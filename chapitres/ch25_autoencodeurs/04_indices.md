@@ -622,4 +622,620 @@ Commence par « la diffusion fait des dizaines de passes d'un gros réseau », p
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (25.14 à 25.39) seront ajoutés à la prochaine session de génération, avec les parties A à C du notebook.
+### Ex 25.14 — Prédire : un autoencodeur entraîné sur une seule image
+
+<details><summary>Indice 1</summary>
+
+Relis le §25.3 de la fiche, puis suis le chemin d'une entrée dans le réseau : $\mathbf{h} = \text{ReLU}(\mathbf{W}_1\mathbf{x} + \mathbf{b}_1)$, puis $\hat{\mathbf{x}} = \sigma(\mathbf{W}_2\mathbf{h} + \mathbf{b}_2)$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pendant l'entraînement, le réseau n'a vu qu'un seul code $\mathbf{h}$, celui de la botte. Pour a), demande-toi ce que vaut $\mathbf{h}$ pour une image noire ($\mathbf{x} = \mathbf{0}$) : il ne reste que les biais de la première couche, qui ont peu bougé. Pour b), un T-shirt a, comme la botte, des pixels positifs : son code va-t-il dans la même direction que celui de la botte ? Pour c), une sortie fixe peut-elle s'écrire $\sigma(\mathbf{W}_2\mathbf{h})$ sans biais, si $\mathbf{h}$ est le code fixe de la botte ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Raisonne sur ce que l'entraînement a pu fixer : soit les biais de sortie $\mathbf{b}_2$ (l'image sortirait alors quelle que soit l'entrée, même noire), soit le produit $\mathbf{W}_2\mathbf{h}_{\text{botte}}$ (l'image ne sortirait que pour des codes proches de celui de la botte). Avec 500 pas d'Adam, lequel des deux chemins est le plus court ? Écris ta prédiction, puis lis la colonne « code nul → botte » : elle dit ce que portent les biais seuls.
+
+</details>
+
+### Ex 25.15 — Premier autoencodeur dense 784-20-784 en PyTorch
+
+<details><summary>Indice 1</summary>
+
+C'est la boucle de ton `fit_18` du ch. 23, avec une seule différence : la cible est l'entrée. Relis le §25.3 de la fiche pour les couches.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_dense_ae_15` : deux `nn.Sequential` passés à `AutoEncoder`. `fit_ae_15` : convertis `x` en tenseur (`to_tensor`), crée l'optimiseur et **un** générateur avant la boucle des epochs ; dans chaque epoch, tire l'ordre avec `torch.randperm(len(x), generator=g)`, parcours les mini-batches, calcule `F.binary_cross_entropy(model(xb), xb)`, puis les trois lignes habituelles (`zero_grad`, `backward`, `step`). Accumule `loss.item() * len(xb)` et divise par $N$ en fin d'epoch.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit_ae_15(model, x, epochs, lr=1e-3, batch_size=128, seed=0):
+    device = next(model.parameters()).device
+    x = to_tensor(x)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    g = torch.Generator().manual_seed(seed)          # once, before the epochs
+    # for each epoch: order = torch.randperm(len(x), generator=g)
+    #     for each mini-batch xb = x[order[i:i + batch_size]].to(device):
+    #         loss = F.binary_cross_entropy(model(xb), xb)    # the target is the input
+    #         zero_grad, backward, step; total += loss.item() * len(xb)
+    #     losses.append(total / len(x))
+```
+
+</details>
+
+### Ex 25.16 — Autoencodeur profond 512-256-128-20
+
+<details><summary>Indice 1</summary>
+
+Écris la liste des tailles $[784, 512, 256, 128, 20]$ : l'encodeur relie chaque taille à la suivante, le décodeur parcourt la même liste à l'envers.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Construis une liste de couches : pour chaque paire `(n_in, n_out)` de tailles consécutives (`zip(sizes[:-1], sizes[1:])`), ajoute `nn.Linear(n_in, n_out)` puis `nn.ReLU()`. À la fin de l'encodeur, retire la dernière ReLU (le code n'a pas d'activation) ; à la fin du décodeur, remplace-la par une sigmoïde.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def make_deep_ae_16(n_latent=20, hidden=(512, 256, 128)):
+    sizes = [784, *hidden, n_latent]
+    encoder = []
+    for n_in, n_out in zip(sizes[:-1], sizes[1:]):
+        encoder += [nn.Linear(n_in, n_out), nn.ReLU()]
+    encoder.pop()                                  # no activation on the code
+    # the decoder: the same loop on sizes[::-1], then the last ReLU becomes nn.Sigmoid()
+```
+
+</details>
+
+### Ex 25.17 — Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement
+
+<details><summary>Indice 1</summary>
+
+Relis le §25.5.4 de la fiche et le quiz 25.Q11 : l'autoencodeur rend toujours quelque chose qui ressemble à ce qu'il a appris.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), un chiffre a peu de pixels allumés, un vêtement beaucoup plus : à quoi ressemblera la reconstruction d'un pull, et combien de pixels seront faux ? Pour b), cherche les vêtements dont la forme est la plus proche d'un trait fin ou d'un petit motif, comme un chiffre. Pour c), une image noire se trompe sur **tous** les pixels allumés du vêtement : l'autoencodeur fait-il au moins mieux que cela ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), compare l'ordre de grandeur des erreurs : un chiffre bien reconstruit se trompe de quelques centièmes en moyenne ; un vêtement mal reconstruit garde au moins sa silhouette approximative. Pour b), classe mentalement les dix catégories par « surface allumée » et par ressemblance avec des traits. Pour c), compare « prédire 0 partout » à « prédire une forme claire au bon endroit ».
+
+</details>
+
+### Ex 25.18 — Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30)
+
+<details><summary>Indice 1</summary>
+
+Deux étapes : une grille de codes (`np.linspace` et `np.meshgrid`), puis une mosaïque d'images (un `reshape` et un `transpose`). Relis le §25.5.2 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour `grid_codes_18`, les $y$ vont de `ymax` à `ymin` (le haut d'une image est la première ligne) : `np.linspace(ymax, ymin, n)`. `np.meshgrid(xs, ys)` rend deux tableaux $(n, n)$ ; aplatis-les ligne par ligne (`ravel`) et colle-les en colonnes. Pour la mosaïque, les $n^2$ images forment un tableau $(n, n, 28, 28)$ : (ligne d'images, colonne d'images, ligne de pixels, colonne de pixels). Pour que chaque ligne de pixels de la mosaïque traverse toutes les images d'une ligne, il faut l'ordre (ligne d'images, ligne de pixels, colonne d'images, colonne de pixels).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def grid_codes_18(lims, n):
+    xmin, xmax, ymin, ymax = lims
+    gx, gy = np.meshgrid(np.linspace(xmin, xmax, n), np.linspace(ymax, ymin, n))
+    # ...one column per coordinate, rows in the order of ravel()
+
+# in plot_latent_map_18:
+images = decode(model, grid_codes_18(lims, n).astype(np.float32)).reshape(n, n, 28, 28)
+mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
+# left panel: one ax.scatter per digit; right panel: ax.imshow(mosaic, cmap="gray", extent=lims)
+```
+
+</details>
+
+### Ex 25.19 — Secouer les variables latentes : bruit global, une seule composante, latents aléatoires
+
+<details><summary>Indice 1</summary>
+
+Un bruit uniforme se tire avec `rng.uniform(low, high, size=...)`. Travaille sur une **copie** des codes. Relis le §25.5.1 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`add_noise_19` : `np.array(codes, dtype=np.float32)` fait la copie ; si `column` vaut `None`, ajoute un bruit de forme `codes.shape`, sinon un bruit de $N$ valeurs à la seule colonne `noisy[:, column]`. `noise_mse_19` : encode une fois, puis, pour chaque échelle, crée un **nouveau** générateur `np.random.default_rng(seed)`, bruite, décode, et moyenne `mse_per_image(..., x)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def noise_mse_19(model, x, scales, seed=0, column=None):
+    codes = encode(model, x)
+    return [float(mse_per_image(decode(model, add_noise_19(codes, s, np.random.default_rng(seed), column)), x).mean())
+            for s in scales]
+# add_noise_19: noisy = np.array(codes, dtype=np.float32), then noisy += ... or noisy[:, column] += ...
+```
+
+</details>
+
+### Ex 25.20 — Interpoler entre deux codes : linéaire et sphérique
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré slerp du §25.5.3 de la fiche. L'angle entre deux vecteurs vient du produit scalaire : $\cos\Omega = \frac{\mathbf{z}_0 \cdot \mathbf{z}_1}{\lVert\mathbf{z}_0\rVert\,\lVert\mathbf{z}_1\rVert}$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Valide d'abord : deux vecteurs 1-D de même forme, `n_steps` entier (pas un `bool`) ≥ 2, une méthode connue. Calcule `t = np.linspace(0, 1, n_steps)[:, None]`. Pour la ligne droite, une diffusion suffit. Pour le slerp, calcule les deux normes ; si l'une est nulle, reviens à la ligne droite **avant** de diviser. Sinon, $\cos\Omega$ (borné dans $[-1, 1]$ par `np.clip`), $\Omega$ = `np.arccos`, et si $|\sin\Omega|$ est minuscule (de l'ordre de $10^{-6}$), ligne droite aussi. Termine en forçant la première ligne à `z0` et la dernière à `z1`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+t = np.linspace(0, 1, n_steps)[:, None]
+# linear: (1 - t) * z0 + t * z1
+# slerp, after the checks on the norms and on sin(omega):
+path = (np.sin((1 - t) * omega) * z0 + np.sin(t * omega) * z1) / np.sin(omega)
+path[0], path[-1] = z0, z1          # exactly the ends
+```
+
+</details>
+
+### Ex 25.21 — Mélanger dans l'espace des pixels ou dans l'espace latent
+
+<details><summary>Indice 1</summary>
+
+Trois petites fonctions : un fondu (comme la ligne droite de 25.20, mais sur les pixels), une interpolation de codes encadrée par `encode` et `decode`, et une erreur de reconstruction.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`blend_pixels_21` : `t = np.linspace(0, 1, n_steps)[:, None]`, puis $(1 - t)\,\mathbf{x}_0 + t\,\mathbf{x}_1$. `blend_codes_21` : encode les deux images d'un coup (`np.stack([x0, x1])`), passe les deux codes à `mylearn.vae.interpolate_latents`, convertis le chemin en `float32` et décode. `off_manifold_21` : `reconstruct` puis `mse_per_image`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def blend_codes_21(model, x0, x1, n_steps, method="linear"):
+    z0, z1 = encode(model, np.stack([x0, x1]))
+    path = mylearn.vae.interpolate_latents(z0, z1, n_steps, method=method)
+    # ...decode the path (float32)
+```
+
+</details>
+
+### Ex 25.22 — Taille du goulot et profondeur : la courbe d'erreur de reconstruction
+
+<details><summary>Indice 1</summary>
+
+Deux boucles imbriquées (les modèles, puis les tailles), et un dictionnaire dont les clés sont des couples `(nom, taille)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+L'ordre compte pour retrouver le résultat de la vérification : `torch.manual_seed(seed)` **juste avant** `maker(size)` (les poids sont tirés à la création), puis `train_ae(model, x, epochs, seed=seed)`, puis `mse_per_image(reconstruct(model, XM_TEST), XM_TEST).mean()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+x = X_MNIST if x is None else x
+results = {}
+for name, maker in makers.items():
+    for size in sizes:
+        torch.manual_seed(seed)
+        model = maker(size)
+        # ...train, then results[(name, size)] = float(test MSE)
+```
+
+</details>
+
+### Ex 25.23 — L'autoencodeur linéaire face à l'ACP de scikit-learn
+
+<details><summary>Indice 1</summary>
+
+Relis le ∂ 25.8 et le §25.6 de la fiche. Un autoencodeur linéaire est un `AutoEncoder` dont l'encodeur et le décodeur sont deux `nn.Linear` sans biais ; `train_ae` sait l'entraîner avec `loss="mse"`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`fit_linear_ae_23` : `torch.manual_seed(seed)`, puis l'encodeur **avant** le décodeur (l'ordre des tirages), `train_ae(..., lr=lr, batch_size=batch_size, seed=seed, loss="mse")`, et le poids du décodeur : `model.decoder.weight`, de forme `(784, k)` (un `nn.Linear(k, 784)` range ses poids en `(sortie, entrée)`). `subspace_angles_deg_23` : `scipy.linalg.subspace_angles` rend des radians, déjà du plus grand au plus petit.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit_linear_ae_23(xc, k, epochs=40, lr=3e-3, batch_size=256, seed=2523):
+    torch.manual_seed(seed)
+    model = AutoEncoder(nn.Linear(784, k, bias=False), nn.Linear(k, 784, bias=False))
+    train_ae(model, xc, epochs, lr=lr, batch_size=batch_size, seed=seed, loss="mse")
+    # ...return the decoder's weight as a NumPy array (784, k)
+```
+
+</details>
+
+### Ex 25.24 — Autoencodeur convolutif à 147 latents
+
+<details><summary>Indice 1</summary>
+
+Relis le ✏️ 25.3 : il a suivi toutes les formes de ce réseau. Il ne reste qu'à écrire les couches dans l'ordre du contrat.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Deux `nn.Sequential` : l'encodeur commence par `nn.Unflatten(1, (1, 28, 28))` (une ligne de 784 pixels devient une image à un canal), le décodeur finit par `nn.Flatten()`. Une convolution $3 \times 3$ de `padding=1` garde la taille, un `nn.MaxPool2d(2)` la divise par deux, un `nn.Upsample(scale_factor=2)` la double.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+encoder = nn.Sequential(nn.Unflatten(1, (1, 28, 28)),
+                        nn.Conv2d(1, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),     # 16 x 14 x 14
+                        # ...the 8 filters, the pooling, then the 3 filters of the code
+                        )
+decoder = nn.Sequential(nn.Upsample(scale_factor=2), nn.Conv2d(3, 16, 3, padding=1), nn.ReLU(),
+                        # ...the second upsampling, the last convolution, the sigmoid, nn.Flatten()
+                        )
+```
+
+</details>
+
+### Ex 25.25 — Le débruiteur qui apprenait le bruit
+
+<details><summary>Indice 1</summary>
+
+Relis le §25.8 de la fiche et le tableau des pièges : un débruiteur reçoit une image bruitée et doit rendre l'image **propre**.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Lis les diagnostics dans l'ordre : chacun pointe une ligne. La cible de la loss est-elle la bonne image ? Où le bruit est-il tiré : une fois pour toutes, ou à chaque mini-batch ? Que deviennent les pixels d'une image à laquelle on ajoute un bruit gaussien : restent-ils dans $[0, 1]$ ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour le premier point : la ligne (G) passe `inputs` comme cible, alors qu'un débruiteur doit comparer sa sortie à l'image propre. Pour les deux autres, demande-toi quelle ligne fixe le bruit de chaque image pour toutes les epochs, et quelle ligne laisse passer des valeurs hors de $[0, 1]$. La version corrigée tire le bruit dans la boucle :
+
+```python
+clean = x[order[i:i + batch_size]]
+inputs = torch.clamp(clean + sigma * torch.randn(clean.shape, generator=g), 0, 1)
+# loss_fn(model(inputs on the device), ...)
+```
+
+</details>
+
+### Ex 25.26 — Autoencodeur débruiteur (bruit gaussien, écrêtage)
+
+<details><summary>Indice 1</summary>
+
+L'architecture est celle de 25.24 avec plus de filtres et sans goulot étroit. Le PSNR se calcule image par image : relis l'encadré PSNR du §25.8.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_denoiser_26` : comme 25.24, avec $c$ filtres partout, deux `MaxPool2d(2)` dans l'encodeur, et une convolution à $c$ filtres **avant** chaque `Upsample` dans le décodeur. `psnr_26` : la MSE de chaque image (moyenne sur l'axe 1), puis $10\log_{10}(1/\text{MSE})$, puis la moyenne des PSNR.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def psnr_26(clean, images):
+    mse = ((np.asarray(images, dtype=np.float64) - np.asarray(clean, dtype=np.float64)) ** 2).mean(axis=1)
+    # ...10 log10(1 / mse) for each image, then the mean, as a float
+```
+
+</details>
+
+### Ex 25.27 — Sur-échantillonnage explicite ou convolutions à pas : temps et qualité
+
+<details><summary>Indice 1</summary>
+
+Relis le ✏️ 25.4 : une convolution transposée de noyau 3, stride 2, padding 1 et `output_padding=1` double exactement la taille.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_strided_27` : deux `Conv2d(..., 3, stride=2, padding=1)` (28 → 14 → 7) à l'encodage, deux `ConvTranspose2d(..., 3, stride=2, padding=1, output_padding=1)` (7 → 14 → 28) au décodage, puis une convolution à un filtre. `compare_27` : pour chaque modèle, la graine, la création, l'entraînement, puis un dictionnaire de trois nombres.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for name, maker in makers.items():
+    torch.manual_seed(seed)
+    model = maker()
+    history = train_denoiser(model, X_FASHION[:N_DENOISE], epochs, seed=seed)
+    # results[name] = {"params": ..., "sec_per_epoch": np.median(history["seconds"]),
+    #                  "psnr": psnr(VAL_CLEAN_B, reconstruct(model, VAL_NOISY_B))}
+```
+
+</details>
+
+### Ex 25.28 — La reparamétrisation en NumPy : passe avant et passe arrière
+
+<details><summary>Indice 1</summary>
+
+Relis le ∂ 25.5 : il donne $\partial z / \partial \mu$ et $\partial z / \partial \log\sigma^2$. Un générateur NumPy se fabrique à partir d'une graine avec `np.random.default_rng`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une petite fonction commune valide deux tableaux (même forme, 2-D, sans NaN) et en fait des copies `float64`. `reparameterize` : si `rng` n'est pas déjà un `np.random.Generator`, crée-le avec `np.random.default_rng(rng)` ; tire `eps = rng.standard_normal(mu.shape)` ; $\mathbf{z} = \boldsymbol{\mu} + e^{\log\boldsymbol{\sigma}^2/2} \odot \boldsymbol{\varepsilon}$. `reparameterize_backward` : la règle de la chaîne terme à terme, avec une **copie** de `dz` pour `dmu`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+generator = rng if isinstance(rng, np.random.Generator) else np.random.default_rng(rng)
+eps = generator.standard_normal(mu.shape)
+z = mu + np.exp(0.5 * log_var) * eps
+# backward: dmu = dz.copy(); dlog_var = dz * (the derivative of z with respect to log_var, ∂ 25.5)
+```
+
+</details>
+
+### Ex 25.29 — Divergence KL gaussienne et son gradient
+
+<details><summary>Indice 1</summary>
+
+La formule est celle du ∂ 25.7, avec $\sigma^2 = e^{s}$ et $s = \log\sigma^2$ ; on somme sur les latents (l'axe 1).
+
+</details>
+<details><summary>Indice 2</summary>
+
+$\mathrm{KL} = \frac{1}{2}\sum_j (\mu_j^2 + e^{s_j} - 1 - s_j)$ : avec `np.expm1(s)` pour $e^{s} - 1$, le calcul reste précis quand $s$ est proche de 0. Les dérivées : par rapport à $\mu_j$, puis par rapport à $s_j$ (le ∂ 25.7 g l'a calculée en un point).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+kl = 0.5 * np.sum(mu ** 2 + np.expm1(log_var) - log_var, axis=1)     # shape (n,)
+# grad: dmu = a copy of mu; dlog_var = 0.5 * (the derivative of e^s - 1 - s)
+```
+
+</details>
+
+### Ex 25.30 — Un VAE en PyTorch : reconstruction + KL
+
+<details><summary>Indice 1</summary>
+
+Le VAE est l'autoencodeur profond de 25.16 avec deux têtes au bout de l'encodeur (`to_mu`, `to_log_var`) et la reparamétrisation de 25.28 entre l'encodeur et le décodeur. La loss est celle du §25.9.2 de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `__init__`, appelle d'abord `super().__init__()`, garde `n_latent` et `tuple(hidden)`, puis construis l'encodeur (des `Linear` + ReLU sur `[784, *hidden]`), les deux têtes, et le décodeur (sur les tailles à l'envers, sans activation après la dernière couche). `forward` : `encode`, puis `torch.randn_like(mu)`, puis le décodeur. La loss : `F.binary_cross_entropy_with_logits(..., reduction="none")`, sommée sur l'axe 1 puis moyennée ; la KL de même. Ne convertis rien en nombre Python : la loss doit rester dérivable.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward(self, x):
+    mu, log_var = self.encode(x)
+    z = mu + torch.exp(0.5 * log_var) * torch.randn_like(mu)
+    return self.decoder(z), mu, log_var
+
+# vae_loss_30:
+rec = F.binary_cross_entropy_with_logits(logits, x, reduction="none").sum(dim=1).mean()
+# kl: the same pattern with 0.5 * (mu ** 2 + exp(log_var) - 1 - log_var)
+```
+
+</details>
+
+### Ex 25.31 — Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE
+
+<details><summary>Indice 1</summary>
+
+Relis les §25.9 et §25.10 de la fiche, et ce que 25.18 et 25.19 t'ont montré de l'espace latent d'un autoencodeur classique.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Rien n'a demandé aux codes de `AE_DEEP` de ressembler à $\mathcal{N}(\mathbf{0}, \mathbf{I})$ : où tombent des tirages de cette loi par rapport à ses codes (25.19 a affiché leur étendue) ? Si tous les tirages tombent dans une même région de l'espace latent, que rendra le décodeur ? Pour `VAE_C`, la KL a rapproché les codes de cette loi : les tirages se répartissent-ils entre les chiffres ? Pour c), pense à la netteté des images d'un VAE entraîné 10 epochs sur 10 000 images.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris, pour chaque modèle, deux nombres que tu attends : la part du chiffre le plus prédit (20 % est deux fois la part d'un chiffre sur dix) et la part d'images « nettes » pour le classifieur. Puis compare tes deux colonnes : laquelle doit être la plus concentrée sur un chiffre ?
+
+</details>
+
+### Ex 25.32 — Un VAE est stochastique : sorties répétées, bruit relatif, interpolations
+
+<details><summary>Indice 1</summary>
+
+`repeat_32` refait le `forward` du VAE, pour une seule image et $k$ tirages ; `relative_noise_32` est un bruit multiplicatif.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`repeat_32` : mode évaluation, `torch.inference_mode()`, `encode` sur l'image en une ligne `(1, 784)`, puis `torch.manual_seed(seed)` **juste avant** `torch.randn(k, n_latent)` ; `mu` `(1, d)` se diffuse sur les $k$ lignes. `relative_noise_32` : $u$ par `np.random.default_rng(seed).uniform(-1, 1, size=mu.shape)`, puis $\mu\,(1 + \text{frac}\cdot u)$ en `float32`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+with torch.inference_mode():
+    mu, log_var = vae.encode(to_tensor(x).reshape(1, 784).to(DEVICE))
+    torch.manual_seed(seed)
+    z = mu + torch.exp(0.5 * log_var) * torch.randn(k, mu.shape[1]).to(DEVICE)
+    # ...the sigmoid of vae.decoder(z), as a NumPy array
+```
+
+</details>
+
+### Ex 25.33 — Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68)
+
+<details><summary>Indice 1</summary>
+
+C'est la figure de 25.18, avec les moyennes $\boldsymbol{\mu}$ au lieu des codes, des limites fixes et trois cercles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`encode_mu(vae, x)` donne les moyennes. Les cercles : `ax.add_patch(plt.Circle((0, 0), r, fill=False))` pour $r$ = 1, 2, 3 ; `ax.set_aspect("equal")` pour qu'ils restent ronds. La grille : `grid_codes((-lim, lim, -lim, lim), n)`, puis `vae_images`, puis la même mosaïque qu'en 25.18.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+mu = encode_mu(vae, x)
+images = vae_images(vae, grid_codes((-lim, lim, -lim, lim), n)).reshape(n, n, 28, 28)
+mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
+# left: one scatter per digit, three circles, limits -lim..lim; right: imshow(mosaic, extent=(-lim, lim, -lim, lim))
+```
+
+</details>
+
+### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur)
+
+<details><summary>Indice 1</summary>
+
+Relis la section « Au-delà du livre » de la fiche : le $\beta$-VAE et l'effondrement du posterior, et ses signes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un $\beta$ plus grand pousse la KL vers le bas et la reconstruction vers le haut ; un $\beta$ qui part de 0 laisse d'abord la KL libre : rien ne la retient pendant les premières epochs. Pour a), cherche la KL qui finit presque à 0 avec zéro latent actif. Pour b), lis la dernière valeur de `"active"`. Pour c), la première et la dernière valeur de `"kl"` du run qui part le plus haut. Pour d), deux dernières valeurs de `"rec"`. Pour e), range les runs par KL finale.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) La KL de chaque run à la dernière epoch : `{k: run["kl"][-1] for k, run in HISTORY_34.items()}` ; le plus petit, s'il est presque nul, désigne l'effondrement. Pour les autres questions, le même genre de lecture : `run["active"][-1]`, `run["kl"][0] - run["kl"][-1]`, une différence de `run["rec"][-1]`, et un classement : plus $\beta$ est grand, plus la KL finale est petite.
+
+</details>
+
+### Ex 25.35 — Exporter le décodeur comme générateur autonome et le tester
+
+<details><summary>Indice 1</summary>
+
+Relis l'Ex 23.22 : on sauvegarde le `state_dict`, et on reconstruit l'architecture avant de le recharger. Ici, le fichier doit aussi dire **quelle** architecture reconstruire.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`export_decoder_35` : un `torch.save` d'un dictionnaire de trois entrées. `load_generator_35` : `torch.load(path, weights_only=True)`, puis les couches de 25.30 (sur `reversed(hidden)`), `load_state_dict`, `eval()`, et une fonction **imbriquée** `generate(n, seed=0)` qui garde le décodeur. Un test est une fonction sans argument qui appelle le code et vérifie par `assert` (forme, `dtype`, égalité avec `np.array_equal`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def generate(n, seed=0):
+    z = torch.randn(n, saved["n_latent"], generator=torch.Generator().manual_seed(seed))
+    with torch.inference_mode():
+        images = torch.round(torch.sigmoid(decoder(z)) * 255)
+    # ...as uint8, shape (n, 28, 28)
+
+def test_generator_seed_35():
+    generate = load_generator_35(GEN_PATH)
+    assert np.array_equal(generate(3, seed=7), generate(3, seed=7))
+    # ...and two different seeds must give different images
+```
+
+</details>
+
+### Ex 25.36 — β-VAE : échanger la netteté contre la régularité
+
+<details><summary>Indice 1</summary>
+
+Une boucle sur les $\beta$, avec la même graine pour chacun, et les outils de référence de 25.30 (`VAE`, `train_vae`, `vae_eval`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque $\beta$ : `torch.manual_seed(seed)` puis `VAE(n_latent)`, `train_vae(..., beta=beta, seed=seed)`, `vae_eval(model, XF_TEST)` qui rend `(rec, kl, per_latent)` ; le nombre de latents actifs est `np.sum(per_latent > 0.05)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+x = X_FASHION if x is None else x
+for beta in betas:
+    torch.manual_seed(seed)
+    model = VAE(n_latent)
+    train_vae(model, x, epochs, beta=beta, seed=seed)
+    rec, kl, per_latent = vae_eval(model, XF_TEST)
+    # results[beta] = {...four entries...}
+```
+
+</details>
+
+### Ex 25.37 — Détecter des anomalies par l'erreur de reconstruction
+
+<details><summary>Indice 1</summary>
+
+Relis la section « anomalies » de la fiche et ta `roc_auc` du ch. 3 : elle prend des labels vrais (0 ou 1) et des scores.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`fit_without_37` : un masque `Y_MNIST != digit` sur `X_MNIST`, la graine avant `make_deep_ae(20)`, puis `train_ae`. `scores_37` : `reconstruct` puis `mse_per_image`. `auc_37` : des labels 0 pour les normaux, 1 pour les anomalies (`np.zeros`, `np.ones`), les scores concaténés dans le même ordre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+y_true = np.concatenate([np.zeros(len(normal), dtype=int), np.ones(len(anomalies), dtype=int)])
+# ...mylearn.metrics.roc_auc(y_true, np.concatenate([normal, anomalies])), as a float
+```
+
+</details>
+
+### Ex 25.38 — Un VAE entièrement en NumPy avec mylearn
+
+<details><summary>Indice 1</summary>
+
+Dessine le graphe de calcul : $\mathbf{x} \to$ encodeur $\to [\boldsymbol{\mu}, \log\boldsymbol{\sigma}^2] \to \mathbf{z} \to$ décodeur $\to$ logits $\to$ reconstruction, et une seconde branche $[\boldsymbol{\mu}, \log\boldsymbol{\sigma}^2] \to$ KL. La passe arrière remonte ce graphe ; $\boldsymbol{\mu}$ et $\log\boldsymbol{\sigma}^2$ reçoivent deux gradients qui s'additionnent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Passe avant : `mlp_forward(..., activation=_relu_38, return_cache=True)` pour l'encodeur, les $d$ premières colonnes de sa sortie sont $\boldsymbol{\mu}$ ; puis $\mathbf{z}$, puis le décodeur. La loss de reconstruction sommée sur les pixels vaut 784 fois la moyenne que rend `binary_cross_entropy_with_logits`, et son gradient aussi. Passe arrière : `mlp_backward` du décodeur **avec** `return_input_grad=True` donne $\partial L / \partial \mathbf{z}$ ; `reparameterize_backward` le ramène sur $\boldsymbol{\mu}$ et $\log\boldsymbol{\sigma}^2$ ; ajoute `gaussian_kl_grad` divisé par $n$ (la KL est moyennée sur le batch) ; concatène, et `mlp_backward` de l'encodeur. Pour l'entraînement, Adam reçoit la liste à plat des paramètres, et `step` la liste à plat des gradients, dans le même ordre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+mean_bce, dlogits = backward.binary_cross_entropy_with_logits(logits, x)
+rec, dlogits = 784 * mean_bce, 784 * dlogits
+grads_dec, dz = backward.mlp_backward(dlogits, cache_dec, params["dec"],
+                                      activation_derivative=_relu_derivative_38, return_input_grad=True)
+dmu, dlog_var = vae.reparameterize_backward(dz, eps, log_var)
+# ...add the gradient of the mean KL, concatenate [dmu, dlog_var] on axis 1, then the encoder's mlp_backward
+```
+
+</details>
+
+### Ex 25.39 — Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte
+
+<details><summary>Indice 1</summary>
+
+Pars du débruiteur de 25.26 et note son PSNR de validation : c'est ta baseline. Change une chose à la fois, et garde un œil sur le chronomètre (25.27 a mesuré le coût de chaque choix).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Trois leviers, dans l'ordre où ils coûtent le moins : plus d'images d'entraînement (`X_FASHION` en a 10 000 en mode rapide), un learning rate un peu plus grand avec quelques epochs de plus, puis l'architecture. Un débruiteur n'a pas besoin d'un goulot étroit : réduire la résolution perd des détails qu'il faut ensuite réinventer. Pense à un réseau qui garde toute ou une partie de la résolution, et à la largeur qu'autorise la limite de 100 000 paramètres.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Un squelette qui garde la résolution (tu choisis $c$ et le nombre de couches, sous 100 000 paramètres) :
+
+```python
+layers = [nn.Unflatten(1, (1, 28, 28)), nn.Conv2d(1, c, 3, padding=1), nn.ReLU()]
+# ...a few nn.Conv2d(c, c, 3, padding=1) + nn.ReLU()
+model = AutoEncoder(nn.Sequential(*layers), nn.Sequential(nn.Conv2d(c, 1, 3, padding=1), nn.Sigmoid(), nn.Flatten()))
+```
+
+Puis `train_denoiser(model, X_FASHION, epochs, lr=...)` en comptant le temps d'une epoch avant d'en choisir le nombre.
+
+</details>

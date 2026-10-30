@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 25 « Autoencoders », p. 1380-1457 (§25.1 à §25.10) |
-| **Temps total estimé** | ≈ 28 h : lecture du livre et de la fiche ≈ 5,7 h, exercices ≈ 22 h, 25 flashcards ≈ 0,8 h |
+| **Temps total estimé** | ≈ 29 h : lecture du livre et de la fiche ≈ 6,5 h, exercices ≈ 22 h, 25 flashcards ≈ 0,8 h |
 | **Prérequis** | ch. 2 (loi normale, écart-type, règle des 68 %) · ch. 3 (ROC-AUC) · ch. 6 (divergence KL, bits et nats) · ch. 12 (ACP, variance expliquée, vecteurs propres) · ch. 16 à 19 (couches denses, sigmoïde et ReLU, cross-entropy binaire, rétropropagation, Adam) · ch. 20 (PyTorch, `nn.Module`, boucle d'entraînement) · ch. 21 (convolution, pooling, stride, convolution transposée) · ch. 23 et 24 (`DataLoader`, `state_dict`, augmentation) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `vae.py` : la reparamétrisation (passes avant et arrière), la divergence KL gaussienne et son gradient, l'interpolation linéaire et sphérique entre deux codes |
@@ -371,7 +371,7 @@ Avec 2 latents seulement, le nuage des codes de $10\,000$ images remplit à peu 
 
 ## Guide de lecture et de travail
 
-Le chapitre du livre se lit vite, mais ses figures demandent du temps. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre : il laisse de côté l'introduction sur la compression (§25.2 à §25.2.2), l'exploration de l'espace latent de l'autoencodeur dense (§25.5 à §25.5.2) et la discussion sur l'ACP (§25.6), que la fiche résume. Le notebook avance en trois phases : des autoencodeurs denses, puis convolutifs et débruiteurs, puis le VAE, avec ta librairie `vae.py` au milieu de la troisième. À la fin, tu auras un générateur de chiffres que tu peux exporter seul, et un VAE que tu auras entièrement écrit en NumPy.
+Le chapitre du livre se lit vite, mais ses figures demandent du temps. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 4,8 h : il laisse de côté l'introduction sur la compression (§25.2 à §25.2.2), l'exploration de l'espace latent de l'autoencodeur dense (§25.5 à §25.5.2) et la discussion sur l'ACP (§25.6), que la fiche résume. Le notebook avance en trois phases : des autoencodeurs denses, puis convolutifs et débruiteurs, puis le VAE, avec ta librairie `vae.py` au milieu de la troisième. À la fin, tu auras un générateur de chiffres que tu peux exporter seul, et un VAE que tu auras entièrement écrit en NumPy.
 
 ## Pour aller plus loin
 

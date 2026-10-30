@@ -1173,3 +1173,51 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP5.14 ⚖️ « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? ★★ 4 min
 - [ ] Mini-projet MP5 — Classifieur d'images CIFAR-10 de bout en bout (≈ 10 h)
 <!-- wb:end CP5 -->
+
+<!-- wb:section 25 -->
+## 25 — Autoencodeurs et VAE ⏱️ 29 h
+
+- [ ] 25.Q1–Q12 🧠 Quiz (12 questions, 37 min)
+- [ ] 25.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 25.1 ✏️ Compter les paramètres d'un autoencodeur à goulot ★ 10 min
+- [ ] 25.2 ✏️ Mélanger deux cercles : pixels contre paramètres ★ 10 min
+- [ ] 25.3 ✏️ Suivre les formes dans l'autoencodeur convolutif ★★ 15 min
+- [ ] 25.4 ✏️ Retrouver 28×28 : padding et output_padding d'une convolution transposée ★★ 15 min
+- [ ] 25.5 ∂ Dériver à travers un tirage : l'astuce de reparamétrisation ★★ 20 min
+- [ ] 25.6 ✏️ Où tombent les tirages d'une gaussienne en grande dimension ★★ 25 min
+- [ ] 25.7 ∂ La divergence KL entre N(μ, σ²) et N(0, 1) ★★★ 35 min
+- [ ] 25.8 ∂ Un autoencodeur linéaire retrouve l'ACP (cas 2D guidé) ★★★ 40 min
+- [ ] 25.9 🧮 Compression réelle : le décodeur n'est pas gratuit ★★ 15 min
+- [ ] 25.10 🧮 Pourquoi diffuser dans un espace latent : facteur de compression et coût ★★ 15 min
+- [ ] 25.11 🗣️ Le VAE expliqué à un ami en cinq lignes ★ 10 min
+- [ ] 25.12 ⚖️ Deepfakes par autoencodeurs : un encodeur, deux décodeurs ★★ 20 min
+- [ ] 25.13 📄 Lire Kingma et Welling (2013), « Auto-Encoding Variational Bayes » ★★★ 45 min
+- [ ] 25.14 🔮 Prédire : un autoencodeur entraîné sur une seule image ★ 15 min
+- [ ] 25.15 📦 Premier autoencodeur dense 784-20-784 en PyTorch ★★ 25 min
+- [ ] 25.16 📦 Autoencodeur profond 512-256-128-20 ★★ 25 min
+- [ ] 25.17 🔮 Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement ★★ 15 min
+- [ ] 25.18 🎨 Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30) ★★ 30 min
+- [ ] 25.19 🔬 Secouer les variables latentes : bruit global, une seule composante, latents aléatoires ★★ 25 min
+- [ ] 25.20 🔨 Interpoler entre deux codes : linéaire et sphérique ★★ 20 min
+- [ ] 25.21 🔬 Mélanger dans l'espace des pixels ou dans l'espace latent ★★ 25 min
+- [ ] 25.22 🔬 Taille du goulot et profondeur : la courbe d'erreur de reconstruction ★★★ 40 min
+- [ ] 25.23 🔬 L'autoencodeur linéaire face à l'ACP de scikit-learn ★★★ 40 min
+- [ ] 25.24 📦 Autoencodeur convolutif à 147 latents ★★ 30 min
+- [ ] 25.25 🐛 Le débruiteur qui apprenait le bruit ★★ 25 min
+- [ ] 25.26 📦 Autoencodeur débruiteur (bruit gaussien, écrêtage) ★★ 30 min
+- [ ] 25.27 🔬 Sur-échantillonnage explicite ou convolutions à pas : temps et qualité ★★★ 35 min 🚀
+- [ ] 25.28 🔨 La reparamétrisation en NumPy : passe avant et passe arrière ★★ 25 min
+- [ ] 25.29 🔨 Divergence KL gaussienne et son gradient ★★ 20 min
+- [ ] 25.30 📦 Un VAE en PyTorch : reconstruction + KL ★★ 30 min
+- [ ] 25.31 🔮 Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE ★★ 15 min
+- [ ] 25.32 🔬 Un VAE est stochastique : sorties répétées, bruit relatif, interpolations ★★ 30 min
+- [ ] 25.33 🎨 Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68) ★★ 30 min
+- [ ] 25.34 📈 Diagnostiquer des courbes reconstruction/KL (effondrement du posterior) ★★ 15 min
+- [ ] 25.35 🛠️ Exporter le décodeur comme générateur autonome et le tester ★★ 20 min
+- [ ] 25.36 🔬 β-VAE : échanger la netteté contre la régularité ★★★ 40 min
+- [ ] 25.37 🔬 Détecter des anomalies par l'erreur de reconstruction ★★★ 45 min
+- [ ] 25.38 🔨 Un VAE entièrement en NumPy avec mylearn ★★★★ 150 min
+- [ ] 25.39 🏆 Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte ★★★★ 120 min 🚀
+- [ ] 25.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (25 cartes)
+<!-- wb:end 25 -->

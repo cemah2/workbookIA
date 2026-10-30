@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 917 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 918 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -64,7 +64,7 @@
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 20 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 29 h | 2 | — |
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 14 | 13 h |  | — |
-| [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 28 h | 2 | `vae` |
+| [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 29 h | 2 | `vae` |
 | [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
 | [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 20 h | 1 | `gen_metrics` |
 | [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 19 h | 2 | — |
@@ -92,19 +92,19 @@
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
 | V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 114 h |
-| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 119 h |
+| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 120 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **917 h** |
+| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **918 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2028 | 666 h | 917 h | 100 % |
-| Rapide | 1312 | 319 h | 546 h | 60 % |
-| Maths | 801 | 307 h | 558 h | 61 % |
-| Code | 890 | 462 h | 733 h | 80 % |
+| Complet | 2028 | 666 h | 918 h | 100 % |
+| Rapide | 1312 | 319 h | 547 h | 60 % |
+| Maths | 801 | 307 h | 559 h | 61 % |
+| Code | 890 | 462 h | 734 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -308,7 +308,7 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 20 h |
 | 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 29 h |
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
-| 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 28 h |
+| 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 29 h |
 | 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
 | 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 20 h |
 | 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 19 h |
@@ -4053,7 +4053,7 @@ Extensions : Vision Transformer minuscule entraîné from scratch et comparé au
 | **Livre** | vol. 2, ch. 25 « Autoencoders », p. 1380-1457 |
 | **Dossier** | `chapitres/ch25_autoencodeurs/` |
 | **Exercices** | 59 : 🧠 12 · 🔁 3 · ✏️ 5 · ∂ 3 · 🔨 4 · 📦 5 · 🔬 8 · 🔮 3 · 🐛 1 · 📈 1 · 🧮 2 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **28 h** (lecture 5,7 h, exercices 22 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **29 h** (lecture 6,5 h, exercices 22 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 24, 22, 6 |
 | **Compétence 🛠️** | Exporter un sous-modèle (state_dict du décodeur) en générateur autonome et le couvrir par un test de forme pytest |
@@ -4073,7 +4073,7 @@ Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace l
 
 **Sections du livre couvertes** : 21 sections et sous-sections, toutes couvertes (§25.1 à §25.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,0 h) : 14 sections sur 21 ; sections laissées de côté : §25.2, §25.2.1, §25.2.2, §25.5, §25.5.1, §25.5.2, §25.6.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 4,8 h) : 14 sections sur 21 ; sections laissées de côté : §25.2, §25.2.1, §25.2.2, §25.5, §25.5.1, §25.5.2, §25.6.
 
 **Notions enseignées** : autoencodeur (encodeur, décodeur, goulot) ; espace latent ; autoencodeur convolutif ; autoencodeur débruiteur ; PSNR ; autoencodeur linéaire et ACP ; VAE ; astuce de reparamétrisation ; divergence KL entre gaussiennes ; ELBO ; β-VAE ; interpolation sphérique (slerp) ; détection d'anomalies par reconstruction
 
@@ -4111,10 +4111,10 @@ Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace l
 | 25.11 | 🗣️ | Le VAE expliqué à un ami en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 25.12 | ⚖️ | Deepfakes par autoencodeurs : un encodeur, deux décodeurs | ★★ | 20 | — | 02 | — | R | manual |
 | 25.13 | 📄 | Lire Kingma et Welling (2013), « Auto-Encoding Variational Bayes » | ★★★ | 45 | MNIST | 02 | 25.5, 25.7 | M | manual |
-| 25.14 | 🔮 | Prédire : un autoencodeur entraîné sur une seule image | ★ | 15 | Fashion-MNIST | 03 | 25.1, 23 | RC | manual |
+| 25.14 | 🔮 | Prédire : un autoencodeur entraîné sur une seule image | ★ | 15 | Fashion-MNIST | 03 | 25.1, 23 | RC | wb.check |
 | 25.15 | 📦 | Premier autoencodeur dense 784-20-784 en PyTorch | ★★ | 25 | MNIST | 03 | 23, 25.1 | RMC | manual |
 | 25.16 | 📦 | Autoencodeur profond 512-256-128-20 | ★★ | 25 | MNIST | 03 | 25.15 | RMC | manual |
-| 25.17 | 🔮 | Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement | ★★ | 15 | Fashion-MNIST | 03 | 25.16 | C | manual |
+| 25.17 | 🔮 | Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement | ★★ | 15 | Fashion-MNIST | 03 | 25.16 | C | wb.check |
 | 25.18 | 🎨 | Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30) | ★★ | 30 | MNIST | 03 | 25.16 | C | manual |
 | 25.19 | 🔬 | Secouer les variables latentes : bruit global, une seule composante, latents aléatoires | ★★ | 25 | MNIST | 03 | 25.16 | C | manual |
 | 25.20 | 🔨 | Interpoler entre deux codes : linéaire et sphérique | ★★ | 20 | — | 03 | 25.6 | RMC | pytest |
@@ -4122,16 +4122,16 @@ Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace l
 | 25.22 | 🔬 | Taille du goulot et profondeur : la courbe d'erreur de reconstruction | ★★★ | 40 | MNIST | 03 | 25.16 | C | manual |
 | 25.23 | 🔬 | L'autoencodeur linéaire face à l'ACP de scikit-learn | ★★★ | 40 | MNIST | 03 | 25.8, 12 | MC | manual |
 | 25.24 | 📦 | Autoencodeur convolutif à 147 latents | ★★ | 30 | MNIST | 03 | 25.3, 21 | RC | manual |
-| 25.25 | 🐛 | Le débruiteur qui apprenait le bruit | ★★ | 25 | MNIST | 03 | 25.24 | C | manual |
+| 25.25 | 🐛 | Le débruiteur qui apprenait le bruit | ★★ | 25 | MNIST | 03 | 25.24 | C | wb.check |
 | 25.26 | 📦 | Autoencodeur débruiteur (bruit gaussien, écrêtage) | ★★ | 30 | Fashion-MNIST | 03 | 25.24 | RC | manual |
 | 25.27 | 🔬 | Sur-échantillonnage explicite ou convolutions à pas : temps et qualité 🚀 | ★★★ | 35 | Fashion-MNIST | 03 | 25.26, 25.4 | C | manual |
 | 25.28 | 🔨 | La reparamétrisation en NumPy : passe avant et passe arrière | ★★ | 25 | — | 03 | 25.5 | RMC | pytest |
 | 25.29 | 🔨 | Divergence KL gaussienne et son gradient | ★★ | 20 | — | 03 | 25.7 | RMC | pytest |
 | 25.30 | 📦 | Un VAE en PyTorch : reconstruction + KL | ★★ | 30 | MNIST | 03 | 25.29, 25.28, 25.16 | RMC | manual |
-| 25.31 | 🔮 | Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE | ★★ | 15 | MNIST | 03 | 25.30 | RC | manual |
+| 25.31 | 🔮 | Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE | ★★ | 15 | MNIST | 03 | 25.30 | RC | wb.check |
 | 25.32 | 🔬 | Un VAE est stochastique : sorties répétées, bruit relatif, interpolations | ★★ | 30 | MNIST | 03 | 25.30 | C | manual |
 | 25.33 | 🎨 | Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68) | ★★ | 30 | MNIST | 03 | 25.30 | C | manual |
-| 25.34 | 📈 | Diagnostiquer des courbes reconstruction/KL (effondrement du postérieur) | ★★ | 15 | MNIST | 03 | 25.30 | RMC | manual |
+| 25.34 | 📈 | Diagnostiquer des courbes reconstruction/KL (effondrement du posterior) | ★★ | 15 | MNIST | 03 | 25.30 | RMC | wb.check |
 | 25.35 | 🛠️ | Exporter le décodeur comme générateur autonome et le tester | ★★ | 20 | MNIST | 03 | 25.30, 23 | RC | manual |
 | 25.36 | 🔬 | β-VAE : échanger la netteté contre la régularité | ★★★ | 40 | Fashion-MNIST | 03 | 25.30, 25.34 | MC | manual |
 | 25.37 | 🔬 | Détecter des anomalies par l'erreur de reconstruction | ★★★ | 45 | MNIST | 03 | 25.24, 3 | RC | manual |

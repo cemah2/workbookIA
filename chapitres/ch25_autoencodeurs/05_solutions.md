@@ -231,4 +231,693 @@ Valeurs : a) $\tfrac{1}{2}(4 + 1 - 1 - 0) = 2$. b) $\tfrac{1}{2}(e - 2) = 0{,}35
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (25.14 à 25.39) seront ajoutées à la prochaine session de génération, avec les parties A à C du notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb` ; voici, pour chaque exercice, la réponse, la démarche, les erreurs fréquentes et une variante. Les chiffres sont ceux du mode rapide, sur CPU (PyTorch 2.11, 2 cœurs) : un autre processeur ou un GPU change les dernières décimales des résultats d'entraînement, et les durées. Les entraînements longs de 📈 25.34 et les calibrages sur plusieurs graines (🔮 25.14, 25.17, 25.31, 🏆 25.39) viennent de `tools/chapters/history_ch25.py`, et leurs résultats sont dans `tools/chapters/history_ch25.json`.
+
+### Ex 25.14 — Prédire : un autoencodeur entraîné sur une seule image 🔮
+**Réponse** : a) **Faux** ; b) **Vrai** ; c) **Vrai**.
+
+| | botte → botte | noir → botte | T-shirt → botte | T-shirt → T-shirt | code nul → botte |
+|---|---|---|---|---|---|
+| avec biais | 0,00000 | 0,170 | 0,015 | 0,086 | 0,179 |
+| sans biais | 0,00000 | 0,192 | 0,016 | 0,085 | 0,192 |
+
+**Démarche** : les deux réseaux reconstruisent la botte sans erreur visible : 20 latents pour une seule image, c'est beaucoup trop. Mais ils l'ont rangée **dans les poids du décodeur**, pas dans ses biais : la sortie vaut $\sigma(\mathbf{W}_2\mathbf{h} + \mathbf{b}_2)$, et l'entraînement a appris à envoyer **le** code de la botte, $\mathbf{h}_{\text{botte}}$, sur la botte. Une image noire donne un code presque nul ($\text{ReLU}(\mathbf{b}_1)$, de petits biais) : il ne reste que $\sigma(\mathbf{b}_2)$, une image grise sans rapport (colonne « code nul »). Un T-shirt, lui, a des pixels positifs comme la botte : son code est un multiple de $\mathbf{h}_{\text{botte}}$ dans les mêmes directions, et le décodeur rend… la botte (MSE de 0,015 avec elle, de 0,086 avec le T-shirt). Sans aucun biais, rien ne change pour la botte : la mémoire est dans $\mathbf{W}_2$. Le livre, lui, obtient le tigre à partir d'une image noire : après un entraînement beaucoup plus long sur 10 000 pixels, ses biais de sortie ont fini par porter l'image. Les deux chemins mènent à la même tricherie (le réseau n'a rien comprimé), et seule une évaluation sur d'autres images la révèle. Les trois réponses sont les mêmes sur cinq graines (`calib`, entrée `p14`).
+
+**Erreurs fréquentes** : croire que « mémorisé » veut dire « dans les biais » (ici, les biais ne portent presque rien) ; lire la colonne « botte → botte » pour répondre à a) ; oublier que $\text{ReLU}(\mathbf{W}_1\mathbf{x})$ d'une image positive reste dans le même cône que celui de la botte.
+
+**Variante** : entraîne le même réseau sur deux images, la botte et le T-shirt, et donne-lui l'image noire. Réponse : il reconstruit les deux sans erreur visible, et l'image noire donne encore un gris presque uniforme (des pixels autour de 0,48), ni la botte ni le T-shirt : deux images, c'est encore de la mémorisation, rangée dans les poids.
+
+### Ex 25.15 — Premier autoencodeur dense 784-20-784 en PyTorch 📦
+**Réponse** :
+```python
+def make_dense_ae_15(n_latent=20):
+    return AutoEncoder(nn.Sequential(nn.Linear(784, n_latent), nn.ReLU()),
+                       nn.Sequential(nn.Linear(n_latent, 784), nn.Sigmoid()))
+
+
+def fit_ae_15(model, x, epochs, lr=1e-3, batch_size=128, seed=0):
+    device = next(model.parameters()).device
+    x = to_tensor(x)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    g = torch.Generator().manual_seed(seed)
+    losses = []
+    model.train()
+    for _ in range(epochs):
+        order = torch.randperm(len(x), generator=g)
+        total = 0.0
+        for i in range(0, len(x), batch_size):
+            xb = x[order[i:i + batch_size]].to(device)
+            loss = F.binary_cross_entropy(model(xb), xb)        # the target is the input itself
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(xb)
+        losses.append(total / len(x))
+    return losses
+```
+**Démarche** : la boucle est celle du ch. 23 ; seule la cible change. Après 5 epochs sur 10 000 images, la MSE de test vaut 0,043 avec 20 latents, 0,061 avec 10 et 0,069 avec 3 : les chiffres à 20 latents sont flous mais lisibles, ceux à 10 se déforment, ceux à 3 sont des taches qui rappellent vaguement des chiffres, comme dans le livre. La sigmoïde ramène chaque sortie dans $[0, 1]$, comme un pixel ; la cross-entropy binaire accepte une cible qui n'est pas 0 ou 1 : elle est minimale quand la sortie égale la cible, et sa pente ne s'écrase pas comme celle d'une MSE après une sigmoïde (ch. 17).
+
+**Erreurs fréquentes** : comparer la sortie à `y` (les labels) au lieu de `xb` ; créer le générateur dans la boucle des epochs (le même ordre à chaque epoch) ; moyenner les losses des batches sans les pondérer (le dernier batch est plus petit) ; appeler `torch.manual_seed` dans `fit_ae_15` (le contrat le laisse à l'appelant).
+
+**Variante** : remplace la cross-entropy par l'erreur quadratique (`loss="mse"` dans `train_ae`). Réponse : ici, presque rien ne change (MSE de test de 0,043 après 5 epochs dans les deux cas) : les sorties restent loin de la saturation de la sigmoïde, où la MSE aurait une pente trop faible. Les deux losses ont le même minimum (la sortie égale à la cible) ; elles ne diffèrent nettement que lorsque des sorties saturent.
+
+### Ex 25.16 — Autoencodeur profond 512-256-128-20 📦
+**Réponse** :
+```python
+def make_deep_ae_16(n_latent=20, hidden=(512, 256, 128)):
+    sizes = [784, *hidden, n_latent]
+    encoder = []
+    for n_in, n_out in zip(sizes[:-1], sizes[1:]):
+        encoder += [nn.Linear(n_in, n_out), nn.ReLU()]
+    encoder.pop()                                       # no activation on the code
+    back = sizes[::-1]                                  # n_latent, ..., 784
+    decoder = []
+    for n_in, n_out in zip(back[:-1], back[1:]):
+        decoder += [nn.Linear(n_in, n_out), nn.ReLU()]
+    decoder[-1] = nn.Sigmoid()                          # pixels in [0, 1]
+    return AutoEncoder(nn.Sequential(*encoder), nn.Sequential(*decoder))
+```
+**Démarche** : avec le même goulot de 20 et 8 epochs, le dense (32 164 paramètres) atteint une MSE de test de 0,040, le profond (1 138 212 paramètres) 0,027. Le dense est limité par sa **capacité** : une seule couche pour calculer le code, une seule pour le décoder, donc un code presque linéaire. Le profond garde les mêmes 20 nombres mais les calcule et les décode mieux : c'est la leçon du §25.4, « assez de latents, et assez de capacité ». Il coûte 35 fois plus de paramètres et environ 4 fois plus de temps ici.
+
+**Erreurs fréquentes** : mettre une ReLU sur le code (les latents négatifs sont perdus, et un latent qui reste négatif cesse d'apprendre) ; oublier la sigmoïde finale ; construire le décodeur avec les tailles dans le même ordre que l'encodeur.
+
+**Variante** : un profond `hidden=(256, 64)`. Réponse : 438 180 paramètres (700 032 de moins ; la formule de l'Ex 25.1, couche par couche), et une erreur de test de 0,028 après 8 epochs, presque celle du grand profond (0,027) et bien meilleure que celle du dense (0,040) : la profondeur aide même avec des couches plus étroites.
+
+### Ex 25.17 — Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement 🔮
+**Réponse** : a) **B** (rapport 3,4) ; b) **B** (Sandal 0,055 et Sneaker 0,056) ; c) **Vrai** (0,092 contre 0,207).
+
+**Démarche** : `AE_DEEP` se trompe en moyenne de 0,027 sur les chiffres et de 0,092 sur les vêtements, 3,4 fois plus. Les mieux reconstruits sont les sandales et les baskets : de petites formes claires, peu étendues, que le décodeur rend comme des traits épais, un peu comme un 2 couché ou un 7. Les pires sont les sacs et les bottines, de grandes surfaces claires qu'aucun chiffre ne ressemble à remplir. Pourtant, l'autoencodeur fait bien mieux qu'une image noire (0,207) : il place une forme claire au bon endroit, au centre de l'image, avec à peu près la bonne étendue. Il a appris des régularités des images 28 × 28 centrées, pas seulement des chiffres. L'écart d'erreur entre ce qu'il connaît et ce qu'il ne connaît pas est la base de la détection d'anomalies (25.37). Sur cinq graines, le rapport va de 3,1 à 3,4 et les deux meilleures classes sont toujours les sandales et les baskets (entrée `p17` de `calib`).
+
+**Erreurs fréquentes** : comparer la MSE d'un vêtement à celle de **sa** classe de chiffres (il n'y en a pas) ; lire le tableau trié comme s'il allait du pire au meilleur ; croire qu'un autoencodeur « hors domaine » ne rend rien du tout.
+
+**Variante** : donne à `AE_DEEP` des chiffres retournés (`XM_TEST.reshape(-1, 28, 28)[:, ::-1]`). Réponse : l'erreur moyenne passe de 0,027 à 0,050, moins que pour les vêtements (0,092) : les traits restent des traits, et certains chiffres (0, 1, 8) restent presque des chiffres une fois retournés.
+
+### Ex 25.18 — Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30) 🎨
+**Réponse** :
+```python
+def grid_codes_18(lims, n):
+    xmin, xmax, ymin, ymax = lims
+    xs, ys = np.linspace(xmin, xmax, n), np.linspace(ymax, ymin, n)       # y from the top to the bottom
+    gx, gy = np.meshgrid(xs, ys)                                          # gx[i, j] = xs[j], gy[i, j] = ys[i]
+    return np.column_stack([gx.ravel(), gy.ravel()])
+
+
+def plot_latent_map_18(model, x, labels, n=15):
+    codes = encode(model, x)
+    lims = (codes[:, 0].min(), codes[:, 0].max(), codes[:, 1].min(), codes[:, 1].max())
+    images = decode(model, grid_codes_18(lims, n).astype(np.float32)).reshape(n, n, 28, 28)
+    mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)        # rows of images, then rows of pixels
+    fig, (ax_map, ax_grid) = plt.subplots(1, 2, figsize=(12, 5.6))
+    colors = wb.plot.class_colors(10)
+    for digit in range(10):
+        keep = np.asarray(labels) == digit
+        ax_map.scatter(codes[keep, 0], codes[keep, 1], s=3, color=colors[digit], label=str(digit))
+    ax_map.set_xlim(lims[0], lims[1])
+    ax_map.set_ylim(lims[2], lims[3])
+    ax_map.legend(markerscale=4, fontsize=8, ncol=2)
+    ax_map.set_title("codes de 2 000 chiffres de test")
+    ax_grid.imshow(mosaic, cmap="gray", extent=lims, aspect="auto")
+    ax_grid.set_title(f"{n} × {n} codes de la grille, décodés")
+    plt.tight_layout()
+    plt.show()
+    return mosaic
+```
+**Démarche** : la carte montre des régions par chiffre (les 0 et les 1 bien à part), des chevauchements (4, 7 et 9, et souvent 3, 5 et 8), et de grandes zones sans aucun point, surtout aux bords. La grille décodée change continûment d'une case à l'autre ; dans les zones vides, elle rend des formes qui ne sont aucun chiffre, ou des chiffres étirés. Tirer des codes au hasard tombe souvent dans ces zones : c'est le problème que le VAE résout (25.31, 25.33). La mosaïque demande le bon ordre des axes : `(ligne d'images, ligne de pixels, colonne d'images, colonne de pixels)`, d'où le `transpose(0, 2, 1, 3)`.
+
+**Erreurs fréquentes** : `np.linspace(ymin, ymax, n)` (la carte est retournée de haut en bas par rapport aux points) ; un `reshape(28 * n, 28 * n)` sans `transpose` (des bandes horizontales au lieu d'images) ; oublier `.astype(np.float32)` (PyTorch refuse de mélanger des `float64` et des poids `float32`).
+
+**Variante** : remplace `imshow(..., extent=lims)` par un `imshow` sans `extent`. Réponse : la mosaïque est juste mais ses axes comptent les pixels (0 à 420) au lieu des coordonnées latentes : on ne peut plus la poser à côté de la carte.
+
+### Ex 25.19 — Secouer les variables latentes : bruit global, une seule composante, latents aléatoires 🔬
+**Réponse** :
+```python
+def add_noise_19(codes, scale, rng, column=None):
+    noisy = np.array(codes, dtype=np.float32)               # a copy
+    if column is None:
+        noisy += rng.uniform(-scale, scale, size=noisy.shape)
+    else:
+        noisy[:, column] += rng.uniform(-scale, scale, size=len(noisy))
+    return noisy
+
+
+def noise_mse_19(model, x, scales, seed=0, column=None):
+    codes = encode(model, x)
+    return [float(mse_per_image(decode(model, add_noise_19(codes, s, np.random.default_rng(seed), column)), x).mean())
+            for s in scales]
+```
+**Démarche** : les latents de `AE_DEEP` ont un écart-type de 3,5 et vont de −12,6 à 11,3. Un bruit de ±0,1 écart-type ne change presque rien (MSE 0,0275 contre 0,0271) ; ±0,3 σ commence à abîmer les traits (0,031) ; ±1 σ double l'erreur (0,054), les chiffres changent parfois d'identité ; ±3 σ donne des formes illisibles (0,103), comme le bruit ±100 du livre. Bruités seuls, les latents ne comptent pas tout à fait autant : dans le diagramme en barres, le latent le plus sensible coûte environ 1,3 fois plus que le moins sensible ; aucun ne porte à lui seul l'identité du chiffre, l'information est répartie entre eux. Des codes tirés au hasard entre le min et le max de chaque latent se décodent en taches : chaque latent pris seul reste dans sa plage, mais leur **combinaison** tombe dans une zone vide de l'espace latent (25.18).
+
+**Erreurs fréquentes** : bruiter `codes` sur place (la ligne suivante de l'expérience part de codes déjà bruités) ; réutiliser le même générateur d'une échelle à l'autre (les courbes ne se comparent plus, le bruit change en plus de l'échelle) ; un bruit en valeur absolue (±1) sans regarder l'échelle des latents.
+
+**Variante** : bruite chaque latent en proportion de **son** écart-type (`scale` multiplié par `codes.std(axis=0)`, un bruit tiré par colonne). Réponse : le diagramme change peu (un rapport d'environ 1,3 entre le latent le plus sensible et le moins sensible, comme avec un bruit absolu) : ici, les latents ont des écarts-types voisins, et leurs sensibilités ne viennent pas de leur échelle.
+
+### Ex 25.20 — Interpoler entre deux codes : linéaire et sphérique 🔨
+**Réponse** (`solutions/mylearn_ref/vae.py` ; `_pair` valide les deux vecteurs et en fait des copies `float64`, comme en 25.28) :
+```python
+def interpolate_latents(z0, z1, n_steps, method="linear"):
+    if method not in ("linear", "slerp"):
+        raise ValueError(f"method must be 'linear' or 'slerp', got {method!r}")
+    if isinstance(n_steps, bool) or not isinstance(n_steps, (int, np.integer)) or n_steps < 2:
+        raise ValueError(f"n_steps must be an integer >= 2, got {n_steps!r}")
+    a, b = _pair(z0, z1, ("z0", "z1"), 1)
+    t = np.linspace(0.0, 1.0, int(n_steps))[:, None]
+    linear = (1.0 - t) * a + t * b
+    if method == "linear":
+        return linear
+    norm_a, norm_b = np.linalg.norm(a), np.linalg.norm(b)
+    if norm_a == 0.0 or norm_b == 0.0:
+        return linear
+    cos = np.clip(np.dot(a / norm_a, b / norm_b), -1.0, 1.0)
+    omega = np.arccos(cos)
+    sin_omega = np.sin(omega)
+    if abs(sin_omega) < 1e-6:                   # parallel or opposite vectors: the straight line
+        return linear
+    out = (np.sin((1.0 - t) * omega) / sin_omega) * a + (np.sin(t * omega) / sin_omega) * b
+    out[0], out[-1] = a, b                      # exactly the ends
+    return out
+```
+**Démarche** : la ligne droite moyenne les coordonnées ; le slerp suit l'arc entre les deux directions. Entre le code d'un 1 (norme 23,2) et celui d'un 0 (norme 14,5), la norme descend jusqu'à 11,2 au milieu de la ligne droite, alors que le slerp passe en douceur de 23,2 à 14,5 sans creux. Ici, les images des deux chemins se ressemblent : rien n'a imposé aux codes de `AE_DEEP` une norme typique. La différence compte dans un espace où les codes vivent sur une « coquille », comme ceux d'une gaussienne en grande dimension (✏️ 25.6) : celui d'un VAE ou d'un GAN, où le milieu d'une ligne droite tombe là où il n'y a presque jamais de code (25.Q9).
+
+**Erreurs fréquentes** : diviser par les normes avant de les tester (`RuntimeWarning` et NaN pour un vecteur nul) ; un seuil de repli trop large (à 0,05 rad, $\sin\Omega \approx 0{,}05$ : c'est encore un vrai slerp, et les tests le vérifient) ; oublier `np.clip` avant `arccos` (un cosinus de 1,0000000002 donne NaN) ; ne pas forcer les extrémités (une erreur d'arrondi de $10^{-16}$ suffit à faire échouer l'égalité exacte).
+
+**Variante** : entre $(3, 0)$ et $(0, 4)$, que donne le slerp à $t = 0{,}5$ ? Réponse : $\Omega = \pi/2$, donc $\frac{\sin(\pi/4)}{1}(3, 0) + \frac{\sin(\pi/4)}{1}(0, 4) \approx (2{,}12 ; 2{,}83)$, de norme 3,54 : entre les deux normes, sur une courbe qui n'est un arc de cercle que si les normes sont égales.
+
+### Ex 25.21 — Mélanger dans l'espace des pixels ou dans l'espace latent 🔬
+**Réponse** :
+```python
+def blend_pixels_21(x0, x1, n_steps):
+    t = np.linspace(0, 1, n_steps)[:, None]
+    return (1 - t) * np.asarray(x0, dtype=np.float32) + t * np.asarray(x1, dtype=np.float32)
+
+
+def blend_codes_21(model, x0, x1, n_steps, method="linear"):
+    z0, z1 = encode(model, np.stack([x0, x1]))
+    path = mylearn.vae.interpolate_latents(z0, z1, n_steps, method=method)
+    return decode(model, np.asarray(path, dtype=np.float32))
+
+
+def off_manifold_21(model, images):
+    images = np.asarray(images, dtype=np.float32).reshape(len(images), -1)
+    return mse_per_image(reconstruct(model, images), images)
+```
+**Démarche** : le fondu des pixels superpose un 1 et un 0 : à mi-chemin, un 0 pâle traversé d'un trait, ce que l'autoencodeur ne sait pas redessiner (distance 0,016 à 0,024, cinq à vingt fois celle d'un vrai chiffre). L'interpolation des codes reste à une distance d'environ 0,001 à chaque étape : chaque image est, pour l'autoencodeur, un chiffre « possible » (forcément : elle sort de son décodeur). Mais « possible pour le décodeur » ne veut pas dire « un vrai chiffre » : entre un 1 et un 0, les étapes du milieu sont des formes ambiguës. Entre deux 5, tout se passe mieux : les deux codes sont voisins, et le chemin reste dans la région des 5. C'est le mélange paramétrique du ✏️ 25.2 : des paramètres bien rangés (ici, appris) donnent des intermédiaires plausibles, un mélange de contenu donne une superposition.
+
+**Erreurs fréquentes** : interpoler les images reconstruites au lieu des codes ; décoder un chemin en `float64` ; conclure qu'un mélange latent est réaliste parce que l'autoencodeur le reconstruit bien (la mesure est biaisée en sa faveur : il faudrait un juge extérieur, comme le classifieur de 25.31).
+
+**Variante** : mesure les étapes avec le classifieur `classify_31` de 25.31 plutôt qu'avec l'autoencodeur lui-même. Réponse : surprise : le classifieur est presque sûr de lui sur le fondu de pixels dès le milieu (0,87 puis 0,99 : il voit un 0 pâle, et le reconnaît), alors qu'il hésite au milieu du chemin latent (0,31 à 0,58) : les étapes latentes sont de vraies formes intermédiaires, ni un 1 ni un 0. « Être reconnu par un classifieur » et « ressembler à un chiffre bien écrit » sont deux questions différentes, et aucune des deux mesures ne suffit seule.
+
+### Ex 25.22 — Taille du goulot et profondeur : la courbe d'erreur de reconstruction 🔬
+**Réponse** :
+```python
+def bottleneck_sweep_22(sizes, makers, epochs, seed=2522, x=None):
+    x = X_MNIST if x is None else x
+    results = {}
+    for name, maker in makers.items():
+        for size in sizes:
+            torch.manual_seed(seed)
+            model = maker(size)
+            train_ae(model, x, epochs, seed=seed)
+            results[(name, size)] = float(mse_per_image(reconstruct(model, XM_TEST), XM_TEST).mean())
+    return results
+```
+**Démarche** : en 4 epochs, le profond l'emporte nettement aux petits goulots (0,049 contre 0,117 à 2 latents, 0,039 contre 0,066 à 5) : avec peu de nombres, il faut beaucoup de calcul pour les choisir et les décoder. Mais sa courbe est presque plate de 5 à 50 latents (0,039 à 0,041) : en 4 epochs, il n'a pas eu le temps de se servir des latents en plus. Le dense, lui, progresse encore à 50 latents (0,036, mieux que le profond) : plus simple, il apprend vite, et un large goulot compense sa faible capacité. Sa courbe n'est pas lisse (5 et 10 latents presque à égalité) : avec une ReLU sur le code, des latents peuvent « mourir » tôt et rester inutilisés. Une comparaison à nombre d'epochs fixe désavantage le modèle le plus lent à apprendre : pour conclure, il faudrait entraîner chacun jusqu'à ce que sa loss de validation cesse de baisser (early stopping, ch. 23).
+
+**Erreurs fréquentes** : appeler `torch.manual_seed` une seule fois avant les boucles (chaque modèle part alors d'un état aléatoire différent, et la comparaison mélange l'effet de la taille et celui du hasard) ; mesurer la loss d'entraînement au lieu de la MSE de test ; tracer en échelle linéaire (les petits goulots, où tout se joue, sont écrasés).
+
+**Variante** : combien de paramètres ont le dense et le profond à 2 et à 50 latents ? Réponse : le dense en a $1\,569\,d + 784$, soit 3 922 et 79 234 ; le profond $1\,133\,072 + 257\,d$, soit 1 133 586 et 1 145 922. Le goulot change à peine la taille du profond (son coût est dans les couches cachées), alors qu'il multiplie par 20 celle du dense : à 50 latents, la courbe compare un dense de 79 000 paramètres à un profond de 1,1 million, entraînés aussi peu longtemps l'un que l'autre.
+
+### Ex 25.23 — L'autoencodeur linéaire face à l'ACP de scikit-learn 🔬
+**Réponse** :
+```python
+def fit_linear_ae_23(xc, k, epochs=40, lr=3e-3, batch_size=256, seed=2523):
+    torch.manual_seed(seed)
+    model = AutoEncoder(nn.Linear(784, k, bias=False), nn.Linear(k, 784, bias=False))
+    train_ae(model, xc, epochs, lr=lr, batch_size=batch_size, seed=seed, loss="mse")
+    return model.decoder.weight.detach().cpu().numpy().astype(np.float64)
+
+
+def subspace_angles_deg_23(A, B):
+    return np.degrees(subspace_angles(np.asarray(A, dtype=np.float64), np.asarray(B, dtype=np.float64)))
+```
+**Démarche** : les erreurs de reconstruction sont presque égales (0,02727 pour l'autoencodeur, 0,02725 pour l'ACP, qui est l'optimum). Les angles principaux entre les deux sous-espaces sont petits : 1,6° en moyenne, 6,4° au plus. Les plus grands concernent les dernières directions : la 16ᵉ et la 17ᵉ valeur propre de la covariance sont proches, si bien qu'échanger un peu de l'une contre l'autre coûte très peu d'erreur, et 40 epochs de descente de gradient ne départagent pas tout à fait. Les colonnes du décodeur, elles, ne sont **pas** les axes de l'ACP : la première n'a qu'un cosinus de 0,02 avec le premier axe, et elles ne sont pas orthogonales (jusqu'à 0,10 de cosinus entre deux d'entre elles). Comme le ∂ 25.8 l'a montré, toute transformation inversible du code, compensée par le décodeur, donne la même reconstruction : l'erreur ne fixe que le sous-espace. Un test « mêmes axes » aurait échoué ; un test d'angles entre sous-espaces passe.
+
+**Erreurs fréquentes** : oublier de centrer (sans biais, l'autoencodeur doit alors aussi représenter la moyenne, et son sous-espace n'est plus celui de l'ACP) ; prendre `model.encoder.weight` sans le transposer et le comparer à des colonnes ; comparer des axes un à un avec des cosinus et conclure que l'autoencodeur « n'a rien trouvé ».
+
+**Variante** : orthonormalise les colonnes du décodeur (`np.linalg.qr`), projette les données dessus, et fais une ACP de ces 16 coordonnées. Réponse : ses axes, ramenés dans l'espace des pixels, retrouvent ceux de l'ACP à quelques degrés près : l'autoencodeur avait le bon sous-espace, il ne lui manquait qu'une rotation.
+
+### Ex 25.24 — Autoencodeur convolutif à 147 latents 📦
+**Réponse** :
+```python
+def make_conv_ae_24(relu_code=False):
+    encoder = nn.Sequential(nn.Unflatten(1, (1, 28, 28)),
+                            nn.Conv2d(1, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),     # 16 x 14 x 14
+                            nn.Conv2d(16, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),     # 8 x 7 x 7
+                            nn.Conv2d(8, 3, 3, padding=1))                                  # 3 x 7 x 7: the code
+    if relu_code:
+        encoder.append(nn.ReLU())                                                            # the book's version
+    decoder = nn.Sequential(nn.Upsample(scale_factor=2), nn.Conv2d(3, 16, 3, padding=1), nn.ReLU(),   # 16 x 14 x 14
+                            nn.Upsample(scale_factor=2), nn.Conv2d(16, 1, 3, padding=1), nn.Sigmoid(),  # 1 x 28 x 28
+                            nn.Flatten())
+    return AutoEncoder(encoder, decoder)
+```
+**Démarche** : les couches sont celles du ✏️ 25.3 ; `nn.Unflatten` et `nn.Flatten` font le lien avec les lignes de 784 pixels du notebook. Le modèle n'a que 2 132 paramètres (500 fois moins que `AE_DEEP`) pour un code de 147 valeurs (7 fois plus que ses 20 latents). Sans activation sur le code, il atteint en 3 epochs une MSE de test de 0,017, bien meilleure que les 0,027 de `AE_DEEP` : les filtres locaux et partagés conviennent aux images, et un code plus grand porte plus d'information. Avec la ReLU du livre sur le code, l'entraînement reste bloqué sur une image floue (0,100 après 3 epochs) : **toutes** les valeurs du code sont nulles. Les 147 sorties de la dernière convolution sont devenues négatives au début de l'entraînement, la ReLU les a mises à zéro, et sa pente nulle en dessous de 0 empêche tout gradient de les ramener : le décodeur ne reçoit plus rien et rend l'image moyenne. Le livre, avec d'autres poids de départ et 50 epochs, s'en est sorti ; ici, c'est le cas typique du neurone ReLU mort (ch. 17), en pire, puisque tout le goulot meurt. La ligne droite entre les codes d'un 1 et d'un 0 donne un fondu, le 1 s'efface pendant que le 0 apparaît : avec 147 valeurs qui gardent une organisation spatiale, le code ressemble encore à une petite image, et le mélanger revient presque à mélanger des pixels (fiche §25.7.1).
+
+**Erreurs fréquentes** : oublier `nn.Unflatten` (une `Conv2d` refuse une entrée 2-D de 784 colonnes, ou la lit comme une image d'une seule ligne) ; oublier `nn.Flatten` à la fin (la sortie `(N, 1, 28, 28)` ne se compare plus aux lignes de pixels) ; `padding=0` (chaque convolution perd deux pixels et les tailles ne retombent plus sur 28).
+
+**Variante** : remplace la ReLU du code par une `nn.LeakyReLU(0.1)`. Réponse : la pente n'est plus nulle sous 0, le gradient repasse, et l'entraînement ne se bloque plus (MSE de test de 0,028 après 3 epochs, au lieu de 0,100) ; un goulot entièrement mort n'est plus possible.
+
+### Ex 25.25 — Le débruiteur qui apprenait le bruit 🐛
+**Réponse** : `faulty_25 = "CFG"` ; la boucle corrigée :
+```python
+faulty_25 = "CFG"
+
+
+def train_denoiser_fixed_25(model, x, epochs, sigma=0.5, lr=1e-3, batch_size=128, seed=0,
+                            loss_fn=F.binary_cross_entropy):
+    x = to_tensor(x)
+    g = torch.Generator().manual_seed(seed)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    model.train()
+    for epoch in range(epochs):
+        order = torch.randperm(len(x), generator=g)
+        for i in range(0, len(x), batch_size):
+            clean = x[order[i:i + batch_size]]
+            inputs = torch.clamp(clean + sigma * torch.randn(clean.shape, generator=g), 0, 1)  # a new noise, clipped
+            loss = loss_fn(model(inputs.to(DEVICE)), clean.to(DEVICE))                        # the target is clean
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+    return model
+```
+**Démarche** : (G) compare la sortie à l'entrée **bruitée** : le réseau apprend à recopier le bruit, l'identité est sa meilleure réponse, et ses images « débruitées » restent pleines de neige ; c'est la faute la plus grave, car rien d'autre ne peut la compenser. (C) tire le bruit **une seule fois**, avant les epochs : chaque image garde le même bruit d'une epoch à l'autre, et un réseau assez grand peut apprendre ce bruit par cœur au lieu de la règle « retirer du bruit » ; on le voit à une loss d'entraînement qui continue de baisser pendant que l'erreur de validation, sur un bruit neuf, remonte. (F) n'écrête pas : des pixels à −0,4 ou à 1,3 n'existent dans aucune image réelle, le réseau apprend sur une distribution d'entrées qu'il ne verra jamais, et la cross-entropy binaire n'est plus définie pour une cible hors de $[0, 1]$. Les trois diagnostics le repèrent sans entraînement, avec un faux modèle qui note ce qu'il reçoit : c'est plus rapide et plus sûr que de juger des images floues.
+
+**Erreurs fréquentes** : marquer (E) (tirer l'ordre des mini-batches avec le même générateur que le bruit est permis) ; corriger (F) en écrêtant la cible au lieu de l'entrée ; tirer le nouveau bruit avec `torch.randn_like(clean)` sans le générateur `g` (le contrat demande `generator=g`, pour que deux appels de même graine donnent le même entraînement).
+
+**Variante** : remplace l'écrêtage par `torch.sigmoid` sur l'entrée bruitée. Réponse : les valeurs restent dans $]0, 1[$, mais tous les pixels sont déformés, même ceux que le bruit n'a pas fait sortir de l'intervalle (un pixel noir devient 0,5) : le réseau doit en plus apprendre à défaire cette déformation. L'écrêtage ne touche que les pixels hors de $[0, 1]$.
+
+### Ex 25.26 — Autoencodeur débruiteur (bruit gaussien, écrêtage) 📦
+**Réponse** :
+```python
+def make_denoiser_26(channels=32):
+    c = channels
+    encoder = nn.Sequential(nn.Unflatten(1, (1, 28, 28)),
+                            nn.Conv2d(1, c, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+                            nn.Conv2d(c, c, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2))
+    decoder = nn.Sequential(nn.Conv2d(c, c, 3, padding=1), nn.ReLU(), nn.Upsample(scale_factor=2),
+                            nn.Conv2d(c, c, 3, padding=1), nn.ReLU(), nn.Upsample(scale_factor=2),
+                            nn.Conv2d(c, 1, 3, padding=1), nn.Sigmoid(), nn.Flatten())
+    return AutoEncoder(encoder, decoder)
+
+
+def psnr_26(clean, images):
+    mse = ((np.asarray(images, dtype=np.float64) - np.asarray(clean, dtype=np.float64)) ** 2).mean(axis=1)
+    return float(np.mean(10 * np.log10(1.0 / mse)))
+```
+**Démarche** : avec 32 filtres (28 353 paramètres) et 3 epochs sur 10 000 vêtements, le PSNR passe de 12,8 dB (images bruitées) à 18,6 dB : un gain de 5,8 dB, soit une MSE divisée par environ $10^{0{,}58} \approx 3{,}8$. Les images débruitées sont propres mais floues : les motifs fins (rayures, logos, coutures) disparaissent avec le bruit, car le réseau ne peut pas distinguer un détail fin d'un grain de bruit après deux réductions de résolution. On moyenne le PSNR image par image parce qu'il est logarithmique : le PSNR de la MSE moyenne serait dominé par les images les plus abîmées, et ne dirait pas la qualité typique d'une image.
+
+**Erreurs fréquentes** : calculer la MSE sur tout le tableau au lieu d'image par image ; oublier le $10$ devant le $\log_{10}$ (des bels, pas des décibels) ; comparer le PSNR des images débruitées à celui des images **propres** contre elles-mêmes (une MSE nulle, un PSNR infini).
+
+**Variante** : avec $\sigma = 0{,}5$, que devient le PSNR des images bruitées ? Réponse : sans écrêtage, il baisserait de $20\log_{10}(0{,}5/0{,}3) \approx 4{,}4$ dB ; avec l'écrêtage, qui limite les plus grosses erreurs, il ne baisse que de 3,5 dB, à 9,3 dB. Un débruiteur entraîné à ce bruit garde un gain, mais ses images perdent encore plus de détails.
+
+### Ex 25.27 — Sur-échantillonnage explicite ou convolutions à pas : temps et qualité 🔬
+**Réponse** :
+```python
+def make_strided_27(channels=32):
+    c = channels
+    encoder = nn.Sequential(nn.Unflatten(1, (1, 28, 28)),
+                            nn.Conv2d(1, c, 3, stride=2, padding=1), nn.ReLU(),        # 28 -> 14
+                            nn.Conv2d(c, c, 3, stride=2, padding=1), nn.ReLU())        # 14 -> 7
+    decoder = nn.Sequential(nn.ConvTranspose2d(c, c, 3, stride=2, padding=1, output_padding=1), nn.ReLU(),  # 7 -> 14
+                            nn.ConvTranspose2d(c, c, 3, stride=2, padding=1, output_padding=1), nn.ReLU(),  # 14 -> 28
+                            nn.Conv2d(c, 1, 3, padding=1), nn.Sigmoid(), nn.Flatten())
+    return AutoEncoder(encoder, decoder)
+
+
+def compare_27(makers, epochs, seed=2527):
+    results = {}
+    for name, maker in makers.items():
+        torch.manual_seed(seed)
+        model = maker()
+        history = train_denoiser(model, X_FASHION[:N_DENOISE], epochs, seed=seed)
+        results[name] = {"params": n_params(model), "sec_per_epoch": float(np.median(history["seconds"])),
+                         "psnr": psnr(VAL_CLEAN_B, reconstruct(model, VAL_NOISY_B))}
+    return results
+```
+**Démarche** : les deux modèles ont exactement le même nombre de paramètres (28 353 : un `ConvTranspose2d` de $c$ vers $c$ canaux a autant de poids qu'un `Conv2d`). La version à pas va plus vite (6,7 s par epoch contre 9,4 s ici) : sa première convolution ne calcule que $14 \times 14$ positions au lieu de $28 \times 28$, et le décodeur n'a pas de convolution à pleine résolution avant le dernier étage. En 2 epochs, les deux débruitent presque aussi bien (17,6 dB contre 17,5 dB) : le livre, lui, attribue le temps le plus court au mauvais modèle (l'encadré ⚠️ de la fiche). Une convolution transposée de stride 2 et de noyau 3 recouvre certains pixels de sortie deux fois et d'autres une seule : elle peut laisser un motif en damier, visible surtout au début de l'entraînement ou sur des fonds unis ; ici, il est à peine perceptible.
+
+**Erreurs fréquentes** : oublier `output_padding=1` (des sorties de 13 puis 25 pixels, ✏️ 25.4) ; mesurer la première epoch seule (elle compte des temps de démarrage) au lieu de la médiane ; conclure sur la qualité après 2 epochs (il faudrait entraîner chacun jusqu'au bout, ou à temps égal).
+
+**Variante** : compare-les à **temps** égal plutôt qu'à epochs égales (par exemple 60 s chacun). Réponse : la version à pas fait environ 40 % d'epochs en plus dans le même temps ($9{,}4/6{,}7 \approx 1{,}4$) ; tant que les deux progressent encore, ces epochs en plus devraient lui donner l'avantage : c'est la comparaison qui compte quand le budget est un temps de calcul.
+
+### Ex 25.28 — La reparamétrisation en NumPy : passe avant et passe arrière 🔨
+**Réponse** (`solutions/mylearn_ref/vae.py` ; `_pair` vérifie deux tableaux 2-D sans NaN de même forme et en fait des copies `float64`) :
+```python
+def reparameterize(mu, log_var, rng=None):
+    mu_a, lv = _pair(mu, log_var, ("mu", "log_var"), 2)
+    generator = rng if isinstance(rng, np.random.Generator) else np.random.default_rng(rng)
+    eps = generator.standard_normal(mu_a.shape)
+    z = mu_a + np.exp(0.5 * lv) * eps
+    return z, eps
+
+
+def reparameterize_backward(dz, eps, log_var):
+    d, e = _pair(dz, eps, ("dz", "eps"), 2)
+    _, lv = _pair(dz, log_var, ("dz", "log_var"), 2)
+    return d.copy(), d * 0.5 * np.exp(0.5 * lv) * e
+```
+**Démarche** : $z = \mu + e^{s/2}\varepsilon$ avec $s = \log\sigma^2$ ; donc $\partial z/\partial\mu = 1$ et $\partial z/\partial s = \frac{1}{2}e^{s/2}\varepsilon = \frac{1}{2}\sigma\varepsilon$ (∂ 25.5), multipliés par $\partial L/\partial z$ (la règle de la chaîne). On rend `eps` parce que la passe arrière en a besoin : sans lui, impossible de calculer $\partial z/\partial s$. Ce gradient est nul quand $\varepsilon = 0$ (le tirage n'a pas bougé de la moyenne, la variance n'y a joué aucun rôle), et il s'écrase quand $s$ est très négatif ($\sigma \to 0$) : le code est alors presque déterministe. Sur 200 000 tirages de $\mathcal{N}(2, 9)$, la moyenne vaut 1,993 et la variance 8,978.
+
+**Erreurs fréquentes** : `np.exp(log_var)` au lieu de `np.exp(0.5 * log_var)` (la variance au lieu de l'écart-type) ; recréer le générateur à partir d'un `Generator` reçu (les tirages se répètent d'un appel à l'autre) ; rendre `dz` lui-même comme `dmu` (une vue : modifier l'un modifie l'autre) ; laisser NumPy diffuser `(2, 3)` contre `(1, 3)`.
+
+**Variante** : écris la passe arrière si l'encodeur rendait $\sigma$ directement (avec $z = \mu + \sigma\varepsilon$). Réponse : $\partial z/\partial\sigma = \varepsilon$ ; mais alors il faudrait garantir $\sigma > 0$ (une softplus en sortie), ce que la log-variance évite : elle peut prendre n'importe quelle valeur réelle.
+
+### Ex 25.29 — Divergence KL gaussienne et son gradient 🔨
+**Réponse** (`solutions/mylearn_ref/vae.py`) :
+```python
+def gaussian_kl(mu, log_var):
+    mu_a, lv = _pair(mu, log_var, ("mu", "log_var"), 2)
+    return 0.5 * np.sum(mu_a ** 2 + np.expm1(lv) - lv, axis=1)
+
+
+def gaussian_kl_grad(mu, log_var):
+    mu_a, lv = _pair(mu, log_var, ("mu", "log_var"), 2)
+    return mu_a.copy(), 0.5 * np.expm1(lv)
+```
+**Démarche** : la KL d'un latent vaut $\frac{1}{2}(\mu^2 + e^{s} - 1 - s)$ (∂ 25.7) ; les latents sont indépendants, donc les KL s'**additionnent** (une moyenne changerait l'échelle de la loss avec le nombre de latents). Ses dérivées : $\mu$ par rapport à $\mu$, et $\frac{1}{2}(e^{s} - 1)$ par rapport à $s$. La KL vaut 0 exactement en $\mu = 0$ et $s = 0$ ($\sigma = 1$), là où les deux dérivées s'annulent : le code suit alors exactement le prior. `np.expm1(s)` calcule $e^{s} - 1$ sans perdre de chiffres quand $s$ est proche de 0, là où `np.exp(s) - 1` soustrait deux nombres presque égaux.
+
+**Erreurs fréquentes** : moyenner sur les latents (`np.mean(..., axis=1)`) ; sommer sur l'axe 0 (une valeur par latent au lieu d'une par exemple) ; écrire $\ln\sigma$ au lieu de $\ln\sigma^2$ (la sortie de l'encodeur est déjà la log-variance).
+
+**Variante** : la KL de $\mathcal{N}(\mu, \sigma^2)$ à $\mathcal{N}(0, \tau^2)$ (un prior plus large). Réponse : $\frac{1}{2}\left(\frac{\mu^2 + \sigma^2}{\tau^2} - 1 - \ln\frac{\sigma^2}{\tau^2}\right)$ ; avec $\tau = 1$, on retrouve la formule du chapitre.
+
+### Ex 25.30 — Un VAE en PyTorch : reconstruction + KL 📦
+**Réponse** :
+```python
+class VAE30(nn.Module):
+
+    def __init__(self, n_latent=20, hidden=(512, 256)):
+        super().__init__()
+        self.n_latent, self.hidden = n_latent, tuple(hidden)
+        layers, n_in = [], 784
+        for n_out in hidden:
+            layers += [nn.Linear(n_in, n_out), nn.ReLU()]
+            n_in = n_out
+        self.encoder = nn.Sequential(*layers)
+        self.to_mu = nn.Linear(n_in, n_latent)
+        self.to_log_var = nn.Linear(n_in, n_latent)
+        layers, n_in = [], n_latent
+        for n_out in reversed(hidden):
+            layers += [nn.Linear(n_in, n_out), nn.ReLU()]
+            n_in = n_out
+        self.decoder = nn.Sequential(*layers, nn.Linear(n_in, 784))
+
+    def encode(self, x):
+        h = self.encoder(x)
+        return self.to_mu(h), self.to_log_var(h)
+
+    def forward(self, x):
+        mu, log_var = self.encode(x)
+        z = mu + torch.exp(0.5 * log_var) * torch.randn_like(mu)        # the reparameterization trick
+        return self.decoder(z), mu, log_var
+
+
+def vae_loss_30(x, logits, mu, log_var, beta=1.0):
+    rec = F.binary_cross_entropy_with_logits(logits, x, reduction="none").sum(dim=1).mean()
+    kl = 0.5 * (mu ** 2 + torch.exp(log_var) - 1 - log_var).sum(dim=1).mean()
+    return rec + beta * kl, rec, kl
+```
+**Démarche** : la classe reprend l'autoencodeur profond avec deux têtes ; `torch.randn_like(mu)` tire $\boldsymbol{\varepsilon}$ hors du graphe, et autograd dérive $\boldsymbol{\mu} + e^{s/2}\boldsymbol{\varepsilon}$ comme tu l'as fait en 25.28. La reconstruction est sommée sur les 784 pixels pour rester à la même échelle que la KL, sommée sur les latents : moyenner la reconstruction sur les pixels reviendrait à multiplier $\beta$ par 784 (fiche, pièges). Après 3 epochs, ton VAE a une reconstruction d'environ 171 nats et une KL d'environ 7 nats par image (environ 10 bits, $7/\ln 2$) : au début, la KL est petite (1,8 nat à la première epoch) parce que l'encodeur n'a encore rien de précis à dire de chaque image, puis elle monte à mesure que les codes deviennent informatifs. `VAE_C`, entraîné 10 epochs, atteint 104 nats de reconstruction et 15 de KL sur le test.
+
+**Erreurs fréquentes** : une sigmoïde à la fin du décodeur **et** `binary_cross_entropy_with_logits` (la sigmoïde est appliquée deux fois) ; `reduction="mean"` sur la reconstruction ; `loss.item()` dans la loss (plus de gradient) ; tirer `eps` avec `torch.randn(mu.shape)` sans le mettre sur le device de `mu` (une erreur sur GPU).
+
+**Variante** : remplace la cross-entropy binaire par une erreur quadratique sommée sur les pixels. Réponse : cela revient à supposer des pixels gaussiens de variance fixe ; l'échelle de la reconstruction change (une MSE sommée vaut quelques dizaines au lieu d'une centaine de nats), donc l'équilibre avec la KL aussi : à $\beta = 1$, la KL pèse relativement plus, et les images sont plus floues.
+
+### Ex 25.31 — Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE 🔮
+**Réponse** : a) **Vrai** ; b) **Faux** ; c) **Faux**.
+
+**Démarche** : décodés par `AE_DEEP`, les 1 000 tirages donnent surtout des 2 (43 %) et des 4 (27 %), et seuls 11 % sont reconnus avec confiance. Les tirages de $\mathcal{N}(\mathbf{0}, \mathbf{I})$ ont une norme d'environ 4,4, alors que les codes de `AE_DEEP` ont une norme moyenne de 14,7 : les tirages tombent tous dans la même petite région près de l'origine, que l'autoencodeur n'a jamais utilisée, et le décodeur y rend quelques mêmes formes ambiguës. Décodés par `VAE_C`, les tirages se répartissent entre les dix chiffres (14 % au plus pour un seul) : les moyennes $\boldsymbol{\mu}$ du VAE ont une norme de 3,5, du même ordre que les tirages, parce que la KL les a rangées près du prior. Mais seuls 31 % sont reconnus avec confiance : ce VAE, entraîné 10 epochs sur 10 000 images, rend des chiffres flous, et un classifieur hésite sur un chiffre flou. Inversement, un classifieur peut être « sûr de lui » sur une tache : il n'a jamais appris à dire « aucun chiffre », sa softmax répartit toute la probabilité entre dix classes. Sur cinq graines, la part du chiffre le plus prédit va de 23 % à 45 % pour l'autoencodeur et de 15 % à 17 % pour le VAE, et la part reconnue avec confiance du VAE de 27 % à 33 % (entrée `p31` de `calib`).
+
+**Erreurs fréquentes** : confondre « reconnu avec confiance » et « est un vrai chiffre » ; penser que le VAE donne des chiffres nets dès qu'il est entraîné (sa netteté dépend de l'entraînement et de $\beta$, 25.36).
+
+**Variante** : décode avec `AE_DEEP` des codes tirés autour de la moyenne de **ses** codes, avec leur écart-type (`codes.mean(axis=0) + codes.std(axis=0) * Z_31`). Réponse : les tirages tombent enfin dans la bonne région, la répartition des chiffres s'étale ; mais les zones vides (25.18) restent, et une partie des images sont des formes hybrides : c'est ce que le VAE organise pour toi.
+
+### Ex 25.32 — Un VAE est stochastique : sorties répétées, bruit relatif, interpolations 🔬
+**Réponse** :
+```python
+def repeat_32(vae, x, k, seed=0):
+    vae.eval()
+    with torch.inference_mode():
+        mu, log_var = vae.encode(to_tensor(x).reshape(1, 784).to(DEVICE))
+        torch.manual_seed(seed)
+        z = mu + torch.exp(0.5 * log_var) * torch.randn(k, mu.shape[1]).to(DEVICE)
+        return torch.sigmoid(vae.decoder(z)).cpu().numpy()
+
+
+def relative_noise_32(model, mu, frac, seed=0):
+    mu = np.asarray(mu, dtype=np.float64)
+    u = np.random.default_rng(seed).uniform(-1, 1, size=mu.shape)
+    return (mu * (1 + frac * u)).astype(np.float32)
+```
+**Démarche** : les huit passages du même 2 sont huit codes différents, tirés autour de la même moyenne avec l'écart-type que l'encodeur a choisi pour cette image : les sorties se ressemblent mais varient (écart-type moyen d'un pixel de 0,025 d'un passage à l'autre), surtout le long des bords du trait. Face à un bruit relatif, les deux modèles tolèrent bien 10 % et 30 % (68 % et 67 % de chiffres reconnus avec confiance pour le VAE, 64 % et 63 % pour l'autoencodeur) ; à 100 %, le VAE tient mieux (55 % contre 44 %) : son décodeur a été entraîné sur des codes bruités (chaque passage tire un code), et la KL a resserré les codes, si bien que les codes voisins sont, eux aussi, des chiffres. L'interpolation sphérique d'un 4 à un 9 passe par des formes intermédiaires qui ressemblent à des chiffres à chaque étape.
+
+**Erreurs fréquentes** : appeler `vae(x)` en mode entraînement pour répéter les passages (c'est bien un tirage, mais le contrat demande la graine et le mode évaluation) ; fixer la graine **avant** `encode` (sans effet ici, mais le contrat la fixe juste avant le tirage) ; un bruit additif de taille fixe au lieu d'un bruit proportionnel à la valeur.
+
+**Variante** : décode $\boldsymbol{\mu}$ seul, sans tirage, et compare à la moyenne des huit sorties. Réponse : les deux images sont très proches mais pas égales, car le décodeur n'est pas linéaire : la moyenne des sorties n'est pas la sortie de la moyenne ; la sortie de $\boldsymbol{\mu}$ est un peu plus nette.
+
+### Ex 25.33 — Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68) 🎨
+**Réponse** :
+```python
+def plot_vae_map_33(vae, x, labels, lim=3.0, n=15):
+    mu = encode_mu(vae, x)
+    images = vae_images(vae, grid_codes((-lim, lim, -lim, lim), n)).reshape(n, n, 28, 28)
+    mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
+    fig, (ax_map, ax_grid) = plt.subplots(1, 2, figsize=(12, 5.6))
+    colors = wb.plot.class_colors(10)
+    for digit in range(10):
+        keep = np.asarray(labels) == digit
+        ax_map.scatter(mu[keep, 0], mu[keep, 1], s=3, color=colors[digit], label=str(digit))
+    for radius in (1, 2, 3):
+        ax_map.add_patch(plt.Circle((0, 0), radius, fill=False, color="k", lw=0.8, ls="--"))
+    ax_map.set_xlim(-lim, lim)
+    ax_map.set_ylim(-lim, lim)
+    ax_map.set_aspect("equal")
+    ax_map.legend(markerscale=4, fontsize=8, ncol=2, loc="upper right")
+    ax_map.set_title("moyennes mu de 2 000 chiffres de test")
+    ax_grid.imshow(mosaic, cmap="gray", extent=(-lim, lim, -lim, lim))
+    ax_grid.set_title(f"la grille de -{lim:g} à {lim:g}, décodée")
+    plt.tight_layout()
+    plt.show()
+    return mosaic
+```
+**Démarche** : comparé à la carte de 25.18, le nuage du VAE est centré sur l'origine et à peu près rond, sans grandes zones vides : 34 % des moyennes $\boldsymbol{\mu}$ sont à moins de 1 de l'origine, 69 % à moins de 2, 90 % à moins de 3, au lieu de 39 %, 86 % et 99 % pour des tirages de $\mathcal{N}(\mathbf{0}, \mathbf{I})$. La grille de −3 à 3 se décode en chiffres presque partout, avec des transitions continues d'un chiffre à l'autre ; aux coins, plus loin que 3 de l'origine, les formes se dégradent. Le nuage ne remplit pas tout à fait la gaussienne : la KL pénalise chaque image séparément, en compromis avec la reconstruction, et rien n'oblige l'ensemble des codes à suivre exactement le prior ; ici, ils restent trop resserrés près du centre et laissent des bords peu habités. Avec deux latents seulement, la reconstruction reste médiocre (152 nats) : la KL et le goulot étroit se combinent.
+
+**Erreurs fréquentes** : tracer des codes tirés au lieu des moyennes (un nuage plus épais, qui mélange l'incertitude et la position) ; des axes non égaux (`set_aspect("equal")`), qui rendent les cercles ovales ; une grille construite avec `np.linspace(-lim, lim, n)` pour les $y$ (la mosaïque à l'envers).
+
+**Variante** : trace aussi les codes **tirés** (un passage de `VAE_2D` pour chaque image) et recompte la part à moins de 2 de l'origine. Réponse : elle ne bouge presque pas (69 %) : les $\sigma$ de ce VAE sont petits devant l'étalement des $\boldsymbol{\mu}$, et ajouter le tirage épaissit le nuage sans l'élargir ; ce qui sépare le nuage du prior, c'est sa forme d'ensemble, pas l'incertitude de chaque code.
+
+### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du posterior) 📈
+**Réponse** :
+```python
+collapsed_34, active_34, peak_34, gap_34, mapping_34 = 'C', 1, 45.6, 106.6, 'BDCA'
+```
+**Démarche** : le run C a une KL nulle à toutes les epochs et aucun latent actif : son posterior s'est effondré, l'encodeur rend le prior pour toutes les images et le décodeur rend l'image moyenne (206 nats de reconstruction, sans progrès après la 2ᵉ epoch). Le run D garde un seul latent actif (KL de 0,4 nat) : un $\beta$ fort laisse passer le strict minimum, et sa reconstruction finale (188,9 nats) dépasse de 113,8 nats celle du run A (75,1), celui dont la KL finit la plus haute. Le run A part d'une KL de 68,0 nats et finit à 22,4 (−45,6) : à la première epoch, $\beta = 0$, rien ne retient la KL, l'encodeur utilise ses 20 latents ; puis $\beta$ monte et la KL baisse, mais 16 latents restent actifs. Le run B, à $\beta = 1$ dès le départ, finit avec une reconstruction moins bonne (82,3 nats) et seulement 12 latents actifs : dès les premières epochs, la KL a « éteint » des latents avant que le décodeur ait appris à s'en servir, et ils ne reviennent plus. C'est exactement ce contre quoi la montée progressive de $\beta$ protège. Le classement par KL finale donne la correspondance : $\beta = 1$ → B, $\beta = 20$ → D, $\beta = 100$ → C, $\beta$ montant → A, soit `"BDCA"`. En entreprise, on surveille la KL **par latent** (ou le nombre de latents actifs) dès les premières epochs : un effondrement se voit tôt, une KL totale qui tombe vers 0 aussi.
+
+**Erreurs fréquentes** : prendre le run D pour l'effondrement (un seul latent actif, ce n'est pas zéro) ; lire `active[0]` au lieu de `active[-1]` ; soustraire dans le mauvais sens en c) ou d) ; associer le run A à $\beta = 1$ parce que les deux finissent avec des courbes proches.
+
+**Variante** : que deviendrait le run B avec un décodeur beaucoup plus puissant (capable de dessiner seul des chiffres plausibles, comme un décodeur autorégressif) ? Réponse : il risquerait l'effondrement même à $\beta = 1$ : si le décodeur réussit sans le code, la KL est un coût sans contrepartie, et l'entraînement la pousse à 0.
+
+### Ex 25.35 — Exporter le décodeur comme générateur autonome et le tester 🛠️
+**Réponse** :
+```python
+def export_decoder_35(vae, path):
+    torch.save({"n_latent": vae.n_latent, "hidden": list(vae.hidden), "state_dict": vae.decoder.state_dict()}, path)
+
+
+def load_generator_35(path):
+    saved = torch.load(path, weights_only=True)
+    layers, n_in = [], saved["n_latent"]
+    for n_out in reversed(saved["hidden"]):
+        layers += [nn.Linear(n_in, n_out), nn.ReLU()]
+        n_in = n_out
+    decoder = nn.Sequential(*layers, nn.Linear(n_in, 784))
+    decoder.load_state_dict(saved["state_dict"])
+    decoder.eval()
+
+    def generate(n, seed=0):
+        z = torch.randn(n, saved["n_latent"], generator=torch.Generator().manual_seed(seed))
+        with torch.inference_mode():
+            images = torch.round(torch.sigmoid(decoder(z)) * 255)
+        return images.numpy().astype(np.uint8).reshape(n, 28, 28)
+
+    return generate
+
+
+def test_generator_shape_35():
+    images = load_generator_35(GEN_PATH)(5)
+    assert images.shape == (5, 28, 28), f"expected (5, 28, 28), got {images.shape}"
+    assert images.dtype == np.uint8, f"expected uint8, got {images.dtype}"
+
+
+def test_generator_seed_35():
+    generate = load_generator_35(GEN_PATH)
+    assert np.array_equal(generate(3, seed=7), generate(3, seed=7)), "the same seed must give the same images"
+    assert not np.array_equal(generate(3, seed=7), generate(3, seed=8)), "two seeds must give different images"
+
+
+GEN_PATH = str(WORK_DIR / "generator_35.pt")
+with checked("25.35"):
+    export_decoder_35(VAE_C.cpu(), GEN_PATH)
+    VAE_C.to(DEVICE)
+    generate_35 = load_generator_35(GEN_PATH)
+    if returned("25.35", "load_generator_35", generate_35):
+        images_35 = generate_35(6, seed=1)
+        z_35 = torch.randn(6, 20, generator=torch.Generator().manual_seed(1))
+        want_35 = np.round(vae_images(VAE_C, z_35.numpy()) * 255).astype(np.uint8).reshape(6, 28, 28)
+        verdict("25.35", isinstance(images_35, np.ndarray) and images_35.dtype == np.uint8 and images_35.shape == (6, 28, 28)
+                and np.abs(images_35.astype(int) - want_35.astype(int)).max() <= 1,
+                "le générateur rechargé rend les images du décodeur de VAE_C, en uint8 (6, 28, 28).",
+                f"attendu un tableau uint8 (6, 28, 28) égal aux images du décodeur de VAE_C pour la graine 1, reçu "
+                f"{type(images_35).__name__} {shape_text(images_35)}.")
+        show_rows([generate_35(10, seed=0) / 255.0], ["generate(10)"])
+    PRE_35 = f"import torch\nimport torch.nn as nn\nGEN_PATH = {GEN_PATH!r}"
+    TESTS_35 = [test_generator_shape_35, test_generator_seed_35]
+    import inspect
+    if all("NotImplementedError" not in inspect.getsource(test) for test in TESTS_35):
+        print("Tes tests, sur ton générateur (ils doivent passer) :")
+        result_35 = wb.run_pytest(TESTS_35, subject=load_generator_35, preamble=PRE_35)
+        verdict("25.35", result_35.ok, "tes tests passent sur ton générateur.", "tes tests doivent passer sur ton générateur.")
+        for broken_35, why_35 in [(broken_float_35, "un générateur qui rend des flottants dans [0, 1]"),
+                                  (broken_seed_35, "un générateur qui ignore la graine")]:
+            caught_35 = not wb.run_pytest(TESTS_35, subject=broken_35, name="load_generator_35", preamble=PRE_35, quiet=True).ok
+            verdict("25.35", caught_35, f"tes tests attrapent {why_35}.", f"tes tests laissent passer {why_35}.")
+    else:
+        print("⏳ Ex 25.35 : écris tes deux tests.")
+```
+**Démarche** : le fichier contient tout ce qu'il faut pour reconstruire le décodeur : sa taille (`n_latent`, `hidden`) et ses poids. Le générateur rechargé rend exactement les images du décodeur de `VAE_C` pour la même graine (à un niveau de gris près au plus, l'arrondi). Les deux tests passent sur ce générateur, et chacun attrape un des deux générateurs cassés : le premier vérifie le `dtype` (les flottants dans $[0, 1]$ ne sont pas des `uint8`), le second l'effet de la graine (un générateur qui l'ignore rend les mêmes images pour deux graines). Un test qui ne vérifie que « ça ne plante pas » n'aurait attrapé ni l'un ni l'autre. `weights_only=True` interdit au chargement d'exécuter du code arbitraire caché dans le fichier (un fichier PyTorch ordinaire est un *pickle*) : c'est le défaut de `torch.load` depuis PyTorch 2.6, et une bonne habitude pour un fichier reçu. Pour une autre équipe, il faudrait livrer aussi une fiche modèle (ch. 23) : les données d'entraînement, ce que le générateur sait faire et ne sait pas faire, la version de PyTorch, et un exemple d'utilisation.
+
+**Erreurs fréquentes** : sauvegarder tout le modèle avec `torch.save(vae)` (le fichier dépend alors de la classe `VAE` du notebook) ; oublier `eval()` (sans effet ici, mais un décodeur avec du dropout ou une batchnorm donnerait d'autres images) ; utiliser le générateur global (`torch.manual_seed`) au lieu d'un `torch.Generator` local, qui change l'état aléatoire de tout le programme ; un test qui compare deux appels avec des graines différentes sans vérifier qu'ils diffèrent.
+
+**Variante** : ajoute un test qui vérifie que les images ne sont pas toutes noires ou toutes blanches (par exemple, une moyenne des pixels entre 10 et 200). Réponse : il attraperait un décodeur dont les poids n'ont pas été chargés (un décodeur neuf rend un gris uniforme proche de 128, que ce test seul ne verrait pas ; il faudrait aussi vérifier une variance minimale entre les images).
+
+### Ex 25.36 — β-VAE : échanger la netteté contre la régularité 🔬
+**Réponse** :
+```python
+def beta_sweep_36(betas, epochs, seed=2536, x=None, n_latent=16):
+    x = X_FASHION if x is None else x
+    results = {}
+    for beta in betas:
+        torch.manual_seed(seed)
+        model = VAE(n_latent)
+        train_vae(model, x, epochs, beta=beta, seed=seed)
+        rec, kl, per_latent = vae_eval(model, XF_TEST)
+        results[beta] = {"rec": rec, "kl": kl, "active": int(np.sum(per_latent > 0.05)), "model": model}
+    return results
+```
+**Démarche** : quand $\beta$ passe de 0,5 à 16, la KL baisse de 17,6 à 2,2 nats et la reconstruction monte de 249,5 à 295,4 nats : on échange de l'information dans le code contre de la régularité. Les latents actifs passent de 16 à 4 : à $\beta = 16$, le VAE n'utilise plus que quelques directions, qui portent les facteurs les plus importants (la silhouette, la luminosité), et les reconstructions deviennent des formes moyennes floues ; les tirages de $\mathcal{N}(\mathbf{0}, \mathbf{I})$ sont plus homogènes et plus « typiques ». À $\beta$ petit, les reconstructions sont plus fidèles, mais les tirages au hasard sont moins réussis : les codes s'éloignent du prior. Pour un générateur, on choisit un $\beta$ autour de 1 (ou un peu moins avec plus de latents) en regardant les tirages ; pour un détecteur d'anomalies, un $\beta$ plus petit, car c'est la précision de la reconstruction qui fait le score. Les chiffres viennent de 4 epochs sur 10 000 vêtements : les tendances sont nettes, les valeurs ne sont pas finales.
+
+**Erreurs fréquentes** : comparer les reconstructions à la loss totale (qui contient $\beta$ fois la KL : elle n'est pas comparable d'un $\beta$ à l'autre) ; oublier la graine avant `VAE(n_latent)` (les modèles diffèrent alors aussi par leurs poids de départ) ; compter comme actifs les latents à KL strictement positive (toute KL calculée est un peu positive).
+
+**Variante** : entraîne $\beta = 4$ avec 32 latents au lieu de 16. Réponse : le nombre de latents actifs reste du même ordre (une demi-douzaine) : un $\beta$ fort limite l'information totale du code, pas le nombre de latents disponibles.
+
+### Ex 25.37 — Détecter des anomalies par l'erreur de reconstruction 🔬
+**Réponse** :
+```python
+def fit_without_37(digit, epochs, seed=2537):
+    torch.manual_seed(seed)
+    model = make_deep_ae(20)
+    train_ae(model, X_MNIST[Y_MNIST != digit], epochs, seed=seed)
+    return model
+
+
+def scores_37(model, x):
+    return mse_per_image(reconstruct(model, x), x)
+
+
+def auc_37(normal, anomalies):
+    y_true = np.concatenate([np.zeros(len(normal), dtype=int), np.ones(len(anomalies), dtype=int)])
+    return float(mylearn.metrics.roc_auc(y_true, np.concatenate([normal, anomalies])))
+```
+**Démarche** : sans avoir vu de 7, l'autoencodeur les reconstruit souvent comme des 1 ou des 9 assez proches : ROC-AUC de 0,676 seulement, les 7 sont des anomalies « proches ». Les vêtements, très différents, sont bien repérés (0,906). Les chiffres très pâles (15 % de l'intensité) donnent une ROC-AUC de 0,285, **sous** 0,5 : ils sont faciles à reconstruire (presque tous les pixels sont proches de 0), et leur erreur est plus **petite** que celle des chiffres normaux. C'est la limite de toute détection par reconstruction (25.Q11) : un score faible veut dire « facile à reconstruire », pas « normal » ; une image presque vide, un fond uni, passent inaperçus. En pratique, on choisit le seuil sur une validation, à partir du taux de fausses alertes acceptable (un percentile des scores des données normales), et on mesure la precision et le recall des alertes (ch. 3), pas seulement la ROC-AUC.
+
+**Erreurs fréquentes** : entraîner sur tous les chiffres (le 7 n'est plus une anomalie) ; inverser les labels (une ROC-AUC de $1 - x$) ; lire une ROC-AUC sous 0,5 comme « aléatoire » (elle dit que le score range systématiquement à l'envers).
+
+**Variante** : normalise le score par l'intensité de l'image (la MSE divisée par la moyenne des pixels au carré). Réponse : les chiffres pâles ne passent plus inaperçus (leur erreur relative devient grande), mais d'autres cas s'abîment : chaque correction d'un score a ses propres angles morts, d'où l'intérêt de tester le détecteur sur plusieurs familles d'anomalies.
+
+### Ex 25.38 — Un VAE entièrement en NumPy avec mylearn 🔨
+**Réponse** :
+```python
+def _relu_38(z):
+    return np.maximum(z, 0.0)
+
+
+def _relu_derivative_38(z):
+    return (z > 0).astype(float)
+
+
+def init_numpy_vae_38(n_latent=8, hidden=128, seed=0):
+    rng = np.random.default_rng(seed)
+    return {"enc": mylearn.nn.layers.init_mlp([784, hidden, 2 * n_latent], rng=rng),
+            "dec": mylearn.nn.layers.init_mlp([n_latent, hidden, 784], rng=rng)}
+
+
+def numpy_vae_loss_38(params, x, eps):
+    layers, backward, vae = mylearn.nn.layers, mylearn.nn.backward, mylearn.vae
+    n, d = eps.shape
+    h, cache_enc = layers.mlp_forward(x, params["enc"], activation=_relu_38, return_cache=True)
+    mu, log_var = h[:, :d], h[:, d:]
+    z = mu + np.exp(0.5 * log_var) * eps                                   # reparameterize, with eps given
+    logits, cache_dec = layers.mlp_forward(z, params["dec"], activation=_relu_38, return_cache=True)
+    mean_bce, dlogits = backward.binary_cross_entropy_with_logits(logits, x)
+    rec, dlogits = 784 * mean_bce, 784 * dlogits                            # summed over pixels, mean over batch
+    kl = float(np.mean(vae.gaussian_kl(mu, log_var)))
+    grads_dec, dz = backward.mlp_backward(dlogits, cache_dec, params["dec"], activation_derivative=_relu_derivative_38,
+                                          return_input_grad=True)
+    dmu, dlog_var = vae.reparameterize_backward(dz, eps, log_var)           # through z
+    gmu, glog_var = vae.gaussian_kl_grad(mu, log_var)                       # through the KL, averaged over the batch
+    dh = np.concatenate([dmu + gmu / n, dlog_var + glog_var / n], axis=1)
+    grads_enc = backward.mlp_backward(dh, cache_enc, params["enc"], activation_derivative=_relu_derivative_38)
+    return rec + kl, rec, kl, {"enc": grads_enc, "dec": grads_dec}
+
+
+def train_numpy_vae_38(params, x, epochs, lr=1e-3, batch_size=128, seed=0):
+    flat = [p for part in ("enc", "dec") for layer in params[part] for p in layer]
+    optimizer = mylearn.optim.Adam(flat, lr=lr)
+    rng = np.random.default_rng(seed)
+    d = params["dec"][0][0].shape[0]
+    x = np.asarray(x, dtype=np.float64)
+    losses = []
+    for _ in range(epochs):
+        order = rng.permutation(len(x))
+        total = 0.0
+        for i in range(0, len(x), batch_size):
+            xb = x[order[i:i + batch_size]]
+            loss, _, _, grads = numpy_vae_loss_38(params, xb, rng.standard_normal((len(xb), d)))
+            optimizer.step([g for part in ("enc", "dec") for layer in grads[part] for g in layer])
+            total += loss * len(xb)
+        losses.append(total / len(x))
+    return losses
+```
+**Démarche** : le gradient arrive sur $\boldsymbol{\mu}$ et $\log\boldsymbol{\sigma}^2$ par deux chemins : la reconstruction (à travers le décodeur, puis $\mathbf{z}$, avec `reparameterize_backward`) et la KL (`gaussian_kl_grad`, divisé par $n$ parce que la KL est moyennée sur le batch) ; on additionne les deux avant de remonter dans l'encodeur. La vérification contre `torch.autograd` vient **avant** l'entraînement : une erreur de gradient (un facteur 784 oublié, un $1/n$ en trop) donne un VAE qui apprend quand même un peu, et rien ne la signalerait ; comparée à un oracle sur un petit cas, elle se voit tout de suite, et à la bonne couche. Entraîné 5 epochs sur 5 000 chiffres (3 s), ton VAE NumPy fait passer sa loss de 414 à 173 nats, et décode des taches qui commencent à ressembler à des chiffres. Le VAE PyTorch de 25.30, plus grand, prend environ 1,2 s par epoch sur 10 000 images, ton VAE NumPy environ 0,6 s sur 5 000 : pour de petites couches denses sur un CPU, NumPy n'est pas plus lent, mais on y écrit soi-même chaque gradient.
+
+**Erreurs fréquentes** : oublier le facteur 784 sur le gradient de la reconstruction (la loss est sommée sur les pixels, la fonction de `mylearn` rend une moyenne) ; ne pas diviser le gradient de la KL par $n$ ; oublier `return_input_grad=True` sur le décodeur (pas de $\partial L/\partial \mathbf{z}$) ; donner à Adam les gradients dans un autre ordre que les paramètres.
+
+**Variante** : remplace `eps` par des zéros dans `numpy_vae_loss_38`. Réponse : $\mathbf{z} = \boldsymbol{\mu}$, le gradient par rapport à $\log\boldsymbol{\sigma}^2$ ne vient plus que de la KL, qui pousse $\sigma$ vers 1 sans rien en face : c'est un autoencodeur déterministe régularisé, plus un VAE.
+
+### Ex 25.39 — Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte 🏆
+**Réponse** (une solution parmi d'autres) :
+```python
+def make_denoiser_39():
+    c = 32                                            # no pooling: every layer keeps the 28 x 28 resolution
+    layers = [nn.Unflatten(1, (1, 28, 28)), nn.Conv2d(1, c, 3, padding=1), nn.ReLU()]
+    for _ in range(3):
+        layers += [nn.Conv2d(c, c, 3, padding=1), nn.ReLU()]
+    return AutoEncoder(nn.Sequential(*layers), nn.Sequential(nn.Conv2d(c, 1, 3, padding=1), nn.Sigmoid(), nn.Flatten()))
+
+
+def train_39(model, x_clean):
+    train_denoiser(model, x_clean, 3 if FAST_MODE else 2, lr=2e-3, seed=2539)
+```
+**Démarche** : le débruiteur de 25.26 plafonne vers 18,6 dB : ses deux poolings perdent la résolution, et le décodeur doit réinventer les détails. Un réseau qui garde la résolution $28 \times 28$ à chaque couche (quatre convolutions de 32 filtres, une convolution de sortie, 28 353 paramètres, autant que celui de 25.26) n'a rien à réinventer : chaque pixel de sortie voit un voisinage de $11 \times 11$ pixels d'entrée (cinq convolutions $3 \times 3$), assez pour estimer le bruit. Entraîné 3 epochs sur les 10 000 vêtements (51 s), il atteint 20,1 dB en validation et 20,2 dB sur le test caché. L'objectif, 19,3 dB, est la moyenne de cette recette sur trois graines (19,6 à 20,1 dB en validation) moins 0,5 dB (`tools/chapters/history_ch25.json`, entrée `p39`). Les leviers suivants, dans l'ordre de leur coût : plus d'epochs (le temps le permet), un learning rate un peu plus grand au début puis décroissant, un peu plus de largeur ; une connexion qui ajoute l'entrée à la sortie (le réseau prédit alors le bruit à retirer) aide aussi.
+
+**Erreurs fréquentes** : régler l'architecture sur le test caché (il n'est révélé qu'une fois : la validation sert à choisir) ; entraîner avec un autre bruit que celui du défi ; dépasser le temps en oubliant que la première epoch inclut des temps de démarrage.
+
+**Variante** : mesure le PSNR de validation de ta solution avec un bruit de $\sigma = 0{,}2$ et de $\sigma = 0{,}4$ sans la réentraîner. Réponse : à $\sigma = 0{,}2$, le gain reste positif mais le réseau lisse trop (il retire un bruit plus fort qu'il n'y en a) ; à $\sigma = 0{,}4$, il laisse du bruit : un débruiteur est spécialisé pour le bruit qu'il a vu, d'où l'intérêt d'entraîner sur une plage de $\sigma$.
