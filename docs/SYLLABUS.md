@@ -4653,16 +4653,16 @@ CHAPITRE CONCEPTUEL (10 pages, listes de datasets) : composition adaptée et ass
 
 | ID | Type | Titre | ★ | ⏱️ | Points | Couvre | Parcours |
 |---|---|---|---|---|---|---|---|
-| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) | ★ | 12 | 2,5 | 25, 26, 27, 28, 29 | RMC |
+| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) | ★ | 10 | 2,5 | 25, 26, 27, 28, 29 | RMC |
 | CP6.2 | ✏️ | VAE : un tirage reparamétrisé et sa divergence KL | ★ | 10 | 2 | 25 | RMC |
 | CP6.3 | ✏️ | Deux transitions : mise à jour Q-learning puis SARSA | ★ | 10 | 2 | 26 | RMC |
 | CP6.4 | ∂ | Discriminateur optimal et losses à l'équilibre | ★ | 12 | 2 | 27 | RMC |
-| CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | ★ | 6 | 1 | 28 | RMC |
-| CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | ★ | 5 | 1 | 26 | RMC |
+| CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | ★ | 5 | 1 | 28 | RMC |
+| CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | ★ | 7 | 1 | 26 | RMC |
 | CP6.7 | 📈 | Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement | ★ | 8 | 1 | 25, 26, 27 | RMC |
 | CP6.8 | 📦 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni | ★★ | 15 | 2 | 25 | RMC |
 | CP6.9 | 🐛 | Réparer une boucle d'entraînement de GAN | ★ | 10 | 1,5 | 27 | RMC |
-| CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | ★ | 5 | 1 | 26 | RMC |
+| CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | ★ | 6 | 1 | 26 | RMC |
 | CP6.11 | ⚖️ | Un dataset de visages pour un produit commercial | ★ | 5 | 1 | 29, 27 | RMC |
 | CP6.12 | 💼 | Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes | ★ | 6 | 1 | 25, 27 | RMC |
 | CP6.13 | ✏️ | Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam | ★ | 10 | 2 | 21, 19 | RMC |

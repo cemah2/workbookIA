@@ -525,3 +525,19 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Écrire une data card et un téléchargement vérifié par somme de contrôle | |
 | Choisir et présenter le dataset du projet final | |
 <!-- wb:end 29 -->
+<!-- wb:section CP6 -->
+## CP6 — Checkpoint de la partie VI
+
+| Bilan | Résultat |
+|---|:-:|
+| Note de l'examen blanc (sur 20), et date | |
+| Questions où j'ai eu moins de la moitié des points (remédiation du corrigé faite ?) | |
+| Reprise de ces questions une semaine plus tard (date, points) | |
+| Note du mini-projet MP6 avec la grille (sur 20) | |
+| Je sais redessiner la carte mentale de la partie VI de mémoire (0 à 3) | |
+| Je sais tirer un code par reparamétrisation, calculer sa KL et écrire la loss d'un VAE (0 à 3) | |
+| Je sais mettre à jour une table Q par Q-learning et par SARSA, et régler γ, α et ε (0 à 3) | |
+| Je sais écrire et déboguer un pas de GAN, et dire ce que valent ses losses à l'équilibre (0 à 3) | |
+| Je sais évaluer et comparer deux générateurs : distance de Fréchet, modes couverts, mémorisation (0 à 3) | |
+| Je sais juger un dataset avant usage : licence, consentement, retraits, fuites (0 à 3) | |
+<!-- wb:end CP6 -->
