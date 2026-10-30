@@ -563,11 +563,11 @@ def compare_27(makers, epochs, seed=2527):
                          "psnr": psnr(VAL_CLEAN_B, reconstruct(model, VAL_NOISY_B))}
     return results
 ```
-**Démarche** : les deux modèles ont exactement le même nombre de paramètres (28 353 : un `ConvTranspose2d` de $c$ vers $c$ canaux a autant de poids qu'un `Conv2d`). La version à pas va plus vite (6,7 s par epoch contre 9,4 s ici) : sa première convolution ne calcule que $14 \times 14$ positions au lieu de $28 \times 28$, et le décodeur n'a pas de convolution à pleine résolution avant le dernier étage. En 2 epochs, les deux débruitent presque aussi bien (17,6 dB contre 17,5 dB) : le livre, lui, attribue le temps le plus court au mauvais modèle (l'encadré ⚠️ de la fiche). Une convolution transposée de stride 2 et de noyau 3 recouvre certains pixels de sortie deux fois et d'autres une seule : elle peut laisser un motif en damier, visible surtout au début de l'entraînement ou sur des fonds unis ; ici, il est à peine perceptible.
+**Démarche** : les deux modèles ont exactement le même nombre de paramètres (28 353 : un `ConvTranspose2d` de $c$ vers $c$ canaux a autant de poids qu'un `Conv2d`). La version à pas va plus vite (environ 6 s par epoch contre 8 à 9 s ici, selon les exécutions) : sa première convolution ne calcule que $14 \times 14$ positions au lieu de $28 \times 28$, et le décodeur n'a pas de convolution à pleine résolution avant le dernier étage. En 2 epochs, les deux débruitent presque aussi bien (17,6 dB contre 17,5 dB) : le livre, lui, attribue le temps le plus court au mauvais modèle (l'encadré ⚠️ de la fiche). Une convolution transposée de stride 2 et de noyau 3 recouvre certains pixels de sortie deux fois et d'autres une seule : elle peut laisser un motif en damier, visible surtout au début de l'entraînement ou sur des fonds unis ; ici, il est à peine perceptible.
 
 **Erreurs fréquentes** : oublier `output_padding=1` (des sorties de 13 puis 25 pixels, ✏️ 25.4) ; mesurer la première epoch seule (elle compte des temps de démarrage) au lieu de la médiane ; conclure sur la qualité après 2 epochs (il faudrait entraîner chacun jusqu'au bout, ou à temps égal).
 
-**Variante** : compare-les à **temps** égal plutôt qu'à epochs égales (par exemple 60 s chacun). Réponse : la version à pas fait environ 40 % d'epochs en plus dans le même temps ($9{,}4/6{,}7 \approx 1{,}4$) ; tant que les deux progressent encore, ces epochs en plus devraient lui donner l'avantage : c'est la comparaison qui compte quand le budget est un temps de calcul.
+**Variante** : compare-les à **temps** égal plutôt qu'à epochs égales (par exemple 60 s chacun). Réponse : la version à pas fait environ 35 % d'epochs en plus dans le même temps (8,3 s contre 6,2 s par epoch lors d'une de nos exécutions : $8{,}3/6{,}2 \approx 1{,}35$) ; tant que les deux progressent encore, ces epochs en plus devraient lui donner l'avantage : c'est la comparaison qui compte quand le budget est un temps de calcul.
 
 ### Ex 25.28 — La reparamétrisation en NumPy : passe avant et passe arrière 🔨
 **Réponse** (`solutions/mylearn_ref/vae.py` ; `_pair` vérifie deux tableaux 2-D sans NaN de même forme et en fait des copies `float64`) :
@@ -816,7 +816,7 @@ def beta_sweep_36(betas, epochs, seed=2536, x=None, n_latent=16):
 
 **Erreurs fréquentes** : comparer les reconstructions à la loss totale (qui contient $\beta$ fois la KL : elle n'est pas comparable d'un $\beta$ à l'autre) ; oublier la graine avant `VAE(n_latent)` (les modèles diffèrent alors aussi par leurs poids de départ) ; compter comme actifs les latents à KL strictement positive (toute KL calculée est un peu positive).
 
-**Variante** : entraîne $\beta = 4$ avec 32 latents au lieu de 16. Réponse : le nombre de latents actifs reste du même ordre (une demi-douzaine) : un $\beta$ fort limite l'information totale du code, pas le nombre de latents disponibles.
+**Variante** : entraîne $\beta = 4$ avec 32 latents au lieu de 16. Réponse : la KL totale reste du même ordre (4,5 nats contre 5,1), alors que les latents actifs passent de 6 à 10 : un $\beta$ fort limite d'abord l'information **totale** du code, que le VAE répartit alors sur un peu plus de latents.
 
 ### Ex 25.37 — Détecter des anomalies par l'erreur de reconstruction 🔬
 **Réponse** :
@@ -840,7 +840,7 @@ def auc_37(normal, anomalies):
 
 **Erreurs fréquentes** : entraîner sur tous les chiffres (le 7 n'est plus une anomalie) ; inverser les labels (une ROC-AUC de $1 - x$) ; lire une ROC-AUC sous 0,5 comme « aléatoire » (elle dit que le score range systématiquement à l'envers).
 
-**Variante** : normalise le score par l'intensité de l'image (la MSE divisée par la moyenne des pixels au carré). Réponse : les chiffres pâles ne passent plus inaperçus (leur erreur relative devient grande), mais d'autres cas s'abîment : chaque correction d'un score a ses propres angles morts, d'où l'intérêt de tester le détecteur sur plusieurs familles d'anomalies.
+**Variante** : normalise le score par l'intensité de l'image (la MSE divisée par la moyenne des pixels au carré). Réponse : les chiffres pâles sont tous repérés (ROC-AUC de 1,0), et les 7 mieux qu'avant (0,82 au lieu de 0,68) ; mais les vêtements le sont un peu moins (0,87 au lieu de 0,91), car leurs grandes surfaces claires gonflent le dénominateur. Chaque correction d'un score a ses propres angles morts, d'où l'intérêt de tester un détecteur sur plusieurs familles d'anomalies.
 
 ### Ex 25.38 — Un VAE entièrement en NumPy avec mylearn 🔨
 **Réponse** :

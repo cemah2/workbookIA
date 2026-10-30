@@ -3091,7 +3091,7 @@ Dans tes notes : les 7 sont-ils faciles à repérer, et les vêtements ? Que se 
     Ex("25.38", "🔨", 4, 150, "Un VAE entièrement en NumPy avec mylearn",
        "assembler un VAE complet avec ta librairie (couches, passe arrière, Adam, `vae.py`) et vérifier sa passe arrière.",
        "Ex 25.28 · Ex 25.29 · ch. 18 (Ex 18.14, `mlp_backward`) · ch. 19 (Adam) · fiche §25.9.2", thread="MNIST",
-       tracks="M, C",
+       tracks="M, C", mylearn="vae.py, nn/layers.py, nn/backward.py, optim.py",
        body=r"""Tout ce qu'il faut pour un VAE est déjà dans ta librairie : `init_mlp` et `mlp_forward` (ch. 16), `binary_cross_entropy_with_logits` et `mlp_backward` (ch. 18), `Adam` (ch. 19), et `vae.py`. Tu l'assembles **sans nouvelle fonction de librairie** : un encodeur `784 → hidden → 2d` (ReLU au milieu ; les $d$ premières sorties sont $\boldsymbol{\mu}$, les $d$ suivantes $\log\boldsymbol{\sigma}^2$), un décodeur `d → hidden → 784` (des logits).
 
 **Contrat**
