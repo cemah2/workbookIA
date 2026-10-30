@@ -286,6 +286,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une table Q qui oscille sans se stabiliser dans un environnement aléatoire | $\alpha$ proche de 1 : chaque mise à jour remplace presque la valeur | $\alpha$ petit (0,1) ou qui décroît au fil des visites (fiche 26, §26.6.1 ; 🔬 26.27) |
 | une courbe d'apprentissage RL « bien meilleure » qui ne se reproduit pas | une seule graine, ou évaluation avec exploration | plusieurs graines (au moins cinq), un intervalle, $\varepsilon = 0$ et mêmes graines pour l'évaluation (🛠️ 26.34) |
 | `TypeError` ou état différent à chaque `reset` de Gymnasium | graine passée en `np.int64`, ou `reset` sans graine | `env.reset(seed=int(seed))` |
+| `ValueError: illegal move` au morpion (`wb.envs.TicTacToe`) | l'action choisie par `np.argmax(Q[state])` sur toute la ligne, sans le masque | ne choisir que parmi `np.flatnonzero(info["action_mask"])` (🔨 26.21, 📦 26.35) |
+| un agent qui « gagne » des récompenses sans jamais finir la partie | une récompense intermédiaire qu'on peut ramasser en boucle | récompenser le but, ou une récompense façonnée par différence de potentiel ; vérifier sur la tâche réelle (🔬 26.32) |
 
 ## Erreurs de raisonnement (ML)
 

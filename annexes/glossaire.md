@@ -845,6 +845,11 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | auto-apprentissage | self-play | l'agent joue contre lui-même ; l'adversaire fait partie de son environnement | 26 |
 | RLHF | reinforcement learning from human feedback | ajuster un modèle de langage par RL sur un modèle de récompense appris à partir de préférences humaines, avec une pénalité KL | 26 |
 | piratage de la récompense | reward hacking, specification gaming | l'agent maximise la récompense écrite sans faire ce qu'on voulait | 26 |
+| recherche en largeur | breadth-first search | explorer un graphe par couches (les nœuds à 1 pas, puis à 2 pas…) : donne le plus court chemin de chaque nœud | 26 |
+| récompense façonnée | reward shaping | récompense intermédiaire ajoutée pour guider l'apprentissage (un bonus quand l'agent se rapproche du but) ; sans précaution, elle peut changer ce que l'agent apprend | 26 |
+| masque d'actions | action mask | la liste des actions permises dans un état (`info["action_mask"]`), pour ne jamais proposer un coup interdit | 26 |
+| discrétiser | discretize | découper une variable continue en intervalles, pour qu'une table puisse lister ses valeurs (l'état de CartPole) | 26 |
+| SARSA espéré | expected SARSA | variante de SARSA dont la cible prend l'espérance de $Q(s', \cdot)$ sous la politique, au lieu de l'action tirée | 26 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

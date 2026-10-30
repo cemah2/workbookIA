@@ -652,8 +652,7 @@ def returns_to_go(rewards, gamma=1.0):
     G = 0.0
     for t in range(len(r) - 1, -1, -1):
         G = r[t] + gamma * G
-        out[t] = G
-    return out
+        # store G at position t
 ```
 `discounted_return` peut rendre `float(returns_to_go(rewards, gamma)[0])` (0,0 pour un épisode vide).
 
@@ -852,9 +851,10 @@ Le calendrier est une fonction définie **dans** `epsilon_schedule_22`, qui gard
 ```python
 def epsilon_schedule_22(n_episodes, start=1.0, end=0.05, fraction=0.8):
     def epsilon(i):
-        return max(end, start - (start - end) * i / (fraction * n_episodes))
+        ...                                # start - (start - end) * i / (fraction * n_episodes), never below end
     return epsilon
 ```
+`train_lake_22` crée le lac avec `make_env`, puis rend `(env, *mylearn.rl.train_tabular(...))`.
 
 </details>
 
@@ -890,12 +890,9 @@ Pour chaque ligne, demande-toi ce qu'elle doit faire : départager des ex æquo 
 </details>
 <details><summary>Indice 3</summary>
 
-Les lignes de l'exploration au hasard, du `reset`, de la mise à jour et de la fin de boucle sont justes. Les quatre lignes clés de la version corrigée :
+Pour le premier point : la ligne (E) rend toujours 0 pour une ligne de zéros ; la version corrigée choisit `action = tie_argmax(Q[state], rng)`. Pour les trois autres, demande-toi quelle ligne lit la ligne de l'état **courant** au lieu de celle de l'état suivant, quelle ligne garde l'amorçage après une vraie fin, et quelle ligne le coupe après une simple coupure. La cible corrigée a la forme :
 ```python
-action = tie_argmax(Q[state], rng)
-bootstrap = gamma * np.max(Q[next_state])
-target = reward if terminated else reward + bootstrap
-# and nothing special for truncated: the bootstrap stays
+target = reward if terminated else reward + gamma * ...   # the row of which state?
 ```
 
 </details>
@@ -990,7 +987,7 @@ Avec $\varepsilon = 0{,}1$ et 4 actions, l'agent joue une action au hasard une f
 </details>
 <details><summary>Indice 3</summary>
 
-Le long du bord, chaque pas d'exploration tire « bas » une fois sur quatre : estime la probabilité de tomber en 11 pas, puis multiplie par 500 épisodes, sans oublier que les premiers épisodes, avant que le chemin soit appris, tombent aussi. Pour SARSA, demande-toi si une seule rangée d'écart suffit quand deux explorations de suite vers le bas sont possibles.
+Le long du bord, chaque pas d'exploration tire « bas » une fois sur quatre : estime la probabilité de tomber en 11 pas, puis multiplie par 500 épisodes, sans oublier que les premiers épisodes, avant que le chemin soit appris, tombent aussi. Pour SARSA, compare ce que vaut, sous ε-greedy, une case à une rangée du bord et une case à deux rangées : de combien d'explorations malheureuses de suite faut-il pour tomber de chacune ?
 
 </details>
 
@@ -1062,8 +1059,7 @@ Une file circulaire : `push` écrit à `self._pos`, puis `self._pos = (self._pos
 def sample(self, batch_size):
     # checks: an int (not a bool), 1 <= batch_size <= len(self)
     idx = self._rng.choice(self._size, size=batch_size, replace=False)
-    return {"states": self._states[idx], "actions": self._actions[idx], "rewards": self._rewards[idx],
-            "next_states": self._next_states[idx], "terminated": self._terminated[idx]}
+    return {"states": self._states[idx], ...}      # the five fields, indexed by idx (a copy)
 ```
 
 </details>
@@ -1179,12 +1175,11 @@ Relis le §26.8 de la fiche et 26.R1 : une table a besoin d'états qu'on peut co
 <details><summary>Indice 3</summary>
 
 ```python
-def __init__(self, env, edges):
-    super().__init__(env)
-    self.edges = [np.asarray(e, dtype=float) for e in edges]
-    self.dims = tuple(len(e) + 1 for e in self.edges)
-    self.observation_space = gym.spaces.Discrete(int(np.prod(self.dims)))
-# observation(): the interval index of each variable, then int(np.ravel_multi_index(indices, self.dims))
+# __init__: keep the edges, dims = tuple(len(e) + 1 for e in edges),
+#           self.observation_space = gym.spaces.Discrete(int(np.prod(dims)))
+def observation(self, observation):
+    indices = [int(np.digitize(value, e)) for value, e in zip(observation, self.edges)]
+    # the number of the cell of these indices in the grid of shape self.dims, as a Python int
 ```
 
 </details>
@@ -1198,7 +1193,7 @@ Relis le §26.10 de la fiche, puis ton ∂ 26.8 : une cible qui regarde la posit
 </details>
 <details><summary>Indice 2</summary>
 
-Avec la vue canonique, le joueur au trait a toujours les marques 1 : poser sa marque en `a`, c'est `after = c + 3**a`. La position suivante, vue par l'adversaire, est `TABLES_37["swap"][after]`. La valeur pour l'adversaire de sa meilleure réponse est une perte pour toi : d'où le signe moins. Les coups interdits ne sont jamais choisis ni mis à jour.
+Avec la vue canonique, le joueur au trait a toujours les marques 1 : poser sa marque en `a`, c'est `after = c + 3**a`. La position suivante, vue par l'adversaire, est `TABLES_37["swap"][after]`. Ce que l'adversaire gagne avec sa meilleure réponse, tu le perds : d'où le signe moins. Les coups interdits ne sont jamais choisis ni mis à jour.
 
 </details>
 <details><summary>Indice 3</summary>

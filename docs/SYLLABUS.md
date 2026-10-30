@@ -4246,19 +4246,19 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 | 26.13 | 📦 | Prendre en main gymnasium avec FrozenLake | ★ | 15 | FrozenLake | 03 | 0A | RMC | wb.check |
 | 26.14 | 🔨 | Retours actualisés et retours à venir | ★ | 15 | — | 03 | 26.1 | RMC | pytest |
 | 26.15 | 🎨 | Reproduire les courbes d'actualisation (fig. 26.13-26.14) | ★ | 15 | — | 03 | 26.14 | C | manual |
-| 26.16 | 🔮 | Prédire l'effet du camion sur la table L | ★ | 10 | Flippers | 03 | 26.14 | RC | manual |
+| 26.16 | 🔮 | Prédire l'effet du camion sur la table L | ★ | 10 | Flippers | 03 | 26.14 | RC | wb.check |
 | 26.17 | 🔬 | Flippers : la longueur optimale de chaque partie par recherche exhaustive | ★★ | 25 | Flippers | 03 | 0A | C | wb.check |
 | 26.18 | 🔬 | L-learning sur Flippers, sans puis avec camion | ★★★ | 40 | Flippers | 03 | 26.14, 26.17 | C | manual |
 | 26.19 | 🔨 | Politiques gloutonne et softmax (ε-greedy importée du ch. 11) | ★★ | 20 | — | 03 | 26.5, 11 | RMC | pytest |
 | 26.20 | 🔨 | Mises à jour de Q-learning et de SARSA, états terminaux compris | ★★ | 25 | — | 03 | 26.3, 26.4 | RMC | pytest |
 | 26.21 | 🔨 | La boucle d'entraînement tabulaire et l'évaluation d'une politique | ★★★ | 45 | FrozenLake | 03 | 26.19, 26.20, 26.13 | RMC | pytest |
 | 26.22 | 📦 | Q-learning sur FrozenLake, glissant ou non | ★★ | 25 | FrozenLake | 03 | 26.21 | RMC | manual |
-| 26.23 | 📈 | Lire des courbes d'apprentissage RL bruitées | ★★ | 15 | FrozenLake | 03 | 26.22 | RC | manual |
-| 26.24 | 🐛 | L'agent qui n'apprenait rien | ★★ | 25 | FrozenLake | 03 | 26.21 | C | manual |
+| 26.23 | 📈 | Lire des courbes d'apprentissage RL bruitées | ★★ | 15 | FrozenLake | 03 | 26.22 | RC | wb.check |
+| 26.24 | 🐛 | L'agent qui n'apprenait rien | ★★ | 25 | FrozenLake | 03 | 26.21 | C | wb.check |
 | 26.25 | 🔬 | Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties | ★★★ | 40 | Flippers | 03 | 26.21, 26.17 | C | manual |
 | 26.26 | 🔨 | Itération sur les valeurs : la référence quand le modèle est connu | ★★★ | 40 | FrozenLake | 03 | 26.8, 26.22 | MC | pytest |
 | 26.27 | 🔬 | α, γ, ε : balayage d'hyperparamètres sur Flippers bruité | ★★★ | 45 | Flippers | 03 | 26.25 | C | manual |
-| 26.28 | 🔮 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | ★ | 10 | — | 03 | 26.20 | RC | manual |
+| 26.28 | 🔮 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | ★ | 10 | — | 03 | 26.20 | RC | wb.check |
 | 26.29 | 🔬 | Q-learning contre SARSA sur Flippers et CliffWalking | ★★★ | 45 | Flippers | 03 | 26.28, 26.25 | C | manual |
 | 26.30 | 🎨 | Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) | ★★★ | 35 | Flippers | 03 | 26.29 | C | manual |
 | 26.31 | 🔨 | Une mémoire de rejeu (replay buffer) | ★★ | 20 | — | 03 | 0A | RC | pytest |
