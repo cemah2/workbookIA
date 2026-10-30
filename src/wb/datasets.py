@@ -424,6 +424,9 @@ def _quiet_huggingface():
                 pass
 
 
+# Public name (chapter 29 loads a dataset of the Hub itself and keeps its notebook quiet in the same way)
+quiet_huggingface = _quiet_huggingface
+
 def _cifar_from_huggingface():
     from datasets import load_dataset
 
@@ -740,7 +743,7 @@ def make_trap_dataset(seed: int = 2916, n: int = 1200):
                      "fruit": TRAP_CLASSES[int(f)]})
     df = pd.DataFrame(rows)
     letters = {"pomme": "M", "poire": "R", "coing": "C"}
-    df["code_qualite"] = [f"Q{letters[t]}-{rng.integers(100, 999)}" for t in df["fruit"]]   # defect 5: leaks the label
+    df["code_qualite"] = [f"Q{letters[t]}-{rng.integers(1, 6)}" for t in df["fruit"]]   # defect 5: leaks the label (QM-3...)
     df["split"] = np.where(rng.random(n) < 0.8, "train", "test")
     train_idx = df.index[df["split"] == "train"].to_numpy()
     test_idx = df.index[df["split"] == "test"].to_numpy()
@@ -826,6 +829,7 @@ CATALOGUE = [  # (name, loader, versioned file, kind, card)
     ("images_ch28", "load_sample_image(), load_style_image()", "images/starry_night.jpg",
      "photos libres et tableaux du domaine public", "images"),
     ("pretrained_cnn", "load_pretrained()", None, "réseaux pré-entraînés sur ImageNet (poids torchvision)", "pretrained"),
+    ("trap_fruits", "make_trap_dataset()", None, "tabulaire généré, huit défauts plantés (audit du ch. 29)", "trap"),
 ]
 
 

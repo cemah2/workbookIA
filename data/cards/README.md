@@ -17,5 +17,6 @@ Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, varia
 | Environnements RL | `wb.datasets.make_env()` | code | [rl_envs.md](rl_envs.md) |
 | Images du ch. 28 (photos libres, tableaux du domaine public) | `wb.datasets.load_sample_image()`, `load_style_image()` | scikit-learn ; tableaux versionnés (`data/images/`, 0,27 Mo) | [images.md](images.md) |
 | Réseaux pré-entraînés (SqueezeNet 1.1, VGG16) | `wb.datasets.load_pretrained()` | cache de torch (5 Mo ou 528 Mio) | [pretrained.md](pretrained.md) |
+| Dataset piégé des fruits (audit du ch. 29) | `wb.datasets.make_trap_dataset()` | généré | [trap.md](trap.md) |
 
 Les fichiers versionnés sont reconstruits depuis leurs sources officielles par `python tools/build_datasets.py` (téléchargés le 2026-09-29). Les téléchargements vont dans `data/downloads/` en local et dans `/content/wb_cache` sur Colab ; ils ne sont jamais versionnés.

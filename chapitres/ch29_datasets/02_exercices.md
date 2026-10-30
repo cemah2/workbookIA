@@ -73,7 +73,7 @@ e) Vrai ou faux : l'argument `revision=` de `load_dataset` fixe la version exact
 *Fiche §29.4 · livre §29.4*
 
 a) Parmi ces sites, lesquels sont aujourd'hui de grandes sources de datasets ? (A) le Hugging Face Hub ; (B) Kaggle ; (C) OpenML ; (D) deeplearning.net. Écris leurs lettres.
-b) Vrai ou faux : on peut télécharger un dataset Kaggle par son API sans compte.
+b) Vrai ou faux : l'outil en ligne de commande `kaggle` télécharge un dataset sans compte ni jeton personnel.
 c) `fetch_openml` fait partie de : (A) scikit-learn ; (B) torchvision ; (C) Hugging Face `datasets`.
 d) Vrai ou faux : un lien vers un dataset noté dans un livre de 2018 marche encore aujourd'hui, en général.
 e) Sur le Hugging Face Hub, la page qui décrit un dataset (contenu, licence, usages, limites) s'appelle : (A) une *dataset card* ; (B) un *model card* ; (C) un *README de code*.

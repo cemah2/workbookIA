@@ -50241,6 +50241,839 @@
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
+    "29.1a": {
+      "decimals": 2,
+      "hash": "9b76e09ad3a4ed63f3818c502fec5b7d789c4d57ae6bc5e5b5194bd52b247874",
+      "hash_coarse": "33daf663586298a8284a1c17850122757dc5674acd674a1fd8853b4fe2301778",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "179f6b70cb8c5cbdb851107b8661bc27e3a79358af1c8f7df15aaaa8d0401e11": "1 Mo = 10**6 octets ici, pas 2**20",
+        "3231f210a454303d3390ecb342a40d7e8f096a41da4cc0aee5bed969611b2a75": "compte les 70 000 images, pas seulement les 60 000 d'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.1b": {
+      "decimals": 2,
+      "hash": "0b2535992706519abb6f9c7d3b26eb1bac802c3c67a9c519945f28653bd012f2",
+      "hash_coarse": "3a4168f051bde3fb9b10f85b70778e468c7826127cc9f8735f0634ff95feeff3",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "95a8d067828d8fdf143ebea214926c7a3478da85f52ee241c3505d241e15a015": "un float32 occupe 4 octets, pas 8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.1c": {
+      "decimals": 2,
+      "hash": "2ed028a5fb5e9cc63053c6fe25e40e6f1959f4a622d227ab18deec0137ddea57",
+      "hash_coarse": "01820c21da8703472f5c3bfe0dc06fac85a9af545becb5bec82f7ac61711cf9b",
+      "kind": "float",
+      "magnitude": 2,
+      "mistakes": {
+        "6a4ba9970e9c595b2d304961defe26511b2af3b13987182c1967181b175fc0e2": "CIFAR-10 a trois canaux de couleur"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.1d": {
+      "decimals": 3,
+      "hash": "006313751de9a5c9aebb75772bbeebfd6ccc4552957a88bca9e1e31ce5099df7",
+      "hash_coarse": "d0bfa2c54157e9a5153b6e4c10363da4bcd49fbf766157ff7fb29f3f42f9bd90",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "f27998270fc71c7ac48f7e2629c86f7ebd3286ad12aa615519efb8d87703a088": "en float32, multiplie par 4 octets"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.1e": {
+      "hash": "56d09049db14146df800ff60659ad54cdce1a34db76cc63f6884b98008afbd70",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "3b49270ee97482fd6b0382168b310ab3b06634f991128b0a7904f3d4745b739f": "arrondis vers le bas : une image incomplète ne tient pas",
+        "d1d59b6ccece4ecda4f10c6655a569cfdf3515fc586f3dc083fc2f4f81520e2c": "en float32, chaque valeur occupe 4 octets"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.1f": {
+      "hash": "f6772b83f8137ea4958b8df427fb041ce9b5d6539c59352ddc608273b639f314",
+      "kind": "bool",
+      "mistakes": {
+        "7b869091e51822c0e0f228d59b2c3bb97fee3aac20921ab3bc53db67f2aed75d": "même nombre d'images, même taille, même type : même mémoire"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2a": {
+      "hash": "7efdd0d0a336b2a302096dccc49fd7f338ecf5f58508436fd96e9a5e6e8cb1fb",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "1d5b5af48e8723baf343f7a284a58e73ae0480009ad6aadfd014300139c071f1": "70 % des 200 exemples de C, pas 70 % du total"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2b": {
+      "hash": "7e9163e48c12d16107ae318564f0923000726c9a85cb2d58b6a2f55bd73e5fc8",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c0f409877d8b026041f454f2fd8b1c457ed60e1a6b580dea3fac14e189c5242a": "15 % des 200 exemples de C, pas 15 % du total"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2c": {
+      "decimals": 2,
+      "hash": "4c1e3fa7a729e015f6e1e0987f994582006db8bf960c65bd8c2d1772acbf38b5",
+      "hash_coarse": "4d31b8d5a68c374a96a1d1ce1b2041f244c589d54f4eb15930f51129bad9f7fb",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "55404089f789b00858fc0ca7ddd87b087688146cee60bf36208e5786fafae91c": "la classe majoritaire est A : 1 200 sur 2 000"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2d": {
+      "decimals": 2,
+      "hash": "2eefd06f5beaa3dfd3e112072612b300d31dadb373e6c4c80018ef89b2737e9a",
+      "hash_coarse": "a09fa5adcfe0dc7831c4d364e92d682273917f1f2dcff2266cbf4885449d7492",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "34df56302d51bb7a04b827ba12d43f093b38cdeaf78ab94cf89f7b5e6739c161": "c'est l'accuracy du modèle de c) : un modèle peut aussi avoir juste sur tous les B",
+        "caee89ed93f4e6099043e958efe91b627e98f0bcad9f94e1424bd58f1e632e5e": "il rate au moins tous les C, soit 10 % du total"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2e": {
+      "decimals": 2,
+      "hash": "e345b8f778ea083226173e7744e3d506572206302643cbc800a98321a7f4303c",
+      "hash_coarse": "b19f018ce195b56186e3abbe47d70602a4a9aac971a53a29ecd4ee6e2832b2f3",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "9010589c6314b29112f447ed1b8d891b3edf94066121ee3a8e444d78671c96bc": "le modèle ne prédit jamais C : il n'en trouve aucun"
+      },
+      "sign": 0,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.2f": {
+      "hash": "7d50a834fe72beb50bd5b133ae40dda99298a79bc1f6b6184208c2a17a75e66f",
+      "kind": "bool",
+      "mistakes": {
+        "14e36c3f9350ac142e35186cdb2e1487a4972ceb2d43619aa8e1714e8bcbc62b": "stratifier, c'est garder les proportions des classes dans chaque partie"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.7a": {
+      "hash": "b818dfc36ea82adaefd5054bdbf69644cf51412168040086d4a5a35cae8a2b84",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "5bd236292f0d966f597c434a17d5d7d9d53b8fa84fb9af38465819e478b6f67e": "c'est le nombre du livre : mesure X.shape[0] sur les données chargées"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.7b": {
+      "decimals": 3,
+      "hash": "d03e18e893afa4ef9d3290eec7dcea0997044311265097f6e809db3d783bcbbf",
+      "hash_coarse": "f57452aa269e3bbe6e73ec9c62b6fec9b84cde6aafe52e3d8aaf1c2044aa7e02",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "dcd68309677cf64f74957c4bea9daf5238906a50862da3f239dfe3b7a68fa555": "une part entre 0 et 1, pas un effectif",
+        "dda1460ee405d6c060ac62f2887c3af392ea715fd02a23fd8c0ccb3bd3539d6e": "c'est la part de la classe majoritaire : prends la plus petite"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.7c": {
+      "hash": "208a58c110baab5b6351f3f8dbaa890b36865dc9b798320ddc9742bff0ed566b",
+      "kind": "bool",
+      "mistakes": {
+        "89984d5699c28b1ae14964d90795e7948b56d152ea999abd8d0d77bc223ba8a0": "load_boston a été retiré en 1.2 : un ImportError doit donner False"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.8a": {
+      "hash": "666349fbe498fde453a07e7670b053c7bd3be35e6dab98984d1434854af2e188",
+      "kind": "str",
+      "mistakes": {
+        "aaa8b4e0f217b84231d07944f32794bceae9c2b62848405dee4f276ddb2a4ed3": "même un petit réseau dense dépasse 90 % sur MNIST",
+        "e4d2e51120e1c64c28b7984a7e365f030a58da8b1d76631430a7438ab771683d": "deux epochs sur 10 000 images, un petit réseau dense : on n'atteint pas les 98 % habituels"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.8b": {
+      "hash": "fe8f6082b277e4207bcec5c8fcf5754abb2d223f32aa6cc3eb3e4390c49645bc",
+      "kind": "str",
+      "mistakes": {
+        "01819ae40d8ff85eed09e63c34687eaf1be43fb37edd2d304a2bf023f8f6675a": "regarde les deux accuracies : l'écart dépasse 5 points",
+        "3ce8a3086c49f9d51cfe6ba0ec2d16d9bc73cddcb49d03bd1c72ada06dbde331": "regarde les deux accuracies : l'écart reste sous 15 points"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.8c": {
+      "hash": "649db916219b7d9b4495b44ef1fbd04893dc2cc776c7b1db26883c4be2f0e446",
+      "kind": "str",
+      "mistakes": {
+        "aa7f9cf1db5eafdf9c3d84780c813652778d1ae5a0edc6b0e3e071f08d97da85": "un modèle de chiffres ne sait rien des vêtements : son accuracy est celle du hasard",
+        "df2682e2cdab738176268c26705fdb0783c6117a3b33a3cf7bec8bc635f7664f": "un modèle de chiffres ne sait rien des vêtements : il fait à peu près le hasard"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.9a": {
+      "hash": "4cd7bfc91aeaed76f6a899ed8ac81e453739734dea7ee9a2e71b944ef2a750b4",
+      "kind": "str",
+      "mistakes": {
+        "b28606473110ef6044c9a5660cc1dda754ffbe7d5f6e4ec17095e373db98b100": "ce sont bien des chiffres, mais ni cadrés ni dessinés comme ceux de MNIST : l'accuracy chute beaucoup plus",
+        "fac5b4f2ff15342213a1a70b4b0e51741fe2e3a7adf5299bf6e29de12c272187": "regarde l'accuracy mesurée : elle tombe sous 0,4"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.9b": {
+      "hash": "d473c141e36b329e41aa32938cb02acb2df09f955b7f5e85581187bd90401029",
+      "kind": "bool",
+      "mistakes": {
+        "1abd87808b778502d95b334838ca8cf5c31c4c2c974534b3e4b38c1fe91ea2e2": "un modèle ne sait pas qu'il sort de sa distribution : sa confiance reste élevée quand il se trompe"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.12a": {
+      "hash": "d35c176e9483f0caf715931fc314297835c518c71823b2e5f34796e12a367f60",
+      "kind": "str",
+      "mistakes": {
+        "541e56fbf1d59d05a26c6cff410a0126852e8bfe9cf0e31ebdec82117f870961": "workclass est juste derrière : compare les deux nombres de manquants",
+        "ca5983a9a3b872e4bc248d46c50f9cb8ed566f2e71cf00bd7efe279d9c449575": "native-country en a beaucoup moins : regarde la colonne manquants"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.12b": {
+      "hash": "437cd9fdc173c2016cdf86d9604dc6cd1ccac3651246fd0dca0b47a0773bbf54",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2c83b75205ba01cd245b6697b27f3f14340e146cdeffc95cd22dec3c79f0d319": "ADULT_12.duplicated() compte les lignes répétées : il y en a",
+        "f26f966f8ca506dd30ceaa4b5edae8849a19de526f83642125b6bb85833b4b5f": "duplicated() marque chaque répétition, pas les deux lignes d'une paire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.12c": {
+      "decimals": 2,
+      "hash": "034dd2d3a4a2284a646dae7d27d0a00316d0bdfd43d6d2ac87420155ffd61ff2",
+      "hash_coarse": "d89c350cd59647c4bd3ec0663f2705e9cf3e8d61a4aa78d8fec35234ac7faf3e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "d86da1933e977c11afcaf8b32eb23dbe2003e244804b652b488432594feb18b0": "c'est la classe minoritaire (>50K)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.13a": {
+      "hash": "7178baf32d182c6a553e878644c3b5490cfe5ac026c86966e30cd43c5fdf6c3f",
+      "kind": "str",
+      "mistakes": {
+        "0322a77575d1d3396d1de8fa9b44532bec7f96bde30faa07ff6a291cbea4ce1c": "il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "20772286700dd7a45f90c788aae8e37a9e89af62d2c1a1001de378744468b1ed": "la ligne (F) est correcte, et il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
+        "2a61628af39ff072dced14feed243886e62ae9185b335d9ea190687f81fc9979": "la ligne (D) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "36d4f4dfefef5cb47d887dbcccf5652f1333d21a8b670acae1234057a3d943c6": "une ligne de trop : la ligne (G) est correcte ; relis ce qu'elle fait",
+        "670b9534a3b05aba4ee5a80d133d0a469e37cecfb424c8b949eaf70e081a1296": "la ligne (G) est correcte, et il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
+        "6a4561ea59762731e50d9db0a2ccd82e81bb00991b88e528a1c323de2ce1c965": "il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
+        "72d601dfe2f8926c95007d368c6ce59e4242b1c114418f82bcfb5aaee259020c": "la ligne (F) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "74d28973cd4abbe3c2089ad1e6aa0cbda0ecd243388660c93e4bc92d6321f079": "la ligne (A) est correcte, et il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
+        "75dbe39c79f841e86832079f6e3923c945017cfbddc21a777a19c710c15e5cb1": "la ligne (G) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "7eafa2907e8f78b1252eacf7dfa39a8f5e65f031a2d0543946bd02c6a05081e2": "une ligne de trop : la ligne (D) est correcte ; relis ce qu'elle fait",
+        "84ec6762ee13e15066647e215105a7e1a652808c32b769f6335039cf36f25cfb": "la ligne (G) est correcte, et il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
+        "8591f8e381380b8082c3919ae934f3d06bee93c30c66b343cffed40df9a0fb01": "la ligne (D) est correcte, et il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
+        "988a77359cdd72a27978f6d1a51bd87043f40ff4c12bec90c31b64b2efd3ac5a": "une ligne de trop : la ligne (F) est correcte ; relis ce qu'elle fait",
+        "a205cc8e46fa35145773d0e9fad97340850d363869d175fdd7403af39c52639f": "une ligne de trop : la ligne (A) est correcte ; relis ce qu'elle fait",
+        "b25e438193d16bf130d02a072acf49ed4ea7f3dedd75a0015034ef7b06fee703": "la ligne (A) est correcte, et il manque une ligne fautive : k est choisi sur le score de test, qui sert ensuite à juger le modèle",
+        "b352d82cd073173e8bc23af578d1cce704433f5058bab42bdc99e0507ed49dca": "la ligne (F) est correcte, et il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
+        "da33c90fada59509aa2e282cd31143871014fb3e20fe8da54a396ea6c2238584": "il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés",
+        "db4605c5380bf2005dab68185ce3939aee4c228975aa146a96e499c7cd595b73": "la ligne (D) est correcte, et il manque une ligne fautive : la PCA est ajustée sur toutes les lignes, test compris",
+        "f280d49e450b5e650f11a30958a0084a558a4eb4a2935790696814920c4a7a19": "la ligne (A) est correcte, et il manque une ligne fautive : le découpage au hasard ignore GROUPS_13 : les copies d'une même photo tombent des deux côtés"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.13b": {
+      "hash": "9f65a9b91db1f1083e071a3f435a6fd6a3b5dc57b287700bfc7f6199fe651ff5",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4a0faf792d40f741e624a3527e0b3272e3f7cd3709c6d20ce2885d7e2abff12a": "compte les lignes de test dont le groupe apparaît aussi dans l'entraînement (np.isin), pas l'inverse",
+        "eca00e8df77cad0fd0d03ae2a40a6fab52e9b23c22a2b7a7f6121de6c029c2e0": "le test du découpage de la ligne B a 500 lignes : compte-les une par une, pas par groupe"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16a": {
+      "hash": "988750eb88167873ce4fd8e481150a743e20356af17a16c17478d841c940e354",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "027228d75d2d8378eba9f10f072c06c6e2c33b1088b8b704c4a3db4f0318ac63": "duplicated() ne compte que les répétitions, pas la première ligne de chaque paire"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16b": {
+      "hash": "9c3268b236615d0e1d80348d05ee463c6109e973a4b771f07076dc67d4f0da92",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "85d445192469a74b8643ed7d17ecd972dc725e685e18d54cada76d276edc00c2": "compte chaque ligne de test une seule fois, même si elle a deux jumelles dans l'entraînement"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16c": {
+      "hash": "f3a325fb819d1c472eb56fa4f51ff4e14fe2d965ea4981ac7ad23da6fa112e49",
+      "kind": "str",
+      "mistakes": {
+        "2b0f8d0498f2ba39e0b4acb8e8b1d91ab0d17d29bf8b785fa16021ea644c7a28": "poids_g n'a pas de valeur aberrante négative : regarde les minimums de describe()"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16d": {
+      "hash": "ccb23742115b547f50f99bac53bcc1063ed311d57c159faef53c8cc920ea359c",
+      "kind": "str",
+      "mistakes": {
+        "616a6a4fdf3241b8cc4892473c9b12f62344adcfae3c43a4fcdc0b000416bed7": "id_lot change à chaque ligne : c'est un identifiant, pas une colonne constante"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16e": {
+      "hash": "aaae0bdc298de806cdfbdc1b7ef91ed991a6d649cbd822e69043af423132ab5a",
+      "kind": "str",
+      "mistakes": {
+        "a841a435ba04e1de2dd12d3a4f4e0f070f8e404eeb82a290807f78d70924065f": "les mesures prédisent le fruit honnêtement : cherche une colonne qui le recopie"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16f": {
+      "hash": "ece977b64aff8960df22b1da0fefb9ae2ba58b14795ffdd1f0b535831a93fe07",
+      "kind": "str",
+      "mistakes": {
+        "d0f28d3e086caaf8a58f544142c647e9b85b771e3df1e7f5e2bb9cbbb84e4b2b": "le poids varie de 95 à 386 g, sans saut d'unité : regarde le maximum des diamètres"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16g": {
+      "hash": "6162b0c92cf4434abb35e0adfa95a3bfd77106f179b230878f4f03a4f2f51959",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "ca8bebd2de8883ddf5f5a3bc78d18ba6ede09d32607d92863433fa8b2d71052e": "« poire » suivi d'une espace n'est pas « poire » : value_counts() les sépare"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.16h": {
+      "hash": "8c78afbf15156c0000b9a41a1025d74a0fdbef89ff98e4d60ed46769d3452f8d",
+      "kind": "str",
+      "mistakes": {
+        "0451e5ec14d03ff2144af25018e94152e01f5f9b8ca5334fd83171a02e8cc522": "compte seulement les labels bien écrits : la poire est loin d'être rare"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q1a": {
+      "hash": "1e5564d9cee7c2081b420e77293956a63399de433e955c7fbb90be8eed1f99d3",
+      "kind": "str",
+      "mistakes": {
+        "0142ab5e7751f4e304dee8c7f210c302a52fb3fc03c60ca353264a21c8288aee": "entraîner de zéro coûte le plus de calcul et de données : c'est le dernier recours",
+        "7fc8d0cf479e4c359f684bb5c925204a5f05f6f72c38e065bf502c7f3553d047": "la collecte est la voie la plus chère : le livre la garde pour la fin"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q1b": {
+      "hash": "4849fa6a5441847fc5df0b7dd31ac0989004c0fe0f07ea97ffdda66a22a4337d",
+      "kind": "bool",
+      "mistakes": {
+        "3a2cbe3b8d2d641573cc93865571a2ebfe7ab85a11414e21599bb933f811e6ac": "réutiliser un réseau déjà entraîné en l'ajustant à sa tâche, c'est la définition du transfer learning"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q1c": {
+      "hash": "38e1de7471d54e168380db0d6d765eb8c5af7dc6b9964fc6d1aaeabf66725e88",
+      "kind": "str",
+      "mistakes": {
+        "0c72c07978fca9369e38695e49f47773b631bd154c54839eb55fb4a3536a70cf": "toujours, non : un modèle pré-entraîné sur des données très différentes peut faire moins bien",
+        "23b488698a1ff5b9b98975378d7e233f02a89f191c1ffbd5f6fd503620f6839f": "un modèle pré-entraîné hérite des biais de ses données d'entraînement"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q1d": {
+      "hash": "67999d77d51ef3fb1357c75d0d9c8872fc7d320bbd66ec91f191c49bc3ddb5b0",
+      "kind": "bool",
+      "mistakes": {
+        "60c9724b4bf33a19492eac2c1bee6cc398cf79e0ca91c975e074f7f159d04097": "public ne veut pas dire libre : une licence peut interdire l'usage commercial"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q1e": {
+      "hash": "017e5a253ef74faccaf561d603745f09f9a9f2ea60cb0b69c5ab1b090e835c8a",
+      "kind": "str",
+      "mistakes": {
+        "315dd4ad333006985b4612d6f100b923c7fefd13677809d3253bb4340da8e1d3": "l'augmentation multiplie les défauts au lieu de les révéler",
+        "df0b424c208152cef35770360ae86d68113d88c47cbcf5510ad63b5baa9a0b28": "entraîner avant de regarder, c'est découvrir les défauts trop tard"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q2a": {
+      "hash": "bf87fa262b946bf3eb8f7ca27d45a460f725698fbc8276e55b588d6d0690952e",
+      "kind": "bool",
+      "mistakes": {
+        "f0a155d93944382cffd41fcaea8983f4b7ae0c502e6cf1e4418af03e8ca44d3d": "CC BY n'interdit rien : elle demande seulement de citer la source"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q2b": {
+      "hash": "799e993adadfe2f2f915881d46bafc37cec396ffcb496dc559412fd9f3f5a114",
+      "kind": "bool",
+      "mistakes": {
+        "e918b06522a39457afc9fd025e2dc603c7ae7a41f75447db61775654409a84a2": "NC, c'est « non commercial » : pas de produit vendu"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q2c": {
+      "hash": "26656466361e9f39349c690bcd385a780a7474542d96bb60718387069c96ffb1",
+      "kind": "bool",
+      "mistakes": {
+        "0e1a7595859d4ccc2c68e0f880ebb0afc688643309c45799ede51522069cf862": "un prototype destiné à être vendu n'est pas de la recherche : la restriction s'applique"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q2d": {
+      "hash": "8aa42a97c7b0c7bdaa14e907ebd655dd67146b30b02355659649c39da50d6fed",
+      "kind": "bool",
+      "mistakes": {
+        "76fdae6c38ad97507867ac93bfae6720a6ba6a5c119962927fb00020239f2a1f": "la licence porte sur les droits de celui qui publie, pas sur le consentement des personnes photographiées"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q2e": {
+      "hash": "4b63d68a3fc111b46a497eb6b06ac034ceb54107e5c88deb91b43be1f34983d8",
+      "kind": "bool",
+      "mistakes": {
+        "9477a9efe08d8a2dc21426196620c43c77657ee1e5b44900ec947c0e3ba02a4d": "publier des données personnelles ne les fait pas sortir du RGPD"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q3a": {
+      "hash": "63d2fc4c2b18c9fb380cfcbd5ee91acb247d82b1223fd0e349c7a2cf7e4cfc48",
+      "kind": "str",
+      "mistakes": {
+        "3699752ba60f19b2331782fa7690c33a61ab0e63bc3eb9dff77f271067fecc27": "les poids d'un réseau ne sont pas un défaut des données",
+        "62b7acbaea2c71c46f0b3b50b678da0f39f58bb1241af4a92d67058d625611ea": "il manque les fautes d'orthographe",
+        "80841fb4c94352c43aa402bbba9bc2f97708179533540d693c5249b75f92d035": "il manque les champs vides",
+        "b80d18158df39f3f4a71d93d5070a212854067618f72f152c4556541528d21fa": "il manque les labels qui n'apparaissent qu'une fois"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q3b": {
+      "hash": "3f077b86c98378bcabdeb5eb1d4533da685b573b31d3ef2b4d89fa7b08389077",
+      "kind": "str",
+      "mistakes": {
+        "c78c81deb7148b9fb0f30c2dad1893923986b5392b137af91d4c817398396639": "un poids négatif est impossible : un nombre rond et absurde code souvent une absence"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q3c": {
+      "hash": "eb342c60679df6d5b1cecc9b36019f0bf019376acdd8c49d27556d201f42091a",
+      "kind": "bool",
+      "mistakes": {
+        "dcb843e52108de22157c1aabbe00587d7667a3580fc9f2fb7963ad02ba65ac52": "isna() ne voit que NaN et None : −999 est un nombre comme un autre pour pandas"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q3d": {
+      "hash": "8c1ac9358510628f7c2923ce99f86256da75acec8f5564316992a6ba24810ce0",
+      "kind": "str",
+      "mistakes": {
+        "c9aa4873b36a56eaca9095b568c179d0b25dabd6b34aa17d8cc64f57b6bed302": "un diamètre en millimètres n'est pas manquant : isna() ne le voit pas",
+        "e12b68b56ee50d7c87642f93bcbd884b1f8632dab65a0fcbc1dd722b71575ce1": "un diamètre en millimètres ne crée pas de ligne en double"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q3e": {
+      "hash": "79487a46c620fd3740fcc7ec50a8888804265d8c2f01529537035fc62e1e4565",
+      "kind": "bool",
+      "mistakes": {
+        "b91062b919f72b8c982d01b3616708e47287e920f9eb6d2c62c23536e3c2e698": "relis l'encadré sur les audits : même les jeux de test des benchmarks ont des labels faux"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q4a": {
+      "hash": "b13d5f1ce8cabcfd2c683f16de0b1fb6e8df455a1b060ac31438a4f4c1c911b0",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "766286c1fa86004352b46a7c0ae455e6a5b9a7c5b23aebba227b7d13af988505": "c'est le seul jeu d'entraînement : ajoute les 10 000 images de test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q4b": {
+      "hash": "446648f3764e365f61ad1bcaec05ccf1d6c06a1f65e018f2f44782a1be3afde6",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0285bf60d3acc91e876274537687fb3720fbd50c5fa6e7837aed807bc5006f47": "784 est le nombre de pixels d'une image, pas son côté"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q4c": {
+      "hash": "d392d6c0a617a45b5ca1e837aae69c76799b328b5a3232a0bc1edc2fd94b9cc7",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "5378dc66ee6c1b65cd93190ffbb8f23f69a57d586b4eb2894fab172fa29c597f": "Fashion-MNIST garde les dix classes de MNIST, en vêtements"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q4d": {
+      "hash": "ae87a2a97533e18e741ace6b9952d9eb333b7e4b558a8a6e9054b2cde932ce62",
+      "kind": "bool",
+      "mistakes": {
+        "93fc430731eba6da2b184551e55143f2e3ee5d3e15a7486e5ca1a9402e387956": "même format, mêmes formes de tableaux : seule la source change"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q4e": {
+      "hash": "3e27f3499a5ed454dc6e4af78237e5ee2e14ed2dd71e1dd2b27aeba03127c40e",
+      "kind": "str",
+      "mistakes": {
+        "269899e35cab6406a1a99d96e8e209fa180186e58fb2ed0a98f9da0c058b9641": "Fashion-MNIST est en niveaux de gris, comme MNIST",
+        "87cd1dd330a361af10c194b96c392b555d7cd8c58d4308b28e69602d2e6c260c": "il a exactement autant d'exemples que MNIST"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q5a": {
+      "hash": "6c28d86d1c11d6783eaf73dfa4c5a24ff7c80beceb27864c2cee2136bb26faea",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "c539aff25e632938dcefb9f380ed5fd9db84400cc1ec50a1d95d49d10c732717": "c'est le chiffre du livre : load_digits n'en livre qu'une partie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q5b": {
+      "hash": "229d98a311a42163b021938df7bc38fdf7b6e5eb71949280284ed69f54367a15",
+      "kind": "str",
+      "mistakes": {
+        "8c1b07a3f03215e04be6d81317a1d0600d9878e9ae85c53483d9b7f788282d77": "scikit-learn n'a pas de version 2.0 : le retrait date de la 1.2",
+        "f36b040e92f2a86fed085edd1e402581aa02e2ecc245b71eec17853e964554ae": "en 0.24, load_boston était encore là, sans même d'avertissement"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q5c": {
+      "hash": "346bdebfb42ef12e8f0a8f66b5ac995f090e7553cad44fb734b2bf310dc78b26",
+      "kind": "str",
+      "mistakes": {
+        "b6aea42f9afbd1491a89d95619ff7b6b64f0628c7bc5511966232a614f994942": "506 lignes, c'est petit, mais Iris est plus petit et reste là",
+        "d6624cbb7bdcd08511aa937cf2efaf2135920563c5f0a4ab381884cffa5d2e42": "le problème n'est pas la justesse des prix, mais une variable construite sur un critère racial"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q5d": {
+      "hash": "9498c7a160be40cd500e91bb6b8860a7f79522726b35087440916284796ef842",
+      "kind": "str",
+      "mistakes": {
+        "36de3dfe4106610360c78c39d0c6497701cd353b232d9ae76fa849e5c85c792a": "Breast Cancer est une classification de tumeurs",
+        "fddb763a3a1055c52030b9c16b62622c2522bcf3e8beadb71a57ec289f42e00d": "Iris est une classification de fleurs"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q5e": {
+      "hash": "31d0fa41525c3a76c45f7b91b238cefadb5589dbe8dd8c5a8bb35e5b10e8b234",
+      "kind": "bool",
+      "mistakes": {
+        "2853ae215cbe76e676b80c2d0b075ae86585223cacf7512043cabcda2af140f5": "Diabetes est un tableau de dix mesures numériques et une cible : pas un texte"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q6a": {
+      "hash": "113187ea515b8b145c510d4bb415b041945b826e66eb5caab5d18c0b9b66090f",
+      "kind": "str",
+      "mistakes": {
+        "1785ad475f3ad07c7efb383450149c881b248ff3452e4a01b4fa0b30664bf3e0": "keras.datasets rend des tableaux NumPy, pas des DataFrames",
+        "1e0f5e2e66c73ad61d249073c49edbc506807e47daaf153aaeedb82527d2323e": "le DataLoader est un objet de PyTorch, pas de Keras"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q6b": {
+      "hash": "52887858bfe1e54fde5fc18c67609a142acc6b0c19ecbf9d04162cd650d47ea2",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "fb27e20ab97626b8d5e747425d681d05ddf7455e2cfcf5fc523a6efc61c94958": "50 000, c'est l'entraînement seul : ajoute les 10 000 images de test"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q6c": {
+      "hash": "4241cf5816a6c88b66fe9cde9104faac8da0d22261fd49079bc33aafa402f778",
+      "kind": "str",
+      "mistakes": {
+        "567beb975328fcbf884727ee7261ee6f7554bcec2d23e56025f69021d489884a": "Keras livre IMDB déjà encodé : un entier par mot"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q6d": {
+      "hash": "eba2310c2fe4094015786abe158272d693a059a2132e2147b79c3ff534ab0ed4",
+      "kind": "str",
+      "mistakes": {
+        "741d787141f496e15db3f4a86b709dff6a5a046d16e029f1e81fe06338859ef2": "torch.load relit un objet sauvegardé, il ne télécharge pas de dataset"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q6e": {
+      "hash": "c6124cd2bb435ce9b43ba29065af7ceda7cd78ca1bc3c734af73f6943fd1fc34",
+      "kind": "bool",
+      "mistakes": {
+        "6cceae23d07f5abba826fb51676a8c406c1e5f162021419562ae48b29981861c": "revision= désigne un commit précis du dépôt du dataset : la version est fixée"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q7a": {
+      "hash": "50b86f561da806322708a68278a7499c30bbf3bf568d6b83123b2c5659bbc7d9",
+      "kind": "str",
+      "mistakes": {
+        "5fcc8b5c548a612b11ad7d65547dd9311d52a46be0a2277ad21e24ab4e2bfc99": "il manque OpenML",
+        "6b47368fbe36c9515e7156ac2a5d78fb2e68da97e71d1130c46d4a45409890ef": "il manque le Hugging Face Hub",
+        "7b3e651c5b22e8ae28dfe362c98c2398ce65cc671c66d01248da15c9855581ca": "deeplearning.net est un lien mort (encadré 🕰️ du §29.4)",
+        "7f7c39a29e00cc8e63f5827618af4fb82d717f7801cd27461f3a74035e5a5ade": "il manque Kaggle"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q7b": {
+      "hash": "d4fd6cf5a8a10987707cceb5680a2a6ead5399e5b45addb17f92ac2e8776cc7a",
+      "kind": "bool",
+      "mistakes": {
+        "59696059fb4728ad51bc0dd0700d019ccfd1392dcd071945882d45919c762448": "l'outil kaggle lit un jeton personnel, lié à un compte (encadré 🕰️ du §29.4)"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q7c": {
+      "hash": "a06dd2821caa01e6c7adcf50c8426439a8854c20f69ce549517740f2dfcd3e7c",
+      "kind": "str",
+      "mistakes": {
+        "1a397cbbc6c8a8eab0ec8811ce5bd3f701ac7e6e5005e5028b9fc37c064c6778": "datasets charge le Hugging Face Hub, pas OpenML",
+        "b8123518ecbc7282c89cb5a6ea24710e536b8afed94dd87d47a00747edffac35": "torchvision fournit des datasets d'images, pas l'accès à OpenML"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q7d": {
+      "hash": "89d538315521f14bb6e0b5b4a65d69b307fc8aa9d0f72354602029de4de81691",
+      "kind": "bool",
+      "mistakes": {
+        "9aa95f08a50f9c6018fc7ab05f25d43aefdbf04c50c385383fdd05e34e533ae0": "le livre lui-même prévient que les liens meurent ; plusieurs des siens sont morts"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q7e": {
+      "hash": "1e125eae926476862afed4530f154cc5ac4d018d25379308578624f5d716a1f2",
+      "kind": "str",
+      "mistakes": {
+        "20e5475a6b58e183e258681aeb8e3b36f9db7fd8e1138da983b11c41febaff6e": "une model card décrit un modèle, pas un dataset",
+        "b66bf12e5d96676fa1f96e060570cdb5e054e4cbad80c815b9f9e40751cbf703": "le README d'un dépôt de code ne dit pas la licence ni les limites des données"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q8a": {
+      "hash": "5a30347c691dbffb03a3f639ff66e8efc85226747200ecb2b792aa013b3f6a44",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "318ccf013afc2185020bc55e48473d870b52dbbd8b1b739652f47a603ab5ef3b": "Open Images en compte environ neuf millions, pas un"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q8b": {
+      "hash": "2e127da017dae55628e2680a71bff7d910f3728317cbe9f91849f8efa107dab8",
+      "kind": "str",
+      "mistakes": {
+        "511da1c6a511e7f831a6fda0e9f1ba95453cc1009b66da050b07ab587dd9976b": "il manque MS-Celeb-1M",
+        "7ad46481cf0b7cb5e6096bf1868276af71e4a14ab6a67107cb93c3f708c96c36": "Fashion-MNIST est toujours disponible",
+        "9a66657c244ff41f99e044012fa58c5d893b9f7af8a02d2a82cf48f2ede95016": "COCO est toujours disponible",
+        "a4d52653e28b488c112d8bd386d4c4b998d39a9e19f978f847a12176afe76566": "il manque 80 Million Tiny Images"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q8c": {
+      "hash": "9b0109ad7889a2be0e27a81c919e608146543ba77b3c2054ea82780814b358ec",
+      "kind": "str",
+      "mistakes": {
+        "5e1ca1cea121a7064d67a055031385e3a757b5edecf4ddb3cf2521fd455fc55d": "LAION-6B n'existe pas : relis l'encadré 🕰️ du §29.5",
+        "71b46fb027c454ca9a31a2abb375860d17a474372e4e4c45c1411862d42e9480": "il a été republié, nettoyé, en 2024"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q8d": {
+      "hash": "aec23a39555c3b42440fea0c6675c5e4197eb129907d34f615b104fb98dbae63",
+      "kind": "str",
+      "mistakes": {
+        "949196862eb03c61d1050e8b69357e920f5b19e09333e4b8ea09df79f159eb06": "la licence de CelebA exclut l'usage commercial"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.Q8e": {
+      "hash": "9fc76e2555b60f5331740e440f91c78f41d46028ec7d54b7ed28803b026d0412",
+      "kind": "bool",
+      "mistakes": {
+        "4b2a4f8012940d99e9649304aad34c5928489e323de979ae1db6038479e3f54b": "une copie ne lève ni le retrait ni ses raisons : l'utiliser reste un problème"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R1a": {
+      "hash": "91ca0e8a486170e7b2ee1644f3af015b959b42fbae5f2a8b12d015334b3c390b",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "3924ecef4e9174924d73342f0508bc1acd168cc975187fd921c3aabfa7334a0e": "70 ans après 1973, puis le 1ᵉʳ janvier suivant : 2044, pas 2043"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R1b": {
+      "hash": "d982cd95858f624c54b7d70b70c4d5b84e111669c87a793bb5e7fdde19e082a8",
+      "kind": "bool",
+      "mistakes": {
+        "35ee46d60e0b8919fe424be5edbde6cff61853605434120a6bca0f7c6f3b43fe": "la directive de 2019 (art. 14) : une reproduction fidèle d'une œuvre du domaine public n'est pas protégée"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R1c": {
+      "hash": "0d8bc4f499920dab53bce2d086bb41aa1acefa37fdfe120590ea5201184c1054",
+      "kind": "bool",
+      "mistakes": {
+        "c10985b44a2931035ea5fabf6e408519b1b7cc20cbaa325c219db11bfffe5dd3": "le droit d'auteur protège des œuvres, pas un style"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R1d": {
+      "hash": "cb7ea366d0d6f5dd2f292240bf31550c0339f84416185ffef2ece770ec22ec1e",
+      "kind": "str",
+      "mistakes": {
+        "5d4e93215a697092b7f8a8e65305951befa31dae3dcced2cf35651d7aef2c018": "les photos de scikit-learn sont sous CC BY 2.0 : il faut créditer leurs auteurs"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R1e": {
+      "hash": "7876b83ed165a7c7bd8e033b3b50fb7981d4840435a68ffc91477203d529be0a",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "5458f4afbc94e21cf7197ddb1c17a9a6e9bf83035b637d8e18a1e980b21640b2": "1890 + 70 = 1960, puis le 1ᵉʳ janvier suivant"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R2a": {
+      "hash": "3b192d98ccafca78a527c657a23722afae3718d7a9000a4cab9fc089b1a64415",
+      "kind": "str",
+      "mistakes": {
+        "75c198b19524f11679549a05aabd921a1c5481a22683ed6826d72b60ebc077a6": "en RL, aucun dataset annoté : l'agent produit ses données en agissant"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R2b": {
+      "hash": "13de3976a8adf0c6fdbe23246bb70c8fc6d390ae5a7298a6b10fb30d9458da5e",
+      "kind": "bool",
+      "mistakes": {
+        "f44cf0961818083a3d35dae88acea8722516adba6d488d8f77d56f4b39a7fea0": "une autre politique visite d'autres états : les données changent avec elle"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R2c": {
+      "hash": "663729115eda41a474afff45fd6af5cc19945b0e7e30cd97fd90951006133dfc",
+      "kind": "str",
+      "mistakes": {
+        "b748edede4a2221a6b3675f24a21a7bb27bb9f3bdedafb923ff5525a05ba0c50": "les poids sont dans le réseau, pas dans la mémoire de rejeu",
+        "c745f404de066c21a3eda57bcdad5bd87f700107eb7c66f84f9dcb687de2ce91": "le rejeu stocke des transitions vécues, pas des images annotées"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R2d": {
+      "hash": "137a6bd6f6acbff2eb789dc68e96b4019759157e4bbf58fbe6ec0af730e38ef1",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "584c9b0711f9fbaab5b5b313e22a80c46859ac1e46b0bf28185d2470d7124aa2": "4 × 4 cases, c'est 16 états ; 4, c'est le nombre d'actions"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R2e": {
+      "hash": "07315e0387d71ae672be5f85eca66af304b170d5a1fb6b8adb137b73e8a74f8a",
+      "kind": "bool",
+      "mistakes": {
+        "e807e2ad1f413a20df127d1e15b9d9a57820c22876f878e5ab0c879b5ec1434e": "les données d'un agent changent avec sa politique : un découpage figé n'a pas de sens"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R3a": {
+      "hash": "4eaed3481c88668d9408437164e9f27f638c0b4123f5b151063438f3881d98a9",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "4f0745ce27cd72f72f3984d8791b0708006b3a511ca907f27f8551792cd1b0fd": "333, c'est après avoir retiré les lignes incomplètes : compte-les toutes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R3b": {
+      "hash": "22c0be565dad480aa517bb212347bd4406aa5b1e7d4cb70bd138fac2f2a80016",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "3f5c4c0710f44fe7e3a04aad7f89c1c3d53181c045e2b51ab2ab3e51b23e59b2": "trois espèces (Adélie, Chinstrap, Gentoo) ; trois îles aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R3c": {
+      "hash": "84a0eb22c0465a4d04b012386f430dcde176c03962efa0dc3afaad1666b26bcc",
+      "kind": "str",
+      "mistakes": {
+        "1a63f4a7c9fc3a15ff07c508146da7a9b30e4e6dc6652692d4ac8d198148460c": "un modèle trop simple, c'est de l'underfitting",
+        "755fac314fd5e6bcb9f3f1f86b063ac4ff783b25e61ab48cdec41f389049fa0b": "une erreur de mesure fausse chaque valeur, pas le choix des exemples"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R3d": {
+      "hash": "2a19794076505bb0cdf209195f0bebcab33a02740812339db48e7d9a883393f8",
+      "kind": "bool",
+      "mistakes": {
+        "6746b2b67d1e35e0c64f7b21baf0ce1bd3c9091356f60e3fce481d9f9b69d8b1": "trois espèces, trois îles, trois saisons : ce n'est pas tous les manchots du monde"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
+    "29.R3e": {
+      "hash": "cdcfe3bb51282307f76053ac633f48cc2cf850195d11c878f0bf34103a874f90",
+      "kind": "str",
+      "mistakes": {
+        "404ada6e9c6a0e90bfbff22c5d5a1cbfe7a8bf08b1d3544d776b0c96602e4f35": "une fuite fait passer de l'information du test à l'entraînement",
+        "a0142eb63885d44f48273cec4aaa5ec27cc08c0e7f7c6c9ef75aea6ce94eb5bb": "l'overfitting concerne l'écart entre entraînement et test d'une même distribution"
+      },
+      "source": "chapitres/ch29_datasets/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",
