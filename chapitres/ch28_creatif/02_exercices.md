@@ -197,7 +197,7 @@ Conventions de la fiche : $L_c = \lVert F(\mathbf{x}) - F(\mathbf{c}) \rVert^2$ 
 
 - **Contenu** : une couche d'un seul canal de 2 × 2 ; mises à plat, $F(\mathbf{x}) = (1, 2, 0, 1)$ et $F(\mathbf{c}) = (1, 0, 1, 1)$.
 - **Style** : une couche de deux canaux à deux positions ; $F(\mathbf{x}) = \begin{pmatrix} 1 & 1 \\ 0 & 2 \end{pmatrix}$, $F(\mathbf{s}) = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$.
-- **Variation totale** : une image d'un canal de 3 × 3, $\mathbf{x} = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 1 & 1 \\ 0 & 1 & 2 \end{pmatrix}$.
+- **Variation totale** : une image d'un canal de 3 × 3, $\mathbf{x} = \begin{pmatrix} 0 & 1 & 0 \\ 1 & 1 & 1 \\ 0 & 1 & 3 \end{pmatrix}$.
 
 a) $L_c$.
 b) La valeur que rendrait `F.mse_loss(Fx, Fc)` de PyTorch (une **moyenne** des carrés).
@@ -244,7 +244,7 @@ Le livre entraîne deux couches de LSTM de 128 cellules sur environ 427 000 mots
 1. Le nombre de paramètres de la couche de sortie, biais compris.
 2. Ceux de l'embedding, puis des deux couches de LSTM.
 3. Le total, et la part de la couche de sortie. Que t'apprend cette répartition ?
-4. Combien de mots d'entraînement par paramètre ? Qu'en déduis-tu sur le risque de sur-apprentissage ?
+4. Combien de mots d'entraînement par paramètre ? Qu'en déduis-tu sur le risque d'overfitting ?
 5. On garde les 5 000 mots les plus fréquents et un token `<unk>` pour les autres (📦 28.27). Le nombre de paramètres de la couche de sortie ? Avec la loi de Zipf, la part des mots du texte couverts par ces 5 000 mots est d'environ $\frac{\ln 5\,000 + 0{,}577}{\ln 10\,300 + 0{,}577}$ : calcule-la.
 6. Un modèle qui répond au hasard, uniformément sur 10 300 mots : sa cross-entropy (en nats) et sa perplexité. Un modèle de perplexité 150 : combien de mots « hésite-t-il » en moyenne ?
 
@@ -264,7 +264,7 @@ Explique en cinq lignes au plus, à quelqu'un qui ne connaît pas le deep learni
 
 Les neuf références de style du livre (fig. 28.26) : *La Nuit étoilée* (Van Gogh, mort en 1890), *Le Naufrage d'un navire de transport* (Turner, mort en 1851 ; le livre l'appelle *The Shipwreck of the Minotaur*), *Le Cri* (Munch, mort en 1944), deux œuvres de Picasso (mort en 1973), *Nighthawks* (Hopper, mort en 1967), *Les Nymphéas* (Monet, mort en 1926), *Composition VII* (Kandinsky, mort en 1944), et un tableau de l'auteur du livre. Réponds dans ta copie.
 
-1. Dans l'Union européenne, une œuvre entre dans le domaine public le 1er janvier qui suit les 70 ans de la mort de son auteur. Lesquelles de ces œuvres y sont en 2026 ? En quelle année les autres y entreront-elles ?
+1. Dans l'Union européenne, une œuvre entre dans le domaine public le 1ᵉʳ janvier qui suit les 70 ans de la mort de son auteur. Lesquelles de ces œuvres y sont en 2026 ? En quelle année les autres y entreront-elles ?
 2. Une photo fidèle d'un tableau du domaine public (par exemple sur Wikimedia Commons) crée-t-elle de nouveaux droits, dans l'Union européenne ? Que dit l'article 14 de la directive (UE) 2019/790 ?
 3. Un **style** est-il protégé par le droit d'auteur ? Qu'est-ce qui l'est ? Pourquoi imiter le style d'un artiste vivant pose-t-il quand même des questions (éthiques, commerciales) ?
 4. Pour entraîner un générateur, on copie des millions d'images. Que permet l'exception de fouille de textes et de données (article 4 de la directive 2019/790), et quelle limite lui donne le « opt-out » ? Que demande le règlement sur l'IA (article 53) aux fournisseurs de modèles à usage général ?

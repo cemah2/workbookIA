@@ -4476,19 +4476,19 @@ Un réseau convolutif pré-entraîné peut devenir un outil de création : en fa
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 28.Q1 | 🧠 | Pourquoi partir d'un réseau pré-entraîné comme VGG16 | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q2 | 🧠 | Montée de gradient sur l'entrée, poids gelés | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q3 | 🧠 | Visualiser une couche entière, pondérer ses filtres | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q4 | 🧠 | Deep dream : ce qui change par rapport à la visualisation d'une couche | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q5 | 🧠 | Des yeux partout : l'écho des données d'entraînement | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q6 | 🧠 | Image de base, référence de style, image générée : que minimise-t-on ? | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q7 | 🧠 | Ce que la matrice de Gram retient et ce qu'elle oublie | ★ | 3 | — | 02 | — | RM | manual |
-| 28.Q8 | 🧠 | Loss de contenu : couches précoces ou profondes ? | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q9 | 🧠 | Loss de style, poids relatifs et variation totale | ★ | 3 | — | 02 | — | R | manual |
-| 28.Q10 | 🧠 | Générer du texte mot à mot : ce qu'implique « le mot le plus probable » | ★ | 3 | Verne | 02 | — | R | manual |
-| 28.R1 | 🔁 | Un réseau qui sert de loss (le discriminateur) | ★ | 5 | — | 02 | 27 | R | manual |
-| 28.R2 | 🔁 | Mélange de contenu contre mélange de représentations | ★ | 5 | MNIST | 02 | 25 | R | manual |
-| 28.R3 | 🔁 | Champ récepteur et hiérarchie des filtres de VGG16 | ★ | 5 | CIFAR-10 | 02 | 21 | R | manual |
+| 28.Q1 | 🧠 | Pourquoi partir d'un réseau pré-entraîné comme VGG16 | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q2 | 🧠 | Montée de gradient sur l'entrée, poids gelés | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q3 | 🧠 | Visualiser une couche entière, pondérer ses filtres | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q4 | 🧠 | Deep dream : ce qui change par rapport à la visualisation d'une couche | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q5 | 🧠 | Des yeux partout : l'écho des données d'entraînement | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q6 | 🧠 | Image de base, référence de style, image générée : que minimise-t-on ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q7 | 🧠 | Ce que la matrice de Gram retient et ce qu'elle oublie | ★ | 3 | — | 02 | — | RM | wb.check |
+| 28.Q8 | 🧠 | Loss de contenu : couches précoces ou profondes ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q9 | 🧠 | Loss de style, poids relatifs et variation totale | ★ | 3 | — | 02 | — | R | wb.check |
+| 28.Q10 | 🧠 | Générer du texte mot à mot : ce qu'implique « le mot le plus probable » | ★ | 3 | Verne | 02 | — | R | wb.check |
+| 28.R1 | 🔁 | Un réseau qui sert de loss (le discriminateur) | ★ | 5 | — | 02 | 27 | R | wb.check |
+| 28.R2 | 🔁 | Mélange de contenu contre mélange de représentations | ★ | 5 | MNIST | 02 | 25 | R | wb.check |
+| 28.R3 | 🔁 | Champ récepteur et hiérarchie des filtres de VGG16 | ★ | 5 | CIFAR-10 | 02 | 21 | R | wb.check |
 | 28.1 | ✏️ | Tailles des activations et des matrices de Gram le long de VGG16 | ★ | 10 | — | 02 | 21 | RM | wb.check |
 | 28.2 | ✏️ | Une matrice de Gram à la main | ★★ | 15 | — | 02 | 0B | RM | wb.check |
 | 28.3 | ∂ | Mélanger les positions ne change pas la matrice de Gram | ★★ | 20 | — | 02 | 28.2 | M | manual |
@@ -4517,7 +4517,7 @@ Un réseau convolutif pré-entraîné peut devenir un outil de création : en fa
 | 28.26 | 🛠️ | Crédits, licences et paramètres : documenter une galerie générée | ★★★ | 30 | — | 03 | 28.23 | C | manual |
 | 28.27 | 📦 | Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases 🚀 | ★★★ | 45 | Verne | 03 | 22, 24.30 | C | manual |
 | 28.28 | 🔬 | Glouton, température, top-k ou top-p : répétitions et diversité | ★★★ | 30 | Verne | 03 | 28.27, 22 | C | manual |
-| 28.29 | 🏆 | Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable | ★★★★ | 90 | Verne | 03 | 28.23 | C | manual |
+| 28.29 | 🏆 | Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable | ★★★★ | 90 | — | 03 | 28.23 | C | manual |
 | 28.E1 | 💼 | Comment visualiser ce qu'a appris un CNN ? | ★★ | 10 | — | 02 | — | R | manual |
 | 28.E2 | 💼 | Expliquer le transfert de style neuronal et la matrice de Gram | ★★ | 10 | — | 02 | — | R | manual |
 | 28.E3 | 💼 | Quelles stratégies de décodage pour générer du texte ? | ★★ | 10 | — | 02 | — | R | manual |

@@ -22,7 +22,7 @@ Dans tout le chapitre, le réseau sert d'instrument de mesure : demande-toi ce q
 </details>
 <details><summary>Indice 3</summary>
 
-a) **Faux** : seuls les pixels de l'image changent, les poids sont gelés. Pour b), additionne les convolutions des cinq blocs (2, 2, 3, 3, 3) et les couches denses. Pour c), qu'est-ce qu'un réseau entraîné sur des photos a appris ? Pour d) et e), l'encadré ⚠️ du §28.2.1 donne les chiffres et dit à quoi correspond « 14 millions ».
+a) **Faux** : seuls les pixels de l'image changent, les poids sont gelés. Pour b), additionne les convolutions des cinq blocs (2, 2, 3, 3, 3) et les couches denses. Pour c), qu'est-ce qu'un réseau entraîné sur des photos a appris ? Pour d) et e), l'encadré ⚠️ du §28.2.1 donne les chiffres.
 
 </details>
 
@@ -35,7 +35,7 @@ Relis le §28.2.2 de la fiche et l'encadré 🧮 « dériver par rapport à une 
 </details>
 <details><summary>Indice 2</summary>
 
-La formule $\mathbf{x} \leftarrow \mathbf{x} + \eta\,\nabla_{\mathbf{x}}\, a(\mathbf{x})$ dit ce qui bouge. Un optimiseur de PyTorch ne fait que des descentes : comment s'en servir pour monter ? Et un tenseur créé avec `requires_grad=True` reçoit un gradient, quels que soient les autres.
+La formule $\mathbf{x} \leftarrow \mathbf{x} + \eta\,\nabla_{\mathbf{x}}\, a(\mathbf{x})$ dit ce qui bouge. Un optimiseur de PyTorch ne fait que des descentes : comment s'en servir pour monter ? Pour e), demande-toi ce que `requires_grad_(False)` coupe exactement, et ce qu'il laisse.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -58,7 +58,7 @@ Une couche, c'est tous ses filtres : on additionne leurs activations. Pour d) et
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : on additionne les activations de tous les filtres de la couche, éventuellement pondérées. Pour b), que détectent les premières couches d'un CNN (ch. 21) ? Pour c), que devient une somme quand un des termes est multiplié par un nombre négatif ? Pour d), les filtres doublent de bloc en bloc jusqu'à 512. Pour e), divise 224 par 2 autant de fois qu'il y a de poolings **avant** le bloc 4.
+a) **B** : on additionne les activations de tous les filtres de la couche, éventuellement pondérées. Pour b), que détectent les premières couches d'un CNN (ch. 21) ? Pour c), que devient une somme quand un des termes est multiplié par un nombre négatif ? Pour d), compte les filtres bloc par bloc (§28.2.1). Pour e), divise 224 par 2 autant de fois qu'il y a de poolings **avant** le bloc 4.
 
 </details>
 
@@ -89,7 +89,7 @@ Relis le dernier paragraphe du §28.3 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Un réseau ne fait apparaître que des motifs qu'il a appris à détecter, et il les a appris sur ses données d'entraînement. Pour d), rappelle-toi la hiérarchie des couches (§28.2.3).
+Demande-toi d'où viennent les détecteurs d'un réseau entraîné, et ce qu'ils peuvent faire apparaître. Pour d), rappelle-toi la hiérarchie des couches (§28.2.3).
 
 </details>
 <details><summary>Indice 3</summary>
@@ -107,7 +107,7 @@ Relis les §28.4 et §28.4.2 de la fiche, et la figure des trois images.
 </details>
 <details><summary>Indice 2</summary>
 
-Trois images, mais une seule change d'un pas à l'autre ; les deux autres servent à calculer des cibles, une fois pour toutes. La loss de contenu et la loss de style comparent chacune l'image générée à une **autre** image.
+Pour chacune des trois images, demande-toi si elle change d'un pas à l'autre ou si elle ne sert qu'à fixer une cible. La loss de contenu et la loss de style comparent chacune l'image générée à une **autre** image.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -130,7 +130,7 @@ $G_{ij} = \frac{1}{CHW}\sum_k F_{ik} F_{jk}$ : regarde ce que désignent les ind
 </details>
 <details><summary>Indice 3</summary>
 
-a) **A** : $i$ et $j$ parcourent les filtres, d'où une matrice $C \times C$. Pour b), le produit $F_{ik} F_{jk}$ est grand quand les deux filtres sont forts à la même position $k$. Pour c), une somme dépend-elle de l'ordre de ses termes ? Pour d), écris $G_{ii}$ avec $j = i$. Pour e), relis ce que montre l'article de Li et coll.
+a) **A** : $i$ et $j$ parcourent les filtres, d'où une matrice $C \times C$. Pour b), quand le produit $F_{ik} F_{jk}$ est-il grand ? Pour c), une somme dépend-elle de l'ordre de ses termes ? Pour d), écris $G_{ii}$ avec $j = i$. Pour e), relis ce que montre l'article de Li et coll.
 
 </details>
 
@@ -143,7 +143,7 @@ Relis le §28.4.3 de la fiche et ses deux encadrés ⚠️.
 </details>
 <details><summary>Indice 2</summary>
 
-Une couche précoce garde presque toute l'information des pixels ; une couche profonde n'en garde que ce qui sert à reconnaître des objets. Le second encadré ⚠️ compare trois choix de couche de contenu.
+Relis ce que la fiche dit des reconstructions depuis le bruit, couche par couche (fig. 28.19 du livre). Le second encadré ⚠️ compare trois choix de couche de contenu.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -161,7 +161,7 @@ Relis les §28.4.4 et §28.4.5 de la fiche, avec l'encadré 🧮 sur la variatio
 </details>
 <details><summary>Indice 2</summary>
 
-Le §28.4.5 donne les couches et les poids du livre. Pour d), demande-toi ce que devient la loss de style si l'on oublie de diviser la matrice de Gram par $CHW$ (✏️ 28.4 g). Pour e), relis la remarque sur le point de départ.
+Le §28.4.5 donne les couches et les poids du livre. Pour d), demande-toi ce que devient la loss de style si l'on oublie de diviser la matrice de Gram par $CHW$. Pour e), relis la remarque sur le point de départ.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -179,7 +179,7 @@ Relis le §28.5 de la fiche, ses encadrés ⚠️ et l'encadré 🧮 sur la temp
 </details>
 <details><summary>Indice 2</summary>
 
-Un décodage glouton ne tire rien au hasard. La couche de sortie a un neurone par mot du vocabulaire. Diviser des logits par un nombre plus petit que 1, c'est les multiplier.
+Pour chaque item, une question : y a-t-il du hasard dans le glouton ? Combien de sorties a la couche finale ? Que deviennent les écarts entre logits quand on les divise par $T$ ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -201,7 +201,7 @@ Relis le §27.4 de la fiche du ch. 27 et le §28.4.2 de cette fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Dans les deux cas, un réseau dérivable dit « à quel point c'est bon », et le gradient le traverse. Ce qui diffère : ce réseau apprend-il, et que modifie-t-on ?
+Dans les deux cas, un réseau dérivable dit « à quel point c'est bon ». Ce qui diffère : ce réseau apprend-il, et que modifie-t-on ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -219,7 +219,7 @@ Relis, au ch. 25, le mélange de deux images et l'interpolation dans l'espace la
 </details>
 <details><summary>Indice 2</summary>
 
-Une moyenne de pixels superpose ; un décodeur rend une image qui ressemble aux données. Pour e), une matrice de Gram est un produit $F F^\top$ : que donne ce produit pour une somme $F_1 + F_2$ ?
+Une moyenne de pixels agit case par case ; un décodeur, lui, a été entraîné à produire des images. Pour e), une matrice de Gram est un produit $F F^\top$ : que donne ce produit pour une somme $F_1 + F_2$ ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -300,7 +300,7 @@ Relis le §28.4.1 de la fiche (ce que la matrice de Gram oublie) et la figure de
 </details>
 <details><summary>Indice 3</summary>
 
-1. La colonne $k$ de $FP$ est une colonne de $F$ ; pour $PP^\top$, calcule $\sum_k P_{ik} P_{jk}$ en distinguant $i = j$ et $i \ne j$. 2. $G(FP) = \frac{1}{CN} F (PP^\top) F^\top$ : conclus avec 1. 3. Quelle propriété de $P$ le calcul utilise-t-il, et une matrice orthogonale l'a-t-elle ? Que fait une rotation aux valeurs ? 4. Essaie $F = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix}$. 5. $C\,G_{ii} = \frac{1}{N}\sum_k F_{ik}^2$, et $\sigma^2 = \overline{F^2} - \mu^2$ ; pour la seconde question, cherche deux canaux de même moyenne des carrés et de moyennes différentes. 6. Qu'est-ce que la loss de style impose, et qu'est-ce qui décide de la disposition ?
+1. La colonne $k$ de $FP$ est une colonne de $F$ ; pour $PP^\top$, calcule $\sum_k P_{ik} P_{jk}$ en distinguant $i = j$ et $i \ne j$. 2. $G(FP) = \frac{1}{CN} F (PP^\top) F^\top$ : conclus avec 1. 3. Quelle propriété de $P$ le calcul utilise-t-il, et une matrice orthogonale l'a-t-elle ? Que fait une rotation aux valeurs ? 4. Prends deux filtres allumés à la même position, puis déplace l'activation d'un seul. 5. $C\,G_{ii} = \frac{1}{N}\sum_k F_{ik}^2$, et $\sigma^2 = \overline{F^2} - \mu^2$ ; pour la seconde question, cherche deux canaux de même moyenne des carrés et de moyennes différentes. 6. Qu'est-ce que la loss de style impose, et qu'est-ce qui décide de la disposition ?
 
 </details>
 
@@ -344,7 +344,7 @@ $\frac{\partial F_{ik}}{\partial F_{ab}} = \delta_{ia}\delta_{kb}$. Dérive le p
 
 <details><summary>Indice 1</summary>
 
-Relis la fin du §28.4.5 de la fiche et l'encadré 🕰️ du §28.4.6.
+Relis la fin du §28.4.5 de la fiche, l'encadré 🕰️ du §28.2.1 (les poids de VGG16) et celui du §28.4.6.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -372,7 +372,7 @@ Une couche dense de $n$ entrées et $m$ sorties a $(n + 1)\,m$ paramètres ; un 
 </details>
 <details><summary>Indice 3</summary>
 
-1. $(128 + 1) \times 10\,300 = 1\,328\,700$. Pour 2, la première couche reçoit les vecteurs de l'embedding ($d = 100$), la seconde les sorties de la première ($d = 128$). Pour 3, additionne et calcule la part de la sortie. Pour 4, divise le nombre de mots par le nombre de paramètres. Pour 5, $V = 5\,001$, puis le calcul de la formule. Pour 6, la cross-entropy d'une distribution uniforme sur $V$ mots est $\ln V$ ; que vaut alors $e^{L_{CE}}$ ?
+1. $(128 + 1) \times 10\,300 = 1\,328\,700$. Pour 2, la première couche reçoit les vecteurs de l'embedding ($d = 100$), la seconde les sorties de la première ($d = 128$). Pour 3, additionne et calcule la part de la sortie. Pour 4, divise le nombre de mots par le nombre de paramètres. Pour 5, les 5 000 mots, plus le token `<unk>`, puis le calcul de la formule. Pour 6, la cross-entropy d'une distribution uniforme sur $V$ mots est $\ln V$ ; que vaut alors $e^{L_{CE}}$ ?
 
 </details>
 
@@ -407,12 +407,12 @@ Relis l'encadré ⚠️ du §28.4.5 et l'encadré 🕰️ sur le droit d'auteur,
 </details>
 <details><summary>Indice 2</summary>
 
-1. Ajoute 70 à l'année de la mort, puis passe au 1er janvier suivant. 3. Distingue une œuvre, une reproduction d'une œuvre, et une manière de peindre. 4. Une exception, sa condition, et ce que le règlement demande en plus aux fournisseurs.
+1. Ajoute 70 à l'année de la mort, puis passe au 1ᵉʳ janvier suivant. 3. Distingue une œuvre, une reproduction d'une œuvre, et une manière de peindre. 4. Une exception, sa condition, et ce que le règlement demande en plus aux fournisseurs.
 
 </details>
 <details><summary>Indice 3</summary>
 
-1. Van Gogh (1890) : $1890 + 70 = 1960$, domaine public depuis le 1er janvier 1961 ; fais de même pour les autres, et n'oublie pas le tableau d'un auteur vivant. 2. Lis l'article 14 : une reproduction fidèle est-elle originale ? 3. Le droit d'auteur protège-t-il des idées ? Pense à la concurrence, au nom de l'artiste, à son accord. 4. Que veut dire « s'opposer de manière appropriée » pour un contenu en ligne ? 5. Liste ce dont quelqu'un aurait besoin pour **refaire** l'image et pour **savoir** s'il peut la réutiliser.
+1. Van Gogh (1890) : $1890 + 70 = 1960$, domaine public depuis le 1ᵉʳ janvier 1961 ; fais de même pour les autres, et n'oublie pas le tableau d'un auteur vivant. 2. Lis l'article 14 : une reproduction fidèle est-elle originale ? 3. Le droit d'auteur protège-t-il des idées ? Pense à la concurrence, au nom de l'artiste, à son accord. 4. Que veut dire « s'opposer de manière appropriée » pour un contenu en ligne ? 5. Liste ce dont quelqu'un aurait besoin pour **refaire** l'image et pour **savoir** s'il peut la réutiliser.
 
 </details>
 
@@ -430,7 +430,7 @@ Cherche dans *Methods* : le nom du réseau, ce qu'ils font du pooling, les couch
 </details>
 <details><summary>Indice 3</summary>
 
-1. VGG, mais lequel, et que gardent-ils ? 2. Une seule couche pour le contenu, cinq pour le style. 3. Compare $\frac{1}{4 N_\ell^2 M_\ell^2}$ au carré de la normalisation de la fiche, $\frac{1}{CHW}$. 4. La figure 3 croise deux réglages. 5. Comparé au livre : réseau, couches, taille des images. 6. Relis les fig. 28.19 et 28.24 du livre. 7. Cherche le mot « séparables » dans l'article, et ce qu'en disent les auteurs plus loin.
+1. VGG-19, dont ils gardent les convolutions et les poolings, sans les couches denses ; cherche ce qu'ils changent au pooling. 2. Combien de couches pour le contenu, lesquelles pour le style ? 3. Compare $\frac{1}{4 N_\ell^2 M_\ell^2}$ au carré de la normalisation de la fiche, $\frac{1}{CHW}$. 4. La figure 3 croise deux réglages. 5. Comparé au livre : réseau, couches, taille des images. 6. Relis les fig. 28.19 et 28.24 du livre. 7. Cherche le mot « séparables » dans l'article, et ce qu'en disent les auteurs plus loin.
 
 </details>
 

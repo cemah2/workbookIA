@@ -48,7 +48,7 @@ G_28_2 = RAW_28_2 / F_28_2.size
 FX_28_4, FC_28_4 = np.array([1, 2, 0, 1.0]), np.array([1, 0, 1, 1.0])
 SX_28_4, SS_28_4 = np.array([[1, 1], [0, 2.0]]), np.array([[2, 0], [0, 2.0]])
 GX_28_4, GS_28_4 = SX_28_4 @ SX_28_4.T / SX_28_4.size, SS_28_4 @ SS_28_4.T / SS_28_4.size
-IMG_28_4 = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 2.0]])
+IMG_28_4 = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 3.0]])
 LC_28_4 = float(((FX_28_4 - FC_28_4) ** 2).sum())
 LS_28_4 = float(((GX_28_4 - GS_28_4) ** 2).sum())
 LTV_28_4 = float(((IMG_28_4[1:] - IMG_28_4[:-1]) ** 2).sum() + ((IMG_28_4[:, 1:] - IMG_28_4[:, :-1]) ** 2).sum())
@@ -98,7 +98,7 @@ PAPER = [
         ("c", TF, "True", r'''mistakes={"avec un poids négatif, augmenter la somme pondérée, c'est diminuer l'activation de ce filtre": False}'''),
         ("d", WHOLE, "512", r'''mistakes={"les filtres doublent de bloc en bloc jusqu'au bloc 4, puis restent à 512": 256}'''),
         ("e", WHOLE, "side(4)", r'''mistakes={"le bloc 4 vient après trois poolings, pas quatre": 14,
-          "le bloc 4 vient après trois poolings : divise 224 par 2 trois fois": 56}'''),
+          "le bloc 4 vient après trois poolings, et chacun divise le côté par 2": 56}'''),
     ]),
     Paper("28.Q4", "Deep dream : ce qui change par rapport à la visualisation d'une couche", [
         ("a", LETTERS, '"AB"', r'''mistakes={"les poids du réseau ne changent jamais dans ce chapitre": "ABC",
@@ -151,7 +151,7 @@ PAPER = [
     ]),
     Paper("28.Q9", "Loss de style, poids relatifs et variation totale", [
         ("a", LETTER, '"B"', letters("B", {"A": "relis le §28.4.5 : le livre prend le style sur toutes les convolutions"})),
-        ("b", WHOLE, "round(1 / 0.025)", r'''mistakes={"1 / 0,025 = 40, pas 25": 25}'''),
+        ("b", WHOLE, "round(1 / 0.025)", r'''mistakes={"refais la division : 1 divisé par 0,025": 25}'''),
         ("c", LETTER, '"C"', letters("C", {"A": "la variation totale compare chaque pixel à ses voisins, pas à une plage de couleurs",
                                            "B": "l'écart à la photo, c'est la loss de contenu"})),
         ("d", TF, "True", r'''mistakes={"multiplie la loss de style par 1 000 en changeant de normalisation : le même β donne-t-il le même dosage ?": False}'''),
@@ -199,11 +199,11 @@ PAPER = [
         ("e", WHOLE, "512 * 513 // 2", r'''mistakes={"la diagonale compte aussi : n(n + 1)/2, pas n(n − 1)/2": 512 * 511 // 2,
           "la matrice est symétrique : les coefficients de part et d'autre de la diagonale sont égaux": 512 ** 2}'''),
         ("f", WHOLE, "side(5, image=128)", r'''mistakes={"le bloc 5 vient après quatre poolings, pas cinq": 4,
-          "le bloc 5 vient après quatre poolings : divise 128 par 16": 16}'''),
+          "le bloc 5 vient après quatre poolings, et chacun divise le côté par 2": 16}'''),
         ("g", TF, "False", r'''mistakes={"la matrice de Gram est C × C : seul le nombre de filtres compte": True}'''),
     ]),
     Paper("28.2", "Une matrice de Gram à la main", [
-        ("a", WHOLE, "int(RAW_28_2[0, 1])", ""),
+        ("a", WHOLE, "int(RAW_28_2[0, 1])", r'''mistakes={"le coefficient (1, 2) combine deux lignes différentes de F, pas une ligne avec elle-même": 6}'''),
         ("b", WHOLE, "int(RAW_28_2[1, 1])", r'''mistakes={"le coefficient (2, 2) est la somme des carrés de la ligne 2, pas sa somme": 5}'''),
         ("c", NUMBER, "G_28_2[0, 2]", r'''decimals=3, mistakes={"normalise par C·H·W = 3 × 2 × 2 = 12": 12.0,
           "normalise par C·H·W = 12, pas seulement par H·W = 4": 3.0}'''),
@@ -220,12 +220,13 @@ PAPER = [
           "additionne les carrés des écarts, pas leurs valeurs absolues": 3.0}'''),
         ("b", NUMBER, "LC_28_4 / 4", r'''decimals=3, mistakes={"F.mse_loss prend la moyenne des carrés : divise par 4": 5.0}'''),
         ("c", NUMBER, "GX_28_4[0, 1]", r'''decimals=3, mistakes={"normalise par C·H·W = 2 × 2 = 4": 2.0,
-          "le produit scalaire des lignes (1, 1) et (0, 2) vaut 2, divisé par 4": 0.25}'''),
+          "G multiplie les lignes de F (une par filtre) : F Fᵀ, pas Fᵀ F": 0.25}'''),
         ("d", NUMBER, "LS_28_4", r'''decimals=3, mistakes={"additionne les carrés des quatre écarts, sans racine": np.sqrt(0.75),
           "n'oublie pas les deux coefficients hors diagonale, qui comptent chacun": 0.5}'''),
-        ("e", NUMBER, "LTV_28_4", r'''decimals=3, mistakes={"additionne les deux directions, horizontale et verticale": 4.0,
-          "additionne les carrés des écarts, pas les écarts": 2.0}'''),
-        ("f", DEC4, "0.025 * LC_28_4 + LS_28_4 + 1e-4 * LTV_28_4", r'''decimals=4, mistakes={"le contenu est pondéré par α = 0,025": 5 + 0.75 + 8e-4,
+        ("e", NUMBER, "LTV_28_4", r'''decimals=3, mistakes={"additionne les deux directions, horizontale et verticale": 7.0,
+          "élève chaque écart au carré : la valeur absolue ne suffit pas": 10.0,
+          "des écarts signés se compensent : élève-les au carré": 6.0}'''),
+        ("f", DEC4, "0.025 * LC_28_4 + LS_28_4 + 1e-4 * LTV_28_4", r'''decimals=4, mistakes={"le contenu est pondéré par α = 0,025": 5 + 0.75 + 14e-4,
           "n'oublie pas la variation totale, même petite": 0.875}'''),
         ("g", NUMBER, "float(((SX_28_4 @ SX_28_4.T - SS_28_4 @ SS_28_4.T) ** 2).sum())", r'''decimals=3, mistakes={"sans normalisation, les écarts sont 4 fois plus grands, leurs carrés 16 fois": 3.0}'''),
     ]),

@@ -49301,7 +49301,7 @@
       "magnitude": 0,
       "mistakes": {
         "60198a3c876977c4f78a61e0827c4da3f2334c23f1f470ae7ad9e0c54b642451": "le bloc 5 vient après quatre poolings, pas cinq",
-        "9d4a3240c3607bd8bbb925d39765b6fcf103fcc4ca378d59e00a70b6e5a48b5b": "le bloc 5 vient après quatre poolings : divise 128 par 16"
+        "9d4a3240c3607bd8bbb925d39765b6fcf103fcc4ca378d59e00a70b6e5a48b5b": "le bloc 5 vient après quatre poolings, et chacun divise le côté par 2"
       },
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
@@ -49318,6 +49318,9 @@
       "hash": "ea353f698aab10a19ea8ecdc6bcc04c69779302193fe5972e0219fb94604f783",
       "kind": "int",
       "magnitude": 0,
+      "mistakes": {
+        "4fbceebc59a2285fe5abe130dc3ed20d25cf12419a1d5a0e1012304ea60536eb": "le coefficient (1, 2) combine deux lignes différentes de F, pas une ligne avec elle-même"
+      },
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49423,7 +49426,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "76c5ac6b4e6866a822343d2a61459118f91a33af758035a775b0356871af34ab": "le produit scalaire des lignes (1, 1) et (0, 2) vaut 2, divisé par 4",
+        "76c5ac6b4e6866a822343d2a61459118f91a33af758035a775b0356871af34ab": "G multiplie les lignes de F (une par filtre) : F Fᵀ, pas Fᵀ F",
         "c4251f7698ee4e48ef3f060cc88ef16c6d5f90582835ee99d55c95008b432e05": "normalise par C·H·W = 2 × 2 = 4"
       },
       "sign": 1,
@@ -49444,26 +49447,27 @@
     },
     "28.4e": {
       "decimals": 3,
-      "hash": "08b065f7817ac4d6650ba1be55ba380fa18b605cbc3c917c58332bde8475a71d",
-      "hash_coarse": "768e4326902a2da56e0374234eec51be683317e08827fbd84e5b3835a4911515",
+      "hash": "39ea81d5afccd2ea4b620e80814ca96b1c37a22bd2d45e8a95e0c69244bf8016",
+      "hash_coarse": "9922bf364f78d7d8ae9edefa1e9f565295f894b376e652411b3af01d0832e4d9",
       "kind": "float",
-      "magnitude": 0,
+      "magnitude": 1,
       "mistakes": {
-        "306085e8f308ea0261b02ea6379930fd177ad091b490386b26492b834635f608": "additionne les deux directions, horizontale et verticale",
-        "eaf5080f11f23fdc47fce72a37d4d679fcb73aa4c67e190ea83ab7e547d91897": "additionne les carrés des écarts, pas les écarts"
+        "29cd98239bb90a0ab05b54a9b7a85f19426dd38d4ab6d03b4324a6b348bcbb86": "élève chaque écart au carré : la valeur absolue ne suffit pas",
+        "4ba423d407dc650ed86c182d2f9a5a385e0f7ad8dcc8efd68c3b6e9111f08370": "additionne les deux directions, horizontale et verticale",
+        "f38241cb2588127a6833b38a3c1c790d854eb973f148d9cc20d4010aaff056e8": "des écarts signés se compensent : élève-les au carré"
       },
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.4f": {
       "decimals": 4,
-      "hash": "f7bfa30e6c959a421b77e9200d663a88129c475f4359c9fc4c156e31eb7df046",
+      "hash": "c76d2b60b6a936ebfa2908d478dfc4112df476a0b28e098e0621371d36eca04c",
       "hash_coarse": "60ad02dbd2d99d17d24f3f50ad6e696278e65d5bb0f78765771bad2b8589ea6a",
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
         "4b2fc1bf103960cfbf1200aadf8549032537e087a2d903d7a3ddae56cecb558e": "n'oublie pas la variation totale, même petite",
-        "9519ff6bfc791c31bb4e2b6478dd64777f47f89cb12202d4ddaf69210fb28771": "le contenu est pondéré par α = 0,025"
+        "a9e0c034b368091c4aa52402d5d14f88183dee0f550ad906f1a5a9bba503b29c": "le contenu est pondéré par α = 0,025"
       },
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
@@ -49609,7 +49613,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "d013f07c29d43ea0e23ea6a051dd7096dd6d2c046dcfad4fd0893263c86aefda": "le bloc 4 vient après trois poolings : divise 224 par 2 trois fois",
+        "d013f07c29d43ea0e23ea6a051dd7096dd6d2c046dcfad4fd0893263c86aefda": "le bloc 4 vient après trois poolings, et chacun divise le côté par 2",
         "e93efe25e6c3c75cd3b8f5758b886bea462fe892cdfb2b719745a6842ee32ffb": "le bloc 4 vient après trois poolings, pas quatre"
       },
       "sign": 1,
@@ -49844,7 +49848,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "54c11942fcec319dcdd21c7adb86b50d50d7c30f2efcb107bf2ba48f3b5e795f": "1 / 0,025 = 40, pas 25"
+        "54c11942fcec319dcdd21c7adb86b50d50d7c30f2efcb107bf2ba48f3b5e795f": "refais la division : 1 divisé par 0,025"
       },
       "sign": 1,
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
