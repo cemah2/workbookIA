@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 59 (ch. 28, 2ᵉ partie).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 60 (ch. 29).*
 
 ## Prochaine étape
 
-➡️ **Session 60 : le ch. 29 (Datasets et préparation du projet final)**, selon le nombre de sessions de génération de sa section du SYLLABUS et de `docs/syllabus/data/ch29.json`.
+➡️ **Session 61 : le checkpoint VI (partie VI : ch. 25 à 29) et son mini-projet**, selon la section CP6 du SYLLABUS et `docs/syllabus/data/cp6.json` (BIBLE §17), puis l'audit P5 de la partie VI annoncé par le tableau de statut.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -175,7 +175,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 26 | Apprentissage par renforcement | ✅ | 55-56 | 58 exercices (dont 26 dans le notebook, parties A à F), fiche (5 figures), 30 flashcards, partie 0 (110 vérifications), `mylearn.rl` (208 tests) ; `wb.envs` (Flippers, morpion, minimax ; 35 tests) ; calibrages `history_ch26.py` ; solutions ≈ 5 min sur CPU |
 | 27 | GAN | ✅ | 57 | 46 exercices (dont 18 dans le notebook, parties A et B), fiche (6 figures), 22 flashcards, partie 0 (88 vérifications), `mylearn.gen_metrics` (102 tests) ; historiques et calibrages `history_ch27.py` ; solutions ≈ 5 min sur CPU |
 | 28 | Applications créatives | ✅ | 58-59 | 46 exercices (dont 19 dans le notebook, parties A à D), fiche (5 figures), 20 flashcards, partie 0 (86 vérifications) ; pas de module `mylearn` ; infrastructure `wb.datasets` (photos libres, trois tableaux du domaine public versionnés, `load_pretrained`) ; calibrages `history_ch28.py` ; solutions ≈ 3 min sur CPU |
-| 29 | Datasets et préparation du projet final | 📅 | | |
+| 29 | Datasets et préparation du projet final | ✅ | 60 | 31 exercices (dont 10 dans le notebook, parties A et B), fiche, 15 flashcards, partie 0 (67 vérifications) ; pas de module `mylearn` ; `wb.datasets.make_trap_dataset` (huit défauts plantés) et sa data card ; espions de fuite (`watch_leaks`) ; solutions ≈ 15 s sur CPU |
 | CP-VI | Checkpoint partie VI (+ audit P5) | 📅 | | |
 | B1-B8 | Chapitres bonus | 📅 | | |
 | PF | Projet final et finalisation (P10) | 📅 | | |
@@ -634,6 +634,25 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 60 (2026-10-30) : chapitre 29 (Datasets et préparation du projet final) ✅
+
+**Fait** :
+- **Fiche** (aucune figure : le chapitre du livre est un annuaire) : les listes du livre corrigées (tailles de scikit-learn et de Keras, Boston, liens morts), puis trois sections « Au-delà du livre » : auditer un dataset (tableau des huit défauts), le décalage de distribution, documenter et télécharger (datasheets, dataset cards, Croissant, AI Act art. 53, SHA-256). Toutes les sections sont ⏩ ; en-tête recalculé (9,5 h, lecture 1,1 h).
+- **Exercices papier** : 8 quiz, 3 rappels (ch. 28, 26, 2), ✏️ 29.1 (mémoire des datasets d'images), ✏️ 29.2 (découpage stratifié, référence majoritaire), 🧮 29.3 (Open Images, LAION), 🗣️ 29.4 (le projet final en cinq lignes), ⚖️ 29.5, 📄 29.6 (Gebru et coll.), quatre questions d'entretien.
+- **Infrastructure** : `wb.datasets.make_trap_dataset` / `trap_dataset_answers` (1 230 fruits, huit défauts plantés, 3 tests dans `tests/infra/test_wb_trap.py`), data card `data/cards/trap.md`, entrée du catalogue ; `wb.datasets.quiet_huggingface` (nom public).
+- **Notebook** (`tools/chapters/build_ch29.py`, `ch29_parts.py`, `ch29_code.py`) : A (29.7–29.11) inventaire mesuré de scikit-learn et `load_boston` ; 🔮 un même réseau sur MNIST puis Fashion-MNIST ; 🔮 le modèle MNIST face aux chiffres 8 × 8 ; Fashion-MNIST par le Hub à une révision fixée contre `wb.datasets` (identiques) ; recherche sur le Hub et OpenML vérifiée sur des services simulés (`FakeHubApi`, `fake_fetch_openml`), puis en direct si le réseau répond. B (29.12–29.16) profil d'Adult ; 🐛 trois fuites (découpage sans groupes, PCA ajustée sur tout, k choisi sur le test) vérifiées par un piège à labels aléatoires et par des espions de `PCA` et `KNeighborsClassifier` (`watch_leaks`) ; 🔬 recette de MNIST (20 × 20, centre de masse) et fine-tuning sur 1 à 20 exemples par classe ; 🛠️ téléchargement vérifié par SHA-256 (fichier lu par morceaux, `.part`, refus sans toucher à la destination) et data card du projet final ; 🏆 le dataset piégé.
+- Indices, solutions (variantes mesurées par script), `06_mes_reponses.md`, 15 flashcards ; annexes : glossaire (9 termes), formulaire (ch. 29), erreurs fréquentes (6 lignes), auto-évaluation, cheatsheets pandas (auditer un dataset) et scikit-learn (`GroupShuffleSplit`).
+- `tests/infra/test_tools.py` : l'exemple de section non publiée du tableau de bord passe de 29 à PF.
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 29 (session 60) ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant et référence) ; `build_answers.py --check`, `export_flashcards.py --check` (757 cartes) et `check_env.py` OK ; solutions exécutées en ≈ 15 s sur CPU, « Run all » du notebook vide sans erreur (≈ 9 s) ; `git status mon_travail` propre.
+
+**Leçons** :
+- une fuite qui ne se lit pas dans le score (une PCA ajustée sur tout, k choisi sur le test) se vérifie en espionnant les classes appelées par la fonction de l'apprenant : on reconnaît les lignes de données par leurs pixels et l'on suit les tableaux transformés par leur identité ;
+- un piège à labels tirés au hasard par groupe sépare d'un coup une évaluation honnête (≈ 0,1) d'une évaluation qui fuit (≈ 1) ;
+- les vérifications d'un exercice qui interroge un service en ligne passent par des services simulés : elles ne dépendent pas du réseau, et la partie en direct n'est qu'une démonstration ;
+- `hasattr` sur `sklearn.datasets` laisse passer l'`ImportError` d'un loader retiré : une cellule de vérification qui l'appelle l'attrape elle-même ;
+- le solveur à l'aveugle compte aussi les lettres justes : un « C » jamais correct ou des vrais/faux tous faux sur les mots absolus se corrigent avant publication.
 
 ## Session 59 (2026-10-30) : chapitre 28 (Applications créatives), 2ᵉ partie ✅
 
@@ -1104,6 +1123,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 30 | Notebook du ch. 25 sur Colab : « Tout exécuter » en mode rapide (≈ 6 min sur CPU ici), puis 25.27 et le défi 25.39 en mode complet avec le GPU T4 (`DEVICE` cuda) ; les tests de 25.35 lancés par `wb.run_pytest` dans un sous-processus ; les 🔮 25.14, 25.17 et 25.31 (calibrés sur CPU, cinq graines) | pas de GPU ici | à faire |
 | 31 | Notebook du ch. 26 sur Colab : « Tout exécuter » en mode rapide (≈ 5 min sur CPU ici), Gymnasium 1.4.0 préinstallé (FrozenLake, CliffWalking, CartPole), `wb.envs`, et le défi 26.38 (≈ 15 s d'entraînement) | exécuté ici en local seulement | à faire |
 | 32 | Notebook du ch. 27 sur Colab : « Tout exécuter » en mode rapide (≈ 5 min sur CPU ici, toujours sur CPU même avec un GPU), MNIST et Fashion-MNIST téléchargés, temps du défi 27.28 (référence 66 s ici, limite 150 s) et reprise exacte de 27.27 | exécuté ici en local seulement | à faire |
+| 33 | Notebook du ch. 29 sur Colab : « Tout exécuter » (≈ 15 s ici), Fashion-MNIST chargé par `datasets` à la révision fixée (29.10), recherche en direct sur le Hub et `fetch_openml` de Palmer Penguins (29.11), téléchargement vérifié d'une URL `file://` (29.15) | exécuté ici en local, réseau vers le Hub et OpenML ouvert | à faire |
 
 ## Calibrage
 
@@ -1183,3 +1203,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 57 | 27 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; quiz et rappels, et les vérifications de 🔮 27.13, 📈 27.14, 🐛 27.16 et 🔮 27.17 `manual` → `wb.check` ; `syllabus.py build` | les prédictions, la lecture des courbes et les lignes fautives sont vérifiées |
 | 58 | 28 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications de 28.Q1 à 28.Q10 et 28.R1 à 28.R3 `manual` → `wb.check` (partie 0) ; **fil rouge** de 28.29 « Verne » → « — » (le défi est un transfert de style depuis la relecture du syllabus) ; `syllabus.py build` | la partie 0 vérifie ces réponses courtes ; le fil rouge suivait l'ancien défi de perplexité |
 | 59 | 28 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications de 🔮 28.12, 🔮 28.19, 📈 28.20, 🐛 28.21 et 📦 28.27 `manual` → `wb.check` ; `syllabus.py build` | les prédictions, la lecture des courbes, les lignes fautives et les comptes de tokens sont vérifiés |
+| 60 | 29 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications des quiz et des rappels, et de 🔮 29.8, 🔮 29.9, 📈 29.12, 🐛 29.13 et 🏆 29.16 `manual` → `wb.check` ; `syllabus.py build` | les réponses courtes, les prédictions, le profil, les lignes fautives et les huit défauts sont vérifiés |

@@ -112,7 +112,7 @@ Chaque `load_data()` de Keras rend l'entraînement et le test, sous forme de tab
 </details>
 <details><summary>Indice 3</summary>
 
-a) **C** : deux couples `(x_train, y_train), (x_test, y_test)`. Pour b), 50 000 + 10 000. Pour c), relis la fin de l'encadré ⚠️ du §29.3.2. Pour d), quel module de PyTorch contient les datasets d'images ? Pour e), à quoi correspond une révision sur le Hub ?
+a) **C** : deux couples `(x_train, y_train), (x_test, y_test)`. Pour b), relis l'encadré ⚠️ du §29.3.2 : le livre compte-t-il le test ? Pour c), relis la fin de l'encadré ⚠️ du §29.3.2. Pour d), quel module de PyTorch contient les datasets d'images ? Pour e), à quoi correspond une révision sur le Hub ?
 
 </details>
 
@@ -130,7 +130,7 @@ L'encadré cite des liens morts et les grandes sources d'aujourd'hui. Pour b), l
 </details>
 <details><summary>Indice 3</summary>
 
-a) **ABC** : le Hub, Kaggle et OpenML ; deeplearning.net est mort. Pour b), une clé d'API personnelle est liée à quoi ? Pour d), l'encadré cite-t-il des liens morts ? Pour c), quelle bibliothèque du workbook a une fonction `fetch_openml` ? Pour e), sur le Hub, un dataset a une *dataset card*, un modèle une *model card*.
+a) **ABC** : le Hub, Kaggle et OpenML ; deeplearning.net est mort. Pour b), une clé d'API personnelle est liée à quoi ? Pour c), quelle bibliothèque du workbook a une fonction `fetch_openml` ? Pour d), l'encadré cite-t-il des liens morts ? Pour e), relis ce que l'encadré 🕰️ du §29.4 dit de chaque dataset du Hub.
 
 </details>
 
@@ -148,7 +148,7 @@ L'encadré 🕰️ du §29.5 nomme les datasets retirés, l'année et la raison,
 </details>
 <details><summary>Indice 3</summary>
 
-a) **9** (millions d'images). Pour b), cherche les deux datasets de l'encadré qui ne sont plus distribués par leurs auteurs. Pour c), le nom de la version nettoyée commence par « Re- ». Pour e), une copie efface-t-elle les raisons du retrait ?
+a) **9** (millions d'images). Pour b), cherche les deux datasets de l'encadré qui ne sont plus distribués par leurs auteurs. Pour c), relis la fin du paragraphe sur LAION-5B dans l'encadré. Pour e), une copie efface-t-elle les raisons du retrait ?
 
 </details>
 
@@ -188,7 +188,7 @@ En RL, personne n'annote d'exemples : l'agent agit, l'environnement répond. Ce 
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : des interactions de l'agent avec son environnement. Pour b) et e), si la politique change, les états visités changent-ils ? Pour c), une transition, c'est l'état, l'action, la récompense, l'état suivant et la fin. Pour d), compte les cases de la grille.
+a) **B** : des interactions de l'agent avec son environnement. Pour b) et e), si la politique change, les états visités changent-ils ? Pour c), relis la fiche du ch. 26 : que faut-il garder d'un pas de l'agent pour calculer une cible de Q-learning ? Pour d), compte les cases de la grille.
 
 </details>
 
@@ -322,7 +322,7 @@ L'analogie est dans l'introduction : un composant électronique est toujours ven
 </details>
 <details><summary>Indice 3</summary>
 
-Pour 2, sept sections : motivation, composition, processus de collecte, prétraitement (nettoyage, annotation), usages, distribution, maintenance ; pour chacune, recopie une question dans tes mots. Pour 4, cherche une question dont la réponse est un jugement (« y a-t-il des usages à éviter ? ») plutôt qu'un nombre. Pour 6, relis la section où les auteurs discutent des limites et du coût de l'approche.
+Pour 2, les sept sections suivent la vie d'un dataset, de sa raison d'être à sa maintenance : retrouve-les dans la table des matières de l'article, et pour chacune, recopie une question dans tes mots. Pour 4, cherche une question dont la réponse est un jugement (« y a-t-il des usages à éviter ? ») plutôt qu'un nombre. Pour 6, relis la section où les auteurs discutent des limites et du coût de l'approche.
 
 </details>
 
@@ -445,7 +445,7 @@ Pense au budget d'entraînement : un petit réseau dense, deux epochs, 10 000 im
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), un réseau dense bien entraîné atteint environ 98 % sur MNIST ; avec si peu d'entraînement, place-toi un peu en dessous. Pour b), compte combien de classes de Fashion-MNIST se ressemblent, et ce qu'elles coûtent si le réseau se trompe sur une bonne partie de leurs images. Pour c), compare au hasard (10 classes).
+Pour a), demande-toi ce que deux epochs sur 10 000 images changent par rapport à l'entraînement complet que décrit le livre. Pour b), compte combien de classes de Fashion-MNIST se ressemblent, et ce qu'elles coûtent si le réseau se trompe sur une bonne partie de leurs images. Pour c), demande-toi si quelque chose de ce que le réseau a appris sur les chiffres sert à distinguer une chaussure d'un sac.
 
 </details>
 
@@ -483,9 +483,9 @@ Relis l'encadré 🧮 « Hugging Face `datasets` et `huggingface_hub` » du §29
 
 ```python
 X = np.stack([np.asarray(img, dtype=np.uint8) for img in split["image"]])
-y = np.asarray(split["label"], dtype=np.int64)
+...                                   # y : les labels, en int64
 ```
-Pour `compare_10` : `same_shape = Xa.shape == Xb.shape` ; si les formes diffèrent, `max_diff = -1` ; sinon `np.abs(Xa.astype(np.int64) - Xb.astype(np.int64)).max()`. Les labels se comparent après avoir vérifié leurs formes.
+Pour `compare_10` : traite d'abord le cas `Xa.shape != Xb.shape` (rends tout de suite `max_diff = -1` et `same_pixels = False`) ; sinon, l'écart se calcule après `Xa.astype(np.int64)`. Les labels se comparent après avoir vérifié qu'ils ont la même longueur.
 
 </details>
 
@@ -552,12 +552,13 @@ Lis chaque ligne en te demandant : « cette étape voit-elle des lignes de test 
 </details>
 <details><summary>Indice 3</summary>
 
-La ligne **B** découpe au hasard : les quatre photos d'un vêtement se répartissent des deux côtés, et le 1-NN retrouve la jumelle. Cherche les deux autres lignes avec la question de l'indice 2. Pour b) :
+La ligne **B** découpe au hasard : les quatre photos d'un vêtement se répartissent des deux côtés, et le 1-NN retrouve la jumelle. Cherche les deux autres lignes avec la question de l'indice 2. Pour b), refais le découpage de la ligne B sur `GROUPS_13` (mêmes réglages), puis compte les lignes de test dont le groupe est aussi dans l'entraînement (`np.isin`). Pour `evaluate_fixed_13`, le squelette :
 ```python
-g_train, g_test = train_test_split(GROUPS_13, test_size=0.25, random_state=0, stratify=Y_13)
-shared_13 = int(np.isin(g_test, g_train).sum())
+train, test = next(GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=0).split(X, y, groups))
+fit, val = ...                        # un second GroupShuffleSplit sur les lignes de train (random_state=1)
+fit, val = train[fit], train[val]     # ses indices sont relatifs à train
+...                                   # PCA sur X[fit], k choisi sur X[val] ; puis PCA et k-NN sur X[train], un seul score sur X[test]
 ```
-Pour `evaluate_fixed_13`, le squelette : `train, test = next(GroupShuffleSplit(...).split(X, y, groups))`, puis un second `GroupShuffleSplit` sur `X[train]` (ses indices sont relatifs à `train` : `fit, val = train[fit], train[val]`), la PCA ajustée sur `X[fit]` pour choisir k, puis réajustée sur `X[train]` pour le score final.
 
 </details>
 
@@ -578,9 +579,9 @@ Un tenseur `(N, 1, 8, 8)` en `float32`, multiplié par 255/16 ; `F.interpolate(.
 ```python
 t = torch.as_tensor(np.asarray(images), dtype=torch.float32)[:, None] * 255.0 / 16.0
 small = F.interpolate(t, size=(20, 20), mode="bilinear", align_corners=False)
-out = F.pad(small, (4, 4, 4, 4))[:, 0].numpy()
+out = F.pad(small, (4, 4, 4, 4))[:, 0].numpy()        # "box"
 ```
-Pour `"center"` : `cy, cx = ndimage.center_of_mass(img)`, puis `ndimage.shift(img, (13.5 - cy, 13.5 - cx), order=1)`. Termine toujours par `np.clip(np.rint(out), 0, 255).astype(np.uint8)`.
+Pour `"naive"`, la même interpolation directement à 28 × 28. Pour `"center"`, une boucle sur les images de `"box"` (encore en `float`) : le centre de masse, puis le décalage qui l'amène en (13,5 ; 13,5). L'arrondi, le `clip` et la conversion en `uint8` viennent tout à la fin, pour les trois méthodes.
 
 </details>
 
@@ -600,12 +601,11 @@ Relis l'encadré 🧮 « une somme de contrôle SHA-256 » de la fiche, et ouvre
 
 ```python
 dest = Path(dest)
-if dest.exists() and sha256_15(dest) == sha256:
+if ...:                               # dest existe ET sa somme est la bonne
     return dest
 part = dest.with_name(dest.name + ".part")
-with urllib.request.urlopen(url) as response, open(part, "wb") as out:
-    shutil.copyfileobj(response, out)
-...                                   # vérifier, puis part.replace(dest) ou part.unlink() et raise ValueError
+...                                   # télécharger dans part, puis comparer sha256_15(part) à sha256
+part.replace(dest)                    # seulement si la somme est juste ; sinon part.unlink() et ValueError
 ```
 Pour la data card, remplace chaque `...` ; la somme se calcule avec ta fonction une fois le fichier téléchargé.
 
@@ -625,11 +625,6 @@ Le tableau de « Au-delà du livre : auditer un dataset » a exactement une lign
 </details>
 <details><summary>Indice 3</summary>
 
-a) `FRUITS_16.duplicated().sum()`. Pour b) :
-```python
-key = [c for c in FRUITS_16.columns if c not in ("id_lot", "split", "poids_g")]
-pairs = test.reset_index().merge(train[key + ["poids_g"]], on=key, suffixes=("", "_train"))
-```
-puis garde les paires dont les poids diffèrent d'au plus 1 g, et compte les lignes de test **distinctes** (`pairs["index"].nunique()`). Pour c) à h), une commande de l'indice 2 par question. Pour `clean_16`, commence par `out = df.drop_duplicates().copy()` et traite les défauts un à un.
+a) `FRUITS_16.duplicated().sum()`. Pour b), fusionne (`merge`) les lignes de test avec celles d'entraînement sur toutes les colonnes sauf `id_lot`, `split` et `poids_g`, en gardant les deux poids (`suffixes=`), puis garde les paires dont les poids diffèrent d'au plus 1 g : attention, une ligne de test peut avoir deux jumelles, compte des lignes de test **distinctes**. Pour c) à h), une commande de l'indice 2 par question. Pour `clean_16`, commence par `out = df.drop_duplicates().copy()` et traite les défauts un à un.
 
 </details>
