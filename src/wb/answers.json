@@ -47317,7 +47317,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "177f91e6763a53adc09a024e604db8f6aa6cfb797d8c180735b45f21e33d9f9f": "deux actualisations séparent l'état 0 de la victoire"
+        "177f91e6763a53adc09a024e604db8f6aa6cfb797d8c180735b45f21e33d9f9f": "compte les actualisations entre l'état 0 et la récompense"
       },
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
@@ -47328,7 +47328,7 @@
       "magnitude": 0,
       "mistakes": {
         "493e028e674362ba3b10b32e6cc18a68590eb422de069a46630f9c001b470c76": "les mises à jour suivent l'ordre des pas : l'état 0 est mis à jour avant que 1 ait une valeur",
-        "8ac427ce160b802bf30bd79a6e51d598fdddf666471c23d00fa2587770db126c": "compte un épisode de plus : la valeur avance d'un état par épisode"
+        "8ac427ce160b802bf30bd79a6e51d598fdddf666471c23d00fa2587770db126c": "à cet épisode, l'état 1 avait-il déjà une valeur quand l'état 0 a été mis à jour ?"
       },
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
@@ -47353,7 +47353,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "074c0a658eb398c5270a664871b624c215c10049897c015663b9a86a83a53d20": "trois mises à jour, chacune réduit l'écart à 1 de moitié"
+        "074c0a658eb398c5270a664871b624c215c10049897c015663b9a86a83a53d20": "compte les mises à jour de l'état 2 pendant les trois épisodes"
       },
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
@@ -47366,7 +47366,7 @@
       "magnitude": -1,
       "mistakes": {
         "663c9c39798500d731899cb492b529ace02a1e0b38cbbc4739921c4b199e718b": "α ne change pas la limite, seulement la vitesse",
-        "f13c0c85434d297d3199420692796b1eb804826963ca79f8b3ecc846353081d0": "deux actualisations séparent l'état 0 de la victoire"
+        "f13c0c85434d297d3199420692796b1eb804826963ca79f8b3ecc846353081d0": "compte les actualisations entre l'état 0 et la récompense"
       },
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
@@ -47376,8 +47376,8 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "9f5293a6d64a993e02489e1137eab13faeb92b57280a9ba38db4ec7c63772460": "il y a 10 états non terminaux, de 0 à 9",
-        "e290834528edcb082ecc5bd4a4740b9635afebbf2333397026ded622ca7a6deb": "l'état 9 reçoit la valeur au premier épisode, l'état 0 neuf épisodes plus tard"
+        "9f5293a6d64a993e02489e1137eab13faeb92b57280a9ba38db4ec7c63772460": "compte les états non terminaux de la chaîne",
+        "e290834528edcb082ecc5bd4a4740b9635afebbf2333397026ded622ca7a6deb": "refais le raisonnement de d) : à quel épisode chaque état reçoit-il sa première valeur ?"
       },
       "sign": 1,
       "source": "chapitres/ch26_rl/05_solutions.ipynb"

@@ -282,16 +282,16 @@ PAPER = [
     Paper("26.6", "Regarder la valeur remonter une chaîne d'états", [
         ("a", WHOLE, "round(chain_26_6(1.0, 1)[2])", ""),
         ("b", DEC2, "chain_26_6(1.0, 2)[1]", r'''decimals=2, mistakes={"le pas de 1 à 2 ne rapporte rien : seule la valeur actualisée de l'état 2 compte": 1.0}'''),
-        ("c", DEC2, "chain_26_6(1.0, 3)[0]", r'''decimals=2, mistakes={"deux actualisations séparent l'état 0 de la victoire": 0.9}'''),
+        ("c", DEC2, "chain_26_6(1.0, 3)[0]", r'''decimals=2, mistakes={"compte les actualisations entre l'état 0 et la récompense": 0.9}'''),
         ("d", WHOLE, "3", r'''mistakes={"les mises à jour suivent l'ordre des pas : l'état 0 est mis à jour avant que 1 ait une valeur": 1,
-          "compte un épisode de plus : la valeur avance d'un état par épisode": 2}'''),
+          "à cet épisode, l'état 1 avait-il déjà une valeur quand l'état 0 a été mis à jour ?": 2}'''),
         ("e", DEC3, "chain_26_6(0.5, 2)[1]", r'''decimals=3, mistakes={"à l'épisode 2, l'état 1 voit la valeur de l'état 2 d'avant sa propre mise à jour": 0.5 * 0.9 * 0.75,
           "α = 0,5 : on ne garde que la moitié de l'écart": 0.9 * 0.5}'''),
-        ("f", DEC3, "chain_26_6(0.5, 3)[2]", r'''decimals=3, mistakes={"trois mises à jour, chacune réduit l'écart à 1 de moitié": 0.75}'''),
+        ("f", DEC3, "chain_26_6(0.5, 3)[2]", r'''decimals=3, mistakes={"compte les mises à jour de l'état 2 pendant les trois épisodes": 0.75}'''),
         ("g", DEC2, "0.9 ** 2", r'''decimals=2, mistakes={"α ne change pas la limite, seulement la vitesse": 0.5 * 0.81,
-          "deux actualisations séparent l'état 0 de la victoire": 0.9}'''),
-        ("h", WHOLE, "10", r'''mistakes={"l'état 9 reçoit la valeur au premier épisode, l'état 0 neuf épisodes plus tard": 11,
-          "il y a 10 états non terminaux, de 0 à 9": 9}'''),
+          "compte les actualisations entre l'état 0 et la récompense": 0.9}'''),
+        ("h", WHOLE, "10", r'''mistakes={"refais le raisonnement de d) : à quel épisode chaque état reçoit-il sa première valeur ?": 11,
+          "compte les états non terminaux de la chaîne": 9}'''),
     ]),
 ]
 
