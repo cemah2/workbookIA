@@ -68,7 +68,7 @@ def figure_autoencoder() -> None:
     """The bottleneck: an encoder narrows the input down to a code, a decoder widens it back."""
     fig, ax = plt.subplots(figsize=(8.6, 3.5))
     widths = [3.0, 2.2, 1.4, 0.55, 1.4, 2.2, 3.0]
-    labels = ["entrée x\n(n valeurs)", "", "", "code z\n(k valeurs)", "", "", "sortie x̂\n(n valeurs)"]
+    labels = ["entrée x\n(p valeurs)", "", "", "code z\n(d valeurs)", "", "", "sortie x̂\n(p valeurs)"]
     colors = [C[0], C[0], C[0], C[3], C[1], C[1], C[1]]
     for i, (w, lab, col) in enumerate(zip(widths, labels, colors)):
         x = i * 1.25
