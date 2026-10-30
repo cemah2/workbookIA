@@ -19,16 +19,16 @@
 
 | Question | Type | Sujet | Points | ⏱️ |
 |---|---|---|---|---|
-| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI | 2,5 | 12 min |
+| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI | 2,5 | 10 min |
 | CP6.2 | ✏️ | VAE : un tirage reparamétrisé et sa divergence KL | 2 | 10 min |
 | CP6.3 | ✏️ | Deux transitions : mise à jour Q-learning puis SARSA | 2 | 10 min |
 | CP6.4 | ∂ | Discriminateur optimal et losses à l'équilibre | 2 | 12 min |
-| CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | 1 | 6 min |
-| CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | 1 | 5 min |
+| CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | 1 | 5 min |
+| CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | 1 | 7 min |
 | CP6.7 | 📈 | Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement | 1 | 8 min |
 | CP6.8 | 📦 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni (notebook) | 2 | 15 min |
 | CP6.9 | 🐛 | Réparer un pas d'entraînement de GAN (notebook) | 1,5 | 10 min |
-| CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | 1 | 5 min |
+| CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | 1 | 6 min |
 | CP6.11 | ⚖️ | Un dataset de visages pour un produit commercial | 1 | 5 min |
 | CP6.12 | 💼 | Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes | 1 | 6 min |
 | CP6.13 | ✏️ | Retour sur les parties IV et V : convolution et pas d'Adam | 2 | 10 min |
@@ -36,7 +36,7 @@
 
 ---
 
-### CP6.1 — Questions flash : dix réponses courtes sur la partie VI 🧠 ★ ⏱️ 12 min · 2,5 points
+### CP6.1 — Questions flash : dix réponses courtes sur la partie VI 🧠 ★ ⏱️ 10 min · 2,5 points
 
 Réponds sans justifier ; chaque item vaut 0,25 point.
 
@@ -49,7 +49,7 @@ f) La sortie $D(\mathbf{x})$ du discriminateur à l'équilibre théorique d'un G
 g) Vrai ou faux : l'effondrement de mode (*mode collapse*), c'est un générateur qui ne produit qu'une partie des modes (des « pics ») de la distribution des données.
 h) La forme de la matrice de Gram d'une couche de 64 cartes d'activation de 14 × 14.
 i) Le nombre total d'images de Fashion-MNIST (entraînement et test).
-j) Vrai ou faux : un dataset sous licence CC BY peut servir à entraîner un produit vendu, à condition de citer sa source.
+j) Vrai ou faux : un dataset sous licence CC BY peut servir à entraîner un produit vendu, à condition de citer sa source et sa licence.
 
 ### CP6.2 — VAE : un tirage reparamétrisé et sa divergence KL ✏️ ★ ⏱️ 10 min · 2 points
 
@@ -63,7 +63,7 @@ e) Pourquoi tire-t-on $\boldsymbol{\varepsilon}$ au lieu de tirer directement $\
 
 ### CP6.3 — Deux transitions : mise à jour Q-learning puis SARSA ✏️ ★ ⏱️ 10 min · 2 points
 
-Un agent joue à Flippers. Trois plateaux nous intéressent, A, B et C, et trois actions, 0, 1 et 2 (trois des tuiles qu'il peut retourner). Sa table Q contient, pour ces plateaux :
+Un agent joue à une version simplifiée de Flippers où il n'a que **trois** actions, 0, 1 et 2 (trois tuiles qu'il peut retourner). Trois plateaux nous intéressent, A, B et C. Sa table Q contient, pour ces plateaux :
 
 | | action 0 | action 1 | action 2 |
 |---|---|---|---|
@@ -71,12 +71,12 @@ Un agent joue à Flippers. Trois plateaux nous intéressent, A, B et C, et trois
 | B | 0,5 | 0,3 | 0,8 |
 | C | 0,6 | 0 | 0 |
 
-C est un plateau **gagnant** : la partie s'arrête dès qu'on l'atteint (sa ligne contient encore des valeurs laissées par l'initialisation). On prend $\alpha = 0{,}5$ et $\gamma = 0{,}9$. Chaque question part de la table ci-dessus.
+C est un plateau **gagnant** : la partie s'arrête dès qu'on l'atteint (sa ligne contient des valeurs quelconques, par exemple celles d'une initialisation au hasard, que l'agent ne met jamais à jour). On prend $\alpha = 0{,}5$ et $\gamma = 0{,}9$. Chaque question part de la table ci-dessus.
 
 a) Le Q-learning sur la transition $(s = A,\ a = 1,\ r = 0,\ s' = B)$ : la nouvelle valeur de $Q(A, 1)$ (4 décimales). **[0,4]**
 b) Le Q-learning sur la transition $(s = B,\ a = 2,\ r = 1,\ s' = C)$ : la nouvelle valeur de $Q(B, 2)$ (4 décimales). **[0,4]**
 c) SARSA sur la transition de a), sachant que l'agent choisit ensuite l'action $a' = 0$ dans B : la nouvelle valeur de $Q(A, 1)$ (4 décimales). **[0,4]**
-d) Avec une politique ε-greedy, $\varepsilon = 0{,}2$, sur ces trois actions, la probabilité de choisir l'action 2 dans B (4 décimales). **[0,4]**
+d) Avec une politique ε-greedy, $\varepsilon = 0{,}2$ (l'exploration tire une action au hasard parmi les trois, la gloutonne comprise), la probabilité de choisir l'action 2 dans B (4 décimales). **[0,4]**
 e) Pourquoi dit-on que SARSA apprend la valeur de la politique qu'il suit (*on-policy*) et le Q-learning celle de la politique gloutonne (*off-policy*) ? Une conséquence pratique, en deux phrases. **[0,4]**
 
 ### CP6.4 — Discriminateur optimal et losses à l'équilibre ∂ ★ ⏱️ 12 min · 2 points
@@ -89,7 +89,7 @@ c) En un point où $p_{\text{data}}(\mathbf{x}) = 0{,}3$ et $p_g(\mathbf{x}) = 0
 d) Au début de l'entraînement, $D(G(\mathbf{z})) \approx 0$. Pourquoi minimiser $\ln(1 - D(G(\mathbf{z})))$ donne-t-il alors un gradient presque nul au générateur, et que fait la loss non saturante ? **[0,3]**
 e) Un collègue arrête l'entraînement « parce que la loss de $D$ a atteint 0,5, la valeur idéale ». Qu'en penses-tu ? Comment juger un GAN pendant son entraînement ? **[0,3]**
 
-### CP6.5 — Matrice de Gram de trois cartes d'activation ✏️ ★ ⏱️ 6 min · 1 point
+### CP6.5 — Matrice de Gram de trois cartes d'activation ✏️ ★ ⏱️ 5 min · 1 point
 
 Une couche a $C = 3$ cartes d'activation de 2 × 2. Mises à plat (ligne par ligne), elles donnent la matrice $F$ de forme $(3, 4)$ :
 
@@ -99,22 +99,22 @@ a) Le produit $F F^\top$ (une liste de trois lignes). **[0,4]**
 b) Les coefficients $[G_{00}, G_{02}]$ de la matrice de Gram normalisée $G = \frac{1}{CHW} F F^\top$ (4 décimales). **[0,3]**
 c) On applique la même permutation aux quatre positions de chaque carte (on mélange les pixels de la même façon dans les trois cartes). Que devient $G$ ? Qu'est-ce que cela dit de ce que la matrice de Gram capture, et pourquoi en fait-on une description du style ? **[0,3]**
 
-### CP6.6 — Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers 🔮 ★ ⏱️ 5 min · 1 point
+### CP6.6 — Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers 🔮 ★ ⏱️ 7 min · 1 point
 
-**Sans rien exécuter.** On entraîne un agent Q-learning sur Flippers 3 × 3 (sans camion ; récompense seulement à la victoire, comme au ch. 26), 3 000 parties, $\alpha = 0{,}5$, table Q initialisée à 0, parties coupées à 100 coups. Pendant l'entraînement, les égalités de la politique ε-greedy se départagent **au hasard** (`epsilon_greedy_action` du ch. 11). On mesure ensuite la politique **gloutonne** (égalités : la plus petite action, comme `np.argmax`) sur les 506 plateaux non gagnants : la part des plateaux qu'elle gagne en moins de 100 coups. Avec $\gamma = 0{,}9$ et $\varepsilon = 0{,}1$, cette part vaut environ 0,9.
+**Sans rien exécuter.** On entraîne un agent Q-learning sur Flippers 3 × 3 (sans camion ; récompense seulement à la victoire, comme au ch. 26), 3 000 parties, chacune partant d'un plateau non gagnant tiré au hasard, $\alpha = 0{,}5$, table Q initialisée à 0, parties coupées à 100 coups. Pendant l'entraînement, les égalités de la politique ε-greedy se départagent **au hasard** (`epsilon_greedy_action` du ch. 11). On mesure ensuite la politique **gloutonne** (égalités : la plus petite action, comme `np.argmax`) sur les 506 plateaux non gagnants : la part des plateaux qu'elle gagne en moins de 100 coups. Avec $\gamma = 0{,}9$ et $\varepsilon = 0{,}1$, cette part vaut entre 80 et 95 % selon la graine.
 
-a) Même entraînement avec $\gamma = 0$ (et $\varepsilon = 0{,}1$) : la part gagnée est (A) supérieure à 90 % ; (B) entre 30 et 90 % ; (C) inférieure à 30 %. **[0,4]**
-b) Même entraînement avec $\gamma = 0{,}9$ mais $\varepsilon = 0$ (aucune exploration ε) : (A) supérieure à 90 % ; (B) entre 30 et 90 % ; (C) inférieure à 30 %. **[0,4]**
+a) Même entraînement avec $\gamma = 0$ (et $\varepsilon = 0{,}1$) : la part gagnée est (A) d'au moins 95 % ; (B) entre 30 et 95 % ; (C) inférieure à 30 %. **[0,4]**
+b) Même entraînement avec $\gamma = 0{,}9$ mais $\varepsilon = 0$ (aucune exploration ε) : (A) d'au moins 95 % ; (B) entre 30 et 95 % ; (C) inférieure à 30 %. **[0,4]**
 c) Justifie tes deux prédictions en une phrase chacune. **[0,2]**
 
 ### CP6.7 — Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement 📈 ★ ⏱️ 8 min · 1 point
 
-La figure (`figures/cp6_7_courbes.png`, reproduite ci-dessous) montre trois entraînements réels. ① : un VAE dense sur 6 000 images MNIST, la reconstruction (axe de gauche) et la KL (axe de droite), par exemple, à chaque epoch. ② : un GAN sur une loi à une dimension, les losses de $D$ et de $G$, en moyenne sur 100 pas. ③ : un agent Q-learning sur FrozenLake 8 × 8 glissant ; le retour d'un épisode vaut 1 si l'agent atteint le but, 0 sinon ; la courbe en donne la moyenne par paquet de 100 épisodes.
+La figure (`figures/cp6_7_courbes.png`, reproduite ci-dessous) montre trois entraînements réels. ① : un VAE dense sur 6 000 images MNIST, la reconstruction (axe de gauche) et la KL (axe de droite), en moyenne par image, à chaque epoch. ② : un GAN sur une loi à une dimension, les losses de $D$ et de $G$, en moyenne sur 100 pas. ③ : un agent Q-learning sur FrozenLake 8 × 8 glissant ; le retour d'un épisode vaut 1 si l'agent atteint le but, 0 sinon ; la courbe en donne la moyenne par paquet de 100 épisodes.
 
 ![Trois panneaux de courbes d'entraînement : un VAE, un GAN, un agent de Q-learning](figures/cp6_7_courbes.png)
 
 Pour chaque panneau, la lettre du diagnostic le plus probable (une lettre par panneau ; trois diagnostics ne servent pas) :
-(A) la KL s'effondre vers 0 : le décodeur ignore le code (β trop grand) · (B) un VAE qui apprend normalement : la reconstruction baisse, la KL monte puis se stabilise · (C) le discriminateur gagne : sa loss tend vers 0, celle du générateur reste haute (le générateur n'apprend plus) · (D) l'équilibre : la loss de $D$ tend vers $2\ln 2 \approx 1{,}39$ et celle de $G$ vers $\ln 2 \approx 0{,}69$ · (E) un agent qui apprend : son retour moyen monte vers celui d'une bonne politique · (F) une récompense presque jamais atteinte : le retour reste près de 0, l'agent n'a presque rien à apprendre.
+(A) la KL reste collée à 0 (l'effondrement du posterior) : le décodeur ignore le code · (B) un VAE qui apprend normalement : la reconstruction baisse, la KL monte puis se stabilise · (C) le discriminateur gagne : sa loss tend vers 0, celle du générateur reste haute (le générateur n'apprend plus) · (D) l'équilibre : les deux losses se stabilisent près de leurs valeurs théoriques à l'équilibre (CP6.4) · (E) un agent qui apprend : son retour moyen monte vers celui d'une bonne politique · (F) une récompense presque jamais atteinte : le retour reste près de 0, l'agent n'apprend presque rien.
 
 a) Le panneau ①. b) Le panneau ②. c) Le panneau ③.
 
@@ -122,7 +122,7 @@ a) Le panneau ①. b) Le panneau ②. c) Le panneau ③.
 
 **Dans le notebook de l'examen, partie A, avec PyTorch.** La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), les **logits** qu'un décodeur a rendus pour elles (`LOGITS_V`, même forme) et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`.
 
-a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par exemple** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
+a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par image** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
 b) Avec le batch fourni : reporte $[\text{rec}, \text{kl}]$ (2 décimales). **[0,3]**
 c) La loss pour `beta=3` (2 décimales). **[0,3]**
 
@@ -148,14 +148,14 @@ def gan_step_buggy(G, D, real, opt_d, opt_g):
 a) Les lettres des trois lignes **à corriger** (par exemple `"ABC"`). **[0,6]**
 b) `gan_step_fixed(G, D, real, opt_d, opt_g)`, la version corrigée : même signature, mêmes sorties, et le même tirage (un seul appel à `torch.randn`, ligne B). La cellule d'essai l'enchaîne 1 500 fois : la moyenne des exemples générés doit s'approcher de 4. **[0,9]**
 
-### CP6.10 — Table Q ou réseau : estimer la mémoire nécessaire 🧮 ★ ⏱️ 5 min · 1 point
+### CP6.10 — Table Q ou réseau : estimer la mémoire nécessaire 🧮 ★ ⏱️ 6 min · 1 point
 
 Chaque item vaut 0,2 point. Une valeur Q est un `float32` (4 octets).
 
 a) Une table Q pour le morpion 3 × 3 avec une ligne par **codage** de plateau (chaque case vide, croix ou rond) et une colonne par case : sa taille, en Mo (2 décimales).
 b) La même table restreinte aux 5 478 plateaux réellement atteignables, en Mo (2 décimales).
 c) La table complète pour le morpion 4 × 4 (une ligne par codage, une colonne par case), en Go (3 décimales).
-d) Pour le morpion 4 × 4, un réseau à la place de la table : en entrée, chaque case codée en *one-hot* (3 valeurs par case) ; deux couches cachées de 128 neurones ; en sortie, une valeur Q par case. Son nombre de paramètres.
+d) Pour le morpion 4 × 4, un réseau à la place de la table : en entrée, chaque case codée en *one-hot* (3 valeurs par case) ; deux couches cachées de 128 neurones ; en sortie, une valeur Q par case. Son nombre de paramètres, biais compris.
 e) Au-delà de la mémoire, qu'apporte le réseau que la table n'a pas ? Une phrase.
 
 ### CP6.11 — Un dataset de visages pour un produit commercial ⚖️ ★ ⏱️ 5 min · 1 point

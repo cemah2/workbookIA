@@ -24,7 +24,7 @@
    "type": "🧠",
    "title": "Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux)",
    "stars": 1,
-   "minutes": 12,
+   "minutes": 10,
    "points": 2.5,
    "thread": "—",
    "file": "02",
@@ -113,14 +113,14 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP6.5",
    "type": "✏️",
    "title": "Matrice de Gram de trois cartes d'activation",
    "stars": 1,
-   "minutes": 6,
+   "minutes": 5,
    "points": 1,
    "thread": "—",
    "file": "02",
@@ -142,7 +142,7 @@
    "type": "🔮",
    "title": "Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers",
    "stars": 1,
-   "minutes": 5,
+   "minutes": 7,
    "points": 1,
    "thread": "Flippers",
    "file": "02",
@@ -157,7 +157,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP6.7",
@@ -183,7 +183,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP6.8",
@@ -227,14 +227,14 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP6.10",
    "type": "🧮",
    "title": "Table Q ou réseau : estimer la mémoire nécessaire",
    "stars": 1,
-   "minutes": 5,
+   "minutes": 6,
    "points": 1,
    "thread": "morpion",
    "file": "02",
@@ -249,7 +249,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "CP6.11",

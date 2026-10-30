@@ -74,7 +74,7 @@ CP68_MD = r'''### CP6.8 — Écrire la loss d'un VAE en PyTorch et la tester sur
 
 Avec PyTorch. La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), les **logits** qu'un décodeur a rendus pour elles (`LOGITS_V`, même forme) et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`.
 
-a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par exemple** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
+a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par image** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
 b) Avec le batch fourni : reporte sur ta feuille $[\text{rec}, \text{kl}]$ (2 décimales). **[0,3]**
 c) La loss pour `beta=3` (2 décimales). **[0,3]**'''
 
@@ -398,7 +398,7 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
         ok_o, res_o = safe(vae_loss, lo, xo, mo, vo, beta=0.5)
         want_o = oracle_8(lo.detach(), xo, mo.detach(), vo.detach(), beta=0.5)
         try:
-            same_o = bool(ok_o and abs(float(res_o[0]) - want_o[0]) < 1e-6 * abs(want_o[0]))
+            same_o = bool(ok_o and abs(float(torch.as_tensor(res_o[0]).detach()) - want_o[0]) < 1e-6 * abs(want_o[0]))
         except (TypeError, ValueError, IndexError, RuntimeError):
             same_o = False
         prop("CP6.8", same_o, "avec des images aplaties (3, 784), 5 latents et beta = 0,5, la loss du contrat.",
@@ -487,8 +487,9 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
             with torch.no_grad():
                 sample_c = G_c(torch.randn(2000, 1, generator=torch.Generator().manual_seed(9)))
             prop("CP6.9", abs(sample_c.mean().item() - 4.0) < 0.5,
-                 f"après 1 500 pas, les exemples générés ont une moyenne de {sample_c.mean().item():.2f} (les données : 4).",
-                 f"après 1 500 pas, la moyenne générée vaut {sample_c.mean().item():.2f}, loin de 4.")'''
+                 f"après 1 500 pas, les exemples générés ont une moyenne de {sample_c.mean().item():.2f} (les données : 4)."
+                 .replace(".", ",", 1),
+                 f"après 1 500 pas, la moyenne générée vaut {sample_c.mean().item():.2f}, loin de 4.".replace(".", ",", 1))'''
 
 PAPER_CONTEXT = r'''# The paper questions only use the numbers of their statements (01_examen_sujet.md)
 import math

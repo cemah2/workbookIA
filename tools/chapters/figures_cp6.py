@@ -173,11 +173,11 @@ def fig_curves(h: dict) -> None:
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.3))
     ax = axes[0]
     epochs = np.arange(1, len(h["vae"]["rec"]) + 1)
-    ax.plot(epochs, h["vae"]["rec"], color=C[0], lw=2, marker="o", ms=3, label="reconstruction (par exemple)")
+    ax.plot(epochs, h["vae"]["rec"], color=C[0], lw=2, marker="o", ms=3, label="reconstruction (par image)")
     ax.set(title="Courbes ① : un VAE sur MNIST", xlabel="epoch", ylabel="reconstruction (nats)")
     ax.set_ylim(0, 340)
     twin = ax.twinx()
-    twin.plot(epochs, h["vae"]["kl"], color=C[1], lw=2, ls="--", marker="s", ms=3, label="KL (par exemple)")
+    twin.plot(epochs, h["vae"]["kl"], color=C[1], lw=2, ls="--", marker="s", ms=3, label="KL (par image)")
     twin.set_ylabel("KL (nats)")
     twin.set_ylim(0, 15)
     twin.grid(False)
