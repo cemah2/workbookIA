@@ -684,11 +684,12 @@ Lis `C, H, W` sur les trois derniers axes, aplatis les deux derniers, multiplie 
 <details><summary>Indice 3</summary>
 
 ```python
-C, H, W = A.shape[-3:]
-flat = A.reshape(*A.shape[:-2], H * W)
-G = flat @ flat.transpose(-1, -2) / (C * H * W)
+def gram_matrix_18(A):
+    C, H, W = A.shape[-3:]
+    flat = A.reshape(*A.shape[:-2], H * W)       # les cartes en lignes, axe de batch gardé s'il existe
+    ...                                          # produit par la transposée des DEUX derniers axes, puis la normalisation
 ```
-Pour `tv_loss_18` : `x[..., 1:, :] - x[..., :-1, :]` pour la verticale ; fais de même pour l'horizontale.
+Pour `tv_loss_18`, les écarts verticaux sont `x[..., 1:, :] - x[..., :-1, :]`.
 
 </details>
 
@@ -724,7 +725,7 @@ Au pas 0, un départ par la photo donne un terme de contenu nul : sur une échel
 </details>
 <details><summary>Indice 3</summary>
 
-a) Cherche l'essai dont la courbe de contenu existe dès le pas 0. b) Pour chaque essai, compare les courbes de style et de contenu au dernier pas : l'écart dépasse-t-il une graduation ? c) Repère la puissance de dix juste en dessous du point de départ et du point d'arrivée de la courbe de style de l'essai A, et compte les graduations entre les deux.
+a) **A** : c'est le seul essai dont la courbe de contenu existe dès le pas 0 (les deux autres partent de la photo, contenu nul). b) Pour chaque essai, compare les courbes de style et de contenu au dernier pas : l'écart dépasse-t-il une graduation ? c) Repère la puissance de dix juste en dessous du point de départ et du point d'arrivée de la courbe de style de l'essai A, et compte les graduations entre les deux.
 
 </details>
 
@@ -828,10 +829,9 @@ Aplatis les positions `(N, C, H * W)`, puis moyenne et variance sur le dernier a
 <details><summary>Indice 3</summary>
 
 ```python
-flat = A.reshape(A.shape[0], A.shape[1], -1)
-mean, std = flat.mean(dim=2), torch.sqrt(flat.var(dim=2, unbiased=False) + 1e-5)
+flat = A.reshape(A.shape[0], A.shape[1], -1)     # (N, C, H * W)
 ```
-`stats_loss_25` additionne les carrés des écarts des deux statistiques.
+Puis `flat.mean(dim=2)` ; pour l'écart-type, `flat.var(dim=2, unbiased=False)`, sans oublier le $10^{-5}$ sous la racine. `stats_loss_25` additionne les carrés des écarts des deux statistiques.
 
 </details>
 

@@ -90,10 +90,10 @@ RECORD_20 = (f'wb.record("28.20a", "{A["noise"]}", mistakes={{"partir de la phot
              f'{A["first"] + 1}}})')
 
 RECORD_21 = ('wb.record("28.21", "BEKS", mistakes=' + bug_letters_mistakes("BEKS", "ACDFGHIJLMNOPQR", {
-    "B": "une ligne fautive manque : que reçoit la première couche du réseau (diagnostic 2) ?",
-    "E": "une ligne fautive manque : compare l'échelle des matrices de Gram à celle de la fiche (diagnostic 3)",
-    "K": "une ligne fautive manque : qu'est-ce que l'optimiseur met à jour (diagnostic 1) ?",
-    "S": "une ligne fautive manque : dans quelle plage doivent rester les pixels (diagnostic 4) ?"}) + ")")
+    "B": "que reçoit la première couche du réseau (diagnostic 2) ?",
+    "E": "compare l'échelle des matrices de Gram à celle de la fiche (diagnostic 3)",
+    "K": "qu'est-ce que l'optimiseur met à jour (diagnostic 1) ?",
+    "S": "dans quelle plage doivent rester les pixels (diagnostic 4) ?"}) + ")")
 
 RECORD_27 = C.RECORD_27
 
@@ -288,7 +288,7 @@ Dans tes notes : à partir de quelle couche le contenu ne garde-t-il plus que la
 - à chaque pas : **une** passe de l'image par `extract_11` pour toutes les couches utiles ; $L_c$ = somme des `F.mse_loss` (des moyennes) ; $L_s$ = somme, sur les couches, des sommes des carrés des écarts de matrices de Gram ; $L_{TV}$ = `tv_loss_18` ; loss $= \alpha L_c + \beta L_s + \lambda L_{TV}$, un pas d'`Adam([x], lr)`, pixels ramenés dans $[0, 1]$ ;
 - rend `(image, history)` : `history` = `{"content": [...], "style": [...], "tv": [...]}`, les trois termes **pondérés**, en `float`, enregistrés avant chaque pas dont l'indice est un multiple de `every`, et une fois de plus après le dernier pas.
 
-La cellule de vérification fait un transfert de 12 pas sur de petites images : forme, plage, historique (13 valeurs par terme), loss qui baisse, poids intacts, couches de style additionnées, départ `"noise"` exact. La suivante applique trois styles à la photo (une quinzaine de secondes). 🚀 En mode complet, des images de 256 pixels et 400 pas ; VGG16 et les couches du livre sont à ta portée (`VGG_LAYERS`).
+La cellule de vérification fait un transfert de 12 pas sur de petites images : forme, plage, historique (13 valeurs par terme), loss qui baisse, poids intacts, couches de style additionnées, départ `"noise"` exact. La suivante applique trois styles à la photo (une dizaine de secondes). 🚀 En mode complet, des images de 256 pixels et 400 pas ; VGG16 et les couches du livre sont à ta portée (`VGG_LAYERS`).
 
 Dans tes notes : compare les trois résultats. Qu'est-ce qui passe du tableau à la photo : la palette, les touches, les contours ? Quelle part du temps d'un pas prend la passe dans le réseau (🧮 28.6) ?""",
        todo=C.TODO_23, check=C.CHECK_23, solution=C.SOLUTION_23 + "\n\n\n" + C.CHECK_23, after=[("code", C.EXPERIMENT_23)]),

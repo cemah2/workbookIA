@@ -162,6 +162,15 @@ CHECK_11 = r'''with checked("28.11"):
     left_11 = sum(len(m._forward_hooks) for m in NET.modules())
     verdict("28.11", left_11 == 0, "aucun hook ne reste accroché après l'appel.",
             f"{left_11} hook(s) encore accroché(s) : retire-les (handle.remove()) dans un finally.")
+    try:
+        extract_11(NET, torch.zeros(1, 1, 32, 32), {"fire3": LAYERS["fire3"]})   # one channel instead of 3: the pass fails
+    except Exception:
+        pass
+    left_fail_11 = sum(len(m._forward_hooks) for m in NET.modules())
+    for m_11 in NET.modules():
+        m_11._forward_hooks.clear()
+    verdict("28.11", left_fail_11 == 0, "les hooks sont retirés même quand la passe échoue.",
+            f"une passe qui échoue laisse {left_fail_11} hook(s) accroché(s) : retire-les dans un finally.")
     x_grad_11 = x_11.clone().requires_grad_(True)
     out_11 = extract_11(NET, x_grad_11, {"fire3": LAYERS["fire3"]})["fire3"]
     verdict("28.11", out_11.requires_grad, "les activations gardent leur graphe : on pourra dériver par rapport à l'image.",
@@ -215,24 +224,41 @@ CHECK_13 = r'''with checked("28.13"):
     a_13 = activation_13(NET, noise_13, LAYERS["fire3"], 5)
     with torch.no_grad():
         want_a_13 = float((NET[:LAYERS["fire3"] + 1](normalize(noise_13))[:, 5] ** 2).mean())
-    same("28.13", "activation_13(NET, bruit, fire3, 5)", float(a_13), want_a_13, rtol=1e-5)
+    with torch.no_grad():
+        raw_13 = float((NET[:LAYERS["fire3"] + 1](noise_13)[:, 5] ** 2).mean())
+    if abs(float(a_13) - raw_13) <= 1e-5 * abs(raw_13) and abs(raw_13 - want_a_13) > 1e-3 * abs(want_a_13):
+        verdict("28.13", False, "", "activation_13 passe l'image telle quelle : normalise-la d'abord (normalize), comme pendant l'entraînement du réseau.")
+    else:
+        same("28.13", "activation_13(NET, bruit, fire3, 5)", float(a_13), want_a_13, rtol=1e-5)
     signature_13 = weights_signature(NET)
     start_13 = to_image(torch.rand(1, 3, 64, 64, generator=torch.Generator().manual_seed(1)) * 0.2 + 0.4)
-    img_13 = visualize_filter_13(NET, LAYERS["fire3"], 5, size=64, steps=30, seed=1)
+    seen_13 = []
+    handle_13 = NET[0].register_forward_pre_hook(lambda m, inputs: seen_13.append((float(inputs[0].detach().min()), float(inputs[0].detach().max()))))
+    try:
+        img_13 = visualize_filter_13(NET, LAYERS["fire3"], 5, size=64, steps=30, seed=1)
+    finally:
+        handle_13.remove()
     if not returned("28.13", "visualize_filter_13", img_13):
         raise StopCheck
     img_13 = np.asarray(img_13)
     verdict("28.13", img_13.shape == (3, 64, 64) and img_13.dtype == np.float32,
             "une image float32 (3, 64, 64).", f"attendu un tableau float32 (3, 64, 64), reçu {img_13.dtype} {img_13.shape}.")
-    verdict("28.13", img_13.min() >= 0 and img_13.max() <= 1, "les pixels restent dans [0, 1].",
-            f"des pixels hors de [0, 1] ({fr(img_13.min())} à {fr(img_13.max())}) : clamp_ après chaque pas.")
+    low_13 = min(s[0] for s in seen_13) if seen_13 else 0.0
+    high_13 = max(s[1] for s in seen_13) if seen_13 else 0.0
+    verdict("28.13", img_13.min() >= 0 and img_13.max() <= 1 and low_13 >= -2.12 and high_13 <= 2.65,
+            "les pixels restent dans [0, 1] pendant toute l'optimisation.",
+            f"pendant l'optimisation, le réseau a reçu des pixels hors de [0, 1] (normalisés de {fr(low_13, 2)} à {fr(high_13, 2)}) : clamp_ après chaque pas.")
     verdict("28.13", weights_signature(NET) == signature_13, "les poids du réseau n'ont pas bougé.",
             "les poids du réseau ont changé : l'optimiseur ne doit recevoir que l'image.")
     with torch.no_grad():
         before_13 = float(activation_13(NET, to_batch(start_13), LAYERS["fire3"], 5))
         after_13 = float(activation_13(NET, to_batch(img_13), LAYERS["fire3"], 5))
-    verdict("28.13", after_13 > 5 * before_13, f"l’activation du filtre passe de {fr(before_13, 4)} à {fr(after_13, 1)}.",
-            f"l'activation ne monte pas assez ({fr(before_13)} → {fr(after_13)}) : une montée (loss = −a), le bon départ ?")'''
+    moved_13 = float(np.abs(img_13 - start_13).max())
+    if moved_13 < 1e-6:
+        verdict("28.13", False, "", "l'image n'a pas bougé : l'optimiseur reçoit-il l'image ([x]) et non les poids du réseau ?")
+    else:
+        verdict("28.13", after_13 > 5 * before_13, f"l’activation du filtre passe de {fr(before_13, 4)} à {fr(after_13, 1)}.",
+                f"l'activation ne monte pas assez ({fr(before_13, 4)} → {fr(after_13, 4)}) : une montée (loss = −a), le bon départ ?")'''
 
 EXPERIMENT_13 = r'''with checked("28.13"):
     picks_13 = [("conv1", 7), ("conv1", 30), ("fire3", 5), ("fire5", 40), ("fire7", 100), ("fire9", 200)]
@@ -434,6 +460,14 @@ CHECK_16 = r'''with checked("28.16"):
     verdict("28.16", gain_16 > 1.3, f"le rêve fait monter la loss de rêve (× {fr(gain_16, 2)}).",
             f"la loss de rêve ne monte pas (× {fr(gain_16, 2)}) : une montée, sur l'image, avec le gradient normalisé ?")
     verdict("28.16", weights_signature(NET) == signature_16, "les poids du réseau n'ont pas bougé.", "les poids ont changé.")
+    one_16 = np.asarray(deep_dream_16(NET, small_16, {"fire3": 1.0}, steps=1, lr=0.01, octaves=1))
+    step_16 = float(np.abs(one_16 - small_16).mean())
+    verdict("28.16", 0.004 < step_16 <= 0.0101, f"un pas change chaque pixel de {fr(step_16, 4)} en moyenne (lr = 0,01, gradient normalisé).",
+            f"un pas change les pixels de {fr(step_16, 5)} en moyenne, pour lr = 0,01 : divise le gradient par sa valeur absolue moyenne.")
+    same_16 = np.asarray(deep_dream_16(NET, small_16, {"fire3": 1.0}, steps=0, octaves=2))
+    verdict("28.16", float(np.abs(same_16 - small_16).max()) < 1e-4,
+            "sans aucun pas, deux octaves rendent la photo intacte : les détails perdus sont réinjectés.",
+            "sans aucun pas, deux octaves ne rendent pas la photo : réinjecte les détails perdus (photo à l'échelle moins photo réduite puis agrandie).")
     mask_16 = torch.zeros(dream_16.shape[1:])
     mask_16[:, : dream_16.shape[2] // 2] = 1
     half_16 = np.asarray(deep_dream_16(NET, small_16, {"fire3": 1.0}, steps=6, octaves=1, mask=mask_16))
@@ -596,7 +630,12 @@ CHECK_23 = r'''with checked("28.23"):
     need("28.23", "extract_11", "gram_matrix_18", "tv_loss_18")
     small_c_23, small_s_23 = wb.datasets.load_sample_image("china", 48), wb.datasets.load_style_image("great_wave", 40)
     signature_23 = weights_signature(NET)
-    out_23 = style_transfer_23(NET, small_c_23, small_s_23, ["fire5"], ["conv1", "fire3"], 1.0, 10.0, 0.05, steps=12)
+    passes_23 = []
+    handle_23 = NET[0].register_forward_pre_hook(lambda m, inputs: passes_23.append(1))
+    try:
+        out_23 = style_transfer_23(NET, small_c_23, small_s_23, ["fire5"], ["conv1", "fire3"], 1.0, 10.0, 0.05, steps=12)
+    finally:
+        handle_23.remove()
     if not returned("28.23", "style_transfer_23", out_23):
         raise StopCheck
     img_23, hist_23 = out_23
@@ -607,18 +646,25 @@ CHECK_23 = r'''with checked("28.23"):
             "un historique de 13 valeurs (12 pas, plus la fin) pour chacun des trois termes.",
             f"attendu les clés content, style, tv avec 13 valeurs, reçu { {k: len(v) for k, v in hist_23.items()} }.")
     verdict("28.23", hist_23["content"][0] == 0.0, "partir du contenu donne une loss de contenu nulle au départ.",
-            f"la loss de contenu de départ vaut {fr(hist_23['content'][0])} : part d'une copie du contenu (init=\"content\").")
+            f"le premier terme de contenu enregistré vaut {fr(hist_23['content'][0])} : pars d'une copie du contenu (init=\"content\") et enregistre AVANT le pas.")
+    verdict("28.23", 15 <= len(passes_23) <= 17, f"{len(passes_23)} passes dans le réseau : les cibles, puis une par pas et une à la fin.",
+            f"{len(passes_23)} passes dans le réseau, pour 12 pas : attendu 13 (une par pas, une à la fin), plus deux pour les cibles ; une seule passe par pas, pour toutes les couches.")
     total_23 = [sum(v) for v in zip(*hist_23.values())]
     verdict("28.23", total_23[-1] < 0.5 * total_23[0], f"la loss totale baisse ({fr(total_23[0], 1)} → {fr(total_23[-1], 1)}).",
             f"la loss totale baisse trop peu ({fr(total_23[0], 1)} → {fr(total_23[-1], 1)}) : une descente, sur les pixels ?")
     verdict("28.23", weights_signature(NET) == signature_23, "les poids du réseau n'ont pas bougé.", "les poids du réseau ont changé.")
     with torch.no_grad():
-        acts_s_23 = extract_11(NET, normalize(to_batch(small_s_23)), {"conv1": 1})
-        acts_c_23 = extract_11(NET, normalize(to_batch(small_c_23)), {"conv1": 1})
-        start_style_23 = 10.0 * float(((gram_matrix_18(acts_c_23["conv1"]) - gram_matrix_18(acts_s_23["conv1"])) ** 2).sum())
-    verdict("28.23", hist_23["style"][0] > start_style_23,
-            "la loss de style de départ additionne bien plusieurs couches, pondérées par beta.",
-            "la loss de style de départ est trop petite : additionne les couches de style, multipliées par beta.")
+        def g_23(img, i):
+            A = NET[:i + 1](normalize(to_batch(img)))[0].double()
+            return torch.einsum("chw,dhw->cd", A, A) / A.numel()
+        want_style_23 = 10.0 * float(sum(((g_23(small_c_23, i) - g_23(small_s_23, i)) ** 2).sum() for i in (LAYERS["conv1"], LAYERS["fire3"])))
+        c_23 = to_batch(small_c_23)
+        want_tv_23 = 0.05 * float(((c_23[..., 1:, :] - c_23[..., :-1, :]) ** 2).sum() + ((c_23[..., 1:] - c_23[..., :-1]) ** 2).sum())
+    same("28.23", "premier terme de style enregistré (beta × somme sur conv1 et fire3)", hist_23["style"][0], want_style_23, rtol=1e-4)
+    same("28.23", "premier terme de variation totale enregistré (tv × L_TV de la photo)", hist_23["tv"][0], want_tv_23, rtol=1e-4)
+    _, hist_every_23 = style_transfer_23(NET, small_c_23, small_s_23, ["fire5"], ["conv1"], 1.0, 10.0, 0.05, steps=6, every=4)
+    verdict("28.23", len(hist_every_23["style"]) == 3, "every=4 sur 6 pas : 3 valeurs (pas 0, pas 4, fin).",
+            f"every=4 sur 6 pas : attendu 3 valeurs (pas 0, pas 4, fin), reçu {len(hist_every_23['style'])}.")
     noise_23, _ = style_transfer_23(NET, small_c_23, small_s_23, ["fire5"], ["conv1"], 1.0, 10.0, 0.0, steps=0, init="noise", seed=3)
     same("28.23", "départ init=\"noise\", seed=3, sans aucun pas", np.asarray(noise_23),
          to_image(torch.rand((1,) + small_c_23.shape, generator=torch.Generator().manual_seed(3))), rtol=1e-6, atol=1e-7)'''
@@ -679,7 +725,13 @@ CHECK_22 = r'''with checked("28.22"):
     verdict("28.22", rec_22.shape == tiny_22.shape and err1_22 < 0.3 * err0_22,
             f"depuis le bruit, la couche conv1 rapproche l'image de la photo (erreur pixel {fr(err0_22, 3)} → {fr(err1_22, 3)}).",
             f"l'image ne se rapproche pas de la photo ({fr(err0_22, 3)} → {fr(err1_22, 3)}) : départ, loss de contenu, descente ?")
+    zero_22 = np.asarray(reconstruct_22(NET, tiny_22, ["conv1"], "content", steps=0, seed=4))
+    same("28.22", "départ (steps=0, seed=4)", zero_22,
+         to_image(torch.rand((1,) + tiny_22.shape, generator=torch.Generator().manual_seed(4))), rtol=1e-6, atol=1e-7)
     sty_22 = np.asarray(reconstruct_22(NET, tiny_22, ["conv1"], "style", steps=30))
+    corr_22 = float(np.corrcoef(sty_22.mean(axis=0).ravel(), tiny_22.mean(axis=0).ravel())[0, 1])
+    verdict("28.22", abs(corr_22) < 0.5, "kind=\"style\" ne recopie pas la disposition de l'image (matrices de Gram).",
+            f"la reconstruction de style ressemble à la photo pixel par pixel (corrélation {fr(corr_22, 2)}) : compare des matrices de Gram, pas des activations.")
     with torch.no_grad():
         g_t = gram_matrix_18(extract_11(NET, normalize(to_batch(tiny_22)), {"c": 1})["c"])
         d0_22 = float(((gram_matrix_18(extract_11(NET, normalize(to_batch(start_22)), {"c": 1})["c"]) - g_t) ** 2).sum())
@@ -738,7 +790,8 @@ plt.show()'''
 TODO_20 = r'''noise_20 = ...      # a) the letter of the run that starts from a noise (not from the photo)
 heavy_20 = ...      # b) the letter of the run whose weighted style term, at the end, is still more than 10 times its
                     #    weighted content term
-first_20 = ...      # c) run A: the weighted style term at step 0, divided by its value at the end (1 decimal)'''
+first_20 = ...      # c) run A: by how many powers of ten (graduations of the axis) the weighted style term falls
+                    #    between step 0 and the end (a whole number)'''
 
 SOLUTION_20 = r'''noise_20, heavy_20, first_20 = "{NOISE}", "{HEAVY}", {FIRST}'''
 
@@ -1281,7 +1334,7 @@ EXPERIMENT_27 = r'''with checked("28.27"):
             rng = np.random.default_rng(0)
             model.eval()
             with torch.inference_mode():
-                logits, state = model(torch.as_tensor([prompt_27]))
+                logits, state = model(torch.as_tensor(np.asarray(prompt_27, dtype=np.int64)[None]))
                 out = []
                 for _ in range(40):
                     nxt = int(sample_from_logits(logits[0, -1].numpy(), temperature=0.8, rng=rng))
@@ -1392,7 +1445,7 @@ EXPERIMENT_28 = r'''with checked("28.28"):
         for seed in range(5):
             rng = np.random.default_rng(seed)
             with torch.inference_mode():
-                logits, state = MODEL_27(torch.as_tensor([prompt_27]))
+                logits, state = MODEL_27(torch.as_tensor(np.asarray(prompt_27, dtype=np.int64)[None]))
                 out = []
                 for _ in range(120):
                     nxt = pick_28(logits[0, -1].numpy(), rng=rng, **kw)
