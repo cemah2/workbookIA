@@ -884,7 +884,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | norme de Frobenius | Frobenius norm | $\lVert M \rVert_F = \sqrt{\sum_{i,j} M_{ij}^2}$, la norme euclidienne de tous les coefficients d'une matrice | 28 |
 | variation totale | total variation | somme des (carrés des) écarts entre pixels voisins ; la pénaliser lisse une image | 28 |
 | décodage glouton | greedy decoding | choisir à chaque pas le token le plus probable : déterministe, et sujet aux boucles | 28 |
-| AdaIN | adaptive instance normalization | aligner la moyenne et l'écart-type de chaque canal des features du contenu sur ceux du style : un transfert de style en une passe (X. Huang et S. Belongie, 2017) | 28 |
+| AdaIN | adaptive instance normalization | aligner la moyenne et l'écart-type de chaque canal des features du contenu sur ceux du style, puis refaire l'image par un décodeur appris : un transfert de style de n'importe quel style en une passe (X. Huang et S. Belongie, 2017) | 28 |
 | domaine public | public domain | statut d'une œuvre dont les droits patrimoniaux ont expiré (dans l'UE, le 1ᵉʳ janvier qui suit les 70 ans de la mort de l'auteur) | 28 |
 | fouille de textes et de données | text and data mining (TDM) | analyse automatisée de contenus ; exception au droit d'auteur dans l'UE (directive 2019/790, art. 4), sauf opposition du titulaire (*opt-out*) | 28 |
 

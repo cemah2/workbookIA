@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 57 (ch. 27).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-30, session 58 (ch. 28, 1ʳᵉ partie).*
 
 ## Prochaine étape
 
-➡️ **Session 58 : le ch. 28 (Applications créatives)**, selon le nombre de sessions de génération de sa section du SYLLABUS et de `docs/syllabus/data/ch28.json`.
+➡️ **Session 59 : le ch. 28 (Applications créatives), 2ᵉ partie** : l'infrastructure (`wb.datasets.load_sample_image`, `load_style_image`, poids pré-entraînés), puis les parties A à D du notebook (28.11 à 28.29), leurs indices et solutions, l'historique `history_ch28.py`, les data cards ; tout est décrit dans `chapitres/ch28_creatif/EN_COURS.md`, à supprimer à la fin de la session.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -174,7 +174,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 25 | Autoencodeurs et VAE | ✅ | 53-54 | 59 exercices (dont 26 dans le notebook, parties A à C), fiche (7 figures), 25 flashcards, partie 0 (117 vérifications), `mylearn.vae` (86 tests), historiques et calibrages `history_ch25.py` ; solutions ≈ 6 min sur CPU |
 | 26 | Apprentissage par renforcement | ✅ | 55-56 | 58 exercices (dont 26 dans le notebook, parties A à F), fiche (5 figures), 30 flashcards, partie 0 (110 vérifications), `mylearn.rl` (208 tests) ; `wb.envs` (Flippers, morpion, minimax ; 35 tests) ; calibrages `history_ch26.py` ; solutions ≈ 5 min sur CPU |
 | 27 | GAN | ✅ | 57 | 46 exercices (dont 18 dans le notebook, parties A et B), fiche (6 figures), 22 flashcards, partie 0 (88 vérifications), `mylearn.gen_metrics` (102 tests) ; historiques et calibrages `history_ch27.py` ; solutions ≈ 5 min sur CPU |
-| 28 | Applications créatives | 📅 | | |
+| 28 | Applications créatives | 🟡 | 58 | 1ʳᵉ partie : fiche (5 figures), exercices papier, indices et solutions de cette partie, 20 flashcards, partie 0 (86 vérifications), annexes ; pas de module `mylearn` ; notebook (parties A à D) à la session 59 |
 | 29 | Datasets et préparation du projet final | 📅 | | |
 | CP-VI | Checkpoint partie VI (+ audit P5) | 📅 | | |
 | B1-B8 | Chapitres bonus | 📅 | | |
@@ -634,6 +634,22 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 58 (2026-10-30) : chapitre 28 (Applications créatives), 1ʳᵉ partie ✅
+
+**Fait** :
+- **Fiche** (`01_fiche.md`, ≈ 8 600 mots, figures `tools/chapters/figures_ch28.py` : la montée de gradient sur l'entrée, une matrice de Gram et son invariance quand on mélange les positions, les trois losses du transfert de style, la variation totale d'une photo libre, la distribution du mot suivant à trois températures et le top-p) : le livre §28.1 à §28.5 avec ses ⚠️ (ImageNet « un demi-million » → 1,28 million, l'« erreur » qu'on maximise, filtres ou couches, « 23.3 » et deux renvois faux, la diagonale oubliée et le Gram non normalisé, des différences sans carré, la couche de contenu du bloc 1, des tableaux protégés (Picasso, Hopper) et un titre de Turner faux, « personne ne sait » contredit par Li et coll., itérations ou epochs, le glouton) et ses 🕰️ (torchvision et `weights=`, visualisation régularisée, transfert rapide (Johnson, AdaIN), génération de texte, diffusion et adaptateurs, droit d'auteur et AI Act art. 53) ; encadrés 🧮 *hooks*, gradient par rapport à une image, Gram, Frobenius, variation totale, top-k et top-p.
+- **Exercices papier** (`02_exercices.md`) : 10 quiz, 3 rappels, ✏️ 28.1, 28.2, 28.4, ∂ 28.3 et 28.5, 🧮 28.6 et 28.7, 🗣️ 28.8, ⚖️ 28.9, 📄 28.10 (Gatys 2015), 4 entretiens ; indices et solutions de cette partie ; `06_mes_reponses.md` ; 20 flashcards.
+- **Partie 0 du notebook** (`tools/chapters/build_ch28.py`) : 86 vérifications `wb.check` sur 16 exercices papier ; parties A à D annoncées (`NEXT_SESSION`).
+- Annexes : glossaire (17 termes), formulaire (ch. 28), erreurs fréquentes (7 lignes), auto-évaluation (section 28) ; `EN_COURS.md` (infrastructure d'images et de poids, budget CPU, contraintes des 🔮, 🐛, 📈, 🏆 et du texte sur Verne).
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 28 (session 58) ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 453, référence 4 409 ; pas de module `mylearn` pour ce chapitre) ; `build_answers.py --check`, `export_flashcards.py --check` (742 cartes) et `check_env.py` OK ; partie 0 exécutée en ≈ 3 s, « Run all » du notebook vide sans erreur ; `git status mon_travail` propre ; en-tête de la fiche : 19 h, lecture 3,4 h, parcours rapide ≈ 2,2 h.
+
+**Leçons** :
+- un quiz à choix doit être relu pour ses biais : la bonne option la plus longue, des vrais ou faux à 73 % « vrai », un énoncé qui recopie la fiche ; le solveur à l'aveugle les repère, on rééquilibre (options réécrites, cinq vrais ou faux retournés) ;
+- un mini-exemple de variation totale dont tous les écarts valent 0 ou ±1 ne distingue pas les carrés des valeurs absolues : il faut au moins un écart de 2 ;
+- un indice 2 qui énonce une règle générale (« un tenseur avec `requires_grad=True` reçoit un gradient ») donne déjà la réponse d'un vrai ou faux : on le tourne en question ;
+- une image livrée avec une bibliothèque n'est pas « libre » sans condition : les photos de scikit-learn sont sous CC BY 2.0, à créditer, et une figure de la fiche le fait.
 
 ## Session 57 (2026-10-30) : chapitre 27 (Réseaux antagonistes génératifs, GAN) ✅
 
@@ -1148,3 +1164,4 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | 55 | 26 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications de 26.Q1 à 26.Q12 et 26.R1 à 26.R3 `manual` → `wb.check` (leurs réponses courtes se vérifient en partie 0) ; `syllabus.py build` | la partie 0 vérifie ces réponses courtes |
 | 56 | 26 | aucun écart d'ID, de type, de durée ou de parcours ; **titre** de 26.38 « Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 » (au lieu de « … 195 pas en moyenne ») ; vérifications de 🔮 26.16, 📈 26.23, 🐛 26.24 et 🔮 26.28 `manual` → `wb.check` ; `syllabus.py build` | le seuil de CartPole-v0 (195 sur 200 pas) était déjà atteint par 📦 26.36 ; les prédictions, la lecture des courbes et les lignes fautives sont vérifiées |
 | 57 | 27 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; quiz et rappels, et les vérifications de 🔮 27.13, 📈 27.14, 🐛 27.16 et 🔮 27.17 `manual` → `wb.check` ; `syllabus.py build` | les prédictions, la lecture des courbes et les lignes fautives sont vérifiées |
+| 58 | 28 | aucun écart d'ID, de titre, de type, de durée ou de parcours ; vérifications de 28.Q1 à 28.Q10 et 28.R1 à 28.R3 `manual` → `wb.check` (partie 0) ; **fil rouge** de 28.29 « Verne » → « — » (le défi est un transfert de style depuis la relecture du syllabus) ; `syllabus.py build` | la partie 0 vérifie ces réponses courtes ; le fil rouge suivait l'ancien défi de perplexité |
