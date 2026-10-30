@@ -3,7 +3,7 @@
 > Écris tes réponses dans **ta copie** `mon_travail/ch26_rl/06_mes_reponses.md` (créée par `python tools/start_chapter.py 26`), jamais dans ce fichier : il est mis à jour par Claude.
 > Les réponses courtes des **quiz**, des **rappels** et des exercices ✏️ 26.1 à 26.6 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », les dérivations ∂ 26.7 et 26.8, l'estimation 🧮 26.9, la réflexion (🗣️ ⚖️ 📄) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`.
 > Formats de réponse : un nombre (`0.3` ou `"0,3"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"F"`), plusieurs lettres entre guillemets pour un choix multiple (`"AF"`).
-> Conventions du chapitre (fiche) : état $s$, action $a$, récompense $r$, état suivant $s'$, facteur d'actualisation $\gamma$, taux d'apprentissage $\alpha$, taux d'exploration $\varepsilon$ ; ε-greedy et softmax ont leur définition **standard** (fiche §26.6.2), sauf quand un exercice demande la version du livre.
+> Conventions du chapitre (fiche) : état $s$, action $a$, récompense $r$, état suivant $s'$, facteur d'actualisation $\gamma$, learning rate $\alpha$, taux d'exploration $\varepsilon$ ; ε-greedy et softmax ont leur définition **standard** (fiche §26.6.2), sauf quand un exercice demande la version du livre.
 
 **Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ ∂ 🧮 Papier-crayon](#papier) · [🗣️ ⚖️ 📄 Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)
 
@@ -20,7 +20,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 
 a) Ce qui distingue le RL de l'apprentissage supervisé : (A) il n'utilise pas de réseau de neurones ; (B) on ne donne pas la bonne action, seulement un signal qui dit si le résultat est bon ou mauvais ; (C) il n'a pas besoin de données ; (D) il ne marche que pour les jeux.
 b) Parmi ces problèmes, lesquels se posent naturellement en RL ? (A) régler la position d'attente des ascenseurs d'une tour au fil de la journée ; (B) reconnaître un chiffre manuscrit à partir de 60 000 images étiquetées ; (C) apprendre à un robot à marcher sans lui donner la suite des commandes ; (D) regrouper des clients en segments sans aucun label ; (E) jouer au backgammon contre un adversaire. Écris leurs lettres.
-c) Vrai ou faux : en RL, la récompense d'une action est toujours connue juste après cette action.
+c) Vrai ou faux : en RL, la récompense qui juge vraiment une action (gagner ou perdre la partie) arrive toujours juste après cette action.
 d) Vrai ou faux : le RL est un algorithme précis, comme les k plus proches voisins.
 e) Pour le livre, le RL cherche : (A) la réponse objectivement juste ; (B) la meilleure réponse qu'on puisse trouver pour le critère qu'on s'est donné ; (C) la réponse la plus rapide à calculer.
 
@@ -56,7 +56,7 @@ e) Dans Gymnasium, que renvoie `env.step(action)` ? (A) `(state, reward)` ; (B) 
 
 a) La propriété de Markov dit que : (A) toutes les actions ont la même probabilité ; (B) l'état présent suffit pour prédire la suite, le passé n'apporte rien de plus ; (C) les récompenses sont toujours positives ; (D) l'environnement est déterministe.
 b) Une partie de poker où l'agent ne voit pas les cartes de ses adversaires est un environnement : (A) totalement observable ; (B) partiellement observable.
-c) Une partie est gagnée au 40ᵉ coup. Le problème de savoir lesquels des 40 coups méritent le mérite s'appelle : (A) le dilemme exploration-exploitation ; (B) l'attribution du crédit ; (C) l'overfitting d'une politique ; (D) l'actualisation.
+c) Une partie est gagnée au 40ᵉ coup. Le problème de savoir lesquels des 40 coups ont mérité la victoire s'appelle : (A) le dilemme exploration-exploitation ; (B) l'attribution du crédit ; (C) l'overfitting d'une politique ; (D) l'actualisation.
 d) Vrai ou faux : une politique qui joue toujours l'action la mieux notée explore suffisamment, puisqu'elle finit par tout essayer.
 e) Le dilemme exploration-exploitation est le même que celui du ch. 11 : (A) la régression logistique ; (B) le bandit à bras multiples ; (C) le k-means.
 
@@ -75,7 +75,7 @@ e) L'horizon effectif $1/(1-\gamma)$ pour $\gamma = 0{,}95$.
 a) À Flippers, un plateau est gagnant quand : (A) toutes les tuiles montrent un point ; (B) exactement trois points forment une ligne ou une colonne complète, toutes les autres tuiles vides ; (C) trois points sont alignés, quelle que soit la direction.
 b) Combien de plateaux sont gagnants ?
 c) Le L-learning met à jour une case en : (A) faisant la moyenne de l'ancienne valeur et du TFR ; (B) remplaçant l'ancienne valeur par le TFR du coup ; (C) ajoutant la récompense immédiate.
-d) Vrai ou faux : sans le camion, le L-learning finit par jouer Flippers correctement.
+d) Vrai ou faux : sans le camion, le L-learning finit par gagner en deux coups les plateaux qui n'en demandent que deux.
 e) Pourquoi le camion fait-il échouer le L-learning ? (A) il rend le jeu impossible à gagner ; (B) une seule partie malchanceuse efface la bonne valeur d'un coup ; (C) il change le nombre de tuiles.
 
 ### 26.Q8 — La mise à jour du Q-learning : α, γ et la valeur de l'état suivant 🧠 ⏱️ 3 min
@@ -135,7 +135,7 @@ b) Vrai ou faux : un réseau rend une sortie raisonnable pour une entrée qu'il 
 c) Un DQN pour un jeu à 4 actions rend, pour chaque état, combien de nombres ?
 
 ### 26.R2 — Que sauvegarder pour reprendre un entraînement ? 🔁 ⏱️ 5 min
-*ch. 23 · fiche §26.3.6*
+*ch. 23*
 
 a) Pour reprendre un entraînement PyTorch exactement où il s'était arrêté, que faut-il sauvegarder ? (A) le `state_dict` du modèle ; (B) le `state_dict` de l'optimiseur ; (C) le numéro de l'epoch ; (D) l'état des générateurs aléatoires ; (E) le code source de PyTorch. Écris les lettres nécessaires.
 b) Pour un agent de Q-learning tabulaire, l'équivalent du `state_dict` est : (A) la table Q ; (B) la liste des récompenses ; (C) l'environnement.
@@ -226,7 +226,7 @@ f) Softmax de température $\tau = 2$ : la probabilité de jouer l'action 2, à 
 g) Vrai ou faux : ajouter 10 à toutes les valeurs de la ligne change les probabilités de la softmax.
 h) La « softmax » du livre (les valeurs divisées par leur somme) : la probabilité de jouer l'action 2, à 3 décimales.
 
-Dans ta copie : laquelle des deux ε-greedy explore le plus les mauvaises actions, et de combien ? Que donnerait h) si toutes les valeurs étaient nulles, ou si l'une était négative ?
+Dans ta copie : laquelle des deux ε-greedy explore le plus les mauvaises actions, et de combien ? Que donnerait h) si l'une des valeurs était négative ?
 
 ### Ex 26.6 — Regarder la valeur remonter une chaîne d'états ✏️ ★★ ⏱️ 20 min
 **Objectif :** suivre, épisode par épisode, la remontée de la valeur d'une victoire dans une table initialisée à zéro.
@@ -259,13 +259,13 @@ Réponds dans ta copie.
 2. Des récompenses toutes égales à $r_{\max} > 0$, pour toujours. Montre que le retour actualisé vaut $\frac{r_{\max}}{1-\gamma}$. Pourquoi aucun retour actualisé de récompenses bornées par $r_{\max}$ ne peut-il le dépasser ?
 3. Calcule l'horizon effectif $\frac{1}{1-\gamma}$ pour $\gamma = 0{,}5$, $0{,}9$ et $0{,}99$.
 4. À partir de combien de pas $k$ le poids $\gamma^k$ passe-t-il sous $\frac{1}{2}$ ? Exprime $k$ avec des logarithmes, puis calcule-le pour $\gamma = 0{,}9$ et $\gamma = 0{,}99$.
-5. Avec le $\gamma = 0{,}2$ du livre, quelle part de sa valeur garde une victoire à 4 coups de distance ? Que dit cela de la capacité de l'agent à préférer une partie gagnée en 4 coups à une partie gagnée en 6 ?
+5. Avec le $\gamma = 0{,}2$ du livre, quelle part de sa valeur garde une récompense de victoire reçue 4 pas après le coup présent (son poids est $\gamma^4$) ? Et 6 pas après ? Que dit cela de la capacité de l'agent à préférer la victoire la plus proche ?
 
 ### Ex 26.8 — Équation de Bellman : le point fixe que vise le Q-learning ∂ ★★★ ⏱️ 35 min
 **Objectif :** montrer que les valeurs optimales sont le point fixe de la mise à jour de Bellman, et le calculer sur un petit MDP.
 **Prérequis :** Ex 26.3 · fiche §26.6.4 (encadré 🧮) · 0B (espérance) · **Parcours :** M
 
-Un MDP à deux états non terminaux, $A$ et $B$, et un état terminal $T$. Dans $A$, l'action « rester » rapporte 0 et laisse en $A$ ; l'action « aller » rapporte 0 et mène en $B$. Dans $B$, l'action « finir » rapporte 1 et mène en $T$ ; l'action « jouer » rapporte 2 et mène en $T$ avec la probabilité $\frac{1}{2}$, en $A$ avec la probabilité $\frac{1}{2}$. On prend $\gamma = 0{,}9$. Réponds dans ta copie.
+Un MDP à deux états non terminaux, $A$ et $B$, et un état terminal $T$. Dans $A$, l'action « rester » rapporte 0 et laisse en $A$ ; l'action « aller » rapporte 0 et mène en $B$. Dans $B$, l'action « finir » rapporte 1 et mène en $T$ ; l'action « jouer » rapporte 2 (quelle que soit l'issue) et mène en $T$ avec la probabilité $\frac{1}{2}$, en $A$ avec la probabilité $\frac{1}{2}$. On prend $\gamma = 0{,}9$. Réponds dans ta copie.
 
 1. Écris l'équation d'optimalité de Bellman pour chacune des quatre valeurs $Q^*(A, \text{rester})$, $Q^*(A, \text{aller})$, $Q^*(B, \text{finir})$, $Q^*(B, \text{jouer})$.
 2. On suppose que la politique optimale joue « aller » dans $A$ et « jouer » dans $B$. Résous le système et calcule les quatre valeurs. Vérifie que cette politique est bien gloutonne pour ces valeurs.
@@ -273,13 +273,13 @@ Un MDP à deux états non terminaux, $A$ et $B$, et un état terminal $T$. Dans 
 4. Le Q-learning ne connaît pas les probabilités de transition. Explique comment sa cible $r + \gamma \max_{a'} Q(s', a')$ est un **échantillon** du second membre, et pourquoi un $\alpha$ constant proche de 1 empêche de faire la moyenne de ces échantillons dans l'action « jouer ».
 
 ### Ex 26.9 — Mémoire d'une table Q : morpion 4×4, 5×5 et Go 🧮 ★★ ⏱️ 15 min
-**Objectif :** estimer la mémoire d'une table Q, et voir où les tables deviennent impossibles.
+**Objectif :** estimer la mémoire d'une table Q, et voir quand une table devient démesurée, puis impossible.
 **Prérequis :** Ex 26.2 · fiche §26.8 · **Parcours :** R, M
 
 Une valeur Q est un `float32` (4 octets). Réponds dans ta copie, avec des ordres de grandeur.
 
 1. La mémoire de la table Q d'un morpion 3 × 3, codée comme à l'Ex 26.2 e) avec 9 colonnes.
-2. La même chose pour le morpion 4 × 4 (16 colonnes), puis 5 × 5 (25 colonnes). Compare à la mémoire d'un ordinateur portable (16 Go) et d'un grand centre de données (environ un exaoctet, $10^{18}$ octets).
+2. La même chose pour le morpion 4 × 4 (16 colonnes), puis 5 × 5 (25 colonnes), puis le go 19 × 19 ($3^{361}$ codages, 361 colonnes). Compare à la mémoire d'un ordinateur portable (16 Go) et d'un grand centre de données (environ un exaoctet, $10^{18}$ octets).
 3. Si l'on ne garde que les positions réellement atteignables (5 478 au morpion 3 × 3), combien la table gagne-t-elle ?
 4. Pour remplir une table, chaque case doit être visitée plusieurs fois. À un milliard de mises à jour par seconde, combien de temps faudrait-il pour visiter **une** fois chaque case de la table du 5 × 5 ?
 5. Que fait un réseau à la place de la table, et combien de paramètres aurait, par exemple, un réseau dense 25 → 256 → 256 → 25 ?

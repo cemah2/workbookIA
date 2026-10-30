@@ -151,7 +151,7 @@ PAPER = [
          r'''decimals=2, mistakes={"le poids de la 3e récompense est γ², pas γ": 2.5, "c'est le retour total : actualise": 3}'''),
         ("c", TF, "True", r'''mistakes={"avec γ = 0, que valent les poids γ^k pour k ≥ 1 ?": False}'''),
         ("d", LETTER, '"B"', letters("B", {"A": "c'est l'interprétation du livre, que la fiche corrige",
-                                           "C": "c'est le rôle du taux d'apprentissage α"})),
+                                           "C": "c'est le rôle du learning rate α"})),
         ("e", WHOLE, "round(1 / (1 - 0.95))", r'''mistakes={"1 / (1 − γ), pas γ / (1 − γ)": 19}'''),
     ]),
     Paper("26.Q7", "Flippers et L-learning : pourquoi « lousy » ?", [

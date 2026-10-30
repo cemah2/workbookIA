@@ -47645,7 +47645,7 @@
       "hash": "e03546e6cf56bcc520b579ea393284d421e2c91ec59f0a015da68624f727435e",
       "kind": "str",
       "mistakes": {
-        "196b839283c6ce0218d1744753ab66b629da79ec3780ca96c325436a84971438": "c'est le rôle du taux d'apprentissage α",
+        "196b839283c6ce0218d1744753ab66b629da79ec3780ca96c325436a84971438": "c'est le rôle du learning rate α",
         "1a4fac511d44d8088b472055c66d3b3fa2ad172517f8d520e856bd2ed1a06430": "c'est l'interprétation du livre, que la fiche corrige"
       },
       "source": "chapitres/ch26_rl/05_solutions.ipynb"
