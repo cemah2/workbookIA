@@ -153,7 +153,7 @@ c) Vrai ou faux : un autoencodeur de séquences peut utiliser un LSTM comme enco
 
 a) $\mathrm{KL}(P \,\|\, Q)$ en **bits** pour $P = (0{,}5\ ;\ 0{,}5)$ et $Q = (0{,}25\ ;\ 0{,}75)$, à 3 décimales.
 b) Vrai ou faux : $\mathrm{KL}(P \,\|\, Q) = \mathrm{KL}(Q \,\|\, P)$ pour toutes les lois $P$ et $Q$.
-c) La valeur de $\mathrm{KL}(P \,\|\, P)$.
+c) Vrai ou faux : $\mathrm{KL}(P \,\|\, P) = 0$ pour toute loi $P$.
 d) Vrai ou faux : une divergence KL n'est jamais négative.
 e) La divergence de a) en **nats**, à 3 décimales.
 
@@ -183,24 +183,23 @@ Dans ta copie : le livre dit avoir rangé 10 000 nombres dans 400 000. D'où vie
 **Objectif :** comparer, sur des nombres, le mélange de contenu et le mélange paramétrique de deux formes.
 **Prérequis :** 0B (coordonnées, aire d'un disque) · fiche §25.2.3 · **Parcours :** M
 
-Une image noire contient un disque blanc A de centre $(2, 2)$, de rayon 1 et d'intensité 1,0. Une autre image noire contient un disque gris B de centre $(10, 6)$, de rayon 3 et d'intensité 0,4. Un pixel vaut l'intensité du disque s'il est dans le disque (distance au centre au plus égale au rayon), 0 sinon.
+Une image noire contient un disque blanc A de centre $(2, 2)$, de rayon 1 et d'intensité 1,0. Une autre image noire contient un disque gris B de centre $(10, 6)$, de rayon 4 et d'intensité 0,4. Un pixel vaut l'intensité du disque s'il est dans le disque (distance au centre au plus égale au rayon), 0 sinon.
 
 Le mélange **paramétrique** à $t$ mélange chaque paramètre : $(1 - t)\cdot\text{A} + t\cdot\text{B}$ pour le centre, le rayon et l'intensité.
 
 a) Le centre du disque obtenu par mélange paramétrique à $t = 0{,}25$, comme vecteur.
-b) Son rayon.
+b) Son rayon, à 2 décimales.
 c) Son intensité, à 2 décimales.
 
 Le mélange de **contenu** à $t = 0{,}25$ est l'image $0{,}75 \cdot \text{image A} + 0{,}25 \cdot \text{image B}$, pixel par pixel.
 
 d) La valeur du pixel de coordonnées $(2, 2)$ dans le mélange de contenu.
 e) Celle du pixel $(10, 6)$.
-f) Celle du pixel $(4, 3)$, le centre du disque de a).
-g) Le nombre de disques visibles (de valeur non nulle) dans le mélange de contenu.
-h) L'aire du disque obtenu par mélange paramétrique à $t = 0{,}5$, à 2 décimales.
-i) La moyenne des aires des disques A et B, à 2 décimales.
+f) Le nombre de disques visibles (de valeur non nulle) dans le mélange de contenu.
+g) L'aire du disque obtenu par mélange paramétrique à $t = 0{,}5$, à 2 décimales.
+h) La moyenne des aires des disques A et B, à 2 décimales.
 
-Dans ta copie : pourquoi h) et i) diffèrent-ils ? Quel paramètre faudrait-il mélanger linéairement pour que l'aire du disque intermédiaire soit la moyenne des aires ? Qu'en conclus-tu sur le choix des paramètres d'un mélange ?
+Dans ta copie : que vaut, dans le mélange de contenu, le pixel $(4, 3)$, le centre du disque de a) ? Pourquoi g) et h) diffèrent-ils ? Quel paramètre faudrait-il mélanger linéairement pour que l'aire du disque intermédiaire soit la moyenne des aires ? Qu'en conclus-tu sur le choix des paramètres d'un mélange ?
 
 ### Ex 25.3 — Suivre les formes dans l'autoencodeur convolutif ✏️ ★★ ⏱️ 15 min
 **Objectif :** prévoir la forme d'un tenseur à chaque étage d'un autoencodeur convolutif, et compter ses paramètres.
@@ -236,10 +235,10 @@ c) La hauteur de sortie de `ConvTranspose2d(k=3, s=2, p=1, output_padding=1)` su
 d) La hauteur de sortie de `ConvTranspose2d(k=2, s=2, p=0)` sur une entrée de hauteur 7.
 e) La hauteur de sortie de `ConvTranspose2d(k=4, s=2, p=1)` sur une entrée de hauteur 7.
 f) À l'encodage, la hauteur de sortie de `Conv2d(k=3, s=2, p=1)` sur une entrée de hauteur 7.
-g) La valeur d'`output_padding` qui fait revenir `ConvTranspose2d(k=3, s=2, p=1)` de la hauteur f) à 7.
+g) La hauteur de sortie de `ConvTranspose2d(k=3, s=2, p=1)` sur une entrée de la hauteur f), sans `output_padding`.
 h) Le nombre de paramètres de `ConvTranspose2d(32, 16, 3)` (avec biais).
 
-Dans ta copie : pourquoi la convolution de f) ne peut-elle pas savoir, à elle seule, si son entrée avait une hauteur 7 ou 8 ? Écris une ligne de PyTorch qui vérifie ta réponse c) sans rien entraîner.
+Dans ta copie : quelle valeur d'`output_padding` donnerait 8 au lieu de g) ? Pourquoi la convolution de f) ne peut-elle pas savoir, à elle seule, si son entrée avait une hauteur 7 ou 8 ? Écris une ligne de PyTorch qui vérifie ta réponse c) sans rien entraîner.
 
 ### Ex 25.5 — Dériver à travers un tirage : l'astuce de reparamétrisation ∂ ★★ ⏱️ 20 min
 **Objectif :** comprendre, par le calcul, pourquoi la reparamétrisation laisse passer le gradient.

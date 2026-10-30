@@ -45551,6 +45551,1221 @@
       },
       "source": "chapitres/ch24_pytorch_2/05_solutions.ipynb"
     },
+    "25.1a": {
+      "hash": "16c96b893b56332f57958a855e056a390c05a47f79449a8d537c4c594b48dc97",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "058b3e75a071cf73d4addce4e8544cee533333474e7a8a864b73c68d2f16d027": "relis la question : l'encodeur a un biais par latent",
+        "3ebe5ffe00eebccfc888446e22c65c81dcdab64646482e8c1de4ebbaa2c4a6b3": "un biais par neurone, en plus des poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1b": {
+      "hash": "96d1ecf150771ebb50ce7a5aebd0beb3535110e98ab6a3aa93e9a7e73f310505",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "4e14021e2ee4d7723d324e70a9105b117998d215089f14f51f30a79d6ba6efd8": "relis la question : on demande le décodeur",
+        "8fee4c5c010429fae7e725d99b28b27483341adf6026a8e67067b631adf04060": "sans oublier un biais par pixel de sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1c": {
+      "hash": "2852446d7c8e38e0824fb7fb3b9cc61a1271a318fc4dac9798a7e68b3c8b331b",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "5f452f99fb00fab602e89a65135b6a146e892e86b9c7097c38f7c011dc189be8": "les biais comptent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1d": {
+      "hash": "7780e29e6001c9b80ebf2bf04342f5b74da6ddfe5e0bb5a8e6cccf7232581f9e",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "4b69144f7489d6414e071f7f63c47a607e40c117618fe84e0a3bd87744a83f75": "les biais comptent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1e": {
+      "hash": "123144e08937178fc1cb2dbe9418b8c277d366143b339472fce0ba8d516158d3",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "4cb816b06f34731ad1b48a939f4e820ecdd8541a5b9e4cfdc75c8740a0e61b20": "le décodeur n'a pas les mêmes biais que l'encodeur : compte-le à part",
+        "e7f442634975262ad2067bc5feddd8b07e72a30e5f29d66aa1b5ec7f72776d27": "les biais comptent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1f": {
+      "decimals": 1,
+      "hash": "956d7f79e93bc4b85fc10a48fb98b82e8f3f4c112afed6477d672f1e84da8eac",
+      "hash_coarse": "f47172676b79568f6692506e6718ec78247f372a9f10a52c82e9015ce62f2cb0",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "b97b6501c480fc0fd05210e6970e10c2534a215f32fb0d8404bd858b27d157e1": "une image MNIST a 28 × 28 pixels"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.1g": {
+      "hash": "94d9a63a54908eae642e595ea7ae5d2d3ce63cd2400c3618e7a9f780570f3595",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "37152b4143996e3f94062ea2e6005c9356cb4e0f156ed589baf7f76defd7921d": "les biais comptent",
+        "d93cf89a69f483a3fa4d27531859f9980c8d1e7c0aa59541dad18cfaef506b2c": "le décodeur a un biais par pixel de sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2a": {
+      "hash": "ba47ad9d7a3360b93e26c01762d43541dfcb807b099c0798e6c688b0be6c72c5",
+      "kind": "str",
+      "mistakes": {
+        "2872953bcbf75bc0f6b994113325207dfe67df16014005effea4fa0b3dc02838": "t = 0,25 : un quart du chemin de A vers B, pas trois quarts",
+        "726ee3086b57e2402c2a2a333e9c2fa87faf002f7b30d8587788d1d8ab56f314": "t = 0,25, pas le milieu"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2b": {
+      "decimals": 2,
+      "hash": "7f0baa2ff70559b450f6af32ee867a496488a0a30a48f7846488d80df2c43cb2",
+      "hash_coarse": "b78b512495cf24bbb5549d3db7e9b5a8eda9c949ca9498f7e97dea3a0732c0c4",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1ff3a4915eaf0ff9a35409f52ca3f6931f5ad16c97c594841f1494e03daf6231": "t = 0,25, pas le milieu",
+        "23d3dab6ace507fbf57bfda7564b4b2e8dc528d7812d888189234e7c599f3cbe": "(1 − t) pour A, t pour B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2c": {
+      "alt_coarse": [
+        "30f751c62128a6633d224e7d435a9ffe51cada73cd7397e5bbbfc2511d4f7547"
+      ],
+      "decimals": 2,
+      "hash": "ac546eeb5da6fa88c15a308ec185370aabe84b38c4b944423dccb8f75a5d49cf",
+      "hash_coarse": "5ed4d1e3267f91f3b2a80d377f1706d75f94de308711bf6921304f12d53dd630",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "74ada6590300c751f0d0b1b68f0f9a72b1a10c3fd42eecbc2f73ace4c31fb04a": "t = 0,25, pas le milieu de l'intensité",
+        "8eab016086509bdfe1f2a5f8ef611c8fb125788496588845ae52982fc4aaffd6": "(1 − t) multiplie l'intensité de A"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2d": {
+      "decimals": 2,
+      "hash": "f5b024fda63b6683ff2ba01b5ace83ab4e175049c4b456a52c6c61db3c7d07a9",
+      "hash_coarse": "cababf4bbe5d261df0122b9cf280f1d1c76ebe983694a088cc606d82cc32efb3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5cd701ec90056654c0fb509bc210e5295b23e5e3fceefdc929eb1ddfb6f984e1": "ce pixel n'est que dans A : son poids est 1 − t",
+        "d8f04dbd501280a20529b3b2870cce43d6b79d295f8e3e58a3a073515b5d6d7d": "ce pixel est-il aussi dans B ?"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2e": {
+      "decimals": 2,
+      "hash": "a4960f57b1f7ebc642b815da8a247c22dddfe240dbfdcee530b1cdf84ba0064c",
+      "hash_coarse": "5fa1d9fb5c38b7e9b0a51090bb22e63ea1403c7e0a6ef8ac1daa31c098811d65",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "28e4d2efe27d087bf2fe0e14ef51f7f0e522f474d9b67fe132ae335a769c4052": "ce pixel n'est que dans B : son poids est t, sa valeur l'intensité de B",
+        "4f19de90d8fac2fa78e944b2dad52f11324fb388b99fd75b2cd4218619948eae": "multiplie aussi par l'intensité de B"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2f": {
+      "hash": "8ab77d8a5e956039df1f19ad3f2a9d70ad66f6fe79c1c1dfd391519e5776cc95",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c0a41832adef1331ec31bc48313961e55acf07d18d9549acc15757da86355027": "dans un mélange de contenu, chaque disque garde sa place"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2g": {
+      "alt_hashes": [
+        "205e6d5fde9149e9595b050fd3c5e951db839d4a5dc21243a7085c0eb1bbe7d8"
+      ],
+      "decimals": 2,
+      "hash": "e41dd829a79fc1e314f4005bc031313237f0195a563f91d4e301927539ab769f",
+      "hash_coarse": "72267364d41251873cbe4834f3b02471ed08114d910394e0b71c3ce211de1fb1",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "498f4a78e2e7d3841ddf5416f7c518138fd68ebe8321498da6afdfc9ecac4906": "relis la question : l'aire du disque mélangé, pas la moyenne des aires",
+        "b65be7c75d3df55d49cef32e53e13b374291cf8bc86d918692cec92f786d60c1": "l'aire d'un disque est π r², pas 2 π r"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.2h": {
+      "decimals": 2,
+      "hash": "dbde71de06ff7986cd9304ace907b9426cc4ba92fb3deae4e75331dbdb9a531d",
+      "hash_coarse": "f611cfb335f2d4fe1a0ba2fd5ef774015bccb1eb73c83935d51cc76be00f7caa",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "04332038ed93a73376c2b9618df17ba5a1370ab9a2c8ec39d85d4df2cfebefa9": "relis la question : la moyenne des aires des deux disques",
+        "f87414020750873d8b2e2bc2b553037def3647e719705b8bc3e1e5ad01ebe5ba": "π r² pour chaque disque, pas 2 π r"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3a": {
+      "hash": "fa7670c099104a4f9135ac3b5d180bf0c0c6226b4a14bdfb19ecc52d2c2c364f",
+      "kind": "str",
+      "mistakes": {
+        "1dd43319e049e13209d8d77904158b2df168820fcde70f05436c57153671f461": "PyTorch range les canaux avant la hauteur et la largeur",
+        "c4b7fc9d4b85387fd23159a043ae86fc35342ba84b6b2661d8dddc415c00c0df": "l'axe des exemples reste en premier",
+        "e0a11c4bcf7e57090507e3cc2df600f3f5f294e8556d50bc6b867dddf0cef6f5": "le pooling divise la hauteur et la largeur par deux"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3b": {
+      "hash": "ba6d2af9ed0711fc748ee01db7f91edf6e78ed3b898906dd640e7d62142f1806",
+      "kind": "str",
+      "mistakes": {
+        "1850cd12405661106c2cdbe98fd4ebb15b416f2f1872ed90e814f047ab35bbe5": "les canaux avant la hauteur et la largeur",
+        "ad79fd0274e91db82677a0b2a0ba8f118d1f48a2494e75a4f72ff7ed48edac45": "les canaux sont ceux de la deuxième convolution",
+        "e2453f47b529fa1261232b812cad31abe6cd93f68fed15a2c81ce57d0032b5e5": "un pooling ne change pas le nombre de canaux : d'où viennent-ils ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3c": {
+      "hash": "6a6164d8fa5c58a683a81a5d53c5cff8311337b5ee28ce77ed8636df239c5424",
+      "kind": "str",
+      "mistakes": {
+        "0460451609c5e5170e882bab859ad212b08787fa65c986ca7ce4b3cbe588a13b": "les canaux avant la hauteur et la largeur",
+        "33949e2d70bacf6967a04ffc4f0178e5f3e696fb4d999e6c5a3309af0e441102": "il n'y a pas de pooling après la troisième convolution"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3d": {
+      "hash": "c447a6da4fe7e7ce9368fa170b01f61bd340892958e62fe3d82bbb249244eec6",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "321fb9410ecf28481baf12a8cd983daca5474789a5a292ad6872de1a6215b65d": "chaque filtre a aussi un biais",
+        "8a18138f63871a97fb7a48fd28bbcf30633b7d6127f45a27b4e728cc7f53bb53": "un noyau 3 × 3 a 9 poids par canal d'entrée"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3e": {
+      "hash": "cc28c9ac8666b876cf1cf4afd902a728e94a0116bced4e1a52dd8bcfb5292d13",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "19ac6cf60b6762487cc373b0a6e4cdb4553a60a946e3dbeccf444a90412b54fd": "chaque convolution a un biais par filtre",
+        "2dea93f059d5ac6f6396b7f2919ccab9c625defbcb0f0a641a3f92645a6240e8": "les sur-échantillonnages n'ont pas de paramètres"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3f": {
+      "hash": "c622590f2fd2cb6cb5321cb96ad3a3a1e94ea9c34197ccaf624c6a50f99e84cb",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "91728f23e1dc652520a1eed6d3e642ab2f0c0c72e42d80ef56e2bb015abbb883": "les biais comptent"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3g": {
+      "decimals": 2,
+      "hash": "d726f38e128aaf5fb6e178362cbf906581b859ac97c4b19fd58abde1f2a9a1db",
+      "hash_coarse": "1b0b2bbb01288f281af0c413fd42817556be852663f4dbbe0c363fd26e8008f2",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "55c8f54ea269e67e86c8620aa9b4ca810980f4686e66f57c2b79b803251912c8": "le code a 3 canaux de 7 × 7",
+        "f97cc92ffce7d939eb901960299bf943ad180180bbc115cd100cc1a9b65bd36e": "valeurs de l'image divisées par valeurs du code, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.3h": {
+      "hash": "0c80d8f1eea38f441376aa493167cd4d1ae44d5fdc937c2f87915f3c877d13ec",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "34c23f186643700e17581efba29186131f437b5438428a70db2f4b0c4e46b102": "il y a deux poolings",
+        "fa45f2ad7fe79a7eaf78406db525db5d568e7ed0c174acb78a4aa9d1d2758943": "multiplie aussi par les 32 canaux"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4a": {
+      "hash": "c537a16e269d9ddadf5b5afd74935dc78936948c545e015b3e8cd494799c7f26",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "7c097e45b7b5772ff9f1ea168f5d5eecbb2d046b5bb9712ade3ff320087104a1": "(H − 1) s, pas H s",
+        "f45f0f48e8602a5bb4b3d52b36a2082215e127c7cf25fea6e69a2a2c7cf3f2fb": "le padding retire 2p, il n'ajoute pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4b": {
+      "hash": "d016ddaee1216bfb8745810c83c3bff78b2986c1f404d83572fb5324a15013ab",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0aa877c88deb953904130210fc122df280aac05808d3ca2cbcfe67e10ccb48c3": "output_padding ajoute sa valeur à la sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4c": {
+      "hash": "decde173b7d01589cb5cf685e8396e625249cb385edb55ea2ebcb291e42703e2",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3575f8e701b16cec166b86edafdbfcf7668158861f56b72fff4039cc99a98c14": "n'oublie pas output_padding",
+        "8d0bcaf888cda5eadc1f8dc344a64d1c3f6b1820d347b4f2d9fe88ae78b61d42": "(H − 1) s, pas H s"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4d": {
+      "hash": "895a979496f0e2d27d829b47296991d467368c1c3cd6144fae679a7fc2be2ea6",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "d32dfb4a07a8d7a08c0474485dc39da19644b99d099187592d969f8e1ffd3210": "(H − 1) s, pas H s"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4e": {
+      "hash": "8050814cdc81a1fc7e263e8490f08c63a867b4ee55c2ff55f5cdd4c5cb8975c3",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "365a0b183f36c9a7572d8555f010fe53c552fb3cbad9669717077da1ecaa4346": "(H − 1) s − 2p + k : vérifie le premier terme et le padding"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4f": {
+      "hash": "b70c7a14d4f2e4a11710902e2b8e3eba38dc46aa902106aac1c9ff36e93f8a2b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "15d58eb950c247ef81d92921617d6ce1e40b91da2b9a7d3a94d8ada3ef8b6ce4": "⌊(H + 2p − k)/s⌋ + 1 : vérifie le padding (des deux côtés) et le + 1"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4g": {
+      "hash": "c678f28a01643fd023c3b826400fb9925ca74bab57f844391de58dade6529973",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "30b7ea54a4a11d078fae05af861c61f0f72cd2cc8d8a127b6b23131f9f7ee1b0": "(H − 1) s − 2p + k, avec H la hauteur de f)",
+        "f4df9faedac74f8c8ba0d17437cd55a076b496da67e53ab7c382cd92a5b98d6d": "sans output_padding"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.4h": {
+      "hash": "35331e554229b34cc0f0c14f223e390a21390a3d05ab59f60ca1e25f6a294468",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "5f312db455ee401032e34aa6e606bf4a0323aed43c9ba9dd47f6a3b51554eba0": "un biais par canal de sortie (16), pas d'entrée",
+        "f197fce8d16d88a20a8d7efe20b628ac4f7bb48c671feeafaf0899cc4df2f034": "un biais par canal de sortie, en plus des poids"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6a": {
+      "hash": "1b3731389095cdf8fac11e17cf93a0b952d507e85709a88678a7fd4697f3243f",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "6d7a53b6919e36d989309e30ab5178ad2272fb8079e78c18cdbaeb155d2119d0": "E[z_j²] = 1 pour chacune des d coordonnées : additionne-les"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6b": {
+      "decimals": 2,
+      "hash": "d3ba5512435ccfbfd0245ddb2966fe5f1f006fe47996c39f889b3451b0c7cb44",
+      "hash_coarse": "2bec0f6de895e8b92a7b6b3dd516d42fe18f24d8c57bc4f111adcbfc657f9fe8",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "928a0e00b1bb26740a2d0cdbd54bb7c8e6237b963cf98257e18ff4913b22de72": "c'est E‖z‖² : on demande sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6c": {
+      "decimals": 3,
+      "hash": "397f5d1ac86b894f3bf16e3fa4f2d1269bd0efcb7585946d13592f66fadeec90",
+      "hash_coarse": "6d63ffb87124ece36db6cdd99088ee498f819947e1d80c1c8040af55397ffff0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3f16941bd541ed36a7835fd9edcd4d6dc3f61b1a68a7ad36e3663e65d4d1838c": "l'exposant est r²/2, pas r²",
+        "aa7ef2fd4e1884b45cde89729872ec59402f2c2972e24b76e853c67328958e39": "1 − e^(−r²/2), pas e^(−r²/2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6d": {
+      "decimals": 3,
+      "hash": "a0fa1576ce2c2675ea3a22afea9baec9bbb907674a1199951c1c409cad6a3a4d",
+      "hash_coarse": "a7bab1545d54d9a9b16cb3f53b49e522fb695791a33692a3d31164f08a9d8aa4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0508916c06c1057338b2a6ddbafbfadded5cabb9517bdd9c9de88d32618da5a3": "r = 3, donc r² = 9",
+        "35b4d8f0069033f07346b7d68a71d1fe396556f32205be21b82a4a1563a5affa": "1 − e^(−r²/2), pas e^(−r²/2)"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6e": {
+      "decimals": 2,
+      "hash": "81123e44d3ce575720050c193a9f9cc03f41960e9970135b65570f4f9da3ad55",
+      "hash_coarse": "cda917fa6c7beaef102081bc58c9f5b4d27daed25edef3a08ee1149451c16ae5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "928437236cfbf01fbadceea6df61f17f1f0c0ac4f483ce6c89c1c9f6395984cc": "ln 2 (logarithme népérien), pas log₁₀ 2",
+        "e8a6a16d16af179e493c0d7ea1f5170b828fa83e3372ffa647f177b35eb4116c": "on cherche r, pas r² : prends la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6f": {
+      "hash": "806b90204cd43230de89fe13ef76ecb7dd140e6f25b553ebb8c1d8d9511a1886",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1e10c5ec4e08b08da0ec47f908325da6ff91f5c3f556574b66850e6c372c5fa6": "chaque coordonnée de m a pour variance 1/4 + 1/4",
+        "cbac4047aed639d6b25cb6f8f074a625dfc73df686b813c788cc7c344feec43d": "les deux tirages sont indépendants : leurs variances s'ajoutent avant la division par 4"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6g": {
+      "decimals": 2,
+      "hash": "d51455bd9cef7f75ecc1f21e231645883812184f081d7cc1d7465856d6bfbe80",
+      "hash_coarse": "fab57b1523367e5063ad528a6ea5f5b320767a7e076435871bd55c609c7b02d7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4140538c4704a111ab9aa013bdc3f846b40e0886a50cdd105230b92ad780ec19": "c'est E‖m‖² : on demande sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.6h": {
+      "decimals": 2,
+      "hash": "e908f6ecdfadf56e9efd684f2bb83da13ee4f10cd690885bf3cc36c2a275b365",
+      "hash_coarse": "5aba9b95454750b281bea948c30c56d498594c567e4d1936827f7e23613d36c2",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "a51857392303af463e88570bd9f26973e2377729336ef9a18e18507246d7e309": "la norme typique est la racine de d"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7a": {
+      "decimals": 3,
+      "hash": "f16f819128f0f700bc6f3ad147072a8a05653e10c33c3402f8f219c747ced935",
+      "hash_coarse": "7d66d3ffa246a105ba98a13ee9d74c478f13c8f8f41518627cd3adb5832ae4a7",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "b06b9de479a26b05bba7c44d6682f74819c45e050895fdbb9bbee38cf5380c55": "n'oublie pas le facteur ½"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7b": {
+      "decimals": 3,
+      "hash": "d595bb053ac5f980863fef84a3dc14b475c4dbcba50ef58fd5f3ba7176565fec",
+      "hash_coarse": "4c655ec55446ae24a0c74fdd9d0baf081aa313d005e4cc3296faf54a5a78f72e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5bab33430a4e95f9455d673264c187dbcc7aa19e6c24d1c93bda399cd561d25d": "n'oublie pas le facteur ½",
+        "ae3ef1773691a62b37bcc35e86280654e362d8678b7a78320893569d74e5d123": "σ² = e, et ln σ² = 1 : ne les échange pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7c": {
+      "decimals": 3,
+      "hash": "03f0b57c891745b974b4fafa7b91719ceb530bd1fc5d3e542e8c39a9d761dbdb",
+      "hash_coarse": "54992f03c6b3bfc22f4e11b91902d63564ea41a36082a8a6a66c1d75542f894b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8301243334034a14f7c03ab07c3fe697d530d8fa41c8727ed70238311fad5bd2": "n'oublie pas le facteur ½",
+        "ac645af81a185d91e7e1dc7d3a9d899897ee8ce3f6207bcdc5df55669dce9d5c": "σ = 0,1 donne σ² = 0,01 : la formule prend la variance"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7d": {
+      "decimals": 3,
+      "hash": "7aec60cccf039c71ef5c0f13a20c13aef26693ed0974607c89a3370fce6922f5",
+      "hash_coarse": "2aaa09e1917dabf2684e34e13f2200f5dd9e754001f6de9c454b5b4f874e9674",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "217cdb7b5d243f411758ae61bb7a50be8d6c75bb1d0ab8ef4106006c35843ccf": "le logarithme est celui de σ² = 4, pas de σ",
+        "62995ee49438ca23d0bf151b94733faa0750fc86dec9d8b4f7de895d6314173a": "n'oublie pas le facteur ½"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7e": {
+      "decimals": 3,
+      "hash": "0759aa892c6026300e51ea85f8534b39c199488bcda575cf9eafc8004b733f61",
+      "hash_coarse": "5d0af2721d505dccc464944110fafda41a84969f42abf3a1f3114c280c92af64",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "357b5b586d3bf95e775d3089a66933b8c416c898bb435662b131e479603d1771": "on additionne les KL des latents, on ne les moyenne pas"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7f": {
+      "decimals": 3,
+      "hash": "6e5993323f55e81433bb26191235d4d49882e0118dbba4a33f3df54e3c7dfd53",
+      "hash_coarse": "17cb65217bbb6b7e395d5e672d50ff1c14e88717dd9f51954f67ebc4ca4afe24",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "052b7768e74e35cdd0d31963d0acee54816c17994222f104553f09f261c12cc6": "μ² = 0,25, pas 0,5",
+        "d3b86dffedc5c68f45ea1d9f13b4e9a2758493ca9e187ab72c008369a40a979f": "n'oublie pas le facteur ½"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7g": {
+      "decimals": 3,
+      "hash": "0d1acb6a0715d31f634bb0035efee941a372e50e5d0083349448fbcf8eae8bae",
+      "hash_coarse": "c8c07e3f36dbd38609f2ff3547b2149d2ade7bbddbfbc4ba332828b1ee57c383",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "80eaea3ecee4aa5770d270def142bcaccb94abbbd9a3a07e51feb8bf732f5bfb": "n'oublie pas le facteur ½",
+        "c1f843d6093eeec7ce2b6103acc0fb6b3ce5be0c1129cbb97fbae0032653d70f": "dérive ½(e^s − 1 − s), pas ½ e^s"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.7h": {
+      "decimals": 3,
+      "hash": "5e087c85c00052683a96c0dcf576459d9b61de1582c47832c60837582435f904",
+      "hash_coarse": "30db54ea97572a291f89a04ce835fc03eae8bd8acfc809bb6e3d8269327c9db3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1ea4dbf58a338589862362ef10f5f45d208fdffa90cb4c2304f63c7a2b82eb58": "c'est la valeur en nats",
+        "548a3cf3243bfbc5d05de4d3c11413c49e5418f422cfa6eb01c7e3762c79aa03": "pour passer des nats aux bits, on divise par ln 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q1a": {
+      "hash": "a863b7735631829bd1122a2bfb63862fe96e54f7971ae0f15447f74fbae6b68c",
+      "kind": "str",
+      "mistakes": {
+        "4b6edfa3f2ccfe3a18f2c8748cabcd90d093b3ffe15dc2f47709e3efaa898b95": "arrondir au degré : peut-on retrouver les décimales ?",
+        "a5fcabb0ccf5b4bb02d17a17d8db26bdeb679267a4f264c128a644d740827efb": "JPEG jette de l'information, même en qualité 90",
+        "bd35941dd9eb331c3f536a3148aff05211ce6a5e74c04ced4c8ea161f5907eae": "écrire en binaire change la forme d'un nombre : peut-on revenir au décimal ?",
+        "c905d8b4481b57d57dfd4155c7750173dad900861ee85d19036377f4b65ce426": "un fichier ZIP : retrouve-t-on le fichier exact en le décompressant ?",
+        "cfa914c17ea75b2c66202484332256377cc74b07469de72df87114dc03334c30": "une lettre sur deux : peut-on retrouver les lettres retirées ?",
+        "dac0addf8caf292b64fba12274af86e63dc5576394bda7c2766f66be5043e462": "une photo en niveaux de gris : peut-on retrouver ses couleurs ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q1b": {
+      "hash": "99c7710cce44c88022f4d92baa65481cc3fa24cda430e97a1199bef40709bb42",
+      "kind": "bool",
+      "mistakes": {
+        "fc19a450cd593ed0c5d17d48e9329f9a7e0e246d58e3972f5e0afe2e40c5b9d8": "applique le test de l'inversibilité : existe-t-il une autre façon d'être sans perte ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q1c": {
+      "hash": "463a56955c9649e3bc377975e82e32e50f8c242a9e5ad903c2ab704f2d648bb0",
+      "kind": "str",
+      "mistakes": {
+        "a18f2fb5191d8679ec1ab604227d5855f5ad01d3f69b5d01bd803638baa29a40": "l'erreur de reconstruction est petite mais pas nulle : retrouve-t-on l'image exacte ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q1d": {
+      "decimals": 3,
+      "hash": "74e147466a695a92c365796454a5f6142bab27ce9cab21df59def7d09dfe3678",
+      "hash_coarse": "088ab1061f81a2fe43d8a41132d540d6e8bb262a37c6d0937a4b09e0a7f01ec9",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "21d23a5db16e52f7d09cc1237475b5d77413d94da3c61ab3ef2a11a462d082f8": "c'est la part des octets supprimés, pas le facteur de compression",
+        "6aac2e6866afbfb2d3e79505d1f6e3e9d8be8e1f5d6445213add32ae571f361a": "on divise la taille d'origine par la taille compressée, pas l'inverse"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q1e": {
+      "hash": "a4fdf23d5eb1bda28b239dc5128cbedae3cd3aaff81599e69620d22d3b060d9d",
+      "kind": "bool",
+      "mistakes": {
+        "d75579e7f6187cf53513ebc1d847bfb55c67ee7237a162911bef84918d3439dd": "compte les fichiers courts et les fichiers longs : y a-t-il assez de fichiers courts pour tous ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q2a": {
+      "hash": "5cfb442fec4855329ed06bdc16040039eb1227568849e7f6f1489efad6d81ac0",
+      "kind": "str",
+      "mistakes": {
+        "5026043125b0b9d37aa340149d5f1d3fcf61a0ded7fe8132df9e6c954da566c5": "JPEG ne garde aucun catalogue d'images",
+        "81512e0d8153a19ab6a74de5eeec2a448c72e102fd5cebeb1dfd08db0629dbed": "JPEG n'apprend rien : ses règles ont été écrites par des ingénieurs",
+        "e6d9b99e4fa60a941a147b6ccf79258410dce27b5b564fae5b4f35d54e11da90": "JPEG jette de l'information : relis le §25.2.2"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q2b": {
+      "hash": "09606bd5f7b4e6217e24fc3ca4b046fe0423cf715526ba3491925fa4bfc0a4a1",
+      "kind": "str",
+      "mistakes": {
+        "03b119b1461975186ed5f1f4cc4e5b0f835d8710332d1f949afca38edb135082": "le code a été appris sur un seul type d'images",
+        "fbfbc4a232f8da4d122e3d70af9000b37314d07a633774d92a2d80b911e9a12f": "simple pour toi, pas pour un code appris sur d'autres images"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q2c": {
+      "hash": "e9c4528d2e2beeada9866b22a753364841abf82513c32d268bf42c674544a16a",
+      "kind": "bool",
+      "mistakes": {
+        "5705c72cbf136f89049a7b3d48518deeebe5b3dccd294af840d7b75c3a0b233b": "relis la première page du chapitre : qui aurait quelque chose à craindre ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q2d": {
+      "hash": "7eab72814960a885c80822025b1f17e518104fa4406339bf1ec73acccb1b6970",
+      "kind": "str",
+      "mistakes": {
+        "390fd91e983b237953fa085e6257d836d477acb6532648507394abda0be5f154": "dater une image n'est pas un usage d'autoencodeur",
+        "b3aabb5cba92caeda4e00f1a5e6e0cd2988a680fcd2d19c29800da1518b7f2c7": "un seul usage : le livre en donne deux, relis le §25.1",
+        "f288b38367765495d9305444f7911dddc82495f3d8ddb41ba7fe4ce94a04fe8d": "chiffrer n'est pas comprimer : un autoencodeur ne cache rien",
+        "fe82d88168aa2899dbc5945871ff21bf1ffb86d0358fde367d1be34617992ff4": "il manque un des deux usages : relis le §25.1"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q2e": {
+      "decimals": 2,
+      "hash": "0c5a0152de1733b0de3da1d22436a7a51e3bdd7ba9579c7da66254fc4aea366e",
+      "hash_coarse": "30cb90fef6de68370269d4dd04fc58f1d869cea2867722d299c4c1ffd3db0e99",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9214f49838ea6668c8de3de604add8534518abd8da0691cbe821233cff66b967": "8 bits par octet : as-tu divisé par 8 ?",
+        "9b7bdc9026b4de6e6da73ddc7cff3fabfce06286ea5a4b45e9109ca445b1e8fe": "3 minutes, c'est 180 secondes"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q3a": {
+      "hash": "b29201de1848cec878554cd9e9503d2450f7cfdeb54daac9345353cadaec854e",
+      "kind": "str",
+      "mistakes": {
+        "d51ee2f827576c7c89a28ed979a7d182724463f2c524a3ee8b527114c05c668b": "on mélange les pixels, pas ce qui décrit les objets"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q3b": {
+      "hash": "18c030fbb9c97149d1a3d9a493c6f8b9f09c0b65a3cdaa5a7cc59de9e7a41f2f",
+      "kind": "str",
+      "mistakes": {
+        "6081a5ec45b0ad2ca259e0a562d380b130c50e53948bbd775b462e48405e065c": "la lettre du milieu, pas la première lettre de chaque paire",
+        "e252dad3d22351239648fd351186453c5d78e06d2a177ee21a4aaeecc0b52154": "quand il y a deux lettres au milieu, la règle prend la plus proche du début de l'alphabet"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q3c": {
+      "hash": "46129e4e3a4a9ded624e7bb6df208f3cfe591d3c62f885cd9076b8be49cd36db",
+      "kind": "bool",
+      "mistakes": {
+        "6fca7e2541852f86c35a598cc279c138adc05c9e7c106763eea0ba6bbea90ecc": "relis ce que donne le mélange des deux noms de fruits du livre"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q3d": {
+      "hash": "c6114a1b8aa5effe066924880065e8fa3ad4103e3ea7a2e972cffe1712c14b7c",
+      "kind": "str",
+      "mistakes": {
+        "53b3a91c4731de3f28f86874eb5ad1c893c94a43e4b2b6d7cda362fea5363713": "un code court peut être mal rangé : que faut-il entre des objets voisins ?",
+        "54b162cbdbb12c4df2af6bd4bd3a941ce0690b77f690e93b4f1251cc48a26772": "binaire ou non, ce qui compte est la place des codes les uns par rapport aux autres",
+        "e8d5937505e3b9ee1e5922505818536fdd2d10df1e95e68e1ba891c652e299c4": "« sans perte » ne dit rien de la place des codes entre eux"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q4a": {
+      "hash": "df52a432711f319c7f72e3e6fad0a66fa97fc2ddb59233784df8419e7969e893",
+      "kind": "bool",
+      "mistakes": {
+        "3e9c9fb6baead5a1d79080fc2b35efd361b21fb78aeaa42832086a453df4a35d": "la cible d'un autoencodeur, d'où vient-elle ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q4b": {
+      "hash": "de474429aa220d76d6c32326ab1eaea7085ec8276af638167ba64b005f47c02c",
+      "kind": "bool",
+      "mistakes": {
+        "db3203584abc3d93d10914278254addd161b41cd4c0168cf1d6ac9339c5d1b85": "que cherche à reproduire un autoencodeur ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q4c": {
+      "hash": "cb345cd4706162d180e619a945a58146a9b2bdefa3b329d2c925564820096216",
+      "kind": "bool",
+      "mistakes": {
+        "3b10992ca0befe434d0df4fb23c47ffc3c54df344cf02b3b1f9fc3dc95728280": "où se trouve le goulot, et que contient-il ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q4d": {
+      "hash": "946c5b8be96dc1e74fbe8a9dc099d847d3453c0f9d62ea46ce53004f3c8ec367",
+      "kind": "str",
+      "mistakes": {
+        "053aab7aaa5e300de1e0346d022ff721c58adf02674594208a86d453509be18c": "c'est le terme du livre, corrigé dans la fiche",
+        "b95317932e193934355cffc1ff18fd7f374ceefde2dcc406f53608e20355cbcf": "il n'y a aucun label à fournir",
+        "c85de66fcbc99df6579fe2cd9d7e0661874adc3b858f02919b92e61c60b353c1": "il n'y a ni agent ni récompense"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q4e": {
+      "hash": "b6364bffabcff9b2b1398c93fad37911b20ec7d06e987703126deb8cbb228b2b",
+      "kind": "bool",
+      "mistakes": {
+        "f425f34bde11bf82cb26a7c72532490cc392fc8bec4fe32c7d0319e4809babe9": "si le code est aussi grand que l'entrée, que peut faire le réseau le plus simple ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q5a": {
+      "hash": "75b19dfb3bb27e592eb9d7bc94caaa563004ad0c2faa5c330af03fad9302cfce",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "5ab54d40751fa679bb7865e39a511f4b8dcdcb8c46e33076674e4fce3e0035ff": "deux couches : l'encodeur et le décodeur ont chacune leurs poids",
+        "6c3074f5956cc579a0b31d3612c8bba79758184ae2b98e7c69223160c09c4a68": "relis la question : sans les biais",
+        "937319c2e46792ec1030ed0f317099d923c1cfd29338e9c59c143a72e2f73a2f": "une image de 64 × 64 a 64 × 64 pixels, pas 64 + 64"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q5b": {
+      "hash": "19469699401dfbaff5d534dfeaebce82884150b4faa1a071df60c723cac4861e",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "28675a29bf15811c2878abd7460f972f84b69885d02c2ad9fdbe525a863e52f5": "un biais par neurone de la couche de sortie, qui a un neurone par pixel"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q5c": {
+      "hash": "800792e6706b84bf8bb472476d4695261cfe741e0741c8e28253002ffc3a0920",
+      "kind": "str",
+      "mistakes": {
+        "85c6312f1f209dc5da0b31b29307148f2aac102df3545956188096e5429f0c31": "le réseau accepte toute image de la bonne taille",
+        "cc85ec4663c108bd5da5d7502e5673f422224bc39c079f85609c2226fd567f72": "rien n'est tiré au hasard dans un réseau entraîné",
+        "e91b6744f28222b08981240906dd413997b63ef49a619c99c0cb2900b72d5847": "les biais de la sortie ne dépendent pas de l'entrée"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q5d": {
+      "hash": "9fd3e40344f2b8d13eccd7ed6ffc51d0904a395a9c21c5f82cfc56362addb49a",
+      "kind": "bool",
+      "mistakes": {
+        "088e480f43e7957c7bc2fece9dac30564657c85d83e44a90b020d71621b90977": "relis l'histoire du tigre : que montre l'image noire ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q5e": {
+      "hash": "f98433218620ece5bbbf3d23413a42f9dc0154ae82dba45916c1a0b84c1b0f92",
+      "kind": "str",
+      "mistakes": {
+        "0525d3620e0fd6f2aa0b67da3a431317fb8a6c937efb92b448b6281dcaf1b2b5": "la taille du goulot ne dit pas si le réseau triche",
+        "5a73b92811a890915268ac7a531f7ac162a15e62dfcd641739e42b443e0e70c9": "sur ses images d'entraînement, un réseau qui mémorise semble excellent",
+        "9f6f9aa118efafc101a31858a6645b74b238565e891ab7fe35dc49e8b0724064": "le nombre d'epochs ne dit pas ce que le réseau a appris"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q6a": {
+      "hash": "8540cf30729880fba28cf09a9fda90e68698d682972cc96f4db7a9294ccf97b1",
+      "kind": "str",
+      "mistakes": {
+        "0f5f92f29f11a71116605e8ace6b6fb8d3284aad88c1dc00aa4f6bd840ecb5f3": "relis les figures 25.18 à 25.20",
+        "d50f049d168686f95b32bfbeaca3da0282f314a2b0a41fadcdd4687fca3a704c": "moins de latents, c'est moins d'information dans le code"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q6b": {
+      "hash": "bd0ef4bf8e7d4cda828d935c09cb2fedd837a87b2e41a05e3c28be83f7bdecc4",
+      "kind": "str",
+      "mistakes": {
+        "0b7644ea9f41d664b32ceda62e9eefa2fc9bce123fcd48c12aac24f6b7b5052f": "plus de couches, c'est plus de capacité pour calculer et décoder le code",
+        "435e26cbc0f727f36499eb59da7314e6345e5f2e5b3220131b25bf35a9c6e6a5": "relis la figure 25.22"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q6c": {
+      "hash": "bbee0cc53d7aec8accf215bebe1fbb11109773646834bf653587e6263070ce56",
+      "kind": "str",
+      "mistakes": {
+        "245843ed74cffda130f6a120798ee9ffc4959ff5f8df21b2435553786c0f0343": "un autoencodeur n'a pas de labels",
+        "3ddb9a9e824a55b8a881dbdc058c941ce01d19db01215eef953f30cbe5c6c271": "il manque une des deux conditions du livre",
+        "5ee4370638426bc918c18c41ea4bec80252939d2a0c4df0fa145f1c8458fb9ec": "une seule condition : le livre en pose deux",
+        "e81b9539944b4fcaa8dc57d5f63e9b56b9280e7c810bc6781b96aa742f0880c4": "avec un learning rate nul, rien n'est appris"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q6d": {
+      "hash": "92708217333f3a14492cc9c2e6bbddd9c371c7ca3091de9050580138c6df5e46",
+      "kind": "bool",
+      "mistakes": {
+        "a26679918618ee67281df9b7fe60ebd23620dcff44f10736d6366001bbe95566": "le livre parle d'une habitude, pas d'une obligation"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q6e": {
+      "hash": "336ce5de0ceb1252a916cecf703c417cceefc166599bd5ae50f23d9d9826cacf",
+      "kind": "str",
+      "mistakes": {
+        "43abc39cf12b3da9c06e026ce8382a1e7fc71e5c70d6daec2737d3506b5d96b5": "2 latents donnent des reconstructions très floues",
+        "6d9a62db5725e282d04b51d2e68c4083d55f151cc121b35e13fd209f9b3360b4": "le décodeur sert toujours",
+        "fd792eda16def2dcb4a3c823d62d0051203e739c9047dbebcb1032a75e62b2f7": "la loss reste celle de la reconstruction"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q7a": {
+      "hash": "c1affbfa48e90d3f561d243542eae5b7f8e96e2ad1e384b72c511d883a3a3b32",
+      "kind": "str",
+      "mistakes": {
+        "bfaee8f0aad6d79f79d51ee71465dcc9fa53b131a07745d3b5a1d3ccc3b3d360": "compare la taille du bruit à celle des latents"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q7b": {
+      "hash": "8bc0795dff132202501dcb05ed134f3fc4de1995ae02881cce1258fd2c87573d",
+      "kind": "str",
+      "mistakes": {
+        "6fe16ef5148ac7d8717fee4b9b83fca8a0c7fd10720615293b4e59bc3d7729ec": "compare la taille de ce bruit à celle des latents"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q7c": {
+      "hash": "e17e08f0c1f2110e33fa7ff75a4806d154f1bb8ce75f6022f470e30572603d07",
+      "kind": "str",
+      "mistakes": {
+        "753ac9485dc7e5e949e49f0f7fd21a5f118554c41e3c15d2322194ae66b114bf": "chaque chiffre dépend plus ou moins de chaque latent"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q7d": {
+      "hash": "21818857e30de78d9eeb6cf0b44a466e11bfde221b88e5728f08f0cb01abdd43",
+      "kind": "bool",
+      "mistakes": {
+        "df5bb1940ec273ef3f97bd7d6d0b92d5b7d2e80d22e841123bd3341816d1fcc0": "relis ce que donnent des latents tirés au hasard"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q7e": {
+      "hash": "a5588d3e09d1ae54ac6d6c340145d0edd320749a8fb58a3ed79be2c1b32d73a1",
+      "kind": "str",
+      "mistakes": {
+        "b86af30fbcb3536dde4805d80504179b8e0e5a76ffca860904ae08fffc58a86f": "relis la figure 25.28"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q8a": {
+      "hash": "87c99afe2e2f3f9ee819d87a6689c6f49773164a617e6fc279a17ea09fe8ce1a",
+      "kind": "str",
+      "mistakes": {
+        "5baaad89c15947ee1abce8fa3f3467faa07ab4d4bcce0b741a5a8a13ec596a6f": "la carte ne dit rien de la fréquence des chiffres",
+        "63ddef8ac48de52a200dbaa6ebbd979fe097cac8b3c1be9544ced2d82a5dcd27": "les points sont placés par l'encodeur, pas par le dessin",
+        "e9ebc45c6176537acba561b072cf868defbe4ff01427b8f65c7d613fccfb980e": "des codes voisins pour des chiffres différents, est-ce bon signe ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q8b": {
+      "hash": "33c3f7a32bb6c25499053fd170f76aa23b26bb2a54a4c00b4161c8f528c31c7c",
+      "kind": "str",
+      "mistakes": {
+        "19f6ee96bd36127dc6e05546792c732a46a616727526adbd9b5feacf64245d62": "le décodeur rend toujours une image, pas forcément noire",
+        "558055d76b6fc3585695c92704cf0fc74a3389fe854cf55319125dfa754dbe9d": "aucun exemple n'a de code dans cette zone"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q8c": {
+      "hash": "d9b5645d592c105badc7553f3cb9d92c91060d2399bef76c8210135a92f88c43",
+      "kind": "str",
+      "mistakes": {
+        "2b855db6b1c6c94b620974ca705e3b8d580f84ae3edf6fa6764713464cd7b971": "on mélange les codes, pas les pixels"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q8d": {
+      "hash": "bc466d5201648ebad0a9f73361c1d423df3689fea30ff167f8399f870ad93657",
+      "kind": "bool",
+      "mistakes": {
+        "40f234546fe1c0bcb70bfd6802e020e2e6d2a4c6cb790e01f8c3cd897488b72a": "relis le §25.5.3 : que donnent certains mélanges ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q8e": {
+      "hash": "5b1c288fc49133e2a9101dc7733434abd3617d322fab0ec515d105a106ec2fa9",
+      "kind": "str",
+      "mistakes": {
+        "06684baa0b7f6b759c8fe0b1c2137ae4702fc59ed2a037a05c57c872134c2afc": "moyenne coordonnée par coordonnée : la première avec la première",
+        "4719750c87f684c4ac098a6a1e843e5c2788460ccec0162f1d5c68cfa2cb077b": "c'est la différence des deux codes, pas leur milieu",
+        "c978d46a89417903aa73021a6f9abed01e4e3cfcccd90d5e490152cf2b703410": "le milieu est la moyenne des deux points : as-tu divisé par 2 ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q9a": {
+      "hash": "c4d16a15b993d3fb9e4860dcf17644d605008d46f8229ab950a95728eb1cc536",
+      "kind": "str",
+      "mistakes": {
+        "98e28619298275ec417c103cc3cccc7da4d1849b07950b3e10b072103fc28e79": "pas n'importe lequel : celui qui minimise l'erreur de reconstruction",
+        "d22cb6bc0c09952af5b29bc03209ef3fcda870756658aac77be2bf735c39ef4e": "rien ne force les latents à être orthogonaux ni rangés par variance",
+        "fd2824fe0357b216b18bb6e8cfb3cd990a7b19067a26ddfab1c59b7b95931496": "garde-t-on les directions de plus grande ou de plus petite variance ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q9b": {
+      "hash": "3cc94dec977edad55d1000368ca8e88a4c7a269041d2818cfd1d2263c8210eb3",
+      "kind": "bool",
+      "mistakes": {
+        "fd43e73ee0839c857721ccd1a6be8a787d84b405711d0c4faafa613554a8834d": "relis l'encadré « Le livre, corrigé » du §25.6"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q9c": {
+      "hash": "e8d92a7def9f4f91fe7e2b3151148aaa3989df70dcfff6dece68e1b9163e7cae",
+      "kind": "bool",
+      "mistakes": {
+        "d00b5a51c8916446be641fc725d706663885e1121312df97e98f5e740998608a": "l'ACP commence par centrer les données : qui le fait dans l'autoencodeur ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q9d": {
+      "hash": "2745ada93ee4aff5bface4adef21ba5f38f03a7bba9ce9008fb9b8bfa2d9450b",
+      "kind": "str",
+      "mistakes": {
+        "200556279d55a41c5d3b7066aec4874d0f40a14266f52a8d701375cb13867c70": "un autoencodeur apprend sur des données",
+        "6b4d3b3a18dbeb6d18c3cf018c13472dcf785182eb2695a0c7421a1ada86ee93": "des axes orthogonaux classés par variance, c'est ce que fournit l'ACP",
+        "fa24b58106ebf1805f372a03d7f8a1b91d588dc1a2317b7756056eaca1cf05e4": "aucun modèle ne garantit une erreur nulle"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q9e": {
+      "decimals": 1,
+      "hash": "28445167bdb806525a6e5bed7b6f676254185ea32f540ed8c995e67f50893c3f",
+      "hash_coarse": "fde588c3b3e13b82c40f93b75c60e57ecb0b62778ee85406e06131c51599f32d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1362edb6b127a144b19223e84319f1ea7dcbb72f73b435ea00c7affb3dd6af48": "c'est la norme de x, pas sa coordonnée sur u",
+        "e5c9b0d9a269fca24ee9e6d3f3d7f797db58127752954277144dccea5b7442e1": "le code est un seul nombre, la coordonnée sur la droite ; 1,8 est une coordonnée de la projection",
+        "fcd3b3d8cb681073d657f5fec01ebb4bef72145574f5709b7ea798c942f1b307": "le produit scalaire associe chaque coordonnée de u à la même coordonnée de x"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q10a": {
+      "hash": "3d1291a959048a6de2da57ed9eb76779f4fdaa3226a2be7d9ec9c03eb2058b7e",
+      "kind": "str",
+      "mistakes": {
+        "2b8139ad61c308ec05791429d6fb79602574d27e6854ed9e522d85fcf0d62d28": "si la cible est l'entrée bruitée, que va apprendre le réseau ?",
+        "88cbcb253af9eeb18ed8b55e81bbda172bc106243d91bbd8cbe4bcf0f0789ee0": "sans bruit à l'entrée, il n'y a rien à débruiter",
+        "bc6924e27ff074f82d9e29e7c2ba25781ab7e6a9fa9c0483881254e1b59a771b": "le réseau doit apprendre à rendre l'image propre"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q10b": {
+      "hash": "5485a3ef780c2dd893a5443a26feb68bfd9f6e1581b8aaf8e019d2abecf1a27c",
+      "kind": "bool",
+      "mistakes": {
+        "1363ea7803f173229bcfe969311ecaf7f3ec3946c23e57006b64e953f0c38851": "relis ce que le livre dit du code de son débruiteur"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q10c": {
+      "hash": "72d901a844be10eb219278abb8cb0ddbfcdb7722c3e78bcfa028f16a8ce8cc04",
+      "kind": "str",
+      "mistakes": {
+        "05e93330a6a26fa2b3f064ed4635689d4af8e5e6288315cc7897192a5ed03f15": "écrêter ne change pas la durée de l'entraînement",
+        "1ae2f1bd45b66140423fe8f164eabd090f32d00f9f3e30c90a3c72e7f0bf5c37": "la loss ne devient pas nulle",
+        "ef983e8a4f2e1557c713d6861bc71cad76ea7487ca1d67b4ba7a7ca64a84222d": "écrêter ne retire pas le bruit"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q10d": {
+      "hash": "d38e81c5d428f5b1ac8212b23db91b67f73502967eeba9e74146c626b8ee6eeb",
+      "kind": "str",
+      "mistakes": {
+        "293c2ab2ff17c019a16b70ab22d5c70b0babef3bd175b685850bdf0660ef3a00": "des couches denses perdent la structure de l'image",
+        "2fcfcc1560e18ea61245dafd56b679f87189157acc2e449f07aac0af02a47b88": "la batchnorm ne change pas la taille d'une image",
+        "f1c6fa8c46cf15edb9646b2c47ce36c754eb9724aad8d7b2d58ef0a3040ea5bb": "le dropout ne change pas la taille d'une image"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q10e": {
+      "hash": "2e019644bf30d6426faa3ac5a79e47bfe51a0e84b6a45bd9b888c54ac20f0a6f",
+      "kind": "bool",
+      "mistakes": {
+        "fbc684267bd32a20cd91677d1aafb17c48648c83d9b92e947dec3f82ff7d9683": "le réseau a-t-il vu des photos pendant son entraînement ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q11a": {
+      "hash": "41bd00cbda57cdfb4da1d6ee3ab7ad7774d70aaebf5f529a0ba04cf72c1e85bf",
+      "kind": "str",
+      "mistakes": {
+        "5981008e85ac350197451d18dfb84571669f61d8669b0335a56c1862a186ac3d": "le résultat dépend de l'entrée",
+        "7c7fc447f9c906c9b820b03931b482a18a3fce6c4e9d453c652150f000f9f4e5": "le réseau ne sait reconstruire que des chiffres",
+        "a76b4076f5af1e51faa39d419b781ff364287bc578576707eced15ce93067307": "le réseau rend toujours quelque chose de visible"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q11b": {
+      "hash": "4cd8beb354bc374a3ea6e4be1dff533771387a0740590d3e429a1ce4e8cf2856",
+      "kind": "bool",
+      "mistakes": {
+        "5907c8a4906ff97694994b4a0304987ecc2050be2ed456cf0345cfe00c2818b7": "un code appris sur des chiffres représente-t-il bien autre chose ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q11c": {
+      "hash": "ed621bb6cf756ef7a4bb6387b4fe2522289d474708a7170dd6a1544e2b3927b1",
+      "kind": "bool",
+      "mistakes": {
+        "45fd11b07c7f7c9631fe8320afd6e13bc254b44c223d0272cd18771219a878c7": "une image presque vide est-elle difficile à reconstruire ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q11d": {
+      "hash": "ad9e2b2f54236f55c6608ce47742139fef0654950a55c5cee45e831a674613e1",
+      "kind": "str",
+      "mistakes": {
+        "bd0e5754cfb9f4a282e04eb8e1d3a8ba4777819204c31e90b66c928640c7ad87": "la photo n'avait pas de cadre",
+        "e28b1a1fffa7d3e265f2e9b8c06fa7b796d6cfa72d22e09b4778d6bcf74240b4": "c'est systématique, pas un hasard",
+        "e7434e7887f497c19e45155ce536a99f6ab0356325622abe055fbe4da0c01460": "le padding ne colore pas la sortie du décodeur"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q11e": {
+      "hash": "5cbf0288dabd9fa195cac301bd355d32fea8be75169bdda0d817f27b641c399b",
+      "kind": "str",
+      "mistakes": {
+        "24724ec51c93494805547032baa47687cc4f7e2f524f1071ece74709de815dd9": "un chiffre du test MNIST vient de la même distribution que l'entraînement",
+        "ebf8d35043e73b2c3deaec9bcb6ae373f380f6774f7f5cd3f93bd8effbee80bf": "il manque une réponse",
+        "f1fcf329f0a3042df346c774a8cb68134448f39c36692f44a8c800650c5c29c6": "une des réponses manque"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q12a": {
+      "hash": "e42f28678b03b4a3b511e40676c0ff0aec50dc64af421b0f9d1d6b2c4dbe2fbc",
+      "kind": "str",
+      "mistakes": {
+        "837892ba095191bd0e34483db61e420df7ab7035984bf8e4789cf0662a131d6c": "des latents entiers n'aident pas à tirer des codes",
+        "a30d6646b67b7b8afc6c84a2966df906cac8c1b477aab54ff3af4fc4f35a0064": "il manque une exigence",
+        "a4784646afc6174873b3f9c35360ce9b167dfc8484e73b2dfa64516947927fb0": "il manque une des trois exigences",
+        "b410644eb96d4629c2b52d5daf788ff3b07f1ea7fc27cf0c3db45b89004529a1": "il manque une exigence : relis le §25.9.2",
+        "dcf1ded13db3fba8b31d5d226576c7ccb43ec767133ed5c0ca28157aaa5d49da": "le livre veut des codes proches pour des entrées proches, pas un code par classe"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q12b": {
+      "hash": "c9169340311cefa14e4ca971297c4169070cc0a640af6e280557578d1dae1fe4",
+      "kind": "str",
+      "mistakes": {
+        "43b4152b531c64f329c91b1c798e05d0c68007c9d3ad69206b86b0fb4d5e7df3": "un VAE ne rend pas un seul nombre par latent",
+        "93fc5ff6a3a507b668c2967ca179f90babb9d95a71a937993b8736c795f393c4": "il n'y a pas de label",
+        "f765f15c85d506971d547c5ddee45ff6af762bdaf5164d13305d758f26ec115f": "relis la description de l'encodeur au §25.9.2"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q12c": {
+      "hash": "4503cdc72a4cabb5b108a5f6cb057c81630591ef4a31a7c1e4980f75de94419d",
+      "kind": "bool",
+      "mistakes": {
+        "b641571f71a139f79f23114708c99ec95836985457aedfe52ba665c0fe4d9263": "tiré tel quel, z est-il une fonction de μ et de σ ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q12d": {
+      "decimals": 2,
+      "hash": "779a5b5dc10108b92063fdda9eb5b12b08afeddb22755009a13b4f9455b878ba",
+      "hash_coarse": "87a58e1df2c4cf1c950903ee95e94501964803ab32b5eb65509a451b5757c4b4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "54c076765a40c7dbf3de1c86eda5f16a448e8212dd339fbab33756dde0378715": "ε vaut −2, pas 2",
+        "792b36b8687e6f0781335e8f0ba4da08a18ad1cbc1ffcfb01d0dd486cb8b07da": "σ = 0,5 est l'écart-type : ne l'élève pas au carré",
+        "9723095aadf6364d1367cc8108ecdb1bcaa04b3171fb71e87ce1de50a765147a": "σ multiplie ε : z = μ + σ ε"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.Q12e": {
+      "hash": "78578114f096687dbcedf21cf20708875c006dab2ce824aaa441d27dc6107342",
+      "kind": "bool",
+      "mistakes": {
+        "c5ece26fce3a6817bf727ca34b743bcf70ac384c87e5b8954c43e34a0f279127": "le tirage de ε change-t-il d'un passage à l'autre ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R1a": {
+      "hash": "96f188f53be47f7385f3ae6eef53748a74153960ce991a6636e9f63fdf61d044",
+      "kind": "str",
+      "mistakes": {
+        "1d225d287f74c68a3c88c3f6b9b84290bad1bcd0f05a9d736599134d406446ae": "une transformation plausible manque",
+        "5bb17d55b7d231119b52ec9b4801a5263547eef8026da55b37c41764579acad7": "il en manque une",
+        "5d7f583bbabf352f6e2deda8af943a2b1d72c43cd9f75e6d5c7dcb43f5a8a6b4": "un 6 tourné de 180°, est-ce encore un 6 ?",
+        "ca534d6855b000dac974db56dd6925b34a8d4f8b4f60fd014f28d9354a452d14": "il manque une transformation plausible",
+        "d80af25940780e6aef42eb64a6004ad64aeea068d9ddfa7a57c3b6b41aa9c6b1": "un chiffre retourné gauche-droite reste-t-il le même chiffre ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R1b": {
+      "hash": "783a3f702847ce81f7ddcd3c925e124ac9f61f9cb931e1b33f244b419dbffe28",
+      "kind": "bool",
+      "mistakes": {
+        "f37008a2c00af694d41c1bbcaea1b37b19a2e7170772f1041e9cb288a9a24205": "le test doit représenter les vraies données : faut-il le transformer ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R1c": {
+      "hash": "845e8539fec433485738e0a1feffe862a031dc3e1aa8351c1acc25e4128c054b",
+      "kind": "bool",
+      "mistakes": {
+        "f1bf240e08e0024b77e621f34fab7e5e82e44ef1e816cadda7b38d9428a83138": "chaque epoch voit-elle les mêmes images bruitées ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R2a": {
+      "hash": "c88962c0ac36ddbc79b89313ccd326e5ef3ceb72789e3e37dc381ba6ae40777c",
+      "kind": "str",
+      "mistakes": {
+        "00d432b9181336594d5ee181ef8ac4778730910e2a2cca779d75531d560fa204": "h_n garde l'axe des couches en premier, même avec batch_first=True",
+        "463c5fa1332cecc01f9384a019de15289f89baa26a34a85f6e9c13e0c616d4b6": "h_n a trois axes : couches, exemples, état",
+        "9238ca07937b1e9bd7d2d21d89fa7060d0f9b52e18a069a5055c4e8fa072e078": "h_n ne contient que le dernier pas de temps : c'est output qui les a tous"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R2b": {
+      "alt_coarse": [
+        "26df1ba2f386c1c0a517184a4e56ee01644073e68b61096ceec45f47400d78bb"
+      ],
+      "decimals": 1,
+      "hash": "23ef5caf6f25970abe903798887f96c91d9e7ba9912de620e9aaf07a9b5bf2ce",
+      "hash_coarse": "6ef8edc498d1b07fd2955e7f57451fb10b325fd8876e6753e0f5daa5703729e5",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "371617fc24df06f5307b0593b6583e2075683074aac29b6928722a208b69098b": "compte toutes les valeurs de la séquence : 50 pas de 8 features",
+        "cc1a2e596e7241862b49340fe14799438173a1f7e773c1d1bdaeadfda0b5284e": "le code a 32 valeurs, pas 8"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R2c": {
+      "hash": "51e15b3022d8a0406ed13456345b4ddeea6c90f658f91e63b54f959e743cfcb6",
+      "kind": "bool",
+      "mistakes": {
+        "29da847f02abf53099685a1a95f87d0be44f932460a9c36a322526d43953c2b0": "un encodeur et un décodeur peuvent être des réseaux récurrents"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R3a": {
+      "alt_hashes": [
+        "7c780bc5a13ace1615610818d7627a0c902edc76e708e5e520dd4a9803fc8cac"
+      ],
+      "decimals": 3,
+      "hash": "c79367c3046f3f591848482452553c1bfe21fd97369296dec682a5be9882d1a1",
+      "hash_coarse": "7dc7ef26d515720638453428b2fa494be0c1611d0a21ebc785ce24de2e9e5abd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "22fab0daafb9cb55e24c1afff42dcf8494a06c7ff8bf57f1f81baf4d49aaf638": "KL(P‖Q) moyenne log(P/Q) sous P, pas sous Q",
+        "7a8d5c067ec19b5dec799658465cc693a2c50a7e84dc534142da18628a1a07b0": "en bits, le logarithme est en base 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R3b": {
+      "hash": "a14b74f245bad31963a38576f64d994fba5ce5fe95e6bd0e7827357ff5f9ef2e",
+      "kind": "bool",
+      "mistakes": {
+        "c8c0416d16c7f72babca171ff4480b76cf9c44907b30281f0e5cffc2e8e74c6c": "calcule KL(Q‖P) avec les lois de a) et compare"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R3c": {
+      "hash": "bc1140fff4f412fdf9086e410169a4548b0f5052ec5525e9a307af7c305d473b",
+      "kind": "bool",
+      "mistakes": {
+        "8209896407903cdd1de52f0bc89fd795eaf4d66050085e28a383f86b18f5df27": "chaque terme vaut p log(p / p) : que vaut log 1 ?"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R3d": {
+      "hash": "583a4cd926ef140c448835bad29829bd118285caed0e62adc43c22630a53492f",
+      "kind": "bool",
+      "mistakes": {
+        "e88b5d9491ae404ddb0daded6e141673cce509bf59a9914b14fa503a14589a2d": "relis l'inégalité de Gibbs (ch. 6)"
+      },
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
+    "25.R3e": {
+      "decimals": 3,
+      "hash": "942ca84782f4df92a6804d8cc1b7471ae3151010e3cc0bac4ba85a3b367137ba",
+      "hash_coarse": "080703c41b9c00fc74ff058eae1c64f45e022189210afbba04e183f299f92ab9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1818691e8b242c0460d0dc678319347ab309ef0bb9bcc0537aa113e368fa93f6": "c'est la valeur en bits",
+        "988a466eca5687e5d624048b319a2af1bcbc34db0a74147393a3c378b9ba0357": "pour passer des bits aux nats, on multiplie par ln 2"
+      },
+      "sign": 1,
+      "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",
