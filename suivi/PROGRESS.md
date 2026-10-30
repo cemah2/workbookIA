@@ -641,7 +641,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - `wb.check` lit un vecteur écrit avec des décimales ou des « ; » (« (4,0 ; 3,0) », `np.array([4., 3.])`) comme son tuple d'entiers ; message de mauvaise forme reformulé (forme ou vecteur).
 - Annexes : glossaire (18 termes), formulaire (ch. 25), cheatsheet PyTorch (autoencodeurs et VAE), erreurs fréquentes (6 lignes), auto-évaluation (section 25) ; `EN_COURS.md` (contraintes et contrat de `vae.py` pour la session 54).
 - **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. 25 (session 53) ».
-- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 415, référence : voir le commit) ; `build_answers.py --check`, `export_flashcards.py --check` (670 cartes) et `check_env.py` OK ; partie 0 exécutée en ≈ 3 s, « Run all » du notebook vide sans erreur ; `git status mon_travail` propre.
+- Vérification finale : `syllabus.py check` 0 problème ; tests verts (mode apprenant 415, référence 4 061) ; `build_answers.py --check`, `export_flashcards.py --check` (670 cartes) et `check_env.py` OK ; partie 0 exécutée en ≈ 3 s, « Run all » du notebook vide sans erreur ; `git status mon_travail` propre.
 
 **Leçons** :
 - les messages `mistakes` disent où est l'erreur, sans donner le calcul juste ni confirmer la réponse d'un autre item (« relis la question : on demande … », pas « … pas la moyenne des aires ») ;
