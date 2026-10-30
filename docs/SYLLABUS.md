@@ -4083,21 +4083,21 @@ Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace l
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| 25.Q1 | 🧠 | Avec ou sans perte : le test de l'inversibilité | ★ | 3 | — | 02 | — | R | manual |
-| 25.Q2 | 🧠 | Pourquoi JPEG et MP3 battent un autoencodeur généraliste | ★ | 3 | — | 02 | — | R | manual |
-| 25.Q3 | 🧠 | Mélange de contenu ou mélange de paramètres ? | ★ | 3 | — | 02 | — | R | manual |
-| 25.Q4 | 🧠 | Goulot, code, variables latentes : vrai ou faux | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q5 | 🧠 | Le réseau qui ne savait redessiner qu'une image | ★ | 3 | — | 02 | — | R | manual |
-| 25.Q6 | 🧠 | Profondeur ou nombre de latents : qui améliore quoi ? | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q7 | 🧠 | Du bruit dans l'espace latent d'un autoencodeur classique | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q8 | 🧠 | Lire une carte latente à deux dimensions | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q9 | 🧠 | Autoencodeur linéaire et ACP | ★ | 3 | — | 02 | — | RM | manual |
-| 25.Q10 | 🧠 | Autoencodeurs convolutifs et débruiteurs | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q11 | 🧠 | Une entrée jamais vue : un tigre chez les chiffres | ★ | 3 | MNIST | 02 | — | R | manual |
-| 25.Q12 | 🧠 | Les trois exigences d'un VAE et l'astuce de reparamétrisation | ★ | 4 | MNIST | 02 | — | RM | manual |
-| 25.R1 | 🔁 | Quelles augmentations garder pour des chiffres manuscrits ? | ★ | 5 | MNIST | 02 | 24 | R | manual |
-| 25.R2 | 🔁 | Résumer une séquence entière dans l'état final d'un LSTM | ★ | 5 | Holmes | 02 | 22 | R | manual |
-| 25.R3 | 🔁 | La divergence KL, ce que mesure le terme de régularisation du VAE | ★ | 5 | — | 02 | 6 | RM | manual |
+| 25.Q1 | 🧠 | Avec ou sans perte : le test de l'inversibilité | ★ | 3 | — | 02 | — | R | wb.check |
+| 25.Q2 | 🧠 | Pourquoi JPEG et MP3 battent un autoencodeur généraliste | ★ | 3 | — | 02 | — | R | wb.check |
+| 25.Q3 | 🧠 | Mélange de contenu ou mélange de paramètres ? | ★ | 3 | — | 02 | — | R | wb.check |
+| 25.Q4 | 🧠 | Goulot, code, variables latentes : vrai ou faux | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q5 | 🧠 | Le réseau qui ne savait redessiner qu'une image | ★ | 3 | — | 02 | — | R | wb.check |
+| 25.Q6 | 🧠 | Profondeur ou nombre de latents : qui améliore quoi ? | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q7 | 🧠 | Du bruit dans l'espace latent d'un autoencodeur classique | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q8 | 🧠 | Lire une carte latente à deux dimensions | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q9 | 🧠 | Autoencodeur linéaire et ACP | ★ | 3 | — | 02 | — | RM | wb.check |
+| 25.Q10 | 🧠 | Autoencodeurs convolutifs et débruiteurs | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q11 | 🧠 | Une entrée jamais vue : un tigre chez les chiffres | ★ | 3 | MNIST | 02 | — | R | wb.check |
+| 25.Q12 | 🧠 | Les trois exigences d'un VAE et l'astuce de reparamétrisation | ★ | 4 | MNIST | 02 | — | RM | wb.check |
+| 25.R1 | 🔁 | Quelles augmentations garder pour des chiffres manuscrits ? | ★ | 5 | MNIST | 02 | 24 | R | wb.check |
+| 25.R2 | 🔁 | Résumer une séquence entière dans l'état final d'un LSTM | ★ | 5 | Holmes | 02 | 22 | R | wb.check |
+| 25.R3 | 🔁 | La divergence KL, ce que mesure le terme de régularisation du VAE | ★ | 5 | — | 02 | 6 | RM | wb.check |
 | 25.1 | ✏️ | Compter les paramètres d'un autoencodeur à goulot | ★ | 10 | MNIST | 02 | 16 | RM | wb.check |
 | 25.2 | ✏️ | Mélanger deux cercles : pixels contre paramètres | ★ | 10 | — | 02 | 0B | M | wb.check |
 | 25.3 | ✏️ | Suivre les formes dans l'autoencodeur convolutif | ★★ | 15 | MNIST | 02 | 21 | RM | wb.check |

@@ -645,7 +645,25 @@ Conventions de PyTorch : images `(N, C, H, W)`, séquences `(N, T, D)` avec `bat
 | coût d'un entraînement | MAC par image $\times 2 \times 3 \times$ images $\times$ epochs opérations | (🧮 24.7) |
 
 ## Partie VI : génératif et RL
-### Ch. 25 à 29
+### Ch. 25 · Autoencodeurs et VAE
+
+Notations : une entrée $\mathbf{x}$ de $p$ valeurs, un code $\mathbf{z}$ de $d$ valeurs ; $\log$ népérien, KL en nats.
+
+| Notion | Formule | En code |
+|---|---|---|
+| autoencodeur | $\mathbf{z} = f_\theta(\mathbf{x})$, $\hat{\mathbf{x}} = g_\phi(\mathbf{z})$ ; $L_{\text{rec}} = \frac{1}{n}\sum_i \lVert\mathbf{x}_i - \hat{\mathbf{x}}_i\rVert^2$ | `loss_fn(model(x), x)` |
+| cross-entropy binaire (pixels dans $[0, 1]$) | $-\sum_j [x_j \ln \hat{x}_j + (1 - x_j)\ln(1 - \hat{x}_j)]$ | `F.binary_cross_entropy_with_logits(logits, x)` |
+| autoencodeur linéaire et ACP | $\min_{\mathbf{W}} \lVert\mathbf{X} - \mathbf{X}\mathbf{W}\mathbf{W}^\top\rVert_F^2$ : le sous-espace des $d$ premières composantes principales (pas ses axes) ; en 2D, $L = \operatorname{tr}\mathbf{C} - \mathbf{w}^\top\mathbf{C}\,\mathbf{w}$ | `PCA(n_components=d)` (∂ 25.8) |
+| convolution transposée | $H_{out} = (H_{in} - 1)s - 2p + k + p_{out}$, $p_{out} < s$ ; poids $(C_{in}, C_{out}, k, k)$ | `nn.ConvTranspose2d(C_in, C_out, k, stride, padding, output_padding)` |
+| PSNR | $10\log_{10}(1/\text{MSE})$ dB pour des pixels dans $[0, 1]$ | `10 * torch.log10(1 / F.mse_loss(out, clean))` |
+| norme d'un tirage gaussien | $\mathbb{E}\lVert\mathbf{z}\rVert^2 = d$ pour $\mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}_d)$ ; en 2D, $P(\lVert\mathbf{z}\rVert \le r) = 1 - e^{-r^2/2}$ | `np.linalg.norm(rng.standard_normal((n, d)), axis=1)` |
+| interpolation | linéaire $(1 - t)\mathbf{z}_0 + t\mathbf{z}_1$ ; sphérique $\frac{\sin((1-t)\Omega)}{\sin\Omega}\mathbf{z}_0 + \frac{\sin(t\Omega)}{\sin\Omega}\mathbf{z}_1$, $\cos\Omega = \frac{\mathbf{z}_0\cdot\mathbf{z}_1}{\lVert\mathbf{z}_0\rVert\lVert\mathbf{z}_1\rVert}$ | `mylearn.vae.interpolate_latents(z0, z1, n, method)` |
+| reparamétrisation | $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma}\odot\boldsymbol{\varepsilon}$, $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$, $\boldsymbol{\sigma} = e^{\frac{1}{2}\log\boldsymbol{\sigma}^2}$ ; $\partial z/\partial\mu = 1$, $\partial z/\partial \log\sigma^2 = \tfrac{1}{2}\sigma\varepsilon$ | `mu + torch.exp(0.5 * log_var) * torch.randn_like(mu)` ; `mylearn.vae.reparameterize`, `reparameterize_backward` (∂ 25.5) |
+| KL gaussienne | $\mathrm{KL}(\mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1)) = \tfrac{1}{2}(\mu^2 + \sigma^2 - 1 - \ln\sigma^2)$, sommée sur les latents ; gradients $\mu$ et $\tfrac{1}{2}(\sigma^2 - 1)$ par rapport à $\log\sigma^2$ | `0.5 * (mu**2 + log_var.exp() - 1 - log_var).sum()` ; `mylearn.vae.gaussian_kl`, `gaussian_kl_grad` (∂ 25.7) |
+| loss du VAE | $\mathbb{E}_{q(\mathbf{z}\mid\mathbf{x})}[-\ln p(\mathbf{x}\mid\mathbf{z})] + \beta\,\mathrm{KL}(q(\mathbf{z}\mid\mathbf{x}) \,\|\, \mathcal{N}(\mathbf{0}, \mathbf{I}))$, $\beta = 1$ : l'opposé de l'ELBO | reconstruction **sommée** sur les pixels + `beta * kl` |
+| espérances d'une gaussienne | $\mathbb{E}[(z - \mu)^2] = \sigma^2$, $\mathbb{E}[z^2] = \mu^2 + \sigma^2$ | |
+
+### Ch. 26 à 29
 *(à compléter)*
 
 ## Partie VII : bonus

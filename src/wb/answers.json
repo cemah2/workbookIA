@@ -45702,30 +45702,27 @@
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
     "25.2g": {
-      "alt_hashes": [
-        "205e6d5fde9149e9595b050fd3c5e951db839d4a5dc21243a7085c0eb1bbe7d8"
-      ],
-      "decimals": 2,
-      "hash": "e41dd829a79fc1e314f4005bc031313237f0195a563f91d4e301927539ab769f",
-      "hash_coarse": "72267364d41251873cbe4834f3b02471ed08114d910394e0b71c3ce211de1fb1",
+      "decimals": 1,
+      "hash": "72267364d41251873cbe4834f3b02471ed08114d910394e0b71c3ce211de1fb1",
+      "hash_coarse": "61ed80ba330c5ffc5d15c922dcc359c6f3f732619ab2d101aa7f2d9835185a3d",
       "kind": "float",
       "magnitude": 1,
       "mistakes": {
-        "498f4a78e2e7d3841ddf5416f7c518138fd68ebe8321498da6afdfc9ecac4906": "relis la question : l'aire du disque mélangé, pas la moyenne des aires",
-        "b65be7c75d3df55d49cef32e53e13b374291cf8bc86d918692cec92f786d60c1": "l'aire d'un disque est π r², pas 2 π r"
+        "43d6facfa1d0cfe2e5fcfa65631ee597b6605fc4f09e623730110c011bf9ca6a": "l'aire d'un disque est π r², pas 2 π r",
+        "c5efb2cf0b3bded7f41f63d67f7f19e828a42e7973c68193993075f1fbbbcc5d": "relis la question : l'aire du disque mélangé, pas la moyenne des aires"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
     "25.2h": {
-      "decimals": 2,
-      "hash": "dbde71de06ff7986cd9304ace907b9426cc4ba92fb3deae4e75331dbdb9a531d",
-      "hash_coarse": "f611cfb335f2d4fe1a0ba2fd5ef774015bccb1eb73c83935d51cc76be00f7caa",
+      "decimals": 1,
+      "hash": "f611cfb335f2d4fe1a0ba2fd5ef774015bccb1eb73c83935d51cc76be00f7caa",
+      "hash_coarse": "819795ad8b23dd330604083bc3eebfdbab8c7d76f38e2fb8f5044258340d7dd1",
       "kind": "float",
       "magnitude": 1,
       "mistakes": {
-        "04332038ed93a73376c2b9618df17ba5a1370ab9a2c8ec39d85d4df2cfebefa9": "relis la question : la moyenne des aires des deux disques",
-        "f87414020750873d8b2e2bc2b553037def3647e719705b8bc3e1e5ad01ebe5ba": "π r² pour chaque disque, pas 2 π r"
+        "60168ea4a99892f569987d2533ed1f5e1a9f4d3f2bb10b6ff1ac1bbc9cbf604b": "relis la question : la moyenne des aires des deux disques",
+        "a8450000f5dee6c8a03f0596480edfc69c827b0c3134feb72e7aa37448cc24cd": "π r² pour chaque disque, pas 2 π r"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46714,17 +46711,14 @@
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
     "25.R3a": {
-      "alt_hashes": [
-        "7c780bc5a13ace1615610818d7627a0c902edc76e708e5e520dd4a9803fc8cac"
-      ],
-      "decimals": 3,
-      "hash": "c79367c3046f3f591848482452553c1bfe21fd97369296dec682a5be9882d1a1",
-      "hash_coarse": "7dc7ef26d515720638453428b2fa494be0c1611d0a21ebc785ce24de2e9e5abd",
+      "decimals": 2,
+      "hash": "7dc7ef26d515720638453428b2fa494be0c1611d0a21ebc785ce24de2e9e5abd",
+      "hash_coarse": "4425fdddbe531ba5e8d22f32b6c7d76461f90e0d61a6967c0f2704d0d89551d2",
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "22fab0daafb9cb55e24c1afff42dcf8494a06c7ff8bf57f1f81baf4d49aaf638": "KL(P‖Q) moyenne log(P/Q) sous P, pas sous Q",
-        "7a8d5c067ec19b5dec799658465cc693a2c50a7e84dc534142da18628a1a07b0": "en bits, le logarithme est en base 2"
+        "16a45918df434598216ec1ded0bcaec2c96b59a8731c6f636512bcd24668644d": "KL(P‖Q) moyenne log(P/Q) sous P, pas sous Q",
+        "c3c240f61038bd423b2a566d2ff6f8b8d2eb9445c72830d8375473209a1fc2f8": "en bits, le logarithme est en base 2"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -46754,14 +46748,14 @@
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
     },
     "25.R3e": {
-      "decimals": 3,
-      "hash": "942ca84782f4df92a6804d8cc1b7471ae3151010e3cc0bac4ba85a3b367137ba",
-      "hash_coarse": "080703c41b9c00fc74ff058eae1c64f45e022189210afbba04e183f299f92ab9",
+      "decimals": 2,
+      "hash": "080703c41b9c00fc74ff058eae1c64f45e022189210afbba04e183f299f92ab9",
+      "hash_coarse": "4db170bb526dbf8faecde38bb33f657cc0067ce2ba5cdc3e3e44899e7b7e7fa8",
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
-        "1818691e8b242c0460d0dc678319347ab309ef0bb9bcc0537aa113e368fa93f6": "c'est la valeur en bits",
-        "988a466eca5687e5d624048b319a2af1bcbc34db0a74147393a3c378b9ba0357": "pour passer des bits aux nats, on multiplie par ln 2"
+        "81d1ac0cbc5f07f1d867f738085401f6379b6ae380bc28c14636e0fc8df60dee": "pour passer des bits aux nats, on multiplie par ln 2",
+        "fdfd7e9ac7617f462abe6a70d08b0fe9dab46d89ac68c06a3e4cd418adb82aac": "c'est la valeur en bits"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"

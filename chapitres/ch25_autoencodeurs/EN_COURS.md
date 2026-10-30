@@ -1,0 +1,30 @@
+# Chapitre 25 : génération en cours
+
+Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python tools/start_chapter.py 25` copie la fiche et `06_mes_reponses.md`, mais pas encore le notebook.
+
+| Fichier | État |
+|---|---|
+| `01_fiche.md` et `figures/` | complets (session 53) |
+| `02_exercices.md`, `06_mes_reponses.md` | complets (session 53) |
+| `04_indices.md`, `05_solutions.md` | quiz, rappels, papier, réflexion et entretien (session 53) ; notebook 25.14 à 25.39 à la session 54 |
+| `flashcards.csv` | complet (session 53) |
+| `03_notebook.ipynb`, `05_solutions.ipynb` | partie 0 (session 53) ; parties A à C (25.14 à 25.39) à la session 54 |
+| `mylearn/vae.py` | référence `solutions/mylearn_ref/vae.py` et tests `tests/test_ch25_vae.py` (81 tests, 30 mutants dont 3 équivalents), session 53 |
+
+## Pour la session 54
+
+À reprendre : `PARTS` et `NEXT_SESSION` de `tools/chapters/build_ch25.py` (A 25.14-25.23 autoencodeurs denses, B 25.24-25.27 convolutifs et débruiteurs, C 25.28-25.39 VAE), les sections « Notebook » de `04_indices.md` et `05_solutions.md`, la data card MNIST et Fashion-MNIST (usages du ch. 25), puis supprimer ce fichier, lancer `syllabus.py build` et revérifier l'en-tête de la fiche (temps total, parcours rapide).
+
+**Contraintes pour la session 54** :
+- Budget : solutions < 10 min sur CPU, aucune cellule > 3 min ; un seul entraînement PyTorch à la fois (vérificateurs compris). Contrat : sous-échantillons de 10 000 images et 3 à 5 epochs en mode rapide ; 25.27 et 25.39 en 🚀 pour le mode complet. Les historiques longs (VAE à 2 latents, carte latente, β-VAE) se précalculent par un script `tools/chapters/history_ch25.py`, comme aux ch. 21 à 24, avec leurs résultats multi-graines dans un historique versionné.
+- **Contrat de `vae.py` à écrire dans les énoncés 🔨** (les tests le vérifient, la docstring figée ne le dit pas toujours) : `mu`, `log_var`, `dz`, `eps` sont des tableaux 2-D `(n, d)` de même forme, `z0` et `z1` des vecteurs 1-D de même forme, sinon `ValueError` ; une entrée avec NaN est refusée (`ValueError`, « remove the missing values first ») ; `rng` accepte None, un entier ou un `Generator`, et la même graine donne les mêmes tirages ; chaque tableau rendu est un nouveau tableau `float64` (jamais une vue d'une entrée, même `dmu`, égal à `dz`, et le gradient par rapport à `mu`, égal à `mu`) ; `gaussian_kl` rend la forme `(n,)` ; `interpolate_latents` rend la première ligne égale à `z0` et la dernière à `z1` exactement, refuse `n_steps < 2` et une méthode inconnue, et revient à la ligne droite pour des vecteurs parallèles, opposés ou nuls (`sin Ω` presque nul). Groupes de tests : `-k "test_interpolate_latents_"` (25.20), `-k "test_reparameterize_"` (25.28), `-k "test_gaussian_kl_"` (25.29).
+- **Valeurs déjà données, à ne pas faire vérifier** : les exemples des docstrings figées (`gaussian_kl([[1, 0]], [[0, 0]])` = 0,5 ; `gaussian_kl_grad` en `log 3` → 1 ; `reparameterize` de `[[5]]`, `[[-100]]` → 5 ; les interpolations de `(0, 0)` à `(1, 2)` et de `(1, 0)` à `(0, 1)`) ; les réponses des exercices papier (32 164, 1 138 212, 1 539 et 2 132 paramètres, les formes `(64, 16, 14, 14)`, `(64, 8, 7, 7)`, `(64, 3, 7, 7)`, 1 568 valeurs du code du débruiteur, 13/14/28, 4,47 et 3,16, les KL 2, 0,359, 1,808, 1,307, 1, 0,417) et leurs variantes (570 272, 1 612, 196, 7,07, 0,25 nat) ; les chiffres de la fiche (MSE 0,01 → 20 dB, $512 \times 512 \times 3 \to 64 \times 64 \times 4$, facteur 48 de 🧮 25.10).
+- 🔮 25.14 : la fiche raconte l'expérience du tigre du livre (mémorisation par les biais, image noire → le tigre). Le 🔮 doit faire prédire ce qu'elle ne dit pas, sur **une** image Fashion-MNIST : par exemple l'erreur de reconstruction (MSE) d'une image noire ou d'un autre vêtement, comparée à celle de l'image apprise, ou la part des biais dans la sortie, saisies en nombres ou en booléens, calibrées sur plusieurs graines.
+- 🔮 25.17 : la fiche et Q11 disent qu'un autoencodeur de chiffres rend des morceaux de chiffres ; le 🔮 doit porter sur des mesures (l'erreur de reconstruction moyenne des vêtements contre celle des chiffres, la classe de vêtement la mieux reconstruite).
+- 🔮 25.31 : la fiche dit que les codes aléatoires donnent des taches avec un autoencodeur classique et des chiffres avec un VAE ; le 🔮 doit prédire des quantités (la part de tirages qu'un classifieur MNIST reconnaît avec confiance, pour l'AE et pour le VAE).
+- 🐛 25.25 : trois bugs plantés (cible = entrée bruitée, bruit tiré une seule fois hors de la boucle, pas d'écrêtage) ; diagnostics enchaînés, rejoués sur les $2^3$ versions partiellement corrigées.
+- 🔬 25.23 : comparer l'autoencodeur linéaire et `PCA(svd_solver="full")` par l'**angle entre sous-espaces** (`scipy.linalg.subspace_angles`) et l'erreur de reconstruction, pas par les axes (un test de « mêmes axes » échouerait, ∂ 25.8).
+- 🔬 25.37 : MNIST sans le chiffre 7 (ou MNIST contre Fashion-MNIST), score = erreur de reconstruction, ROC-AUC avec `mylearn.metrics` (ch. 3) ; montrer aussi une anomalie « facile à reconstruire » (une image presque vide).
+- 🔨 25.38 : assemblage sans nouvelle fonction (`vae.py`, `nn/layers.py` `init_mlp`/`mlp_forward`, `nn/backward.py` `mlp_backward`/`binary_cross_entropy_with_logits`, `optim.py` `Adam`) : vérifier la passe arrière complète contre `torch.autograd` sur un petit VAE à poids copiés, avant tout entraînement.
+- 🏆 25.39 : Fashion-MNIST bruité $\sigma = 0{,}3$, ≤ 100 000 paramètres, ≤ 5 min d'entraînement CPU en mode rapide ; seuil de PSNR = référence moins 0,5 dB, calibré sur plusieurs graines ; test révélé une fois par session.
+- 📈 25.34 : des courbes de reconstruction et de KL (effondrement du posterior) tirées d'entraînements réels précalculés, ou d'une fonction de `wb.synth` sans commentaires qui nomment les cas.

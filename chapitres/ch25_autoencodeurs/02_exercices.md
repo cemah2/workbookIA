@@ -151,11 +151,11 @@ c) Vrai ou faux : un autoencodeur de séquences peut utiliser un LSTM comme enco
 ### 25.R3 — La divergence KL, ce que mesure le terme de régularisation du VAE 🔁 ⏱️ 5 min
 *Ch. 6 (divergence KL) · parcours R, M*
 
-a) $\mathrm{KL}(P \,\|\, Q)$ en **bits** pour $P = (0{,}5\ ;\ 0{,}5)$ et $Q = (0{,}25\ ;\ 0{,}75)$, à 3 décimales.
+a) $\mathrm{KL}(P \,\|\, Q)$ en **bits** pour $P = (0{,}5\ ;\ 0{,}5)$ et $Q = (0{,}25\ ;\ 0{,}75)$, à 2 décimales.
 b) Vrai ou faux : $\mathrm{KL}(P \,\|\, Q) = \mathrm{KL}(Q \,\|\, P)$ pour toutes les lois $P$ et $Q$.
 c) Vrai ou faux : $\mathrm{KL}(P \,\|\, P) = 0$ pour toute loi $P$.
 d) Vrai ou faux : une divergence KL n'est jamais négative.
-e) La divergence de a) en **nats**, à 3 décimales.
+e) La divergence de a) en **nats**, à 2 décimales.
 
 <a id="papier"></a>
 
@@ -196,8 +196,8 @@ Le mélange de **contenu** à $t = 0{,}25$ est l'image $0{,}75 \cdot \text{image
 d) La valeur du pixel de coordonnées $(2, 2)$ dans le mélange de contenu.
 e) Celle du pixel $(10, 6)$.
 f) Le nombre de disques visibles (de valeur non nulle) dans le mélange de contenu.
-g) L'aire du disque obtenu par mélange paramétrique à $t = 0{,}5$, à 2 décimales.
-h) La moyenne des aires des disques A et B, à 2 décimales.
+g) L'aire du disque obtenu par mélange paramétrique à $t = 0{,}5$, à 1 décimale.
+h) La moyenne des aires des disques A et B, à 1 décimale.
 
 Dans ta copie : que vaut, dans le mélange de contenu, le pixel $(4, 3)$, le centre du disque de a) ? Pourquoi g) et h) diffèrent-ils ? Quel paramètre faudrait-il mélanger linéairement pour que l'aire du disque intermédiaire soit la moyenne des aires ? Qu'en conclus-tu sur le choix des paramètres d'un mélange ?
 
@@ -361,14 +361,14 @@ Les premiers logiciels d'échange de visages entraînent **un seul encodeur** su
 **Objectif :** lire l'article qui a introduit le VAE, et relier ses notations à la fiche.
 **Prérequis :** Ex 25.5 · Ex 25.7 · fiche §25.9.2 · **Fil rouge :** MNIST · **Parcours :** M
 
-Lis D. P. Kingma et M. Welling, « Auto-Encoding Variational Bayes », ICLR 2014 ([arXiv:1312.6114](https://arxiv.org/abs/1312.6114)) : le résumé, la section 2 (2.1 à 2.4), la section 3 (l'exemple du VAE), l'annexe B et la figure 2. Réponds dans ta copie.
+Lis D. P. Kingma et M. Welling, « Auto-Encoding Variational Bayes », ICLR 2014 ([arXiv:1312.6114](https://arxiv.org/abs/1312.6114)) : le résumé, la section 2 (2.1 à 2.4), la section 3 (l'exemple du VAE), la section 5 et sa figure 2, et les annexes A et B. Réponds dans ta copie.
 
 1. Résumé : quel problème les auteurs résolvent-ils, et quelles sont leurs deux contributions ?
 2. Section 2.1 : qui sont $p_\theta(\mathbf{z})$, $p_\theta(\mathbf{x} \mid \mathbf{z})$ et $q_\phi(\mathbf{z} \mid \mathbf{x})$ ? Lequel est l'encodeur, lequel le décodeur ? Pourquoi le vrai posterior $p_\theta(\mathbf{z} \mid \mathbf{x})$ n'est-il pas calculable ?
 3. Section 2.2 et équation (3) : écris la borne inférieure $\mathcal{L}$ avec ses deux termes. Relie-la à la loss de la fiche (le signe, le rôle de chaque terme).
 4. Section 2.4 : comment les auteurs écrivent-ils $\mathbf{z}$ pour pouvoir dériver ? Relie leur notation à $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}$, et à l'Ex 25.5.
 5. Annexe B : retrouve la forme fermée de la KL, et compare-la à celle de l'Ex 25.7 (attention au signe : les auteurs écrivent $-\mathrm{KL}$).
-6. Section 3 et figure 2 : combien de tirages de $\boldsymbol{\varepsilon}$ par exemple suffisent, selon les auteurs, quand le mini-batch est assez grand ? Sur quels datasets comparent-ils leur méthode, et que montre la figure 2 ? Qu'est-ce que l'article ne fait pas, que le livre fait (pense aux images générées et aux interpolations) ?
+6. Sections 2.3 et 5 : combien de tirages de $\boldsymbol{\varepsilon}$ par exemple suffisent, selon les auteurs, quand le mini-batch est assez grand ? Sur quels datasets comparent-ils leur méthode, et que montre la figure 2 ? Annexe A : que montrent les figures des variétés à deux latents et des tirages au hasard ? Compare-les aux figures 25.68 et 25.70 du livre.
 
 <a id="entretien"></a>
 

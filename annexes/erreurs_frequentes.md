@@ -275,6 +275,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une RMSE de prévision « excellente » de 0,02 | calculée sur les valeurs mises à l'échelle entre 0 et 1 | `inverse_transform` d'abord, puis comparer à la persistance (fiche 24, §24.5.4) |
 | un modèle compilé « 50 fois plus lent » | la mesure inclut la compilation du premier appel | chauffer quelques pas, puis la médiane de plusieurs mesures (fiche 24) |
 | une loss qui ne baisse plus en `float16` | des gradients arrondis à zéro sans mise à l'échelle de la loss | `torch.amp.GradScaler`, ou `bfloat16` (fiche 24) |
+| un autoencodeur qui ressort la même image quelle que soit l'entrée | entraîné sur une seule image (ou trop peu), il l'a rangée dans ses biais | beaucoup d'images variées ; juger sur des images jamais vues (fiche 25, §25.3) |
+| un débruiteur qui rend des images aussi bruitées que l'entrée | la cible est l'image bruitée, ou le bruit est tiré une seule fois | entrée bruitée, cible propre, bruit neuf à chaque mini-batch (🐛 25.25) |
+| une sortie de 27 ou 29 pixels au lieu de 28 | `ConvTranspose2d(…, stride=2, padding=1)` sans le bon `output_padding` | $H_{out} = (H_{in} - 1)s - 2p + k + p_{out}$ ; vérifier sur `torch.zeros` (✏️ 25.4) |
+| des images de VAE toutes identiques, quelle que soit l'entrée, et une KL proche de 0 | effondrement du posterior : β trop grand, ou reconstruction moyennée sur les pixels face à une KL sommée | les deux termes à la même échelle ; faire monter β progressivement ; surveiller la KL par latent (📈 25.34) |
+| des `nan` dans la loss d'un VAE | `log_var` qui explose, ou un écart-type pris pour une log-variance | une tête qui rend $\log\sigma^2$, `torch.exp(0.5 * log_var)` ; écrêter `log_var` si besoin |
+| un score d'anomalie parfait sur MNIST contre Fashion-MNIST, inutile sur de vrais défauts | validé sur une anomalie trop facile | valider sur des anomalies réalistes ; regarder la carte d'erreur pixel par pixel (🔬 25.37) |
 
 ## Erreurs de raisonnement (ML)
 

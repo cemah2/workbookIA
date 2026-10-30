@@ -458,3 +458,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais mener une comparaison honnête : baselines, une variable à la fois, journal, plusieurs graines (0 à 3) | |
 | Je sais livrer un modèle avec son prétraitement, sa fiche modèle et une analyse d'erreurs (0 à 3) | |
 <!-- wb:end CP5 -->
+<!-- wb:section 25 -->
+## 25 — Autoencodeurs et VAE
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer la compression avec ou sans perte et le rôle du goulot dans un autoencodeur | |
+| Construire et entraîner en PyTorch des autoencodeurs denses, convolutifs et débruiteurs | |
+| Analyser un espace latent : carte 2D, perturbations, interpolation linéaire et sphérique | |
+| Relier un autoencodeur linéaire à l'ACP, par le calcul puis par l'expérience | |
+| Dériver l'astuce de reparamétrisation et la divergence KL gaussienne, puis les implémenter en NumPy | |
+| Entraîner un VAE, régler le compromis reconstruction/KL (β) et l'utiliser comme générateur | |
+| Détecter des anomalies grâce à l'erreur de reconstruction, et en connaître les limites | |
+| Situer les autoencodeurs aujourd'hui : espaces latents des modèles de diffusion, latents discrets, autoencodeurs parcimonieux | |
+<!-- wb:end 25 -->

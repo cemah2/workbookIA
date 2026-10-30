@@ -798,6 +798,24 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | mise à l'échelle de la loss | loss scaling | multiplier la loss avant `backward()` et diviser les gradients avant le pas, pour que de petits gradients ne s'arrondissent pas à zéro en `float16` (`torch.amp.GradScaler`) | 24 |
 | bfloat16 | bfloat16, brain floating point | nombre à virgule de 16 bits qui garde l'exposant du `float32` (moins de chiffres, même étendue) : pas besoin de mise à l'échelle de la loss | 24 |
 | compilation (d'un modèle) | compilation, `torch.compile` | transformer un modèle en code optimisé à son premier appel (opérations fusionnées) ; la première passe est lente | 24 |
+| autoencodeur | autoencoder | réseau entraîné à recopier son entrée en la faisant passer par un goulot : un encodeur produit un code, un décodeur reconstruit l'entrée | 25 |
+| encodeur, décodeur | encoder, decoder | les deux moitiés d'un autoencodeur : l'encodeur $f_\theta$ réduit l'entrée à un code, le décodeur $g_\phi$ reconstruit à partir du code | 25 |
+| goulot | bottleneck | la couche la plus étroite d'un autoencodeur, qui force le réseau à résumer son entrée | 25 |
+| code, variables latentes | code, latent variables | les valeurs du goulot, qui représentent l'entrée ; *latent* : caché | 25 |
+| espace latent | latent space | l'espace des codes, une dimension par variable latente ($d$ dimensions) | 25 |
+| apprentissage auto-supervisé | self-supervised learning | apprentissage dont la cible est fabriquée à partir de l'entrée elle-même (recopier, compléter, prédire la suite), sans label ; à distinguer du semi-supervisé (quelques données étiquetées, beaucoup sans label) | 25 |
+| compression avec ou sans perte | lossy, lossless compression | sans perte : on retrouve exactement l'original (transformation inversible) ; avec perte : une partie de l'information disparaît | 25 |
+| mélange paramétrique | parametric blending | mélanger les nombres qui décrivent deux objets (et non leurs données brutes, le mélange de contenu) | 25 |
+| interpolation sphérique (slerp) | spherical linear interpolation | interpolation qui suit l'arc de grand cercle entre deux vecteurs : $\frac{\sin((1-t)\Omega)}{\sin\Omega}\mathbf{z}_0 + \frac{\sin(t\Omega)}{\sin\Omega}\mathbf{z}_1$ | 25 |
+| autoencodeur débruiteur | denoising autoencoder | autoencodeur qui reçoit une entrée bruitée et doit rendre l'entrée propre | 25 |
+| sur-échantillonnage | upsampling | agrandir une image en répétant (ou en interpolant) ses valeurs, sans paramètres (`nn.Upsample`) | 25 |
+| PSNR | peak signal-to-noise ratio | mesure de fidélité d'une image en décibels : $10\log_{10}(1/\text{MSE})$ pour des pixels dans $[0, 1]$ | 25 |
+| VAE (autoencodeur variationnel) | variational autoencoder | autoencodeur dont l'encodeur donne une loi (moyenne et variance par latent), avec un terme KL vers le prior $\mathcal{N}(\mathbf{0}, \mathbf{I})$ ; son décodeur seul est un générateur | 25 |
+| astuce de reparamétrisation | reparameterization trick | écrire un tirage $z = \mu + \sigma\varepsilon$ avec $\varepsilon \sim \mathcal{N}(0, 1)$ tiré à part, pour que le gradient passe par $\mu$ et $\sigma$ | 25 |
+| ELBO | evidence lower bound | borne inférieure de $\ln p(\mathbf{x})$ : reconstruction attendue moins KL entre $q(\mathbf{z} \mid \mathbf{x})$ et le prior ; la loss du VAE est son opposé | 25 |
+| β-VAE | β-VAE | VAE dont la KL est multipliée par $\beta$ ; $\beta > 1$ régularise davantage l'espace latent, au prix de reconstructions plus floues | 25 |
+| effondrement du posterior | posterior collapse | le VAE ignore certains latents (ou tous) : leur loi devient le prior quelle que soit l'entrée, et leur KL tombe à 0 | 25 |
+| détection d'anomalies | anomaly detection | repérer les exemples qui ne ressemblent pas aux données normales ; avec un autoencodeur, par l'erreur de reconstruction | 25 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

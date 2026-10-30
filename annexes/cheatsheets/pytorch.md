@@ -136,6 +136,20 @@
 | `with torch.autocast(device_type="cpu", dtype=torch.bfloat16):` ; `torch.amp.GradScaler("cuda")` | précision mixte (bfloat16 sur CPU ; float16 avec mise à l'échelle de la loss sur GPU) |
 | `model = torch.compile(model)` | compiler le modèle à son premier appel (lent la première fois ; compilateur C++ requis sur CPU) |
 
+## Autoencodeurs et VAE (ch. 25)
+
+| Code | Effet |
+|---|---|
+| `self.encoder = nn.Sequential(...)` ; `self.decoder = nn.Sequential(...)` ; `forward: return self.decoder(self.encoder(x))` | un autoencodeur dont on peut appeler chaque moitié seule |
+| `loss = F.binary_cross_entropy_with_logits(model(x), x)` | la cible est l'entrée ; des logits en sortie, `torch.sigmoid(model(x))` pour voir l'image |
+| `noisy = (x + sigma * torch.randn_like(x)).clamp(0, 1)` ; `loss_fn(model(noisy), x)` | un débruiteur : bruit neuf à chaque mini-batch, cible propre |
+| `nn.Upsample(scale_factor=2)` ; `nn.ConvTranspose2d(C, C2, 3, stride=2, padding=1, output_padding=1)` | doubler la hauteur et la largeur, sans ou avec paramètres |
+| `mu, log_var = self.to_mu(h), self.to_log_var(h)` ; `z = mu + torch.exp(0.5 * log_var) * torch.randn_like(mu)` | l'encodeur d'un VAE et la reparamétrisation |
+| `kl = 0.5 * (mu**2 + log_var.exp() - 1 - log_var).sum() / len(x)` | la KL vers $\mathcal{N}(\mathbf{0}, \mathbf{I})$ par exemple, à ajouter à une reconstruction sommée sur les pixels |
+| `with torch.no_grad(): images = torch.sigmoid(model.decoder(torch.randn(64, d)))` | générer : des codes tirés du prior, le décodeur seul |
+| `torch.save(model.decoder.state_dict(), "decoder.pt")` | exporter le décodeur comme générateur autonome |
+| `10 * torch.log10(1 / F.mse_loss(out, clean))` | le PSNR d'un débruitage (pixels dans $[0, 1]$) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |
