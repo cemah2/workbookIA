@@ -764,19 +764,20 @@ def self_play_37(n_games, alpha=0.5, gamma=0.9, epsilon=0.2, seed=0):
 **Erreurs fréquentes** : oublier d'échanger les marques (les deux joueurs écrivent dans les mêmes cases, chacun avec son propre point de vue) ; un signe plus dans la cible (l'agent aide l'adversaire) ; mettre à jour des coups interdits ; prendre le max sur toute la ligne de `c2`.
 **Variante** : avec $\varepsilon = 0{,}05$ au lieu de 0,2 (50 000 parties), l'agent ne perd toujours pas (**100 nuls** dans chaque camp), mais n'a donné une valeur qu'à **21 %** des cases légales (25 % avec $\varepsilon = 0{,}2$) : au morpion, explorer peu suffit, parce que minimax ne mène que dans des positions que le jeu contre soi-même visite déjà.
 
-### Ex 26.38 — Défi CartPole tabulaire : tenir 195 pas en moyenne 🏆
+### Ex 26.38 — Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 🏆
 **Réponse** (une solution parmi d'autres) :
 ```python
 def make_cartpole_38():
-    return Discretize_36(gym.make("CartPole-v1"), EDGES_36)
+    edges = [[], [], [-0.05, 0.0, 0.05], [-0.5, 0.5]]   # the angle (4 intervals) and its speed (3) only: 12 states
+    return Discretize_36(gym.make("CartPole-v1"), edges)
 
 
 def train_38(env):
-    n = 1500
+    n = 800
     Q, _ = mylearn.rl.train_tabular(env, n, alpha=0.2, gamma=0.99, epsilon=epsilon_schedule_22(n, 1.0, 0.01, 0.5),
                                     max_steps=200, rng=np.random.default_rng(2638))
     return Q
 ```
-**Démarche** : le découpage de 26.36, 1 500 épisodes au lieu de 800, $\alpha = 0{,}2$ et un $\varepsilon$ qui finit à 0,01 : l'entraînement prend environ 25 s, et la politique tient 200 pas sur les graines publiques comme sur les graines cachées. La même recette réussit avec trois graines d'entraînement (2638, 1 et 2 : 200 pas à chaque fois, `history_ch26.json`). Ce qui compte le plus : un $\varepsilon$ qui finit bas (une politique qui explore encore tombe), un découpage fin de l'angle et de sa vitesse, et assez d'épisodes pour visiter les cases utiles.
-**Erreurs fréquentes** : un découpage trop fin (des cases jamais visitées, 26.36) ; des épisodes d'entraînement de 500 pas (plus lents, sans gain sur 200) ; régler sur les graines publiques jusqu'à les réussir par chance ; évaluer avec exploration.
-**Variante** : la même politique, sur des épisodes de 500 pas (CartPole-v1), tient **500** pas en moyenne : elle a appris à garder le bâton droit, pas seulement à survivre 200 pas.
+**Démarche** : la table de 26.36 (144 cases) tient 200 pas, mais seulement 220 à 360 pas en moyenne sur des épisodes de 500 (selon la graine) : beaucoup de ses cases sont visitées trop peu pour que leurs valeurs soient justes, et le chariot finit par dériver dans une case mal apprise. Avec 12 cases seulement (l'angle en 4 intervalles, sa vitesse en 3, le chariot ignoré), chaque case reçoit des milliers de mises à jour : en 800 épisodes (une quinzaine de secondes), la politique tient 500 pas sur les graines publiques comme sur les graines cachées, et la même recette réussit avec trois graines d'entraînement (`history_ch26.json`). Une table plus fine pourrait mieux faire, mais demanderait beaucoup plus d'épisodes : c'est le compromis entre la finesse d'une représentation et la quantité de données, que les réseaux de neurones (DQN, B8) déplacent en généralisant d'une case à ses voisines.
+**Erreurs fréquentes** : affiner encore la grille de 26.36 (des cases jamais visitées) ; des épisodes d'entraînement de 500 pas (plus lents, sans gain) ; régler sur les graines publiques jusqu'à les réussir par chance ; évaluer avec exploration.
+**Variante** : avec la grille de 26.36 (144 cases) mais 1 500 épisodes, la politique tient aussi **500** pas en moyenne : avec assez de données, la grille plus fine rattrape la grille grossière, en deux fois plus de temps.

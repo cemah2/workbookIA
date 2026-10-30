@@ -372,6 +372,6 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 26.35 | Morpion contre un adversaire aléatoire : masque d'actions ou pénalité | 📦 | ★★★ | 45 |
 | 26.36 | CartPole : discrétiser un état continu pour un Q-learning tabulaire | 📦 | ★★★ | 45 |
 | 26.37 | Auto-apprentissage au morpion : l'agent joue les deux camps | 🔬 | ★★★★ | 90 |
-| 26.38 | Défi CartPole tabulaire : tenir 195 pas en moyenne | 🏆 | ★★★★ | 120 |
+| 26.38 | Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 | 🏆 | ★★★★ | 120 |
 
 Aucun exercice ne demande de GPU : les tables tiennent sur un CPU, et les boucles d'environnement dominent le temps de calcul.

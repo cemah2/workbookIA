@@ -413,6 +413,34 @@ def show_lake_policy(policy, desc=("SFFF", "FHFH", "FFFH", "HFFG"), title=None):
         print(" ".join(ch if ch in "HG" else ACTIONS_LAKE[int(policy[r * len(row) + c])] for c, ch in enumerate(row)))
 
 
+def unpack(text):
+    """Data packed by the builder (zlib + base64 of a JSON text)."""
+    import base64
+    import zlib
+    return json.loads(zlib.decompress(base64.b64decode(text)).decode("utf-8"))
+
+
+class GameRecorder(gym.Wrapper):
+    """Records every game played on an environment: self.games is a list of games, each a list of
+    (state, action, reward) in the order of the moves (used by the checks)."""
+
+    def __init__(self, env):
+        super().__init__(env)
+        self.games = []
+
+    def reset(self, **kwargs):
+        state, info = self.env.reset(**kwargs)
+        self.games.append([])
+        self._state = state
+        return state, info
+
+    def step(self, action):
+        state, reward, terminated, truncated, info = self.env.step(action)
+        self.games[-1].append((int(self._state), int(action), float(reward)))
+        self._state = state
+        return state, reward, terminated, truncated, info
+
+
 def masked_greedy(Q):
     """A policy (state, info) -> action for the games with an action mask: the best legal action of Q."""
     def policy(state, info):
@@ -520,13 +548,15 @@ CHECK_13 = r'''with checked("26.13"):
     wb.check("26.13a", n_states_13)
     wb.check("26.13b", n_actions_13)
     WALK_13 = [1, 1, 2, 2, 1, 2]                  # down, down, right, right, down, right
-    print(env_13.unwrapped.desc.astype(str))     # S start, F frozen, H hole, G goal
+    print(make_env("FrozenLake-v1", seed=0, is_slippery=False).unwrapped.desc.astype(str))   # S start, F frozen, H hole, G goal
     result_13 = play_actions_13(env_13, WALK_13)
     if returned("26.13", "play_actions_13", result_13):
         same("26.13", "la marche ↓ ↓ → → ↓ → sans glisser : (récompense totale, pas, terminated)",
              np.array(result_13, dtype=float), [1.0, 6.0, 1.0])
         same("26.13", "la marche arrêtée dans le trou de la case 5 (↓ →)", np.array(play_actions_13(env_13, [1, 2, 2]),
              dtype=float), [0.0, 2.0, 1.0])
+        same("26.13", "120 pas contre le mur de gauche : coupé à 100 pas, pas terminé", np.array(
+             play_actions_13(env_13, [0] * 120), dtype=float), [0.0, 100.0, 0.0])
         rate_13 = random_success_13(env_13, 1000, np.random.default_rng(13))
         print(f"des actions au hasard atteignent le but dans {pct(rate_13)} des épisodes")
         wb.check("26.13c", rate_13, computed=True)
@@ -591,15 +621,21 @@ CHECK_15 = r'''with checked("26.15"):
              [np.polynomial.polynomial.polyval(g, REWARDS_15) for g in GAMMAS_15])'''
 
 
+def _packed(data) -> str:
+    """JSON data packed (zlib + base64) so that a code cell does not show the numbers before the prediction."""
+    import base64
+    import zlib
+    return base64.b64encode(zlib.compress(json.dumps(data, ensure_ascii=False).encode("utf-8"), 9)).decode("ascii")
+
+
 def _l16_rows() -> str:
-    data = HISTORY.get("l16") or {}
-    return json.dumps(data, ensure_ascii=False)
+    return _packed(HISTORY.get("l16") or {})
 
 
 GIVEN_16 = r'''# The L-learning results that 26.18 will reproduce (tools/chapters/history_ch26.py, five seeds): for each seed, the
 # table after 6 000 games without the truck, and after 6 000 games with a truck of probability 0.1; each agent then
 # played the 506 non-winning boards once, greedily, WITHOUT the truck
-L_RESULTS_16 = json.loads(r"""{L16}""")'''
+L_RESULTS_16 = unpack("{L16}")   # packed, so that the numbers stay hidden until the experiment cell'''
 
 TODO_16 = r'''optimal_16 = ...   # a) without the truck, after 6 000 games: does the L-agent play at least 90 % of the 506 boards
                    #    in their minimal number of moves? True or False
@@ -682,26 +718,6 @@ RECORD_17 = r'''wb.record("26.17a", most_common_17, mistakes={"c'est la longueur
 wb.record("26.17b", mean_17, decimals=2, mistakes={"la moyenne porte sur les 506 plateaux non gagnants, sans les 6 gagnants": 2.67})
 wb.record("26.17c", hardest_17)'''
 
-GIVEN_18 = r'''class GameRecorder(gym.Wrapper):
-    """Records every game played on an environment: self.games is a list of games, each a list of
-    (state, action, reward) in the order of the moves (used by the checks)."""
-
-    def __init__(self, env):
-        super().__init__(env)
-        self.games = []
-
-    def reset(self, **kwargs):
-        state, info = self.env.reset(**kwargs)
-        self.games.append([])
-        self._state = state
-        return state, info
-
-    def step(self, action):
-        state, reward, terminated, truncated, info = self.env.step(action)
-        self.games[-1].append((int(self._state), int(action), float(reward)))
-        self._state = state
-        return state, reward, terminated, truncated, info'''
-
 TODO_18 = r'''def l_learning_18(env, n_games, rng, max_steps=100):
     """The book's L-learning. L = np.zeros((n_states, n_actions)). For each game: state, info =
     env.reset(seed=int(rng.integers(2**31))), then at each move the action tie_argmax(L[state], rng) (the largest
@@ -756,7 +772,13 @@ with checked("26.18"):
         same("26.18", "la table L après 60 parties (camion 0,3, parties coupées à 12 coups), refaite à partir des coups "
              "joués", L_18, expected_table_18(spy_18.games, (512, 9)))
         verdict("26.18", max(len(g) for g in spy_18.games) <= 12, "aucune partie ne dépasse max_steps coups.",
-                "une partie a dépassé max_steps coups.")'''
+                "une partie a dépassé max_steps coups.")
+        ties_18 = GameRecorder(Flippers())
+        l_learning_18(ties_18, 40, np.random.default_rng(1), max_steps=1)   # one move per game: the table stays ~ 0
+        first_18 = {game[0][1] for game in ties_18.games}
+        verdict("26.18", len(first_18) > 1, "avec une table nulle, les ex æquo sont départagés au hasard.",
+                f"avec une table nulle, le premier coup est toujours {sorted(first_18)} : les ex æquo doivent être "
+                "départagés au hasard (tie_argmax).")'''
 
 EXPERIMENT_18 = r'''with checked("26.18"):
     results_18, tables_18 = {}, {}
@@ -794,7 +816,7 @@ PART_A = Part("A", "La boucle, les retours, Flippers et le L-learning",
               "aussi `make_env` (un environnement de Gymnasium, déjà initialisé avec sa graine), `tie_argmax` (la "
               "meilleure valeur d'une ligne, ex æquo au hasard), `moving_average`, `evaluate_flippers` (fait jouer "
               "une table, gloutonnement, sur les 506 plateaux non gagnants), `summary_flippers`, "
-              "`length_histograms`, `show_lake_policy` (une politique de FrozenLake en flèches) et `masked_greedy`. "
+              "`length_histograms`, `show_lake_policy` (une politique de FrozenLake en flèches), `masked_greedy` et `GameRecorder` (note les coups joués, pour les vérifications). "
               "`pct` et `fr` écrivent les nombres à la française.",
               given=TOOLS, exercises=[
     Ex("26.13", "📦", 1, 15, "Prendre en main gymnasium avec FrozenLake",
@@ -807,7 +829,7 @@ PART_A = Part("A", "La boucle, les retours, Flippers et le L-learning",
 - `play_actions_13(env, actions, seed=None)` : `env.reset(seed=seed)`, puis les actions dans l'ordre, jusqu'à la fin de l'épisode (`terminated` ou `truncated`) ou de la liste ; elle rend `(récompense totale, nombre de pas joués, terminated)`, ce dernier pour le dernier pas joué ;
 - `random_success_13(env, n_episodes, rng)` : `n_episodes` épisodes au hasard, chacun commencé par `env.reset()` (sans graine), avec **un** tirage `int(rng.integers(n_actions))` par pas jusqu'à la fin de l'épisode ; elle rend la part des épisodes de récompense totale positive.
 
-La vérification lit tes réponses a) et b), essaie ta fonction sur deux marches connues, puis mesure c) la réussite d'actions au hasard sur 1 000 épisodes (`np.random.default_rng(13)`) et d) la réussite de la marche ↓ ↓ → → ↓ → sur la glace glissante, rejouée avec les graines 0 à 999.
+La vérification lit tes réponses a) et b), essaie ta fonction sur trois marches connues (dont une coupée à 100 pas), puis mesure c) la réussite d'actions au hasard sur 1 000 épisodes (`np.random.default_rng(13)`) et d) la réussite de la marche ↓ ↓ → → ↓ → sur la glace glissante, rejouée avec les graines 0 à 999.
 
 Dans tes notes : pourquoi faut-il distinguer `terminated` de `truncated` (pense à la cible du Q-learning, fiche §26.6.1) ? Que dit d) de la politique « jouer toujours la même suite d'actions » quand l'environnement est stochastique ?""",
        todo=TODO_13, check=CHECK_13, solution=SOLUTION_13 + "\n\n\n" + CHECK_13, record=RECORD_13),
@@ -879,10 +901,10 @@ Dans tes notes : le livre dit que « la plupart » des plateaux se gagnent en 3 
 
 **Contrat** : `l_learning_18(env, n_games, rng, max_steps=100)` part d'une table `L = np.zeros((n_states, n_actions))`. Pour chaque partie : `env.reset(seed=int(rng.integers(2**31)))`, puis à chaque coup l'action `tie_argmax(L[state], rng)`, jusqu'à `terminated`, `truncated` ou `max_steps` coups. À la fin de la partie, chaque couple (état, action) joué reçoit son TFR, `mylearn.rl.returns_to_go(rewards)` ($\gamma = 1$), qui **remplace** la valeur de sa case, dans l'ordre des coups (un couple joué deux fois garde la valeur de son dernier coup). Elle rend `(L, lengths)` : la table et le nombre de coups de chaque partie.
 
-La vérification fait jouer ta fonction 60 parties sur un Flippers au camion fréquent, en notant chaque coup (`GameRecorder`), puis refait la table attendue à partir des coups joués : elle vérifie ta règle de mise à jour, quelle que soit la façon dont tes tirages départagent les ex æquo. La cellule suivante entraîne quatre tables (3 000 et 6 000 parties, sans et avec camion ; une quinzaine de secondes), les fait jouer sur les 506 plateaux sans camion, trace les histogrammes des longueurs et montre la partie de chaque agent depuis un plateau qui se gagne en deux coups.
+La vérification fait jouer ta fonction 60 parties sur un Flippers au camion fréquent, en notant chaque coup (`GameRecorder`), puis refait la table attendue à partir des coups joués : elle vérifie ta règle de mise à jour, quel que soit l'ordre de tes tirages ; puis que les ex æquo d'une table nulle sont bien départagés au hasard. La cellule suivante entraîne quatre tables (3 000 et 6 000 parties, sans et avec camion ; une quinzaine de secondes), les fait jouer sur les 506 plateaux sans camion, trace les histogrammes des longueurs et montre la partie de chaque agent depuis un plateau qui se gagne en deux coups.
 
 Dans tes notes : retrouves-tu l'amélioration que le livre montre entre 3 000 et 6 000 parties (fig. 26.23 à 26.26) ? Pourquoi, sans exploration, une table du L-learning cesse-t-elle presque de changer ? Le camion fait-il seulement du mal (regarde la part de plateaux joués au minimum) ? Qu'est-ce qui, dans le Q-learning, répond à chacun des défauts que tu observes ?""",
-       given=GIVEN_18, todo=TODO_18, check=CHECK_18, solution=SOLUTION_18 + "\n\n\n" + CHECK_18,
+       todo=TODO_18, check=CHECK_18, solution=SOLUTION_18 + "\n\n\n" + CHECK_18,
        after=[("code", EXPERIMENT_18)]),
 ])
 
@@ -1102,7 +1124,7 @@ def _curves_23_cell() -> str:
     data = HISTORY.get("curves23") or {}
     return ("# Four trainings on the slippery lake (tools/chapters/history_ch26.py): the moving average (100 episodes) "
             "of the\n# training returns every 50 episodes, and the success of each greedy policy over 1 000 episodes\n"
-            f"RUNS_23 = json.loads(r\"\"\"{json.dumps(data, ensure_ascii=False)}\"\"\")\n"
+            f"RUNS_23 = unpack(\"{_packed({k: v for k, v in data.items() if k != 'settings'})}\")\n"
             "fig_23, (left_23, right_23) = plt.subplots(1, 2, figsize=(10, 3.2), gridspec_kw={'width_ratios': [3, 1]})\n"
             "for letter_23, run_23 in RUNS_23['runs'].items():\n"
             "    left_23.plot(RUNS_23['episodes'], run_23['curve'], label=letter_23)\n"
@@ -1281,7 +1303,7 @@ with checked("26.24"):
 RECORD_24 = ('wb.record("26.24", "EGHI", mistakes=' + bug_letters_mistakes("EGHI", "ABCDFJKL", {
     "E": "un des diagnostics regarde la première action choisie quand toutes les valeurs sont égales",
     "G": "un des diagnostics regarde si la valeur d'un état remonte vers celui qui le précède",
-    "H": "un des diagnostics regarde la cible après un pas qui termine l'épisode",
+    "H": "un des diagnostics regarde la cible après un pas qui termine l'épisode ; telle qu'elle est écrite, la ligne (H) amorce après toute fin, même si une autre correction peut la compenser",
     "I": "un des diagnostics regarde la cible après un pas qui coupe l'épisode"}) + ")")
 
 TODO_25 = r'''def train_in_stages_25(stages, seed=0, truck_prob=0.1, **kwargs):
@@ -1396,12 +1418,12 @@ SOLUTION_27 = r'''def sweep_27(settings, n_games, seeds, epsilon=0.1):
     return results'''
 
 CHECK_27 = r'''with checked("26.27"):
-    tiny_27 = sweep_27([(0.5, 0.9, 0.0)], 20, (7,))
+    tiny_27 = sweep_27([(0.5, 0.9, 0.5)], 20, (7,))
     if returned("26.27", "sweep_27", tiny_27):
-        Q_27, _ = mylearn.rl.train_tabular(Flippers(truck_prob=0.0, reward="win"), 20, alpha=0.5, gamma=0.9,
+        Q_27, _ = mylearn.rl.train_tabular(Flippers(truck_prob=0.5, reward="win"), 20, alpha=0.5, gamma=0.9,
                                            epsilon=0.1, max_steps=100, rng=np.random.default_rng(7))
-        same("26.27", "un réglage, une graine, 20 parties : la longueur moyenne", tiny_27.get((0.5, 0.9, 0.0), [None]),
-             [evaluate_flippers(Q_27, truck_prob=0.0, seed=7)["length"].mean()])'''
+        same("26.27", "un réglage (camion 0,5), une graine, 20 parties : la longueur moyenne",
+             tiny_27.get((0.5, 0.9, 0.5), [None]), [evaluate_flippers(Q_27, truck_prob=0.5, seed=7)["length"].mean()])'''
 
 EXPERIMENT_27 = r'''with checked("26.27"):
     start_27 = time.perf_counter()
@@ -1607,13 +1629,13 @@ SOLUTION_29 = r'''def compare_29(make, n_episodes, seeds, score, **train_kwargs)
     return results'''
 
 CHECK_29 = r'''with checked("26.29"):
-    tiny_29 = compare_29(lambda: make_env("CliffWalking-v1", seed=0), 30, (5,),
+    tiny_29 = compare_29(lambda: make_env("CliffWalking-v1", seed=0), 150, (5,),
                          lambda env, Q: float(Q.sum()), alpha=0.5, gamma=0.9, epsilon=0.3, max_steps=50)
     if returned("26.29", "compare_29", tiny_29):
         R = mylearn.rl
         want_29 = {}
         for algorithm_29 in ("q_learning", "sarsa"):
-            Q_29, h_29 = R.train_tabular(make_env("CliffWalking-v1", seed=0), 30, algorithm=algorithm_29,
+            Q_29, h_29 = R.train_tabular(make_env("CliffWalking-v1", seed=0), 150, algorithm=algorithm_29,
                                          alpha=0.5, gamma=0.9, epsilon=0.3, max_steps=50, rng=np.random.default_rng(5))
             want_29[algorithm_29] = [h_29["returns"][-100:].mean(), Q_29.sum()]
         for algorithm_29 in ("q_learning", "sarsa"):
@@ -1954,7 +1976,23 @@ CHECK_33 = r'''with checked("26.33"):
         Q_replay_33, _ = train_with_replay_33(lake_33, 40, 4, alpha=0.5, gamma=0.9, epsilon=0.3, seed=33)
         verdict("26.33", not np.allclose(Q_replay_33, Q_ref_33), "avec rejeu, la table change bien.",
                 "avec replay_updates=4, la table est la même que sans rejeu : les transitions rejouées ne mettent "
-                "rien à jour.")'''
+                "rien à jour.")
+        calls_33, original_33 = [], mylearn.rl.q_learning_update
+
+        def counting_33(*args, **kwargs):
+            calls_33.append(1)
+            return original_33(*args, **kwargs)
+
+        spy_33 = GameRecorder(make_env("FrozenLake-v1", seed=0, is_slippery=True))
+        mylearn.rl.q_learning_update = counting_33               # counts the updates of train_with_replay_33
+        try:
+            train_with_replay_33(spy_33, 5, 3, alpha=0.5, gamma=0.9, epsilon=0.3, seed=34)
+        finally:
+            mylearn.rl.q_learning_update = original_33
+        steps_33 = sum(len(game) for game in spy_33.games)
+        same("26.33", f"le nombre d'appels à mylearn.rl.q_learning_update en {steps_33} pas avec replay_updates=3 : un "
+             "par pas vécu, plus 3 par pas dès que la mémoire contient 3 transitions", len(calls_33),
+             steps_33 + 3 * max(0, steps_33 - 2))'''
 
 EXPERIMENT_33 = r'''with checked("26.33"):
     SEEDS_33 = (0, 1, 2) if FAST_MODE else tuple(range(10))
@@ -2025,23 +2063,23 @@ def report_34(config, seeds, path):
     return report'''
 
 CHECK_34 = r'''with checked("26.34"):
-    tiny_config_34 = dict(CONFIG_34, is_slippery=False, n_episodes=150, eval_episodes=10)
+    tiny_config_34 = dict(CONFIG_34, n_episodes=300, eval_episodes=20)
     one_34 = run_34(tiny_config_34, 1)
     if returned("26.34", "run_34", one_34):
         R = mylearn.rl
-        env_34 = make_env("FrozenLake-v1", seed=0, is_slippery=False)
-        Q_34, _ = R.train_tabular(env_34, 150, alpha=0.1, gamma=0.99, epsilon=epsilon_schedule_22(150, 1.0, 0.05, 0.8),
+        env_34 = make_env("FrozenLake-v1", seed=0, is_slippery=True)
+        Q_34, _ = R.train_tabular(env_34, 300, alpha=0.1, gamma=0.99, epsilon=epsilon_schedule_22(300, 1.0, 0.05, 0.8),
                                   max_steps=100, rng=np.random.default_rng(1))
-        same("26.34", "run_34 sur un petit réglage (lac sans glissade, 150 épisodes)", one_34, R.evaluate_policy(
-            env_34, R.greedy_policy(Q_34), 10, max_steps=100, rng=np.random.default_rng(34))["mean_return"])
+        same("26.34", "run_34 sur un petit réglage (300 épisodes, 20 d'évaluation)", one_34, R.evaluate_policy(
+            env_34, R.greedy_policy(Q_34), 20, max_steps=100, rng=np.random.default_rng(34))["mean_return"])
         path_34 = WORK_DIR / "rep_34test.json"
-        report_34(tiny_config_34, (1, 2), path_34)
+        report_34(tiny_config_34, (1, 2, 3), path_34)
         saved_34 = json.loads(path_34.read_text(encoding="utf-8"))
         verdict("26.34", sorted(saved_34) == ["ci95", "config", "mean", "results", "seeds"] and saved_34["config"] ==
                 tiny_config_34, "le fichier JSON contient la configuration complète, les graines et les résultats.",
                 f"le fichier JSON doit avoir les clés ci95, config, mean, results, seeds, reçu {sorted(saved_34)}.")
         same("26.34", "les résultats enregistrés, graine par graine", saved_34["results"],
-             [one_34, run_34(tiny_config_34, 2)])
+             [one_34, run_34(tiny_config_34, 2), run_34(tiny_config_34, 3)])
         same("26.34", "l'intervalle bootstrap", saved_34["ci95"],
              list(mylearn.stats.bootstrap_ci(saved_34["results"], confidence=0.95, n_boot=2000,
                                              rng=np.random.default_rng(0))))'''
@@ -2112,7 +2150,7 @@ Dans tes notes : quelle récompense apprend le plus vite à jouer court, et pour
 
 **Contrat** : `train_with_replay_33(env, n_episodes, replay_updates, *, alpha=0.1, gamma=0.99, epsilon=0.1, capacity=10_000, max_steps=100, seed=0)` : `rng = np.random.default_rng(seed)`, une mémoire `mylearn.rl.ReplayBuffer(capacity, random_state=seed)`, une table nulle. Pour chaque épisode : `epsilon` (une constante ou une fonction de l'épisode), `env.reset(seed=int(rng.integers(2**31)))` ; à chaque pas : l'action `mylearn.bandit.epsilon_greedy_action(Q[state], eps, rng)`, `env.step`, **une** `mylearn.rl.q_learning_update` sur cette transition, `push` dans la mémoire, puis, si `replay_updates > 0` et que la mémoire contient au moins `replay_updates` transitions, un mini-batch `sample(replay_updates)` et une mise à jour par transition du mini-batch ; arrêt à `terminated`, `truncated` ou `max_steps` pas. Elle rend `(Q, returns)`.
 
-Sans rejeu, ta fonction doit refaire **exactement** ta `train_tabular` : la vérification le contrôle, puis s'assure que le rejeu change la table. La cellule suivante entraîne 500 épisodes sur le lac glissant, sans rejeu et avec 8 mises à jour rejouées par pas, sur 3 graines en mode rapide (une dizaine de secondes).
+Sans rejeu, ta fonction doit refaire **exactement** ta `train_tabular` : la vérification le contrôle, s'assure que le rejeu change la table, puis compte tes appels à `mylearn.rl.q_learning_update` (appelle-la par `mylearn.rl`, pas par un `import` qui en garderait une copie). La cellule suivante entraîne 500 épisodes sur le lac glissant, sans rejeu et avec 8 mises à jour rejouées par pas, sur 3 graines en mode rapide (une dizaine de secondes).
 
 Dans tes notes : combien de mises à jour chaque version fait-elle en tout, et le gain vient-il seulement de ce nombre (que donnerait 9 fois plus d'épisodes sans rejeu) ? Pourquoi le rejeu suppose-t-il une méthode **hors politique** comme le Q-learning ? Qu'est-ce que la mémoire de rejeu de DQN apporte en plus, qu'une table n'a pas besoin (fiche, 💼 26.E4) ?""",
        todo=TODO_33, check=CHECK_33, solution=SOLUTION_33 + "\n\n\n" + CHECK_33, after=[("code", EXPERIMENT_33)]),
@@ -2376,12 +2414,14 @@ EXPERIMENT_37 = r'''with checked("26.37"):
     verdict("26.37", losses_37 == 0, "aucune défaite contre un joueur parfait, dans les deux camps.",
             f"{losses_37} défaites contre minimax : plus de parties, ou un ε plus grand ?")'''
 
-GIVEN_38 = r'''# The challenge: the mean of 100 evaluation episodes (200 steps at most) must reach 195, on public seeds, then on
-# hidden ones; the training must stay within MAX_SECONDS_38 seconds on a CPU
-GOAL_38 = 195
+GIVEN_38 = r'''# The challenge: the mean of 100 evaluation episodes of CartPole-v1 (500 steps at most) must reach 475, on public
+# seeds, then on hidden ones; the training must stay within MAX_SECONDS_38 seconds on a CPU
+GOAL_38 = 475
+EPISODE_STEPS_38 = 500
 MAX_SECONDS_38 = 180
 PUBLIC_SEED_38, HIDDEN_SEED_38 = 38, 3838
-print(f"objectif : au moins {GOAL_38} pas en moyenne sur 100 épisodes · au plus {MAX_SECONDS_38} s d'entraînement")'''
+print(f"objectif : au moins {GOAL_38} pas en moyenne sur 100 épisodes de {EPISODE_STEPS_38} pas au plus · au plus "
+      f"{MAX_SECONDS_38} s d'entraînement")'''
 
 TODO_38 = r'''def make_cartpole_38():
     """Your CartPole-v1 with DISCRETE states (gym.make("CartPole-v1") wrapped, for example, by your Discretize_36,
@@ -2397,13 +2437,14 @@ def train_38(env):
 SOLUTION_38 = r'''def make_cartpole_38():
     """Your CartPole-v1 with DISCRETE states (gym.make("CartPole-v1") wrapped, for example, by your Discretize_36,
     with the intervals of your choice)."""
-    return Discretize_36(gym.make("CartPole-v1"), EDGES_36)
+    edges = [[], [], [-0.05, 0.0, 0.05], [-0.5, 0.5]]   # the angle (4 intervals) and its speed (3) only: 12 states
+    return Discretize_36(gym.make("CartPole-v1"), edges)
 
 
 def train_38(env):
     """Train a table on env (any tabular method: mylearn.rl.train_tabular, your own loop...) within MAX_SECONDS_38
     seconds, and return it: an array (n_states, n_actions) whose greedy policy will be evaluated."""
-    n = 1500
+    n = 800
     Q, _ = mylearn.rl.train_tabular(env, n, alpha=0.2, gamma=0.99, epsilon=epsilon_schedule_22(n, 1.0, 0.01, 0.5),
                                     max_steps=200, rng=np.random.default_rng(2638))
     return Q'''
@@ -2416,7 +2457,7 @@ CHECK_38 = r'''with checked("26.38"):
         seconds_38 = time.perf_counter() - start_38
         if returned("26.38", "train_38", Q_38):
             policy_38 = mylearn.rl.greedy_policy(Q_38)
-            public_38 = mylearn.rl.evaluate_policy(make_cartpole_38(), policy_38, 100, max_steps=200,
+            public_38 = mylearn.rl.evaluate_policy(make_cartpole_38(), policy_38, 100, max_steps=EPISODE_STEPS_38,
                                                    rng=np.random.default_rng(PUBLIC_SEED_38))["mean_length"]
             print(f"entraînement {seconds_38:.0f} s · {Q_38.shape[0]} états · moyenne sur les graines publiques "
                   f"{fr(public_38, 1)} pas")
@@ -2426,7 +2467,7 @@ CHECK_38 = r'''with checked("26.38"):
                 print(f"❌ Ex 26.38 : il faut au moins {GOAL_38} pas sur les graines publiques avant de révéler le test.")
             else:
                 REVEALED_38 = globals().setdefault("REVEALED_38", mylearn.rl.evaluate_policy(
-                    make_cartpole_38(), policy_38, 100, max_steps=200,
+                    make_cartpole_38(), policy_38, 100, max_steps=EPISODE_STEPS_38,
                     rng=np.random.default_rng(HIDDEN_SEED_38))["mean_length"])
                 print(f"test (révélé une fois par session ; un nouvel essai affiche la même valeur) : "
                       f"{fr(REVEALED_38, 1)} pas")
@@ -2477,18 +2518,18 @@ Dans tes notes : quel état terminal partage-t-il sa case avec des états qui ne
 
 La vérification contrôle la forme et les valeurs de ta table, puis qu'un agent entraîné 10 000 parties complète une ligne quand il le peut (quelques secondes). La cellule suivante joue 50 000 parties (une dizaine de secondes ; 200 000 en mode complet), puis 100 parties dans chaque camp contre minimax. L'objectif : **aucune défaite**.
 
-Dans tes notes : pourquoi le signe moins dans la cible ? Pourquoi les ronds sont-ils plus difficiles à apprendre que les croix ? Combien des 19 683 codes l'agent a-t-il visités, et pourquoi n'a-t-il pas besoin des autres ? Qu'est-ce qui, au go, empêche de garder cette table, et que fait AlphaGo Zero à la place ?""",
+Dans tes notes : pourquoi le signe moins dans la cible ? Pourquoi les ronds sont-ils plus difficiles à apprendre que les croix ? Quelle part des cases légales a reçu une valeur, et pourquoi l'agent n'a-t-il pas besoin des autres ? Qu'est-ce qui, au go, empêche de garder cette table, et que fait AlphaGo Zero à la place ?""",
        given=GIVEN_37, todo=TODO_37, check=CHECK_37, solution=SOLUTION_37 + "\n\n\n" + CHECK_37,
        after=[("code", EXPERIMENT_37)]),
 
-    Ex("26.38", "🏆", 4, 120, "Défi CartPole tabulaire : tenir 195 pas en moyenne",
-       "régler un découpage de l'état et un entraînement tabulaire pour tenir CartPole 195 pas en moyenne.",
+    Ex("26.38", "🏆", 4, 120, "Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500",
+       "régler un découpage de l'état et un entraînement tabulaire pour tenir CartPole-v1 475 pas en moyenne.",
        "Ex 26.36 · Ex 26.22 · Ex 26.34", thread="CartPole", tracks="C",
-       body=r"""Le défi : une politique gloutonne tabulaire qui tient le bâton **au moins 195 pas en moyenne sur 100 épisodes**, chaque épisode étant coupé à 200 pas (le seuil historique de CartPole-v0 ; pour CartPole-v1, coupé à 500 pas, le seuil officiel est 475). L'entraînement doit tenir en **3 minutes** de CPU. Tu choisis tout : le découpage de l'état (`make_cartpole_38`), l'algorithme, $\alpha$, $\gamma$, le calendrier de $\varepsilon$, le nombre d'épisodes (`train_38`).
+       body=r"""Le défi : une politique gloutonne tabulaire qui tient le bâton **au moins 475 pas en moyenne sur 100 épisodes** de CartPole-v1, chaque épisode étant coupé à 500 pas (le seuil officiel de CartPole-v1 ; CartPole-v0 coupait à 200 pas et demandait 195, ce que ta politique de 26.36 fait déjà). L'entraînement doit tenir en **3 minutes** de CPU ; il peut couper ses propres épisodes plus tôt. Tu choisis tout : le découpage de l'état (`make_cartpole_38`), l'algorithme, $\alpha$, $\gamma$, le calendrier de $\varepsilon$, le nombre d'épisodes (`train_38`).
 
-La vérification mesure la durée de ton entraînement, évalue ta politique sur 100 épisodes de graines publiques, puis, si tu atteins 195, sur 100 épisodes de graines **cachées**, révélés une fois par session : un nouvel essai affiche la même valeur, pour qu'on ne règle pas le modèle sur le test.
+La vérification mesure la durée de ton entraînement, évalue ta politique sur 100 épisodes de graines publiques, puis, si tu atteins 475, sur 100 épisodes de graines **cachées**, révélés une fois par session : un nouvel essai affiche la même valeur, pour qu'on ne règle pas le modèle sur le test.
 
-Dans tes notes : quels réglages ont compté le plus ? Ton agent tient-il aussi bien sur 500 pas (CartPole-v1) ? Sur combien de graines d'entraînement ta recette réussit-elle (26.34) ?""",
+Dans tes notes : quels réglages ont compté le plus ? Ta politique de 26.36 tient-elle 500 pas, et pourquoi une table plus fine n'est-elle pas forcément meilleure ? Sur combien de graines d'entraînement ta recette réussit-elle (26.34) ?""",
        given=GIVEN_38, todo=TODO_38, check=CHECK_38, solution=SOLUTION_38 + "\n\n\n" + CHECK_38),
 ])
 

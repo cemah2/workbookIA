@@ -1221,3 +1221,50 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 25.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (25 cartes)
 <!-- wb:end 25 -->
+
+<!-- wb:section 26 -->
+## 26 — Apprentissage par renforcement ⏱️ 29 h
+
+- [ ] 26.Q1–Q12 🧠 Quiz (12 questions, 37 min)
+- [ ] 26.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] 26.1 ✏️ Retours total et actualisé d'une partie de six coups ★ 10 min
+- [ ] 26.2 ✏️ Taille des tables : de Flippers au Go ★ 10 min
+- [ ] 26.3 ✏️ Une mise à jour de Q-learning à la main ★ 10 min
+- [ ] 26.4 ✏️ La même transition vue par SARSA ★ 10 min
+- [ ] 26.5 ✏️ Probabilités d'action : ε-greedy (standard et version du livre) et softmax ★★ 20 min
+- [ ] 26.6 ✏️ Regarder la valeur remonter une chaîne d'états ★★ 20 min
+- [ ] 26.7 ∂ Somme géométrique et horizon effectif de γ ★★ 20 min
+- [ ] 26.8 ∂ Équation de Bellman : le point fixe que vise le Q-learning ★★★ 35 min
+- [ ] 26.9 🧮 Mémoire d'une table Q : morpion 4×4, 5×5 et Go ★★ 15 min
+- [ ] 26.10 🗣️ Attribution du crédit et exploration expliquées en cinq lignes ★ 10 min
+- [ ] 26.11 ⚖️ Quand l'agent optimise la mauvaise récompense ★★ 20 min
+- [ ] 26.12 📄 Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning » ★★★ 45 min
+- [ ] 26.13 📦 Prendre en main gymnasium avec FrozenLake ★ 15 min
+- [ ] 26.14 🔨 Retours actualisés et retours à venir ★ 15 min
+- [ ] 26.15 🎨 Reproduire les courbes d'actualisation (fig. 26.13-26.14) ★ 15 min
+- [ ] 26.16 🔮 Prédire l'effet du camion sur la table L ★ 10 min
+- [ ] 26.17 🔬 Flippers : la longueur optimale de chaque partie par recherche exhaustive ★★ 25 min
+- [ ] 26.18 🔬 L-learning sur Flippers, sans puis avec camion ★★★ 40 min
+- [ ] 26.19 🔨 Politiques gloutonne et softmax (ε-greedy importée du ch. 11) ★★ 20 min
+- [ ] 26.20 🔨 Mises à jour de Q-learning et de SARSA, états terminaux compris ★★ 25 min
+- [ ] 26.21 🔨 La boucle d'entraînement tabulaire et l'évaluation d'une politique ★★★ 45 min
+- [ ] 26.22 📦 Q-learning sur FrozenLake, glissant ou non ★★ 25 min
+- [ ] 26.23 📈 Lire des courbes d'apprentissage RL bruitées ★★ 15 min
+- [ ] 26.24 🐛 L'agent qui n'apprenait rien ★★ 25 min
+- [ ] 26.25 🔬 Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties ★★★ 40 min
+- [ ] 26.26 🔨 Itération sur les valeurs : la référence quand le modèle est connu ★★★ 40 min
+- [ ] 26.27 🔬 α, γ, ε : balayage d'hyperparamètres sur Flippers bruité ★★★ 45 min
+- [ ] 26.28 🔮 Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise ★ 10 min
+- [ ] 26.29 🔬 Q-learning contre SARSA sur Flippers et CliffWalking ★★★ 45 min
+- [ ] 26.30 🎨 Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) ★★★ 35 min
+- [ ] 26.31 🔨 Une mémoire de rejeu (replay buffer) ★★ 20 min
+- [ ] 26.32 🔬 Concevoir la récompense : finale, pénalité par coup ou façonnée ★★ 30 min
+- [ ] 26.33 🔬 Rejouer l'expérience pour apprendre avec moins d'épisodes ★★★ 35 min
+- [ ] 26.34 🛠️ Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle ★★ 25 min
+- [ ] 26.35 📦 Morpion contre un adversaire aléatoire : masque d'actions ou pénalité ★★★ 45 min
+- [ ] 26.36 📦 CartPole : discrétiser un état continu pour un Q-learning tabulaire ★★★ 45 min
+- [ ] 26.37 🔬 Auto-apprentissage au morpion : l'agent joue les deux camps ★★★★ 90 min
+- [ ] 26.38 🏆 Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 ★★★★ 120 min
+- [ ] 26.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (30 cartes)
+<!-- wb:end 26 -->

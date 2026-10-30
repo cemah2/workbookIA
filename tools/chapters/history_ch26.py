@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Precompute the multi-seed experiments of chapter 26 (used by Claude).
 
-    python tools/chapters/history_ch26.py                  # everything (about 5 min on a CPU)
+    python tools/chapters/history_ch26.py                  # everything (about 2 min on a CPU)
     python tools/chapters/history_ch26.py --only curves23  # one entry: l16, curves23 or calib
 
 Writes tools/chapters/history_ch26.json, which build_ch26.py reads:
@@ -11,7 +11,7 @@ Writes tools/chapters/history_ch26.json, which build_ch26.py reads:
 - "curves23": the four FrozenLake trainings of 📈 26.23 (slippery lake, 4 000 episodes, seed 0) under shuffled
   letters: the moving average of the training returns and the success of the greedy policy (1 000 episodes);
 - "calib": the outcomes of the predictions 🔮 26.28 over eight seeds (the notebook uses one), and the reference of the
-  challenge 🏆 26.38 over three seeds.
+  challenge 🏆 26.38 over three training seeds (mean length over 100 episodes of 500 steps, public and hidden seeds).
 The code of the notebook is reused as is: the cells of build_ch26.py are executed in one namespace.
 """
 
@@ -118,7 +118,7 @@ def calib(ns) -> dict:
         Q = ns["train_38"](ns["make_cartpole_38"]())
         seconds = time.perf_counter() - start
         policy = rl.greedy_policy(Q)
-        scores = [rl.evaluate_policy(ns["make_cartpole_38"](), policy, 100, max_steps=200,
+        scores = [rl.evaluate_policy(ns["make_cartpole_38"](), policy, 100, max_steps=500,
                                      rng=np.random.default_rng(s))["mean_length"] for s in (38, 3838)]
         out["challenge38"].append({"seed": seed, "seconds": round(seconds, 1), "public": scores[0], "hidden": scores[1]})
         print(f"  calib challenge38 {out['challenge38'][-1]}", flush=True)

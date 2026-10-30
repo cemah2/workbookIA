@@ -1196,27 +1196,25 @@ if winner[after] == 1:
 
 </details>
 
-### Ex 26.38 — Défi CartPole tabulaire : tenir 195 pas en moyenne
+### Ex 26.38 — Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500
 
 <details><summary>Indice 1</summary>
 
-Pars de ton 26.36 : il tient déjà longtemps. Que faudrait-il pour qu'il tienne presque toujours 200 pas ?
+Mesure d'abord ta politique de 26.36 sur des épisodes de 500 pas : où en est-elle ? Puis demande-toi ce qui limite une table : sa taille, ou le nombre de fois qu'on visite chaque case ?
 
 </details>
 <details><summary>Indice 2</summary>
 
-Les leviers : plus d'épisodes (le temps le permet : 3 minutes), un $\varepsilon$ qui finit très bas, un $\alpha$ un peu plus grand que 0,1, un découpage fin de l'angle et de sa vitesse, et des épisodes d'entraînement coupés à 200 pas (ils coûtent moins cher que 500).
+Chaque case de la table doit être visitée souvent pour que sa valeur soit juste : avec 144 cases et quelques centaines d'épisodes, beaucoup restent mal estimées. Les leviers : **moins** de cases (ne garder que les variables qui décident de la chute, avec peu d'intervalles), un $arepsilon$ qui finit très bas, et des épisodes d'entraînement coupés à 200 pas (moins chers, et une politique qui tient 200 pas en tient souvent 500).
 
 </details>
 <details><summary>Indice 3</summary>
 
 ```python
-def train_38(env):
-    n = ...                                # more episodes than in 26.36: you have 3 minutes
-    Q, _ = mylearn.rl.train_tabular(env, n, alpha=..., gamma=0.99, epsilon=epsilon_schedule_22(n, 1.0, ..., ...),
-                                    max_steps=200, rng=np.random.default_rng(...))
-    return Q
+def make_cartpole_38():
+    edges = [[], [], [...], [...]]         # ignore the cart; a few bounds for the angle and its speed only
+    return Discretize_36(gym.make("CartPole-v1"), edges)
 ```
-Pars des réglages de 26.36 et change un levier à la fois. Mesure ensuite sur plusieurs graines d'entraînement : une recette qui ne réussit qu'avec une graine est fragile.
+Garde l'entraînement de 26.36, change un levier à la fois, et mesure ensuite sur plusieurs graines d'entraînement : une recette qui ne réussit qu'avec une graine est fragile.
 
 </details>

@@ -184,7 +184,7 @@ class Flippers(gym.Env):
             truck = True
         self.moves += 1
         terminated = state in self.winning
-        reward = -self.step_penalty
+        reward = 0.0 - self.step_penalty           # 0.0, not -0.0, without a penalty
         if terminated:
             reward += 1.0 if self.reward_mode == "win" else 1.0 / math.sqrt(self.moves)
         if self.reward_mode == "shaped":
