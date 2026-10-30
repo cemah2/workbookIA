@@ -76,7 +76,7 @@ Le §28.3 donne les deux changements du livre, puis les ingrédients de la versi
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le deep dream part d'une photo (A) et combine plusieurs couches pondérées (B) ; reste à décider pour (C) (que dit tout le chapitre des poids ?) et pour (D) (relis le paragraphe sur la version de Google). Pour b), que fait la montée de gradient aux motifs que le réseau détecte déjà ? Pour c), d'où vient le nom ? Pour d), quel outil limite une mise à jour à une zone de l'image ? Pour e), compare les formules du §28.2.2 et du §28.4.2.
+a) Le deep dream part d'une photo (A) et combine plusieurs couches pondérées (B) ; reste à décider pour (C) (que dit tout le chapitre des poids ?) et pour (D) (le rêve cherche-t-il à renforcer ou à effacer ce que voit le réseau ?). Pour b), que fait la montée de gradient aux motifs que le réseau détecte déjà ? Pour c), d'où vient le nom ? Pour d), quel outil limite une mise à jour à une zone de l'image ? Pour e), compare les formules du §28.2.2 et du §28.4.2.
 
 </details>
 
@@ -336,7 +336,7 @@ $\frac{\partial F_{ik}}{\partial F_{ab}} = \delta_{ia}\delta_{kb}$. Dérive le p
 </details>
 <details><summary>Indice 3</summary>
 
-1. $\delta_{ia} F_{jb} + F_{ib}\,\delta_{ja}$. 2. $\frac{\partial E}{\partial F_{ab}} = \sum_{i,j} 2 D_{ij} \frac{\partial D_{ij}}{\partial F_{ab}}$ ; chaque $\delta$ fait disparaître une somme ; reconnais deux produits matriciels, puis utilise $D^\top = D$. 3. $\bigl\lVert \frac{1}{N'} F F^\top - G(\mathbf{s}) \bigr\rVert_F^2 = \frac{1}{N'^2}\bigl\lVert F F^\top - N' G(\mathbf{s}) \bigr\rVert_F^2$ : applique 2 avec $S = N' G(\mathbf{s})$. 4. Reprends la matrice d'écart de l'Ex 28.4 d). 5. Que vaut un produit par $F = 0$ ? 6. Comment le gradient passe-t-il des activations aux pixels ?
+1. $\delta_{ia} F_{jb} + F_{ib}\,\delta_{ja}$. 2. $\frac{\partial E}{\partial F_{ab}} = \sum_{i,j} 2 D_{ij} \frac{\partial D_{ij}}{\partial F_{ab}}$ ; chaque $\delta$ fait disparaître une somme ; reconnais deux produits matriciels, puis utilise $D^\top = D$. 3. $\bigl\lVert \frac{1}{N'} F F^\top - G(\mathbf{s}) \bigr\rVert_F^2 = \frac{1}{N'^2}\bigl\lVert F F^\top - N' G(\mathbf{s}) \bigr\rVert_F^2$ : applique 2 avec $S = N' G(\mathbf{s})$. 4. Reprends la matrice d'écart de l'Ex 28.4 d). 5. Que vaut un produit par $F = 0$ ? Que vaut la dérivée d'une ReLU là où son entrée est négative ? Quels filtres une image uniforme laisse-t-elle éteints ? 6. Comment le gradient passe-t-il des activations aux pixels ?
 
 </details>
 

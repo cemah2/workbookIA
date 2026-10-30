@@ -49616,13 +49616,13 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q4a": {
-      "hash": "1a3e9034d54b7808a439628b39205ff83d0104edd966ebc16d29f894b83698ce",
+      "hash": "05c5233c246d40fc6bf3f5661042da4adcccf1677bfeb3cb6a6398029b751626",
       "kind": "str",
       "mistakes": {
-        "05c5233c246d40fc6bf3f5661042da4adcccf1677bfeb3cb6a6398029b751626": "il manque les octaves de la version de Google (fiche §28.3)",
-        "17ba345cea43e2e4fdd106eefca59672ea098ac40bc4ccbce5cceb68384c6f69": "il manque la combinaison de plusieurs couches",
-        "5ca56c4f1c2f51579c412ee6d7ea7d5f17f79c4219de6939d4cb0a8c26019297": "il manque le changement d'image de départ",
-        "5ece0c15a5e10ea049fa1c1b15790156150f1e8b41759898dcb5657139c145a5": "les poids du réseau ne changent jamais dans ce chapitre"
+        "1a3e9034d54b7808a439628b39205ff83d0104edd966ebc16d29f894b83698ce": "le deep dream fait monter les activations, comme la visualisation",
+        "24fb8bc5667d52efe73e8f2981646f3a3207e04c28b8cd855ee2921d3b087f51": "il manque la combinaison de plusieurs couches",
+        "54b4347932a534e9c19e197b694b8861b934a26e8587273eaf3998874f61a232": "les poids du réseau ne changent jamais dans ce chapitre",
+        "d258cc819d18fc47694f0376c6ec3f54eb2d73a7e99269a60fdeb1d1bc98f04f": "il manque le changement d'image de départ"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49653,10 +49653,10 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q4e": {
-      "hash": "68b80cd1a0d24c465649fb04e77b3cd0e8852b3fa45f6f0fe0de7c93b9adb52c",
+      "hash": "5c5b8c155b32c30786c3d74c6b1a2c34ba5e84c4b5bc5393c0079efc7997df22",
       "kind": "bool",
       "mistakes": {
-        "5c5b8c155b32c30786c3d74c6b1a2c34ba5e84c4b5bc5393c0079efc7997df22": "le transfert de style cherche à ressembler à des cibles : il minimise des écarts"
+        "68b80cd1a0d24c465649fb04e77b3cd0e8852b3fa45f6f0fe0de7c93b9adb52c": "le transfert de style cherche à ressembler à des cibles : il fait baisser des écarts"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49670,10 +49670,10 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q5b": {
-      "hash": "8c9eee895f62901ce013679ea8e96215c008aa420e730af3ef4363ccf3eb406a",
+      "hash": "03b1b8e310706fb5901b7340f1fc4a6acc2cc4752ee7b2c5a7462f0b899b5fa1",
       "kind": "bool",
       "mistakes": {
-        "03b1b8e310706fb5901b7340f1fc4a6acc2cc4752ee7b2c5a7462f0b899b5fa1": "plus d'une centaine des 1 000 classes sont des races de chiens"
+        "8c9eee895f62901ce013679ea8e96215c008aa420e730af3ef4363ccf3eb406a": "plus d'une centaine des 1 000 classes sont des races de chiens"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49782,10 +49782,10 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q7e": {
-      "hash": "744444bcbf1ee478cb08629ec77303f517977e98195671ca463f0c51f6427d6d",
+      "hash": "c3b2866b982b65aa0f38a3885865670f55c922f62481e9969b69d12e7c381f20",
       "kind": "bool",
       "mistakes": {
-        "c3b2866b982b65aa0f38a3885865670f55c922f62481e9969b69d12e7c381f20": "relis l'encadré ⚠️ « personne ne sait vraiment » du §28.4.6"
+        "744444bcbf1ee478cb08629ec77303f517977e98195671ca463f0c51f6427d6d": "relis l'encadré ⚠️ « personne ne sait vraiment » du §28.4.6 : Li et coll. nomment cette mesure"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49867,10 +49867,10 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q9e": {
-      "hash": "7777e97df2d87fc2e6722a7b3348fb7644f0f331b3ed7c5c7f7e7eaa2d43a5d5",
+      "hash": "995cd6cdbe956c2c426aebab8b56da7fa5f369399e7007e32810021c710a7c51",
       "kind": "bool",
       "mistakes": {
-        "995cd6cdbe956c2c426aebab8b56da7fa5f369399e7007e32810021c710a7c51": "partir de la photo, c'est partir d'une image dont le contenu est déjà juste"
+        "7777e97df2d87fc2e6722a7b3348fb7644f0f331b3ed7c5c7f7e7eaa2d43a5d5": "partir de la photo, c'est partir d'une image dont le contenu est déjà juste : c'est elle qui converge vite"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
@@ -49883,10 +49883,10 @@
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },
     "28.Q10b": {
-      "hash": "68a651408b7e09fe566099f57e33e3788123d21e180ab6445dce7b74b036084d",
+      "hash": "64166dbb3ec22cea47544b2d78493e0dc6f545427b88640a3d494a82281bf72a",
       "kind": "bool",
       "mistakes": {
-        "64166dbb3ec22cea47544b2d78493e0dc6f545427b88640a3d494a82281bf72a": "le glouton ne tire rien au hasard : même entrée, même sortie"
+        "68a651408b7e09fe566099f57e33e3788123d21e180ab6445dce7b74b036084d": "le glouton ne tire rien au hasard : même entrée, même sortie"
       },
       "source": "chapitres/ch28_creatif/05_solutions.ipynb"
     },

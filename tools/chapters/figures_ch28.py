@@ -180,8 +180,8 @@ def figure_tv() -> None:
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_title(f"{title}\n$L_{{TV}}$ = {fr(_tv(img), 0)}", fontsize=10, color=INK)
-    fig.text(0.5, -0.02, "photo libre fournie avec scikit-learn (flower.jpg), en niveaux de gris, 128 × 128 pixels "
-             "dans [0, 1]", ha="center", fontsize=8.5, color=MUTED)
+    fig.text(0.5, -0.02, "photo flower.jpg fournie avec scikit-learn (Flickr, vultilion, licence CC BY 2.0), recadrée, en "
+             "niveaux de gris, 128 × 128 pixels dans [0, 1]", ha="center", fontsize=8.5, color=MUTED)
     save(fig, "variation_totale.png")
 
 

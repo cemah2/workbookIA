@@ -870,6 +870,23 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | precision et recall génératifs | precision and recall for generative models | fidélité (part des échantillons proches de vraies données) et diversité (part des vraies données approchées par un échantillon) | 27 |
 | trace | trace | somme des éléments diagonaux d'une matrice carrée, égale à la somme de ses valeurs propres | 27 |
 | deepfake | deepfake | image, son ou vidéo truqués par un modèle génératif pour faire dire ou faire à une personne ce qu'elle n'a pas dit ou fait | 27 |
+| montée de gradient sur l'entrée | gradient ascent on the input | modifier les pixels d'une image, réseau gelé, pour faire monter une activation : $\mathbf{x} \leftarrow \mathbf{x} + \eta \nabla_{\mathbf{x}} a(\mathbf{x})$ | 28 |
+| maximisation d'activation | activation maximization | chercher l'image qui excite le plus un filtre, une couche ou une classe, par montée de gradient sur l'entrée | 28 |
+| visualisation de features | feature visualization | images obtenues par maximisation d'activation, régularisées (décalages, flou, octaves) pour être lisibles | 28 |
+| octave | octave | une des échelles successives d'une image (réduite puis agrandie) sur lesquelles on optimise, des grandes structures aux détails | 28 |
+| deep dream | deep dream, inceptionism | montée de gradient sur une photo qui fait monter une somme pondérée des activations de plusieurs couches : le réseau amplifie ce qu'il croit voir | 28 |
+| transfert de style neuronal | neural style transfer | optimiser une image pour qu'elle ait le contenu d'une photo et le style d'un tableau (L. Gatys et coll., 2015) | 28 |
+| image de contenu, référence de style, image générée | content image, style reference, generated image | les trois images du transfert de style ; le livre appelle la première « image de base » (*base image*) ; seule la troisième est optimisée | 28 |
+| matrice de Gram | Gram matrix | $G = \frac{1}{CHW} F F^\top$ : produits scalaires des cartes d'activation mises à plat ; mesure quels filtres s'activent ensemble, en oubliant la position | 28 |
+| loss de contenu | content loss | somme des carrés des écarts entre les activations de l'image générée et celles de la photo, à une couche | 28 |
+| loss de style | style loss | somme pondérée, sur plusieurs couches, des carrés des écarts entre matrices de Gram | 28 |
+| loss perceptuelle | perceptual loss | loss calculée sur les features d'un réseau pré-entraîné plutôt que sur les pixels (transfert de style, super-résolution, LPIPS) | 28 |
+| norme de Frobenius | Frobenius norm | $\lVert M \rVert_F = \sqrt{\sum_{i,j} M_{ij}^2}$, la norme euclidienne de tous les coefficients d'une matrice | 28 |
+| variation totale | total variation | somme des (carrés des) écarts entre pixels voisins ; la pénaliser lisse une image | 28 |
+| décodage glouton | greedy decoding | choisir à chaque pas le token le plus probable : déterministe, et sujet aux boucles | 28 |
+| AdaIN | adaptive instance normalization | aligner la moyenne et l'écart-type de chaque canal des features du contenu sur ceux du style : un transfert de style en une passe (X. Huang et S. Belongie, 2017) | 28 |
+| domaine public | public domain | statut d'une œuvre dont les droits patrimoniaux ont expiré (dans l'UE, le 1er janvier qui suit les 70 ans de la mort de l'auteur) | 28 |
+| fouille de textes et de données | text and data mining (TDM) | analyse automatisée de contenus ; exception au droit d'auteur dans l'UE (directive 2019/790, art. 4), sauf opposition du titulaire (*opt-out*) | 28 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

@@ -295,6 +295,13 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des images générées toutes semblables, ou presque que des 1 | effondrement de mode | compter les classes ou les modes couverts ; écart-type par mini-batch, WGAN-GP (🔬 27.24) |
 | des images générées qui changent selon la taille du mini-batch | générateur en mode `train()` : les batchnorms utilisent les statistiques du mini-batch | `G.eval()` et `torch.no_grad()` pour générer (fiche 27) |
 | un FID « meilleur » que celui d'un article | moins d'images générées, un autre extracteur ou une autre référence | même nombre d'images, mêmes features, même référence (📦 27.23) |
+| une visualisation de filtre qui n'est qu'un bruit coloré | montée de gradient brute, sans régularisation | décalages aléatoires, flou, variation totale, octaves (fiche 28, §28.2.2) |
+| l'image ne change presque pas, mais la loss baisse | l'optimiseur reçoit `model.parameters()` : ce sont les poids qui bougent | `Adam([x])`, poids gelés par `requires_grad_(False)` (🐛 28.21) |
+| un transfert de style délavé, ou des couleurs fausses | l'image passe dans le réseau sans la normalisation d'ImageNet | `model((x - mean) / std)`, avec les valeurs de `weights.transforms()` (fiche 28, §28.2.2) |
+| une image générée grise ou saturée | pixels jamais ramenés dans la plage valide | `x.clamp_(0, 1)` sous `torch.no_grad()` après chaque pas (🐛 28.21) |
+| un transfert de style qui perd toute la scène | matrices de Gram non normalisées : la loss de style vaut des milliards et écrase le contenu | diviser par $CHW$ ; afficher la valeur de chaque terme pondéré (✏️ 28.4, 📈 28.20) |
+| des activations enregistrées deux fois, ou déjà passées par la ReLU | hooks empilés en relançant une cellule ; ReLU `inplace=True` après la convolution | garder les `handle` et les retirer ; accrocher le hook à la ReLU ou désactiver `inplace` (fiche 28, §28.2.1) |
+| un texte généré qui répète la même phrase | décodage glouton | température, top-k ou top-p ; juger le modèle à sa perplexité (fiche 28, §28.5) |
 
 ## Erreurs de raisonnement (ML)
 

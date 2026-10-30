@@ -20,7 +20,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 
 a) Vrai ou faux : dans les expériences de ce chapitre, les poids de VGG16 changent à chaque pas d'optimisation.
 b) Combien VGG16 a-t-il de couches à poids (convolutions et couches denses) ?
-c) Pourquoi partir d'un réseau entraîné sur ImageNet ? (A) c'est le réseau le plus rapide qui existe ; (B) ses filtres détectent déjà une grande variété de motifs, des traits aux parties d'objets ; (C) il a été entraîné sur des tableaux de maîtres.
+c) Pourquoi partir d'un réseau entraîné sur ImageNet ? (A) c'est le réseau le plus rapide qui existe, et le plus précis sur ImageNet ; (B) ses filtres détectent déjà une grande variété de motifs, des traits aux parties d'objets ; (C) il a été entraîné sur des tableaux de maîtres.
 d) Le jeu d'entraînement d'ImageNet-1k (ILSVRC) compte environ : (A) 500 000 images ; (B) 1,28 million d'images ; (C) 14 millions d'images.
 e) Combien de classes ce jeu distingue-t-il ?
 
@@ -40,22 +40,22 @@ a) Pour visualiser une couche entière, on maximise : (A) l'activation d'un seul
 b) Les images obtenues pour les couches du premier bloc montrent surtout : (A) des rayures, des couleurs et des textures fines ; (B) des objets reconnaissables, comme des yeux ou des têtes.
 c) Vrai ou faux : donner un poids négatif à un filtre, c'est chercher une image qui l'éteint.
 d) Combien de filtres compte la couche bloc 4, conv 3 de VGG16 ?
-e) Pour une entrée de 224 × 224, la carte d'activation d'un filtre du bloc 4 mesure combien de pixels de côté ?
+e) Pour une entrée de 224 × 224, la carte d'activation d'une convolution du bloc 4 mesure combien de pixels de côté ?
 
 ### 28.Q4 — Deep dream : ce qui change par rapport à la visualisation d'une couche 🧠 ⏱️ 3 min
 *Fiche §28.3 · livre §28.3*
 
-a) Parmi ces différences avec la visualisation d'une couche, lesquelles sont vraies ? (A) on part d'une photo et non d'un bruit ; (B) on combine plusieurs couches, chacune avec son poids ; (C) on met à jour les poids du réseau ; (D) dans la version de Google, on répète l'opération à plusieurs échelles (des octaves). Écris leurs lettres.
+a) Parmi ces différences avec la visualisation d'une couche, lesquelles sont vraies ? (A) on part d'une photo et non d'un bruit ; (B) on combine plusieurs couches, chacune avec son poids ; (C) on met à jour les poids du réseau ; (D) on fait baisser les activations au lieu de les faire monter. Écris leurs lettres.
 b) Vrai ou faux : le deep dream amplifie ce que le réseau croit déjà voir dans l'image.
 c) Le nom donné par les chercheurs de Google à leur billet de 2015 : (A) *inceptionism* ; (B) *deep style* ; (C) *neural painting*.
-d) Pour ne rêver que dans une partie de l'image, on : (A) coupe une partie du réseau ; (B) baisse le learning rate ; (C) multiplie le gradient par un masque avant de mettre l'image à jour.
-e) Vrai ou faux : le deep dream et la visualisation d'un filtre maximisent tous deux une activation, alors que le transfert de style minimise un écart.
+d) Pour ne rêver que dans une partie de l'image, on : (A) coupe le réseau après les couches qui voient cette zone ; (B) baisse le learning rate pour que le reste de l'image change moins ; (C) multiplie le gradient par un masque avant de mettre l'image à jour.
+e) Vrai ou faux : le transfert de style, comme le deep dream, fait monter une activation.
 
 ### 28.Q5 — Des yeux partout : l'écho des données d'entraînement 🧠 ⏱️ 3 min
 *Fiche §28.3 · livre §28.3*
 
-a) Pourquoi le deep dream fait-il apparaître tant d'yeux et de têtes de chiens ? (A) VGG16 a une couche spéciale pour les yeux ; (B) c'est un effet du bruit de départ ; (C) ImageNet contient de très nombreuses photos d'animaux, et le réseau a appris des détecteurs pour leurs parties.
-b) Vrai ou faux : plus d'un dixième des 1 000 classes d'ImageNet-1k sont des races de chiens.
+a) Pourquoi le deep dream fait-il apparaître tant d'yeux et de têtes de chiens ? (A) VGG16 contient une couche conçue à la main pour détecter les yeux ; (B) c'est un effet du bruit uniforme que l'on ajoute à la photo avant de commencer ; (C) ImageNet contient de très nombreuses photos d'animaux, et le réseau a appris des détecteurs pour leurs parties.
+b) Vrai ou faux : moins d'un dixième des 1 000 classes d'ImageNet-1k sont des races de chiens.
 c) Un réseau entraîné sur des images satellites ferait plutôt apparaître : (A) des yeux et des museaux ; (B) des routes, des champs et des toits.
 d) Rêver avec une couche **profonde** fait apparaître surtout : (A) des traits et des textures ; (B) des parties d'objets (yeux, museaux, pattes).
 e) Vrai ou faux : ces hallucinations révèlent un biais des données d'entraînement, dont il faut tenir compte quand on interprète ce qu'un réseau « voit ».
@@ -76,7 +76,7 @@ a) La matrice de Gram d'une couche de $C$ filtres, dont les cartes mesurent $H \
 b) L'entrée $G_{ij}$ mesure : (A) la distance entre les pixels $i$ et $j$ ; (B) à quel point les filtres $i$ et $j$ s'activent ensemble, aux mêmes endroits ; (C) la position où le filtre $i$ s'active le plus.
 c) Vrai ou faux : si l'on mélange les positions d'une carte d'activation (la même permutation pour tous les canaux), la matrice de Gram ne change pas.
 d) Le coefficient diagonal $G_{ii}$ est proportionnel à : (A) le nombre de positions où le filtre $i$ est actif ; (B) la moyenne des carrés des activations du filtre $i$ ; (C) la plus grande activation du filtre $i$.
-e) Vrai ou faux : Li et coll. (2017) montrent qu'égaler les matrices de Gram revient à rapprocher les **distributions** des features des deux images, mesurées par une MMD avec un noyau polynomial du second degré.
+e) Vrai ou faux : selon Li et coll. (2017), égaler les matrices de Gram ne correspond à aucune mesure connue de l'écart entre deux distributions de features.
 
 ### 28.Q8 — Loss de contenu : couches précoces ou profondes ? 🧠 ⏱️ 3 min
 *Fiche §28.4.3 · livre §28.4.3*
@@ -85,22 +85,22 @@ a) Partir d'un bruit et égaler les activations d'une couche **précoce** de la 
 b) Avec une couche **profonde**, l'image reconstruite : (A) est identique à la photo, au pixel près ; (B) garde la structure et les objets, mais perd les couleurs et les détails fins.
 c) Le livre calcule la loss de contenu sur : (A) la couche bloc 5, conv 2 ; (B) toutes les couches ; (C) la couche bloc 1, conv 2.
 d) Vrai ou faux : Gatys et coll. (2015) prennent eux aussi une couche du premier bloc pour le contenu.
-e) Pourquoi une couche de contenu profonde laisse-t-elle plus de place au style ? (A) elle a moins de paramètres ; (B) elle ne fixe que la structure, et laisse libres les couleurs et les textures ; (C) elle est plus rapide à calculer.
+e) Pourquoi une couche de contenu profonde laisse-t-elle plus de place au style ? (A) ses filtres ont moins de paramètres, donc ils contraignent moins l'image ; (B) elle ne fixe que la structure, et laisse libres les couleurs et les textures ; (C) elle est plus rapide à calculer, donc on peut faire plus de pas.
 
 ### 28.Q9 — Loss de style, poids relatifs et variation totale 🧠 ⏱️ 3 min
 *Fiche §28.4.4, §28.4.5 · livre §28.4.4, §28.4.5*
 
 a) Le livre calcule la loss de style sur : (A) une seule couche ; (B) toutes les couches de convolution.
 b) Avec les poids du livre, $\alpha = 0{,}025$ pour le contenu et $\beta = 1$ pour le style, combien de fois le poids du style est-il plus grand que celui du contenu ?
-c) La variation totale pénalise : (A) les couleurs trop saturées ; (B) l'écart à l'image de contenu ; (C) les écarts entre pixels voisins, donc le bruit à haute fréquence.
+c) La variation totale pénalise : (A) les couleurs trop saturées, qui sortent de la plage des pixels ; (B) l'écart, pixel à pixel, entre l'image générée et la photo de contenu ; (C) les écarts entre pixels voisins, donc le bruit à haute fréquence.
 d) Vrai ou faux : un bon réglage de $\alpha$ et $\beta$ dépend de la façon dont on normalise les matrices de Gram et les losses ; il ne se recopie pas d'un code à l'autre.
-e) Vrai ou faux : partir de l'image de contenu plutôt que d'un bruit donne en général, en moins d'itérations, une image plus proche de la photo.
+e) Vrai ou faux : partir d'un bruit plutôt que de l'image de contenu fait en général converger en moins d'itérations.
 
 ### 28.Q10 — Générer du texte mot à mot : ce qu'implique « le mot le plus probable » 🧠 ⏱️ 3 min
 *Fiche §28.5 · livre §28.5*
 
 a) Le livre choisit, à chaque pas : (A) le mot le plus probable ; (B) un mot tiré au hasard selon les probabilités du modèle.
-b) Vrai ou faux : le décodage glouton donne toujours la même suite pour un même début de texte.
+b) Vrai ou faux : le décodage glouton peut donner deux suites différentes pour un même début de texte.
 c) Le défaut typique d'un décodage glouton : (A) des mots qui n'existent pas ; (B) des répétitions et des boucles.
 d) Vrai ou faux : un modèle mot à mot peut écrire un mot absent de son vocabulaire.
 e) Diviser les logits par une température $T < 1$ avant le softmax rend la distribution : (A) plus piquée, plus proche du glouton ; (B) plus plate, plus proche du hasard uniforme.
@@ -153,7 +153,7 @@ b) Le nombre de valeurs dans l'activation de la couche bloc 4, conv 1.
 c) Le nombre de coefficients de la matrice de Gram de la couche bloc 4, conv 1.
 d) Pour la couche bloc 1, conv 1 : le nombre de valeurs de l'activation divisé par le nombre de coefficients de sa matrice de Gram.
 e) La matrice de Gram de la couche bloc 4, conv 1 est symétrique : combien de coefficients **distincts** au plus faut-il stocker (diagonale comprise) ?
-f) En mode rapide, le notebook travaille sur des images de 128 × 128. Le côté des cartes d'activation de la couche bloc 5, conv 1.
+f) Pour une entrée plus petite, de 128 × 128 : le côté des cartes d'activation de la couche bloc 5, conv 1.
 g) Vrai ou faux : la taille de la matrice de Gram d'une couche dépend de la taille de l'image d'entrée.
 
 Dans ta copie : pourquoi la photo de contenu et la référence de style n'ont-elles pas besoin d'avoir la même taille pour la loss de style ? En ont-elles besoin pour la loss de contenu ?
@@ -186,7 +186,7 @@ Réponds dans ta copie. On note $N = HW$ le nombre de positions et $G = \frac{1}
 2. Déduis-en que $G(FP) = G(F)$ : mélanger les positions, de la même façon pour tous les canaux, ne change pas la matrice de Gram.
 3. Le résultat reste-t-il vrai pour une matrice $Q$ quelconque telle que $Q Q^\top = I$ (une matrice orthogonale) ? Une telle transformation garde-t-elle encore les valeurs des activations ?
 4. Et si l'on permute les positions d'un **seul** canal ? Donne un exemple avec deux canaux et deux positions où $G$ change.
-5. On note $\mu_i$ et $\sigma_i$ la moyenne et l'écart-type (sur les $N$ positions) des activations du filtre $i$. Montre que $C\,G_{ii} = \mu_i^2 + \sigma_i^2$. Peut-on retrouver $\mu_i$ à partir de la seule matrice $G$ ?
+5. On note $\mu_i$ et $\sigma_i$ la moyenne et l'écart-type (sur les $N$ positions, l'écart-type de population, qui divise par $N$) des activations du filtre $i$. Montre que $C\,G_{ii} = \mu_i^2 + \sigma_i^2$. Peut-on retrouver $\mu_i$ à partir de la seule matrice $G$ ?
 6. Qu'en conclus-tu sur ce que la loss de style impose à l'image générée, et sur ce qu'elle laisse libre ? Relie ta réponse à l'idée du livre de tables à trois ou quatre filtres (§28.4.6).
 
 ### Ex 28.4 — Losses de contenu, de style et de variation totale sur un mini-exemple ✏️ ★★ ⏱️ 20 min
@@ -204,7 +204,7 @@ b) La valeur que rendrait `F.mse_loss(Fx, Fc)` de PyTorch (une **moyenne** des c
 c) Le coefficient $G_{12}(\mathbf{x})$.
 d) $L_s$.
 e) $L_{TV}$.
-f) La loss totale $L = \alpha L_c + \beta L_s + \lambda L_{TV}$ avec les poids du livre, $\alpha = 0{,}025$, $\beta = 1$, $\lambda = 10^{-4}$, à 4 décimales.
+f) La loss totale $L = \alpha L_c + \beta L_s + \lambda L_{TV}$ (les trois termes viennent ici de trois mini-exemples indépendants : c'est seulement pour voir leurs ordres de grandeur) avec les poids du livre, $\alpha = 0{,}025$, $\beta = 1$, $\lambda = 10^{-4}$, à 4 décimales.
 g) La loss de style si l'on oublie la normalisation, c'est-à-dire avec $F F^\top$ au lieu de $G$ pour les deux images.
 
 Dans ta copie : dans f), quel terme domine ? Par quel facteur g) multiplie-t-il d) pour une couche de 512 canaux de 28 × 28, et que devient alors le réglage $\alpha = 0{,}025$, $\beta = 1$ ?
@@ -219,19 +219,19 @@ On note $E(F) = \lVert F F^\top - S \rVert_F^2 = \sum_{i,j} \bigl(\sum_k F_{ik} 
 2. On pose $D = F F^\top - S$. Montre que $\frac{\partial E}{\partial F_{ab}} = 2 (D F)_{ab} + 2 (D^\top F)_{ab}$, puis que $\frac{\partial E}{\partial F} = 4\,(F F^\top - S)\,F$. Où sers-tu de la symétrie de $S$ ?
 3. Avec la normalisation de la fiche, $L_s = \bigl\lVert \frac{1}{N'} F F^\top - G(\mathbf{s}) \bigr\rVert_F^2$, où $N' = CHW$. Écris $\frac{\partial L_s}{\partial F}$.
 4. Vérifie ta formule sur l'Ex 28.4 : calcule la matrice $\frac{\partial L_s}{\partial F(\mathbf{x})}$ ($2 \times 2$).
-5. Que vaut ce gradient si toutes les activations de la couche sont nulles ($F = 0$) ? Pourquoi est-ce un argument contre une image de départ uniforme et sombre, surtout derrière une ReLU ?
+5. Que vaut ce gradient si toutes les activations de la couche sont nulles ($F = 0$) ? Derrière une ReLU, une activation nulle vient d'une pré-activation négative ou nulle : que devient alors le gradient qui redescend vers les pixels ? Pourquoi part-on plutôt d'un bruit ou de la photo que d'une image uniforme ?
 6. Ce gradient porte sur les activations $F$. Comment arrive-t-on au gradient par rapport aux pixels de $\mathbf{x}$, et qui le calcule dans le notebook ?
 
 ### Ex 28.6 — Combien coûte un transfert de style sur CPU ? 🧮 ★★ ⏱️ 15 min
 **Objectif :** estimer en ordres de grandeur le temps et la mémoire d'un transfert de style, et justifier le choix d'un petit réseau sur CPU.
 **Prérequis :** Ex 28.1 · fiche §28.4.5 · **Parcours :** R, M
 
-Données (documentation de torchvision) : une passe avant de VGG16 sur une image de 224 × 224 coûte environ 15,5 milliards de multiplications-additions (MAC) ; celle de SqueezeNet 1.1, 0,35 milliard. Les poids de VGG16 pèsent 528 Mo, dont 14,7 millions de paramètres dans les convolutions et 123,6 millions dans les trois couches denses. On suppose qu'un pas d'optimisation (passe avant et rétropropagation) coûte trois passes avant, et que ton CPU tient 50 milliards de MAC par seconde. Réponds dans ta copie, avec des ordres de grandeur.
+Données (documentation de torchvision) : une passe avant de VGG16 sur une image de 224 × 224 coûte environ 15,5 milliards de multiplications-additions (MAC) ; celle de SqueezeNet 1.1, 0,35 milliard. Le fichier des poids de VGG16 pèse 553 Mo (528 Mio), pour 138,4 millions de paramètres, dont 14,7 millions dans les convolutions et 123,6 millions dans les trois couches denses. On suppose qu'un pas d'optimisation (passe avant et rétropropagation) coûte trois passes avant, et que ton CPU tient 50 milliards de MAC par seconde. Réponds dans ta copie, avec des ordres de grandeur.
 
 1. Le temps de 300 pas de transfert de style avec VGG16 à 224 × 224.
 2. Le même calcul à 512 × 512. Pourquoi le coût croît-il comme le carré du côté ?
 3. Le temps de 150 pas avec SqueezeNet 1.1 à 128 × 128. Pourquoi le temps mesuré dans le notebook sera-t-il plus long que ce calcul ?
-4. Le transfert de style n'utilise que les convolutions. Quelle part des 528 Mo de VGG16 sert vraiment ? Combien de Mo faut-il pour les seuls poids des convolutions, en `float32` ?
+4. Le transfert de style n'utilise que les convolutions. Quelle part des poids de VGG16 sert vraiment ? Combien de Mo ($10^6$ octets) faut-il pour les seuls poids des convolutions, en `float32` ?
 5. Les activations des treize convolutions de VGG16 à 224 × 224 totalisent environ 13,5 millions de valeurs. Leur mémoire en `float32` ? Pourquoi la rétropropagation demande-t-elle de les garder ?
 6. Un réseau de transfert rapide (Johnson et coll., 2016) applique un style en **une** passe avant d'un réseau de coût comparable à celui de VGG16. Combien de fois plus vite que la méthode de Gatys à 300 pas ? Qu'a-t-il fallu payer une fois pour toutes ?
 
@@ -245,7 +245,7 @@ Le livre entraîne deux couches de LSTM de 128 cellules sur environ 427 000 mots
 2. Ceux de l'embedding, puis des deux couches de LSTM.
 3. Le total, et la part de la couche de sortie. Que t'apprend cette répartition ?
 4. Combien de mots d'entraînement par paramètre ? Qu'en déduis-tu sur le risque de sur-apprentissage ?
-5. On garde les 5 000 mots les plus fréquents et un token `<unk>` pour les autres (📦 28.27). La taille de la couche de sortie ? Avec la loi de Zipf, la part des mots du texte couverts par ces 5 000 mots est d'environ $\frac{\ln 5\,000 + 0{,}577}{\ln 10\,300 + 0{,}577}$ : calcule-la.
+5. On garde les 5 000 mots les plus fréquents et un token `<unk>` pour les autres (📦 28.27). Le nombre de paramètres de la couche de sortie ? Avec la loi de Zipf, la part des mots du texte couverts par ces 5 000 mots est d'environ $\frac{\ln 5\,000 + 0{,}577}{\ln 10\,300 + 0{,}577}$ : calcule-la.
 6. Un modèle qui répond au hasard, uniformément sur 10 300 mots : sa cross-entropy (en nats) et sa perplexité. Un modèle de perplexité 150 : combien de mots « hésite-t-il » en moyenne ?
 
 <a id="reflexion"></a>

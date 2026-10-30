@@ -697,7 +697,23 @@ Notations : générateur $G$, discriminateur $D$ (une probabilité ; son logit $
 | distance de Fréchet | $d_F^2 = \lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2})$, $\operatorname{Tr}((\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2}) = \sum_i \sqrt{\lambda_i(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)}$ ; diagonale : $\lVert \Delta\boldsymbol{\mu} \rVert^2 + \sum_j (\sigma_{1j} - \sigma_{2j})^2$ | `mylearn.gen_metrics.frechet_distance`, `frechet_distance_from_features` |
 | croissance progressive | coût $\propto$ pixels : la dernière étape ≈ 75 % du total (suite de raison 4) | (🧮 27.7) |
 
-### Ch. 28 et 29
+### Ch. 28 · Applications créatives
+
+Notations : image générée $\mathbf{x}$, contenu $\mathbf{c}$, style $\mathbf{s}$ ; à la couche $\ell$, $C$ canaux de $H \times W$, $F \in \mathbb{R}^{C \times HW}$ les cartes mises à plat.
+
+| Notion | Formule | En code |
+|---|---|---|
+| montée de gradient sur l'entrée | $\mathbf{x} \leftarrow \mathbf{x} + \eta \nabla_{\mathbf{x}}\, a(\mathbf{x})$, $a(\mathbf{x}) = \frac{1}{HW}\sum_{h,w} A_{c,h,w}^2$, poids gelés | `x.requires_grad_(True)`, `Adam([x])`, `loss = -a`, `x.clamp_(0, 1)` |
+| deep dream | $L_{\text{dream}} = \sum_\ell w_\ell \frac{\lVert A^\ell(\mathbf{x}) \rVert^2}{C_\ell H_\ell W_\ell}$, montée de gradient à partir d'une photo | hooks sur les couches choisies |
+| matrice de Gram | $G = \frac{1}{CHW} F F^\top$, $C \times C$, symétrique ; $C\,G_{ii} = \mu_i^2 + \sigma_i^2$ ; invariante par permutation des positions | `F = A.reshape(C, -1)` ; `F @ F.T / A.numel()` (✏️ 28.2, ∂ 28.3) |
+| loss de contenu | $L_c = \lVert F^\ell(\mathbf{x}) - F^\ell(\mathbf{c}) \rVert^2$ | `((Fx - Fc) ** 2).sum()` ; `F.mse_loss` en prend la moyenne |
+| loss de style | $L_s = \sum_\ell w_\ell \lVert G^\ell(\mathbf{x}) - G^\ell(\mathbf{s}) \rVert_F^2$ ; Gatys : $\frac{1}{4N^2M^2}\sum(G - A)^2$ avec $G$ non normalisée | (✏️ 28.4) |
+| gradient de la loss de style | $\frac{\partial}{\partial F}\lVert F F^\top - S \rVert_F^2 = 4(F F^\top - S)F$ ; normalisée : $\frac{4}{CHW}(G(\mathbf{x}) - G(\mathbf{s}))F$ | (∂ 28.5) |
+| variation totale | $L_{TV} = \sum_{i,j} (x_{i+1,j} - x_{i,j})^2 + (x_{i,j+1} - x_{i,j})^2$ | `((x[..., 1:, :] - x[..., :-1, :]) ** 2).sum() + ((x[..., 1:] - x[..., :-1]) ** 2).sum()` |
+| transfert de style | $L = \alpha L_c + \beta L_s + \lambda L_{TV}$ (livre : $\alpha = 0{,}025$, $\beta = 1$, $\lambda \approx 10^{-4}$, pour sa normalisation) | |
+| décodage | $p_i = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}$ ; top-k ; top-p : le plus petit ensemble de probabilité cumulée $\ge p$ ; $\text{PPL} = e^{L_{CE}}$ | `sample_from_logits` (ch. 22) |
+
+### Ch. 29
 *(à compléter)*
 
 ## Partie VII : bonus

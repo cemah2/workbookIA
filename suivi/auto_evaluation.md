@@ -499,3 +499,16 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Implémenter et utiliser des mesures quantitatives : distance de Wasserstein 1D, distance de Fréchet | |
 | Comparer GAN, VAE et diffusion et discuter des usages éthiques (deepfakes, transparence) | |
 <!-- wb:end 27 -->
+<!-- wb:section 28 -->
+## 28 — Applications créatives
+
+| Compétence | Niveau |
+|---|:-:|
+| Extraire les activations d'un CNN pré-entraîné avec des hooks et prévoir leurs formes | |
+| Visualiser filtres et couches par montée de gradient sur l'entrée, avec régularisation | |
+| Produire des images deep dream en combinant plusieurs couches pondérées | |
+| Calculer une matrice de Gram et les losses de contenu, de style et de variation totale | |
+| Réaliser un transfert de style neuronal et en régler les poids sous contrainte CPU | |
+| Générer du texte mot à mot et comparer les stratégies de décodage | |
+| Discuter droit d'auteur, domaine public et crédit des œuvres utilisées ou produites | |
+<!-- wb:end 28 -->
