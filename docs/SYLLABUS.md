@@ -102,9 +102,9 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
 | Complet | 2028 | 666 h | 918 h | 100 % |
-| Rapide | 1312 | 319 h | 548 h | 60 % |
-| Maths | 801 | 307 h | 560 h | 61 % |
-| Code | 890 | 462 h | 735 h | 80 % |
+| Rapide | 1312 | 319 h | 547 h | 60 % |
+| Maths | 801 | 307 h | 559 h | 61 % |
+| Code | 890 | 462 h | 734 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -4186,7 +4186,7 @@ COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre fa
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 |
 | **Dossier** | `chapitres/ch26_rl/` |
 | **Exercices** | 58 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 6 · 📦 4 · 🔬 8 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **29 h** (lecture 7,8 h, exercices 20 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **29 h** (lecture 7,2 h, exercices 20 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 25, 23, 11 |
 | **Compétence 🛠️** | Rapporter un résultat stochastique honnêtement : plusieurs graines, moyenne et intervalle, configuration sauvegardée en JSON |
@@ -4206,7 +4206,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 
 **Sections du livre couvertes** : 26 sections et sous-sections, toutes couvertes (§26.1 à §26.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,8 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,1 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
 
 **Notions enseignées** : boucle agent-environnement ; API gymnasium (reset, step, terminated, truncated) ; politique ; retour actualisé et facteur γ ; Q-learning tabulaire ; SARSA ; ε-greedy et softmax (Boltzmann) ; équation de Bellman ; itération sur les valeurs ; on-policy / off-policy ; experience replay ; conception de la récompense ; masques d'actions ; discrétisation d'un état continu ; self-play ; reproductibilité en RL (graines multiples)
 

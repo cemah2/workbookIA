@@ -663,7 +663,24 @@ Notations : une entrée $\mathbf{x}$ de $p$ valeurs, un code $\mathbf{z}$ de $d$
 | loss du VAE | $\mathbb{E}_{q(\mathbf{z}\mid\mathbf{x})}[-\ln p(\mathbf{x}\mid\mathbf{z})] + \beta\,\mathrm{KL}(q(\mathbf{z}\mid\mathbf{x}) \,\|\, \mathcal{N}(\mathbf{0}, \mathbf{I}))$, $\beta = 1$ : l'opposé de l'ELBO | reconstruction **sommée** sur les pixels + `beta * kl` |
 | espérances d'une gaussienne | $\mathbb{E}[(z - \mu)^2] = \sigma^2$, $\mathbb{E}[z^2] = \mu^2 + \sigma^2$ | |
 
-### Ch. 26 à 29
+### Ch. 26 · Apprentissage par renforcement
+
+Notations : état $s$, action $a$, récompense $r$, état suivant $s'$, action suivante $a'$ ; $\gamma$ le facteur d'actualisation, $\alpha$ le learning rate, $\varepsilon$ le taux d'exploration, $\tau$ la température ; $|\mathcal{A}|$ le nombre d'actions.
+
+| Notion | Formule | En code |
+|---|---|---|
+| retour actualisé | $G_t = \sum_{k \ge 0} \gamma^k r_{t+k} = r_t + \gamma\,G_{t+1}$ ; $\gamma = 1$ : retour total | `mylearn.rl.discounted_return`, `returns_to_go` |
+| borne et horizon | $\lvert G_t\rvert \le \frac{r_{\max}}{1-\gamma}$ ; horizon effectif $\frac{1}{1-\gamma}$ ; $\gamma^k < \tfrac{1}{2}$ dès $k > \frac{\ln 2}{-\ln\gamma}$ | (∂ 26.7) |
+| Q-learning | $Q(s, a) \leftarrow Q(s, a) + \alpha\,[y - Q(s, a)]$, $y = r + \gamma \max_{a'} Q(s', a')$, $y = r$ si $s'$ terminal | `mylearn.rl.q_learning_update` |
+| SARSA | $y = r + \gamma\,Q(s', a')$, $a'$ l'action choisie et jouée ensuite | `mylearn.rl.sarsa_update` |
+| ε-greedy | $p(a^*) = 1 - \varepsilon + \frac{\varepsilon}{\lvert\mathcal{A}\rvert}$, $p(a) = \frac{\varepsilon}{\lvert\mathcal{A}\rvert}$ pour $a \ne a^*$ | `mylearn.bandit.epsilon_greedy_action` |
+| softmax (Boltzmann) | $p(a) = \frac{e^{Q(s, a)/\tau}}{\sum_b e^{Q(s, b)/\tau}}$, invariante par $Q + c$ | `mylearn.rl.softmax_action` |
+| équation de Bellman | $Q^*(s, a) = \mathbb{E}[r + \gamma \max_{a'} Q^*(s', a')]$ ; contraction : $\max\lvert\mathcal{T}Q_1 - \mathcal{T}Q_2\rvert \le \gamma \max\lvert Q_1 - Q_2\rvert$ | `mylearn.rl.value_iteration` (∂ 26.8) |
+| convergence du Q-learning | chaque couple visité une infinité de fois ; $\sum \alpha = \infty$, $\sum \alpha^2 < \infty$ (par exemple $\alpha = 1/n(s, a)$) | |
+| taille d'une table | lignes $\times$ colonnes $\times$ 4 octets (`float32`) ; Flippers $2^9 \times 9$, morpion $3^9 \times 9$ | (✏️ 26.2, 🧮 26.9) |
+| Gymnasium | `state, info = env.reset(seed=…)` ; `state, reward, terminated, truncated, info = env.step(action)` | `wb.datasets.make_env("FrozenLake-v1")` |
+
+### Ch. 27 à 29
 *(à compléter)*
 
 ## Partie VII : bonus

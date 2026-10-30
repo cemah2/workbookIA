@@ -281,6 +281,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des images de VAE toutes identiques, quelle que soit l'entrée, et une KL proche de 0 | effondrement du posterior : β trop grand, ou reconstruction moyennée sur les pixels face à une KL sommée | les deux termes à la même échelle ; faire monter β progressivement ; surveiller la KL par latent (📈 25.34) |
 | des `nan` dans la loss d'un VAE | `log_var` qui explose, ou un écart-type pris pour une log-variance | une tête qui rend $\log\sigma^2$, `torch.exp(0.5 * log_var)` ; écrêter `log_var` si besoin |
 | un score d'anomalie parfait sur MNIST contre Fashion-MNIST, inutile sur de vrais défauts | validé sur une anomalie trop facile | valider sur des anomalies réalistes ; regarder la carte d'erreur pixel par pixel (🔬 25.37) |
+| un agent de Q-learning qui n'apprend rien, table restée à 0 | récompenses nulles sauf à la fin, et un but jamais atteint par hasard (ou ex æquo toujours vers l'action 0 avec `np.argmax`) | vérifier qu'un épisode aléatoire atteint parfois le but ; départager les ex æquo au hasard (fiche 26, §26.6.4 ; 🐛 26.24) |
+| des valeurs Q fausses près de la fin des épisodes | amorçage sur un état terminal, ou épisode tronqué traité comme terminé | cible `r` si `terminated`, `r + gamma * Q[s_next].max()` sinon, même si `truncated` (fiche 26, §26.6.1) |
+| une table Q qui oscille sans se stabiliser dans un environnement aléatoire | $\alpha$ proche de 1 : chaque mise à jour remplace presque la valeur | $\alpha$ petit (0,1) ou qui décroît au fil des visites (fiche 26, §26.6.1 ; 🔬 26.27) |
+| une courbe d'apprentissage RL « bien meilleure » qui ne se reproduit pas | une seule graine, ou évaluation avec exploration | plusieurs graines (au moins cinq), un intervalle, $\varepsilon = 0$ et mêmes graines pour l'évaluation (🛠️ 26.34) |
+| `TypeError` ou état différent à chaque `reset` de Gymnasium | graine passée en `np.int64`, ou `reset` sans graine | `env.reset(seed=int(seed))` |
 
 ## Erreurs de raisonnement (ML)
 

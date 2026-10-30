@@ -816,6 +816,35 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | β-VAE | β-VAE | VAE dont la KL est multipliée par $\beta$ ; $\beta > 1$ régularise davantage l'espace latent, au prix de reconstructions plus floues | 25 |
 | effondrement du posterior | posterior collapse | le VAE ignore certains latents (ou tous) : leur loi devient le prior quelle que soit l'entrée, et leur KL tombe à 0 | 25 |
 | détection d'anomalies | anomaly detection | repérer les exemples qui ne ressemblent pas aux données normales ; avec un autoencodeur, par l'erreur de reconstruction | 25 |
+| état, transition | state, transition | l'état : les nombres qui décrivent l'environnement à un instant ; une transition : le passage d'un état au suivant après une action | 26 |
+| épisode | episode | une suite complète d'interactions, de l'état initial à un état final (une partie entière) | 26 |
+| politique | policy | règle qui associe une action, ou une loi de probabilité sur les actions, à chaque état : $a = \pi(s)$ | 26 |
+| agent libre, déclenché | free-running, triggered agent | libre : agit de lui-même, en continu ; déclenché : attend qu'on le sollicite (chacun son tour) | 26 |
+| processus de décision markovien (MDP) | Markov decision process | états, actions, probabilités de transition et récompenses, où l'état présent suffit pour prédire la suite | 26 |
+| observabilité partielle | partial observability | l'agent ne voit qu'une partie de l'état (les cartes des adversaires sont cachées) | 26 |
+| attribution du crédit | credit assignment | répartir le mérite d'un résultat tardif entre les actions qui y ont mené | 26 |
+| exploration, exploitation | exploration, exploitation | essayer une action pour en savoir plus, ou jouer celle qui semble la meilleure | 26 |
+| retour, retour total (TFR) | return, total future reward | somme des récompenses d'un pas et de toutes les suivantes | 26 |
+| retour actualisé | discounted return | $G_t = \sum_k \gamma^k r_{t+k}$ ; $G_t = r_t + \gamma G_{t+1}$ | 26 |
+| facteur d'actualisation | discount factor | $\gamma \in [0, 1]$ : le poids $\gamma^k$ d'une récompense reçue $k$ pas plus tard ; horizon effectif $\approx 1/(1-\gamma)$ | 26 |
+| état terminal, épisode tronqué | terminal state, truncation | terminal : l'épisode est vraiment fini, la cible vaut $r$ ; tronqué : coupé par une limite, on amorce encore sur l'état suivant (`terminated`, `truncated` de Gymnasium) | 26 |
+| L-learning | L-learning | algorithme naïf du livre : le retour total d'un coup remplace la valeur de sa case à la fin de chaque partie | 26 |
+| table Q, valeur Q | Q-table, Q-value | une ligne par état, une colonne par action ; $Q(s, a)$ estime le retour obtenu en jouant $a$ dans $s$, puis en jouant bien | 26 |
+| Q-learning | Q-learning | $Q(s, a) \leftarrow Q(s, a) + \alpha\,[r + \gamma \max_{a'} Q(s', a') - Q(s, a)]$, après chaque pas | 26 |
+| erreur TD | temporal-difference error | $\delta = r + \gamma \max_{a'} Q(s', a') - Q(s, a)$ (ou avec $Q(s', a')$ pour SARSA) : l'écart entre la cible et la valeur actuelle | 26 |
+| amorçage | bootstrapping (RL) | estimer une valeur à partir d'une autre estimation (la cible utilise la table) ; à ne pas confondre avec le bootstrap statistique du ch. 2 | 26 |
+| politique gloutonne | greedy policy | jouer toujours l'action de plus grande valeur ($\arg\max_a Q(s, a)$) | 26 |
+| politique softmax, de Boltzmann | softmax (Boltzmann) policy | tirer l'action $a$ avec la probabilité $e^{Q(s, a)/\tau} / \sum_b e^{Q(s, b)/\tau}$ | 26 |
+| SARSA | SARSA | mise à jour sur $r + \gamma\,Q(s', a')$, où $a'$ est l'action choisie et jouée ensuite ; nom tiré de $s, a, r, s', a'$ | 26 |
+| sur politique, hors politique | on-policy, off-policy | sur politique : apprend la valeur de la politique suivie (SARSA) ; hors politique : d'une autre politique que celle qui produit les données (Q-learning) | 26 |
+| équation de Bellman | Bellman equation | $Q^*(s, a) = \mathbb{E}[r + \gamma \max_{a'} Q^*(s', a')]$ : la valeur optimale comme point fixe | 26 |
+| itération sur les valeurs | value iteration | appliquer la mise à jour de Bellman à toute la table quand le modèle est connu ; converge vers $Q^*$ | 26 |
+| deep RL, DQN | deep reinforcement learning, deep Q-network | RL où un réseau remplace la table ; DQN reçoit l'état et rend une valeur Q par action | 26 |
+| mémoire de rejeu | replay buffer, experience replay | mémoire des dernières transitions, dans laquelle on tire des mini-batches au hasard | 26 |
+| réseau cible | target network | copie figée du réseau, recopiée de temps en temps, qui calcule les cibles de DQN | 26 |
+| auto-apprentissage | self-play | l'agent joue contre lui-même ; l'adversaire fait partie de son environnement | 26 |
+| RLHF | reinforcement learning from human feedback | ajuster un modèle de langage par RL sur un modèle de récompense appris à partir de préférences humaines, avec une pénalité KL | 26 |
+| piratage de la récompense | reward hacking, specification gaming | l'agent maximise la récompense écrite sans faire ce qu'on voulait | 26 |
 
 ## Termes des checkpoints et des mini-projets (parties I à IV)
 

@@ -472,3 +472,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Détecter des anomalies grâce à l'erreur de reconstruction, et en connaître les limites | |
 | Situer les autoencodeurs aujourd'hui : espaces latents des modèles de diffusion, latents discrets, autoencodeurs parcimonieux | |
 <!-- wb:end 25 -->
+<!-- wb:section 26 -->
+## 26 — Apprentissage par renforcement
+
+| Compétence | Niveau |
+|---|:-:|
+| Décrire la boucle agent-environnement et la manipuler avec l'API Gymnasium | |
+| Calculer des retours totaux et actualisés, et interpréter le facteur d'actualisation γ | |
+| Dériver et appliquer à la main les mises à jour du Q-learning et de SARSA | |
+| Implémenter un agent tabulaire complet : politiques, mises à jour, boucle d'entraînement, itération sur les valeurs, mémoire de rejeu | |
+| Comparer expérimentalement le Q-learning et SARSA, et régler α, γ et ε | |
+| Traiter un état continu par discrétisation, et reconnaître les limites des tables | |
+| Mener une expérience de RL reproductible et rapporter un résultat sur plusieurs graines | |
+| Situer les méthodes d'aujourd'hui : DQN, PPO, RLHF | |
+<!-- wb:end 26 -->

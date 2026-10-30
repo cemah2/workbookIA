@@ -11,9 +11,9 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
 | [Parcours complet](#complet) | 2028 | 666 h | 0 (0,0 h) | 157 h | 95 h | **918 h** |
-| [Parcours rapide](#rapide) | 1312 | 319 h | 59 (7,7 h) | 126 h | 95 h | **548 h** |
-| [Parcours orienté maths](#maths) | 801 | 307 h | 8 (0,3 h) | 157 h | 95 h | **560 h** |
-| [Parcours orienté code](#code) | 890 | 462 h | 188 (20 h) | 157 h | 95 h | **735 h** |
+| [Parcours rapide](#rapide) | 1312 | 319 h | 59 (7,7 h) | 126 h | 95 h | **547 h** |
+| [Parcours orienté maths](#maths) | 801 | 307 h | 8 (0,3 h) | 157 h | 95 h | **559 h** |
+| [Parcours orienté code](#code) | 890 | 462 h | 188 (20 h) | 157 h | 95 h | **734 h** |
 
 À 10 h par semaine : complet ≈ 92 semaines, rapide ≈ 55 semaines.
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1312 exercices, 319 h d'exercices, ≈ 548 h au total.**
+**1312 exercices, 319 h d'exercices, ≈ 547 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**801 exercices, 307 h d'exercices, ≈ 560 h au total.**
+**801 exercices, 307 h d'exercices, ≈ 559 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -298,7 +298,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**890 exercices, 462 h d'exercices, ≈ 735 h au total.**
+**890 exercices, 462 h d'exercices, ≈ 734 h au total.**
 
 ### Partie 0 · Prérequis
 
