@@ -416,7 +416,7 @@ a) $25 \times 10^6 \times 2 \times 3 \times 50\,000 \times 20 = 1{,}5 \times 10^
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 24.8 — La data augmentation en cinq lignes 🗣️
+### Ex 24.8 — L'augmentation de données en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -492,7 +492,7 @@ Commence par : « D'abord, je chiffre le budget : combien dure un entraînement,
 
 </details>
 
-### 24.E2 — Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter
+### 24.E2 — Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donne des transformations à éviter
 
 <details><summary>Indice 1</summary>
 
@@ -898,7 +898,7 @@ Relis le §24.4.7 de la fiche (le `ShapeStream`, ses deux pièges) et, en 0A, le
 </details>
 <details><summary>Indice 2</summary>
 
-`draw_shape_24` : tire le label s'il manque (`rng.integers(5)`), le facteur (`rng.uniform(0.8, 1.1)`) et le décalage (`rng.uniform(-0.1, 0.1, size=2)`) ; pour chaque ligne brisée, ajoute le bruit (`rng.normal(0, 0.03, size=(n, 2))`), applique $(p - 0{,}5) \times$ facteur $+ 0{,}5 +$ décalage, multiplie par `size - 1`, puis trace chaque segment. Le cercle : 25 points sur `np.linspace(0, 2π, 25)`, le dernier égal au premier après le bruit. `worker_share_24` : une division entière et un reste. `ShapeStream_24.__iter__` : la graine de `np.random.default_rng` vient de `torch.randint(2**31, ())`, et `get_worker_info()` dit si l'on est dans un worker (`info.id`, `info.num_workers`).
+`draw_shape_24`, une recette adaptée du livre. En coordonnées unitaires (ligne, colonne), entre 0,2 et 0,8 : le « Z » est la barre du haut, la diagonale et la barre du bas ; le « plus », deux segments qui se croisent au centre ; les « trois barres », verticales, aux colonnes 0,25, 0,5 et 0,75 ; le « U carré », le côté gauche, le bas et le côté droit ; le « cercle », un polygone fermé de 24 côtés, de centre $(0{,}5 ; 0{,}5)$ et de rayon 0,3 (25 points sur `np.linspace(0, 2π, 25)`, le dernier égal au premier après le bruit). Tire le label s'il manque (`rng.integers(5)`), le facteur d'agrandissement (`rng.uniform(0.8, 1.1)`) et le décalage (`rng.uniform(-0.1, 0.1, size=2)`) ; pour chaque ligne brisée, ajoute à chaque point un bruit normal d'écart-type 0,03 (`rng.normal(0, 0.03, size=(n, 2))`), applique $(p - 0{,}5) \times$ facteur $+ 0{,}5 +$ décalage (l'agrandissement se fait autour du centre), multiplie par `size - 1`, puis trace chaque segment avec `stroke_24(image, p, q, width=size / 32)`. `worker_share_24` : une division entière et un reste. `ShapeStream_24.__iter__` : la graine de `np.random.default_rng` vient de `torch.randint(2**31, ())`, et `get_worker_info()` dit si l'on est dans un worker (`info.id`, `info.num_workers`).
 
 </details>
 <details><summary>Indice 3</summary>
@@ -983,6 +983,8 @@ Relis les §24.5.8 à §24.5.10 de la fiche (les trois détails sur `output` et 
 
 </details>
 <details><summary>Indice 3</summary>
+
+`last_steps_27`, pour un LSTM bidirectionnel : `output[:, -1, :H]` (les $H$ premières colonnes du dernier pas sont le sens avant) et `h_n[-2]` (`h_n[-1]` est le sens arrière de la dernière couche), avec `H = lstm.hidden_size`.
 
 ```python
 def to_streams_27(series, n_streams, seq_len):

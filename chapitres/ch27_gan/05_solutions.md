@@ -32,7 +32,7 @@ a) **Vrai** : $\min_G \max_D V(D, G)$. b) **A** : les gains s'additionnent à z�
 a) **3** : le générateur, le discriminateur et le modèle combiné. b) **Faux** : ce sont les mêmes couches, partagées ; rien à resynchroniser. c) **B** : deux optimiseurs, et `D(G(z))` calculé à la volée. d) **Vrai** : `backward()` remplit le `.grad` de tous les poids traversés, ceux de $D$ compris. e) **B** : seul `opt_g.step()` modifie des poids, et `opt_d.zero_grad()` efface les gradients de $D$ avant son pas.
 **À retenir** : en PyTorch, « geler » un réseau pendant une étape, c'est surtout ne pas appeler son optimiseur.
 
-### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé
+### 27.Q7 — Pourquoi juger des mini-batches plutôt qu'un point isolé
 a) **313** : $\lceil 10\,000 / 32 \rceil$, 312 mini-batches pleins et un de 16 (le générateur fait autant de pas). b) **Faux** : il reçoit **un** point (deux nombres) et rend une probabilité ; le mini-batch ne fait que moyenner les gradients. c) **A**. d) **B** : $1 - e^{-1/2} \approx 39{,}3\,\%$ ; 68 % est la règle d'une dimension. e) **114** : $(4 + 1) \times 16 + (16 + 1) \times 2 = 80 + 34$.
 **À retenir** : un discriminateur point par point ne voit pas qu'un mini-batch manque de variété ; il faut lui donner une statistique du mini-batch.
 
@@ -52,7 +52,7 @@ a) **B** : un pic de la distribution. b) **B** : partiel, il reste quelques 7. c
 
 ## 🔁 Rappels
 
-### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (auto-apprentissage)
 a) **A**. b) **Faux** : deux réseaux différents, aux rôles opposés ; en auto-apprentissage, une seule table joue les deux camps. c) **B** : le morpion parfait est nul. d) **Vrai** : dans les deux cas, l'adversaire évolue, la cible n'est pas fixe. e) **A** : un gradient, qui dit dans quelle direction modifier chaque sortie ; un agent de RL ne reçoit qu'un nombre.
 **À retenir** : GAN et auto-apprentissage sont deux jeux à cible mouvante ; le GAN a l'avantage d'un signal dérivable.
 

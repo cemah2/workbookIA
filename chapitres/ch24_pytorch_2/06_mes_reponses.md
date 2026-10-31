@@ -276,7 +276,7 @@ Dans ta copie :
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 24.8 — La data augmentation en cinq lignes
+### Ex 24.8 — L'augmentation de données en cinq lignes
 
 Mes cinq lignes :
 
@@ -328,7 +328,7 @@ Mes cinq lignes :
 ### 24.E1 — Comment organises-tu une recherche d'hyperparamètres avec un budget limité ?
 
 
-### 24.E2 — Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter
+### 24.E2 — Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donne des transformations à éviter
 
 
 ### 24.E3 — Dropout ou batchnorm : lequel, où, et peut-on combiner les deux ?

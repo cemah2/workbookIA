@@ -116,7 +116,7 @@ a) Le livre construit le générateur, le discriminateur, et un troisième modè
 
 </details>
 
-### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé
+### 27.Q7 — Pourquoi juger des mini-batches plutôt qu'un point isolé
 
 <details><summary>Indice 1</summary>
 
@@ -148,7 +148,7 @@ Compare chaque affirmation à la liste de la fiche (§27.6.1) et à son encadré
 </details>
 <details><summary>Indice 3</summary>
 
-a) Vrai : des convolutions de pas 2 remplacent le pooling dans $D$. Pour b), cherche dans la fiche le learning rate de l'article et son $\beta_1$ ; pour c), dans quel réseau va la Leaky ReLU de pente 0,2 ? Pour d), relis la règle de la batchnorm ; pour e), quelle plage de valeurs rend une tanh ?
+a) Vrai : des convolutions de stride 2 remplacent le pooling dans $D$. Pour b), cherche dans la fiche le learning rate de l'article et son $\beta_1$ ; pour c), dans quel réseau va la Leaky ReLU de pente 0,2 ? Pour d), relis la règle de la batchnorm ; pour e), quelle plage de valeurs rend une tanh ?
 
 </details>
 
@@ -192,7 +192,7 @@ a) Le mode est un pic de la distribution des données (B), pas une manière de t
 
 ## 🔁 Rappels
 
-### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (auto-apprentissage)
 
 <details><summary>Indice 1</summary>
 

@@ -892,7 +892,7 @@
   {
    "id": "24.8",
    "type": "🗣️",
-   "title": "La data augmentation en cinq lignes",
+   "title": "L'augmentation de données en cinq lignes",
    "stars": 1,
    "minutes": 10,
    "gpu": false,
@@ -1149,6 +1149,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "manual"
@@ -1173,6 +1174,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1217,6 +1219,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1238,6 +1241,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1443,7 +1447,7 @@
   {
    "id": "24.E2",
    "type": "💼",
-   "title": "Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter",
+   "title": "Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donne des transformations à éviter",
    "stars": 2,
    "minutes": 10,
    "gpu": false,

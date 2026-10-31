@@ -59,7 +59,7 @@
 - e) :
 
 
-### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé
+### 27.Q7 — Pourquoi juger des mini-batches plutôt qu'un point isolé
 
 - a) :
 - b) :
@@ -97,7 +97,7 @@
 
 ## 🔁 Rappels
 
-### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (auto-apprentissage)
 
 - a) :
 - b) :

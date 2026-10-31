@@ -99,7 +99,7 @@ c) **F** : 64 victoires en 3 000 épisodes ; le retour moyen reste sous 0,06 (il
 **Erreurs fréquentes** : lire en ① une « convergence rapide » sans regarder la KL ; prendre ② pour un équilibre parce que les courbes sont plates ; prendre ③ pour une politique déjà optimale parce que la courbe est plate.
 **Remédiation** : 25.34, 25.36, 27.14, 27.17, 26.23, 26.32.
 
-## CP6.8 — Écrire la loss d'un VAE en PyTorch 📦 · 2 points
+## CP6.8 — Écrire la loss d'un VAE en PyTorch 🔨 · 2 points
 
 ```python
 def vae_loss(logits, x, mu, log_var, beta=1.0):

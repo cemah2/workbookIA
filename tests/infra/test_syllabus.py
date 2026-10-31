@@ -186,7 +186,7 @@ def test_mylearn_tests_only_use_the_mylearn_module_fixture():
 def test_stats_measures_the_length_of_the_build_statements(tmp_path, capsys):
     """`syllabus.py stats` also shows the mean length of the 🔨/📦 statements per part (an indicator, BIBLE §12):
     a statement runs from its heading over the Markdown cells up to the first code cell or the next heading,
-    without its heading, objective, prerequisites and mylearn box."""
+    without its heading, objective, prerequisites, mylearn box and the « Contrat commun » paragraph of its module."""
     folder = tmp_path / "chapitres" / "ch99_essai"
     folder.mkdir(parents=True)
 
@@ -198,7 +198,8 @@ def test_stats_measures_the_length_of_the_build_statements(tmp_path, capsys):
 
     cells = [
         md("### Ex 99.1 — Une fonction 🔨 ★★ ⏱️ 30 min\n**Objectif :** pas compté.  \n**Prérequis :** non plus\n\n"
-           "> **Mode d'emploi mylearn** : encadré\n> sur deux lignes\n\nun deux trois"),
+           "> **Mode d'emploi mylearn** : encadré\n> sur deux lignes\n\n**Contrat commun de `essai.py`** : pas "
+           "compté,\nsur deux lignes\n\nun deux trois"),
         md("quatre cinq"),
         code("x = ..."),
         md("six, après la cellule de code : hors de l'énoncé"),
@@ -216,3 +217,86 @@ def test_stats_measures_the_length_of_the_build_statements(tmp_path, capsys):
     assert syllabus.main(["stats"]) == 0                                   # the real repository: no failure
     text = capsys.readouterr().out
     assert "Longueur moyenne des énoncés 🔨 et 📦" in text and "| III · ML classique |" in text
+
+
+# Formats of the published Markdown supports (audit P5 of parts V and VI, R9; formats fixed in session 43, BIBLE §22
+# 2026-10-04). A support follows the contract: these tests stop the drift seen from one audit to the next.
+
+def _published_chapters(chapters):
+    return [ch for cid, ch in chapters.items()
+            if not syllabus.is_cp(cid) and ch.get("dir") and syllabus.published(ch)]
+
+
+def _support_lines(ch, names):
+    for name in names:
+        path = ROOT / "chapitres" / ch["dir"] / name
+        if path.exists():
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                yield name, number, line
+
+
+def test_exercise_headers_of_hints_and_solutions_end_with_the_icon_of_their_type(chapters):
+    """(a) « ### Ex N.k — Titre icône » in 04_indices.md and 05_solutions.md: the icon of the contract type."""
+    import re
+
+    wrong = []
+    for ch in _published_chapters(chapters):
+        types = {e["id"]: e["type"] for e in ch["exercises"]}
+        for name, number, line in _support_lines(ch, ("04_indices.md", "05_solutions.md")):
+            m = re.match(r"### Ex (\S+) — (.*)$", line)
+            if m and not m.group(2).rstrip().endswith(types.get(m.group(1), "\0")):
+                wrong.append(f"{ch['dir']}/{name}:{number}: expected the icon {types.get(m.group(1))} at the end "
+                             f"of « {line} »")
+    assert not wrong, f"{len(wrong)} header(s): " + " | ".join(wrong[:20])
+
+
+# Chapters 0B to 7 name a recall of part 0 « 0A : … » or « 0B : … », a form older than the rule of session 43 (the
+# rule applies from ch. 12 on, which session 43 aligned; ch. 8 to 11 already follow it).
+RECALL_PREFIX_FROM = "12"
+
+
+def test_recall_headers_name_their_source_chapter_then_a_lowercase(chapters):
+    """(b) « ### N.R1 — Ch. M : titre » in 02, 04, 05 and 06, M being the source of the recall (its prerequisite,
+    `recall_from` of the chapter), followed by a lowercase letter, unless the title starts with a name written with
+    several capitals (« VGG16 », « PyTorch »)."""
+    import re
+
+    wrong = []
+    for ch in _published_chapters(chapters):
+        if syllabus.rank(ch["id"]) < syllabus.rank(RECALL_PREFIX_FROM):
+            continue
+        recalls = {e["id"]: e for e in ch["exercises"] if e["type"] == "🔁"}
+        for name, number, line in _support_lines(ch, ("02_exercices.md", "04_indices.md", "05_solutions.md",
+                                                      "06_mes_reponses.md")):
+            m = re.match(r"#+ (?:Ex )?(\S+\.R\d+) — (.*)$", line)
+            if not m or m.group(1) not in recalls:
+                continue
+            source = recalls[m.group(1)]["prereq"][0]
+            rest = re.match(rf"Ch\. {re.escape(source)} : (\S+)", m.group(2))
+            first = rest.group(1) if rest else ""
+            if not rest or (first[0].isupper() and sum(c.isupper() for c in first) < 2):
+                wrong.append(f"{ch['dir']}/{name}:{number}: expected « {m.group(1)} — Ch. {source} : » and a "
+                             f"lowercase letter in « {line} »")
+    assert not wrong, f"{len(wrong)} header(s): " + " | ".join(wrong[:20])
+
+
+def test_recall_headers_of_the_exercises_show_their_stars_and_minutes(chapters):
+    """(c) every recall of the contract has its header in 02_exercices.md, ending with « 🔁 ★ ⏱️ 5 min » (its stars
+    and minutes)."""
+    import re
+
+    wrong = []
+    for ch in _published_chapters(chapters):
+        recalls = {e["id"]: e for e in ch["exercises"] if e["type"] == "🔁"}
+        seen = set()
+        for name, number, line in _support_lines(ch, ("02_exercices.md",)):
+            m = re.match(r"#+ (?:Ex )?(\S+\.R\d+) — ", line)
+            if not m or m.group(1) not in recalls:
+                continue
+            seen.add(m.group(1))
+            e = recalls[m.group(1)]
+            end = f" 🔁 {syllabus.stars(e['stars'])} ⏱️ {e['minutes']} min"
+            if not line.rstrip().endswith(end):
+                wrong.append(f"{ch['dir']}/{name}:{number}: expected « …{end} » at the end of « {line} »")
+        wrong += [f"{ch['dir']}/02_exercices.md: expected a header for {rid}" for rid in sorted(set(recalls) - seen)]
+    assert not wrong, f"{len(wrong)} header(s): " + " | ".join(wrong[:20])

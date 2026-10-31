@@ -197,7 +197,7 @@ Relis les §26.7 à §26.7.2 de la fiche.
 </details>
 <details><summary>Indice 2</summary>
 
-Le Q-learning prend le **max** de la ligne de $s'$ ; SARSA prend la valeur de l'action $a'$ que la politique a choisie, et qu'elle jouera. Un algorithme est *on-policy* quand il apprend la valeur de la politique qu'il suit.
+Le Q-learning prend le **max** de la ligne de $s'$ ; SARSA prend la valeur de l'action $a'$ que la politique a choisie, et qu'elle jouera. Un algorithme est on-policy (*sur politique*) quand il apprend la valeur de la politique qu'il suit.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -354,7 +354,7 @@ SARSA remplace $\max_{a'} Q(s', a')$ par $Q(s', a')$ de l'action **choisie**. Le
 </details>
 <details><summary>Indice 3</summary>
 
-a) L'action 2 est la troisième valeur de la ligne, 0,3 : $y = 0{,}2 + 0{,}9 \times 0{,}3 = 0{,}47$. Pour b), $0{,}5 + 0{,}5\,(y - 0{,}5)$ ; pour c), reprends le c) de l'Ex 26.3 ; pour d), que vaut $Q(s', 1)$ par rapport au max ? Pour e), relis la définition de *on-policy*.
+a) L'action 2 est la troisième valeur de la ligne, 0,3 : $y = 0{,}2 + 0{,}9 \times 0{,}3 = 0{,}47$. Pour b), $0{,}5 + 0{,}5\,(y - 0{,}5)$ ; pour c), reprends le c) de l'Ex 26.3 ; pour d), que vaut $Q(s', 1)$ par rapport au max ? Pour e), relis la définition de on-policy.
 
 </details>
 
@@ -564,7 +564,7 @@ Commence par « exploiter rapporte maintenant, explorer rapporte de l'informatio
 
 </details>
 
-### 26.E4 — Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ?
+### 26.E4 — Pourquoi DQN utilise-t-il une mémoire de rejeu et un réseau cible ?
 
 <details><summary>Indice 1</summary>
 
@@ -1031,7 +1031,7 @@ for n, Q in tables.items():
 
 </details>
 
-### Ex 26.31 — Une mémoire de rejeu (replay buffer) 🔨
+### Ex 26.31 — Une mémoire de rejeu 🔨
 
 <details><summary>Indice 1</summary>
 

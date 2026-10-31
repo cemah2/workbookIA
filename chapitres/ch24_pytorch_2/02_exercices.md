@@ -145,7 +145,7 @@ f) Vrai ou faux : Keras 3 a gardé l'API fonctionnelle.
 ### 24.R1 — Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs 🔁 ★ ⏱️ 5 min
 *Ch. 23 (§23.7, §23.8.3) · fiche §24.2.2, §24.2.7 · parcours R*
 
-a) Ce que garde l'historique d'une fonction `fit()` honnête : (A) la loss d'entraînement de chaque epoch ; (B) la loss et l'accuracy de validation de chaque epoch ; (C) une copie des poids de chaque epoch ; (D) le learning rate de chaque epoch ; (E) la loss de test de chaque epoch. Écris leurs lettres.
+a) Ce que garde l'historique d'une fonction `fit()` honnête : (A) la loss d'entraînement de chaque epoch ; (B) la loss et l'accuracy de validation de chaque epoch ; (C) une copie des poids de chaque epoch ; (D) le learning rate de chaque epoch (utile dès qu'un planning le fait varier) ; (E) la loss de test de chaque epoch. Écris leurs lettres.
 b) Ce qu'il faut noter en plus pour comparer deux runs : (A) la couleur des courbes ; (B) la graine ; (C) tous les hyperparamètres, valeurs par défaut comprises ; (D) la durée et la machine. Écris leurs lettres.
 c) Vrai ou faux : la loss d'entraînement qu'affiche une boucle comme celle du ch. 23 est calculée avec les poids de fin d'epoch.
 d) Les losses de validation d'un run, epoch par epoch à partir de l'epoch 1, valent $0{,}52 ;\ 0{,}47 ;\ 0{,}45 ;\ 0{,}46 ;\ 0{,}44 ;\ 0{,}45$. Le numéro de la meilleure epoch.
@@ -298,7 +298,7 @@ Dans ta copie : quelle stratégie choisirais-tu avec un CPU seulement et un week
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 24.8 — La data augmentation en cinq lignes 🗣️ ★ ⏱️ 10 min
+### Ex 24.8 — L'augmentation de données en cinq lignes 🗣️ ★ ⏱️ 10 min
 **Objectif :** expliquer à un débutant ce qu'est l'augmentation de données et pourquoi elle aide.
 **Prérequis :** fiche §24.4.6 · **Parcours :** R
 
@@ -341,7 +341,7 @@ Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis com
 
 « Vous avez deux jours de GPU pour régler un réseau. Comment organisez-vous la recherche d'hyperparamètres ? »
 
-### 24.E2 — Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter 💼 ★★ ⏱️ 10 min
+### 24.E2 — Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donne des transformations à éviter 💼 ★★ ⏱️ 10 min
 *Fiche §24.4.6 · parcours R*
 
 « Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donnez des transformations à éviter, et dites pourquoi. »

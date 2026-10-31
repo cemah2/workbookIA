@@ -270,7 +270,7 @@ Les moyennes des pixels vont de 35 (sandales) à 98 (manteaux), sur une échelle
 **Erreurs fréquentes** : croire que l'oubli de la normalisation lève une erreur (seul l'oubli de la conversion en `float` en lève une) ; regarder l'accuracy de la 1ʳᵉ epoch au lieu de la 3ᵉ ; confondre « l'écart existe » et « l'écart dépasse 3 points ».
 **Variante** : avec SGD (learning rate 0,1) au lieu d'Adam, et les pixels bruts, la loss moyenne de la 1ʳᵉ epoch dépasse **2 millions**, puis le réseau reste bloqué vers **2,3**, soit $\ln 10$ : les pas géants ont rendu les ReLU muettes, et il n'apprend plus rien. Avec les pixels divisés par 255, le même SGD descend à 0,70 en trois epochs.
 
-### Ex 23.15 — Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader 📦
+### Ex 23.15 — Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader 📦
 **Réponses** : a) **600** ; b) **0,2858** ; c) **0,3529**.
 **Démarche** :
 ```python
@@ -527,7 +527,7 @@ def extract_features_24(model, x, batch_size=250):
         model.fc = head
 ```
 **Démarche** : 5 130 paramètres entraînables (la tête, $512 \times 10 + 10$) contre 11 176 512 gelés. Les features de 3 000 images à 112 pixels prennent une trentaine de secondes ; la tête, entraînée 20 epochs sur ces features, atteint **86,0 %** sur 1 000 images de validation, contre **83,5 %** pour le MLP du livre entraîné sur les mêmes 2 000 images. La nouvelle couche est créée **après** le gel : ses paramètres restent entraînables.
-**Dans tes notes** : l'avantage est modeste. Les features d'ImageNet ont été apprises sur des photos en couleur d'objets du monde, à 224 pixels ; des vêtements gris de 28 pixels agrandis en sont loin, un déplacement de domaine. Le transfert brille quand les nouvelles images ressemblent à celles du pré-entraînement et qu'on en a peu, et plus encore quand on dégèle les dernières couches (le fine-tuning, chapitre bonus B1).
+**Dans tes notes** : l'avantage est modeste. Les features d'ImageNet ont été apprises sur des photos en couleur d'objets du monde, à 224 pixels ; des vêtements gris de 28 pixels agrandis en sont loin, un déplacement de domaine. Le transfer learning brille quand les nouvelles images ressemblent à celles du pré-entraînement et qu'on en a peu, et plus encore quand on dégèle les dernières couches (le fine-tuning, chapitre bonus B1).
 **Erreurs fréquentes** : geler **après** avoir remplacé `fc` (la tête est gelée aussi : 0 paramètre entraînable) ; oublier la normalisation d'ImageNet ; donner une image à 1 canal au réseau ; `model.eval()` oublié (la batchnorm du ResNet utiliserait les statistiques de chaque mini-batch) ; laisser `model.fc = nn.Identity()` après l'extraction.
 **Variante** : dégeler aussi le dernier bloc (`model.layer4`) ajoute **8 393 728** paramètres entraînables : on passe de l'extraction de features au fine-tuning partiel, beaucoup plus coûteux, puisqu'il faut alors refaire la passe avant à chaque epoch.
 
@@ -613,7 +613,7 @@ a) et b) La loss de validation remonte à l'epoch 3 : une patience de 1 s'arrêt
 **Erreurs fréquentes** : rendre `best_epoch_` sans `+ 1` (une epoch de trop tôt) ; compter les epochs à partir de 0 ; confondre l'epoch d'arrêt et l'epoch rechargée ; reprendre la règle de Keras 2.0, qui attendait une epoch de plus que sa patience.
 **Variante** : avec une patience de 4, l'arrêt a lieu à l'epoch **12**, et l'on recharge encore l'epoch **8**.
 
-### Ex 23.28 — Rédiger la fiche du modèle (model card) 🛠️
+### Ex 23.28 — Rédiger la fiche modèle 🛠️
 **Réponse** : une fiche possible (le notebook de solutions la construit avec une f-string, qui insère les chiffres) :
 
 > **Détails du modèle** : le MLP du livre, 623 290 paramètres, Adam (learning rate 0,001), 5 epochs, graine 2321, PyTorch 2.11. **Usage prévu** : classer des images de vêtements de 28 × 28 pixels, en niveaux de gris, centrées sur fond noir, comme celles de Fashion-MNIST ; usage pédagogique ; hors du champ : des photos prises au téléphone, en couleur, décentrées ou sur fond clair, et toute décision qui concerne une personne. **Facteurs** : la classe (les hauts se confondent), le cadrage (2 pixels de décalage coûtent plus de 30 points), le contraste (des images inversées tombent sous le hasard), l'orientation (le miroir coûte 25 points). **Métriques** : accuracy de validation et accuracy par classe, matrice de confusion. **Données d'évaluation** : 6 000 images de validation, 600 par classe ; le test n'a pas servi. **Données d'entraînement** : Fashion-MNIST (Zalando, licence MIT), 54 000 images, découpage stratifié ; prétraitement : pixels / 255, puis $(x - 0{,}2858)/0{,}3529$, sauvegardé avec le modèle. **Analyses quantitatives** : accuracy de validation 0,8867 ; les classes les moins bien reconnues sont la chemise, le pull et le manteau. **Considérations éthiques** : des vêtements de catalogue surtout occidentaux, photographiés en studio ; le modèle ne doit pas servir à décrire ou juger des personnes. **Mises en garde et recommandations** : une confiance élevée ne garantit rien hors des données d'entraînement (0,95 sur des images inversées, classées faux) ; pour un usage réel, un CNN, de l'augmentation de données, une évaluation sur des photos du terrain et une mesure finale sur le test, une seule fois.

@@ -664,7 +664,7 @@ Pose chaque prédiction comme une comparaison : a) une accuracy après 3 epochs,
 
 </details>
 
-### Ex 23.15 — Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader 📦
+### Ex 23.15 — Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader 📦
 
 <details><summary>Indice 1</summary>
 
@@ -987,7 +987,7 @@ def simulate_27(val_losses, patience, min_delta=0.0):
 
 </details>
 
-### Ex 23.28 — Rédiger la fiche du modèle (model card) 🛠️
+### Ex 23.28 — Rédiger la fiche modèle 🛠️
 
 <details><summary>Indice 1</summary>
 

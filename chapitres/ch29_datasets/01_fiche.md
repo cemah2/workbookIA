@@ -45,7 +45,7 @@ Le chapitre du livre se lit en vingt minutes : c'est un annuaire. Lis-le pour l'
 1. Avant d'entraîner de zéro, cherche ce qui existe : un modèle pré-entraîné à ajuster (transfer learning, bonus B1), sinon un dataset public, et seulement ensuite une collecte.
 2. Un dataset public n'est pas un dataset libre : lis sa **licence** (usage commercial ? attribution ? recherche seulement ?), son histoire (a-t-il été retiré ?) et ce qu'il contient (données personnelles, œuvres protégées).
 3. **Inspecte** toujours les données : des champs vides, des codes comme −999 qui jouent les valeurs manquantes, des doublons, des labels mal orthographiés, des unités mélangées, des images manquantes.
-4. MNIST est propre et facile ; Fashion-MNIST a exactement le même format et il est plus difficile : c'est le banc d'essai suivant.
+4. MNIST est propre et facile ; Fashion-MNIST a exactement le même format et il est plus difficile : c'est le benchmark suivant.
 5. Les bibliothèques fournissent des datasets prêts à charger : `sklearn.datasets`, `torchvision.datasets`, Hugging Face `datasets` ; vérifie leurs vraies tailles, la liste du livre se trompe souvent.
 6. Les grandes collections d'aujourd'hui : Hugging Face Hub, Kaggle, OpenML, le dépôt UCI ; chaque dataset y a une page (sa *dataset card*) qui donne licence, taille et usage prévu.
 7. Une **fuite** entre entraînement et test (doublons, quasi-doublons, une colonne qui contient la réponse) donne un score trop beau pour être vrai ; on la cherche avant de célébrer.

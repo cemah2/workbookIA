@@ -315,8 +315,8 @@
   },
   {
    "topic": "pooling",
-   "book": "en perte de vitesse face aux convolutions à pas (stride)",
-   "today": "convolutions à pas et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21",
+   "book": "en perte de vitesse face aux convolutions de stride 2",
+   "today": "convolutions de stride 2 et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21",
    "keep": "oui",
    "verify": "doc torchvision.models (ResNet, ConvNeXt)"
   },

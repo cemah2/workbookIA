@@ -7,12 +7,14 @@
     python tools/build_answers.py
     python tools/run_all_notebooks.py checkpoints/partie_6/02_examen_notebook.ipynb
 
-The exam notebook has two parts. Part A is done DURING the exam: the two code questions, CP6.8 (📦, PyTorch: the
-loss of a VAE, tested on a given batch) and CP6.9 (🐛, PyTorch: one step of a GAN with three faulty lines), without
-mylearn and without any check. Part B is done AFTER the exam: it checks the code of part A against oracles (the
-formulas of chapter 25 written once more; the GAN step of chapter 27, compared weight by weight), then the answers
-written on paper (sub-IDs CP6.1a, CP6.2a, ...). Its cells only run once ``EXAM_OVER = True``; its tools come from
-``wb.nbtools``. The solutions notebook records every checked answer with ``wb.record``.
+The exam notebook has two parts. Part A is done DURING the exam: the two code questions, CP6.8 (🔨 with a written
+contract, PyTorch: the loss of a VAE, tested on a given batch) and CP6.9 (🐛, PyTorch: one step of a GAN with three
+faulty lines), without mylearn and without any check. Part B is done AFTER the exam: it checks the code of part A
+against oracles imported from ``wb.exams`` (the formulas of chapter 25; the GAN step of chapter 27, compared weight
+by weight), then the answers written on paper (sub-IDs CP6.1a, CP6.2a, ...). Part B holds no solution in clear: the
+oracles, and the hints that give the KL formula or name a faulty line of CP6.9 with its fix, come from ``wb.exams``
+(audit P5 R3). Its cells only run once ``EXAM_OVER = True``; its tools come from ``wb.nbtools``. The solutions
+notebook records every checked answer with ``wb.record``.
 """
 
 from __future__ import annotations
@@ -37,7 +39,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# CP6.8: a batch of 16 MNIST images in [0, 1] (N, 1, 28, 28), the logits a decoder gave for them, and the two heads
+# CP6.8: a batch of 16 MNIST images in [0, 1] (N, 1, 28, 28), random logits (an untrained decoder), and the two heads
 # of an encoder with d = 4 latents (mu, log_var); everything in float64
 _X8, _ = wb.datasets.load_mnist("train", n=16, normalize=True, seed=68)
 X_V = torch.from_numpy(_X8.astype(np.float64)).unsqueeze(1)                        # (16, 1, 28, 28)
@@ -70,10 +72,10 @@ def real_batch(n=64):
 print("X_V:", tuple(X_V.shape), "· LOGITS_V:", tuple(LOGITS_V.shape), "· MU_V and LOGVAR_V:", tuple(MU_V.shape),
       "· G parameters:", sum(p.numel() for p in make_gan()[0].parameters()))'''
 
-CP68_MD = r'''### CP6.8 — Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni 📦 ★★ ⏱️ 15 min · 2 points
+CP68_MD = r'''### CP6.8 — Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni 🔨 ★★ ⏱️ 15 min · 2 points
 **Objectif :** écrire de mémoire la loss d'un VAE avec ses deux termes à la bonne échelle.
 
-Avec PyTorch. La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), les **logits** qu'un décodeur a rendus pour elles (`LOGITS_V`, même forme) et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`.
+Avec PyTorch. La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), des **logits** tirés au hasard, comme ceux d'un décodeur pas encore entraîné (`LOGITS_V`, même forme), et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`. Avec ces logits, la reconstruction sera bien plus grande que celle d'un VAE entraîné.
 
 a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par image** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
 b) Avec le batch fourni : reporte sur ta feuille $[\text{rec}, \text{kl}]$ (2 décimales). **[0,3]**
@@ -150,7 +152,7 @@ wb.record("CP6.8c", loss3_8.item(), decimals=2, mistakes={
     "la loss vaut rec + beta * kl : avec beta = 3, la KL compte trois fois": loss_8.item(),
     "la KL est SOMMÉE sur les 4 latents, puis moyennée sur les images": variant_8(kl_mean=True, beta=3.0)})'''
 
-CP69_MD = r'''### CP6.9 — Réparer un pas d'entraînement de GAN 🐛 ★ ⏱️ 10 min · 1,5 point
+CP69_MD = r'''### CP6.9 — Réparer un pas d'entraînement de GAN 🐛 ★★ ⏱️ 10 min · 1,5 point
 **Objectif :** reconnaître les trois erreurs classiques d'un pas de GAN, et les corriger.
 
 Avec PyTorch. `gan_step_buggy` (cellule suivante) doit faire **un** pas d'entraînement d'un GAN : d'abord le discriminateur (vrais exemples contre faux), puis le générateur (loss non saturante, comme au ch. 27). `make_gan()` rend un générateur, un discriminateur (qui rend un **logit**) et leurs deux optimiseurs ; `real_batch()` tire 64 vrais exemples. Elle contient **trois** lignes fautives ; une erreur peut se déclarer plus loin que sa cause.
@@ -255,6 +257,7 @@ PART_B_FLAG = r'''EXAM_OVER = False   # set it to True once your exam is finishe
 
 import re
 
+from wb import exams
 from wb.nbtools import StopCheck, as_numpy, fr, letters_text, shape_text, verdict
 
 RESULTS = {}        # sub-ID -> result of wb.check
@@ -318,7 +321,7 @@ def code_check(ex_id, value, reminder=""):
 
 
 def sorted_letters(value):
-    """A set of letters typed in any order ("J, C et G") -> its letters in alphabetical order ("CGJ")."""
+    """A set of letters typed in any order ("K, A et E") -> its letters in alphabetical order ("AEK")."""
     return letters_text(value, sort=True)
 
 
@@ -340,13 +343,8 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
     for key in ("CP6.8b", "CP6.8c"):
         RESULTS.pop(key, None)
     restore_data("CP6.8", ["X_V", "LOGITS_V", "MU_V", "LOGVAR_V"])
-
-    def oracle_8(logits, x, mu, log_var, beta=1.0):
-        """(loss, rec, kl) as floats: BCE summed over the pixels and Gaussian KL summed over the latents, per example."""
-        n = x.shape[0]
-        rec = float(F.binary_cross_entropy_with_logits(logits, x, reduction="sum")) / n
-        kl = float(0.5 * (mu ** 2 + log_var.exp() - 1 - log_var).sum()) / n
-        return rec + beta * kl, rec, kl
+    oracle_8 = exams.cp6_vae_loss                       # (loss, rec, kl) as floats, the formulas of chapter 25
+    hints_8 = exams.HINTS["CP6.8"]
 
     def as_float(value):
         try:
@@ -380,10 +378,8 @@ if exam_over() and ready("CP6.8", "np", "torch", "F", "X_V", "LOGITS_V", "MU_V",
                  "rec : la cross-entropy binaire sur les logits, sommée sur les pixels, moyennée sur les images.",
                  f"rec vaut {fr(got[1], 4)}, attendu {fr(want[1], 4)} : la cross-entropy binaire sur les LOGITS (une seule "
                  "sigmoïde), une SOMME sur les pixels de chaque image, divisée par le nombre d'images.")
-            prop("CP6.8", abs(got[2] - want[2]) < 1e-9 + 1e-6 * abs(want[2]),
-                 "kl : ½(μ² + σ² − 1 − ln σ²) sommée sur les latents, moyennée sur les images.",
-                 f"kl vaut {fr(got[2], 4)}, attendu {fr(want[2], 4)} : ½(μ² + exp(log_var) − 1 − log_var), sommée sur les "
-                 "latents, divisée par le nombre d'images.")
+            prop("CP6.8", abs(got[2] - want[2]) < 1e-9 + 1e-6 * abs(want[2]), hints_8["kl_ok"],
+                 hints_8["kl_wrong"].format(got=fr(got[2], 4), want=fr(want[2], 4)))
             prop("CP6.8", abs(got[0] - want[0]) < 1e-6 * abs(want[0]), "loss = rec + kl avec beta = 1.",
                  f"loss vaut {fr(got[0], 4)}, attendu {fr(want[0], 4)} = rec + beta * kl.")
         prop("CP6.8", all(torch.equal(a, b) for a, b in zip(inputs, (LOGITS_V, X_V, MU_V, LOGVAR_V))),
@@ -435,20 +431,8 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
     PENDING.discard("CP6.9")
     RESULTS.pop("CP6.9a", None)
     RESULTS["CP6.9a"] = wb.check("CP6.9a", ... if faulty_9 is ... else sorted_letters(faulty_9))
-
-    def reference_step(G, D, real, opt_d, opt_g):
-        """The GAN step of chapter 27: D on real and detached fakes, then G with the label 1 (non-saturating)."""
-        ones, zeros = torch.ones(len(real), 1), torch.zeros(len(real), 1)
-        fake = G(torch.randn(len(real), 1))
-        d_loss = bce(D(real), ones) + bce(D(fake.detach()), zeros)
-        opt_d.zero_grad()
-        d_loss.backward()
-        opt_d.step()
-        g_loss = bce(D(fake), ones)
-        opt_g.zero_grad()
-        g_loss.backward()
-        opt_g.step()
-        return d_loss.item(), g_loss.item()
+    reference_step = exams.cp6_gan_step                 # the GAN step of chapter 27
+    hints_9 = exams.HINTS["CP6.9"]
 
     def run_steps(step, n=3, seed=69):
         """(ok, losses or error, G weights, D weights) after n steps from make_gan(seed)."""
@@ -468,8 +452,7 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
         PENDING.add("CP6.9")
     elif not ok:
         prop("CP6.9", False, "", f"gan_step_fixed lève une erreur : {mine}" + (
-            " (un backward à travers un graphe déjà libéré : le pas de D a-t-il détaché les faux ?)"
-            if "backward through the graph" in str(mine) else ""))
+            hints_9["freed_graph"] if "backward through the graph" in str(mine) else ""))
     else:
         _, ref, ref_g, ref_d = run_steps(reference_step)
         try:
@@ -485,28 +468,17 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
         first_d = mine_d1 is not None and all(torch.allclose(a, b, rtol=1e-5, atol=1e-7) for a, b in zip(mine_d1, ref_d1))
         start_g = [p.detach().clone() for p in make_gan(69)[0].parameters()]
         still_g = mine_g is not None and all(torch.equal(a, b) for a, b in zip(mine_g, start_g))   # G never moved
-        if first_d:
-            why_d = ("le premier pas de D est juste ; l'écart vient ensuite du pas du générateur "
-                     "(un opt_d.step() de trop, ou un générateur qui a bougé autrement).")
-        elif still_g:
-            why_d = ("l'écart vient du pas du générateur : le générateur n'a pas bougé, et D a fait un second pas avec "
-                     "les gradients de g_loss (ligne J : c'est opt_g qui fait le pas du générateur).")
-        else:
-            why_d = "vrais exemples avec le label 1, faux DÉTACHÉS avec le label 0, et un seul tirage torch.randn (ligne B)."
+        why_d = hints_9["d_after_first" if first_d else "d_still_g" if still_g else "d_other"]
         prop("CP6.9", same_d, "après trois pas, les poids du discriminateur sont ceux du pas de référence.",
              "après trois pas, les poids du discriminateur diffèrent de ceux du pas de référence : " + why_d)
         prop("CP6.9", same_g, "après trois pas, les poids du générateur sont ceux du pas de référence.",
-             "après trois pas, les poids du générateur diffèrent : "
-             + ("il n'a pas bougé, c'est opt_g qui fait son pas (ligne J)." if still_g else
-                "sa loss donne le label 1 aux faux (non saturante), et c'est opt_g qui fait le pas."))
+             "après trois pas, les poids du générateur diffèrent : " + hints_9["g_still" if still_g else "g_other"])
         if pairs_ok and len(mine) == len(ref):
             first_losses = np.allclose(np.array(mine[0], dtype=float), np.array(ref[0], dtype=float), rtol=1e-5)
             prop("CP6.9", np.allclose(np.array(mine, dtype=float), np.array(ref, dtype=float), rtol=1e-5),
                  "les losses rendues sont celles du pas de référence.",
                  "les losses du premier pas sont justes, celles des pas suivants diffèrent : c'est la conséquence de "
-                 "l'écart des poids ci-dessus." if first_losses else
-                 "les losses rendues diffèrent de celles du pas de référence : d_loss = BCE(D(vrais), 1) + BCE(D(faux), 0), "
-                 "g_loss = BCE(D(faux), 1).")
+                 "l'écart des poids ci-dessus." if first_losses else hints_9["losses_wrong"])
         if pairs_ok and same_d and same_g:
             G_c, (d_c, g_c) = train_gan(gan_step_fixed)
             with torch.no_grad():
@@ -777,7 +749,7 @@ def header_cells(kind: str) -> list:
     if kind == "exercise":
         title = "# Checkpoint VI · Examen blanc — notebook de l'examen"
         how = ("Ce notebook accompagne le sujet `01_examen_sujet.md`.\n\n"
-               "- **Partie A, pendant l'examen** : les deux questions de code, CP6.8 (📦, 2 points : la loss d'un VAE) "
+               "- **Partie A, pendant l'examen** : les deux questions de code, CP6.8 (🔨, 2 points : la loss d'un VAE) "
                "et CP6.9 (🐛, 1,5 point : un pas de GAN à réparer), avec PyTorch. Écris ton code dans les cellules à "
                "compléter, sans `mylearn`, sans les corrigés et sans assistant IA ; `help()` et la documentation "
                "officielle de PyTorch sont permis. Rien n'est vérifié pendant l'examen : les cellules « essai » montrent "

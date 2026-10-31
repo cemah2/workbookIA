@@ -30,7 +30,7 @@ e) Vrai ou faux : un réseau ne s'appelle CNN que si toutes ses couches sont des
 a) Vrai ou faux : avec le partage de poids, toutes les positions de l'image sont évaluées avec les mêmes poids.
 b) Le nombre de poids (sans biais) d'un filtre 5 × 5 sur une image en niveaux de gris.
 c) Vrai ou faux : le nombre de poids d'un filtre dépend de la taille de l'image à laquelle on l'applique.
-d) Le pixel de l'image qui se trouve sous l'ancre du filtre s'appelle : (A) le noyau ; (B) le pixel focal ; (C) le champ récepteur ; (D) la carte de caractéristiques.
+d) Le pixel de l'image qui se trouve sous l'ancre du filtre s'appelle : (A) le noyau ; (B) le pixel focal ; (C) le champ récepteur ; (D) la carte d'activation.
 e) Pourquoi préfère-t-on des filtres de côté impair (3, 5, 7) ? (A) ils ont moins de poids ; (B) ils ont un pixel central, où placer l'ancre ; (C) ils s'entraînent plus vite ; (D) les GPU ne savent pas calculer les autres.
 
 ### 21.Q3 — Convolution ou corrélation croisée ? 🧠 ★★ ⏱️ 3 min
@@ -88,10 +88,10 @@ e) Cette convolution 1 × 1 reçoit un tenseur de forme `(8, 300, 28, 28)` : la 
 ### 21.Q8 — Couche de convolution et initialisation des filtres 🧠 ⏱️ 3 min
 *Fiche §21.7, §21.7.1 · livre §21.7, §21.7.1*
 
-a) Vrai ou faux : si **tous** les poids et les biais d'une couche de convolution et des couches suivantes partent d'une même valeur (une pour les poids, une pour les biais), les filtres de cette couche restent identiques pendant tout l'entraînement.
+a) Vrai ou faux : si **tous** les poids et les biais d'une couche de convolution et des couches suivantes (sans dropout) partent d'une même valeur (une pour les poids, une pour les biais), les filtres de cette couche restent identiques pendant tout l'entraînement.
 b) Le fan-in d'un neurone d'une convolution 3 × 3 sur une entrée à 64 canaux.
 c) L'écart-type de l'initialisation de He pour ce fan-in, $\sqrt{2/\text{fan-in}}$ (3 décimales).
-d) La sortie d'une couche de convolution, une tranche par filtre, s'appelle : (A) un noyau ; (B) une carte de caractéristiques (*feature map*) ; (C) un champ récepteur ; (D) un padding.
+d) La sortie d'une couche de convolution, une tranche par filtre, s'appelle : (A) un noyau ; (B) une carte d'activation ; (C) un champ récepteur ; (D) un padding.
 e) Vrai ou faux : `nn.Conv2d(3, 16, 3)`, sans autre argument, garde la hauteur et la largeur de l'image.
 
 ### 21.Q9 — Convolution transposée : les mots piégés 🧠 ★★ ⏱️ 3 min
@@ -153,7 +153,7 @@ a) Si la loss est $L = y_1 + y_2 + y_3$ : la valeur de $\partial L / \partial w$
 b) Si l'on connaît $\partial L / \partial y_i = (1, -1, 2)$ : la valeur de $\partial L / \partial w$.
 c) Vrai ou faux : dans le micro-autograd `Value` du ch. 18, les gradients d'un nœud utilisé plusieurs fois s'additionnent.
 
-### 21.R3 — 0B : le produit scalaire, ce que calcule un filtre en chaque position 🔁 ★ ⏱️ 5 min
+### 21.R3 — Ch. 0B : le produit scalaire, ce que calcule un filtre en chaque position 🔁 ★ ⏱️ 5 min
 *0B (produit scalaire) · parcours R*
 
 a) Le produit scalaire de $(1, 2, -1)$ et $(3, 0, 2)$.
@@ -387,7 +387,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|
-| 21.12 | conv_output_size et pad2d | 🔨 | ★ | 15 |
+| 21.12 | conv_output_size et pad2d | 🔨 | ★★ | 30 |
 | 21.13 | Prédire où une image CIFAR-10 « jaunit » | 🔮 | ★ | 10 |
 | 21.14 | im2col : la vue « œil de mouche » | 🔨 | ★★ | 30 |
 | 21.15 | conv2d : stride, padding, dilatation et groupes | 🔨 | ★★★ | 90 |
@@ -398,7 +398,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 21.20 | Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres | 🔮 | ★★ | 15 |
 | 21.21 | Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) | 🎨 | ★★★ | 45 |
 | 21.22 | Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST | 📦 | ★★★ | 45 |
-| 21.23 | Diagnostiquer les courbes et la matrice de confusion du CNN | 📈 | ★★ | 15 |
+| 21.23 | Diagnostiquer les courbes et la matrice de confusion du CNN | 📈 | ★★ | 25 |
 | 21.24 | Le CNN dont les formes ne passent pas | 🐛 | ★★ | 20 |
 | 21.25 | Briser la symétrie : filtres identiques, aléatoires ou He | 🔬 | ★★ | 25 |
 | 21.26 | Stride ou pooling : accuracy et temps sur CIFAR-10 | 🔬 | ★★★ | 40 |

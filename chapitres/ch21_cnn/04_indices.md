@@ -264,7 +264,7 @@ a) Ici $\partial L/\partial y_i = 1$ : $\partial L/\partial w = 1 + 2 + 3$. Pour
 
 </details>
 
-### 21.R3 — 0B : le produit scalaire, ce que calcule un filtre en chaque position
+### 21.R3 — Ch. 0B : le produit scalaire, ce que calcule un filtre en chaque position
 
 <details><summary>Indice 1</summary>
 

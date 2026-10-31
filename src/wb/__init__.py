@@ -8,6 +8,7 @@
 >>> wb.plot.plot_decision_boundary(model, X, y)
 >>> mylearn = wb.load_mylearn("learner") # your own library (or "ref" in solutions)
 >>> from wb.nbtools import checked, same, run_pytest_group   # tools of the check cells (ch. 21 on)
+>>> from wb import exams                 # oracles of part B of the exam notebooks (CP4 on), out of sight
 
 Importing ``wb`` is light: PyTorch is only imported by ``setup()`` (if
 installed) and by the functions that need it.

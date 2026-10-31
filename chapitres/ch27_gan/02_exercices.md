@@ -71,7 +71,7 @@ c) En PyTorch, le modèle combiné est remplacé par : (A) un seul optimiseur su
 d) Vrai ou faux : à l'étape de $G$, avec deux optimiseurs, `loss_g.backward()` dépose aussi des gradients dans les poids de $D$.
 e) Ce qui empêche cette étape de modifier $D$ : (A) `loss_g.backward()` ne touche pas $D$ ; (B) seul `opt_g.step()` est appelé, et les gradients laissés dans $D$ sont effacés par `opt_d.zero_grad()` avant son pas suivant ; (C) on entoure l'étape de `torch.no_grad()`.
 
-### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé 🧠 ⏱️ 3 min
+### 27.Q7 — Pourquoi juger des mini-batches plutôt qu'un point isolé 🧠 ⏱️ 3 min
 *Fiche §27.5 · livre §27.5 · parcours R*
 
 a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batches 32 points. Combien de pas le discriminateur fait-il par epoch, à raison d'un pas par mini-batch (le dernier, incomplet, compte aussi) ?
@@ -84,7 +84,7 @@ e) Le générateur du livre : 4 nombres en entrée, une couche dense de 16 neuro
 *Fiche §27.6.1 · livre §27.6.1 · parcours R*
 
 D'après l'article de Radford et coll. (2016), vrai ou faux ?
-a) Dans le discriminateur, on remplace le pooling par des convolutions à pas (*stride*) de 2.
+a) Dans le discriminateur, on remplace le pooling par des convolutions de stride 2.
 b) L'optimiseur conseillé est Adam, avec un learning rate de $10^{-3}$ pour le générateur et de $10^{-4}$ pour le discriminateur.
 c) Le **générateur** utilise des Leaky ReLU dans toutes ses couches.
 d) Pas de batchnorm sur la couche de sortie du générateur, ni sur la couche d'entrée du discriminateur.
@@ -112,7 +112,7 @@ e) Parmi ces moyens, lesquels combattent l'effondrement de mode ? (A) une couche
 
 ## 🔁 Rappels
 
-### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play) 🔁 ★ ⏱️ 5 min
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (auto-apprentissage) 🔁 ★ ⏱️ 5 min
 *Ch. 26 · fiche §27.3 · parcours R*
 
 a) En auto-apprentissage (*self-play*, ch. 26), l'agent joue contre : (A) une copie de lui-même ; (B) un humain ; (C) un adversaire qui joue au hasard.
@@ -154,13 +154,13 @@ Formules (fiche §27.6) : $H_{\text{out}} = \left\lfloor \frac{H_{\text{in}} + 2
 
 a) Le générateur du livre remet en forme la sortie d'une couche dense en un tenseur de 128 canaux de 7 × 7. Combien de neurones doit avoir cette couche ?
 b) Cette couche dense reçoit 1 024 valeurs. Combien a-t-elle de paramètres, biais compris ?
-c) Une convolution de noyau 4, de pas 2, de padding 1, sur une image de 28 × 28 : la hauteur de sortie.
+c) Une convolution de noyau 4, de stride 2, de padding 1, sur une image de 28 × 28 : la hauteur de sortie.
 d) La même convolution appliquée à la sortie de c) : la hauteur de sortie.
-e) Une convolution transposée de noyau 4, de pas 2, de padding 1 (sans `output_padding`), sur un tenseur de 7 × 7 : la hauteur de sortie.
+e) Une convolution transposée de noyau 4, de stride 2, de padding 1 (sans `output_padding`), sur un tenseur de 7 × 7 : la hauteur de sortie.
 f) Le nombre de paramètres de `nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1, bias=False)`.
 g) Le générateur du livre fait plutôt un suréchantillonnage 2 × 2 (qui n'a pas de paramètres) suivi d'une convolution de 128 vers 64 canaux, de noyau 5 × 5, avec biais. Combien de paramètres a cette convolution ?
 
-Dans ta copie : pourquoi 7 × 7 au départ, et pas 6 × 6 ou 8 × 8 ? Laquelle des couches de f) et de g) coûte le plus ? Laquelle des deux façons d'agrandir est la plus exposée au motif en damier (fiche §27.6.1), et pourquoi son noyau de 4 pour un pas de 2 limite-t-il le défaut ?
+Dans ta copie : pourquoi 7 × 7 au départ, et pas 6 × 6 ou 8 × 8 ? Laquelle des couches de f) et de g) coûte le plus ? Laquelle des deux façons d'agrandir est la plus exposée au motif en damier (fiche §27.6.1), et pourquoi son noyau de 4 pour un stride de 2 limite-t-il le défaut ?
 
 ### Ex 27.2 — Valeur minimax d'une petite matrice de gains ✏️ ★ ⏱️ 10 min
 **Objectif :** trouver le coup prudent de chaque joueur dans un jeu à somme nulle, et voir que maximin et minimax peuvent différer.

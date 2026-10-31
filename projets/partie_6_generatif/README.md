@@ -1,6 +1,6 @@
 # Mini-projet MP6 — Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST
 
-> Le mini-projet du checkpoint VI, à faire après l'examen blanc (environ 10 h). Il réunit les chapitres 25 et 27 (et le 29 pour la data card) dans un vrai banc d'essai : un VAE convolutif et un DCGAN entraînés sur les mêmes images, puis jugés par un protocole d'évaluation écrit **avant** les expériences. Un projet de portfolio : des résultats reproductibles (graines, configuration), une galerie, un README et une fiche modèle qui discutent les limites et les usages responsables.
+> Le mini-projet du checkpoint VI, à faire après l'examen blanc (environ 10 h). Il réunit les chapitres 25 et 27 (et le 29 pour la data card) dans un vrai banc d'essai (*benchmark*) : un VAE convolutif et un DCGAN entraînés sur les mêmes images, puis jugés par un protocole d'évaluation écrit **avant** les expériences. Un projet de portfolio : des résultats reproductibles (graines, configuration), une galerie, un README et une fiche modèle qui discutent les limites et les usages responsables.
 
 | | |
 |---|---|
@@ -64,7 +64,7 @@ Il s'écrit **avant** les expériences, dans ton README (étape MP6.1), et ne ch
 | MP6.4 | DCGAN (option cGAN) : entraînement journalisé, checkpoints, reprise | `generator_body`, `discriminator_body`, `Generator`, `Discriminator`, `gan_step`, `train_gan` et le checkpoint, `log.csv`, deux figures | 150 min |
 | MP6.5 | Évaluation : distance de Fréchet sur 3 graines, classes générées, plus proches voisins | `class_report`, `nearest_neighbors`, `results.json`, trois figures | 90 min |
 | MP6.6 | Galerie : grilles, interpolations sphériques, échantillons conditionnels | `interpolate`, deux ou trois figures légendées | 45 min |
-| MP6.7 | README, model card, tests pytest et nettoyage du dépôt | `test_genbench.py`, `README.md`, `MODEL_CARD.md` | 75 min (sans compter le temps de machine du mode complet sur Colab, qui tourne sans toi) |
+| MP6.7 | README, fiche modèle, tests pytest et nettoyage du dépôt | `test_genbench.py`, `README.md`, `MODEL_CARD.md` | 75 min (sans compter le temps de machine du mode complet sur Colab, qui tourne sans toi) |
 
 ## La grille d'évaluation (sur 20)
 
@@ -75,14 +75,14 @@ Il s'écrit **avant** les expériences, dans ton README (étape MP6.1), et ne ch
 | **GAN stable, journalisé, repris** | 4 | règles de Radford, loss non saturante, faux détachés, `log.csv` et courbes commentées, un entraînement interrompu puis repris depuis `last.pt` (deux réseaux, deux optimiseurs, états aléatoires), la reprise au bit près vérifiée (c'est ce critère qui la note) | un GAN qui génère, mais sans checkpoint complet ou sans journal |
 | **Évaluation rigoureuse** | 4 | protocole fixé à l'avance et suivi, trois graines par générateur avec leur écart, plancher et repères de la distance, effondrement de mode et mémorisation vérifiés et interprétés | une seule graine, ou une distance de Fréchet sans repère ni contrôle de mémorisation |
 | **Galerie** | 2 | des grilles pour un bruit fixé, des interpolations slerp (et la ligne droite à côté), des échantillons conditionnels si le cGAN est fait, chaque figure légendée | des figures sans légende |
-| **README et model card** | 3 | résultats chiffrés (moyenne et écart sur trois graines), limites honnêtes (petits modèles, features d'un petit CNN, distance non comparable aux FID publiés), usages responsables et risques des images générées | un README sans chiffres, ou une fiche modèle sans limites ni risques |
+| **README et fiche modèle** | 3 | résultats chiffrés (moyenne et écart sur trois graines), limites honnêtes (petits modèles, features d'un petit CNN, distance non comparable aux FID publiés), usages responsables et risques des images générées | un README sans chiffres, ou une fiche modèle sans limites ni risques |
 
 ## Les extensions (pour aller plus loin)
 
 - **Une diffusion latente miniature** : un petit modèle de diffusion dans l'espace latent du VAE, comparé aux deux autres avec le même protocole (préparation du bonus B5).
 - **Deux extracteurs de features** : la distance de Fréchet sur les features de ton classifieur et sur celles d'un autre réseau (un autre CNN, ou un réseau pré-entraîné sur des images agrandies) ; le classement des générateurs change-t-il ? Discute la dépendance de la mesure.
 - **Une démo interactive** (Gradio) publiée sur un Space Hugging Face, avec la fiche modèle.
-- **Un volet apprentissage par renforcement** : un agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt.
+- **Un volet apprentissage par renforcement** : un agent de morpion entraîné par auto-apprentissage (ch. 26), évalué contre minimax, présenté dans le même dépôt.
 
 ## Ta librairie : les fonctions que le projet appelle
 

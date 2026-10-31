@@ -380,7 +380,7 @@ PAPER = [
           "un noyau 3 × 3 a 9 poids par canal d'entrée": 16 * 1 * 3 + 16 + 8 * 16 * 3 + 8 + 3 * 8 * 3 + 3}'''),
         ("e", WHOLE, "P_DEC_CONV",
          r'''mistakes={"chaque convolution a un biais par filtre": P_DEC_CONV - (16 + 1),
-          "les sur-échantillonnages n'ont pas de paramètres": P_DEC_CONV + 2}'''),
+          "les suréchantillonnages n'ont pas de paramètres": P_DEC_CONV + 2}'''),
         ("f", WHOLE, "P_ENC_CONV + P_DEC_CONV",
          r'''mistakes={"les biais comptent": P_ENC_CONV + P_DEC_CONV - (16 + 8 + 3 + 16 + 1)}'''),
         ("g", DEC2, "784 / (3 * 7 * 7)",
@@ -1909,16 +1909,16 @@ CHECK_27 = r'''with checked("25.27"):
 
 EXPERIMENT_27 = r'''with checked("25.27"):
     EPOCHS_27 = 2 if FAST_MODE else 10                 # 🚀 the full mode trains for long: a GPU helps
-    table_27 = compare_27({"pooling + sur-échantillonnage": lambda: make_denoiser_26(32),
-                           "convolutions à pas": lambda: make_strided_27(32)}, EPOCHS_27)
+    table_27 = compare_27({"pooling + suréchantillonnage": lambda: make_denoiser_26(32),
+                           "convolutions de stride 2": lambda: make_strided_27(32)}, EPOCHS_27)
     for name_27, row_27 in table_27.items():
         print(f"{name_27:30s} {row_27['params']:7,d} paramètres · {row_27['sec_per_epoch']:5.2f} s par epoch · "
               f"PSNR {row_27['psnr']:.2f} dB")'''
 
 PART_B = Part("B", "Autoencodeurs convolutifs et débruiteurs",
               "Tu construis l'autoencodeur convolutif du livre (25.24), tu répares un débruiteur qui apprenait le "
-              "bruit (25.25), tu débruites Fashion-MNIST (25.26), puis tu remplaces pooling et sur-échantillonnage "
-              "par des convolutions à pas (25.27). La cellule suivante fixe le bruit des débruiteurs de vêtements "
+              "bruit (25.25), tu débruites Fashion-MNIST (25.26), puis tu remplaces pooling et suréchantillonnage "
+              "par des convolutions de stride 2 (25.27). La cellule suivante fixe le bruit des débruiteurs de vêtements "
               "($\\sigma = 0{,}3$), leurs images d'entraînement (`N_DENOISE` : 10 000 en mode rapide) et 1 000 "
               "vêtements de validation avec leur version bruitée (un bruit fixé), et donne `layout`, qui écrit "
               "brièvement les couches d'un `nn.Sequential` (les vérifications comparent ces listes).",
@@ -1966,10 +1966,10 @@ La vérification essaie ton architecture avec 8 filtres et ton PSNR sur deux ima
 Dans tes notes : combien de décibels gagne le débruiteur, et à quoi cela correspond-il en MSE (fiche : diviser la MSE par 10 ajoute 10 dB) ? Quels détails perd-il ? Pourquoi moyenne-t-on le PSNR image par image plutôt que de calculer celui de la MSE moyenne ?""",
        todo=TODO_26, check=CHECK_26, solution=SOLUTION_26 + "\n\n\n" + CHECK_26, after=[("code", EXPERIMENT_26)]),
 
-    Ex("25.27", "🔬", 3, 35, "Sur-échantillonnage explicite ou convolutions à pas : temps et qualité",
-       "comparer, à nombre de filtres égal, un débruiteur à pooling et sur-échantillonnage et un débruiteur à convolutions à pas.",
+    Ex("25.27", "🔬", 3, 35, "Suréchantillonnage explicite ou convolutions à stride : temps et qualité",
+       "comparer, à nombre de filtres égal, un débruiteur à pooling et suréchantillonnage et un débruiteur à convolutions de stride 2.",
        "Ex 25.26 · ✏️ 25.4 · fiche §25.8 (et son encadré ⚠️)", thread="Fashion-MNIST", tracks="C",
-       body=r"""Le livre remplace le pooling et le sur-échantillonnage de son débruiteur par des convolutions à pas : un `Conv2d` de stride 2 réduit l'image, un `ConvTranspose2d` de stride 2 l'agrandit (le ✏️ 25.4 a calculé ses tailles). Tu mesures ce que cela change, au même nombre de filtres.
+       body=r"""Le livre remplace le pooling et le suréchantillonnage de son débruiteur par des convolutions de stride 2 : un `Conv2d` de stride 2 réduit l'image, un `ConvTranspose2d` de stride 2 l'agrandit (le ✏️ 25.4 a calculé ses tailles). Tu mesures ce que cela change, au même nombre de filtres.
 
 **Contrat**
 - `make_strided_27(channels=32)` rend un `AutoEncoder` ; l'encodeur est `nn.Unflatten(1, (1, 28, 28))`, `Conv2d(1, c, 3, stride=2, padding=1)`, ReLU, `Conv2d(c, c, 3, stride=2, padding=1)`, ReLU ; le décodeur `ConvTranspose2d(c, c, 3, stride=2, padding=1, output_padding=1)`, ReLU, le même encore, ReLU, puis `Conv2d(c, 1, 3, padding=1)`, sigmoïde, `nn.Flatten()` ;
@@ -3000,7 +3000,7 @@ PART_C = Part("C", "Le VAE",
               "anomalies (25.37), tu écris un VAE entièrement en NumPy (25.38), et tu relèves le défi de débruitage "
               "(25.39).",
               exercises=[
-    Ex("25.28", "🔨", 2, 25, "La reparamétrisation en NumPy : passe avant et passe arrière",
+    Ex("25.28", "🔨", 3, 35, "La reparamétrisation en NumPy : passe avant et passe arrière",
        "écrire le tirage $\\mathbf{z} = \\boldsymbol{\\mu} + \\boldsymbol{\\sigma} \\odot \\boldsymbol{\\varepsilon}$ et "
        "sa passe arrière dans ta librairie.",
        "∂ 25.5 · ch. 18 (passe arrière) · fiche §25.9.2", tracks="R, M, C", mylearn="vae.py",

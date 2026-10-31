@@ -36,14 +36,14 @@ SOLUTION = f"{FOLDER}/solution/{NOTEBOOK}"
 PACKAGE_SOLUTION = ROOT / FOLDER / "solution" / "cifarkit"
 PACKAGE_STARTER = ROOT / FOLDER / "depart" / "cifarkit"
 
-STEPS = [("MP5.1", "Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN)", 60),
+STEPS = [("MP5.1", "Cadrage, protocole de validation (découpage stratifié) et baselines (MLP puis petit CNN)", 60),
          ("MP5.2", "Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation transforms.v2, Dataset et DataLoader", 60),
          ("MP5.3", "Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal", 90),
          ("MP5.4", "Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout", 90),
          ("MP5.5", "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré", 90),
          ("MP5.6", "Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM", 60),
          ("MP5.7", "Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites", 60),
-         ("MP5.8", "Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage", 60)]
+         ("MP5.8", "Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage", 90)]
 
 # Step of the notebook where each public function of the package is written (starter package).
 TODO_STEPS = {
@@ -489,7 +489,7 @@ def check_document(step, path, sections):
 # ---------------------------------------------------------------------------
 # MP5.1
 # ---------------------------------------------------------------------------
-MP51_MD = r'''## MP5.1 · Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN) ⏱️ 60 min
+MP51_MD = r'''## MP5.1 · Cadrage, protocole de validation (découpage stratifié) et baselines (MLP puis petit CNN) ⏱️ 60 min
 
 **Objectif :** savoir ce que tu construis et comment tu le mesureras, puis poser les deux baselines que tout modèle devra battre.
 
@@ -1271,7 +1271,7 @@ if backbone is not None and ready("X_train", "resnet18_features") and final_ok:
 # ---------------------------------------------------------------------------
 # MP5.8
 # ---------------------------------------------------------------------------
-MP58_MD = r'''## MP5.8 · Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage ⏱️ 60 min
+MP58_MD = r'''## MP5.8 · Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage ⏱️ 90 min
 
 **Objectif :** un dépôt qu'un recruteur comprend en deux minutes, un modèle qu'on peut réutiliser sans le notebook, et des tests qui attrapent des erreurs.
 
@@ -1390,7 +1390,7 @@ NOTES = {   # step -> questions for the learner
 }
 
 OBSERVATIONS: dict[str, str] = {   # the reference solution's answers (fast mode on CPU, and the full mode of results.json)
-    "MP5.1": r"""- **Le cadrage** : dix classes équilibrées de photos 32 × 32, l'accuracy comme métrique (le hasard en donne 10 %), 45 000 images d'entraînement et 5 000 de validation tirées par un split stratifié (500 par classe), le test de 10 000 images ouvert une fois, en mode complet ; chaque run, même raté, entre dans le journal.
+    "MP5.1": r"""- **Le cadrage** : dix classes équilibrées de photos 32 × 32, l'accuracy comme métrique (le hasard en donne 10 %), 45 000 images d'entraînement et 5 000 de validation tirées par un découpage stratifié (500 par classe), le test de 10 000 images ouvert une fois, en mode complet ; chaque run, même raté, entre dans le journal.
 - **Les baselines** : en mode rapide (10 000 images, 3 epochs), le MLP plafonne à 40,9 % et le petit CNN atteint 51,3 % ; en mode complet (45 000 images, 10 epochs), 52,8 % et 72,1 %. Le CNN a 26 fois moins de paramètres (60 362 contre 1 578 506) : chaque filtre 3 × 3 est partagé par toutes les positions de l'image, là où la première couche du MLP relie chacun des 3 072 pixels à chacun de ses 512 neurones. Toujours prédire la même classe donne 10 à 10,5 %.""",
     "MP5.2": r"""- **Les statistiques de l'entraînement seul** : la validation et le test doivent être traités comme des images nouvelles, que le modèle n'a jamais vues ; calculer la moyenne et l'écart-type avec elles, c'est laisser fuir de l'information (une petite fuite ici, mais la règle vaut partout). Ces six nombres (0,4916 ; 0,4823 ; 0,4466 et 0,2471 ; 0,2435 ; 0,2615) font partie du modèle : sans eux, une image normalisée autrement donnerait d'autres logits ; ils voyagent donc dans `model.json`.
 - **L'augmentation** : un recadrage de quelques pixels et une symétrie horizontale ne changent pas la classe d'un avion ou d'un chat. Une rotation de 180° ou une symétrie verticale ne conviendrait pas (un bateau à l'envers n'existe pas dans les données), ni une inversion des couleurs, qui ferait d'une scène de jour une image qu'on ne rencontrera jamais.""",

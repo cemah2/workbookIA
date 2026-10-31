@@ -107,7 +107,7 @@ e) Dans le plan, la première composante principale de données centrées est $\
 a) Dans un autoencodeur débruiteur, l'entrée et la cible sont : (A) l'image propre et l'image bruitée ; (B) l'image bruitée et l'image propre ; (C) l'image bruitée deux fois ; (D) l'image propre deux fois.
 b) Vrai ou faux : dans un débruiteur, le code doit avoir moins de valeurs que l'image.
 c) On ajoute un bruit gaussien à une image, puis on écrête dans $[0, 1]$. Pourquoi ? (A) les pixels d'une image restent dans $[0, 1]$, comme les sorties sigmoïdes du réseau ; (B) pour accélérer l'entraînement ; (C) pour retirer le bruit ; (D) pour que la loss soit nulle.
-d) Ce qui remplace aujourd'hui souvent un pooling suivi, au décodage, d'un sur-échantillonnage : (A) des couches denses ; (B) une convolution de stride 2 à l'encodage, une convolution transposée de stride 2 au décodage ; (C) un dropout ; (D) une batchnorm.
+d) Ce qui remplace aujourd'hui souvent un pooling suivi, au décodage, d'un suréchantillonnage : (A) des couches denses ; (B) une convolution de stride 2 à l'encodage, une convolution transposée de stride 2 au décodage ; (C) un dropout ; (D) une batchnorm.
 e) Vrai ou faux : un débruiteur entraîné sur des chiffres MNIST débruite aussi bien des photos.
 
 ### 25.Q11 — Une entrée jamais vue : un tigre chez les chiffres 🧠 ⏱️ 3 min
@@ -422,8 +422,8 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 25.24 | Autoencodeur convolutif à 147 latents | 📦 | ★★ | 30 |
 | 25.25 | Le débruiteur qui apprenait le bruit | 🐛 | ★★ | 25 |
 | 25.26 | Autoencodeur débruiteur (bruit gaussien, écrêtage) | 📦 | ★★ | 30 |
-| 25.27 | Sur-échantillonnage explicite ou convolutions à pas : temps et qualité | 🔬 | ★★★ | 35 |
-| 25.28 | La reparamétrisation en NumPy : passe avant et passe arrière | 🔨 | ★★ | 25 |
+| 25.27 | Suréchantillonnage explicite ou convolutions à stride : temps et qualité | 🔬 | ★★★ | 35 |
+| 25.28 | La reparamétrisation en NumPy : passe avant et passe arrière | 🔨 | ★★★ | 35 |
 | 25.29 | Divergence KL gaussienne et son gradient | 🔨 | ★★ | 20 |
 | 25.30 | Un VAE en PyTorch : reconstruction + KL | 📦 | ★★ | 30 |
 | 25.31 | Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE | 🔮 | ★★ | 15 |

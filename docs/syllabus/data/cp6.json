@@ -97,7 +97,7 @@
    "id": "CP6.4",
    "type": "∂",
    "title": "Discriminateur optimal et losses à l'équilibre",
-   "stars": 1,
+   "stars": 2,
    "minutes": 12,
    "points": 2,
    "thread": "—",
@@ -187,7 +187,7 @@
   },
   {
    "id": "CP6.8",
-   "type": "📦",
+   "type": "🔨",
    "title": "Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni",
    "stars": 2,
    "minutes": 15,
@@ -210,8 +210,8 @@
   {
    "id": "CP6.9",
    "type": "🐛",
-   "title": "Réparer une boucle d'entraînement de GAN",
-   "stars": 1,
+   "title": "Réparer un pas d'entraînement de GAN",
+   "stars": 2,
    "minutes": 10,
    "points": 1.5,
    "thread": "synth",
@@ -337,7 +337,7 @@
   "dir": "projets/partie_6_generatif",
   "title": "Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST",
   "dataset": "Fashion-MNIST (wb.datasets.load_fashion_mnist), data card du workbook",
-  "brief": "Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MNIST, puis les comparer avec un protocole d'évaluation écrit AVANT les expériences : distance de Fréchet sur les features d'un classifieur de référence, répartition des classes prédites sur les échantillons (effondrement de mode), plus proches voisins dans l'ensemble d'entraînement (mémorisation) et inspection visuelle. Le dépôt livré est prêt pour le portfolio : résultats reproductibles (graines, configuration), galerie d'interpolations, README et model card qui discutent limites et usages responsables.",
+  "brief": "Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MNIST, puis les comparer avec un protocole d'évaluation écrit AVANT les expériences : distance de Fréchet sur les features d'un classifieur de référence, répartition des classes prédites sur les échantillons (effondrement de mode), plus proches voisins dans l'ensemble d'entraînement (mémorisation) et inspection visuelle. Le dépôt livré est prêt pour le portfolio : résultats reproductibles (graines, configuration), galerie d'interpolations, README et fiche modèle qui discutent limites et usages responsables.",
   "deliverables": [
    "dossier projets/partie_6_generatif/ dans le dépôt de l'apprenant : notebook propre exécutable de bout en bout (FAST_MODE)",
    "modules réutilisables (models.py, train.py, evaluate.py) avec docstrings et au moins trois tests pytest",
@@ -379,7 +379,7 @@
    },
    {
     "id": "MP6.7",
-    "title": "README, model card, tests pytest et nettoyage du dépôt",
+    "title": "README, fiche modèle, tests pytest et nettoyage du dépôt",
     "minutes": 75
    }
   ],
@@ -389,18 +389,19 @@
    "GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4 pts)",
    "Évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4 pts)",
    "Galerie claire et légendée (2 pts)",
-   "README et model card : résultats chiffrés, limites, usages responsables (3 pts)"
+   "README et fiche modèle : résultats chiffrés, limites, usages responsables (3 pts)"
   ],
   "extensions": [
    "diffusion latente miniature : un petit modèle de diffusion dans l'espace latent du VAE (préparation du bonus B5)",
    "comparer la distance de Fréchet sur deux extracteurs de features et discuter la dépendance de la mesure",
-   "démo interactive (Gradio) publiée sur un Space Hugging Face avec la model card",
-   "volet RL : agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt"
+   "démo interactive (Gradio) publiée sur un Space Hugging Face avec la fiche modèle",
+   "volet RL : agent de morpion entraîné par auto-apprentissage (ch. 26), évalué contre minimax, présenté dans le même dépôt"
   ],
   "hours": 10,
   "requires": [
    "vae.interpolate_latents"
   ]
  },
- "study_notes": "Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, loss de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
+ "study_notes": "Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 13 questions de 10 types (🧠, ✏️, ∂, 🔮, 📈, 🔨, 🐛, 🧮, ⚖️, 💼) ; ≈ ch. 25 : 5,4 pts, ch. 26 : 4,8, ch. 27 : 5,2, ch. 28 : 1,6, ch. 29 : 1 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties IV et V (CP6.13 : taille de sortie d'une convolution du ch. 21, un pas d'Adam du ch. 19). Les deux questions de code se font dans la partie A du notebook d'examen, avec PyTorch (🔨 CP6.8 : la loss d'un VAE au contrat écrit, testée sur un batch fourni ; 🐛 CP6.9 : un pas d'entraînement de GAN à trois lignes fautives) ; la partie B vérifie le code (13 propriétés, contre des oracles importés de wb.exams ; le pas de GAN poids par poids) et les réponses chiffrées (39 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; entre 8 et 12/20, la remédiation du corrigé fait refaire 25.30, 26.20, 26.21, 27.16 et 27.12 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page (18 formules clés). Mini-projet MP6 après l'examen (≈ 10 h, barème sur 20), entraînement complet sur GPU Colab (🚀). Examen, synthèse et mini-projet font partie des quatre parcours.",
+ "notes": "Contrat de la session 2 (historique) : CP6.8 en 📦 et CP6.9 « Réparer une boucle d'entraînement de GAN ». Session 61 (génération) : treize questions, 114 min ; durées revues après la résolution à l'aveugle (CP6.1 à 10 min, CP6.5 à 5, CP6.6 à 7, CP6.10 à 6). Audit P5 (R2), écarts à ce contrat, pour suivre la règle du §17 comme CP4.9 et CP5.6 : CP6.8 n'est plus un 📦 (les 📦 sont exclus de l'examen et vont au mini-projet) mais un 🔨 au contrat écrit, la loss d'un VAE (énoncé, réponses et vérifications inchangés) ; étoiles selon le §17 (★★ pour deux notions, une interprétation, une preuve ou un 🐛 à plusieurs erreurs) : CP6.4 (une preuve, puis ses interprétations) et CP6.9 (un 🐛 à trois erreurs) passent en ★★, comme CP6.8 ; CP6.9 prend le titre du sujet, « Réparer un pas d'entraînement de GAN » (la question corrige un seul pas, pas une boucle). Les 🧠, ✏️, ∂, 🔮, 📈, 🐛 et 🧮 ont des réponses vérifiées par wb.check (formes, lettres, valeurs), leurs rédactions restant notées par le barème ; les oracles de la partie B sont dans wb.exams (aucune solution en clair dans le notebook de l'examen). Types pratiqués mais absents : 🗣️ (CP6.12 💼, une réponse d'entretien argumentée à l'oral, en tient lieu) ; 📄 (lire un article demande l'article, pas une épreuve chronométrée) ; 📦, 🔬, 🛠️, 🔁, 🎨 et 🏆 sont exclus par le §17."
 }

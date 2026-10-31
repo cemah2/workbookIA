@@ -10,8 +10,9 @@
 The exam notebook has two parts. Part A is done DURING the exam: the code question CP4.9 (🔨, NumPy
 only: an epoch of training with AdamW and gradient clipping), without mylearn, without PyTorch and
 without any check. Part B is done AFTER the exam: it checks the code of part A against a NumPy
-transcription of torch.optim.AdamW (and against PyTorch itself when it is installed), then the answers
-written on paper (sub-IDs CP4.1a, CP4.2a, ...). Its cells only run once ``EXAM_OVER = True``. The
+transcription of torch.optim.AdamW (and against PyTorch itself when it is installed), imported from
+``wb.exams`` so that part B holds no solution in clear (audit P5 R3), then the answers written on paper
+(sub-IDs CP4.1a, CP4.2a, ...). Its cells only run once ``EXAM_OVER = True``. The
 solutions notebook records every checked answer with ``wb.record``.
 """
 
@@ -244,6 +245,8 @@ PART_B_FLAG = r'''EXAM_OVER = False   # set it to True once your exam is finishe
 
 import re
 
+from wb import exams
+
 RESULTS = {}        # sub-ID -> result of wb.check
 PROPERTIES = {}     # question -> [(property, passed)], reset each time its check cell runs
 PENDING_9 = []      # the parts of CP4.9 not written yet (⏳)
@@ -339,17 +342,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
     PENDING_9[:] = []
     RESULTS.pop("CP4.9d", None)
     restore_data("CP4.9", ["X_F", "Y_F"])
-
-    def oracle_step(params, grads, state, lr, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01):
-        """torch.optim.AdamW transcribed in NumPy (its pseudo-code, PyTorch 2.11), in place."""
-        if not state:
-            state.update(t=0, m=[np.zeros_like(p) for p in params], v=[np.zeros_like(p) for p in params])
-        state["t"] += 1
-        for p, g, m, v in zip(params, grads, state["m"], state["v"]):
-            p *= 1 - lr * weight_decay
-            m[...] = betas[0] * m + (1 - betas[0]) * g
-            v[...] = betas[1] * v + (1 - betas[1]) * g * g
-            p -= lr * (m / (1 - betas[0] ** state["t"])) / (np.sqrt(v / (1 - betas[1] ** state["t"])) + eps)
+    oracle_step = exams.cp4_adamw_step                  # torch.optim.AdamW transcribed in NumPy, in place
 
     def safe(function, *args, **kwargs):
         """(True, result) or (False, the text of the error): a bug of the exam code must not stop part B."""
@@ -456,13 +449,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
     else:
         want_c, state_c = init_params(), {}
         order_c = np.random.default_rng(49).permutation(len(X_F))
-        total_c = 0.0
-        for start in range(0, len(X_F), BATCH):
-            idx = order_c[start:start + BATCH]
-            loss_i, grads_i = loss_and_grads(want_c, X_F[idx], Y_F[idx])
-            norm_i = np.sqrt(sum(np.sum(g ** 2) for g in grads_i))
-            oracle_step(want_c, [g * min(1.0, MAX_NORM / (norm_i + 1e-6)) for g in grads_i], state_c, LR)
-            total_c += loss_i * len(idx)
+        mean_c = exams.cp4_train_epoch(want_c, X_F, Y_F, state_c, LR, BATCH, MAX_NORM, order_c, loss_and_grads)
         gap_c = max(np.abs(a - b).max() for a, b in zip(params_c, want_c))
         verdict("CP4.9", isinstance(loss_c, float), "train_epoch rend un float.",
                 f"train_epoch rend {type(loss_c).__name__} : attendu un float Python (return float(...)).")
@@ -473,7 +460,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
                 "toute l'epoch, et les réglages par défaut d'adamw_step.")
         if gap_c < 1e-10:                                   # the same trajectory: the mean loss can be compared
             try:
-                weighted_ok = abs(float(loss_c) - total_c / len(X_F)) < 1e-9
+                weighted_ok = abs(float(loss_c) - mean_c) < 1e-9
             except (TypeError, ValueError):
                 weighted_ok = False
             verdict("CP4.9", weighted_ok, "la loss rendue est la moyenne par exemple (le dernier mini-batch, de 48 images, pèse 48).",
@@ -486,11 +473,7 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
         X_e, Y_e = X_F[-300:].copy(), Y_F[-300:].copy()   # not a prefix of X_F: indexing the global data shows
         ok_e, loss_e = safe(train_epoch, params_e, X_e.copy(), Y_e.copy(), state_e, 3e-3, 64, 0.5, np.random.default_rng(7))
         order_e = np.random.default_rng(7).permutation(300)
-        for start in range(0, 300, 64):
-            idx = order_e[start:start + 64]
-            _, grads_e = loss_and_grads(want_e, X_e[idx], Y_e[idx])
-            norm_e = np.sqrt(sum(np.sum(g ** 2) for g in grads_e))
-            oracle_step(want_e, [g * min(1.0, 0.5 / (norm_e + 1e-6)) for g in grads_e], state_we, 3e-3)
+        exams.cp4_train_epoch(want_e, X_e, Y_e, state_we, 3e-3, 64, 0.5, order_e, loss_and_grads)
         try:
             gap_e = max(np.abs(a - b).max() for a, b in zip(params_e, want_e)) if ok_e else np.inf
         except (TypeError, ValueError):
@@ -501,18 +484,8 @@ if exam_over() and ready("CP4.9", "np", "X_F", "Y_F", "init_params", "loss_and_g
                 "ou laisse vide le state qu'elle reçoit : utilise-t-elle ses arguments, ou les réglages globaux LR, BATCH, "
                 "MAX_NORM, X_F et Y_F ?")
         try:
-            import torch                                    # the same check against PyTorch itself, when installed
-            W_t, b_t = (torch.tensor(a, requires_grad=True) for a in init_params())
-            opt_t = torch.optim.AdamW([W_t, b_t], lr=LR, weight_decay=0.01)
-            X_t, Y_t = torch.from_numpy(X_F), torch.from_numpy(Y_F)
-            for start in range(0, len(X_F), BATCH):
-                idx = torch.from_numpy(order_c[start:start + BATCH])
-                loss_t = torch.nn.functional.cross_entropy(X_t[idx] @ W_t + b_t, Y_t[idx])
-                opt_t.zero_grad()
-                loss_t.backward()
-                torch.nn.utils.clip_grad_norm_([W_t, b_t], MAX_NORM)
-                opt_t.step()
-            gap_t = max(np.abs(W_t.detach().numpy() - params_c[0]).max(), np.abs(b_t.detach().numpy() - params_c[1]).max())
+            W_t, b_t = exams.cp4_torch_epoch(init_params(), X_F, Y_F, order_c, LR, BATCH, MAX_NORM)   # when installed
+            gap_t = max(np.abs(W_t - params_c[0]).max(), np.abs(b_t - params_c[1]).max())
             print(f"   (PyTorch : écart de tes paramètres à torch.optim.AdamW + clip_grad_norm_ : {gap_t:.1e})")
         except ImportError:
             pass

@@ -49,7 +49,7 @@
 
 - **Markdown** (énoncés, fiches, solutions) : **en français**, tutoiement, ton clair et encourageant, phrases courtes.
 - **Code** : identifiants, docstrings et commentaires **en anglais**, comme en entreprise. Toute explication pédagogique va dans les cellules Markdown, en français.
-- **Termes techniques** : on garde l'anglais quand c'est l'usage professionnel. Dans le chapitre qui définit un terme, à sa première occurrence : « terme retenu (*autre langue*) », puis on s'en tient au terme retenu, partout (prose, titres, messages des notebooks) ; les autres chapitres l'emploient sans glose, et le glossaire donne l'équivalent. Tout terme ajouté va dans `annexes/glossaire.md`. Un mot français qui garde son sens courant reste permis (« à l'époque de Rosenblatt », « compression sans perte », « les étiquettes des axes ») ; `tests/infra/test_terminology.py` refuse les autres formes.
+- **Termes techniques** : on garde l'anglais quand c'est l'usage professionnel. Dans le chapitre qui définit un terme, à sa première occurrence : « terme retenu (*autre langue*) », puis on s'en tient au terme retenu, partout (prose, titres, messages des notebooks) ; les autres chapitres l'emploient sans glose (un chapitre d'une autre partie peut la rappeler une fois, avec le renvoi : « le stride (*pas*, ch. 20) »), et le glossaire donne l'équivalent. Tout terme ajouté va dans `annexes/glossaire.md`. Un mot français qui garde son sens courant reste permis (« à l'époque de Rosenblatt », « compression sans perte », « les étiquettes des axes ») ; `tests/infra/test_terminology.py` refuse les autres formes.
 
 | On garde l'anglais | On dit en français | Remarque |
 |---|---|---|
@@ -264,7 +264,7 @@ Pour **chaque** exercice, trois niveaux dans des blocs `<details>` repliés : **
 - **Code** (🔨, et tout exercice du notebook) : l'indice 3 donne la signature, le squelette (les étapes en commentaires) et les deux ou trois lignes clés ; jamais la fonction complète, qui reste dans `05_solutions.md` et le notebook de solutions. Pour un 🔮, les indices posent le raisonnement sans révéler l'issue de l'expérience.
 
 ### 05_solutions.md et 05_solutions.ipynb
-Pour chaque exercice : la réponse, la démarche détaillée (le *pourquoi*, pas seulement le *comment*), les erreurs fréquentes, une variante (avec sa réponse) ou une piste pour aller plus loin, qui ne donne jamais d'avance le résultat d'un exercice suivant. Pour un item court de la partie 0 (★, 10 min au plus), une ligne « **À retenir** » remplace les erreurs fréquentes et la variante. Les questions 💼 reçoivent une « réponse modèle en 60 secondes » et les relances possibles du recruteur. Libellés des rubriques, toujours les mêmes : « **Réponse** », « **Démarche** », « **Erreurs fréquentes** », « **Variante** » ; pour un 🗣️, « **Réponse modèle** » et « **Ce qui compte** » ; pour un 💼, « **Réponse modèle en 60 secondes** », « **Ce qui compte** » et « **Relances possibles** » (au moins deux, chacune avec sa réponse). Le notebook de solutions est **exécuté, sorties conservées**.
+Pour chaque exercice : la réponse, la démarche détaillée (le *pourquoi*, pas seulement le *comment*), les erreurs fréquentes, une variante (avec sa réponse) ou une piste pour aller plus loin, qui ne donne jamais d'avance le résultat d'un exercice suivant. Pour un item court de la partie 0 (★, 10 min au plus), une ligne « **À retenir** » remplace les erreurs fréquentes et la variante. Les questions 💼 reçoivent une « réponse modèle en 60 secondes » et les relances possibles du recruteur. Libellés des rubriques, toujours les mêmes : « **Réponse** », « **Démarche** », « **Erreurs fréquentes** », « **Variante** » ; pour un 🗣️, « **Réponse modèle** » et « **Ce qui compte** » ; pour un 💼, « **Réponse modèle en 60 secondes** », « **Ce qui compte** » et « **Relances possibles** » (au moins deux, chacune avec sa réponse, sur une ligne : « « question ? » (réponse) · « question ? » (réponse) »). Le notebook de solutions est **exécuté, sorties conservées**.
 
 ### 06_mes_reponses.md
 Modèle vide avec un titre par exercice papier, où l'apprenant écrit ses réponses. Il sert de support à la correction (P9).
@@ -288,6 +288,7 @@ Format d'import Anki : séparateur `;`, colonnes `front;back;tags`, HTML autoris
 > 💼 **En entreprise** — …
 > ⚠️ **Piège classique — sujet** — …     (**Le livre, corrigé — sujet** pour une erreur ou une simplification du livre)
 > 🔗 **Lien avec le ch. X** — …
+> 📐 **Conventions de la fiche** — …   (notations du chapitre, et tout écart au §6, signalé une fois en tête de fiche)
 ```
 Le sujet, dans le gras après un tiret cadratin, dit en quelques mots de quoi parle l'encadré. Le tableau des pièges de la fiche a pour en-tête `| Piège | Exemple | Ce qu'il faut faire |`.
 Toute affirmation 🕰️ est **vérifiée par recherche web au moment de la génération**, avec une source (documentation officielle, article, référence reconnue). Au-delà de la liste indicative du §8, Claude signale **toute** notion du chapitre dépassée ou qui se fait autrement aujourd'hui : API, bonnes pratiques, conventions, jeux de données retirés…

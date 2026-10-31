@@ -632,7 +632,7 @@ PART_A = Part("A", "Ta librairie sequences.py : vocabulaire, fenêtres, et ce qu
               "la série des taches solaires. Ne recopie jamais un nombre à la main : chaque réponse vérifiée est "
               "calculée par ton code.",
               given=TOOLS, exercises=[
-    Ex("22.12", "🔨", 1, 15, "build_vocab, encode et decode sur Holmes et Verne",
+    Ex("22.12", "🔨", 2, 30, "build_vocab, encode et decode sur Holmes et Verne",
        "numéroter les tokens d'un texte, du plus fréquent au plus rare, et passer d'un texte à ses ids et retour.",
        "0A (dictionnaires, `sorted`) · ch. 6 (fréquences des lettres) · fiche §22.9", thread="Holmes/Verne",
        tracks="R, C", mylearn="sequences.py",
@@ -650,7 +650,7 @@ Dans tes notes : avec un vocabulaire de 2 000 mots, quelle part du texte de Vern
        after=tests_after("22.12", 'mylearn.sequences.build_vocab("ab")', "TEST_SEQ",
                          "test_build_vocab_ or test_encode_ or test_decode_")),
 
-    Ex("22.13", "🔨", 2, 20, "make_windows et make_sequence_pairs",
+    Ex("22.13", "🔨", 2, 30, "make_windows et make_sequence_pairs",
        "découper une série en fenêtres et leurs cibles, et un texte en morceaux et leurs suites, au format (N, T, D).",
        "✏️ 22.1 · Ex 22.12 · fiche §22.2, §22.5", thread="taches solaires", tracks="R, M, C", mylearn="sequences.py",
        body=mylearn_howto("sequences.py") + "\n\n" + COMMON_SEQ + r"""
@@ -1392,7 +1392,7 @@ PART_C = Part("C", "Échantillonner, valider une série sans fuite, empiler les 
        body=mylearn_howto("sequences.py") + "\n\n" + COMMON_SEQ + r"""
 
 Écris `temperature_softmax(logits, temperature=1.0)` et `sample_from_logits(logits, temperature=1.0, top_k=None, rng=None)`. **Contrat** :
-- `temperature_softmax` calcule $\mathrm{softmax}(z / T)$ le long du **dernier** axe (forme gardée), de façon stable : des logits de ±1 000 ne déclenchent aucun `RuntimeWarning` (on retire le maximum de **chaque ligne**) ; $T \leq 0$ lève `ValueError` ;
+- `temperature_softmax` calcule $\mathrm{softmax}(z / T)$ le long du **dernier** axe (forme gardée), de façon stable : des logits de ±1 000 ne déclenchent aucun `RuntimeWarning` (on retire le maximum de **chaque ligne**) ; $T \leq 0$ lève `ValueError` ; elle rend un **nouveau** tableau NumPy `float64` de la forme des logits ;
 - `sample_from_logits` rend un `int` Python pour des logits `(V,)`, un tableau `int64` `(N,)` pour des logits `(N, V)`, chaque ligne étant tirée **indépendamment** ; avec `temperature=0`, aucun hasard : le **premier** indice du maximum ; avec `top_k`, les logits strictement plus petits que le $k$-ième plus grand sont retirés avant de tirer, ligne par ligne (les ex aequo du $k$-ième restent, et `top_k = V` garde tout) ; `temperature < 0`, ou un `top_k` qui n'est pas un entier de $[1, V]$, lève `ValueError` ;
 - le tirage utilise `rng` (un `np.random.Generator`) et lui seul : la même graine redonne les mêmes ids ; `rng=None` crée un nouveau générateur, sans graine fixe. La façon de tirer (CDF inverse, `rng.choice`…) est libre : les tests ne regardent que les fréquences.
 

@@ -6,7 +6,7 @@
 |---|---|
 | **Livre** | vol. 2, ch. 27 « Generative Adversarial Networks », p. 1558-1602 (§27.1 à §27.7.2) |
 | **Temps total estimé** | ≈ 21 h : lecture du livre et de la fiche ≈ 4,1 h, exercices ≈ 16 h, 22 flashcards ≈ 0,7 h |
-| **Prérequis** | 0B (dérivée nulle, logarithme) · ch. 2 (moyenne, écart-type, covariance) · ch. 3 (precision et recall) · ch. 6 (cross-entropy, divergence KL) · ch. 12 (matrice de covariance, valeurs propres) · ch. 17 (sigmoïde, tanh, Leaky ReLU) · ch. 19 (Adam) · ch. 20 (batchnorm, autograd, optimiseurs) · ch. 21 (convolution à pas) · ch. 23 (checkpoint complet) · ch. 24 (classifieur CNN, gel des poids) · ch. 25 (convolution transposée, interpolation latente) · ch. 26 (auto-apprentissage) |
+| **Prérequis** | 0B (dérivée nulle, logarithme) · ch. 2 (moyenne, écart-type, covariance) · ch. 3 (precision et recall) · ch. 6 (cross-entropy, divergence KL) · ch. 12 (matrice de covariance, valeurs propres) · ch. 17 (sigmoïde, tanh, Leaky ReLU) · ch. 19 (Adam) · ch. 20 (batchnorm, autograd, optimiseurs) · ch. 21 (convolution de stride 2) · ch. 23 (checkpoint complet) · ch. 24 (classifieur CNN, gel des poids) · ch. 25 (convolution transposée, interpolation latente) · ch. 26 (auto-apprentissage) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `gen_metrics.py` : distance de Wasserstein 1D, distance de Fréchet entre deux gaussiennes (la formule du FID) et à partir de features ; NumPy seulement |
 
@@ -56,7 +56,7 @@ Le chapitre du livre est court (45 pages) et, comme le précédent, sans équati
 4. On alterne : un pas de $D$ sur un mini-batch de vrais et de faux (les faux **détachés** de $G$), puis un pas de $G$ à travers $D$, avec le label « vrai » ; deux optimiseurs, un par réseau.
 5. Pour un $G$ fixé, le meilleur discriminateur est $D^* = p_{\text{data}} / (p_{\text{data}} + p_g)$ ; le jeu atteint son optimum quand $p_g = p_{\text{data}}$, où $D = \frac{1}{2}$ partout.
 6. À cet équilibre, chaque terme de cross-entropy vaut $\ln 2 \approx 0{,}693$ : la loss de $D$ (vrais + faux) vaut $2 \ln 2 \approx 1{,}386$, celle de $G$, $\ln 2$ ; ni l'une ni l'autre ne mesure la qualité des images.
-7. Un **DCGAN** est un GAN convolutif construit selon les règles de Radford : convolutions à pas au lieu du pooling, convolutions transposées pour agrandir, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$, Adam avec un learning rate de $2 \cdot 10^{-4}$ et $\beta_1 = 0{,}5$.
+7. Un **DCGAN** est un GAN convolutif construit selon les règles de Radford : convolutions de stride 2 au lieu du pooling, convolutions transposées pour agrandir, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$, Adam avec un learning rate de $2 \cdot 10^{-4}$ et $\beta_1 = 0{,}5$.
 8. Le GAN n'a aucune garantie de converger en pratique ; il est sensible aux hyperparamètres, et sujet à l'**effondrement de mode** (*mode collapse*) : le générateur ne produit plus qu'une partie de la variété des données.
 9. On mesure un générateur par des distances entre distributions : la distance de **Wasserstein** en 1D, la distance de **Fréchet** entre deux gaussiennes ajustées sur des features (le **FID**), ou une precision et un recall génératifs.
 10. Depuis 2021, la **diffusion** a supplanté les GAN pour l'essentiel de la génération d'images ; l'idée adversariale survit comme loss d'appoint, pour la super-résolution, et pour distiller un modèle de diffusion en quelques pas.
@@ -210,13 +210,13 @@ Avec $k = 4$, $s = 2$, $p = 1$ : une convolution divise la taille par deux ($28 
 ### 27.6.1 · Des règles empiriques ⏩
 
 L'article de Radford, Metz et Chintala (2016) a dégagé des règles qui rendent l'entraînement d'un GAN convolutif bien plus fiable. Les voici, telles que les donne l'article (la place de la batchnorm, avant l'activation, vient de son code et de l'usage) :
-- **pas de pooling** : des convolutions de pas 2 dans $D$ pour réduire, des **convolutions transposées** de pas 2 dans $G$ pour agrandir ;
+- **pas de pooling** : des convolutions de stride 2 dans $D$ pour réduire, des **convolutions transposées** de stride 2 dans $G$ pour agrandir ;
 - **pas de couches denses cachées** : la première couche de $G$ (une multiplication de matrice remise en forme) et la sortie de $D$ (aplatie vers une seule valeur) sont les seules ;
 - **batchnorm** partout, sauf sur la sortie de $G$ et sur l'entrée de $D$, entre la convolution et son activation ;
 - **ReLU** dans $G$, **tanh** en sortie (donc des images ramenées dans $[-1, 1]$) ; **Leaky ReLU** de pente 0,2 dans **$D$** ;
 - **Adam** avec un learning rate de $2 \cdot 10^{-4}$ et $\beta_1 = 0{,}5$ pour les deux réseaux, des mini-batches de 128, des poids initialisés selon $\mathcal{N}(0;\, 0{,}02^2)$.
 
-> ⚠️ **Le livre, corrigé — les règles de Radford** — Le livre conseille Adam avec $10^{-3}$ pour le générateur et $10^{-4}$ pour le discriminateur : l'article utilise $2 \cdot 10^{-4}$ pour les deux, avec $\beta_1 = 0{,}5$ (il juge $10^{-3}$ trop grand et $\beta_1 = 0{,}9$ instable). Le livre écrit aussi « Leaky ReLU dans le générateur » : c'est dans le **discriminateur**. Enfin, il explique qu'une convolution transposée « place l'agrandissement après la convolution » : c'est l'inverse, une convolution transposée de pas 2 revient à intercaler des zéros (agrandir) **puis** à convoluer. Sa différence avec un suréchantillonnage suivi d'une convolution tient à la façon d'agrandir (des zéros contre des copies), pas à l'ordre (A. Radford et coll., [arXiv:1511.06434](https://arxiv.org/abs/1511.06434)).
+> ⚠️ **Le livre, corrigé — les règles de Radford** — Le livre conseille Adam avec $10^{-3}$ pour le générateur et $10^{-4}$ pour le discriminateur : l'article utilise $2 \cdot 10^{-4}$ pour les deux, avec $\beta_1 = 0{,}5$ (il juge $10^{-3}$ trop grand et $\beta_1 = 0{,}9$ instable). Le livre écrit aussi « Leaky ReLU dans le générateur » : c'est dans le **discriminateur**. Enfin, il explique qu'une convolution transposée « place l'agrandissement après la convolution » : c'est l'inverse, une convolution transposée de stride 2 revient à intercaler des zéros (agrandir) **puis** à convoluer. Sa différence avec un suréchantillonnage suivi d'une convolution tient à la façon d'agrandir (des zéros contre des copies), pas à l'ordre (A. Radford et coll., [arXiv:1511.06434](https://arxiv.org/abs/1511.06434)).
 
 Le livre rapporte qu'appliquer ces règles mécaniquement au modèle de Gildenblat, déjà réglé, l'a rendu bien moins bon. La leçon est juste : un modèle réglé se garde tel quel, et les règles servent de point de départ pour un modèle neuf (🔬 27.21).
 
@@ -313,7 +313,7 @@ Les usages du livre (un jardin pour **cet** endroit, un fauteuil pour **ce** sal
 - **Ch. 6** : la cross-entropy binaire, la divergence KL et la divergence de Jensen-Shannon, qui est la valeur du jeu au discriminateur optimal.
 - **Ch. 12** : la matrice de covariance et ses valeurs propres, dans la distance de Fréchet.
 - **Ch. 17 à 20** : sigmoïde, tanh, Leaky ReLU, Adam, batchnorm ; `train()` et `eval()`.
-- **Ch. 21 et 25** : convolutions à pas et convolutions transposées ; le VAE, l'autre générateur, et l'interpolation latente (`interpolate_latents`).
+- **Ch. 21 et 25** : convolutions de stride 2 et convolutions transposées ; le VAE, l'autre générateur, et l'interpolation latente (`interpolate_latents`).
 - **Ch. 23 et 24** : le checkpoint complet ; le partage et le gel des couches ; le classifieur CNN qui fournit les features du FID.
 - **Ch. 26** : l'auto-apprentissage, un autre jeu où l'adversaire évolue avec soi.
 - **Mini-projet MP6 et bonus B5** : ta distance de Fréchet comparera le DCGAN, le VAE et un modèle de diffusion sur MNIST.

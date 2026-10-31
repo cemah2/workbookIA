@@ -668,6 +668,7 @@ def render_totals(chapters: dict) -> list[str]:
 SCAFFOLD_TYPES = ("🔨", "📦")
 SCAFFOLD_HEADER = ("**Objectif", "**Prérequis")          # lines of the header, not of the statement
 SCAFFOLD_BOXES = ("> **Mode d'emploi", "> **mylearn")    # the shared mylearn box (a blockquote paragraph)
+SCAFFOLD_COMMON = ("**Contrat commun",)                  # the contract shared by a module (a paragraph)
 
 
 def statement_words(ch: dict, root: Path = ROOT) -> dict[str, int]:
@@ -675,9 +676,10 @@ def statement_words(ch: dict, root: Path = ROOT) -> dict[str, int]:
 
     A statement starts at the Markdown cell ``### Ex <id> — <title>`` and runs over the Markdown cells that follow,
     up to the first code cell or the next ``### `` heading. Not counted: the heading line, the lines that start
-    with ``**Objectif`` or ``**Prérequis``, and the blockquote paragraph of the mylearn box (``> **Mode d'emploi``,
-    ``> **mylearn``). Words are counted as ``str.split`` does (a formula counts as its pieces): an indicator of the
-    decreasing scaffolding (BIBLE §12), not a rule.
+    with ``**Objectif`` or ``**Prérequis``, the blockquote paragraph of the mylearn box (``> **Mode d'emploi``,
+    ``> **mylearn``) and the paragraph of the contract shared by a module (``**Contrat commun …``, up to the next
+    blank line: it is copied into every 🔨 of the module, audit P5 V-VI R5 A). Words are counted as ``str.split``
+    does (a formula counts as its pieces): an indicator of the decreasing scaffolding (BIBLE §12), not a rule.
     """
     path = root / "chapitres" / ch.get("dir", "") / "03_notebook.ipynb"
     if is_cp(ch["id"]) or not published(ch, root) or not path.exists():
@@ -696,13 +698,17 @@ def statement_words(ch: dict, root: Path = ROOT) -> dict[str, int]:
             if nxt["cell_type"] != "markdown" or text.startswith("### "):
                 break
             texts.append(text)
-        kept, in_box = [], False
+        kept, in_box, in_common = [], False, False
         for line in "\n".join(texts).splitlines():
             if line.startswith(SCAFFOLD_BOXES):
                 in_box = True
             elif not line.startswith(">"):
                 in_box = False
-            if not in_box and not line.startswith(SCAFFOLD_HEADER):
+            if line.startswith(SCAFFOLD_COMMON):
+                in_common = True
+            elif not line.strip():
+                in_common = False
+            if not in_box and not in_common and not line.startswith(SCAFFOLD_HEADER):
                 kept.append(line)
         words[match.group(1)] = len(" ".join(kept).split())
     return words
@@ -711,7 +717,8 @@ def statement_words(ch: dict, root: Path = ROOT) -> dict[str, int]:
 def render_scaffolding(chapters: dict, root: Path = ROOT) -> list[str]:
     """Mean length (words) of the 🔨 and 📦 statements per part, read in the published notebooks (indicative)."""
     lines = ["Longueur moyenne des énoncés 🔨 et 📦, en mots (indicatif, BIBLE §12 : l'échafaudage décroît ; "
-             "notebooks d'exercices publiés, hors titre, objectif, prérequis et encadré mylearn) :", "",
+             "notebooks d'exercices publiés, hors titre, objectif, prérequis, encadré mylearn et contrat commun d'un "
+             "module) :", "",
              "| Partie | 🔨 (n) | 🔨 mots | 📦 (n) | 📦 mots | Le plus long |", "|---|---|---|---|---|---|"]
     for part, ids in PARTS.items():
         by_type = {t: [] for t in SCAFFOLD_TYPES}

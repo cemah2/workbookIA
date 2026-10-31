@@ -381,7 +381,7 @@
   {
    "id": "29.R3",
    "type": "🔁",
-   "title": "Biais d'échantillonnage — un dataset représente-t-il la population visée ?",
+   "title": "Biais d'échantillonnage : un dataset représente-t-il la population visée ?",
    "stars": 1,
    "minutes": 5,
    "gpu": false,

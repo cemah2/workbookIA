@@ -959,6 +959,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -982,6 +983,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1010,7 +1012,7 @@
   {
    "id": "23.15",
    "type": "📦",
-   "title": "Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader",
+   "title": "Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader",
    "stars": 2,
    "minutes": 30,
    "gpu": false,
@@ -1029,6 +1031,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1053,6 +1056,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "wb.check"
@@ -1100,6 +1104,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "manual"
@@ -1211,6 +1216,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "manual"
@@ -1260,6 +1266,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "manual"
@@ -1308,7 +1315,7 @@
   {
    "id": "23.28",
    "type": "🛠️",
-   "title": "Rédiger la fiche du modèle (model card)",
+   "title": "Rédiger la fiche modèle",
    "stars": 2,
    "minutes": 20,
    "gpu": false,

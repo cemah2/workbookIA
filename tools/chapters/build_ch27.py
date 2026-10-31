@@ -156,7 +156,7 @@ PAPER = [
         ("e", LETTER, '"B"', letters("B", {"A": "le gradient traverse D : ses poids reçoivent bien un .grad",
                                            "C": "sous torch.no_grad(), le générateur ne recevrait aucun gradient"})),
     ]),
-    Paper("27.Q7", "Pourquoi juger des mini-batchs plutôt qu'un point isolé", [
+    Paper("27.Q7", "Pourquoi juger des mini-batches plutôt qu'un point isolé", [
         ("a", WHOLE, "math.ceil(10_000 / 32)", r'''mistakes={"le dernier mini-batch, incomplet, compte aussi": 312,
           "un pas par mini-batch, pas un pas par point": 10_000,
           "le discriminateur fait un pas par mini-batch (le générateur aussi, mais on ne compte que D)": 626}'''),
@@ -199,7 +199,7 @@ PAPER = [
           "il manque la discrimination par mini-batch": "AD"}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("27.R1", "Deux agents qui jouent l'un contre l'autre (self-play)", [
+    Paper("27.R1", "Deux agents qui jouent l'un contre l'autre (auto-apprentissage)", [
         ("a", LETTER, '"A"', letters("A", {"B": "relis le ch. 26 : en auto-apprentissage, pas besoin d'humain",
                                            "C": "un adversaire aléatoire, c'est l'entraînement ordinaire du ch. 26"})),
         ("b", TF, "False", r'''mistakes={"un GAN a deux réseaux aux rôles différents : partagent-ils leurs poids ?": True}'''),
@@ -235,7 +235,7 @@ PAPER = [
         ("b", WHOLE, "dense(1024, 6272)", r'''mistakes={"n'oublie pas les biais": 1024 * 6272,
           "un biais par neurone de sortie, pas par entrée": 1024 * 6272 + 1024}'''),
         ("c", WHOLE, "conv_out(28, 4, 2, 1)", r'''mistakes={"relis la formule : le padding compte deux fois (2p), et il y a un + 1": 13,
-          "le pas de 2 divise la taille : (H + 2p − k) / s": 27}'''),
+          "le stride de 2 divise la taille : (H + 2p − k) / s": 27}'''),
         ("d", WHOLE, "conv_out(conv_out(28, 4, 2, 1), 4, 2, 1)", r'''mistakes={"c'est la taille après une seule convolution": 14}'''),
         ("e", WHOLE, "tconv_out(7, 4, 2, 1)", r'''mistakes={"(H − 1)s : la formule part de H − 1": 7 * 2 - 2 + 4,
           "−2p, pas −p": (7 - 1) * 2 - 1 + 4}'''),
@@ -2432,10 +2432,10 @@ PART_B = Part("B", "DCGAN sur MNIST : construire, évaluer, conditionner, repren
               given=GIVEN_B, exercises=[
     Ex("27.20", "📦", 3, 45, "Un DCGAN sur MNIST selon les règles de Radford",
        "construire un générateur et un discriminateur convolutifs qui suivent les règles de Radford, et les entraîner sur MNIST.",
-       "✏️ 27.1 · Ex 27.12 · ch. 21 (convolution à pas) · fiche §27.6.1", thread="MNIST", tracks="R, C",
+       "✏️ 27.1 · Ex 27.12 · ch. 21 (convolution de stride 2) · fiche §27.6.1", thread="MNIST", tracks="R, M, C",
        body=r"""**Contrat** (règles de Radford, fiche §27.6.1, adaptées aux images 28 × 28 et au CPU)
-- `make_generator_20(nz=NZ, width=32)` : $(N, n_z) \to (N, 1, 28, 28)$ dans $[-1, 1]$. Une seule couche dense, sans biais, qui projette le bruit sur $2w$ canaux de 7 × 7 ($w$ = `width`), puis deux convolutions transposées de noyau 4, de pas 2, de padding 1 ($7 \to 14 \to 28$) ; une batchnorm et une ReLU après chaque couche sauf la dernière, qui finit par une tanh (après la couche dense, une `nn.BatchNorm1d` sur ses $2w \cdot 7 \cdot 7$ valeurs, avant la mise en forme) ; les couches suivies d'une batchnorm n'ont pas de biais. Avec $n_z = 64$ et $w = 32$ : **240 321** paramètres ;
-- `make_discriminator_20(width=32, in_channels=1)` : $(N, c, 28, 28) \to (N, 1)$, des **logits**. Deux convolutions de noyau 4, de pas 2, de padding 1 ($28 \to 14 \to 7$, vers $w$ puis $2w$ canaux), une Leaky ReLU de pente 0,2 après chacune, une batchnorm après la seconde seulement (pas sur la couche d'entrée ; la convolution qu'elle suit n'a pas de biais), puis une couche dense vers une valeur. Avec $w = 32$ : **36 577** paramètres ;
+- `make_generator_20(nz=NZ, width=32)` : $(N, n_z) \to (N, 1, 28, 28)$ dans $[-1, 1]$. Une seule couche dense, sans biais, qui projette le bruit sur $2w$ canaux de 7 × 7 ($w$ = `width`), puis deux convolutions transposées de noyau 4, de stride 2, de padding 1 ($7 \to 14 \to 28$) ; une batchnorm et une ReLU après chaque couche sauf la dernière, qui finit par une tanh (après la couche dense, une `nn.BatchNorm1d` sur ses $2w \cdot 7 \cdot 7$ valeurs, avant la mise en forme) ; les couches suivies d'une batchnorm n'ont pas de biais. Avec $n_z = 64$ et $w = 32$ : **240 321** paramètres ;
+- `make_discriminator_20(width=32, in_channels=1)` : $(N, c, 28, 28) \to (N, 1)$, des **logits**. Deux convolutions de noyau 4, de stride 2, de padding 1 ($28 \to 14 \to 7$, vers $w$ puis $2w$ canaux), une Leaky ReLU de pente 0,2 après chacune, une batchnorm après la seconde seulement (pas sur la couche d'entrée ; la convolution qu'elle suit n'a pas de biais), puis une couche dense vers une valeur. Avec $w = 32$ : **36 577** paramètres ;
 - les activations sont des modules `nn` (`nn.ReLU()`, pas `F.relu`), déclarés dans l'ordre du calcul : un `nn.Sequential` convient, et la vérification lit les couches dans cet ordre ;
 - `init_weights_20(module)`, à appliquer avec `G.apply(init_weights_20)` : les poids des couches denses et convolutives selon $\mathcal{N}(0 ;\, 0{,}02^2)$, ceux des batchnorms selon $\mathcal{N}(1 ;\, 0{,}02^2)$ et leurs biais à 0.
 
@@ -2491,7 +2491,7 @@ Dans tes notes : le classement correspond-il à ton jugement visuel de 27.20 et 
     Ex("27.24", "🔬", 3, 45, "Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes)",
        "provoquer un effondrement de mode sur un mélange de gaussiennes, le mesurer, puis le soigner avec une couche d'écart-type par mini-batch.",
        "Ex 27.15 · Ex 27.11 · 27.Q10 · fiche §27.7.2", thread="anneau de gaussiennes", tracks="C",
-       body=r"""Le banc d'essai classique de l'effondrement de mode : huit gaussiennes très serrées (écart-type 0,05), régulièrement réparties sur un cercle de rayon 2. Un générateur qui ne couvre que quelques-unes d'entre elles se voit tout de suite.
+       body=r"""Le banc d'essai (*benchmark*) classique de l'effondrement de mode : huit gaussiennes très serrées (écart-type 0,05), régulièrement réparties sur un cercle de rayon 2. Un générateur qui ne couvre que quelques-unes d'entre elles se voit tout de suite.
 
 Écris :
 - `ring_24(n, rng, ...)`, qui tire $n$ points de ce mélange, dans l'ordre de tirage que donne sa docstring ;
@@ -2535,7 +2535,7 @@ Dans tes notes : les images passent-elles d'un chiffre à l'autre en douceur, ou
 
     Ex("27.27", "🛠️", 3, 30, "Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique",
        "sauvegarder tout l'état d'un entraînement de GAN dans un fichier, et reprendre exactement où on s'était arrêté.",
-       "Ex 27.20 · ch. 23 (checkpoint complet)", thread="MNIST", tracks="C",
+       "Ex 27.20 · ch. 23 (checkpoint complet)", thread="MNIST", tracks="M, C",
        body=r"""Un entraînement de GAN dure, et une coupure (fin de session Colab, panne) ne doit pas le faire repartir de zéro. Au ch. 23, tu as sauvegardé un réseau et son optimiseur ; ici, il y a **deux** réseaux, **deux** optimiseurs (avec les moments d'Adam), les statistiques des batchnorms, l'epoch, et les générateurs aléatoires qui fixent l'ordre des mini-batches et le bruit.
 
 **Contrat**

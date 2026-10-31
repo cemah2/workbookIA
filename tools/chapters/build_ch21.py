@@ -132,7 +132,7 @@ PAPER = [
         ("d", LETTER, '"B"',
          r'''mistakes={"le noyau, ce sont les poids du filtre": "A",
           "le champ récepteur est tout le carré de pixels lu par le filtre": "C",
-          "la carte de caractéristiques est la sortie de la couche": "D"}'''),
+          "la carte d'activation est la sortie de la couche": "D"}'''),
         ("e", LETTER, '"B"',
          r'''mistakes={"un filtre 3 × 3 a plus de poids qu'un 2 × 2 : ce n'est pas la raison": "A",
           "la parité du côté ne change pas la vitesse d'apprentissage": "C",
@@ -1430,7 +1430,7 @@ def _record_23() -> str:
     return "\n".join(lines)
 
 
-EX_23 = Ex("21.23", "📈", 2, 15, "Diagnostiquer les courbes et la matrice de confusion du CNN",
+EX_23 = Ex("21.23", "📈", 2, 25, "Diagnostiquer les courbes et la matrice de confusion du CNN",
        "lire sur deux entraînements complets l'effet du dropout, choisir l'epoch d'un early stopping, et trouver dans une "
        "matrice de confusion la classe que le réseau reconnaît le moins bien.",
        "Ex 21.22 · ch. 3 (matrice de confusion, recall, precision) · Ex 20.25 · fiche §21.9", thread="Fashion-MNIST",
@@ -2140,7 +2140,7 @@ PART_A = Part("A", "Ta librairie conv.py : tailles, im2col, convolution et pooli
               "rayures de la figure 21.14 (21.17). La cellule suivante importe PyTorch et les outils des parties A à D. "
               "Ne recopie jamais un nombre à la main : chaque réponse vérifiée est calculée par ton code.",
               given=TOOLS, exercises=[
-    Ex("21.12", "🔨", 1, 15, "conv_output_size et pad2d",
+    Ex("21.12", "🔨", 2, 30, "conv_output_size et pad2d",
        "écrire la formule des tailles de sortie et le padding d'un mini-batch d'images.",
        "0A (tableaux NumPy) · ✏️ 21.3 · fiche §21.3.4, §21.3.5", tracks="R, M, C", mylearn="conv.py",
        body=mylearn_howto() + "\n\n" + COMMON_CONTRACT + r"""

@@ -130,10 +130,10 @@ e) Vrai ou faux : la matrice de Gram de la moyenne de deux activations, $\frac{1
 ### 28.R3 — Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16 🔁 ★ ⏱️ 5 min
 *Ch. 21 · fiche §28.2.1 · parcours R*
 
-a) Deux convolutions 3 × 3 empilées, de pas 1 : le côté du champ récepteur d'un neurone de la seconde, en pixels de l'entrée.
-b) Trois convolutions 3 × 3 empilées, de pas 1 : le côté du champ récepteur.
+a) Deux convolutions 3 × 3 empilées, de stride 1 : le côté du champ récepteur d'un neurone de la seconde, en pixels de l'entrée.
+b) Trois convolutions 3 × 3 empilées, de stride 1 : le côté du champ récepteur.
 c) Vrai ou faux : plus on va profond dans un CNN, plus le champ récepteur grandit, et plus les motifs détectés sont grands et complexes.
-d) Une image CIFAR-10 de 32 × 32 traverse les cinq blocs de VGG16, chacun terminé par un max-pooling 2 × 2 de pas 2 (les convolutions gardent la taille). Le côté de la sortie.
+d) Une image CIFAR-10 de 32 × 32 traverse les cinq blocs de VGG16, chacun terminé par un max-pooling 2 × 2 de stride 2 (les convolutions gardent la taille). Le côté de la sortie.
 e) Le nombre de paramètres, biais compris, d'une convolution 3 × 3 de 64 vers 64 canaux.
 
 <a id="papier"></a>
@@ -146,7 +146,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 **Objectif :** prévoir la forme des activations d'un réseau pré-entraîné, et voir combien la matrice de Gram les résume.
 **Prérequis :** fiche §28.2.1, §28.4.1 · ch. 21 (convolution, pooling) · **Parcours :** R, M
 
-VGG16 (fiche §28.2.1) : cinq blocs de convolutions 3 × 3 de pas 1 et de padding 1 (2, 2, 3, 3 et 3 convolutions, de 64, 128, 256, 512 et 512 filtres), chaque bloc terminé par un max-pooling 2 × 2 de pas 2. Entrée : une image couleur de 224 × 224.
+VGG16 (fiche §28.2.1) : cinq blocs de convolutions 3 × 3 de stride 1 et de padding 1 (2, 2, 3, 3 et 3 convolutions, de 64, 128, 256, 512 et 512 filtres), chaque bloc terminé par un max-pooling 2 × 2 de stride 2. Entrée : une image couleur de 224 × 224.
 
 a) Le nombre de valeurs dans l'activation de la couche bloc 1, conv 2 (tous canaux compris).
 b) Le nombre de valeurs dans l'activation de la couche bloc 4, conv 1.

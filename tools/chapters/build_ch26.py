@@ -835,7 +835,7 @@ La vérification lit tes réponses a) et b), essaie ta fonction sur trois marche
 Dans tes notes : pourquoi faut-il distinguer `terminated` de `truncated` (pense à la cible du Q-learning, fiche §26.6.1) ? Que dit d) de la politique « jouer toujours la même suite d'actions » quand l'environnement est stochastique ?""",
        todo=TODO_13, check=CHECK_13, solution=SOLUTION_13 + "\n\n\n" + CHECK_13, record=RECORD_13),
 
-    Ex("26.14", "🔨", 1, 15, "Retours actualisés et retours à venir",
+    Ex("26.14", "🔨", 2, 30, "Retours actualisés et retours à venir",
        "écrire le retour actualisé d'un épisode et les retours à venir de chacun de ses pas dans ta librairie.",
        "✏️ 26.1 · fiche §26.3.7 (encadré 🧮)", tracks="R, M, C", mylearn="rl.py",
        body=mylearn_howto() + "\n\n" + COMMON_RL + r"""
@@ -888,7 +888,7 @@ La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont 
        "0A (boucles, listes) · ✏️ 26.2 · fiche §26.4", thread="Flippers", tracks="C",
        body=r"""Pour juger un agent de Flippers, il faut savoir ce qu'il aurait pu faire de mieux. Le jeu est assez petit pour tout calculer : on part des 6 plateaux gagnants (0 coup), leurs voisins à un coup (une tuile retournée) en demandent 1, les voisins de ceux-là qui n'ont pas encore de valeur en demandent 2, et ainsi de suite. C'est une **recherche en largeur** (*breadth-first search*). Un coup se défait en retournant la même tuile : « être à $d$ coups d'une victoire » et « être à $d$ coups d'un plateau gagnant en partant de lui » reviennent au même.
 
-**Contrat** : `min_moves_17()` rend un tableau d'entiers de forme `(512,)` : le nombre minimal de coups de chaque plateau (0 pour les 6 gagnants, `Flippers().winning`). Puis, à partir de **ton** tableau : `most_common_17` (la longueur minimale la plus fréquente), `mean_17` (sa moyenne sur les 506 plateaux non gagnants, à 2 décimales) et `hardest_17` (le code du plateau qui demande le plus de coups).
+**Contrat** : `min_moves_17()` rend un tableau d'entiers de forme `(512,)` : le nombre minimal de coups de chaque plateau (0 pour les 6 gagnants, `Flippers().winning`). Puis, à partir de **ton** tableau : `most_common_17` (la longueur minimale la plus fréquente), `mean_17` (sa moyenne sur les 506 plateaux non gagnants, à 2 décimales) et `hardest_17` (le code du plateau qui demande le plus de coups). N'utilise pas `Flippers().min_moves` : elle donne la réponse.
 
 La vérification compare ton tableau à une recherche de référence, trace l'histogramme des longueurs, puis vérifie tes trois réponses et dessine le plateau le plus difficile.
 
@@ -1004,7 +1004,7 @@ PART_B = Part("B", "Le cœur de ta librairie `rl.py`",
               "puis la boucle d'entraînement et l'évaluation d'une politique (26.21). Les parties C à F s'en "
               "servent : leurs expériences appellent **ta** librairie.",
               exercises=[
-    Ex("26.19", "🔨", 2, 20, "Politiques gloutonne et softmax (ε-greedy importée du ch. 11)",
+    Ex("26.19", "🔨", 3, 35, "Politiques gloutonne et softmax (ε-greedy importée du ch. 11)",
        "écrire la politique gloutonne d'une table et le tirage softmax d'une action dans ta librairie.",
        "✏️ 26.5 · ch. 11 (ε-greedy, `argmax_random_tie`) · fiche §26.6.2", tracks="R, M, C", mylearn="rl.py",
        body=mylearn_howto() + "\n\n" + COMMON_RL + r"""
@@ -1021,7 +1021,7 @@ Dans tes notes : pourquoi la politique gloutonne de l'**évaluation** peut-elle 
        solution=TODO_RL.format(names="greedy_policy and softmax_action") + "\n\n" + CHECK_19,
        after=tests_after("26.19", "mylearn.rl.greedy_policy([[0.0, 1.0]])", "test_greedy_policy_ or test_softmax_action_")),
 
-    Ex("26.20", "🔨", 2, 25, "Mises à jour de Q-learning et de SARSA, états terminaux compris",
+    Ex("26.20", "🔨", 3, 75, "Mises à jour de Q-learning et de SARSA, états terminaux compris",
        "écrire les mises à jour du Q-learning et de SARSA, avec les états terminaux et les masques d'actions.",
        "✏️ 26.3 · ✏️ 26.4 · fiche §26.6.1, §26.6.3, §26.7", tracks="R, M, C", mylearn="rl.py",
        body=mylearn_howto() + "\n\n" + COMMON_RL + r"""
@@ -1040,7 +1040,7 @@ Dans tes notes : pourquoi la mise à jour doit-elle rendre $\delta$ calculé **a
        after=tests_after("26.20", "mylearn.rl.q_learning_update(np.zeros((2, 2)), 0, 0, 1.0, 1, True, 0.5, 0.9)",
                          "test_q_learning_update_ or test_sarsa_update_")),
 
-    Ex("26.21", "🔨", 3, 45, "La boucle d'entraînement tabulaire et l'évaluation d'une politique",
+    Ex("26.21", "🔨", 3, 90, "La boucle d'entraînement tabulaire et l'évaluation d'une politique",
        "écrire la boucle d'entraînement du Q-learning et de SARSA, masques d'actions compris, et l'évaluation d'une "
        "politique.",
        "Ex 26.19 · Ex 26.20 · Ex 26.13 · fiche §26.6.3, §26.6.4, §26.7", thread="FrozenLake", tracks="R, M, C",
@@ -2129,12 +2129,12 @@ PART_E = Part("E", "Le rejeu d'expérience, la conception des récompenses, un r
               "puis tu rapportes un résultat de RL comme il faut : plusieurs graines, un intervalle, la "
               "configuration enregistrée (26.34).",
               exercises=[
-    Ex("26.31", "🔨", 2, 20, "Une mémoire de rejeu (replay buffer)",
+    Ex("26.31", "🔨", 3, 40, "Une mémoire de rejeu",
        "écrire une mémoire de rejeu de capacité fixe et le tirage de mini-batches dans ta librairie.",
        "0A (tableaux NumPy) · fiche §26.9 (encadré 🕰️)", tracks="R, C", mylearn="rl.py",
        body=mylearn_howto() + "\n\n" + COMMON_RL + r"""
 
-Écris les méthodes `push`, `sample` et `__len__` de la classe `ReplayBuffer` (son `__init__` est déjà écrit : lis sa docstring, qui décrit le stockage). **Contrat** propre à cette classe :
+Écris les méthodes `push`, `sample` et `__len__` de la classe `ReplayBuffer`, la mémoire de rejeu (*replay buffer*) de ta librairie (son `__init__` est déjà écrit : lis sa docstring, qui décrit le stockage). **Contrat** propre à cette classe :
 - `push(state, action, reward, next_state, terminated)` écrit à la position `self._pos`, puis avance cette position modulo la capacité (la plus ancienne transition est écrasée quand la mémoire est pleine) ; un état ou un état suivant dont la forme n'est pas `obs_shape` lève `ValueError` (pas de diffusion) ;
 - `sample(batch_size)` tire **sans remise**, uniformément, `batch_size` transitions parmi celles qui sont stockées (après un retour au début aussi), avec `self._rng` : la même `random_state` donne les mêmes mini-batches ; il rend exactement les cinq clés `"states"`, `"actions"`, `"rewards"`, `"next_states"`, `"terminated"`, la ligne $i$ de chaque tableau venant de la même transition, et des **copies** ; un `batch_size` nul, plus grand que `len(buffer)` ou booléen lève `ValueError` ;
 - `len(buffer)` est le nombre de transitions stockées, au plus la capacité.
@@ -2169,7 +2169,7 @@ Dans tes notes : quelle récompense apprend le plus vite à jouer court, et pour
 
 Sans rejeu, ta fonction doit refaire **exactement** ta `train_tabular` : la vérification le contrôle, s'assure que le rejeu change la table, puis compte tes appels à `mylearn.rl.q_learning_update` (appelle-la par `mylearn.rl`, pas par un `import` qui en garderait une copie). La cellule suivante entraîne 500 épisodes sur le lac glissant, sans rejeu et avec 8 mises à jour rejouées par pas, sur 3 graines en mode rapide (une dizaine de secondes).
 
-Dans tes notes : combien de mises à jour chaque version fait-elle en tout, et le gain vient-il seulement de ce nombre (que donnerait 9 fois plus d'épisodes sans rejeu) ? Pourquoi le rejeu suppose-t-il une méthode **hors politique** comme le Q-learning ? Qu'est-ce que la mémoire de rejeu de DQN apporte en plus, qu'une table n'a pas besoin (fiche, 💼 26.E4) ?""",
+Dans tes notes : combien de mises à jour chaque version fait-elle en tout, et le gain vient-il seulement de ce nombre (que donnerait 9 fois plus d'épisodes sans rejeu) ? Pourquoi le rejeu suppose-t-il une méthode **off-policy** (*hors politique*) comme le Q-learning ? Qu'est-ce que la mémoire de rejeu de DQN apporte en plus, qu'une table n'a pas besoin (fiche, 💼 26.E4) ?""",
        todo=TODO_33, check=CHECK_33, solution=SOLUTION_33 + "\n\n\n" + CHECK_33, after=[("code", EXPERIMENT_33)]),
 
     Ex("26.34", "🛠️", 2, 25, "Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle",
@@ -2507,7 +2507,7 @@ PART_F = Part("F", "Le morpion, CartPole, l'auto-apprentissage et le défi",
 
 **Contrat** : `play_ttt_35(env, Q, n_games, seed=0)` joue `n_games` parties avec la politique gloutonne de `Q` : la meilleure action **permise** quand `info` contient `"action_mask"` (`masked_greedy`), sinon la meilleure action de `Q[state]` ; chaque partie commence par `env.reset(seed=int(rng.integers(2**31)))`, avec `rng = np.random.default_rng(seed)` ; elle rend `{"win": …, "draw": …, "loss": …, "illegal": …}`, le compte de `info["result"]` à la fin des parties, avec les quatre clés.
 
-La vérification essaie ta fonction avec une table qui joue toujours la case 0. La cellule suivante entraîne les deux agents (20 000 parties chacun, une dizaine de secondes ; $\alpha = 0{,}3$, $\gamma = 0{,}9$, $\varepsilon = 0{,}1$), puis les fait jouer contre l'adversaire aléatoire et contre minimax.
+La vérification essaie ta fonction avec une table qui joue toujours la case 0. La cellule suivante entraîne les deux agents (20 000 parties chacun, une dizaine de secondes ; $\alpha = 0{,}3$, $\gamma = 0{,}9$, $\varepsilon = 0{,}1$), puis les fait jouer contre l'adversaire aléatoire et contre minimax, un adversaire **parfait** (fiche §26.10, encadré 🧮) : il joue toujours le coup qui donne le meilleur résultat dans le pire des cas ; au morpion, deux joueurs parfaits font match nul.
 
 Dans tes notes : combien de coups interdits l'agent à pénalité joue-t-il encore ? Que lui a coûté d'apprendre les règles en plus du jeu ? Contre minimax, aucun agent ne gagne : lequel s'en sort le mieux, et pourquoi l'autre perd-il autant ? L'agent à masque a-t-il appris à bien jouer, ou à battre un adversaire aléatoire (que valent ses coups dans les positions où un joueur parfait le mène, et que fait 26.37 pour les lui montrer) ?""",
        todo=TODO_35, check=CHECK_35, solution=SOLUTION_35 + "\n\n\n" + CHECK_35, after=[("code", EXPERIMENT_35)]),

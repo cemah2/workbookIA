@@ -369,8 +369,8 @@ Ces exercices sont dans `03_notebook.ipynb`.
 
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|
-| 22.12 | build_vocab, encode et decode sur Holmes et Verne | 🔨 | ★ | 15 |
-| 22.13 | make_windows et make_sequence_pairs | 🔨 | ★★ | 20 |
+| 22.12 | build_vocab, encode et decode sur Holmes et Verne | 🔨 | ★★ | 30 |
+| 22.13 | make_windows et make_sequence_pairs | 🔨 | ★★ | 30 |
 | 22.14 | Un MLP sur des fenêtres : l'ordre compte-t-il ? | 🔮 | ★★ | 20 |
 | 22.15 | rnn_cell_forward et rnn_forward | 🔨 | ★★ | 30 |
 | 22.16 | lstm_cell_forward et lstm_forward (portes i, f, g, o) | 🔨 | ★★★ | 45 |

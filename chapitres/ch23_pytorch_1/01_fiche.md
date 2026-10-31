@@ -538,7 +538,7 @@ Keras savait écrire l'architecture seule en JSON ou en YAML, sans les poids, po
 
 ### 23.9.4 · Utiliser un modèle pré-entraîné
 
-Des modèles entraînés pendant des jours sur des données que nous n'avons pas (ImageNet) sont publiés avec leurs poids (p. 1193-1194). Le livre décrit l'**apprentissage par transfert** (*transfer learning*) : on garde un tel modèle, on **gèle** ses couches (leurs poids ne bougent plus) et l'on entraîne seulement de nouvelles couches ajoutées à la fin ; ou bien on gèle tout sauf les dernières couches, que l'on continue d'entraîner sur ses données avec un très petit learning rate : c'est le **fine-tuning**, qui ajuste ces poids sans les bouleverser.
+Des modèles entraînés pendant des jours sur des données que nous n'avons pas (ImageNet) sont publiés avec leurs poids (p. 1193-1194). Le livre décrit le **transfer learning** (*apprentissage par transfert*) : on garde un tel modèle, on **gèle** ses couches (leurs poids ne bougent plus) et l'on entraîne seulement de nouvelles couches ajoutées à la fin ; ou bien on gèle tout sauf les dernières couches, que l'on continue d'entraîner sur ses données avec un très petit learning rate : c'est le **fine-tuning**, qui ajuste ces poids sans les bouleverser.
 
 En PyTorch, torchvision fournit les modèles et leurs poids :
 

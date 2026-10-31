@@ -27,7 +27,7 @@ flowchart TD
   VAE --> EV
   GAN --> EV
   GAN -.->|"un réseau qui sert de loss"| IN
-  RL -.->|"self-play, deux joueurs"| GAN
+  RL -.->|"auto-apprentissage, deux joueurs"| GAN
   DATA --> AE
   DATA --> GAN
   DATA --> RL

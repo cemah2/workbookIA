@@ -12,24 +12,24 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | feature | caractéristique, variable explicative | une information mesurée sur chaque exemple (ex. la longueur du bec d'un manchot) | 0A |
 | label | étiquette | la réponse attendue pour un exemple (ex. l'espèce du manchot) | 0A |
 | batch | lot | groupe d'exemples traités ensemble en une étape de calcul | 0A |
-| mini-batch | mini-lot | petit batch (quelques dizaines d'exemples) utilisé à chaque mise à jour des poids | 0A |
+| mini-batch | mini-lot | petit batch (quelques dizaines d'exemples) utilisé à chaque mise à jour des poids ; au pluriel, « des mini-batches » (comme « des batches ») | 0A |
 | epoch | époque | un passage complet sur tout le dataset d'entraînement | 0A |
 | learning rate | taux d'apprentissage | taille des pas faits à chaque mise à jour des poids | 0B |
 | loss | perte, fonction de coût | nombre qui mesure à quel point les prédictions sont mauvaises ; on cherche à le minimiser | 0B |
 | pipeline | chaîne de traitement | suite d'étapes (préparation, modèle…) enchaînées automatiquement ; `Pipeline` de scikit-learn : réajusté en entier dans chaque fold d'une validation croisée | 12 |
 | framework | cadriciel | bibliothèque qui fournit la structure d'un programme (ex. PyTorch) | 15 |
-| fine-tuning | réglage fin, affinage | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche | 1 |
+| fine-tuning | réglage fin, affinage, affiner | réentraîner un peu un modèle déjà entraîné sur une nouvelle tâche ; on dit « faire du fine-tuning » ou « un modèle qui a reçu un fine-tuning » (le verbe français de la 2ᵉ colonne est écarté) | 1 |
 | embedding | plongement, représentation vectorielle | vecteur de nombres qui représente un objet (mot, image…), souvent calculé par un réseau pré-entraîné | 12 |
 | dropout | abandon | désactiver au hasard des neurones pendant l'entraînement pour limiter l'overfitting | 9 |
 | pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | 20 |
 | padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | 20 |
-| stride | pas | décalage entre deux positions successives d'un filtre de convolution | 20 |
+| stride | pas | décalage entre deux positions successives d'un filtre de convolution ; on dit « une convolution de stride 2 » ; le mot « pas » reste au pas d'un optimiseur et au pas de temps d'une séquence | 20 |
 | kernel (dans le code : `kernel_size`) | noyau, filtre | dans la prose des CNN, on dit « noyau » ou « filtre » (DÉROGATION du BIBLE §22 ; voir « noyau (d'une convolution) ») | 21 |
 | token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | 1 |
 | prompt | invite, instruction | texte donné en entrée à un modèle de langage | 1 |
 | overfitting | surapprentissage, surajustement | le modèle apprend aussi le hasard de son échantillon : excellent sur l'entraînement, il généralise mal | 9 |
 | underfitting | sous-apprentissage | le modèle n'apprend pas assez (trop simple, trop régularisé ou pas assez entraîné) : il se trompe déjà sur l'entraînement | 9 |
-| benchmark | banc d'essai, référence | jeu de test standard pour comparer des méthodes | 1 |
+| benchmark | banc d'essai, référence | jeu de test standard et public pour comparer des méthodes (ImageNet) ; « banc d'essai » se dit en français pour le montage d'une comparaison (même protocole, mêmes données, mêmes mesures : voir « banc d'essai ») | 1 |
 | notebook | carnet | document qui mêle texte, code exécutable et résultats (Jupyter, Colab) | 0A |
 | accuracy | exactitude, taux de bonnes réponses | proportion de prédictions correctes | 1 |
 | precision | précision (ambigu), valeur prédictive positive (VPP) | parmi les exemples prédits positifs, proportion vraiment positive : $\frac{TP}{TP + FP}$ | 3 |
@@ -382,6 +382,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | recherche approchée des plus proches voisins | approximate nearest neighbor search (ANN) | retrouver très vite des vecteurs presque les plus proches d'une requête, sans tout comparer (index HNSW, bibliothèque FAISS) | 7, 13 |
 | base de données vectorielle | vector database | base qui stocke des embeddings et répond aux requêtes « les plus proches de ce vecteur » (recherche sémantique, RAG) | 7 |
 | cycle de dépréciation | deprecation cycle | une bibliothèque prévient (`FutureWarning`) une ou deux versions avant de changer un comportement par défaut | 7 |
+| découpage (des données) | data split | partage des exemples entre entraînement, validation et test ; **stratifié** quand chaque partie garde les proportions des classes (`train_test_split(..., stratify=y)`), par groupes, ou temporel (le passé pour l'entraînement) ; on ne dit pas « split », réservé à la question d'un nœud d'arbre (ch. 13) | 8 |
 | hold-out | mise de côté | le découpage le plus simple : une part des données (souvent 25 % ou 30 %) est mise de côté pour le test ; scikit-learn arrondit la taille du test vers le haut, $\lceil t \cdot n \rceil$ | 8 |
 | optimiseur | optimizer | l'algorithme qui met à jour les paramètres à partir de l'erreur (descente de gradient, Adam) ; le livre l'appelle *updater* | 8 |
 | raccourci appris | shortcut learning | règle de décision qui réussit sur les données habituelles grâce à un détail sans rapport avec la tâche (le décor d'une photo, l'hôpital d'une radiographie), et qui échoue dès que ce détail change | 8 |
@@ -726,7 +727,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | partage de poids | weight sharing | les mêmes poids servent à toutes les positions de l'image : un filtre a un nombre de poids indépendant de la taille de l'image | 21 |
 | champ récepteur | receptive field | les pixels de l'entrée dont dépend une sortie ; il grandit avec la profondeur, les strides et les poolings : $r_\ell = r_{\ell-1} + (k_\ell - 1)\prod_{i<\ell} s_i$ | 21 |
 | ancre, pixel focal | anchor, focal pixel | la case du noyau posée sur le pixel calculé (en général le centre), et ce pixel | 21 |
-| carte de caractéristiques | feature map, activation map | la sortie d'un filtre : une grille qui dit où, dans l'entrée, son motif est présent | 21 |
+| carte d'activation | feature map, activation map ; « carte de caractéristiques » (écarté) | la sortie d'un filtre : une grille qui dit où, dans l'entrée, son motif est présent ; une couche de $C_{out}$ filtres en produit $C_{out}$ | 21 |
 | détecteur de motif | feature detector | un filtre vu comme ce qu'il cherche : sa sortie est grande là où l'entrée ressemble à son noyau | 21 |
 | dilatation | dilation, atrous convolution | espacer les poids du noyau de $d - 1$ pixels : il couvre $d(k - 1) + 1$ pixels sans poids en plus | 21 |
 | convolution par canal | depthwise convolution | `groups=C_in` : un filtre d'un seul canal par canal d'entrée, sans mélange entre canaux | 21 |
@@ -782,7 +783,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | callback | callback | fonction que `fit()` appelle à des moments précis (fin d'epoch…) : checkpoint, planning de learning rate, early stopping ; en PyTorch, quelques lignes dans la boucle | 23 |
 | meilleur checkpoint | best checkpoint | les poids de l'epoch où la mesure de validation est la meilleure, sauvegardés pendant l'entraînement et rechargés à la fin | 23 |
 | modèle pré-entraîné | pretrained model | modèle publié avec des poids appris sur un grand dataset (ImageNet…), et avec son prétraitement (`weights.transforms()`) et ses conditions d'utilisation | 23 |
-| apprentissage par transfert | transfer learning | réutiliser un modèle pré-entraîné pour une nouvelle tâche : geler ses couches et entraîner une nouvelle tête, puis éventuellement faire du fine-tuning | 23 |
+| transfer learning | apprentissage par transfert | réutiliser un modèle pré-entraîné pour une nouvelle tâche : geler ses couches et entraîner une nouvelle tête, puis éventuellement faire du fine-tuning | 23 |
 | geler (des couches) | freeze | empêcher la mise à jour de poids (`p.requires_grad_(False)`) : ils restent ceux du pré-entraînement | 23 |
 | tête (d'un modèle) | head | les dernières couches, propres à la tâche (la couche de classification), que l'on remplace pour une nouvelle tâche | 23 |
 | safetensors | safetensors | format de fichier de poids (Hugging Face) qui ne contient que des tenseurs et se charge sans exécuter de code, contrairement à pickle | 23 |
@@ -839,7 +840,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | politique gloutonne | greedy policy | jouer toujours l'action de plus grande valeur ($\arg\max_a Q(s, a)$) | 26 |
 | politique softmax, de Boltzmann | softmax (Boltzmann) policy | tirer l'action $a$ avec la probabilité $e^{Q(s, a)/\tau} / \sum_b e^{Q(s, b)/\tau}$ | 26 |
 | SARSA | SARSA | mise à jour sur $r + \gamma\,Q(s', a')$, où $a'$ est l'action choisie et jouée ensuite ; nom tiré de $s, a, r, s', a'$ | 26 |
-| sur politique, hors politique | on-policy, off-policy | sur politique : apprend la valeur de la politique suivie (SARSA) ; hors politique : d'une autre politique que celle qui produit les données (Q-learning) | 26 |
+| on-policy, off-policy | sur politique, hors politique | on-policy : apprend la valeur de la politique suivie, exploration comprise (SARSA) ; off-policy : la valeur d'une autre politique que celle qui produit les données (Q-learning, qui apprend la politique gloutonne) | 26 |
 | équation de Bellman | Bellman equation | $Q^*(s, a) = \mathbb{E}[r + \gamma \max_{a'} Q^*(s', a')]$ : la valeur optimale comme point fixe | 26 |
 | itération sur les valeurs | value iteration | appliquer la mise à jour de Bellman à toute la table quand le modèle est connu ; converge vers $Q^*$ | 26 |
 | deep RL, DQN | deep reinforcement learning, deep Q-network | RL où un réseau remplace la table ; DQN reçoit l'état et rend une valeur Q par action | 26 |
@@ -900,7 +901,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | Croissant | Croissant | format de métadonnées de datasets lisible par machine (MLCommons, 2024), fondé sur schema.org | 29 |
 | dataset retiré | retracted dataset | dataset que ses auteurs ne distribuent plus (consentement absent, contenus injurieux ou illégaux) ; une copie sur un miroir ne lève pas le problème | 29 |
 
-## Termes des checkpoints et des mini-projets (parties I à IV)
+## Termes des checkpoints et des mini-projets (parties I à VI)
 
 | Retenu | Autre langue | Définition courte | Ch. |
 |---|---|---|---|
@@ -913,3 +914,4 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | taux de sélection | selection rate | part des exemples qu'un classifieur prédit positifs, dans un groupe ou au total ; à comparer à la prévalence du groupe | MP3 |
 | imputation (d'enquête) | survey imputation | compléter la réponse manquante d'une personne interrogée (son revenu) à partir de ses autres réponses ; les statistiques publiées héritent des biais du modèle | MP3 |
 | test d'équivalence | equivalence test | test qui donne les mêmes entrées et les mêmes poids à une implémentation et à une référence (PyTorch) et compare leurs sorties et leurs gradients, à une tolérance près | MP4 |
+| banc d'essai | benchmark | le montage d'une comparaison de modèles : mêmes données, même protocole d'évaluation et mêmes mesures, fixés **avant** les expériences (le MP6 compare un VAE et un DCGAN) ; la glose *benchmark* accompagne sa première occurrence dans la prose, jamais un titre (« Banc d'essai génératif… ») ; un benchmark public (ImageNet) en fournit les données | MP6 |

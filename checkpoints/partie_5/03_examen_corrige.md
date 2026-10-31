@@ -217,7 +217,7 @@ d) **[0,2]** Chaque $x_k$ sert aux positions qui le lisent : $\frac{\partial L}{
 
 **Critères** (0,5 en tout) :
 - un seul entraînement par architecture ne dit pas si l'écart dépasse la **variabilité** due au hasard (initialisation, ordre des mini-batches, dropout) : d'une graine à l'autre, l'accuracy d'un même réseau bouge souvent de plusieurs dixièmes de point, et le jeu de test, de taille finie, ajoute sa propre incertitude (0,2) ;
-- à la place : entraîner chaque architecture sur plusieurs graines (5 au moins), rapporter la moyenne et l'écart-type (ou un intervalle), sur le même split, avec le jeu de test ouvert une seule fois, après tous les choix ; ou écrire honnêtement « sur un seul entraînement, B a fait 0,8 point de mieux ; l'écart n'est pas établi » (0,15) ;
+- à la place : entraîner chaque architecture sur plusieurs graines (5 au moins), rapporter la moyenne et l'écart-type (ou un intervalle), sur le même découpage, avec le jeu de test ouvert une seule fois, après tous les choix ; ou écrire honnêtement « sur un seul entraînement, B a fait 0,8 point de mieux ; l'écart n'est pas établi » (0,15) ;
 - l'honnêteté : le client (un hôpital) prendra des décisions d'après le rapport ; présenter comme établi un écart qui peut venir du hasard, ou choisir la graine qui arrange, l'induit en erreur, même sans intention, et une affirmation de performance sur un dispositif médical engage l'équipe (0,15).
 
 **Erreurs fréquentes** : répondre seulement « il faut plus de données » ; proposer de garder la meilleure graine de chaque modèle (c'est sélectionner le hasard) ; oublier que choisir l'architecture sur le jeu de test le rend lui-même optimiste.

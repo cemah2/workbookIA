@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 (§26.1 à §26.10) |
-| **Temps total estimé** | ≈ 29 h : lecture du livre et de la fiche ≈ 7,9 h, exercices ≈ 20 h, 30 flashcards ≈ 1,0 h |
+| **Temps total estimé** | ≈ 32 h : lecture du livre et de la fiche ≈ 7,9 h, exercices ≈ 23 h, 30 flashcards ≈ 1,0 h |
 | **Prérequis** | 0A (classes, dictionnaires, générateur aléatoire de NumPy) · 0B (sommes, suite géométrique, espérance) · ch. 2 (intervalle de confiance bootstrap) · ch. 11 (bandit à bras multiples, ε-greedy, UCB, conditionnement opérant) · ch. 16 (un réseau comme approximateur de fonction) · ch. 17 (softmax et température) · ch. 19 (moyenne mobile) · ch. 23 (sauvegarder et reprendre un entraînement) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `rl.py` : retours, politiques gloutonne et softmax, mises à jour du Q-learning et de SARSA, boucle d'entraînement tabulaire, évaluation d'une politique, itération sur les valeurs, mémoire de rejeu ; il réutilise `bandit.py` (ch. 11) |
@@ -59,7 +59,7 @@ Le chapitre du livre est long (100 pages) mais sans une équation : tout passe p
 3. Le **retour actualisé** $G_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \dots$ pondère les récompenses lointaines par $\gamma^k$ ; avec $\gamma = 1$, c'est le retour total ; l'horizon effectif est d'environ $1/(1-\gamma)$ pas.
 4. Une **table Q** donne, pour chaque état et chaque action, une estimation $Q(s, a)$ du retour qu'on peut espérer en jouant $a$ dans $s$, puis en jouant au mieux.
 5. Le **Q-learning** corrige $Q(s, a)$ après chaque pas : $Q(s, a) \leftarrow Q(s, a) + \alpha\,[r + \gamma \max_{a'} Q(s', a') - Q(s, a)]$, sans attendre la fin de l'épisode ; un état terminal ne vaut rien au-delà de sa récompense.
-6. **SARSA** fait la même chose avec $Q(s', a')$, la valeur de l'action **réellement** choisie ensuite, au lieu du maximum : il apprend la valeur de sa politique exploratoire (*on-policy*), là où le Q-learning apprend celle de la politique optimale (*off-policy*).
+6. **SARSA** fait la même chose avec $Q(s', a')$, la valeur de l'action **réellement** choisie ensuite, au lieu du maximum. Il apprend ainsi la valeur de sa politique exploratoire : il est **on-policy** (*sur politique*), là où le Q-learning, qui apprend celle de la politique optimale, est **off-policy** (*hors politique*).
 7. Il faut **explorer** (essayer des actions mal connues) autant qu'**exploiter** (jouer la meilleure connue) : ε-greedy choisit une action au hasard avec la probabilité $\varepsilon$, softmax tire chaque action selon $e^{Q/\tau}$.
 8. Le learning rate $\alpha$ règle la part du nouveau dans chaque mise à jour : proche de 1, la table oublie tout à chaque surprise (c'est l'échec du L-learning du livre) ; petit ou décroissant, elle fait la moyenne du hasard.
 9. Une table ne passe pas à l'échelle : déjà $3^{16}$ codages de plateau au morpion 4 × 4, et plus de configurations que d'atomes dans l'univers au go ; le **deep RL** remplace la table par un réseau, et stabilise l'apprentissage par une **mémoire de rejeu** (*replay buffer*) et un réseau cible (DQN).
@@ -254,7 +254,7 @@ $$Q(s, a) \leftarrow Q(s, a) + \alpha\,\big[r + \gamma\, Q(s', a') - Q(s, a)\big
 
 La seule différence avec le Q-learning est $Q(s', a')$ au lieu de $\max_{a'} Q(s', a')$. Quand $a'$ est l'action gloutonne, les deux mises à jour sont identiques.
 
-> ⚠️ **Le livre, corrigé — un « défaut » du Q-learning ?** — Le livre présente le max du Q-learning comme un défaut, une « erreur » que SARSA corrigerait, avec un meilleur regard vers l'avant (p. 1532 et 1546). Ce sont deux objectifs différents, et chacun est juste pour le sien. Le Q-learning est **hors politique** (*off-policy*) : il apprend $Q^*$, la valeur de la politique gloutonne optimale, quelle que soit la politique exploratoire qui produit les données. SARSA est **sur politique** (*on-policy*) : il apprend la valeur de la politique qu'il suit, exploration comprise. Les deux regardent un seul pas en avant. Quand l'exploration coûte cher, SARSA apprend un chemin plus prudent, qui tient compte de ses propres faux pas ; le Q-learning apprend le chemin optimal, qui n'est le meilleur qu'une fois l'exploration arrêtée (🔮 26.28 et 🔬 26.29, au bord d'une falaise).
+> ⚠️ **Le livre, corrigé — un « défaut » du Q-learning ?** — Le livre présente le max du Q-learning comme un défaut, une « erreur » que SARSA corrigerait, avec un meilleur regard vers l'avant (p. 1532 et 1546). Ce sont deux objectifs différents, et chacun est juste pour le sien. Le Q-learning est **off-policy** : il apprend $Q^*$, la valeur de la politique gloutonne optimale, quelle que soit la politique exploratoire qui produit les données. SARSA est **on-policy** : il apprend la valeur de la politique qu'il suit, exploration comprise. Les deux regardent un seul pas en avant. Quand l'exploration coûte cher, SARSA apprend un chemin plus prudent, qui tient compte de ses propres faux pas ; le Q-learning apprend le chemin optimal, qui n'est le meilleur qu'une fois l'exploration arrêtée (🔮 26.28 et 🔬 26.29, au bord d'une falaise).
 
 ### 26.7.1 · SARSA en action
 

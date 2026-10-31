@@ -331,7 +331,7 @@ Relis les formules de taille et de paramètres d'une convolution (ch. 21), et le
 </details>
 <details><summary>Indice 2</summary>
 
-Une convolution $3 \times 3$ avec `padding=1` garde la hauteur et la largeur et donne autant de canaux qu'elle a de filtres ; un `MaxPool2d(2)` divise la hauteur et la largeur par 2 et garde les canaux ; un `Upsample(scale_factor=2)` les multiplie par 2. Une convolution a $C_{out}(C_{in} k^2 + 1)$ paramètres ; pooling et sur-échantillonnage n'en ont aucun.
+Une convolution $3 \times 3$ avec `padding=1` garde la hauteur et la largeur et donne autant de canaux qu'elle a de filtres ; un `MaxPool2d(2)` divise la hauteur et la largeur par 2 et garde les canaux ; un `Upsample(scale_factor=2)` les multiplie par 2. Une convolution a $C_{out}(C_{in} k^2 + 1)$ paramètres ; pooling et suréchantillonnage n'en ont aucun.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -934,7 +934,7 @@ def psnr_26(clean, images):
 
 </details>
 
-### Ex 25.27 — Sur-échantillonnage explicite ou convolutions à pas : temps et qualité 🔬
+### Ex 25.27 — Suréchantillonnage explicite ou convolutions à stride : temps et qualité 🔬
 
 <details><summary>Indice 1</summary>
 

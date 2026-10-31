@@ -100,7 +100,7 @@
   "loss minimax vs loss non saturante",
   "divergence de Jensen-Shannon : la valeur du jeu au discriminateur optimal (promise par le ch. 6)",
   "discriminateur optimal",
-  "mini-batchs",
+  "mini-batches",
   "DCGAN",
   "règles de Radford (stride, convolution transposée, batchnorm, ReLU/LeakyReLU, tanh, Adam)",
   "GAN conditionnel",
@@ -212,7 +212,7 @@
    "from": "19"
   },
   {
-   "notion": "convolution à pas, convolution transposée",
+   "notion": "convolution de stride 2, convolution transposée",
    "from": "21"
   },
   {
@@ -439,7 +439,7 @@
   {
    "id": "27.Q7",
    "type": "🧠",
-   "title": "Pourquoi juger des mini-batchs plutôt qu'un point isolé",
+   "title": "Pourquoi juger des mini-batches plutôt qu'un point isolé",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -513,7 +513,7 @@
   {
    "id": "27.R1",
    "type": "🔁",
-   "title": "Deux agents qui jouent l'un contre l'autre (self-play)",
+   "title": "Deux agents qui jouent l'un contre l'autre (auto-apprentissage)",
    "stars": 1,
    "minutes": 5,
    "gpu": false,
@@ -994,6 +994,7 @@
    ],
    "tracks": [
     "rapide",
+    "maths",
     "code"
    ],
    "check": "manual"
@@ -1145,6 +1146,7 @@
     "27.4.3"
    ],
    "tracks": [
+    "maths",
     "code"
    ],
    "check": "manual"

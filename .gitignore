@@ -41,6 +41,9 @@ checkpoints/**/*.ckpt
 *.pth
 *.ckpt
 *.safetensors
+# ...except the delivered model of MP5 (300 KB): the solution's, and the learner's (deliverable 4, graded)
+!projets/partie_5_classifieur_cifar10/solution/model.pt
+!mon_travail/projets/*/model.pt
 *.onnx
 runs/
 wandb/

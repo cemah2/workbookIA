@@ -131,7 +131,7 @@
 - c) :
 
 
-### 21.R3 — 0B : le produit scalaire, ce que calcule un filtre en chaque position
+### 21.R3 — Ch. 0B : le produit scalaire, ce que calcule un filtre en chaque position
 
 - a) :
 - b) :

@@ -131,7 +131,7 @@ Dans tes notes : pourquoi accrocher le hook à la ReLU (ou ici au module `Fire`,
 a) la médiane des 8 périodes de `conv1` : `"A"` moins de 4 pixels, `"B"` de 4 à 8, `"C"` plus de 8 ;
 b) la médiane des 8 périodes de `fire8`, avec les mêmes catégories.
 
-Rappel utile : la première convolution de SqueezeNet a un noyau de 3 × 3 et un pas de 2 ; `fire8` vient après trois max-poolings.
+Rappel utile : la première convolution de SqueezeNet a un noyau de 3 × 3 et un stride de 2 ; `fire8` vient après trois max-poolings.
 
 La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont pas écrites.""",
        given=GIVEN_12.replace("{P12}", _packed(HISTORY.get("p12", {}))), todo=TODO_12, solution=SOLUTION_12,

@@ -996,7 +996,7 @@ PART_A = Part("A", "L'environnement, les données, le prétraitement et le MLP d
               given=TOOLS, exercises=[
     Ex("23.12", "📦", 2, 20, "Environnement et tenseurs : versions, device, reshape, view, permute",
        "vérifier les versions et le device, convertir des images de NHWC à NCHW, et attraper les avertissements.",
-       "ch. 20 (tenseurs) · fiche §23.1.3, §23.2.1, §23.3.2 à §23.3.5, §23.5.1", thread="Fashion-MNIST", tracks="R, C",
+       "ch. 20 (tenseurs) · fiche §23.1.3, §23.2.1, §23.3.2 à §23.3.5, §23.5.1", thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""Quatre petites fonctions qu'on retrouve en tête de tout projet. `IMAGES_12` contient 4 images en couleur de 5 lignes et 6 colonnes, au format `channels_last` `(N, H, W, C)`, en `uint8`.
 
 **Contrat**
@@ -1016,7 +1016,7 @@ Dans tes notes : pourquoi `x.permute(0, 3, 1, 2).view(4, -1)` lève-t-il une err
 
     Ex("23.13", "📦", 2, 20, "Charger et regarder Fashion-MNIST",
        "charger un dataset d'images, vérifier sa structure et regarder ses images classe par classe.",
-       "Ex 23.12 · fiche §23.4.1, §23.5.2, §23.5.3", thread="Fashion-MNIST", tracks="R, C",
+       "Ex 23.12 · fiche §23.4.1, §23.5.2, §23.5.3", thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""Avant tout entraînement, on charge et on regarde (fiche §23.5.3).
 
 **Contrat**
@@ -1065,10 +1065,10 @@ L'expérience affiche les trois entraînements, puis essaie les pixels `uint8` s
             "réglé pour des entrées de taille 1 diverge sur des entrées 255 fois plus grandes, et les réseaux "
             "profonds sont bien plus sensibles à l'échelle de leurs entrées."),
 
-    Ex("23.15", "📦", 2, 30, "Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader",
+    Ex("23.15", "📦", 2, 30, "Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader",
        "écrire le prétraitement d'un projet une seule fois, en quatre fonctions réutilisables.",
        "Ex 23.13 · ch. 8 (stratification) · ch. 12 (statistiques apprises sur le train) · fiche §23.5.4 à §23.5.8",
-       thread="Fashion-MNIST", tracks="R, C",
+       thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""Le livre réunit tout son prétraitement dans un seul listing (fiche §23.5.8). Tu l'écris en quatre fonctions, que les exercices suivants réutilisent.
 
 **Contrat**
@@ -1090,7 +1090,7 @@ Dans tes notes : pourquoi calcule-t-on `mean` et `std` sur `X_tr` seulement ? Po
 
     Ex("23.16", "📦", 1, 15, "Le MLP du livre avec nn.Sequential et nn.Flatten",
        "construire le MLP du livre en PyTorch et compter ses paramètres.",
-       "Ex 23.15 · ✏️ 23.3 · fiche §23.6 à §23.6.2", thread="Fashion-MNIST", tracks="R, C",
+       "Ex 23.15 · ✏️ 23.3 · fiche §23.6 à §23.6.2", thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""Le modèle du livre, traduit (fiche §23.6.2).
 
 **Contrat**
@@ -1536,7 +1536,7 @@ Dans tes notes : lequel des trois bugs fausse les résultats, lequel coûte seul
     Ex("23.18", "📦", 3, 45, "Ta fonction fit() : boucle, validation et historique",
        "écrire une fonction d'entraînement réutilisable, avec validation, historique et callbacks.",
        "Ex 23.16 · ch. 20 (boucle d'entraînement) · ✏️ 23.5 · 23.R2 · fiche §23.6.3, §23.6.4, §23.7, §23.8",
-       thread="Fashion-MNIST", tracks="R, C",
+       thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""Le `fit()` de Keras, en PyTorch, écrit par toi : les exercices suivants s'en servent.
 
 **Contrat**
@@ -2010,7 +2010,7 @@ Dans tes notes : pourquoi le fichier JSON doit-il accompagner le fichier de poid
     Ex("23.23", "📦", 2, 30, "Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires)",
        "sauvegarder un entraînement et le reprendre plus tard exactement là où il s'était arrêté.",
        "Ex 23.18 · 🧮 23.8 · fiche §23.9 à §23.9.3, « Au-delà du livre : la reproductibilité »", thread="Fashion-MNIST",
-       tracks="R, C",
+       tracks="R, M, C",
        body=r"""Un entraînement de plusieurs heures s'interrompt (une coupure, une session Colab qui expire). Avec un bon checkpoint, on le reprend comme s'il ne s'était jamais arrêté : mêmes poids, même état d'Adam, même ordre des mini-batches, mêmes masques de dropout.
 
 **Contrat**
@@ -2041,13 +2041,13 @@ Dans tes notes : enlève (dans une copie de ta fonction) l'état de l'optimiseur
 
 `SIZE_24` vaut 112 en mode rapide (4 fois moins de calculs) et 224, la taille d'ImageNet, sinon. La vérification compte tes paramètres, contrôle ton prétraitement et tes features, entraîne la tête 20 epochs sur les features, puis le MLP du livre sur les **mêmes** 2 000 images, et compare.
 
-Dans tes notes : le modèle pré-entraîné fait-il beaucoup mieux que le MLP ? Pourquoi, d'après toi (pense à ce que sont les images d'ImageNet) ? Dans quel cas l'apprentissage par transfert donne-t-il un grand avantage ?""",
+Dans tes notes : le modèle pré-entraîné fait-il beaucoup mieux que le MLP ? Pourquoi, d'après toi (pense à ce que sont les images d'ImageNet) ? Dans quel cas le transfer learning donne-t-il un grand avantage ?""",
        given=GIVEN_24, todo=TODO_24, check=CHECK_24, solution=SOLUTION_24 + "\n\n\n" + CHECK_24,
        note="La tête du ResNet gelé (5 130 paramètres appris) fait un peu mieux que le MLP du livre (623 290 "
             "paramètres appris) sur les mêmes 2 000 images : environ 86 % contre 83 à 84 % en mode rapide, un "
             "avantage modeste. Les features "
             "d'ImageNet ont été apprises sur des photos en couleur d'objets du monde, à 224 pixels ; des vêtements "
-            "gris de 28 pixels agrandis en sont loin (un déplacement de domaine). Le transfert donne un grand "
+            "gris de 28 pixels agrandis en sont loin (un déplacement de domaine). Le transfer learning donne un grand "
             "avantage quand les nouvelles images ressemblent à celles du pré-entraînement et qu'on en a peu "
             "(quelques centaines de photos d'un produit), et davantage encore quand on dégèle les dernières couches "
             "(le fine-tuning, chapitre bonus B1)."),
@@ -2490,12 +2490,12 @@ CHECK_29 = r'''with checked("23.29"):
 PART_D = Part("D", "Callbacks, plannings, patience, fiche modèle et défi",
               "Tu écris en PyTorch les trois callbacks de Keras, pour ta `fit_18` (23.25) ; tu compares quatre "
               "plannings de learning rate (23.26) et plusieurs patiences d'early stopping (23.27) ; tu rédiges la "
-              "fiche du modèle (23.28) ; puis tu relèves le défi de reproductibilité (23.29).",
+              "fiche modèle (23.28) ; puis tu relèves le défi de reproductibilité (23.29).",
               exercises=[
     Ex("23.25", "📦", 3, 45, "Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping",
        "écrire les trois callbacks de Keras pour ta fonction `fit_18`, et les combiner dans un vrai entraînement.",
        "Ex 23.18 · Ex 23.23 · ✏️ 23.6, 23.7 · ch. 20 (`EarlyStopping` de mylearn) · fiche §23.10 à §23.10.3",
-       thread="Fashion-MNIST", tracks="R, C",
+       thread="Fashion-MNIST", tracks="R, M, C",
        body=r"""PyTorch n'a pas de callbacks ; ta `fit_18` en accepte (23.18) : des objets appelés `callback(epoch, history, model, optimizer)` à la fin de chaque epoch, dont un `True` arrête l'entraînement. Tu écris les trois du livre sous forme de classes : un objet garde son état (la meilleure valeur, le compteur) d'un appel à l'autre.
 
 **Contrat**
@@ -2555,7 +2555,7 @@ Dans tes notes : que coûte une patience trop petite ici, et une patience trop g
             "petites que 0,01 et ne comptent pas, le compteur atteint 3 à l'epoch 7, et l'on recharge l'epoch 4. Une patience de 3 à 5, sans `min_delta`, est un "
             "bon choix pour ce modèle."),
 
-    Ex("23.28", "🛠️", 2, 20, "Rédiger la fiche du modèle (model card)",
+    Ex("23.28", "🛠️", 2, 20, "Rédiger la fiche modèle",
        "documenter un modèle dans une fiche modèle complète, avec ses chiffres et ses limites.",
        "Ex 23.22 · Ex 23.23 · MP3 (fiche modèle) · fiche §23.9.5", thread="Fashion-MNIST", tracks="C",
        body=r"""Le livre conseille de documenter le prétraitement et de faire suivre cette documentation au modèle (fiche §23.9.5). La forme standard est la **fiche modèle** (*model card*, Mitchell et coll., 2019), que tu as rencontrée au MP3. Rédige celle de `MODEL_C`, en Markdown, dans la chaîne `MODEL_CARD_28`. La cellule suivante affiche ce qu'il faut savoir du modèle (`CARD_FACTS_28`) et la liste des neuf sections de l'article (`REQUIRED_28`).

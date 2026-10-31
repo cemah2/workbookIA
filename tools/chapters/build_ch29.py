@@ -141,7 +141,7 @@ PAPER = [
         ("d", WHOLE, "16", r'''mistakes={"4 × 4 cases, c'est 16 états ; 4, c'est le nombre d'actions": 4}'''),
         ("e", TF, "False", r'''mistakes={"les données d'un agent changent avec sa politique : un découpage figé n'a pas de sens": True}'''),
     ]),
-    Paper("29.R3", "Ch. 2 : biais d'échantillonnage — un dataset représente-t-il la population visée ?", [
+    Paper("29.R3", "Ch. 2 : biais d'échantillonnage : un dataset représente-t-il la population visée ?", [
         ("a", WHOLE, "344", r'''mistakes={"333, c'est après avoir retiré les lignes incomplètes : compte-les toutes": 333}'''),
         ("b", WHOLE, "3", r'''mistakes={"trois espèces (Adélie, Chinstrap, Gentoo) ; trois îles aussi": 2}'''),
         ("c", LETTER, '"A"', letters("A", {"B": "une erreur de mesure fausse chaque valeur, pas le choix des exemples",

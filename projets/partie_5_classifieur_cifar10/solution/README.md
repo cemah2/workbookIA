@@ -10,7 +10,7 @@ Classer des photos couleur de 32 × 32 pixels dans les dix classes de CIFAR-10 (
 
 ## Le protocole
 
-- **Le découpage** : les 50 000 images d'entraînement sont coupées par un split **stratifié** (graine 0) en 45 000 pour l'entraînement et 5 000 pour la validation, 500 par classe ; tous les choix se font sur la validation. Le test (10 000 images) n'a été ouvert **qu'une fois**, pour le modèle final (`test_log.json`).
+- **Le découpage** : les 50 000 images d'entraînement sont coupées par un découpage **stratifié** (graine 0) en 45 000 pour l'entraînement et 5 000 pour la validation, 500 par classe ; tous les choix se font sur la validation. Le test (10 000 images) n'a été ouvert **qu'une fois**, pour le modèle final (`test_log.json`).
 - **Le prétraitement** : la moyenne et l'écart-type de chaque canal sont calculés sur les 45 000 images d'entraînement seulement (0,4916 ; 0,4823 ; 0,4466 et 0,2471 ; 0,2435 ; 0,2615), et enregistrés avec le modèle (`model.json`).
 - **L'augmentation** (entraînement seulement) : un recadrage aléatoire 32 × 32 après un padding de 4 pixels, une symétrie horizontale.
 - **Les graines** : `torch.manual_seed(0)` avant de construire chaque modèle, un `torch.Generator` par `DataLoader`.
@@ -20,12 +20,12 @@ Classer des photos couleur de 32 × 32 pixels dans les dix classes de CIFAR-10 (
 
 | Module | Contenu |
 |---|---|
-| `cifarkit/pipeline.py` | split stratifié, statistiques par canal, transformations `torchvision.transforms.v2`, `Dataset`, `DataLoader` à graine |
+| `cifarkit/pipeline.py` | découpage stratifié, statistiques par canal, transformations `torchvision.transforms.v2`, `Dataset`, `DataLoader` à graine |
 | `cifarkit/models.py` | MLP et petit CNN (baselines), VGG (pooling ou stride, batchnorm, dropout), bloc résiduel et petit ResNet, `build_model(config)` |
 | `cifarkit/train.py` | `evaluate` (moyenne par exemple), `fit` (meilleur checkpoint, early stopping, `OneCycleLR` compté en pas, reprise exacte), `save_model` et `load_model`, `predict_proba`, `fgsm`, le journal |
 | `cifarkit/predict.py` | `python -m cifarkit.predict photo.jpg --model .` |
 
-**Les tests** (`test_cifarkit.py`, 19 tests, 3 s sur CPU) vérifient sur des images aléatoires ce que l'entraînement ne montre pas : les proportions du split, les statistiques par canal (contre NumPy), la normalisation (contre un calcul à la main), le nombre de paramètres de chaque modèle, le bloc résiduel, la moyenne par exemple d'`evaluate` sur des mini-batches inégaux, les poids de la meilleure epoch, la **reprise au bit près** (2 + 2 epochs contre 4 d'affilée, avec dropout et `OneCycleLR`), la sauvegarde, et la taille de la perturbation FGSM. Ils attrapent les cinq mutants du notebook (une moyenne de moyennes, des statistiques mélangées entre canaux, les poids de la dernière epoch, un pas de 2ε, un split non stratifié).
+**Les tests** (`test_cifarkit.py`, 19 tests, 3 s sur CPU) vérifient sur des images aléatoires ce que l'entraînement ne montre pas : les proportions du découpage, les statistiques par canal (contre NumPy), la normalisation (contre un calcul à la main), le nombre de paramètres de chaque modèle, le bloc résiduel, la moyenne par exemple d'`evaluate` sur des mini-batches inégaux, les poids de la meilleure epoch, la **reprise au bit près** (2 + 2 epochs contre 4 d'affilée, avec dropout et `OneCycleLR`), la sauvegarde, et la taille de la perturbation FGSM. Ils attrapent les cinq mutants du notebook (une moyenne de moyennes, des statistiques mélangées entre canaux, les poids de la dernière epoch, un pas de 2ε, un split non stratifié).
 
 **Le modèle livré** : `model.pt` (le `state_dict`, 300 Ko) et `model.json` (la configuration, la normalisation, les classes, les métriques et les versions). `cifarkit` n'a besoin que de PyTorch, torchvision et Pillow pour le recharger.
 

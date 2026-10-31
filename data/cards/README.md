@@ -1,6 +1,6 @@
 # Fiches des datasets (*data cards*)
 
-Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, variables, biais et limites, chapitres qui l'utilisent. Au ch. 29, tu écriras la fiche du dataset de ton projet final sur le même modèle.
+Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, variables, biais et limites, chapitres qui l'utilisent. Au ch. 29, tu écriras la fiche du dataset de ton projet final sur le même modèle, avec les six sections que demande 🛠️ 29.15 (Provenance, Contenu, Licence, Usage prévu, Limites et biais, Téléchargement) : ces fiches montrent le niveau de détail attendu, sans avoir tous ces six titres.
 
 | Dataset | Chargement | Stockage | Fiche |
 |---|---|---|---|

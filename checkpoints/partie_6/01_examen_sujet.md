@@ -26,7 +26,7 @@
 | CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | 1 | 5 min |
 | CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | 1 | 7 min |
 | CP6.7 | 📈 | Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement | 1 | 8 min |
-| CP6.8 | 📦 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni (notebook) | 2 | 15 min |
+| CP6.8 | 🔨 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni (notebook) | 2 | 15 min |
 | CP6.9 | 🐛 | Réparer un pas d'entraînement de GAN (notebook) | 1,5 | 10 min |
 | CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | 1 | 6 min |
 | CP6.11 | ⚖️ | Un dataset de visages pour un produit commercial | 1 | 5 min |
@@ -79,7 +79,7 @@ c) SARSA sur la transition de a), sachant que l'agent choisit ensuite l'action $
 d) Avec une politique ε-greedy, $\varepsilon = 0{,}2$ (l'exploration tire une action au hasard parmi les trois, la gloutonne comprise), la probabilité de choisir l'action 2 dans B (4 décimales). **[0,4]**
 e) Pourquoi dit-on que SARSA apprend la valeur de la politique qu'il suit (*on-policy*) et le Q-learning celle de la politique gloutonne (*off-policy*) ? Une conséquence pratique, en deux phrases. **[0,4]**
 
-### CP6.4 — Discriminateur optimal et losses à l'équilibre ∂ ★ ⏱️ 12 min · 2 points
+### CP6.4 — Discriminateur optimal et losses à l'équilibre ∂ ★★ ⏱️ 12 min · 2 points
 
 Pour un générateur fixé, le discriminateur maximise $V(D) = \mathbb{E}_{\mathbf{x} \sim p_{\text{data}}}[\ln D(\mathbf{x})] + \mathbb{E}_{\mathbf{x} \sim p_g}[\ln(1 - D(\mathbf{x}))]$, où $p_g$ est la loi des exemples générés.
 
@@ -113,20 +113,20 @@ La figure (`figures/cp6_7_courbes.png`, reproduite ci-dessous) montre trois entr
 
 ![Trois panneaux de courbes d'entraînement : un VAE, un GAN, un agent de Q-learning](figures/cp6_7_courbes.png)
 
-Pour chaque panneau, la lettre du diagnostic le plus probable (une lettre par panneau ; trois diagnostics ne servent pas) :
+Pour chaque panneau, la lettre du diagnostic le plus probable (une lettre par panneau, 1/3 de point chacune ; trois diagnostics ne servent pas) :
 (A) la KL reste collée à 0 (l'effondrement du posterior) : le décodeur ignore le code · (B) un VAE qui apprend normalement : la reconstruction baisse, la KL monte puis se stabilise · (C) le discriminateur gagne : sa loss tend vers 0, celle du générateur reste haute (le générateur n'apprend plus) · (D) l'équilibre : les deux losses se stabilisent près de leurs valeurs théoriques à l'équilibre (CP6.4) · (E) un agent qui apprend : son retour moyen monte vers celui d'une bonne politique · (F) une récompense presque jamais atteinte : le retour reste près de 0, l'agent n'apprend presque rien.
 
 a) Le panneau ①. b) Le panneau ②. c) Le panneau ③.
 
-### CP6.8 — Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni 📦 ★★ ⏱️ 15 min · 2 points
+### CP6.8 — Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni 🔨 ★★ ⏱️ 15 min · 2 points
 
-**Dans le notebook de l'examen, partie A, avec PyTorch.** La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), les **logits** qu'un décodeur a rendus pour elles (`LOGITS_V`, même forme) et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`.
+**Dans le notebook de l'examen, partie A, avec PyTorch.** La cellule des données fournit un batch de 16 images MNIST `X_V` (valeurs dans $[0, 1]$, forme `(16, 1, 28, 28)`), des **logits** tirés au hasard, comme ceux d'un décodeur pas encore entraîné (`LOGITS_V`, même forme), et les deux têtes d'un encodeur à $d = 4$ latents (`MU_V`, `LOGVAR_V`, forme `(16, 4)`) ; tout est en `float64`. Avec ces logits, la reconstruction sera bien plus grande que celle d'un VAE entraîné.
 
 a) `vae_loss(logits, x, mu, log_var, beta=1.0)` rend le triplet `(loss, rec, kl)` de tenseurs à 0 dimension, **par image** (moyennés sur le batch) : `rec`, la cross-entropy binaire entre `x` et `sigmoid(logits)`, **sommée** sur les pixels d'une image ; `kl`, la divergence KL entre $\mathcal{N}(\boldsymbol{\mu}, \operatorname{diag}(e^{\log\boldsymbol{\sigma}^2}))$ et $\mathcal{N}(\mathbf{0}, \mathbf{I})$, sommée sur les latents ; `loss = rec + beta * kl`. Elle marche pour toute forme d'images (`(N, 784)` comme `(N, 1, 28, 28)`) et garde le graphe (le gradient doit pouvoir remonter jusqu'à `logits`, `mu` et `log_var`). **[1,4]**
 b) Avec le batch fourni : reporte $[\text{rec}, \text{kl}]$ (2 décimales). **[0,3]**
 c) La loss pour `beta=3` (2 décimales). **[0,3]**
 
-### CP6.9 — Réparer un pas d'entraînement de GAN 🐛 ★ ⏱️ 10 min · 1,5 point
+### CP6.9 — Réparer un pas d'entraînement de GAN 🐛 ★★ ⏱️ 10 min · 1,5 point
 
 **Dans le notebook de l'examen, partie A, avec PyTorch.** `gan_step_buggy` doit faire **un** pas d'entraînement d'un GAN : d'abord le discriminateur (vrais exemples contre faux), puis le générateur (loss non saturante). `make_gan()` rend un générateur, un discriminateur (qui rend un **logit**) et leurs deux optimiseurs ; `bce` est `nn.BCEWithLogitsLoss()` ; `real_batch()` tire 64 vrais exemples de $\mathcal{N}(4 ;\ 1{,}25^2)$. Le pas contient **trois** lignes fautives ; une erreur peut se déclarer plus loin que sa cause.
 

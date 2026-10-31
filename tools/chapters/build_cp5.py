@@ -10,8 +10,8 @@
 The exam notebook has two parts. Part A is done DURING the exam: the two code questions, CP5.5 (🔨, NumPy only:
 unroll a simple RNN over a sequence from a given cell) and CP5.6 (🔨, PyTorch: a training loop with early
 stopping that keeps the best weights), without mylearn and without any check. Part B is done AFTER the exam: it
-checks the code of part A against oracles (nn.RNN, and the contract of CP5.6 written once more), then the answers
-written on paper (sub-IDs CP5.1a, CP5.2a, ...). Its cells only run once ``EXAM_OVER = True``; its tools come from
+checks the code of part A against oracles imported from ``wb.exams`` (nn.RNN, and the contract of CP5.6 written once
+more: part B holds no solution in clear, audit P5 R3), then the answers written on paper (sub-IDs CP5.1a, CP5.2a, ...). Its cells only run once ``EXAM_OVER = True``; its tools come from
 ``wb.nbtools``. The solutions notebook records every checked answer with ``wb.record``.
 
 CP5.6 trains in float64: the best epoch and its validation loss then do not depend on the machine (a perturbation
@@ -291,6 +291,7 @@ PART_B_FLAG = r'''EXAM_OVER = False   # set it to True once your exam is finishe
 
 import re
 
+from wb import exams
 from wb.nbtools import StopCheck, as_numpy, letters_text, pair, shape_text, verdict
 
 RESULTS = {}        # sub-ID -> result of wb.check
@@ -361,7 +362,7 @@ def as_outcome(value):
 
 
 def sorted_letters(value):
-    """A set of letters typed in any order ("D, B, I et F") -> its letters in alphabetical order ("BDFI")."""
+    """A set of letters typed in any order ("K, A et E") -> its letters in alphabetical order ("AEK")."""
     return letters_text(value, sort=True)
 
 
@@ -383,17 +384,7 @@ if exam_over() and ready("CP5.5", "np", "torch", "nn", "X_S", "H0_S", "WX_S", "W
     PENDING.discard("CP5.5")
     RESULTS.pop("CP5.5b", None)
     restore_data("CP5.5", ["X_S", "H0_S"])
-
-    def oracle_5(X, h0, Wx, Wh, b):
-        """(output, h_n) of nn.RNN(batch_first=True) in float64 with W_ih = Wx.T, W_hh = Wh.T, b_ih = b, b_hh = 0."""
-        layer = nn.RNN(Wx.shape[0], Wx.shape[1], batch_first=True).double()
-        with torch.no_grad():
-            layer.weight_ih_l0.copy_(torch.from_numpy(Wx.T.copy()))
-            layer.weight_hh_l0.copy_(torch.from_numpy(Wh.T.copy()))
-            layer.bias_ih_l0.copy_(torch.from_numpy(b.copy()))
-            layer.bias_hh_l0.zero_()
-            out, h_n = layer(torch.from_numpy(X.copy()), torch.from_numpy(h0.copy()).unsqueeze(0))
-        return out.numpy(), h_n[0].numpy()
+    oracle_5 = exams.cp5_rnn                            # (output, h_n) of nn.RNN(batch_first=True), the same weights
 
     X_in = X_S.copy()
     ok, result = safe(rnn_forward, X_in, H0_S.copy(), WX_S, WH_S, B_S)
@@ -456,34 +447,7 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
     PROPERTIES["CP5.6"] = []
     PENDING.discard("CP5.6")
     RESULTS.pop("CP5.6b", None)
-
-    def reference_fit(model, train_loader, val_loader, max_epochs, patience, path, lr=1e-3):
-        """The contract of CP5.6 a), the oracle of these checks."""
-        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-        history, best, waited = {"train_loss": [], "val_loss": [], "best_epoch": None}, float("inf"), 0
-        for epoch in range(1, max_epochs + 1):
-            model.train()
-            total, count = 0.0, 0
-            for X, y in train_loader:
-                loss = nn.functional.cross_entropy(model(X), y)
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
-                total, count = total + loss.item() * len(y), count + len(y)
-            history["train_loss"].append(total / count)
-            model.eval()
-            with torch.no_grad():
-                total = sum(nn.functional.cross_entropy(model(X), y, reduction="sum").item() for X, y in val_loader)
-            history["val_loss"].append(total / len(val_loader.dataset))
-            if history["val_loss"][-1] < best:
-                best, waited, history["best_epoch"] = history["val_loss"][-1], 0, epoch
-                torch.save(model.state_dict(), path)
-            else:
-                waited += 1
-                if waited == patience:
-                    break
-        model.load_state_dict(torch.load(path, weights_only=True))
-        return history
+    reference_fit = exams.cp5_fit_early_stopping        # the contract of CP5.6 a), the oracle of these checks
 
     def run(function, max_epochs, patience, lr, **sizes):
         """(ok, history or error, final weights, saved weights) of one training from a new CNN and new loaders."""

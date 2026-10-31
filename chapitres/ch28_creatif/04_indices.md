@@ -237,7 +237,7 @@ Relis, au ch. 21, le champ récepteur et l'architecture de VGG16 (§21.9.1).
 </details>
 <details><summary>Indice 2</summary>
 
-Une convolution 3 × 3 de pas 1 voit 3 sorties de la couche précédente ; chacune de ces sorties voyait déjà une région. Une convolution de $C_{\text{in}}$ vers $C_{\text{out}}$ canaux a $C_{\text{out}}$ filtres de taille $C_{\text{in}} \times 3 \times 3$, et un biais par filtre.
+Une convolution 3 × 3 de stride 1 voit 3 sorties de la couche précédente ; chacune de ces sorties voyait déjà une région. Une convolution de $C_{\text{in}}$ vers $C_{\text{out}}$ canaux a $C_{\text{out}}$ filtres de taille $C_{\text{in}} \times 3 \times 3$, et un biais par filtre.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -550,7 +550,7 @@ Relis les §28.2.2 et §28.2.3 de la fiche, et ton 🔁 R3 sur le champ récepte
 </details>
 <details><summary>Indice 2</summary>
 
-Un filtre ne peut chercher un motif plus grand que ce qu'il voit de l'image. Calcule l'ordre de grandeur du champ récepteur de `conv1` (un noyau 3 × 3, un pas de 2) et de `fire8` (après trois poolings de pas 2).
+Un filtre ne peut chercher un motif plus grand que ce qu'il voit de l'image. Calcule l'ordre de grandeur du champ récepteur de `conv1` (un noyau 3 × 3, un stride de 2) et de `fire8` (après trois poolings de stride 2).
 
 </details>
 <details><summary>Indice 3</summary>

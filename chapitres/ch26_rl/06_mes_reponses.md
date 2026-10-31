@@ -345,7 +345,7 @@ Mes cinq lignes :
 ### 26.E3 — Comment gérer le compromis exploration/exploitation ?
 
 
-### 26.E4 — Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ?
+### 26.E4 — Pourquoi DQN utilise-t-il une mémoire de rejeu et un réseau cible ?
 
 
 ### 26.E5 — Qu'est-ce que le RLHF et pourquoi utilise-t-on le RL avec les LLM ?

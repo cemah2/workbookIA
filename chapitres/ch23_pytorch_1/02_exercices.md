@@ -388,7 +388,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 23.12 | Environnement et tenseurs : versions, device, reshape, view, permute | 📦 | ★★ | 20 |
 | 23.13 | Charger et regarder Fashion-MNIST | 📦 | ★★ | 20 |
 | 23.14 | Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? | 🔮 | ★ | 10 |
-| 23.15 | Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader | 📦 | ★★ | 30 |
+| 23.15 | Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader | 📦 | ★★ | 30 |
 | 23.16 | Le MLP du livre avec nn.Sequential et nn.Flatten | 📦 | ★ | 15 |
 | 23.17 | Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) | 🐛 | ★★ | 25 |
 | 23.18 | Ta fonction fit() : boucle, validation et historique | 📦 | ★★★ | 45 |
@@ -401,7 +401,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 23.25 | Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping | 📦 | ★★★ | 45 |
 | 23.26 | Planning de learning rate : constant, par paliers, cosinus ou plateau | 🔬 | ★★ | 30 |
 | 23.27 | Patience de l'early stopping : 1, 3 ou 10 | 🔬 | ★★ | 20 |
-| 23.28 | Rédiger la fiche du modèle (model card) | 🛠️ | ★★ | 20 |
+| 23.28 | Rédiger la fiche modèle | 🛠️ | ★★ | 20 |
 | 23.29 | Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU | 🏆 | ★★★★ | 90 |
 
 Tout le notebook tourne sur un CPU en mode rapide ; aucun exercice ne demande de GPU.

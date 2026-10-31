@@ -2374,12 +2374,9 @@ def stroke_24(image, p, q, width=1.0):
 
 TODO_24 = r'''def draw_shape_24(rng, label=None, size=32):
     """One random drawing: (image float32 (size, size), 0 for the background and 1 on the strokes, label int).
-    label None: drawn uniformly among 0 to 4 with rng. In unit coordinates (row, column), between 0.2 and 0.8:
-    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (vertical, at the columns 0.25, 0.5 and 0.75), 3 "square U" (left side,
-    bottom, right side), 4 "circle" (a closed polygon of 24 sides, centre (0.5, 0.5), radius 0.3). Each point of the
-    shape moves by a normal noise of standard deviation 0.03; the whole shape is scaled by a factor drawn in
-    [0.8, 1.1] around (0.5, 0.5) and shifted by up to ±0.1 on each axis; then the points are multiplied by size - 1
-    and joined by stroke_24 with width = size / 32. Everything random comes from rng."""
+    label None: drawn uniformly among 0 to 4 with rng. Labels: 0 "Z", 1 "plus", 2 "three bars", 3 "square U",
+    4 "circle"; two drawings of the same shape differ, and the five shapes stay easy to tell apart. Everything random
+    comes from rng."""
     raise NotImplementedError("draw_shape_24")
 
 
@@ -2407,12 +2404,9 @@ SOLUTION_24 = r'''_LINES_24 = {0: [[(0.2, 0.2), (0.2, 0.8), (0.8, 0.2), (0.8, 0.
 
 def draw_shape_24(rng, label=None, size=32):
     """One random drawing: (image float32 (size, size), 0 for the background and 1 on the strokes, label int).
-    label None: drawn uniformly among 0 to 4 with rng. In unit coordinates (row, column), between 0.2 and 0.8:
-    0 "Z" (top bar, diagonal, bottom bar), 1 "plus", 2 "three bars" (vertical, at the columns 0.25, 0.5 and 0.75), 3 "square U" (left side,
-    bottom, right side), 4 "circle" (a closed polygon of 24 sides, centre (0.5, 0.5), radius 0.3). Each point of the
-    shape moves by a normal noise of standard deviation 0.03; the whole shape is scaled by a factor drawn in
-    [0.8, 1.1] around (0.5, 0.5) and shifted by up to ±0.1 on each axis; then the points are multiplied by size - 1
-    and joined by stroke_24 with width = size / 32. Everything random comes from rng."""
+    label None: drawn uniformly among 0 to 4 with rng. Labels: 0 "Z", 1 "plus", 2 "three bars", 3 "square U",
+    4 "circle"; two drawings of the same shape differ, and the five shapes stay easy to tell apart. Everything random
+    comes from rng."""
     label = int(rng.integers(5)) if label is None else int(label)
     scale, shift = rng.uniform(0.8, 1.1), rng.uniform(-0.1, 0.1, size=2)
     image = np.zeros((size, size), dtype=np.float32)
@@ -2475,7 +2469,7 @@ with checked("24.24"):
     verdict("24.24", nearest_24 >= 0.7, f"les cinq formes se distinguent : la forme moyenne la plus proche donne le bon "
             f"label {fr(100 * nearest_24, 0)} fois sur 100.",
             f"les formes se ressemblent trop : la forme moyenne la plus proche ne donne le bon label que "
-            f"{fr(100 * nearest_24, 0)} fois sur 100 ; relis la description de chaque forme.")
+            f"{fr(100 * nearest_24, 0)} fois sur 100 ; relis la recette de chaque forme (indice 2).")
     shares_24 = {(n, w): [worker_share_24(n, k, w) for k in range(w)] for n, w in [(10, 3), (103, 4), (5, 8), (12, 4)]}
     verdict("24.24", all(sum(s) == n and max(s) - min(s) <= 1 and s == sorted(s, reverse=True)
                          for (n, w), s in shares_24.items()),
@@ -2521,7 +2515,7 @@ EXPERIMENT_24 = r'''with checked("24.24"):
     verdict("24.24", history_24["val_acc"][-1] >= 0.9,
             f"le petit réseau reconnaît {fr(100 * history_24['val_acc'][-1], 1)} % des dessins neufs.",
             f"seulement {fr(100 * history_24['val_acc'][-1], 1)} % de dessins neufs reconnus : tes formes sont-elles "
-            "conformes à la description ?")
+            "assez différentes les unes des autres (indice 2) ?")
     fig_24, axes_24 = plt.subplots(2, 5, figsize=(9, 3.8))
     for k_24, ax_24 in enumerate(axes_24.ravel()):
         im_24, lab_24 = test_pairs_24[k_24]
@@ -2544,7 +2538,7 @@ PART_C = Part("C", "Des CNN sur CIFAR-10",
     Ex("24.19", "🐛", 2, 25, "Un CNN traduit du Keras qui refuse de tourner",
        "trouver et réparer les six erreurs d'une traduction littérale de Keras vers PyTorch.",
        "ch. 21 (convolutions, formes) · ✏️ 24.2 · 24.R2 · 24.Q7 · fiche §24.4.1 à §24.4.3", thread="CIFAR-10",
-       tracks="R, C",
+       tracks="R, M, C",
        body=r"""Un collègue a traduit un petit CNN Keras en PyTorch, ligne à ligne. Le modèle Keras est dans la docstring de `make_cnn_19`. La traduction contient **six** erreurs : trois lèvent une exception, trois sont silencieuses (le code tourne, mais le modèle apprend mal ou pas du tout). Corrige `make_cnn_19` et `prepare_19` **sur place**, sans changer leurs signatures.
 
 La vérification enchaîne les diagnostics : la construction du modèle, une passe avant, les activations, la sortie, puis la préparation des images (tant qu'une étape échoue, les suivantes attendent). Elle tourne dès le premier « Tout exécuter » : ses messages sont ton point de départ. Une fois les cinq étapes passées, la cellule suivante entraîne le modèle réparé `EPOCHS_C` epochs.
@@ -2564,7 +2558,7 @@ Dans tes notes : la liste des six erreurs, en séparant celles qui lèvent une e
 
     Ex("24.20", "📦", 3, 45, "Du CNN simple au CNN profond sur CIFAR-10",
        "construire un CNN simple et un CNN profond paramétrable, compter leurs paramètres et suivre leurs formes.",
-       "Ex 24.19 · ✏️ 24.2, 24.3 · ch. 21 · fiche §24.4.3 à §24.4.5", thread="CIFAR-10", tracks="R, C",
+       "Ex 24.19 · ✏️ 24.2, 24.3 · ch. 21 · fiche §24.4.3 à §24.4.5", thread="CIFAR-10", tracks="R, M, C",
        body=r"""La cellule suivante définit `to_input_c`, la version de `to_input` de la fiche pour un tableau entier, et les tenseurs `XC_TR_T`, `YC_TR_T`, `XC_VAL_T`, `YC_VAL_T`.
 
 **Contrat**
@@ -2606,7 +2600,7 @@ La vérification lance les quatre variantes `EPOCHS_C` epochs (une demi-minute e
     Ex("24.22", "🔮", 1, 10, "Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris",
        "prédire, puis mesurer, la sensibilité d'un CNN entraîné sans augmentation à des transformations de ses "
        "images de test.",
-       "Ex 24.20 · 24.Q8 · 🗣️ 24.8 · fiche §24.4.6", thread="CIFAR-10", tracks="R, C",
+       "Ex 24.20 · 24.Q8 · 🗣️ 24.8 · fiche §24.4.6", thread="CIFAR-10", tracks="R, M, C",
        body=r"""La fiche donne la règle de plausibilité : une transformation n'a de sens pour l'augmentation que si elle produit une image que le modèle pourrait rencontrer. Avant d'augmenter, regarde ce que « sait » déjà un modèle entraîné **sans** augmentation. La cellule donnée définit `train_reference_22` (un CNN à pooling moyen global, sans rapport avec tes modèles, entraîné 4 epochs sur les 10 000 premières images du fichier, les mêmes dans les deux modes) et cinq transformations des images de test : miroir gauche-droite, retournement haut-bas, rotation de 90°, décalage de 4 pixels vers la droite et vers le bas (une bande noire apparaît), niveaux de gris.
 
 **Avant d'exécuter**, écris tes prédictions : sur 2 000 images de test, le modèle « perd » si son accuracy baisse d'au moins le nombre de points indiqué par rapport aux images intactes.
@@ -2632,7 +2626,7 @@ L'expérience (une minute environ) ne se lance qu'une fois tes cinq prédictions
        "écrire une augmentation reproductible avec torchvision.transforms.v2 et un Dataset, et mesurer son effet "
        "sur un historique long.",
        "Ex 24.22 · Ex 24.20 · ch. 23 (Dataset, DataLoader) · fiche §24.4.2, §24.4.6", thread="CIFAR-10",
-       tracks="R, C",
+       tracks="R, M, C",
        body=r"""**Contrat**
 - `make_transforms_23(augment=True)` rend `(train_tf, test_tf)`, deux `v2.Compose` : `test_tf` fait `ToImage`, `ToDtype(torch.float32, scale=True)` et `Normalize(MEAN, STD)` ; `train_tf` fait de même, avec `RandomCrop(32, padding=4)` puis `RandomHorizontalFlip()` juste après `ToImage` quand `augment` est vrai (rien d'aléatoire sinon) ;
 - `CifarImages_23(images, labels, transform)` est un `Dataset` : l'élément `i` vaut `(transform(images[i]), int(labels[i]))`, la transformation étant appliquée **à chaque accès** ;
@@ -2663,7 +2657,7 @@ La vérification contrôle tes transformations (forme, type, standardisation, ha
        body=r"""Le livre dessine cinq formes (un Z, un plus, trois barres, un U carré, un cercle) dans des images $64 \times 64$, en bougeant un peu leurs points à chaque dessin. Tu fais de même en $32 \times 32$, puis tu écris un flux qui en fabrique sans fin. La fiche montre un `ShapeStream` ; le tien partage **exactement** le travail entre les workers. La cellule donnée définit `stroke_24`, qui trace un segment épais dans une image.
 
 **Contrat**
-- `draw_shape_24(rng, label=None, size=32)` rend `(image, label)` : une image `float32` $(size, size)$, 0 pour le fond et 1 sur les traits, et un label `int` ; si `label` vaut `None`, il est tiré uniformément entre 0 et 4 avec `rng`. En coordonnées unitaires (ligne, colonne), entre 0,2 et 0,8 : 0 « Z » (barre du haut, diagonale, barre du bas), 1 « plus », 2 « trois barres » (verticales, aux colonnes 0,25, 0,5 et 0,75), 3 « U carré » (côté gauche, bas, côté droit), 4 « cercle » (un polygone fermé de 24 côtés, centre $(0{,}5 ; 0{,}5)$, rayon 0,3). Chaque point de la forme bouge d'un bruit normal d'écart-type 0,03 ; la forme entière est agrandie d'un facteur tiré dans $[0{,}8 ; 1{,}1]$ autour de $(0{,}5 ; 0{,}5)$ et décalée d'au plus $\pm 0{,}1$ sur chaque axe ; puis les points sont multipliés par `size - 1` et reliés par `stroke_24` avec une épaisseur `width = size / 32`. Tout le hasard vient de `rng` ;
+- `draw_shape_24(rng, label=None, size=32)` rend `(image, label)` : une image `float32` $(size, size)$, 0 pour le fond et 1 sur les traits, et un label `int` ; si `label` vaut `None`, il est tiré uniformément entre 0 et 4 avec `rng`. Les labels : 0 « Z », 1 « plus », 2 « trois barres », 3 « U carré », 4 « cercle » ; deux dessins de la même forme diffèrent (les points bougent un peu), et les cinq formes restent faciles à distinguer (les coordonnées, le bruit et l'épaisseur des traits sont à ton choix ; l'indice 2 donne une recette, adaptée de celle du livre). Tout le hasard vient de `rng` ;
 - `worker_share_24(n, worker_id, num_workers)` rend le nombre d'exemples que produit le worker `worker_id` pour que les workers en produisent `n` en tout : chacun `n // num_workers`, plus un pour les `n % num_workers` premiers ;
 - `ShapeStream_24(n_per_epoch, size=32)` est un `IterableDataset` : une epoch produit des couples (tenseur `float32` $(1, size, size)$, label `int`) dessinés par `draw_shape_24` avec `np.random.default_rng(graine)`, la graine étant tirée de torch (`torch.randint`) au début de `__iter__` ; seul, il produit `n_per_epoch` couples ; dans un worker (`get_worker_info()`), sa part `worker_share_24`.
 
@@ -2939,7 +2933,7 @@ TODO_27 = r'''def lstm_shapes_27(lstm, x):
 
 def last_steps_27(lstm, x):
     """(from_output, from_h_n): the output of the LAST time step of the LAST layer, read in `output` and in `h_n`,
-    two tensors (N, H). For a bidirectional LSTM, the FORWARD direction only: output[:, -1, :H] and h_n[-2]."""
+    two tensors (N, H). For a bidirectional LSTM, the FORWARD direction only; the two readings must be equal."""
     raise NotImplementedError("last_steps_27")
 
 
@@ -2972,7 +2966,7 @@ SOLUTION_27 = r'''def lstm_shapes_27(lstm, x):
 
 def last_steps_27(lstm, x):
     """(from_output, from_h_n): the output of the LAST time step of the LAST layer, read in `output` and in `h_n`,
-    two tensors (N, H). For a bidirectional LSTM, the FORWARD direction only: output[:, -1, :H] and h_n[-2]."""
+    two tensors (N, H). For a bidirectional LSTM, the FORWARD direction only; the two readings must be equal."""
     output, (h_n, _) = lstm(x)
     if lstm.bidirectional:                                 # h_n: (2 L, N, H), the two directions of each layer
         return output[:, -1, :lstm.hidden_size], h_n[-2]   # h_n[-1] is the backward direction of the last layer
@@ -3172,7 +3166,7 @@ Dans tes notes : lequel des trois leviers fait le plus baisser la RMSE de test ?
 
 **Contrat**
 - `lstm_shapes_27(lstm, x)` rend `{"output": forme, "h_n": forme, "c_n": forme}`, les formes (tuples) de ce que rend `lstm(x)` ;
-- `last_steps_27(lstm, x)` rend `(from_output, from_h_n)` : la sortie du **dernier** pas de temps de la **dernière** couche, lue dans `output` et dans `h_n`, deux tenseurs $(N, H)$ ; pour un LSTM bidirectionnel, le sens **avant** seulement : `output[:, -1, :H]` et `h_n[-2]` ;
+- `last_steps_27(lstm, x)` rend `(from_output, from_h_n)` : la sortie du **dernier** pas de temps de la **dernière** couche, lue dans `output` et dans `h_n`, deux tenseurs $(N, H)$ ; pour un LSTM bidirectionnel, le sens **avant** seulement ; les deux lectures doivent être égales ;
 - `to_streams_27(series, n_streams, seq_len)` rend `(X, Y)` : la série coupée en `n_streams` flux parallèles, puis en morceaux. Avec $L$ = `(len(series) - 1) // n_streams`, le flux $b$ est `series[b * L : b * L + L + 1]` ; `n_chunks = L // seq_len` ; `X[k, b, t, 0]` vaut `flux_b[k * seq_len + t]` et `Y[k, b, t]` vaut `flux_b[k * seq_len + t + 1]` ; tenseurs `float32` `(n_chunks, n_streams, seq_len, 1)` et `(n_chunks, n_streams, seq_len)` ;
 - `run_carried_27(lstm, X, carry=True)` passe les morceaux `X[0]`, `X[1]`… dans l'ordre (sans graphe) et rend leurs sorties empilées, `(n_chunks, n_streams, seq_len, H)` ; avec `carry=True`, l'état `(h, c)` rendu par un morceau démarre le suivant, sinon chaque morceau part de l'état nul ;
 - `train_carried_27(lstm, head, X, Y, epochs, lr=1e-2)` entraîne `lstm` et `head` (un `Linear(H, 1)` appliqué à chaque pas), l'état porté d'un morceau au suivant et **détaché** du graphe, nul au début de chaque epoch ; un pas d'Adam par morceau, sur l'erreur quadratique moyenne entre `head(output).squeeze(-1)` et `Y[k]` ; elle rend la loss moyenne de chaque epoch.

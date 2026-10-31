@@ -4,9 +4,9 @@
 
 **Les quatre chapitres en une phrase chacun**
 
-21. **Réseaux convolutifs** : un même petit filtre promené sur toute l'image (partage de poids), des cartes de features de plus en plus abstraites et de plus en plus petites (stride, pooling), un champ récepteur qui grandit couche après couche, et des réseaux qu'on sait aussi tromper (exemples adversariaux).
+21. **Réseaux convolutifs** : un même petit filtre promené sur toute l'image (partage de poids), des cartes d'activation de plus en plus abstraites et de plus en plus petites (stride, pooling), un champ récepteur qui grandit couche après couche, et des réseaux qu'on sait aussi tromper (exemples adversariaux).
 22. **Réseaux récurrents** : un état qui porte la mémoire d'un pas de temps au suivant, avec les mêmes poids à chaque pas ; la rétropropagation dans le temps multiplie les dérivées, d'où les gradients évanescents ou explosifs, que le chemin additif du LSTM (et du GRU) contourne.
-23. **PyTorch en pratique (1)** : une marche à suivre complète et reproductible, des données (tenseurs `float32`, `(N, C, H, W)`, split stratifié, normalisation apprise sur l'entraînement) au modèle sauvegardé et rechargé, en passant par une boucle `fit()` avec validation, meilleur checkpoint, planning de learning rate et early stopping.
+23. **PyTorch en pratique (1)** : une marche à suivre complète et reproductible, des données (tenseurs `float32`, `(N, C, H, W)`, découpage stratifié, normalisation apprise sur l'entraînement) au modèle sauvegardé et rechargé, en passant par une boucle `fit()` avec validation, meilleur checkpoint, planning de learning rate et early stopping.
 24. **PyTorch en pratique (2)** : améliorer un modèle par des expériences contrôlées (un hyperparamètre à la fois, plusieurs graines, un journal), régulariser (dropout, batchnorm, augmentation), valider sans fuite, et sortir de `nn.Sequential` (branches, poids partagés, blocs résiduels, séquences et texte).
 
 ## 1. Carte mentale
@@ -54,12 +54,12 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | 14 | Sorties de `nn.LSTM` | `output` : `(N, T, D·H)` avec `batch_first=True` ; `h_n`, `c_n` : `(D·L, N, H)` | `output[:, -1]` = `h_n[-1]` dans un seul sens (même avec plusieurs couches empilées) ; `h_n` n'obéit jamais à `batch_first` | 22, 24 | |
 | 15 | Température | $p_k = \frac{e^{z_k / T}}{\sum_j e^{z_j / T}}$ | $T \to 0$ : toujours le plus probable ; $T$ grand : presque uniforme | 22 | `sequences.temperature_softmax`, `sample_from_logits` |
 | 16 | Perplexité | $\text{PPL} = e^{L}$, $L$ la cross-entropy moyenne par token, en nats | le nombre de choix « équiprobables » entre lesquels le modèle hésite ; une perplexité par caractère ne se compare pas à une perplexité par mot | 22, 24 | |
-| 17 | Fenêtres sans fuite | $n - w - h + 1$ fenêtres de $w$ pas pour prévoir $h$ pas plus loin ; split **temporel**, scaler ajusté sur le passé | battre la persistance ($\hat y_{t+h} = y_t$) avant tout | 22, 24 | `sequences.make_windows`, `make_sequence_pairs` |
+| 17 | Fenêtres sans fuite | $n - w - h + 1$ fenêtres de $w$ pas pour prévoir $h$ pas plus loin ; découpage **temporel**, scaler ajusté sur le passé | battre la persistance ($\hat y_{t+h} = y_t$) avant tout | 22, 24 | `sequences.make_windows`, `make_sequence_pairs` |
 | 18 | Cross-entropy sur les logits | `F.cross_entropy(logits, y)`, `y` des indices de classe (`int64`) | jamais de softmax avant ; `ln K` au départ pour $K$ classes équilibrées | 23 | |
 | 19 | Mises à jour | $\lceil n / B \rceil$ par epoch ; FLOP d'une epoch $\approx 6\,P\,N$ | 2 pour la passe avant, 4 pour la passe arrière, par paramètre et par exemple | 23 | |
 | 20 | Early stopping | arrêter après `patience` epochs sans progrès **strict** de la loss de validation, recharger le meilleur `state_dict` | la loss de validation est une moyenne **par exemple** ; les poids gardés sont ceux de la meilleure epoch, pas de la dernière | 23 | |
 | 21 | Dropout et max-norm | $\mathbb{E}\left[\frac{m\,x}{1 - p}\right] = x$ ; max-norm : $\mathbf{w} \leftarrow \mathbf{w} \min\!\left(1, \frac{c}{\lVert \mathbf{w} \rVert}\right)$ | avec dropout, la loss d'entraînement mesurée pendant l'epoch dépasse souvent celle de validation | 24 | |
-| 22 | Comparer deux réglages | moyenne $\pm$ écart-type sur plusieurs graines, même split, test ouvert une fois | un écart plus petit que la variabilité d'une graine à l'autre n'est pas établi | 24 | |
+| 22 | Comparer deux réglages | moyenne $\pm$ écart-type sur plusieurs graines, même découpage, test ouvert une fois | un écart plus petit que la variabilité d'une graine à l'autre n'est pas établi | 24 | |
 
 ## 3. Diagnostiquer : formes, courbes et comparaisons
 
@@ -74,7 +74,7 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | Les deux losses baissent ensemble, très lentement, depuis $\ln K$ | learning rate beaucoup trop petit | augmenter $\eta$ |
 | Les prédictions changent avec la taille du batch, ou d'un appel à l'autre | `model.eval()` oublié (dropout, batchnorm) | `model.eval()` + `torch.inference_mode()` pour prédire |
 | Un modèle « meilleur » de quelques dixièmes de point | une seule graine | plusieurs graines, moyenne et écart-type (24.9, 24.11) |
-| Une série temporelle « trop bien » prédite | fuite : fenêtres mélangées entre train et validation, scaler ajusté sur tout | split temporel, scaler sur le passé, comparer à la persistance |
+| Une série temporelle « trop bien » prédite | fuite : fenêtres mélangées entre train et validation, scaler ajusté sur tout | découpage temporel, scaler sur le passé, comparer à la persistance |
 | Un CNN qui s'effondre sur des images décalées de quelques pixels | pas d'augmentation de translation, pas de pooling global | augmentation (`RandomCrop` avec padding), `AdaptiveAvgPool2d` |
 
 ## 4. La marche à suivre en PyTorch, en une page
@@ -141,14 +141,14 @@ for epoch in range(1, epochs + 1):
 | `conv` (ch. 21) | tailles, padding, im2col, `conv2d` (stride, padding, dilatation, groupes), poolings, convolution transposée, rétropropagation | le mini-projet MP5 (`conv_output_size` pour dimensionner la tête) ; les autoencodeurs et les modèles génératifs (convolution transposée) |
 | `rnn`, `sequences` (ch. 22) | cellules RNN, LSTM, GRU en NumPy ; vocabulaire, encodage, fenêtres, température | l'attention et les Transformers (B3) ; la génération de texte |
 | La boucle `fit()` (ch. 23, 24) | validation, meilleur checkpoint, early stopping, planning, journal d'expériences | MP5 (le paquet `train.py`) ; le passage en production (B7) |
-| `metrics`, `model_selection` (parties II et III) | `confusion_matrix`, `accuracy`, `train_test_split` stratifié | MP5 (le split, l'analyse d'erreurs) |
+| `metrics`, `model_selection` (parties II et III) | `confusion_matrix`, `accuracy`, `train_test_split` stratifié | MP5 (le découpage, l'analyse d'erreurs) |
 
 ## 7. Vocabulaire à maîtriser à l'oral
 
 Dis chaque définition à voix haute, avec un exemple, **avant** d'ouvrir la réponse.
 
 <details><summary><b>Partage de poids</b></summary>Le même filtre (convolution) ou la même cellule (récurrence) appliqué à toutes les positions ou à tous les pas : peu de paramètres, une invariance (ou une équivariance) à la translation, et des gradients qui s'additionnent sur les positions.</details>
-<details><summary><b>Carte de features, canal</b></summary>La sortie d'un filtre sur toute l'image ; une couche de 64 filtres produit 64 canaux, qui sont l'entrée de la suivante.</details>
+<details><summary><b>Carte d'activation, canal</b></summary>La sortie d'un filtre sur toute l'image ; une couche de 64 filtres produit 64 canaux, qui sont l'entrée de la suivante.</details>
 <details><summary><b>Padding, stride, dilatation</b></summary>Ajouter des zéros sur les bords (garder la taille), sauter des positions (réduire la taille et le coût), espacer les poids du noyau (voir plus loin sans paramètres).</details>
 <details><summary><b>Pooling</b></summary>Résumer une fenêtre par son maximum ou sa moyenne, canal par canal, sans paramètres ; le pooling global (`AdaptiveAvgPool2d(1)`) réduit chaque carte à un nombre.</details>
 <details><summary><b>Champ récepteur</b></summary>La zone de l'image d'entrée dont dépend une valeur d'une couche : elle grandit avec la profondeur, surtout après les strides.</details>

@@ -7,7 +7,7 @@
 | **Problème** | classer des photos 32 × 32 en couleur dans dix classes (avion, automobile, oiseau, chat, cerf, chien, grenouille, cheval, bateau, camion) |
 | **Données** | CIFAR-10 (Krizhevsky, 2009 : 50 000 images d'entraînement, 10 000 de test, 6 000 par classe ; pas de licence formelle, les auteurs demandent de citer leur rapport technique) ; la validation (5 000 images) se coupe dans les 50 000 |
 | **Méthode imposée** | PyTorch et torchvision dans le package `cifarkit/` ; trois fonctions de ta librairie `mylearn` (« Ta librairie », plus bas) ; le test ouvert une seule fois, en mode complet |
-| **Prérequis** | chapitres 21 à 24 ; le split stratifié (ch. 8 et 15) et la matrice de confusion (ch. 3) |
+| **Prérequis** | chapitres 21 à 24 ; le découpage stratifié (ch. 8 et 15) et la matrice de confusion (ch. 3) |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
 
 ## Le contexte
@@ -29,7 +29,7 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 
 ## Le protocole
 
-1. **La validation** : 5 000 images tirées des 50 000 par un split **stratifié** (500 par classe), une fois pour toutes, avec une graine écrite. Tous les choix se font sur elle.
+1. **La validation** : 5 000 images tirées des 50 000 par un découpage **stratifié** (500 par classe), une fois pour toutes, avec une graine écrite. Tous les choix se font sur elle.
 2. **Le prétraitement** : la moyenne et l'écart-type de chaque canal s'apprennent sur les images d'entraînement seules, et sont enregistrés avec le modèle ; l'augmentation ne touche que l'entraînement.
 3. **Les baselines d'abord** : prédire toujours la même classe (10 %), un MLP, un petit CNN. Un modèle qui ne bat pas le petit CNN n'apporte rien.
 4. **Une variable à la fois** : chaque comparaison change une seule chose (le pooling contre le stride, la batchnorm, le dropout, les raccourcis), à budget égal ; **chaque run** (même raté) entre dans le journal `runs.csv`.
@@ -48,7 +48,7 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 1. Le notebook `mp5_classifieur_cifar10.ipynb` : propre, « Tout exécuter » sans erreur (moins de 10 minutes en mode rapide sur CPU), exécuté en mode complet pour les résultats, avec tes observations.
 2. Le package `cifarkit/` (`pipeline.py`, `models.py`, `train.py` avec `fit()`, le meilleur checkpoint, l'early stopping et le planning de learning rate, `predict.py`) et `test_cifarkit.py`, au moins **trois** tests, qui attrapent au moins deux des cinq mutants de l'étape MP5.8.
 3. Le journal `runs.csv` (au moins **8** runs, le notebook en écrit une vingtaine) et le tableau de synthèse du README.
-4. Le modèle livré : `model.pt` (le `state_dict`) et `model.json` (la configuration, la moyenne et l'écart-type de normalisation, les classes, les métriques, les versions), et `python -m cifarkit.predict` qui classe une image.
+4. Le modèle livré : `model.pt` (le `state_dict`) et `model.json` (la configuration, la moyenne et l'écart-type de normalisation, les classes, les métriques, les versions), et `python -m cifarkit.predict` qui classe une image. `model.pt` (300 Ko) se commite avec le projet : le `.gitignore` du workbook l'excepte de la règle `*.pt`, alors que les autres fichiers `*.pt` (les checkpoints de `fit`, par exemple) restent ignorés.
 5. Le **README de portfolio** (`README.md`) et la **fiche modèle** (`MODEL_CARD.md`) : leurs modèles sont dans le kit.
 6. L'analyse d'erreurs : la matrice de confusion, les 20 erreurs les plus sûres d'elles commentées, l'accuracy sous l'attaque FGSM (`figures/`).
 
@@ -56,20 +56,20 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 
 | Étape | Ce que tu fais | Ce que tu produis | ⏱️ |
 |---|---|---|---|
-| MP5.1 | Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN) | « L'objectif » et « Le protocole » du README, `stratified_split`, `mlp`, `small_cnn` | 60 min |
+| MP5.1 | Cadrage, protocole de validation (découpage stratifié) et baselines (MLP puis petit CNN) | « L'objectif » et « Le protocole » du README, `stratified_split`, `mlp`, `small_cnn` | 60 min |
 | MP5.2 | Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation `transforms.v2`, `Dataset` et `DataLoader` | `pipeline.py`, `figures/augmentation.png` | 60 min |
 | MP5.3 | Boucle d'entraînement réutilisable : `fit()`, meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal | `train.py` (première partie), les premiers runs du journal | 90 min |
 | MP5.4 | Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout | `vgg`, `ResidualBlock`, `resnet`, `build_model`, `figures/architectures.png` | 90 min |
 | MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré | `save_model`, `load_model`, `model.pt`, `model.json`, `results.json`, `figures/courbes_final.png` | 90 min |
 | MP5.6 | Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM | `predict_proba`, `fgsm`, trois figures, tes commentaires | 60 min |
 | MP5.7 | Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites | `resnet18_features`, la comparaison dans le README | 60 min |
-| MP5.8 | Livraison : README, fiche modèle, `predict.py`, tests et mutants, nettoyage | `predict.py`, `test_cifarkit.py`, `README.md`, `MODEL_CARD.md` | 60 min |
+| MP5.8 | Livraison : README, fiche modèle, `predict.py`, tests et mutants, nettoyage | `predict.py`, `test_cifarkit.py`, `README.md`, `MODEL_CARD.md` | 90 min |
 
 ## La grille d'évaluation (sur 20)
 
 | Critère | Points | Tous les points | La moitié des points |
 |---|---|---|---|
-| **Pipeline de données** | 3 | split stratifié à graine écrite, statistiques de normalisation apprises sur l'entraînement seul et sauvegardées avec le modèle, augmentation sur l'entraînement seulement | une fuite (statistiques sur tout le dataset, augmentation de la validation) ou un prétraitement oublié dans le modèle livré |
+| **Pipeline de données** | 3 | découpage stratifié à graine écrite, statistiques de normalisation apprises sur l'entraînement seul et sauvegardées avec le modèle, augmentation sur l'entraînement seulement | une fuite (statistiques sur tout le dataset, augmentation de la validation) ou un prétraitement oublié dans le modèle livré |
 | **Boucle d'entraînement** | 4 | graines, meilleur checkpoint, early stopping, planning compté en pas, reprise exacte vérifiée, `evaluate` en moyenne par exemple | un `fit()` sans reprise ou sans meilleur checkpoint |
 | **Démarche expérimentale** | 4 | baselines, journal d'au moins 8 runs, une variable à la fois, règle de choix écrite avant de lire les chiffres, conclusions limitées à ce que les mesures permettent | des comparaisons à budgets différents, ou un journal incomplet |
 | **Performance** | 3 | au moins **80 %** d'accuracy de test en mode complet (ou, sans GPU, au moins **65 %** de validation en mode rapide sur CPU), le test ouvert une seule fois | entre 70 et 80 % en mode complet (55 à 65 % en mode rapide) |

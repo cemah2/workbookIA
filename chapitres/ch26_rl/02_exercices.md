@@ -110,7 +110,7 @@ e) Dans l'expérience du livre, combien de parties d'entraînement donnent les p
 
 a) SARSA tient son nom de : (A) *State, Action, Reward, State, Action* ; (B) *Stochastic Approximation with Reward and Stable Actions* ; (C) son inventeur.
 b) Dans la cible de SARSA, $Q(s', a')$ est la valeur de : (A) la meilleure action de $s'$ ; (B) l'action $a'$ que la politique a choisie dans $s'$, et qui sera jouée ; (C) l'action jouée au pas précédent.
-c) Lequel est **hors politique** (*off-policy*) ? (A) le Q-learning ; (B) SARSA.
+c) Lequel est **off-policy** (*hors politique*) ? (A) le Q-learning ; (B) SARSA.
 d) Vrai ou faux : quand l'action suivante choisie est l'action gloutonne, SARSA et le Q-learning font exactement la même mise à jour.
 e) Vrai ou faux : selon la fiche, SARSA est meilleur que le Q-learning dans tous les cas.
 
@@ -339,7 +339,7 @@ Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : rép
 
 « Comment un agent de RL gère-t-il le compromis entre exploration et exploitation ? Citez plusieurs méthodes. »
 
-### 26.E4 — Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ? 💼 ★★ ⏱️ 10 min
+### 26.E4 — Pourquoi DQN utilise-t-il une mémoire de rejeu et un réseau cible ? 💼 ★★ ⏱️ 10 min
 *Fiche §26.8, §26.9 · parcours R*
 
 « Pourquoi le DQN a-t-il besoin d'une mémoire de rejeu et d'un réseau cible ? »
@@ -358,14 +358,14 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | ID | Titre | Type | ★ | ⏱️ |
 |---|---|---|---|---|
 | 26.13 | Prendre en main gymnasium avec FrozenLake | 📦 | ★ | 15 |
-| 26.14 | Retours actualisés et retours à venir | 🔨 | ★ | 15 |
+| 26.14 | Retours actualisés et retours à venir | 🔨 | ★★ | 30 |
 | 26.15 | Reproduire les courbes d'actualisation (fig. 26.13-26.14) | 🎨 | ★ | 15 |
 | 26.16 | Prédire l'effet du camion sur la table L | 🔮 | ★ | 10 |
 | 26.17 | Flippers : la longueur optimale de chaque partie par recherche exhaustive | 🔬 | ★★ | 25 |
 | 26.18 | L-learning sur Flippers, sans puis avec camion | 🔬 | ★★★ | 40 |
-| 26.19 | Politiques gloutonne et softmax (ε-greedy importée du ch. 11) | 🔨 | ★★ | 20 |
-| 26.20 | Mises à jour de Q-learning et de SARSA, états terminaux compris | 🔨 | ★★ | 25 |
-| 26.21 | La boucle d'entraînement tabulaire et l'évaluation d'une politique | 🔨 | ★★★ | 45 |
+| 26.19 | Politiques gloutonne et softmax (ε-greedy importée du ch. 11) | 🔨 | ★★★ | 35 |
+| 26.20 | Mises à jour de Q-learning et de SARSA, états terminaux compris | 🔨 | ★★★ | 75 |
+| 26.21 | La boucle d'entraînement tabulaire et l'évaluation d'une politique | 🔨 | ★★★ | 90 |
 | 26.22 | Q-learning sur FrozenLake, glissant ou non | 📦 | ★★ | 25 |
 | 26.23 | Lire des courbes d'apprentissage RL bruitées | 📈 | ★★ | 15 |
 | 26.24 | L'agent qui n'apprenait rien | 🐛 | ★★ | 25 |
@@ -375,7 +375,7 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 26.28 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | 🔮 | ★ | 10 |
 | 26.29 | Q-learning contre SARSA sur Flippers et CliffWalking | 🔬 | ★★★ | 45 |
 | 26.30 | Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) | 🎨 | ★★★ | 35 |
-| 26.31 | Une mémoire de rejeu (replay buffer) | 🔨 | ★★ | 20 |
+| 26.31 | Une mémoire de rejeu | 🔨 | ★★★ | 40 |
 | 26.32 | Concevoir la récompense : finale, pénalité par coup ou façonnée | 🔬 | ★★ | 30 |
 | 26.33 | Rejouer l'expérience pour apprendre avec moins d'épisodes | 🔬 | ★★★ | 35 |
 | 26.34 | Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle | 🛠️ | ★★ | 25 |

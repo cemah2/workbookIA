@@ -40,7 +40,7 @@ STEPS = [("MP6.1", "Cadrage : protocole d'évaluation écrit, data card relue, c
          ("MP6.4", "DCGAN (option cGAN) : entraînement journalisé, checkpoints, reprise", 150),
          ("MP6.5", "Évaluation : distance de Fréchet sur 3 graines, classes générées, plus proches voisins", 90),
          ("MP6.6", "Galerie : grilles, interpolations sphériques, échantillons conditionnels", 45),
-         ("MP6.7", "README, model card, tests pytest et nettoyage du dépôt", 75)]
+         ("MP6.7", "README, fiche modèle, tests pytest et nettoyage du dépôt", 75)]
 
 # Step of the notebook where each public function of the package is written (starter package).
 TODO_STEPS = {
@@ -1329,7 +1329,7 @@ checks_done()'''
 # ---------------------------------------------------------------------------
 # MP6.7
 # ---------------------------------------------------------------------------
-MP67_MD = r'''## MP6.7 · README, model card, tests pytest et nettoyage du dépôt ⏱️ 75 min
+MP67_MD = r'''## MP6.7 · README, fiche modèle, tests pytest et nettoyage du dépôt ⏱️ 75 min
 
 **Objectif :** un dépôt qu'un recruteur comprend en deux minutes, dont les résultats se reproduisent, et dont les tests attrapent des erreurs.
 
@@ -1455,9 +1455,9 @@ def notes_cell(step: str, exercise: bool):
 
 FOOTER = r'''## ✅ Bilan
 
-**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : reproductibilité : graines, configuration, notebook exécutable de bout en bout (3) · VAE correct et analysé : courbes, choix de β justifié (4) · GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4) · évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4) · galerie claire et légendée (2) · README et model card : résultats chiffrés, limites, usages responsables (3).
+**Grille d'évaluation** (sur 20, détaillée dans le cahier des charges) : reproductibilité : graines, configuration, notebook exécutable de bout en bout (3) · VAE correct et analysé : courbes, choix de β justifié (4) · GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4) · évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4) · galerie claire et légendée (2) · README et fiche modèle : résultats chiffrés, limites, usages responsables (3).
 
-**Pour aller plus loin** : les extensions du cahier des charges (une petite diffusion dans l'espace latent du VAE, préparation du bonus B5 ; la distance de Fréchet sur deux extracteurs de features ; une démo Gradio sur un Space Hugging Face ; un agent de morpion en self-play). La suite du workbook : les chapitres bonus, dont B5 (diffusion), qui comparera un modèle de diffusion à ces deux générateurs avec ta distance de Fréchet.'''
+**Pour aller plus loin** : les extensions du cahier des charges (une petite diffusion dans l'espace latent du VAE, préparation du bonus B5 ; la distance de Fréchet sur deux extracteurs de features ; une démo Gradio sur un Space Hugging Face ; un agent de morpion par auto-apprentissage). La suite du workbook : les chapitres bonus, dont B5 (diffusion), qui comparera un modèle de diffusion à ces deux générateurs avec ta distance de Fréchet.'''
 
 
 def header_cells(kind: str) -> list:

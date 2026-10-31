@@ -390,7 +390,7 @@
   "steps": [
    {
     "id": "MP5.1",
-    "title": "Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN)",
+    "title": "Cadrage, protocole de validation (découpage stratifié) et baselines (MLP puis petit CNN)",
     "minutes": 60
    },
    {
@@ -426,7 +426,7 @@
    {
     "id": "MP5.8",
     "title": "Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage",
-    "minutes": 60
+    "minutes": 90
    }
   ],
   "grading": [
