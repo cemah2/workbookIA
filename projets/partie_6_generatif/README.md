@@ -7,7 +7,7 @@
 | **Problème** | générer des images de vêtements 28 × 28 en niveaux de gris, et dire honnêtement lequel de deux générateurs le fait le mieux |
 | **Données** | Fashion-MNIST (Xiao, Rasul et Vollgraf, 2017 ; licence MIT ; data card : `data/cards/fashion_mnist.md`) : les 60 000 images d'entraînement, coupées une fois pour toutes en 50 000 pour l'entraînement et 10 000 pour la validation (`data.py`, fourni) ; le test n'est pas utilisé |
 | **Méthode imposée** | PyTorch dans le package `genbench/` ; un VAE convolutif et un DCGAN selon les règles de Radford (un GAN conditionnel en option) ; le protocole d'évaluation fixé avant les expériences ; trois graines par générateur ; ta fonction `interpolate_latents` (« Ta librairie », plus bas) |
-| **Prérequis** | chapitres 25 (VAE) et 27 (GAN, distance de Fréchet) ; le checkpoint complet (ch. 23) ; la data card (ch. 29) |
+| **Prérequis** | chapitres 25 (VAE) et 27 (GAN, distance de Fréchet) ; la sauvegarde complète d'un entraînement (ch. 23) ; la data card (ch. 29) |
 | **Évaluation** | sur 20, avec la grille ci-dessous |
 
 ## Le contexte
@@ -40,14 +40,15 @@ Il s'écrit **avant** les expériences, dans ton README (étape MP6.1), et ne ch
 
 ## Les contraintes
 
-- **Deux modes** : le mode rapide (`FAST_MODE = True`) tient en une dizaine de minutes sur un CPU à deux cœurs, sur des sous-ensembles (10 000 images pour les générateurs, 2 000 images par mesure) ; le mode complet (les 50 000 images, 10 000 images par mesure) se lance sur un GPU de Colab (🚀). Les fichiers du mode rapide sont suffixés `_rapide` et n'écrasent jamais ceux du mode complet.
+- **Deux modes** : le mode rapide (`FAST_MODE = True`) tourne en 4 minutes environ sur un CPU à deux cœurs (3,6 min mesurées pour la solution), sur des sous-ensembles (10 000 images pour les générateurs, 2 000 images par mesure) ; le mode complet (les 50 000 images, 10 000 images par mesure) se lance sur un GPU de Colab (🚀 ; 48 min mesurées sur un CPU à deux cœurs). Les fichiers du mode rapide sont suffixés `_rapide` et n'écrasent jamais ceux du mode complet.
+- **Les deux modes et la note** : un projet fait en mode rapide seulement peut avoir tous les points de la grille, à condition que le README le dise, montre les figures `…_rapide.png` et donne les chiffres de `results_rapide.json`. Le mode complet sur Colab est recommandé pour le portfolio (des images plus nettes, des mesures sur 10 000 images), pas exigé ; le notebook accepte les fichiers du mode rapide avec une ligne ℹ️.
 - **Un package réutilisable** : le notebook n'a pas de boucle d'entraînement à lui ; il appelle `genbench`.
 - **Reproductible** : les graines et la configuration dans `config.json`, les versions dans `config.json` et `results.json` ; la reprise d'un GAN interrompu donne les mêmes poids, au bit près.
 - **Lisible** : des docstrings, des annotations de type, des tests dont le message dit ce qui était attendu.
 
 ## Les livrables
 
-1. Le notebook `mp6_generatif.ipynb` : propre, « Tout exécuter » sans erreur (moins de 10 minutes en mode rapide sur CPU), avec tes observations.
+1. Le notebook `mp6_generatif.ipynb` : propre, « Tout exécuter » sans erreur (moins de 10 minutes en mode rapide sur CPU), avec tes observations ; il se reproduit en une commande, depuis la racine du dépôt : `python tools/run_all_notebooks.py mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb --inplace` (ajoute `--full --timeout 3600` pour le mode complet).
 2. Le package `genbench/` (`models.py`, `train.py`, `evaluate.py`) et `test_genbench.py`, au moins **trois** tests, qui attrapent au moins deux des cinq mutants de l'étape MP6.7.
 3. `config.json` (écrit avant les expériences) et `results.json` (les métriques par modèle et par graine, le choix de β, la mémorisation, les historiques d'entraînement).
 4. Les figures (`figures/`) : les courbes d'entraînement du VAE et du GAN, les grilles d'échantillons, les interpolations slerp, les classes générées, les plus proches voisins, la distance de Fréchet par graine.
@@ -63,15 +64,15 @@ Il s'écrit **avant** les expériences, dans ton README (étape MP6.1), et ne ch
 | MP6.4 | DCGAN (option cGAN) : entraînement journalisé, checkpoints, reprise | `generator_body`, `discriminator_body`, `Generator`, `Discriminator`, `gan_step`, `train_gan` et le checkpoint, `log.csv`, deux figures | 150 min |
 | MP6.5 | Évaluation : distance de Fréchet sur 3 graines, classes générées, plus proches voisins | `class_report`, `nearest_neighbors`, `results.json`, trois figures | 90 min |
 | MP6.6 | Galerie : grilles, interpolations sphériques, échantillons conditionnels | `interpolate`, deux ou trois figures légendées | 45 min |
-| MP6.7 | README, model card, tests pytest et nettoyage du dépôt | `test_genbench.py`, `README.md`, `MODEL_CARD.md` | 75 min |
+| MP6.7 | README, model card, tests pytest et nettoyage du dépôt | `test_genbench.py`, `README.md`, `MODEL_CARD.md` | 75 min (sans compter le temps de machine du mode complet sur Colab, qui tourne sans toi) |
 
 ## La grille d'évaluation (sur 20)
 
 | Critère | Points | Tous les points | La moitié des points |
 |---|---|---|---|
-| **Reproductibilité** | 3 | graines et configuration écrites avant les expériences (`config.json`), versions notées, notebook exécutable de bout en bout, reprise exacte vérifiée | des graines fixées mais une configuration incomplète, ou un notebook qui ne tourne qu'avec des cellules relancées à la main |
+| **Reproductibilité** | 3 | graines et configuration écrites avant les expériences (`config.json`), versions notées, notebook exécutable de bout en bout et reproductible en une commande (la reprise exacte du GAN compte dans le critère suivant) | des graines fixées mais une configuration incomplète, ou un notebook qui ne tourne qu'avec des cellules relancées à la main |
 | **VAE correct et analysé** | 4 | une loss à la bonne échelle (reconstruction sommée sur les pixels, comme la KL), courbes de reconstruction et de KL lues, latents actifs comptés, β choisi par une règle écrite avant la comparaison | un VAE qui génère, mais un β choisi sans règle ou des courbes sans commentaire |
-| **GAN stable, journalisé, repris** | 4 | règles de Radford, loss non saturante, faux détachés, `log.csv` et courbes commentées, un entraînement interrompu puis repris depuis `last.pt` (deux réseaux, deux optimiseurs, états aléatoires) | un GAN qui génère, mais sans checkpoint complet ou sans journal |
+| **GAN stable, journalisé, repris** | 4 | règles de Radford, loss non saturante, faux détachés, `log.csv` et courbes commentées, un entraînement interrompu puis repris depuis `last.pt` (deux réseaux, deux optimiseurs, états aléatoires), la reprise au bit près vérifiée (c'est ce critère qui la note) | un GAN qui génère, mais sans checkpoint complet ou sans journal |
 | **Évaluation rigoureuse** | 4 | protocole fixé à l'avance et suivi, trois graines par générateur avec leur écart, plancher et repères de la distance, effondrement de mode et mémorisation vérifiés et interprétés | une seule graine, ou une distance de Fréchet sans repère ni contrôle de mémorisation |
 | **Galerie** | 2 | des grilles pour un bruit fixé, des interpolations slerp (et la ligne droite à côté), des échantillons conditionnels si le cGAN est fait, chaque figure légendée | des figures sans légende |
 | **README et model card** | 3 | résultats chiffrés (moyenne et écart sur trois graines), limites honnêtes (petits modèles, features d'un petit CNN, distance non comparable aux FID publiés), usages responsables et risques des images générées | un README sans chiffres, ou une fiche modèle sans limites ni risques |

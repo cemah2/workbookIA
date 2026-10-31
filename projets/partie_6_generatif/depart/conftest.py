@@ -39,9 +39,17 @@ class _Pending:
         tw.line(self.text)
 
 
+def _not_written_yet(excinfo):
+    """True for the NotImplementedError of a function still to write: raised in genbench/ or in your mylearn/,
+    not by PyTorch (« Module [...] is missing the required forward function » is a real error)."""
+    if not excinfo.errisinstance(NotImplementedError):
+        return False
+    return bool({"genbench", "mylearn"} & set(Path(str(excinfo.traceback[-1].path)).parts))
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """« ⏳ pas encore écrit : fit » instead of a traceback, in a test or in one of its fixtures."""
+    """« ⏳ pas encore écrit : vae_loss » instead of a traceback, in a test or in one of its fixtures."""
     report = (yield).get_result()
-    if report.when in ("setup", "call") and call.excinfo is not None and call.excinfo.errisinstance(NotImplementedError):
+    if report.when in ("setup", "call") and call.excinfo is not None and _not_written_yet(call.excinfo):
         report.longrepr = _Pending(f"⏳ pas encore écrit : {call.excinfo.value or 'une fonction de ton module'}")

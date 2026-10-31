@@ -48,7 +48,7 @@ def set_seed(seed: int) -> None:
 
 def save_config(path: Path, config: dict) -> dict:
     """Write the configuration of the experiments to the JSON file path, BEFORE they run: the keys of config, plus
-    "date" (today, ISO format) and "versions" (library_versions()). Returns what was written. The config must be
+    "date" (today, as "YYYY-MM-DD": ``datetime.date.today().isoformat()``) and "versions" (library_versions()). Returns what was written. The config must be
     JSON-serializable (TypeError otherwise, and nothing is written) and must not already hold "date" or "versions"
     (ValueError)."""
     clash = {"date", "versions"} & set(config)
@@ -177,7 +177,8 @@ def save_checkpoint(path: Path, G: nn.Module, D: nn.Module, opt_g: torch.optim.O
                     opt_d: torch.optim.Optimizer, epoch: int, history: dict, generator: torch.Generator) -> None:
     """Save in ONE file (torch.save) everything an exact resumption needs: the state_dicts of G, D, opt_g and opt_d,
     the epoch, the history, the state of the torch.Generator that draws the mini-batches and the noise
-    (generator.get_state()) and PyTorch's global random state (torch.get_rng_state()). Only tensors, numbers,
+    (generator.get_state()) and PyTorch's global random state (torch.get_rng_state(); train_gan never draws from
+    it, it is saved for safety, should a dropout or another draw be added). Only tensors, numbers,
     strings, and dicts or lists of them: the file reloads with torch.load(path, weights_only=True)."""
     torch.save({"G": G.state_dict(), "D": D.state_dict(), "opt_g": opt_g.state_dict(), "opt_d": opt_d.state_dict(),
                 "epoch": int(epoch), "history": history, "generator": generator.get_state(),
@@ -214,9 +215,12 @@ def train_gan(G: nn.Module, D: nn.Module, images: torch.Tensor, *, epochs: int, 
     - The history: "loss_d", "loss_g", "d_real", "d_fake" (the means of gan_step's values over each epoch),
       "seconds" (per epoch) and "steps", a dict with the lists "loss_d" and "loss_g" of every step.
     - With a folder: after each epoch, ``folder / "last.pt"`` (save_checkpoint) and one row appended to
-      ``folder / "log.csv"`` (columns LOG_COLUMNS, header when the file is new). With ``resume=True``, train_gan
-      first restores last.pt (load_checkpoint: networks, optimizers, history, random states) and goes on from the
-      next epoch up to ``epochs``. ``stop_after=k`` stops after epoch k, as an interrupted run would: 2 epochs, then a
+      ``folder / "log.csv"`` (columns LOG_COLUMNS, header when the file is new). Without resume, a new run starts
+      a new journal: an existing log.csv of the folder is deleted first. With ``resume=True``, train_gan first
+      restores last.pt (load_checkpoint: networks, optimizers, history, random states) and goes on from the next
+      epoch up to ``epochs``, appending to log.csv; without folder / "last.pt", it raises FileNotFoundError (it
+      never silently starts again from scratch). The draws all come from ``generator``: PyTorch's global random
+      state is not used, only saved. ``stop_after=k`` stops after epoch k, as an interrupted run would: 2 epochs, then a
       resumption up to 3, give the same weights, bit for bit, as 3 epochs in a row.
     - ``on_epoch(epoch, G)``, when given, is called after each epoch (a grid of samples for a fixed noise...).
 
@@ -231,6 +235,8 @@ def train_gan(G: nn.Module, D: nn.Module, images: torch.Tensor, *, epochs: int, 
     if folder is not None:
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
+        if not resume and (folder / "log.csv").exists():
+            (folder / "log.csv").unlink()                                 # a new run, a new journal
     if resume:
         if folder is None or not (folder / "last.pt").exists():
             raise FileNotFoundError("resume=True needs folder / 'last.pt', written by an earlier train_gan")

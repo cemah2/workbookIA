@@ -167,6 +167,10 @@ def pending(step, message):
 PENDING = "⏳ pas encore écrit"   # the first words of a test failure on a function not written yet (conftest.py)
 
 
+class StopCheck(Exception):
+    """Raised by a check cell after a ❌ that makes the rest of its checks meaningless (attempt stops there quietly)."""
+
+
 @contextmanager
 def attempt(step):
     """wb.attempt (⏳ for what is not written yet), and any other error of your code as one ❌ line, so that « Run all »
@@ -174,6 +178,8 @@ def attempt(step):
     try:
         with wb.attempt(step):
             yield
+    except StopCheck:
+        pass
     except Exception as exc:
         verdict(step, False, "", f"ton code lève {type(exc).__name__}: {str(exc)[:300]} (la vérification de la cellule "
                 "s'arrête là ; corrige, puis relance-la)")
@@ -358,8 +364,8 @@ c) Complète `CONFIG` dans la cellule suivante : trois graines d'entraînement, 
 
 MP61_TODO = r'''CONFIG = {
     "seeds": ...,             # MP6.1 c) three distinct training seeds (a list of ints)
-    "n_eval": ...,            # MP6.1 c) generated images per model and seed for the measures (1 000 to 10 000;
-                              #          the same number for every model: the Fréchet distance depends on it)
+    "n_eval": ...,            # MP6.1 c) generated images per model and seed for the measures (1 000 to 10 000, e.g.
+                              #          2_000 if FAST_MODE else 10_000; the same number for every model)
     "betas": ...,             # MP6.1 c) the values of beta compared in MP6.3 (a list of at least three, 1.0 among them)
     "copy_quantile": ...,     # MP6.1 c) a sample is a « near copy » when its nearest training image is closer than
                               #          this quantile of the same distance for real validation images (e.g. 0.01)
@@ -372,8 +378,8 @@ MP61_TODO = r'''CONFIG = {
 }'''
 
 MP61_SOLUTION = MP61_TODO.replace('''    "seeds": ...,             # MP6.1 c) three distinct training seeds (a list of ints)
-    "n_eval": ...,            # MP6.1 c) generated images per model and seed for the measures (1 000 to 10 000;
-                              #          the same number for every model: the Fréchet distance depends on it)
+    "n_eval": ...,            # MP6.1 c) generated images per model and seed for the measures (1 000 to 10 000, e.g.
+                              #          2_000 if FAST_MODE else 10_000; the same number for every model)
     "betas": ...,             # MP6.1 c) the values of beta compared in MP6.3 (a list of at least three, 1.0 among them)
     "copy_quantile": ...,     # MP6.1 c) a sample is a « near copy » when its nearest training image is closer than
                               #          this quantile of the same distance for real validation images (e.g. 0.01)''',
@@ -405,9 +411,9 @@ if kit_ok():
         written = genbench.save_config(folder_c / "c.json", {"a": [1, 2]})
         reread = json.loads((folder_c / "c.json").read_text(encoding="utf-8"))
         verdict("MP6.1", isinstance(written, dict) and reread == written and reread.get("a") == [1, 2]
-                and {"date", "versions"} <= set(reread),
+                and {"date", "versions"} <= set(reread) and bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(reread.get("date")))),
                 "save_config : la configuration, la date et les versions, relues telles quelles du fichier JSON.",
-                "save_config(path, config) doit écrire un JSON qui contient les clés de config, « date » et « versions », "
+                "save_config(path, config) doit écrire un JSON qui contient les clés de config, « date » (AAAA-MM-JJ) et « versions », "
                 f"et rendre ce contenu (relu : {reread}).")
         refused = []
         for bad_config, error in (({"date": "hier"}, ValueError), ({"model": object()}, TypeError)):
@@ -654,13 +660,18 @@ if kit_ok() and ready("X_train_t"):
             logits_c, mu_c, lv_c = vae_b(x_check)
             val_rec_b = F.binary_cross_entropy_with_logits(logits_c, x_check, reduction="sum").item() / 50
         gap_v = weight_gap(vae_a, vae_b)
-        verdict("MP6.3", gap_v < 1e-5 and np.allclose(history_v["loss"], [s[0] for s in sums_b], rtol=1e-5)
-                and np.allclose(history_v["kl"], [s[2] for s in sums_b], rtol=1e-4)
-                and abs(history_v["val_rec"][-1] - val_rec_b) < 1e-4 * val_rec_b and not vae_a.training,
+        same_losses = (np.allclose(history_v["loss"], [s[0] for s in sums_b], rtol=1e-4)
+                       and np.allclose(history_v["kl"], [s[2] for s in sums_b], rtol=1e-3))
+        rounding = (" ; les losses concordent : l'écart des poids vient sans doute d'arrondis (une formule équivalente "
+                    "de la BCE ?), mais au-delà de 1e-3 c'est autre chose" if same_losses else "")
+        verdict("MP6.3", gap_v < 1e-3 and same_losses and len(history_v["val_rec"]) == 2
+                and abs(history_v["val_rec"][-1] - val_rec_b) < 1e-3 * val_rec_b and not vae_a.training,
                 "train_vae : les poids et les moyennes d'un entraînement écrit à la main (mini-batches de 32, 32, 32 et 4, "
                 "β = 2) ; la validation en mode évaluation ; le modèle finit en mode évaluation.",
-                f"train_vae : écart de {gap_v:.1e} aux poids d'un entraînement écrit à la main, loss {np.round(history_v['loss'], 2).tolist()} "
-                f"au lieu de {np.round([s[0] for s in sums_b], 2).tolist()} : Adam(lr), model.train(), l'ordre "
+                f"train_vae : écart de {gap_v:.1e} aux poids d'un entraînement écrit à la main{rounding} ; loss "
+                f"{np.round(history_v['loss'], 5).tolist()} au lieu de {np.round([s[0] for s in sums_b], 5).tolist()}, "
+                f"reconstruction de validation {np.round(history_v['val_rec'], 5).tolist()} (attendu en dernier "
+                f"{val_rec_b:.5f}), mode final {'entraînement' if vae_a.training else 'évaluation'} : Adam(lr), model.train(), l'ordre "
                 "torch.randperm(n, generator=torch.Generator().manual_seed(seed)) à chaque epoch, vae_loss(..., beta), "
                 "des moyennes pondérées par la taille des mini-batches, la validation en mode évaluation (z = mu), "
                 "model.eval() à la fin.")
@@ -844,8 +855,18 @@ if kit_ok() and ready("X_train_t"):
         G_2, D_2 = copy.deepcopy(G_1), copy.deepcopy(D_1)
         calls = [0]
         hook = G_1.net[0].weight.register_hook(lambda grad: calls.__setitem__(0, calls[0] + 1))
-        out_s = genbench.gan_step(G_1, D_1, adam(G_1), adam(D_1), real_g, z_g, y_g[:16], fl_g)
-        hook.remove()
+        try:
+            out_s = genbench.gan_step(G_1, D_1, adam(G_1), adam(D_1), real_g, z_g, y_g[:16], fl_g)
+        except RuntimeError as exc:
+            if "second time" not in str(exc):
+                raise
+            verdict("MP6.4", False, "", "gan_step : PyTorch refuse de remonter deux fois le même graphe (« backward through "
+                    "the graph a second time ») : à l'étape de D, juge fake.detach() ; sinon loss_d.backward() remonte "
+                    "jusqu'à G et libère son graphe, dont l'étape de G a encore besoin. Les vérifications suivantes de "
+                    "MP6.4 attendent cette correction.")
+            raise StopCheck
+        finally:
+            hook.remove()
         opt_g2, opt_d2 = adam(G_2), adam(D_2)
         fake = G_2(z_g, fl_g)
         a, b = D_2(real_g, y_g[:16]), D_2(fake.detach(), fl_g)
@@ -859,11 +880,13 @@ if kit_ok() and ready("X_train_t"):
         loss_g.backward()
         opt_g2.step()
         gap_s = max(weight_gap(G_1, G_2), weight_gap(D_1, D_2))
-        verdict("MP6.4", gap_s < 1e-6 and abs(out_s["loss_d"] - loss_d.item()) < 1e-5 and abs(out_s["loss_g"] - loss_g.item()) < 1e-5
-                and abs(out_s["d_real"] - torch.sigmoid(a).mean().item()) < 1e-6,
+        same_step = abs(out_s["loss_d"] - loss_d.item()) < 1e-4 and abs(out_s["loss_g"] - loss_g.item()) < 1e-4
+        rounding = (" ; les losses concordent : l'écart des poids vient sans doute d'arrondis (une formule équivalente ?), "
+                    "mais au-delà de 1e-4 c'est autre chose" if same_step else "")
+        verdict("MP6.4", gap_s < 1e-4 and same_step and abs(out_s["d_real"] - torch.sigmoid(a).mean().item()) < 1e-5,
                 "gan_step : les poids et les losses d'un pas écrit à la main (D puis G, loss non saturante, D à jour pour G).",
-                f"gan_step : écart de {gap_s:.1e} aux poids d'un pas écrit à la main ; attendu loss_d = {loss_d.item():.4f} et "
-                f"loss_g = {loss_g.item():.4f}, reçu {out_s['loss_d']:.4f} et {out_s['loss_g']:.4f} : D apprend vrais → 1 "
+                f"gan_step : écart de {gap_s:.1e} aux poids d'un pas écrit à la main{rounding} ; attendu loss_d = "
+                f"{loss_d.item():.6f} et loss_g = {loss_g.item():.6f}, reçu {out_s['loss_d']:.6f} et {out_s['loss_g']:.6f} : D apprend vrais → 1 "
                 "et faux détachés → 0, puis G veut que le D MIS À JOUR juge ses faux vrais (label 1), et seul opt_g fait un pas.")
         verdict("MP6.4", calls[0] == 1, "gan_step : les faux sont détachés à l'étape de D (un seul passage du gradient dans G).",
                 f"gan_step : le gradient a traversé G {calls[0]} fois au lieu d'une : à l'étape de D, juge fake.detach(), "
@@ -928,8 +951,8 @@ if kit_ok() and ready("X_train_t"):
 
         straight, history_s = resumable(Path(tempfile.mkdtemp()))
         folder_r = Path(tempfile.mkdtemp())
+        resumable(folder_r, stop=1)                                # an older run in the same folder: its journal goes
         resumable(folder_r, stop=2)
-        torch.manual_seed(12345)                                   # another state: the resumption must restore its own
         resumed, history_r = resumable(folder_r, resume=True)
         gap_r = weight_gap(straight, resumed)
         rows = (folder_r / "log.csv").read_text(encoding="utf-8").splitlines() if (folder_r / "log.csv").exists() else []
@@ -940,8 +963,18 @@ if kit_ok() and ready("X_train_t"):
                 + " : last.pt doit garder les deux réseaux, les deux optimiseurs, l'epoch, l'historique, l'état du "
                 "générateur et l'état global de PyTorch, et train_gan(resume=True) tout restaurer avant l'epoch suivante.")
         verdict("MP6.4", bool(rows) and rows[0].split(",") == genbench.LOG_COLUMNS and len(rows) == 4,
-                "log.csv : un en-tête et une ligne par epoch (2 avant l'interruption, 1 après).",
-                f"log.csv doit avoir l'en-tête LOG_COLUMNS et une ligne par epoch, à la suite après une reprise (reçu {len(rows)} lignes).")
+                "log.csv : un en-tête et une ligne par epoch (2 avant l'interruption, 1 après) ; le journal d'un run plus "
+                "ancien du même dossier est remplacé.",
+                f"log.csv doit avoir l'en-tête LOG_COLUMNS et une ligne par epoch : un nouveau run (sans resume) "
+                f"recommence le journal, une reprise l'allonge (attendu 4 lignes, reçu {len(rows)}).")
+        try:
+            resumable(Path(tempfile.mkdtemp()), resume=True)
+            refused_r = False
+        except FileNotFoundError:
+            refused_r = True
+        verdict("MP6.4", refused_r, "train_gan(resume=True) sans last.pt lève FileNotFoundError.",
+                "train_gan(resume=True) dans un dossier sans last.pt doit lever FileNotFoundError, pas repartir de zéro "
+                "en silence.")
 checks_done()'''
 
 MP64_TRAIN = r'''checks_of("MP6.4 entraînement")
@@ -1305,8 +1338,8 @@ MP67_MD = r'''## MP6.7 · README, model card, tests pytest et nettoyage du dép�
 **Objectif :** un dépôt qu'un recruteur comprend en deux minutes, dont les résultats se reproduisent, et dont les tests attrapent des erreurs.
 
 a) Complète `test_genbench.py` : **au moins trois tests** (un est donné), chacun avec un nom clair et un message dont la première ligne dit ce qui était attendu. La vérification les relance contre cinq **mutants** de `genbench` (une erreur glissée dans `vae_loss`, `gan_step`, `classifier_features`, `nearest_neighbors` ou `load_checkpoint`) : de bons tests en attrapent au moins deux.
-b) Termine le `README.md` de portfolio (les résultats chiffrés de `results.json`, la galerie légendée, les limites, la reproduction en une commande) et la fiche modèle `MODEL_CARD.md` (usage prévu, données, métriques, limites, risques et usages responsables) : leurs modèles sont dans ton dossier.
-c) Nettoie : relance tout le notebook de zéro (*Exécution → Tout exécuter*), en mode complet sur Colab si tu peux (🚀), vérifie que `runs/` n'est pas commité (des checkpoints lourds), puis commite le projet.'''
+b) Termine le `README.md` de portfolio (les résultats chiffrés de `results.json`, la galerie légendée, les limites, la reproduction en une commande : `python tools/run_all_notebooks.py mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb --inplace`, avec `--full` pour le mode complet) et la fiche modèle `MODEL_CARD.md` (usage prévu, données, métriques, limites, risques et usages responsables) : leurs modèles sont dans ton dossier.
+c) Nettoie : relance tout le notebook de zéro (*Exécution → Tout exécuter*), en mode complet sur Colab si tu peux (🚀), vérifie que le `.gitignore` du projet écarte `runs/` (des checkpoints lourds), puis commite le projet. Le modèle de README pointe vers les figures du mode complet ; si tu n'as que le mode rapide, remplace les liens par les fichiers `…_rapide.png` et dis-le dans le README.'''
 
 MP67_CHECK = r'''checks_of("MP6.7")
 if kit_ok():
@@ -1335,14 +1368,15 @@ if kit_ok():
                     f"tes tests n'attrapent que {sum(caught)} mutant(s) sur {len(caught)} : teste ce que l'entraînement ne "
                     "montre pas (l'échelle de la loss du VAE, le sens du pas de G, le mode d'évaluation, des distances "
                     "comparées à NumPy, une reprise au bit près).")
+    fast_only = []                      # the deliverables that only exist in fast mode (accepted, with an ℹ️ line)
     for name in ("config.json", "results.json"):
         fast_name = name.replace(".json", "_rapide.json")
         if (PROJECT / name).exists():
             verdict("MP6.7", True, f"{name} (mode complet) est livré.", "")
         elif (PROJECT / fast_name).exists():
-            pending("MP6.7", f"{name} n'existe pas encore : le mode complet l'écrit (en mode rapide : {fast_name}, livré).")
+            fast_only.append(fast_name)
         else:
-            pending("MP6.7", f"{name} n'existe pas encore : les étapes MP6.1 et MP6.5 l'écrivent.")
+            pending("MP6.7", f"{name} n'existe pas encore : les étapes MP6.1 et MP6.5 l'écrivent ({fast_name} en mode rapide).")
     readme = check_document("MP6.7", PROJECT / "README.md",
                             {"L'objectif": ["objectif", "goal"], "Le protocole d'évaluation": ["protocole", "protocol"],
                              "Les résultats": ["résultat", "result"], "La galerie": ["galerie", "gallery"],
@@ -1355,16 +1389,29 @@ if kit_ok():
                             ("gan_courbes.png", "MP6.4"), ("gan_progression.png", "MP6.4"), ("frechet.png", "MP6.5"),
                             ("classes.png", "MP6.5"), ("voisins.png", "MP6.5"), ("galerie.png", "MP6.6"),
                             ("interpolations.png", "MP6.6")):
-        if not (FIGURES / figure).exists():
-            pending("MP6.7", f"figures/{figure} n'existe pas encore : l'étape {made_by} la crée en mode complet "
-                    f"({'en mode rapide : ' + figure.replace('.png', '_rapide.png') if (FIGURES / figure.replace('.png', '_rapide.png')).exists() else 'pas encore tracée'}).")
-        elif readme:
-            verdict("MP6.7", f"figures/{figure}" in readme, f"le README montre figures/{figure}.",
-                    f"le README doit montrer figures/{figure}, avec sa légende.")
-    gitignore = ROOT / ".gitignore"
-    ignored = gitignore.exists() and re.search(r"(?m)^/?runs/?$", gitignore.read_text(encoding="utf-8"))
-    verdict("MP6.7", bool(ignored), "runs/ (les checkpoints du GAN) est ignoré par git.",
-            "ajoute « runs/ » au .gitignore de ton dépôt : les checkpoints sont lourds et se régénèrent.")
+        fast_figure = figure.replace(".png", "_rapide.png")
+        if (FIGURES / figure).exists():
+            shown = figure
+        elif (FIGURES / fast_figure).exists():
+            shown = fast_figure
+            fast_only.append(f"figures/{fast_figure}")
+        else:
+            pending("MP6.7", f"figures/{figure} n'existe pas encore : l'étape {made_by} la crée ({fast_figure} en mode rapide).")
+            continue
+        if readme:
+            verdict("MP6.7", f"figures/{figure}" in readme or f"figures/{fast_figure}" in readme,
+                    f"le README montre figures/{shown if f'figures/{shown}' in readme else figure}.",
+                    f"le README doit montrer figures/{shown}, avec sa légende (le modèle pointe vers les figures du mode "
+                    "complet : sans mode complet, mets les liens vers les fichiers « _rapide »).")
+    if fast_only:
+        print(f"ℹ️ MP6.7 : livrés en mode rapide seulement : {', '.join(fast_only)}. C'est accepté (cahier des charges, "
+              "« Les deux modes et la note ») ; le mode complet sur Colab donnera de meilleures images et des mesures sur "
+              "10 000 images, à reporter dans le README si tu le lances.")
+    gitignore = PROJECT / ".gitignore"
+    ignored = gitignore.exists() and re.search(r"(?m)^/?runs/?\s*$", gitignore.read_text(encoding="utf-8"))
+    verdict("MP6.7", bool(ignored), "le .gitignore du projet écarte runs/ (les checkpoints du GAN).",
+            "le dossier du projet doit avoir son propre .gitignore avec une ligne « runs/ » : les checkpoints sont lourds "
+            "et se régénèrent, et le projet doit rester propre quand tu le copies dans un dépôt de portfolio.")
     print(f"\n⏱️ notebook exécuté en {(time.perf_counter() - STARTED) / 60:.1f} min ({'mode rapide' if FAST_MODE else 'mode complet'})")
 checks_done()'''
 
@@ -1423,7 +1470,7 @@ def header_cells(kind: str) -> list:
                                                             for sid, title, minutes in STEPS]
     fast = ("**Mode rapide et mode complet.** Avec `FAST_MODE = True` (la cellule de setup), les modèles s'entraînent sur "
             "des sous-ensembles (15 000 images pour le classifieur, 10 000 pour les générateurs, 3 à 5 epochs), et chaque "
-            "mesure porte sur 2 000 images : le notebook tient en une dizaine de minutes sur un CPU à deux cœurs. Le mode "
+            "mesure porte sur 2 000 images : le notebook tourne en 4 minutes environ sur un CPU à deux cœurs (3,6 min mesurées, CPU au repos). Le mode "
             "complet (les 50 000 images d'entraînement, 10 à 15 epochs, 10 000 images par mesure) se lance sur un GPU de "
             "Colab (🚀, *Exécution → Modifier le type d'exécution → GPU*) ; il a pris 48 minutes sur un CPU à deux cœurs, dont un quart d'heure pour les deux DCGAN de l'étape MP6.5. Ses fichiers (`config.json`, `results.json`, "
             "les figures du README) ne sont jamais écrasés par ceux du mode rapide, suffixés `_rapide`. Ferme les autres "

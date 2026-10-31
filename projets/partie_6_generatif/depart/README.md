@@ -4,7 +4,7 @@
 
 Mini-projet du checkpoint VI du workbook *Deep Learning* (d'après A. Glassner) : un package PyTorch testé (`genbench` : les modèles, l'entraînement, l'évaluation), un protocole d'évaluation écrit avant les expériences, trois graines par générateur, une galerie et une fiche modèle.
 
-<!-- Ce fichier est le modèle de ton README de portfolio : remplace chaque paragraphe qui commence par TODO (et la ligne TODO des tableaux) par ton texte, avec tes propres chiffres. Écris les sections « L'objectif » et « Le protocole d'évaluation » dès l'étape MP6.1, AVANT les expériences, et commite-les. Tu peux l'écrire en anglais si tu vises des postes à l'international, avec le même plan (## The goal, ## Evaluation protocol, ## Method, ## Results, ## Gallery, ## Limitations and responsible use, ## Reproduce, ## What I learned). -->
+<!-- Ce fichier est le modèle de ton README de portfolio : remplace chaque paragraphe qui commence par TODO (et la ligne TODO des tableaux) par ton texte, avec tes propres chiffres. Écris les sections « L'objectif » et « Le protocole d'évaluation » dès l'étape MP6.1, AVANT les expériences, et commite-les. Les liens des figures pointent vers celles du mode complet : si tu n'as que le mode rapide, remplace-les par les fichiers « …_rapide.png » et dis-le. Tu peux l'écrire en anglais si tu vises des postes à l'international, avec le même plan (## The goal, ## Evaluation protocol, ## Method, ## Results, ## Gallery, ## Limitations and responsible use, ## Reproduce, ## What I learned). -->
 
 ## L'objectif
 

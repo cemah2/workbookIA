@@ -247,8 +247,8 @@ def test_train_gan_resumes_bit_for_bit(tmp_path, images):
         history = train_gan(G, D, x, labels=y, epochs=3, batch_size=16, seed=2, folder=folder, stop_after=stop, resume=resume)
         return G, history
     straight, history_s = run(tmp_path / "a")
+    run(tmp_path / "b", stop=1)                                     # an older run: its journal is replaced
     run(tmp_path / "b", stop=2)
-    torch.manual_seed(1234)                                         # another state: the resumption must restore its own
     resumed, history_r = run(tmp_path / "b", resume=True)
     assert largest_gap(straight, resumed) == 0.0, \
         f"expected 2 + 1 epochs = 3 epochs in a row bit for bit, largest gap {largest_gap(straight, resumed):.2e}"
@@ -256,6 +256,8 @@ def test_train_gan_resumes_bit_for_bit(tmp_path, images):
         "expected the same history, 4 steps per epoch (64 images, mini-batches of 16)"
     rows = (tmp_path / "b" / "log.csv").read_text(encoding="utf-8").splitlines()
     assert rows[0].split(",") == LOG_COLUMNS and len(rows) == 4, f"expected a header and 3 rows in log.csv, got {rows}"
+    with pytest.raises(FileNotFoundError):
+        train_gan(*tiny_gan(), x, epochs=1, batch_size=16, folder=tmp_path / "empty", resume=True)
 
 
 # ---------------------------------------------------------------- the measures
