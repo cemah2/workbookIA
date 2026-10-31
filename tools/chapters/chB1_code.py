@@ -312,6 +312,9 @@ CHECK_13 = r'''with checked("B1.13"):
         raise StopCheck
     verdict("B1.13", not backbone_13.training, "le backbone est en mode eval().",
             "le backbone est en mode train() : ses batchnorms normaliseraient avec les statistiques de chaque mini-batch.")
+    if backbone_13.training:
+        print("⏳ Ex B1.13 : les embeddings se vérifient sur un backbone en mode eval() : corrige d'abord make_backbone_13.")
+        raise StopCheck
     images_13 = X_TEST[:16].copy()
     E_13 = embed_13(backbone_13, images_13, SIZE)
     if not returned("B1.13", "embed_13", E_13):
@@ -448,10 +451,12 @@ with checked("B1.14"):
         want_14 = reference_probe(RESNET.embed(small_tr_14[0], r_14["size"]), small_tr_14[1],
                                   RESNET.embed(small_te_14[0], r_14["size"]), small_te_14[1])
         acc_ok_14 = isinstance(r_14["accuracy"], (float, np.floating)) and abs(float(r_14["accuracy"]) - want_14) < 0.011
+        got_text_14 = (pct(float(r_14["accuracy"])) if isinstance(r_14["accuracy"], (float, np.floating))
+                       else f"{r_14['accuracy']!r:.40}")
         verdict("B1.14", acc_ok_14,
-                f"{r_14['size']} pixels : accuracy {pct(float(r_14['accuracy']))}, comme le linear probe de référence.",
-                f"{r_14['size']} pixels : accuracy {r_14['accuracy']!r:.40}, attendu {pct(want_14)} (probe_13 sur les "
-                "embeddings de embed_13 à cette taille).")
+                f"{r_14['size']} pixels : accuracy {got_text_14}, comme le linear probe de référence.",
+                f"{r_14['size']} pixels : accuracy {got_text_14}, attendu {pct(want_14)} (probe_13 sur les embeddings de "
+                "embed_13 à cette taille ; si la vérification de B1.13 n'est pas toute en ✅, corrige d'abord embed_13).")
     for r_14 in rows_14:
         ms_14, fast_14 = float(r_14["ms_per_image"]), probe_net_14.fast_ms.get(r_14["size"])
         if fast_14 is None:
@@ -609,14 +614,24 @@ def probe_by_block_16(model, train, test, size, blocks=RESNET_BLOCKS):
     return {b: probe_13(E_tr[b], train[1], E_te[b], test[1]) for b in blocks}'''
 
 CHECK_16 = r'''with checked("B1.16"):
-    calls_16 = []
-    hook_16 = RESNET.full.conv1.register_forward_hook(lambda m, i, o: calls_16.append(o.shape[0]))
+    calls_16, grad_16 = [], []
+    net_16 = copy.deepcopy(RESNET.full).requires_grad_(True).eval()   # trainable, like the network of the experiment
+    def count_16(module, inputs, output):            # notes each pass and its gradient mode (returns None: output kept)
+        calls_16.append(output.shape[0])
+        grad_16.append(torch.is_grad_enabled())
+
+    hook_16 = net_16.conv1.register_forward_hook(count_16)
     try:
         for name_16, sample_16 in (("CIFAR-10", X_TEST[:6].copy()), ("Fashion-MNIST", XF_TE_16[:6].copy())):
             want_16 = RESNET.embed_blocks(sample_16, 64, batch_size=4)
             calls_16.clear()                             # count the passes of YOUR function only
-            got_16 = block_embeddings_16(RESNET.full, sample_16, 64, batch_size=4)
+            grad_16.clear()
+            got_16 = block_embeddings_16(net_16, sample_16, 64, batch_size=4)
             passes_16 = list(calls_16)
+            if any(grad_16):
+                print(f"❌ Ex B1.16 : {name_16} : les passes avant se font avec le calcul du gradient : le contrat demande "
+                      "« sans gradient » (torch.no_grad() ou torch.inference_mode() autour de la boucle).")
+                raise StopCheck
             if not returned("B1.16", "block_embeddings_16", got_16):
                 raise StopCheck
             if not isinstance(got_16, dict) or set(got_16) != set(RESNET_BLOCKS):
@@ -631,7 +646,7 @@ CHECK_16 = r'''with checked("B1.16"):
     finally:
         hook_16.remove()
     tr_16, te_16 = nested(10), nested(10, "test")
-    probes_16 = probe_by_block_16(RESNET.full, (X_TRAIN[tr_16], Y_TRAIN[tr_16]), (X_TEST[te_16], Y_TEST[te_16]), 64,
+    probes_16 = probe_by_block_16(net_16, (X_TRAIN[tr_16], Y_TRAIN[tr_16]), (X_TEST[te_16], Y_TEST[te_16]), 64,
                                   blocks=("stem", "layer4"))
     if not returned("B1.16", "probe_by_block_16", probes_16):
         raise StopCheck
@@ -651,8 +666,15 @@ CHECK_16 = r'''with checked("B1.16"):
 EXPERIMENT_16 = r'''with checked("B1.16"):
     need("B1.16", "probe_by_block_16")
     model_16 = make_backbone_13()
-    results_16 = {"CIFAR-10": probe_by_block_16(model_16, (XC_TR_16, YC_TR_16), (XC_TE_16, YC_TE_16), SIZE),
-                  "Fashion-MNIST": probe_by_block_16(model_16, (XF_TR_16, YF_TR_16), (XF_TE_16, YF_TE_16), SIZE)}
+    try:
+        results_16 = {"CIFAR-10": probe_by_block_16(model_16, (XC_TR_16, YC_TR_16), (XC_TE_16, YC_TE_16), SIZE),
+                      "Fashion-MNIST": probe_by_block_16(model_16, (XF_TR_16, YF_TR_16), (XF_TE_16, YF_TE_16), SIZE)}
+    except NotImplementedError:
+        raise
+    except Exception as exc_16:                       # the learner's code: one readable line, then the cell stops
+        print(f"❌ Ex B1.16 : le sondage s'arrête sur une erreur de ton code ({type(exc_16).__name__} : {str(exc_16)[:120]}) ; "
+              "fais d'abord passer la cellule de vérification ci-dessus (« sans gradient », formes, une passe par mini-batch).")
+        raise StopCheck
     print(f"{'bloc':>8} " + " ".join(f"{name:>14}" for name in results_16))
     for b_16 in RESNET_BLOCKS:
         print(f"{b_16:>8} " + " ".join(f"{pct(results_16[name][b_16]):>14}" for name in results_16))
@@ -878,9 +900,16 @@ with checked("B1.17"), torch.random.fork_rng():
             f"train_partial_17 rend une loss par epoch ({fr(losses_17[0], 3) if isinstance(losses_17, list) and losses_17 else '?'}).",
             f"attendu une liste d'un float par epoch, reçu {losses_17!r:.100}.")
     if SpyAdamW_17.seen:
-        lrs_17 = sorted({round(lr, 12) for lr, _, _ in SpyAdamW_17.seen[-1]})
-        verdict("B1.17", lrs_17 == [1e-4, 1e-3], "AdamW reçoit 1e-3 pour la tête et 1e-4 pour layer4 (gamma = 0,1).",
-                f"learning rates reçus par AdamW : {lrs_17}, attendu [1e-4, 1e-3] (param_groups_17 avec [model.fc, model.layer4]).")
+        lr_of_17 = {pid: lr for lr, _, ids in SpyAdamW_17.seen[-1] for pid in ids}   # the learning rate of each parameter
+        head_lr_17 = {lr_of_17.get(id(p)) for p in model_17.fc.parameters()}
+        l4_lr_17 = {lr_of_17.get(id(p)) for p in model_17.layer4.parameters()}
+        close_17 = lambda lrs, want: bool(lrs) and all(v is not None and math.isclose(v, want, rel_tol=1e-6) for v in lrs)
+        verdict("B1.17", close_17(head_lr_17, 1e-3) and close_17(l4_lr_17, 1e-4),
+                "AdamW reçoit 1e-3 pour chaque paramètre de la tête et 1e-4 pour chaque paramètre de layer4 (gamma = 0,1).",
+                f"learning rates reçus par AdamW : tête {sorted(f'{v:.3g}' for v in head_lr_17 if v is not None)}, layer4 "
+                f"{sorted(f'{v:.3g}' for v in l4_lr_17 if v is not None)} (None : un paramètre absent de l'optimiseur) ; "
+                "attendu 1e-3 pour la tête et 1e-4 pour layer4 : dans quel ordre param_groups_17 reçoit-il les modules, "
+                "et lequel a gamma**0 ?")
     else:
         print("⚠️ Ex B1.17 : l'optimiseur n'a pas pu être observé (crée-le par torch.optim.AdamW dans train_partial_17).")
     sd_17 = model_17.state_dict()
@@ -1035,8 +1064,11 @@ else:
         acc_18 = evaluate(model_18, X_TEST[nested(100, "test")], Y_TEST[nested(100, "test")])
         print(f"{STEPS_18} pas de 4 images : loss {fr(np.mean(losses_18[:10]), 2)} sur les 10 premiers pas, "
               f"{fr(np.mean(losses_18[-10:]), 2)} sur les 10 derniers ; accuracy de test {pct(acc_18)} (le hasard : 10 %).")
-        verdict("B1.18", acc_18 > 0.3, "le fine-tuning réparé apprend.",
-                "l'accuracy reste proche du hasard : une erreur silencieuse reste-t-elle ?")'''
+        verdict("B1.18", acc_18 > 0.15,
+                "le fine-tuning réparé apprend : nettement au-dessus du hasard (avec 60 pas de 4 images, de 20 à 60 % "
+                "selon les learning rates et la graine : c'est normal, ce n'est pas un entraînement complet).",
+                "l'accuracy reste au niveau du hasard alors que les quatre points passent : les couches pré-entraînées "
+                "reçoivent-elles un pas assez petit, et la tête un pas assez grand (fiche §201.4) ?")'''
 
 TODO_19 = r'''def warmup_cosine_19(step, t_warmup, t_total):
     """The factor of the learning rate at step `step` (0, 1, 2...): step / t_warmup during the warmup, then a cosine
@@ -1142,12 +1174,16 @@ with checked("B1.19"), torch.random.fork_rng():
         return script_19[len(seen_19) - 1] if len(seen_19) <= len(script_19) else 0.0
 
     tiny_19 = (X_TRAIN[nested(2)], Y_TRAIN[nested(2)])
+    net_19 = make_full_19()
     evaluate = scripted_evaluate_19
+    SpyAdamW_17.seen.clear()
+    adamw_19, torch.optim.AdamW = torch.optim.AdamW, SpyAdamW_17      # notes the parameters of each group
     try:
-        hist_19 = fine_tune_19(make_full_19(), tiny_19, (X_VAL[:10], Y_VAL[:10]), epochs=5, head_lr=1e-3, gamma=0.5,
+        hist_19 = fine_tune_19(net_19, tiny_19, (X_VAL[:10], Y_VAL[:10]), epochs=5, head_lr=1e-3, gamma=0.5,
                                t_warmup=3, patience=2, batch_size=10, seed=0)
     finally:
         evaluate = evaluate_19
+        torch.optim.AdamW = adamw_19
     if not returned("B1.19", "fine_tune_19", hist_19):
         raise StopCheck
     if not isinstance(hist_19, dict) or not {"train_loss", "val_acc", "lr", "best_epoch"} <= set(hist_19):
@@ -1171,6 +1207,21 @@ with checked("B1.19"), torch.random.fork_rng():
             "(t_total = epochs × pas par epoch).",
             f"history['lr'] : attendu {n_steps_19} lignes (une par pas), chacune avec les 10 learning rates des groupes au pas t, "
             "lus avant optimizer.step() (relis le contrat : modules, gamma, t_warmup, t_total).")
+    if SpyAdamW_17.seen:
+        # LambdaLR keeps the starting learning rate of each group in "initial_lr": it must follow the depth of the module
+        lr_of_19 = {pid: lr for lr, _, ids in SpyAdamW_17.seen[-1] for pid in ids}
+        depth_19 = [(net_19.fc, 0), (net_19.layer4, 1), (net_19.layer3, 2), (net_19.layer2, 3),
+                    (nn.ModuleList([net_19.conv1, net_19.bn1, net_19.layer1]), 4)]
+        wrong_19 = [k for module, k in depth_19
+                    if not all(lr_of_19.get(id(p)) is not None and math.isclose(lr_of_19[id(p)], 1e-3 * 0.5 ** k, rel_tol=1e-6)
+                               for p in module.parameters())]
+        names_19 = ["fc", "layer4", "layer3", "layer2", "conv1/bn1/layer1"]
+        verdict("B1.19", not wrong_19, "chaque paramètre reçoit le learning rate de sa profondeur (head_lr pour fc, "
+                "head_lr × gamma⁴ pour conv1, bn1 et layer1).",
+                f"learning rates de départ faux pour {[names_19[k] for k in wrong_19]} : le module n° k en partant de la tête "
+                "reçoit head_lr × gamma^k ; dans quel ordre passes-tu les modules à param_groups_17 ?")
+    else:
+        print("⚠️ Ex B1.19 : l'optimiseur n'a pas pu être observé (crée-le par torch.optim.AdamW dans fine_tune_19).")
 
 with checked("B1.19"), torch.random.fork_rng():
     # the best checkpoint: the weights left in the model must be those seen at the best epoch, not the last ones
@@ -1716,7 +1767,18 @@ CHECK_23 = r'''with checked("B1.23"):
     toy_23.train()
     fc_before_23 = toy_23.fc.weight.detach().clone()
     images_23 = X_TEST[nested(10, "test")]
-    got_23 = imagenet_agreement_23(toy_23, RESNET.full, images_23, size=64)
+    grad_23 = []
+    def grad_mode_23(module, inputs, output):         # returns None: the output is kept
+        grad_23.append(torch.is_grad_enabled())
+
+    hook_23 = RESNET.full.conv1.register_forward_hook(grad_mode_23)
+    try:
+        got_23 = imagenet_agreement_23(toy_23, RESNET.full, images_23, size=64)
+    finally:
+        hook_23.remove()
+    if any(grad_23):
+        print("❌ Ex B1.23 : les passes avant se font avec le calcul du gradient : le contrat demande « sans gradient » "
+              "(torch.no_grad() ou torch.inference_mode()).")
     if not returned("B1.23", "imagenet_agreement_23", got_23):
         raise StopCheck
     ref_23 = copy.deepcopy(toy_23).eval()
@@ -1972,7 +2034,8 @@ def few_shot_25(support, query, shots, draws, seed=0):
         rows.append({"shots": k, "mean": float(np.mean(accs)), "std": float(np.std(accs))})
     return rows'''
 
-CHECK_25 = r'''with checked("B1.25"):
+CHECK_25 = r'''ok_25 = False                         # becomes True once prototypes_25 and predict_25 pass
+with checked("B1.25"):
     rng_25 = np.random.default_rng(25)
     E_25 = rng_25.normal(size=(12, 5)) * rng_25.uniform(0.2, 5, size=(12, 1))   # embeddings of very different norms
     y_25 = np.array([0, 1, 2] * 4)
@@ -1997,12 +2060,17 @@ CHECK_25 = r'''with checked("B1.25"):
         raise StopCheck
     want_c_25 = ((q_25 / np.linalg.norm(q_25, axis=1, keepdims=True))
                  @ (protos_25 / np.linalg.norm(protos_25, axis=1, keepdims=True)).T).argmax(1)
+    ok_25 = ok_p_25 and np.shape(got_c_25) == want_c_25.shape and np.array_equal(np.asarray(got_c_25), want_c_25)
     verdict("B1.25", np.array_equal(np.asarray(got_c_25), want_c_25), "predict_25 : la classe du prototype au plus grand cosinus.",
             "predict_25 : " + ("ce sont les classes du plus grand produit scalaire : normalise les prototypes aussi (cosinus)."
                                if np.array_equal(np.asarray(got_c_25), (q_25 @ protos_25.T).argmax(1)) else
                                f"attendu {want_c_25.tolist()}, reçu {np.asarray(got_c_25).tolist()}."))
 
 with checked("B1.25"):
+    if not ok_25:
+        print("⏳ Ex B1.25 : few_shot_25 se vérifie une fois prototypes_25 et predict_25 justes (cellule ci-dessus).")
+        raise StopCheck
+    rng_25 = np.random.default_rng(250)
     sup_25 = (rng_25.normal(size=(40, 6)), np.repeat(np.arange(10), 4))      # 10 classes, 4 support examples each
     qry_25 = (rng_25.normal(size=(30, 6)), rng_25.integers(0, 10, 30))
     got_f_25 = few_shot_25(sup_25, qry_25, (1, 3), draws=4, seed=7)
@@ -2068,7 +2136,8 @@ MOBILE = transfer.load_backbone("mobilenet_v3_small")
 BACKBONES_26 = {"MobileNetV3-small": (MOBILE, SIZE), "ResNet-18": (RESNET, SIZE)}
 if DINO is not None:
     BACKBONES_26["DINOv2-small"] = (DINO, DINO_SIZE)
-idx_26 = nested(100)                     # 100 training images per class for the linear probe of each backbone
+idx_26 = nested(16)                      # 16 training images per class (the support of B1.25) for each linear probe
+val_26 = np.sort(np.concatenate([np.flatnonzero(Y_VAL == c)[:20] for c in range(10)]))   # 200 validation images
 print(f"threads de PyTorch : {torch.get_num_threads()} ; backbones : {', '.join(BACKBONES_26)}")'''
 
 TODO_26 = r'''def latency_ms_26(model, x, reps=20, warmup=3):
@@ -2167,7 +2236,10 @@ with checked("B1.26"):
     keys_ok_26 = isinstance(prof_26, dict) and {"params", "mb", "latency_ms", "images_per_s"} <= set(prof_26)
     verdict("B1.26", keys_ok_26 and 1.5 <= prof_26["latency_ms"] <= 6 and 16 / 0.006 <= prof_26["images_per_s"] <= 16 / 0.0015,
             "profile_26 : la latence d'une image et le débit des batches, sur un faux modèle de 2 ms par appel.",
-            f"profile_26 sur un faux modèle de 2 ms par appel, batches de 16 : reçu {prof_26!r:.160} (attendu ≈ 2 ms et ≈ 8 000 images/s).")'''
+            "profile_26 sur un faux modèle de 2 ms par appel, batches de 16 : "
+            + (f"latence {fr(float(prof_26['latency_ms']), 2)} ms et {fr(float(prof_26['images_per_s']), 0)} images/s"
+               if keys_ok_26 else f"attendu un dictionnaire {{params, mb, latency_ms, images_per_s}}, reçu {type(prof_26).__name__}")
+            + " ; attendu ≈ 2 ms et ≈ 8 000 images/s (si latency_ms_26 n'est pas ✅ ci-dessus, corrige-la d'abord).")'''
 
 EXPERIMENT_26 = r'''with checked("B1.26"):
     need("B1.26", "profile_26")
@@ -2180,16 +2252,16 @@ EXPERIMENT_26 = r'''with checked("B1.26"):
                             "latency_side_ms": latency_ms_26(bb_26.model, torch.randn(1, 3, side_26, side_26))}
     for name_26, (bb_26, side_26) in BACKBONES_26.items():     # the accuracy, once the timings are done
         E_tr_26 = transfer.cached_embeddings(bb_26, X_TRAIN[idx_26], size=side_26, subset="train", verbose=False)
-        E_te_26 = transfer.cached_embeddings(bb_26, X_TEST, size=side_26, subset="test", verbose=False)
+        E_va_26 = transfer.cached_embeddings(bb_26, X_VAL[val_26], size=side_26, subset="val", verbose=False)
         rows_26[name_26]["accuracy"] = float(make_pipeline(StandardScaler(), LogisticRegression(C=0.01, max_iter=3000))
-                                             .fit(E_tr_26, Y_TRAIN[idx_26]).score(E_te_26, Y_TEST))
+                                             .fit(E_tr_26, Y_TRAIN[idx_26]).score(E_va_26, Y_VAL[val_26]))
     print(f"{'backbone':<18} {'paramètres':>11} {'Mo':>6} {'latence 224 px':>15} {'images/s (16)':>14} "
-          f"{'latence, côté du probe':>23} {'probe (100 / classe)':>21}")
+          f"{'latence, côté du probe':>23} {'probe (16 / classe, val.)':>26}")
     for name_26, r_26 in rows_26.items():
         side_text_26 = f"{fr(r_26['latency_side_ms'], 1)} ms ({r_26['side']} px)"
         print(f"{name_26:<18} {format(r_26['params'], ',').replace(',', ' '):>11} {fr(r_26['mb'], 1):>6} "
               f"{fr(r_26['latency_ms'], 1) + ' ms':>15} {fr(r_26['images_per_s'], 0):>14} {side_text_26:>23} "
-              f"{pct(r_26['accuracy']):>21}")
+              f"{pct(r_26['accuracy']):>26}")
     lat_26 = {k: v["latency_ms"] for k, v in rows_26.items()}
     verdict("B1.26", lat_26["MobileNetV3-small"] * 2 < lat_26["ResNet-18"],
             "à 224 pixels, MobileNetV3-small répond au moins deux fois plus vite que ResNet-18.",
@@ -2384,16 +2456,36 @@ with checked("B1.27"):
     print("\n" + (folder_27 / "README.md").read_text(encoding="utf-8")[:900] + "…")'''
 
 GIVEN_28 = r'''# The challenge: 100 training images per class, the test revealed once, 10 minutes of CPU
+import shutil
+import tempfile
+from pathlib import Path
+
 X_TR_28, Y_TR_28 = X_TRAIN[nested(100)], Y_TRAIN[nested(100)]   # the ONLY labelled images of the challenge
 GOAL_28, GATE_28, LIMIT_28 = 0.90, 0.80, 600.0      # test accuracy to reach; validation needed to reveal; seconds
 # every global variable of the notebook that holds CIFAR-10 labels (the test subsets of B1.15, B1.16 and part D too)
 LABEL_GLOBALS_28 = ("Y_TRAIN", "Y_VAL", "Y_TEST", "Y_TR_28", "YT_B", "Y_D", "YS_25", "YC_TR_16", "YC_TE_16", "y_15")
 
 
+class empty_cache_28:
+    """Within this block, the embeddings cache of wb.transfer is an EMPTY temporary folder (removed afterwards): a
+    method that calls cached_embeddings computes everything, and the timer measures it."""
+
+    def __enter__(self):
+        self.folder, self.real = Path(tempfile.mkdtemp(prefix="wb_b1_28_")), transfer.embeddings_dir
+        transfer.embeddings_dir = lambda: self.folder
+        return self.folder
+
+    def __exit__(self, *exc):
+        transfer.embeddings_dir = self.real
+        shutil.rmtree(self.folder, ignore_errors=True)
+        return False
+
+
 def evaluate_28(method):
-    """Run the challenge: method(X, y) -> predict, predict(images) -> labels (N,).
-    1. a leak control: the method trained on SHUFFLED labels (every global variable of labels, LABEL_GLOBALS_28,
-       shuffled too, then restored) must stay near chance;
+    """Run the challenge: method(X, y) -> predict, predict(images) -> labels (N,). The embeddings cache is empty
+    (empty_cache_28) during both steps.
+    1. a leak control: the method trained on 300 images with SHUFFLED labels (every global variable of labels,
+       LABEL_GLOBALS_28, shuffled too, then restored) must stay near chance on 100 validation and 100 test images;
     2. the real run, timed (training + predicting the test), the validation accuracy first: the test is revealed only
        above GATE_28, and only once per session (REVEALED_28)."""
     g = globals()
@@ -2402,48 +2494,56 @@ def evaluate_28(method):
     # the positions in X_TEST of the test subsets whose labels are kept in other variables
     subsets = {"Y_D": g.get("idx_D"), "y_15": g.get("idx_15"),
                "YC_TE_16": nested(g["BLOCK_PER_CLASS"], "test") if "BLOCK_PER_CLASS" in g else None}
+    ctrl_tr = nested(30)                                    # 300 training images for the control
+    ctrl_val = np.sort(np.concatenate([np.flatnonzero(Y_VAL == c)[:10] for c in range(10)]))
+    ctrl_te = nested(10, "test")                            # 100 test images, inside every test subset above
     rng = np.random.default_rng(28)
     try:
         for n in names:
             g[n] = rng.permutation(saved[n])
-        fake = method(X_TR_28.copy(), Y_TR_28.copy())
-        on_val = np.asarray(fake(X_VAL.copy()))
-        on_test = np.asarray(fake(X_TEST.copy()))
+        with empty_cache_28():
+            fake = method(X_TRAIN[ctrl_tr].copy(), g["Y_TRAIN"][ctrl_tr].copy())
+            on_val = np.asarray(fake(X_VAL[ctrl_val].copy()))
+            on_test = np.asarray(fake(X_TEST[ctrl_te].copy()))
         # an honest method trained on shuffled labels agrees with no labelling: neither the true validation labels,
         # nor the shuffled global labels it could have read (validation, test, the test subsets)
-        leaks = {"labels de validation": float(np.mean(on_val == saved["Y_VAL"])),
-                 "labels globaux mélangés de la validation": float(np.mean(on_val == g["Y_VAL"])),
-                 "labels globaux mélangés du test": float(np.mean(on_test == g["Y_TEST"]))}
+        leaks = {"labels de validation": float(np.mean(on_val == saved["Y_VAL"][ctrl_val])),
+                 "labels globaux mélangés de la validation": float(np.mean(on_val == g["Y_VAL"][ctrl_val])),
+                 "labels globaux mélangés du test": float(np.mean(on_test == g["Y_TEST"][ctrl_te]))}
         for n, pos in subsets.items():
             if n in saved and pos is not None and len(pos) == len(saved[n]):
-                leaks[f"labels globaux mélangés de {n}"] = float(np.mean(on_test[pos] == g[n]))
+                common = np.intersect1d(ctrl_te, pos)
+                leaks[f"labels globaux mélangés de {n}"] = float(np.mean(
+                    on_test[np.searchsorted(ctrl_te, common)] == g[n][np.searchsorted(pos, common)]))
     finally:
         for n in names:
             g[n] = saved[n]
     leak = max(leaks.values())
     verdict("B1.28", leak < 0.3, "contrôle anti-fuite : entraînée sur des labels mélangés, ta méthode reste au hasard "
-            f"({pct(leaks['labels de validation'])} sur la validation ; le hasard : 10 %).",
+            f"({pct(leaks['labels de validation'])} sur 100 images de validation ; le hasard : 10 %).",
             f"entraînée sur des labels mélangés, ta méthode retrouve encore des labels ({max(leaks, key=leaks.get)} : "
             f"{pct(leak)}) : elle lit des labels ailleurs que dans ses arguments (une variable globale ?).")
     if leak >= 0.3:
         return None
-    start = time.perf_counter()
-    predict = method(X_TR_28.copy(), Y_TR_28.copy())
-    fit_seconds = time.perf_counter() - start
-    val = float(np.mean(np.asarray(predict(X_VAL.copy())) == Y_VAL))
-    print(f"validation : {pct(val)} ({len(Y_VAL)} images) ; entraînement en {fit_seconds:.0f} s")
-    if val < GATE_28:
-        print(f"❌ Ex B1.28 : moins de {pct(GATE_28, 0)} sur la validation : le test n'est pas révélé (améliore d'abord ta méthode).")
-        return None
-    revealed = globals().get("REVEALED_28")
-    if revealed is None:                              # revealed once per session: the first result is frozen
+    with empty_cache_28():                                  # cold: the first computation of the embeddings is timed
         start = time.perf_counter()
-        test = float(np.mean(np.asarray(predict(X_TEST.copy())) == Y_TEST))
-        revealed = {"test": test, "seconds": fit_seconds + time.perf_counter() - start, "val": val}
-        globals()["REVEALED_28"] = revealed
-    else:
-        print("(le test a déjà été révélé dans cette session : résultat de la première révélation)")
-    print(f"test : {pct(revealed['test'])} sur {len(Y_TEST)} images ; entraînement + prédiction du test : {revealed['seconds']:.0f} s")
+        predict = method(X_TR_28.copy(), Y_TR_28.copy())
+        fit_seconds = time.perf_counter() - start
+        val = float(np.mean(np.asarray(predict(X_VAL.copy())) == Y_VAL))
+        print(f"validation : {pct(val)} ({len(Y_VAL)} images) ; entraînement en {fit_seconds:.0f} s, à froid")
+        if val < GATE_28:
+            print(f"❌ Ex B1.28 : moins de {pct(GATE_28, 0)} sur la validation : le test n'est pas révélé (améliore d'abord ta méthode).")
+            return None
+        revealed = globals().get("REVEALED_28")
+        if revealed is None:                              # revealed once per session: the first result is frozen
+            start = time.perf_counter()
+            test = float(np.mean(np.asarray(predict(X_TEST.copy())) == Y_TEST))
+            revealed = {"test": test, "seconds": fit_seconds + time.perf_counter() - start, "val": val}
+            globals()["REVEALED_28"] = revealed
+        else:
+            print("(le test a déjà été révélé dans cette session : résultat de la première révélation)")
+    print(f"test : {pct(revealed['test'])} sur {len(Y_TEST)} images ; entraînement + prédiction du test : "
+          f"{revealed['seconds']:.0f} s, à froid")
     return revealed'''
 
 TODO_28 = r'''def method_28(X, y):
@@ -2459,8 +2559,8 @@ from sklearn.preprocessing import StandardScaler
 def method_28(X, y):
     """Your method for the challenge: train on the uint8 images X (N, 32, 32, 3) and their labels y ONLY (no other
     labelled image, no global variable of the test), and return a function predict(images) -> int labels (N,)."""
-    # DINOv2-small, frozen, is the best backbone of B1.26 by far: a linear probe on its embeddings (computed once and
-    # cached: the first computation counts in the 10 minutes, ≈ 30 s for 1 000 images at 140 pixels on 2 cores)
+    # DINOv2-small, frozen: a linear probe on its embeddings (≈ 27 ms per image at 140 pixels on 2 cores; during the
+    # challenge the cache starts empty, so every embedding is computed and timed)
     E = transfer.cached_embeddings(DINO, X, size=DINO_SIZE, subset="train", verbose=False)
     probe = make_pipeline(StandardScaler(), LogisticRegression(C={C28}, max_iter=3000)).fit(E, y)
 

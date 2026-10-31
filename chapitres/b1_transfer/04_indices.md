@@ -972,7 +972,7 @@ Relis tes propres mesures : B1.21 (fine-tuning et linear probe à 100 images par
 </details>
 <details><summary>Indice 2</summary>
 
-Compare trois familles sur la **validation** : un ResNet fine-tuné (B1.19) ; un backbone gelé, avec un linear probe ou des prototypes sur ses embeddings ; le zéro-shot de CLIP, éventuellement combiné aux prototypes. Pour un backbone gelé, les embeddings se calculent une fois (`transfer.cached_embeddings`), et les réglages (`C`, la résolution) se choisissent sur `X_VAL` par une petite grille, **avant** de lancer `evaluate_28`. Chronomètre chaque essai à froid : sur deux cœurs, DINOv2-small coûte ≈ 25 à 30 ms par image à 140 pixels, ≈ 70 à 80 ms à 224 ; CLIP ≈ 50 ms à 224.
+Compare trois familles sur la **validation** : un ResNet fine-tuné (B1.19) ; un backbone gelé, avec un linear probe ou des prototypes sur ses embeddings ; le zéro-shot de CLIP, éventuellement combiné aux prototypes. Pour un backbone gelé, les embeddings se calculent une fois (`transfer.cached_embeddings`), et les réglages (`C`, la résolution) se choisissent sur `X_VAL` par une petite grille, **avant** de lancer `evaluate_28`. Pendant le défi, `evaluate_28` vide le cache : chronomètre aussi tes essais à froid. Sur deux cœurs, DINOv2-small coûte ≈ 25 à 30 ms par image à 140 pixels, ≈ 70 à 80 ms à 224 ; CLIP ≈ 50 ms à 224.
 
 </details>
 <details><summary>Indice 3</summary>

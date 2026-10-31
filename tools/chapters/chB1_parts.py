@@ -460,7 +460,7 @@ Dans tes notes : combien d'exemples par classe faut-il aux prototypes de CLIP po
 - `size_26(model)` : `(nombre de paramètres, leur taille en Mo)`, la taille étant la somme de `numel() × element_size()` des paramètres, divisée par $10^6$ ;
 - `profile_26(model, size, batch=32)` : `{"params", "mb", "latency_ms", "images_per_s"}` : `size_26`, la latence d'**une** image (`torch.randn(1, 3, size, size)`), et le débit en images par seconde de batches de `batch` images (`batch` divisé par la latence d'un tel batch, en secondes ; `reps=5` et `warmup=1` pour les batches).
 
-La cellule de vérification essaie tes fonctions sur un faux backbone dont on connaît le temps (des appels de chauffe lents, un appel lent au milieu, comme une tâche de fond) et sur un petit réseau en `float32` et `float16`. La cellule suivante mesure les trois backbones à 224 pixels (latence d'une image, débit par batches de 16), la latence au côté de leur linear probe (`SIZE` ou `DINO_SIZE` pixels), et l'accuracy de test d'un linear probe appris sur 100 images par classe (≈ 45 s la première fois, surtout les embeddings DINOv2, mis en cache pour B1.28). Une mesure de temps dépend de la machine : elle ne se vérifie que par un seuil, jamais par sa valeur.
+La cellule de vérification essaie tes fonctions sur un faux backbone dont on connaît le temps (des appels de chauffe lents, un appel lent au milieu, comme une tâche de fond) et sur un petit réseau en `float32` et `float16`. La cellule suivante mesure les trois backbones à 224 pixels (latence d'une image, débit par batches de 16), la latence au côté de leur linear probe (`SIZE` ou `DINO_SIZE` pixels), et l'accuracy d'un linear probe appris sur les 16 images par classe du support de B1.25, mesurée sur 200 images de **validation** (le test reste pour le défi ; ≈ 30 s la première fois). Une mesure de temps dépend de la machine : elle ne se vérifie que par un seuil, jamais par sa valeur.
 
 Dans tes notes : MobileNetV3-small fait 0,06 GFLOPS par image de 224 pixels, ResNet-18 1,8 (`weights.meta["_ops"]`) : le rapport des latences suit-il celui des FLOPS (fiche §201.9) ? Quel backbone choisirais-tu pour répondre en moins de 20 ms par image sur ce CPU, et lequel pour classer un million d'images en une nuit ? Que coûte chaque point d'accuracy gagné ? Que changerait la demi-précision (`float16`) à la taille ?""",
        given=C.GIVEN_26, todo=C.TODO_26, check=C.CHECK_26, solution=C.SOLUTION_26 + "\n\n\n" + C.CHECK_26,
@@ -493,17 +493,16 @@ Dans tes notes : qu'est-ce que ton modèle hérite de son modèle de base, et qu
 Écris `method_28(X, y)` : elle s'entraîne sur ces images et ces labels **seulement**, et rend une fonction `predict(images)` qui donne les labels (des entiers). Tout ce que le chapitre a montré est permis : un backbone pré-entraîné de `wb.transfer`, gelé ou fine-tuné, des embeddings, des prototypes, le zéro-shot, l'augmentation. Interdit : d'autres images étiquetées, et toute variable du test (`X_TEST`, `Y_TEST`) ou d'autres labels globaux.
 
 `evaluate_28(method_28)` (cellule suivante) :
-1. un **contrôle anti-fuite** : ta méthode, entraînée sur des labels **mélangés** (toutes les variables globales de labels mélangées elles aussi, le temps du contrôle : `LABEL_GLOBALS_28`), doit rester au hasard : ses prédictions ne doivent retrouver ni les vrais labels de la validation, ni les labels globaux mélangés de la validation, du test et des sous-ensembles du test gardés par les parties précédentes (`Y_D`, `YC_TE_16`, `y_15`) ;
+1. un **contrôle anti-fuite** : ta méthode, entraînée sur 300 images aux labels **mélangés** (toutes les variables globales de labels mélangées elles aussi, le temps du contrôle : `LABEL_GLOBALS_28`), doit rester au hasard sur 100 images de validation et 100 de test : ses prédictions ne doivent retrouver ni les vrais labels de la validation, ni les labels globaux mélangés de la validation, du test et des sous-ensembles du test gardés par les parties précédentes (`Y_D`, `YC_TE_16`, `y_15`) ;
 2. l'accuracy sur la **validation** `X_VAL` (500 images, jamais dans `X_TR_28`) : le test n'est révélé que si elle atteint `GATE_28` = 80 % ;
 3. le test, révélé **une fois par session** : le premier résultat est figé (`REVEALED_28`), une nouvelle exécution affiche le même.
 
-Règles d'honneur : règle ta méthode sur `X_VAL`, jamais sur le test ; le temps compte le premier calcul de tes embeddings, même si le cache les relit ensuite (dis-le dans tes notes si tu relances).
+Pendant le contrôle et pendant la vraie course, le cache d'embeddings de `wb.transfer` est un dossier temporaire **vide** (`empty_cache_28`) : tout ce que calcule ta méthode est compté dans le temps, à froid. Règle d'honneur : règle ta méthode sur `X_VAL`, jamais sur le test.
 
 Dans tes notes : ta démarche, tes essais sur la validation et leur temps ; ce que tu gardes, et pourquoi ; ce que coûterait ta méthode en production (B1.26) ; et ce que dit la licence du backbone choisi d'un usage commercial (§201.2).""",
-       note="Ici, les embeddings DINOv2 des images d'entraînement, de validation et de test viennent du cache (calculés "
-            "par B1.15, B1.26 et le contrôle anti-fuite) : le temps affiché est presque nul. À froid, la même méthode coûte "
-            "≈ 75 s sur deux cœurs (≈ 27 s pour les 1 000 images d'entraînement, ≈ 48 s pour les 2 000 images de test, "
-            "`tools/chapters/history_chB1.py`) : loin des 10 minutes.",
+       note="Le temps affiché est mesuré à froid : `evaluate_28` vide le cache d'embeddings pendant le contrôle et la vraie "
+            "course. Sur deux cœurs, la référence compte ≈ 27 s pour les 1 000 images d'entraînement, ≈ 14 s pour la "
+            "validation et ≈ 48 s pour les 2 000 images de test : loin des 10 minutes.",
        given=C.GIVEN_28, todo=C.TODO_28, check=C.CHECK_28,
        solution=C.SOLUTION_28.replace("{C28}", repr(B["c28"])) + "\n\n\n" + C.CHECK_28),
 ])
