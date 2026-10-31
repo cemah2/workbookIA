@@ -51109,7 +51109,7 @@
       "kind": "str",
       "mistakes": {
         "58e36c21205eef02eda6d5c2e37ef326cb3a68c3dd7bceb3e1e6bf0a419f7b9c": "avgpool fait d'abord la moyenne de chaque canal sur toutes ses positions",
-        "647b34d6648963cb18df105bda695d492cde4d303df8fbba531ebfe7a2b23b60": "c'est la sortie d'avgpool : l'aplatissement retire les deux axes de taille 1",
+        "647b34d6648963cb18df105bda695d492cde4d303df8fbba531ebfe7a2b23b60": "c'est la sortie d'avgpool : n'oublie pas l'aplatissement",
         "dbfe4a86ce55f57aa8894551dd60e0281d74e282b9f53198e6d4e5884d7400b1": "n'oublie pas l'axe des exemples"
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
@@ -51420,6 +51420,8 @@
       "mistakes": {
         "04cd6c0dd3f4a964ddd852d02b02970c8ead5a4b7d52e12b583abf97afe2d48e": "gèle aussi les paramètres des batchnorms de layer4",
         "2ecb6f06ddcc1f43afe5f743d526faa672d0e403ef0de67aa8499770a8dc0801": "chaque batchnorm a deux paramètres par canal : ne les retire qu'une fois",
+        "51d1ed01d65469564a5fa24f6b59e8adb432894988ba10fc8b113fa3945f4a07": "relis la question : on part de e), où la tête est entraînée elle aussi",
+        "630fdac9219e0549f055ee58dba435084ee136468447c591b662780c95a6fcf5": "la nouvelle tête, elle, reste entraînable",
         "9a6104df52f8f7e90fabf8ee96d62d8a1b35e2f973de0613f9da5a685ef9701a": "n'oublie pas la batchnorm du raccourci"
       },
       "sign": 1,
@@ -51464,9 +51466,6 @@
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },
     "B1.5c": {
-      "alt_hashes": [
-        "a12a47fd23922a44fc39690d7fc40c8e3df56f0c8f4ecf4a7621fb3b470c4f72"
-      ],
       "decimals": 3,
       "hash": "ff0cfed4d0d17b9ba205a85a29054331b293e7cf07fc67fcadab0b29bc813b4b",
       "hash_coarse": "e00218f12ad9e0a4544fdf6dbd5a886ddfc44d4bd196b8386760e9a3ab4a47fe",
@@ -51476,7 +51475,8 @@
         "53a5920ae9fa5e29be91874666fc5874f6ecf5fc0533a384d34efecf5bec3ee5": "n'oublie pas l'exponentielle",
         "57d34e59e8a823030b9d734c6a110d314ab4dff799217ccafaf5efaeb1f0ec72": "le rapport des probabilités n'est pas celui des cosinus",
         "629c3485c008a9f6a6012bdf6911c1eb1eb5365a1a47621ae353c0e35021ec22": "multiplie l'écart des cosinus par s",
-        "6798b18b22930296521d14fecfed67a968dff5df78825d13747ab64a865eb9c6": "le rapport est inversé : p(oiseau) au numérateur"
+        "6798b18b22930296521d14fecfed67a968dff5df78825d13747ab64a865eb9c6": "le rapport est inversé : p(oiseau) au numérateur",
+        "c0d3205cdb1485cb0d8bcbe6f2fea99f13cdd0c68be4514139be80a250cef7a3": "tu as divisé des probabilités déjà arrondies : calcule le rapport sans arrondir en chemin"
       },
       "sign": 1,
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
@@ -51933,7 +51933,7 @@
       "hash": "6641c3920e6e6b9852675ada0f54be4a56299b7822d2f52b219c09060388c117",
       "kind": "bool",
       "mistakes": {
-        "e69501922a9348cf86742df7ebe46d0ae18c0545a5df26f82edc2b3c05a115fb": "les cosinus d'une image avec les légendes sont très proches : que fait une softmax de nombres proches ?"
+        "e69501922a9348cf86742df7ebe46d0ae18c0545a5df26f82edc2b3c05a115fb": "calcule l'écart entre deux logits quand s = 1 : que fait une softmax de nombres si proches ?"
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },
@@ -51994,7 +51994,7 @@
       "magnitude": 3,
       "mistakes": {
         "1f716f6f164177aa0703a7b7319192e178e75eaa2b9756c87d9c5e7a7e099b8b": "n'oublie pas le token CLS",
-        "753741ff1161e5980e1221942b76ade2563ca12899ff157f0a01749d67aa0c59": "257 tokens, c'est pour une image de 224 × 224 : celle-ci est plus grande",
+        "753741ff1161e5980e1221942b76ade2563ca12899ff157f0a01749d67aa0c59": "257 tokens, c'est pour 224 × 224 : relis l'énoncé, le tenseur est donné tel quel au modèle",
         "c1db424d0c4c21a2baef917f48359983b09bafe4403bbb65a07264fda01fe9fd": "compte les carrés sur toute l'image, pas sur un seul côté"
       },
       "sign": 1,

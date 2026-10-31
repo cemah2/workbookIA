@@ -321,7 +321,7 @@ Mes cinq lignes :
 
 ## 💼 Entretien
 
-### B1.E1 — Feature extraction ou fine-tuning : comment choisis-tu ?
+### B1.E1 — Extraction de features ou fine-tuning : comment choisis-tu ?
 
 
 ### B1.E2 — Tu as 500 images médicales étiquetées : quelle stratégie de transfer learning ?

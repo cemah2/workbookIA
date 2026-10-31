@@ -4772,7 +4772,7 @@ Entraîner un grand réseau de zéro demande des données et du calcul que l'on 
 | B1.26 | 🔬 | Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small | ★★ | 30 | CIFAR-10 | 03 | B1.11 | RC | manual |
 | B1.27 | 🛠️ | Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base | ★★ | 25 | CIFAR-10 | 03 | B1.19, 23 | RC | manual |
 | B1.28 | 🏆 | Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU | ★★★★ | 120 | CIFAR-10 | 03 | B1.19, B1.25 | C | wb.check |
-| B1.E1 | 💼 | Feature extraction ou fine-tuning : comment choisis-tu ? | ★★ | 10 | — | 02 | — | R | manual |
+| B1.E1 | 💼 | Extraction de features ou fine-tuning : comment choisis-tu ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E2 | 💼 | Tu as 500 images médicales étiquetées : quelle stratégie de transfer learning ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E3 | 💼 | Pourquoi un learning rate plus faible pour les couches pré-entraînées ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E4 | 💼 | Qu'est-ce qu'un modèle de fondation, et que change le zéro-shot ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -4787,7 +4787,7 @@ Entraîner un grand réseau de zéro demande des données et du calcul que l'on 
 - **licences des poids** — livre : — · aujourd'hui : licences variées (Apache 2.0, MIT, CC BY-NC, licences « open weights » avec restrictions) ; conditions d'usage d'ImageNet non commerciales · à vérifier : fiches modèles des modèles utilisés ; conditions d'ImageNet
 - **sauvegarde** — livre : — · aujourd'hui : torch.load(weights_only=True) par défaut depuis torch 2.6 ; safetensors pour publier des poids · à vérifier : doc torch.load 2.11 ; doc safetensors 0.8
 
-**Thèmes 💼** : Feature extraction ou fine-tuning · Stratégie avec peu de données étiquetées · Learning rate du fine-tuning · Modèles de fondation et zéro-shot · Licences des modèles pré-entraînés
+**Thèmes 💼** : Extraction de features ou fine-tuning · Stratégie avec peu de données étiquetées · Learning rate du fine-tuning · Modèles de fondation et zéro-shot · Licences des modèles pré-entraînés
 
 **Articles 📄** : Yosinski, Clune, Bengio, Lipson (2014), *How transferable are features in deep neural networks?* · Howard, Ruder (2018), *Universal Language Model Fine-tuning for Text Classification (ULMFiT)* · Li, Grandvalet, Davoine (2018), *Explicit Inductive Bias for Transfer Learning with Convolutional Networks (L2-SP)* · Kornblith, Shlens, Le (2019), *Do Better ImageNet Models Transfer Better?* · Radford et coll. (2021), *Learning Transferable Visual Models From Natural Language Supervision (CLIP)* · Oquab et coll. (2023), *DINOv2: Learning Robust Visual Features without Supervision*
 

@@ -40,7 +40,7 @@ Range les couches de la plus générale à la plus spécifique, puis demande-toi
 </details>
 <details><summary>Indice 3</summary>
 
-a) **Vrai** : bords et taches de couleur se retrouvent dans presque tous les CNN entraînés sur des photos. Pour b) et c), place la dernière couche du backbone sur l'échelle « général → spécifique ». Pour d), lesquelles deviennent les premières inutiles sur un domaine lointain ? Pour e), relis d'où vient le mot « probe » (§201.3).
+a) **Vrai** : bords et taches de couleur se retrouvent dans presque tous les CNN entraînés sur des photos. Pour b) et c), place la dernière couche du backbone, puis `layer1` et `layer4`, sur l'échelle « général → spécifique ». Pour d), lesquelles deviennent les premières inutiles sur un domaine lointain ? Pour e), relis d'où vient le mot « probe » (§201.3).
 
 </details>
 
@@ -161,12 +161,12 @@ Relis « Le transfert négatif » et « L'oubli catastrophique » (§201.7).
 </details>
 <details><summary>Indice 2</summary>
 
-Le transfert négatif compare deux points de départ sur la **nouvelle** tâche ; l'oubli regarde ce que devient l'**ancienne** tâche. Pour e), demande-toi vers quoi chaque parade tire les poids.
+Le transfert négatif compare deux points de départ sur la **nouvelle** tâche ; l'oubli regarde ce que devient l'**ancienne** tâche. Pour e), demande-toi vers quoi chaque mesure tire les poids, ou ce qu'elle empêche de bouger.
 
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : moins bien que le même modèle entraîné de zéro, à budget égal. Pour b), quelle tâche a été perdue ? Pour c), sans quel point de comparaison ne peut-on pas dire qu'un transfert nuit ? Pour d), relis la liste des parades. Pour e), vers quelle valeur chacune des trois parades tire-t-elle les poids : $\theta_0$, ou autre chose ?
+a) **B** : moins bien que le même modèle entraîné de zéro, à budget égal. Pour b), quelle tâche a été perdue ? Pour c), sans quel point de comparaison ne peut-on pas dire qu'un transfert nuit ? Pour d), relis la liste des parades. Pour e), demande-toi, pour chacune des trois mesures, si elle retient les poids près de $\theta_0$ ou les tire ailleurs.
 
 </details>
 
@@ -184,7 +184,7 @@ Dans le zéro-shot, la tête est fabriquée **à partir de mots** : une phrase p
 </details>
 <details><summary>Indice 3</summary>
 
-a) **A** : des phrases écrites à partir d'un gabarit, une par classe. Pour b), relis la phrase sur `logit_scale_init_value`. Pour c), que fait une softmax de trois nombres presque égaux ? Pour d), relis la fin de « Les gabarits comptent ». Pour e), « zéro-shot » veut dire zéro exemple de **la tâche cible** : sur quoi CLIP a-t-il été entraîné ?
+a) **A** : des phrases écrites à partir d'un gabarit, une par classe. Pour b), relis la phrase sur `logit_scale_init_value`. Pour c), de combien diffèrent deux logits quand $s = 1$, et que fait une softmax de nombres presque égaux ? Pour d), relis la fin de « Les gabarits comptent ». Pour e), « zéro-shot » veut dire zéro exemple de **la tâche cible** : sur quoi CLIP a-t-il été entraîné ?
 
 </details>
 
@@ -224,7 +224,7 @@ Décode le sigle NC. Un décalage de distribution compare les données **d'entra
 </details>
 <details><summary>Indice 3</summary>
 
-a) **Faux** : NC interdit l'usage commercial. Pour b), relis la citation des conditions d'ImageNet dans l'encadré 🕰️. Pour c), lequel des trois parle de données d'usage ? Pour d), relis la dernière phrase du deuxième paragraphe du §201.7. Pour e), quel test voit des données qui ne viennent pas du même dataset ?
+a) **Faux** : NC interdit l'usage commercial. Pour b), relis la citation des conditions d'ImageNet dans l'encadré 🕰️. Pour c), lequel des trois parle de données d'usage ? Pour d), relis la dernière phrase du deuxième paragraphe du §201.7 : qu'est-ce qui change quand le capteur change ? Pour e), quel test voit des données qui ne viennent pas du même dataset ?
 
 </details>
 
@@ -349,7 +349,7 @@ Relis « Le zéro-shot » (§201.8), l'exemple à trois classes et le piège « 
 </details>
 <details><summary>Indice 2</summary>
 
-Calcule d'abord $s = e^{4{,}6052}$. Multiplie chaque cosinus par $s$ pour obtenir les logits, retranche le plus grand (les exponentielles restent petites), prends les exponentielles et divise par leur somme. Pour c) et f), écris le rapport de deux probabilités : il ne reste que l'écart de leurs logits.
+Calcule d'abord $s = e^{4{,}60517}$. Multiplie chaque cosinus par $s$ pour obtenir les logits, retranche le plus grand (les exponentielles restent petites), prends les exponentielles et divise par leur somme. Pour c) et f), écris le rapport de deux probabilités : il ne reste que l'écart de leurs logits.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -430,7 +430,7 @@ Range tes réponses en trois familles : ce que le modèle de base **permet** (li
 </details>
 <details><summary>Indice 3</summary>
 
-Pour 1, relis la colonne « À savoir » du tableau des licences pour chacun des trois modèles : lequel exclut **tout** déploiement non testé ? Pour 2, sépare la licence du code, les conditions d'ImageNet et le statut des poids appris. Pour 3, cherche qui manque sur les photos d'ImageNet et dans les 2 000 photos d'un seul hôpital. Pour 4, une métrique par sous-groupe, et la plus grave des erreurs (une lésion maligne manquée). Pour 5, les photos de santé sont des données sensibles au sens du RGPD. Pour 6, ce qu'impose un système à haut risque : documentation technique, évaluation, surveillance. Pour 7, une ligne par biais ou limite, chacune avec ce qui a été mesuré.
+Pour 1, relis la colonne « À savoir » du tableau des licences pour chacun des trois modèles : lequel exclut **tout** déploiement non testé ? Pour 2, sépare la licence du code, les conditions d'ImageNet et le statut des poids appris. Pour 3, cherche qui manque sur les photos d'ImageNet et dans les 2 000 photos d'un seul hôpital. Pour 4, une métrique par sous-groupe, et la plus grave des erreurs (une lésion maligne manquée). Pour 5, les photos de santé sont des données sensibles au sens du RGPD. Pour 6, ce qu'impose un système à haut risque (documentation technique, évaluation, surveillance), et qui évalue un dispositif médical avant sa mise sur le marché. Pour 7, une ligne par biais ou limite, chacune avec ce qui a été mesuré.
 
 </details>
 
@@ -456,7 +456,7 @@ Pour 1, cherche dans la section 2 le nombre de classes de chaque moitié et le n
 
 ## 💼 Entretien
 
-### B1.E1 — Feature extraction ou fine-tuning : comment choisis-tu ?
+### B1.E1 — Extraction de features ou fine-tuning : comment choisis-tu ?
 
 <details><summary>Indice 1</summary>
 

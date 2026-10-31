@@ -66,7 +66,7 @@ La fiche et les exercices papier posent les idées et les calculs (formes des te
 
 ### Des données et du calcul que tu n'as pas
 
-Un CNN moderne a des millions de paramètres. Pour les régler sans overfitting, il lui faut des centaines de milliers d'images étiquetées et des jours de calcul sur des GPU. Le dataset de référence des années 2010, **ImageNet-1k** (le concours ILSVRC 2012), compte 1 281 167 images d'entraînement en 1 000 classes, étiquetées à la main. Les modèles de fondation (201.8) vont bien plus loin : CLIP a été entraîné sur 400 millions de paires image-texte, et sa plus grande version a demandé 12 jours sur 256 GPU V100 (Radford et coll., 2021).
+Un CNN moderne a des millions de paramètres. Pour les régler sans overfitting, il lui faut des centaines de milliers d'images étiquetées et des jours de calcul sur des GPU. Le dataset de référence des années 2010, **ImageNet-1k** (le concours ILSVRC 2012), compte 1 281 167 images d'entraînement en 1 000 classes, étiquetées à la main. Les modèles de fondation (201.8) vont bien plus loin : CLIP a été entraîné sur 400 millions de paires image-texte, et son plus grand Vision Transformer a demandé 12 jours sur 256 GPU V100 (son plus grand ResNet, 18 jours sur 592) (Radford et coll., 2021).
 
 Ton projet, lui, a souvent quelques centaines d'images et un ordinateur portable. Entraîner un ResNet de zéro sur 500 images, c'est la recette de l'overfitting (ch. 9). Le **transfer learning** (*apprentissage par transfert*, ch. 23) contourne le problème : on part d'un réseau entraîné sur une grande tâche **source** (ImageNet) et on le réutilise pour une tâche **cible** (la tienne). Le calcul coûteux a été fait une fois, par d'autres (🧮 B1.7 te fait chiffrer l'écart).
 
@@ -162,7 +162,7 @@ Ici $d = 768$. DINOv2-base est un **Vision Transformer** (ViT, bonus B3) : il d�
 
 ### Lire la fiche modèle avant de télécharger
 
-Une **fiche modèle** (*fiche modèle* ; ch. 23 ; Mitchell et coll., 2019) est au modèle ce que la data card est au dataset (ch. 29). On y cherche six réponses : la **licence** (usage commercial, citation, conditions d'accès) ; les **données d'entraînement** (provenance, biais) ; l'**usage prévu** et les usages exclus (*out of scope*) ; le **prétraitement** ; les **performances**, et sur quels benchmarks ; les **limites** connues. Pour les modèles de ce chapitre, vérifié sur leurs pages le 31 octobre 2026 :
+Une **fiche modèle** (*model card* ; ch. 23 ; Mitchell et coll., 2019) est au modèle ce que la data card est au dataset (ch. 29). On y cherche six réponses : la **licence** (usage commercial, citation, conditions d'accès) ; les **données d'entraînement** (provenance, biais) ; l'**usage prévu** et les usages exclus (*out of scope*) ; le **prétraitement** ; les **performances**, et sur quels benchmarks ; les **limites** connues. Pour les modèles de ce chapitre, vérifié sur leurs pages le 31 octobre 2026 :
 
 | Modèle | Licence des poids | À savoir |
 |---|---|---|

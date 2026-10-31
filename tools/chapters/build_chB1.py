@@ -113,7 +113,7 @@ def zero_shot_b15(s, cos=COS_B15):
     return e / e.sum()
 
 
-P100_B15 = zero_shot_b15(math.exp(4.6052))
+P100_B15 = zero_shot_b15(math.exp(4.60517))
 PINIT_B15 = zero_shot_b15(math.exp(2.6592))
 '''
 
@@ -151,7 +151,7 @@ for t in range(60):
     optimizer.step()
     scheduler.step()
 
-assert np.allclose(torch.softmax(torch.exp(torch.tensor(4.6052)) * torch.tensor(COS_B15), 0).numpy(), P100_B15)
+assert np.allclose(torch.softmax(torch.exp(torch.tensor(4.60517)) * torch.tensor(COS_B15), 0).numpy(), P100_B15)
 print("✅ the paper answers agree with PyTorch, torchvision and scikit-learn")
 '''
 
@@ -283,7 +283,7 @@ PAPER = [
         ("a", LETTER, '"A"', letters("A", {"B": "le zéro-shot n'utilise aucune image étiquetée",
                                            "C": "CLIP n'a pas de tête ImageNet : il fabrique sa tête à partir de mots"})),
         ("b", TF, "False", r'''mistakes={"relis le §201.8 : la valeur de config.json est celle du départ de l'entraînement": True}'''),
-        ("c", TF, "True", r'''mistakes={"les cosinus d'une image avec les légendes sont très proches : que fait une softmax de nombres proches ?": False}'''),
+        ("c", TF, "True", r'''mistakes={"calcule l'écart entre deux logits quand s = 1 : que fait une softmax de nombres si proches ?": False}'''),
         ("d", LETTER, '"C"', letters("C", {"A": "un ensemble de prompts porte sur les phrases des classes, pas sur les images",
                                            "B": "un seul CLIP suffit : on moyenne des embeddings de texte"})),
         ("e", TF, "False", r'''mistakes={"relis le §201.8 : sur quoi CLIP a-t-il été entraîné ?": True}'''),
@@ -296,7 +296,7 @@ PAPER = [
                                            "C": "ces tokens donnent un vecteur par morceau d'image, pas un par image"})),
         ("d", TF, "False", r'''mistakes={"relis la fin du §201.9 : le classement ImageNet est un indice, pas une preuve": True}'''),
         ("e", WHOLE, "(448 // 14) ** 2 + 1", r'''mistakes={"n'oublie pas le token CLS": (448 // 14) ** 2,
-          "257 tokens, c'est pour une image de 224 × 224 : celle-ci est plus grande": 257,
+          "257 tokens, c'est pour 224 × 224 : relis l'énoncé, le tenseur est donné tel quel au modèle": 257,
           "compte les carrés sur toute l'image, pas sur un seul côté": 448 // 14 + 1}'''),
     ]),
     Paper("B1.R1", "Ch. 29 : licence d'un dataset et décalage de distribution", [
@@ -341,7 +341,7 @@ PAPER = [
         ("c", SHAPE, 'shape(16, 512, S128_B11["layer4"], S128_B11["layer4"])', r'''mistakes={"compte les strides 2 de layer2, layer3 et layer4": "(16, 512, 8, 8)",
           "layer1 ne divise pas le côté de la carte": "(16, 512, 2, 2)",
           "n'oublie pas l'axe des exemples": "(512, 4, 4)"}'''),
-        ("d", SHAPE, 'shape(16, 512)', r'''mistakes={"c'est la sortie d'avgpool : l'aplatissement retire les deux axes de taille 1": "(16, 512, 1, 1)",
+        ("d", SHAPE, 'shape(16, 512)', r'''mistakes={"c'est la sortie d'avgpool : n'oublie pas l'aplatissement": "(16, 512, 1, 1)",
           "avgpool fait d'abord la moyenne de chaque canal sur toutes ses positions": "(16, 8192)",
           "n'oublie pas l'axe des exemples": "(512,)"}'''),
         ("e", SHAPE, 'shape(16, 10)', r'''mistakes={"la tête d'ImageNet a été remplacée par une tête à 10 classes": "(16, 1000)",
@@ -424,22 +424,25 @@ PAPER = [
           "c'est la part des paramètres gelés": 100 - 100 * TRAIN_B14 / NET10_B14}'''),
         ("g", WHOLE, "TRAIN_B14 - 5 * bn_params(512)", r'''mistakes={"gèle aussi les paramètres des batchnorms de layer4": TRAIN_B14,
           "chaque batchnorm a deux paramètres par canal : ne les retire qu'une fois": TRAIN_B14 - 10 * bn_params(512),
-          "n'oublie pas la batchnorm du raccourci": TRAIN_B14 - 4 * bn_params(512)}'''),
+          "n'oublie pas la batchnorm du raccourci": TRAIN_B14 - 4 * bn_params(512),
+          "la nouvelle tête, elle, reste entraînable": TRAIN_B14 - 5 * bn_params(512) - HEAD10_B14,
+          "relis la question : on part de e), où la tête est entraînée elle aussi": LAYER4_B14}'''),
         ("h", TF, "False", r'''mistakes={"eval() change le calcul des batchnorms : change-t-il leur requires_grad ?": True}'''),
     ]),
     Paper("B1.5", "Zéro-shot CLIP à la main : cosinus, logit_scale et softmax", [
         ("a", DEC3, "P100_B15[1]", r'''decimals=3, mistakes={"multiplie les cosinus par s avant la softmax": zero_shot_b15(1.0)[1],
-          "s est l'exponentielle de logit_scale": zero_shot_b15(4.6052)[1],
+          "s est l'exponentielle de logit_scale": zero_shot_b15(4.60517)[1],
           "la softmax prend l'exponentielle de chaque logit": COS_B15[1] / COS_B15.sum(),
           "relis la question : s vient ici du paramètre entraîné": PINIT_B15[1]}'''),
         ("b", DEC3, "P100_B15[2]", r'''decimals=3, mistakes={"multiplie les cosinus par s avant la softmax": zero_shot_b15(1.0)[2],
-          "s est l'exponentielle de logit_scale": zero_shot_b15(4.6052)[2],
+          "s est l'exponentielle de logit_scale": zero_shot_b15(4.60517)[2],
           "la softmax prend l'exponentielle de chaque logit": COS_B15[2] / COS_B15.sum(),
           "relis la question : s vient ici du paramètre entraîné": PINIT_B15[2]}'''),
         ("c", DEC3, "P100_B15[1] / P100_B15[2]", r'''decimals=3, mistakes={"le rapport des probabilités n'est pas celui des cosinus": 0.30 / 0.28,
           "n'oublie pas l'exponentielle": 2.0,
           "le rapport est inversé : p(oiseau) au numérateur": P100_B15[2] / P100_B15[1],
-          "multiplie l'écart des cosinus par s": math.exp(0.02)}'''),
+          "multiplie l'écart des cosinus par s": math.exp(0.02),
+          "tu as divisé des probabilités déjà arrondies : calcule le rapport sans arrondir en chemin": round(P100_B15[1], 3) / round(P100_B15[2], 3)}'''),
         ("d", DEC4, "P100_B15[0]", r'''decimals=4, mistakes={"divise par la somme des exponentielles": math.exp(-6),
           "multiplie les cosinus par s avant la softmax": zero_shot_b15(1.0)[0],
           "relis la question : s vient ici du paramètre entraîné": PINIT_B15[0]}'''),

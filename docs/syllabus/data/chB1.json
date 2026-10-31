@@ -1119,7 +1119,7 @@
   {
    "id": "B1.E1",
    "type": "💼",
-   "title": "Feature extraction ou fine-tuning : comment choisis-tu ?",
+   "title": "Extraction de features ou fine-tuning : comment choisis-tu ?",
    "stars": 2,
    "minutes": 10,
    "gpu": false,
@@ -1218,7 +1218,7 @@
   "21"
  ],
  "interview_themes": [
-  "Feature extraction ou fine-tuning",
+  "Extraction de features ou fine-tuning",
   "Stratégie avec peu de données étiquetées",
   "Learning rate du fine-tuning",
   "Modèles de fondation et zéro-shot",

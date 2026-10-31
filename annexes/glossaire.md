@@ -924,7 +924,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | échelle des logits (CLIP) | logit scale | $s = $ `model.logit_scale.exp()`, apprise, qui multiplie les cosinus avant la softmax ; `logit_scale_init_value` de `config.json` n'est que sa valeur de départ | B1 |
 | latence | latency | temps de réponse d'un modèle à une seule requête (batch de 1), mesuré sur la machine cible | B1 |
 | débit | throughput | nombre d'images traitées par seconde en regroupant les requêtes en batches | B1 |
-| modèle dérivé | derived model | modèle obtenu par fine-tuning d'un modèle de base : il hérite de ses poids, de sa licence et de ses biais, et sa model card le cite | B1 |
+| modèle dérivé | derived model | modèle obtenu par fine-tuning d'un modèle de base : il hérite de ses poids, de sa licence et de ses biais, et sa fiche modèle le cite | B1 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

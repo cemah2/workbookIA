@@ -29,7 +29,7 @@ e) Vrai ou faux : le calcul coûteux du pré-entraînement a été payé une foi
 
 a) Les filtres de la première couche d'un CNN entraîné sur des photos ressemblent à des détecteurs de bords orientés et de taches de couleur, quelle que soit la tâche d'entraînement.
 b) Les features de la dernière couche du backbone sont les plus générales du réseau.
-c) Plus une couche est profonde, plus ses features sont liées à la tâche source.
+c) Dans un ResNet entraîné sur ImageNet, les features de `layer4` sont plus liées aux 1 000 classes d'ImageNet que celles de `layer1`.
 d) Pour une tâche cible très éloignée d'ImageNet, les features de la dernière couche du backbone restent en général les plus utiles.
 e) Un linear probe entraîné sur la sortie d'un bloc intermédiaire mesure si l'information des classes y est lisible par un classifieur linéaire.
 
@@ -38,7 +38,7 @@ e) Un linear probe entraîné sur la sortie d'un bloc intermédiaire mesure si l
 
 a) Pour charger DINOv2 depuis le Hugging Face Hub : (A) `torchvision.models.get_model("dinov2", weights="DEFAULT")` ; (B) `torch.load("dinov2.pt", weights_only=True)` ; (C) `AutoModel.from_pretrained("facebook/dinov2-small")`.
 b) Parmi ces informations, lesquelles se cherchent dans la fiche modèle avant d'utiliser un modèle ? (A) la licence ; (B) les données d'entraînement ; (C) les usages déconseillés ; (D) la vitesse de ta connexion. Écris leurs lettres.
-c) Vrai ou faux : un modèle téléchargeable sans compte ni conditions à accepter peut servir dans un produit commercial.
+c) Vrai ou faux : qu'un modèle soit téléchargeable sans compte ni conditions à accepter suffit à garantir qu'il peut servir dans un produit commercial.
 d) La licence des poids `facebook/dinov2-*` aujourd'hui : (A) CC BY-NC, comme à leur sortie ; (B) Apache 2.0 ; (C) aucune, comme CLIP.
 e) Vrai ou faux : l'argument `revision=` de `from_pretrained` fixe la version du dépôt que l'on charge.
 
@@ -83,36 +83,36 @@ e) Vrai ou faux : une batchnorm en mode `eval()` peut quand même entraîner ses
 
 a) 300 photos de produits d'épicerie, un domaine proche d'ImageNet : (A) extraction de features et linear probe ; (B) fine-tuning complet avec le learning rate d'un entraînement de zéro ; (C) un ResNet-50 entraîné de zéro.
 b) 200 000 photos d'animaux sauvages : (A) un k plus proches voisins sur les pixels ; (B) un fine-tuning complet avec un petit learning rate ; (C) un linear probe, sans jamais toucher au backbone.
-c) 150 spectrogrammes de chants d'oiseaux : (A) le cas facile, un linear probe sur la dernière couche suffit ; (B) un ResNet-50 entraîné de zéro ; (C) le cas difficile : sonder les blocs intermédiaires et chercher un modèle pré-entraîné plus proche.
+c) 150 spectrogrammes de chants d'oiseaux, avec un backbone pré-entraîné sur ImageNet : (A) le cas facile, puisqu'un spectrogramme est une image comme une autre, et un linear probe sur la dernière couche suffit ; (B) un ResNet-50 entraîné de zéro, puisque ImageNet ne contient aucun spectrogramme ; (C) le cas difficile : sonder les blocs intermédiaires, et chercher un modèle pré-entraîné sur de l'audio.
 d) Vrai ou faux : avec beaucoup d'images d'un domaine lointain, on compare le fine-tuning complet à un entraînement de zéro.
 e) Vrai ou faux : sur une courbe d'apprentissage, une seule graine suffit pour le point à 10 images par classe.
 
 ### B1.Q9 — Transfert négatif et oubli catastrophique : reconnaître les symptômes 🧠 ⏱️ 3 min
 *Fiche §201.7 · parcours R*
 
-a) On parle de transfert négatif quand : (A) l'accuracy de test baisse d'une epoch à l'autre ; (B) le modèle pré-entraîné fait moins bien que le même modèle entraîné de zéro, à budget égal ; (C) les gradients changent de signe pendant le fine-tuning, et les poids reculent.
+a) On parle de transfert négatif quand : (A) l'accuracy de test baisse d'une epoch à l'autre ; (B) le modèle pré-entraîné fait moins bien que le même modèle entraîné de zéro, à budget égal ; (C) les gradients changent de signe d'un pas à l'autre pendant le fine-tuning, et les poids reculent.
 b) Après un fine-tuning sur CIFAR-10, on remet l'ancienne tête, et le modèle ne reconnaît plus les classes d'ImageNet : (A) de l'oubli catastrophique ; (B) du transfert négatif ; (C) de l'overfitting.
-c) Vrai ou faux : on ne peut affirmer un transfert négatif qu'en comparant à une baseline entraînée de zéro avec le même soin.
+c) Vrai ou faux : pour affirmer qu'un modèle pré-entraîné nuit à ta tâche, il faut un modèle entraîné de zéro sur les mêmes données, réglé avec le même soin.
 d) Vrai ou faux : un grand learning rate et beaucoup d'epochs limitent l'oubli catastrophique.
-e) Laquelle de ces parades ne limite **pas** l'oubli ? (A) la pénalité L2-SP ; (B) des learning rates discriminatifs ; (C) un weight decay plus fort.
+e) Laquelle de ces mesures ne limite **pas** l'oubli ? (A) la pénalité L2-SP ; (B) des learning rates discriminatifs ; (C) un weight decay (vers 0) plus fort.
 
 ### B1.Q10 — Classer sans exemple d'entraînement : le zéro-shot de CLIP 🧠 ⏱️ 3 min
 *Fiche §201.8 · parcours R*
 
 a) Pour classer en zéro-shot, CLIP compare l'embedding de l'image : (A) aux embeddings de phrases écrites à partir d'un gabarit, une par classe ; (B) aux embeddings de quelques images étiquetées de chaque classe, gardés en mémoire ; (C) aux 1 000 sorties d'une tête entraînée sur ImageNet.
 b) Vrai ou faux : `logit_scale_init_value` de `config.json` est l'échelle $s$ qu'utilise le modèle entraîné.
-c) Vrai ou faux : sans la multiplication par $s$, la softmax des cosinus serait presque uniforme.
-d) Un ensemble de prompts, c'est : (A) une phrase différente pour chaque image ; (B) plusieurs CLIP entraînés séparément, dont on moyenne les probabilités ; (C) pour chaque classe, la moyenne des embeddings normalisés de plusieurs gabarits, renormalisée.
+c) Vrai ou faux : avec $s = 1$ et des cosinus compris entre 0,2 et 0,3, la softmax donnerait à chacune des $K$ classes une probabilité proche de $1/K$.
+d) Un ensemble de prompts, c'est : (A) une phrase différente pour chaque image ; (B) plusieurs CLIP entraînés séparément sur des données différentes, dont on moyenne les probabilités de sortie ; (C) pour chaque classe, la moyenne des embeddings normalisés de plusieurs gabarits, renormalisée.
 e) Vrai ou faux : un modèle zéro-shot comme CLIP n'a vu aucune image pendant son entraînement.
 
 ### B1.Q11 — Auto-supervisé (DINOv2) ou supervisé sur ImageNet : quels embeddings ? 🧠 ★★ ⏱️ 3 min
 *Fiche §201.8, §201.9*
 
-a) DINOv2 apprend : (A) à rapprocher chaque image de sa légende ; (B) sans labels, un élève devant produire les mêmes sorties qu'un professeur qui voit d'autres vues de l'image ; (C) à prédire les 1 000 classes d'ImageNet à partir d'images recadrées au hasard.
+a) DINOv2 apprend : (A) à rapprocher chaque image de sa légende ; (B) sans labels : un élève imite un professeur qui voit d'autres vues de l'image ; (C) à prédire les 1 000 classes d'ImageNet à partir d'images recadrées au hasard, comme un ResNet.
 b) Vrai ou faux : DINOv2-small est une version distillée d'un modèle bien plus grand.
 c) Avec `AutoModel`, l'embedding d'une image par DINOv2 se lit dans : (A) `pooler_output`, le token `CLS` après la dernière normalisation ; (B) `pixel_values`, la sortie du processeur ; (C) `last_hidden_state[:, 1:]`, les tokens des morceaux d'image.
 d) Vrai ou faux : le backbone qui a le meilleur top-1 sur ImageNet donne toujours le meilleur linear probe sur ta tâche.
-e) DINOv2-base découpe une image en carrés de 14 pixels de côté et ajoute un token `CLS`. Combien de tokens rend-il pour une image de 448 × 448 ?
+e) DINOv2-base découpe une image en carrés de 14 pixels de côté et ajoute un token `CLS`. Combien de tokens rend-il pour un tenseur d'image de 448 × 448, donné directement au modèle (sans le processeur, qui le ramènerait à 224 × 224) ?
 
 <a id="rappels"></a>
 
@@ -121,16 +121,16 @@ e) DINOv2-base découpe une image en carrés de 14 pixels de côté et ajoute un
 ### B1.R1 — Ch. 29 : licence d'un dataset et décalage de distribution 🔁 ★ ⏱️ 5 min
 *Ch. 29 (licences, décalage de distribution) · fiche §201.2, §201.7 · parcours R*
 
-a) Vrai ou faux : un dataset sous licence CC BY-NC peut entraîner un modèle vendu dans un produit.
+a) Vrai ou faux : la licence CC BY-NC d'un dataset autorise à s'en servir pour entraîner un modèle vendu dans un produit.
 b) Les conditions d'ImageNet réservent la base : (A) à la recherche non commerciale et à l'enseignement ; (B) aux entreprises qui ont acheté une licence ; (C) à personne : elle est dans le domaine public.
-c) Un décalage de distribution, c'est : (A) un découpage en entraînement et test qui n'a pas été stratifié ; (B) un learning rate qui change pendant l'entraînement ; (C) des données d'usage qui ne suivent pas la distribution des données d'entraînement.
-d) Vrai ou faux : la distance de domaine est la version « features » du décalage de distribution.
-e) Pour estimer ce que le décalage coûte à ton modèle : (A) l'entraîner plus d'epochs ; (B) l'évaluer sur un test venu d'une autre source, ou de l'usage visé ; (C) l'évaluer sur un plus grand découpage du même dataset.
+c) Un décalage de distribution, c'est : (A) un découpage en entraînement et en test qui n'a pas été stratifié selon les classes ; (B) un learning rate qui change pendant l'entraînement ; (C) des données d'usage qui ne suivent pas la distribution des données d'entraînement.
+d) Vrai ou faux : quand les images de l'usage viennent d'un autre capteur que celles du pré-entraînement, l'écart entre leurs embeddings est une forme de décalage de distribution.
+e) Pour estimer ce que le décalage coûte à ton modèle : (A) l'entraîner plus d'epochs ; (B) l'évaluer sur un test venu d'une autre source, ou de l'usage visé ; (C) l'évaluer sur un plus grand découpage de test, tiré du même dataset.
 
 ### B1.R2 — Ch. 23 : geler un réseau et remplacer sa tête en PyTorch 🔁 ★ ⏱️ 5 min
 *Ch. 23 (gel des poids, nouvelle tête, sauvegarde) · fiche §201.3, §201.4 · parcours R*
 
-a) Geler les poids d'un réseau en PyTorch : (A) `model.eval()` ; (B) `p.requires_grad_(False)` pour chacun de ses paramètres ; (C) `torch.no_grad()` autour de `optimizer.step()`.
+a) Geler les poids d'un réseau en PyTorch : (A) `model.eval()` ; (B) `p.requires_grad_(False)` pour chacun de ses paramètres ; (C) `torch.no_grad()` autour de `optimizer.step()`, à chaque pas d'entraînement.
 b) Vrai ou faux : `model.eval()` gèle les poids.
 c) La tête d'un réseau est `nn.Linear(1280, 1000)` ; on la remplace pour 4 classes. Combien de paramètres a la nouvelle tête ?
 d) Vrai ou faux : une couche créée par `nn.Linear` a `requires_grad=True`, même si l'on a gelé le reste du modèle avant de la créer.
@@ -139,7 +139,7 @@ e) Pour recharger des poids d'un fichier reçu : (A) `torch.load(f, weights_only
 ### B1.R3 — Ch. 21 : ce que détectent les filtres des premières et des dernières couches 🔁 ★ ⏱️ 5 min
 *Ch. 21 (filtres, cartes d'activation, ResNet, 📦 21.27) · fiche §201.1 · parcours R*
 
-a) Les filtres de `conv1` d'un ResNet-18 entraîné sur ImageNet, affichés comme de petites images, montrent : (A) des visages et des roues ; (B) des bords orientés et des taches de couleur ; (C) du bruit sans structure.
+a) Les filtres de `conv1` d'un ResNet-18 entraîné sur ImageNet, affichés comme de petites images, montrent : (A) des visages, des roues et des yeux d'animaux ; (B) des bords orientés et des taches de couleur ; (C) du bruit sans structure.
 b) Combien de poids a `conv1` d'un ResNet-18 : 64 filtres de 7 × 7 sur 3 canaux, sans biais ?
 c) Vrai ou faux : la carte d'activation de `layer4` a une plus faible résolution spatiale que celle de `conv1`.
 d) Vrai ou faux : on lit facilement ce que détecte un filtre de `layer4` en affichant ses poids comme une petite image.
@@ -214,7 +214,7 @@ c) Le learning rate de `layer4` au pas $t = 3$.
 d) Le rapport entre le learning rate de la tête et celui de `layer2` au pas $t = 3$, à 2 décimales.
 e) Le learning rate de `layer3` au pas $t = 55$, à 2 décimales.
 f) Le learning rate de la tête au pas $t = 30$, à 2 décimales.
-g) Vrai ou faux : au pas $t = 0$, AdamW (avec son weight decay) ne modifie aucun poids.
+g) Vrai ou faux : au pas $t = 0$, AdamW, avec son weight decay découplé (que PyTorch multiplie, lui aussi, par le learning rate du groupe, ch. 19), ne modifie aucun poids.
 h) Vrai ou faux : la fonction donnée à `LambdaLR` rend directement le learning rate de chaque groupe.
 
 Dans ta copie : écris la liste `param_groups` de PyTorch qui donne ces learning rates de pointe, et la fonction $f$ en Python.
@@ -248,7 +248,7 @@ Une image de CIFAR-10 et les quatre phrases « a photo of a {classe} » ont des 
 |---|---|---|---|---|
 | $\cos(\mathbf{u}_x, \mathbf{v}_c)$ | 0,24 | 0,30 | 0,28 | 0,19 |
 
-Le paramètre entraîné du modèle vaut `logit_scale` $= 4{,}6052$, et `config.json` donne `logit_scale_init_value` $= 2{,}6592$. Rappel : $p(c \mid \mathbf{x}) = \dfrac{\exp(s \cos(\mathbf{u}_x, \mathbf{v}_c))}{\sum_{c'} \exp(s \cos(\mathbf{u}_x, \mathbf{v}_{c'}))}$, avec $s = \exp(\texttt{logit\_scale})$.
+Le paramètre entraîné du modèle vaut `logit_scale` $= 4{,}60517$, et `config.json` donne `logit_scale_init_value` $= 2{,}6592$. Rappel : $p(c \mid \mathbf{x}) = \dfrac{\exp(s \cos(\mathbf{u}_x, \mathbf{v}_c))}{\sum_{c'} \exp(s \cos(\mathbf{u}_x, \mathbf{v}_{c'}))}$, avec $s = \exp(\texttt{logit\_scale})$.
 
 a) $p(\text{oiseau} \mid \mathbf{x})$, à 3 décimales.
 b) $p(\text{bateau} \mid \mathbf{x})$, à 3 décimales.
@@ -266,7 +266,7 @@ Dans ta copie : que deviendraient les probabilités si l'on oubliait de normalis
 On note $\theta \in \mathbb{R}^m$ les poids du backbone, $\theta_0$ leurs valeurs pré-entraînées, et $\Omega(\theta) = \frac{\lambda}{2}\lVert\theta - \theta_0\rVert^2 = \frac{\lambda}{2}\sum_{j=1}^{m} (\theta_j - \theta_{0,j})^2$, avec $\lambda > 0$. On minimise $L(\theta) + \Omega(\theta)$ par descente de gradient (SGD), de learning rate $\eta$. Réponds dans ta copie.
 
 1. Calcule $\frac{\partial \Omega}{\partial \theta_j}$, puis écris $\nabla \Omega$ sous forme vectorielle.
-2. Écris un pas de SGD sur $L + \Omega$. On suppose, le temps de cette question, que la loss ne pousse plus : $\nabla L(\theta_t) = 0$. Montre que $\theta_{t+1} - \theta_0 = (1 - \eta\lambda)(\theta_t - \theta_0)$, puis donne $\theta_t - \theta_0$ en fonction de $\theta_{\text{départ}} - \theta_0$ après $t$ pas. Pour quelles valeurs de $\eta\lambda$ l'écart diminue-t-il à chaque pas sans changer de signe ?
+2. Écris un pas de SGD sur $L + \Omega$. On suppose, le temps de cette question, que la loss ne pousse plus : $\nabla L(\theta_t) = 0$. Montre que $\theta_{t+1} - \theta_0 = (1 - \eta\lambda)(\theta_t - \theta_0)$, puis donne $\theta_t - \theta_0$ en fonction de $\theta_{\text{départ}} - \theta_0$ après $t$ pas. Pour quelles valeurs de $\eta\lambda$ l'écart diminue-t-il à chaque pas, sans changer de signe ni s'annuler ?
 3. Application : $\eta = 0{,}5$ et $\lambda = 0{,}2$, un poids pré-entraîné $\theta_0 = -0{,}4$ qu'un premier fine-tuning a amené à $0{,}6$. Toujours avec $\nabla L = 0$, que vaut ce poids après 10 pas ? Combien de pas faut-il pour que l'écart à $\theta_0$ soit divisé par 2 au moins ?
 4. Le weight decay classique ajoute $\frac{\lambda}{2}\lVert\theta\rVert^2$. Écris son pas de SGD dans les mêmes conditions. Montre que L2-SP est exactement le weight decay appliqué à l'écart $\delta = \theta - \theta_0$. Vers où chacun tire-t-il les poids, et pourquoi 0 n'a-t-il « rien de spécial » pour un réseau pré-entraîné ?
 5. On combine les deux, $\frac{\lambda_1}{2}\lVert\theta - \theta_0\rVert^2 + \frac{\lambda_2}{2}\lVert\theta\rVert^2$, toujours avec $\nabla L = 0$. Vers quel point les poids convergent-ils ? Qu'en conclus-tu sur la ligne « weight decay et L2-SP ensemble » du tableau des pièges ?
@@ -283,7 +283,7 @@ Hypothèses de calcul (des ordres de grandeur, pas des mesures) : une passe avan
 2. Une équipe essaie en moyenne 30 réglages avant le bon (learning rates, augmentations, planning). Que devient le coût en GPU-heures ? Et l'annotation : 1,28 million d'images, trois annotateurs par image, 0,02 € par annotation ?
 3. Le fine-tuning complet du même ResNet-50 sur 5 000 images, 10 epochs : le nombre d'opérations, puis la durée sur un GPU et sur le CPU d'un portable.
 4. Un linear probe sur ces 5 000 images : une seule passe avant pour calculer les embeddings, puis une régression logistique (quelques secondes). La durée sur le CPU.
-5. Combien de fois le pré-entraînement (question 1, sans les essais) coûte-t-il plus de calcul que le fine-tuning de la question 3 ? Et CLIP, avec ses 12 jours sur 256 GPU V100 (fiche §201.1) : combien de GPU-heures, et combien de pré-entraînements de ResNet-50 de la question 1 ?
+5. Combien de fois le pré-entraînement (question 1, sans les essais) coûte-t-il plus de calcul que le fine-tuning de la question 3 ? Et le plus grand Vision Transformer de CLIP, avec ses 12 jours sur 256 GPU V100 (fiche §201.1) : combien de GPU-heures, et, en supposant qu'un V100 tienne lui aussi $10^{13}$ opérations par seconde, combien de pré-entraînements de ResNet-50 de la question 1 ?
 6. Qui paie le pré-entraînement, combien de fois, et combien de fois est-il réutilisé ? Cite deux coûts que tes calculs ne comptent pas.
 
 <a id="reflexion"></a>
@@ -307,7 +307,7 @@ Une start-up veut aider des dermatologues à repérer des lésions suspectes sur
 3. Quels biais le modèle peut-il hériter de son pré-entraînement, et quels biais viennent des 2 000 photos elles-mêmes (couleurs de peau, appareils, hôpital, annotateurs) ? Donne un exemple de chaque.
 4. Comment mesurer ces biais avant un déploiement ? Quels sous-groupes, quelle métrique (pense au recall des lésions malignes), et quelles données d'évaluation ?
 5. Les photos sont des données de santé. Que faut-il vérifier avant de s'en servir pour un fine-tuning (consentement, base légale, RGPD), et que doit dire la data card ?
-6. Dans l'Union européenne, un logiciel d'aide au diagnostic est un dispositif médical, et un système d'IA à haut risque au sens du règlement sur l'IA. Qu'est-ce que cela change pour la documentation, l'évaluation et la surveillance après la mise sur le marché ?
+6. Dans l'Union européenne, un logiciel d'aide au diagnostic est un dispositif médical (règlement 2017/745) ; quand il doit passer par un organisme notifié, comme presque tous les logiciels de diagnostic, c'est aussi un système d'IA à haut risque au sens du règlement sur l'IA (2024/1689). Qu'est-ce que cela change pour la documentation, l'évaluation et la surveillance après la mise sur le marché ?
 7. Rédige les cinq lignes de la section « Limites et biais hérités » de la fiche modèle du modèle dérivé.
 
 ### Ex B1.10 — Yosinski et coll. (2014) : jusqu'où les features se transfèrent-elles ? 📄 ★★★ ⏱️ 45 min
@@ -330,7 +330,7 @@ Lis J. Yosinski, J. Clune, Y. Bengio et H. Lipson, « How transferable are featu
 
 Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : réponse modèle et relances possibles.
 
-### B1.E1 — Feature extraction ou fine-tuning : comment choisis-tu ? 💼 ★★ ⏱️ 10 min
+### B1.E1 — Extraction de features ou fine-tuning : comment choisis-tu ? 💼 ★★ ⏱️ 10 min
 *Fiche §201.3, §201.4, §201.6 · parcours R*
 
 « Vous partez d'un modèle pré-entraîné pour une tâche de classification d'images. Comment décidez-vous entre extraire des features et fine-tuner, et que mesurez-vous pour trancher ? »
