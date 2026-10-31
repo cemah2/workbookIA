@@ -94,6 +94,9 @@ projets/*/depart/figures/
 projets/*/depart/test_indices.npy
 projets/*/depart/vault.json
 projets/*/depart/results.json
+projets/*/depart/results_rapide.json
+projets/*/depart/config.json
+projets/*/depart/config_rapide.json
 projets/*/depart/test_log.json
 # the fast-mode curves of MP4 (the committed figure is the full-mode one)
 projets/*/solution/figures/*_rapide.png

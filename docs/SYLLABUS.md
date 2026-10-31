@@ -4683,6 +4683,8 @@ Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MN
 | MP6.6 | Galerie : grilles, interpolations sphériques, échantillons conditionnels | 45 |
 | MP6.7 | README, model card, tests pytest et nettoyage du dépôt | 75 |
 
+Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `vae.interpolate_latents`
+
 Grille : Reproductibilité : graines, configuration, notebook exécutable de bout en bout (3 pts) · VAE correct et analysé : courbes, choix de β justifié (4 pts) · GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4 pts) · Évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4 pts) · Galerie claire et légendée (2 pts) · README et model card : résultats chiffrés, limites, usages responsables (3 pts)
 
 Extensions : diffusion latente miniature : un petit modèle de diffusion dans l'espace latent du VAE (préparation du bonus B5) · comparer la distance de Fréchet sur deux extracteurs de features et discuter la dépendance de la mesure · démo interactive (Gradio) publiée sur un Space Hugging Face avec la model card · volet RL : agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt

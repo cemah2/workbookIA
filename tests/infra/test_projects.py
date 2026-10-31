@@ -93,5 +93,6 @@ def test_starter_kit_mirrors_the_solution(project):
     for figure in figures:
         assert (solution / "figures" / figure).exists(), f"the starter README shows figures/{figure}, absent from solution/"
     assert "TODO" not in (solution / "README.md").read_text(encoding="utf-8")
-    produced = {"test_indices.npy", "vault.json", "results.json", "test_log.json"}   # written by the learner's own notebook
+    produced = {"test_indices.npy", "vault.json", "results.json", "results_rapide.json", "config.json",
+                "config_rapide.json", "test_log.json", "runs"}                    # written by the learner's own notebook
     assert not produced & {p.name for p in starter.iterdir()}, "the starter kit must not ship the learner's outputs"

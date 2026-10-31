@@ -397,7 +397,10 @@
    "démo interactive (Gradio) publiée sur un Space Hugging Face avec la model card",
    "volet RL : agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt"
   ],
-  "hours": 10
+  "hours": 10,
+  "requires": [
+   "vae.interpolate_latents"
+  ]
  },
  "study_notes": "Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, loss de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours."
 }
