@@ -51619,10 +51619,10 @@
       "hash": "c03347ac69d30b23e523cb591785bddc274b0fd2cb74e10eeb12e0258711317c",
       "kind": "str",
       "mistakes": {
-        "0c62f588ecc4ea074a350b5a6d9adca65af2bae331b10a66032c2e8192acf146": "la model card décrit le modèle, pas ta machine ni ta connexion",
-        "1995e106d89e33e48c79838c9d2a6992df792d136d7370d59e2a797d1aec04fa": "une rubrique de la model card manque : ce qu'on a le droit d'en faire",
-        "67dabb9accc71b264bf81e2b8024a0fb202305ca155006b558b7c47097aa5822": "une rubrique de la model card manque : les usages hors du champ prévu (out of scope)",
-        "74d3ed85281a4a11abfb19b1bbc9b2715185e8d734aba85468ab9f05cf43a89e": "une rubrique de la model card manque : d'où viennent ses données"
+        "0c62f588ecc4ea074a350b5a6d9adca65af2bae331b10a66032c2e8192acf146": "la fiche modèle décrit le modèle, pas ta machine ni ta connexion",
+        "1995e106d89e33e48c79838c9d2a6992df792d136d7370d59e2a797d1aec04fa": "une rubrique de la fiche modèle manque : ce qu'on a le droit d'en faire",
+        "67dabb9accc71b264bf81e2b8024a0fb202305ca155006b558b7c47097aa5822": "une rubrique de la fiche modèle manque : les usages hors du champ prévu (out of scope)",
+        "74d3ed85281a4a11abfb19b1bbc9b2715185e8d734aba85468ab9f05cf43a89e": "une rubrique de la fiche modèle manque : d'où viennent ses données"
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },

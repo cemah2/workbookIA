@@ -48,12 +48,12 @@ a) **Vrai** : bords et taches de couleur se retrouvent dans presque tous les CNN
 
 <details><summary>Indice 1</summary>
 
-Relis « Trois sources », l'encadré sur l'API transformers et « Lire la model card avant de télécharger » (§201.2).
+Relis « Trois sources », l'encadré sur l'API transformers et « Lire la fiche modèle avant de télécharger » (§201.2).
 
 </details>
 <details><summary>Indice 2</summary>
 
-Sépare les deux sources : torchvision pour les CNN classiques, le Hub pour les modèles de fondation. Pour b), la fiche liste six réponses à chercher dans une model card : lesquelles parlent du modèle, lesquelles de toi ?
+Sépare les deux sources : torchvision pour les CNN classiques, le Hub pour les modèles de fondation. Pour b), la fiche liste six réponses à chercher dans une fiche modèle : lesquelles parlent du modèle, lesquelles de toi ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -532,17 +532,17 @@ Commence par : « Un modèle de fondation est un grand modèle entraîné une fo
 
 <details><summary>Indice 1</summary>
 
-Relis « Lire la model card avant de télécharger », son tableau et ses encadrés (§201.2), puis « Choisir un backbone pour la production » (§201.9).
+Relis « Lire la fiche modèle avant de télécharger », son tableau et ses encadrés (§201.2), puis « Choisir un backbone pour la production » (§201.9).
 
 </details>
 <details><summary>Indice 2</summary>
 
-Passe en revue : la licence des poids, les données du pré-entraînement et leurs conditions, l'usage prévu et les usages exclus de la model card, les conditions d'accès, puis la traçabilité (révision figée, model card du modèle dérivé).
+Passe en revue : la licence des poids, les données du pré-entraînement et leurs conditions, l'usage prévu et les usages exclus de la fiche modèle, les conditions d'accès, puis la traçabilité (révision figée, fiche modèle du modèle dérivé).
 
 </details>
 <details><summary>Indice 3</summary>
 
-Commence par : « Téléchargeable ne veut pas dire utilisable : je lis la model card avant la première ligne de code. » Puis la licence (permissive, non commerciale, propre à l'entreprise), les données d'entraînement (les conditions d'ImageNet), l'usage prévu (l'exemple de CLIP), les obligations (mentions, citation), la révision figée et la model card du modèle dérivé, et l'avis d'un juriste en cas de doute.
+Commence par : « Téléchargeable ne veut pas dire utilisable : je lis la fiche modèle avant la première ligne de code. » Puis la licence (permissive, non commerciale, propre à l'entreprise), les données d'entraînement (les conditions d'ImageNet), l'usage prévu (l'exemple de CLIP), les obligations (mentions, citation), la révision figée et la fiche modèle du modèle dérivé, et l'avis d'un juriste en cas de doute.
 
 </details>
 

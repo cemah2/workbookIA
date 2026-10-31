@@ -211,10 +211,10 @@ PAPER = [
     Paper("B1.Q3", "Où trouver un modèle pré-entraîné, et quoi lire avant de s'en servir", [
         ("a", LETTER, '"C"', letters("C", {"A": "torchvision n'a pas DINOv2 : il vient du Hugging Face Hub",
                                            "B": "torch.load relit un fichier déjà sur le disque, il ne télécharge rien"})),
-        ("b", LETTERS, '"ABC"', r'''mistakes={"la model card décrit le modèle, pas ta machine ni ta connexion": "ABCD",
-          "une rubrique de la model card manque : ce qu'on a le droit d'en faire": "BC",
-          "une rubrique de la model card manque : d'où viennent ses données": "AC",
-          "une rubrique de la model card manque : les usages hors du champ prévu (out of scope)": "AB"}'''),
+        ("b", LETTERS, '"ABC"', r'''mistakes={"la fiche modèle décrit le modèle, pas ta machine ni ta connexion": "ABCD",
+          "une rubrique de la fiche modèle manque : ce qu'on a le droit d'en faire": "BC",
+          "une rubrique de la fiche modèle manque : d'où viennent ses données": "AC",
+          "une rubrique de la fiche modèle manque : les usages hors du champ prévu (out of scope)": "AB"}'''),
         ("c", TF, "False", r'''mistakes={"relis l'encadré ⚠️ « public n'est pas libre » (§201.2)": True}'''),
         ("d", LETTER, '"B"', letters("B", {"A": "c'était la licence de la sortie, en avril 2023 : relis le tableau du §201.2",
                                            "C": "c'est CLIP qui n'affiche aucune licence, pas DINOv2"})),
@@ -515,7 +515,7 @@ def header_cells(kind: str) -> list:
 def objectives_cell() -> list:
     return [md("## Objectifs et rappel express\n\n"
                "- Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et lire sa "
-               "model card et sa licence.\n"
+               "fiche modèle et sa licence.\n"
                "- Entraîner un linear probe et un k plus proches voisins sur des embeddings figés, et sonder les "
                "blocs d'un backbone.\n"
                "- Fine-tuner un réseau : dégel progressif, learning rates par groupe, warmup, batchnorm maîtrisée.\n"

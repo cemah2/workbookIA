@@ -12,7 +12,7 @@
  "summary": "Entraîner un grand réseau de zéro demande des données et du calcul que l'on a rarement : on part d'un modèle déjà entraîné. Tu apprends à choisir et charger un modèle pré-entraîné (torchvision, Hugging Face Hub), à t'en servir comme extracteur de features (linear probe, k plus proches voisins), puis à le fine-tuner partiellement ou entièrement avec des learning rates adaptés. Tu mesures quand le transfert aide (peu de données, domaine proche) et quand il échoue (domaine lointain, oubli), et tu découvres le zéro-shot et le few-shot des modèles de fondation (CLIP, DINOv2).",
  "objectives": [
   "Expliquer pourquoi les features d'un réseau pré-entraîné se transfèrent et choisir entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine",
-  "Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa model card et sa licence",
+  "Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa fiche modèle et sa licence",
   "Entraîner un linear probe et un k plus proches voisins sur des embeddings figés",
   "Fine-tuner un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, batchnorm maîtrisée",
   "Mesurer le gain du pré-entraînement par des courbes d'apprentissage et diagnostiquer transfert négatif et oubli catastrophique",
@@ -26,7 +26,7 @@
   },
   {
    "ref": "201.2",
-   "title": "Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, model cards, licences"
+   "title": "Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, fiches modèles, licences"
   },
   {
    "ref": "201.3",
@@ -80,7 +80,7 @@
   "oubli catastrophique",
   "régularisation L2-SP vers les poids initiaux",
   "latence, débit, taille d'un modèle",
-  "licences de poids et model cards"
+  "licences de poids et fiches modèles"
  ],
  "formulas": [
   "$\\hat{\\mathbf{y}} = \\operatorname{softmax}(\\mathbf{W}\\,\\phi(\\mathbf{x}) + \\mathbf{b})$ (linear probe sur l'embedding figé $\\phi(\\mathbf{x})$)",
@@ -152,7 +152,7 @@
   "modèles de fondation (DINOv2, CLIP)",
   "oubli catastrophique",
   "latence et taille des modèles",
-  "model card d'un modèle dérivé"
+  "fiche modèle d'un modèle dérivé"
  ],
  "requires": [
   {
@@ -196,7 +196,7 @@
    "from": "0B"
   },
   {
-   "notion": "licences de datasets, décalage de distribution, model card",
+   "notion": "licences de datasets, décalage de distribution, fiche modèle",
    "from": "29"
   },
   {
@@ -217,7 +217,7 @@
    "book": "VGG16, ResNet50",
    "today": "ConvNeXt, EfficientNet, ViT ; backbones auto-supervisés (DINOv2, DINOv3) et texte-image (CLIP, SigLIP 2) comme extracteurs génériques",
    "keep": "oui : le principe est identique",
-   "verify": "model cards facebook/dinov2-small, openai/clip-vit-base-patch32 ; disponibilité et tailles des variantes plus récentes (DINOv3, SigLIP 2) à revérifier sur le Hub"
+   "verify": "fiches modèles facebook/dinov2-small, openai/clip-vit-base-patch32 ; disponibilité et tailles des variantes plus récentes (DINOv3, SigLIP 2) à revérifier sur le Hub"
   },
   {
    "topic": "transformers 5.x",
@@ -238,7 +238,7 @@
    "book": "—",
    "today": "licences variées (Apache 2.0, MIT, CC BY-NC, licences « open weights » avec restrictions) ; conditions d'usage d'ImageNet non commerciales",
    "keep": "oui : réflexe professionnel",
-   "verify": "model cards des modèles utilisés ; conditions d'ImageNet"
+   "verify": "fiches modèles des modèles utilisés ; conditions d'ImageNet"
   },
   {
    "topic": "sauvegarde",
@@ -1074,7 +1074,7 @@
   {
    "id": "B1.27",
    "type": "🛠️",
-   "title": "Publier un modèle fine-tuné : safetensors, configuration et model card qui cite le modèle de base",
+   "title": "Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base",
    "stars": 2,
    "minutes": 25,
    "gpu": false,
@@ -1224,7 +1224,7 @@
   "Modèles de fondation et zéro-shot",
   "Licences des modèles pré-entraînés"
  ],
- "pro_skill": "Publier un modèle dérivé : poids en safetensors, configuration, model card qui cite le modèle de base et sa licence",
+ "pro_skill": "Publier un modèle dérivé : poids en safetensors, configuration, fiche modèle qui cite le modèle de base et sa licence",
  "flashcards": 24,
  "reading_minutes": 90,
  "generation_sessions": 2,

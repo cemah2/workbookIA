@@ -655,7 +655,7 @@ Chapitre-cours sans équivalent dans le livre : 01_fiche.md tient lieu de cours 
 | **Rappels 🔁** | ch. 0B, 0A, 0B |
 | **Compétence 🛠️** | Lire une data card (provenance, licence, biais, limites) avant d'utiliser un dataset |
 
-Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », le vocabulaire de base (échantillon, feature, label, paramètre, loss, learning rate, généralisation) et la carte des familles d'apprentissage (supervisé, non supervisé, génératif, par renforcement, deep learning). Tu découvres les quatre fils rouges du workbook (Penguins, MNIST, Holmes/Verne, taches solaires) et tu fais tourner tes premiers modèles, d'abord à la main puis en boîte noire. Un panorama 2026 (LLM, diffusion, foundation models) relie ces idées de 2018 à l'IA d'aujourd'hui.
+Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », le vocabulaire de base (échantillon, feature, label, paramètre, loss, learning rate, généralisation) et la carte des familles d'apprentissage (supervisé, non supervisé, génératif, par renforcement, deep learning). Tu découvres les quatre fils rouges du workbook (Penguins, MNIST, Holmes/Verne, taches solaires) et tu fais tourner tes premiers modèles, d'abord à la main puis en boîte noire. Un panorama 2026 (LLM, diffusion, modèles de fondation) relie ces idées de 2018 à l'IA d'aujourd'hui.
 
 **Objectifs d'apprentissage**
 
@@ -665,7 +665,7 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 - Charger et décrire les quatre fils rouges du workbook et dire quel type de problème chacun illustre
 - Coder une boucle d'entraînement minimale et observer l'effet du learning rate
 - Diagnostiquer une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement)
-- Situer les LLM, les modèles de diffusion et les foundation models sur la carte du machine learning
+- Situer les LLM, les modèles de diffusion et les modèles de fondation sur la carte du machine learning
 
 **Sections du livre couvertes** : 19 sections et sous-sections, toutes couvertes (§1.1 à §1.8 ; détail dans la matrice de couverture).
 
@@ -725,14 +725,14 @@ Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », 
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **Panorama de l'IA en 2026** — livre : deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs (GAN) sont un sujet de recherche en plein essor, encore loin du grand public · aujourd'hui : Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA) · à vérifier : Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités
+- **Panorama de l'IA en 2026** — livre : deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs (GAN) sont un sujet de recherche en plein essor, encore loin du grand public · aujourd'hui : Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; modèles de fondation multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA) · à vérifier : Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités
 - **Familles d'apprentissage** — livre : supervisé, non supervisé, « semi-supervisé » (pour les générateurs), renforcement · aujourd'hui : l'apprentissage auto-supervisé (prédire un morceau masqué ou le token suivant) est le mode de pré-entraînement dominant ; « semi-supervisé » désigne en général (c'était déjà le cas en 2018) l'apprentissage avec peu de labels et beaucoup de données non étiquetées ; le renforcement sert aussi à aligner les LLM (RLHF, puis DPO) · à vérifier : Ouyang et coll. 2022 (InstructGPT), Rafailov et coll. 2023 (DPO), billet « Self-supervised learning: the dark matter of intelligence » (Meta AI, 2021)
 - **Matériel de calcul** — livre : le GPU accélère l'entraînement ; des puces dédiées « commencent à apparaître » · aujourd'hui : GPU de centre de données, TPU, NPU dans les ordinateurs portables et les téléphones ; GPU gratuit mais limité sur Colab ; le workbook tourne sur CPU en FAST_MODE · à vérifier : documentation Google Colab (ressources et limites), pages Google Cloud TPU
 - **MNIST comme référence** — livre : plus de 99 % d'accuracy ; le petit réseau du livre fait 9 905/10 000 · aujourd'hui : MNIST est considéré comme résolu ; il reste idéal pour apprendre, mais on compare les modèles sur des benchmarks plus durs (Fashion-MNIST, CIFAR, ImageNet et au-delà) · à vérifier : Xiao et coll. 2017 (Fashion-MNIST, arXiv:1708.07747) ; data card data/cards/mnist.md
 - **Bibliothèques** — livre : scikit-learn puis Keras (§1.8) · aujourd'hui : scikit-learn pour le ML classique ; PyTorch pour le deep learning (framework du workbook) ; Keras 3 est multi-backend · à vérifier : BIBLE §21 ; keras.io
 - **Reconnaissance faciale et réglementation** — livre : présentée comme une application parmi d'autres (réseaux sociaux) · aujourd'hui : encadrée en Europe par le RGPD (données biométriques) et l'AI Act (règlement (UE) 2024/1689), dont certaines pratiques sont interdites depuis février 2025 (constitution de bases de visages par moissonnage non ciblé, par exemple) · à vérifier : EUR-Lex, règlement (UE) 2024/1689 ; site de la CNIL
 
-**Thèmes 💼** : Expliquer le machine learning à un non-spécialiste · Paramètre contre hyperparamètre · Pourquoi un jeu de test séparé, et ce qui arrive si on triche · Supervisé, non supervisé, auto-supervisé, renforcement · Qu'est-ce qu'un LLM, un foundation model
+**Thèmes 💼** : Expliquer le machine learning à un non-spécialiste · Paramètre contre hyperparamètre · Pourquoi un jeu de test séparé, et ce qui arrive si on triche · Supervisé, non supervisé, auto-supervisé, renforcement · Qu'est-ce qu'un LLM, un modèle de fondation
 
 **Articles 📄** : F. Galton (1886), *Regression Towards Mediocrity in Hereditary Stature* · K. Simonyan, A. Zisserman (2014), *Very Deep Convolutional Networks for Large-Scale Image Recognition*
 
@@ -4706,44 +4706,44 @@ Extensions : diffusion latente miniature : un petit modèle de diffusion dans l'
 | **Temps d'étude** | **19 h** (lecture 1,5 h, exercices 16 h, 24 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 29, 23, 21 |
-| **Compétence 🛠️** | Publier un modèle dérivé : poids en safetensors, configuration, model card qui cite le modèle de base et sa licence |
+| **Compétence 🛠️** | Publier un modèle dérivé : poids en safetensors, configuration, fiche modèle qui cite le modèle de base et sa licence |
 
 Entraîner un grand réseau de zéro demande des données et du calcul que l'on a rarement : on part d'un modèle déjà entraîné. Tu apprends à choisir et charger un modèle pré-entraîné (torchvision, Hugging Face Hub), à t'en servir comme extracteur de features (linear probe, k plus proches voisins), puis à le fine-tuner partiellement ou entièrement avec des learning rates adaptés. Tu mesures quand le transfert aide (peu de données, domaine proche) et quand il échoue (domaine lointain, oubli), et tu découvres le zéro-shot et le few-shot des modèles de fondation (CLIP, DINOv2).
 
 **Objectifs d'apprentissage**
 
 - Expliquer pourquoi les features d'un réseau pré-entraîné se transfèrent et choisir entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine
-- Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa model card et sa licence
+- Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et vérifier sa fiche modèle et sa licence
 - Entraîner un linear probe et un k plus proches voisins sur des embeddings figés
 - Fine-tuner un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, batchnorm maîtrisée
 - Mesurer le gain du pré-entraînement par des courbes d'apprentissage et diagnostiquer transfert négatif et oubli catastrophique
 - Classer en zéro-shot et en few-shot avec des modèles de fondation (CLIP, DINOv2)
 - Comparer des backbones selon l'accuracy, la taille et la latence sur CPU
 
-**Sections du chapitre** : 201.1 Pourquoi réutiliser : coût des données et du calcul, hiérarchie des features · 201.2 Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, model cards, licences · 201.3 Extraction de features : embeddings figés, linear probe, k plus proches voisins · 201.4 Fine-tuning : partiel, complet, dégel progressif, learning rates discriminatifs, batchnorm · 201.5 Adapter l'entrée et la sortie : résolution, canaux, normalisation, nouvelle tête · 201.6 Peu de données : courbes d'apprentissage, augmentation, few-shot · 201.7 Quand le transfert échoue : distance de domaine, transfert négatif, oubli catastrophique · 201.8 Modèles de fondation : auto-supervisé (DINOv2), texte-image (CLIP), zéro-shot · 201.9 Coût d'usage : taille, latence CPU, choix d'un backbone pour la production
+**Sections du chapitre** : 201.1 Pourquoi réutiliser : coût des données et du calcul, hiérarchie des features · 201.2 Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, fiches modèles, licences · 201.3 Extraction de features : embeddings figés, linear probe, k plus proches voisins · 201.4 Fine-tuning : partiel, complet, dégel progressif, learning rates discriminatifs, batchnorm · 201.5 Adapter l'entrée et la sortie : résolution, canaux, normalisation, nouvelle tête · 201.6 Peu de données : courbes d'apprentissage, augmentation, few-shot · 201.7 Quand le transfert échoue : distance de domaine, transfert négatif, oubli catastrophique · 201.8 Modèles de fondation : auto-supervisé (DINOv2), texte-image (CLIP), zéro-shot · 201.9 Coût d'usage : taille, latence CPU, choix d'un backbone pour la production
 
-**Notions enseignées** : transfer learning ; extraction de features ; linear probe ; fine-tuning partiel et complet ; learning rates discriminatifs ; dégel progressif ; zéro-shot CLIP ; few-shot par prototypes ; modèles de fondation (DINOv2, CLIP) ; oubli catastrophique ; latence et taille des modèles ; model card d'un modèle dérivé
+**Notions enseignées** : transfer learning ; extraction de features ; linear probe ; fine-tuning partiel et complet ; learning rates discriminatifs ; dégel progressif ; zéro-shot CLIP ; few-shot par prototypes ; modèles de fondation (DINOv2, CLIP) ; oubli catastrophique ; latence et taille des modèles ; fiche modèle d'un modèle dérivé
 
-**Notions mobilisées** : modèle pré-entraîné torchvision, gel des poids, nouvelle tête (ch. 23) ; fonction fit(), meilleur checkpoint, early stopping, schedulers (ch. 23) ; CNN, ResNet, filtres et cartes d'activation (ch. 21) ; augmentation de données (transforms.v2) (ch. 24) ; AdamW, warmup + cosinus (ch. 19) ; Batchnorm : statistiques glissantes, train() et eval() (ch. 20) ; régression logistique et Pipeline scikit-learn (ch. 15) ; k plus proches voisins (ch. 13) ; PCA, UMAP (ch. 12) ; similarité cosinus (ch. 0B) ; licences de datasets, décalage de distribution, model card (ch. 29) ; API Hugging Face transformers pour la vision (AutoModel, AutoImageProcessor, CLIPModel) (introduite ici, encadré 🧮)
+**Notions mobilisées** : modèle pré-entraîné torchvision, gel des poids, nouvelle tête (ch. 23) ; fonction fit(), meilleur checkpoint, early stopping, schedulers (ch. 23) ; CNN, ResNet, filtres et cartes d'activation (ch. 21) ; augmentation de données (transforms.v2) (ch. 24) ; AdamW, warmup + cosinus (ch. 19) ; Batchnorm : statistiques glissantes, train() et eval() (ch. 20) ; régression logistique et Pipeline scikit-learn (ch. 15) ; k plus proches voisins (ch. 13) ; PCA, UMAP (ch. 12) ; similarité cosinus (ch. 0B) ; licences de datasets, décalage de distribution, fiche modèle (ch. 29) ; API Hugging Face transformers pour la vision (AutoModel, AutoImageProcessor, CLIPModel) (introduite ici, encadré 🧮)
 
 **Exercices**
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B1.Q1 | 🧠 | Réutiliser plutôt que repartir de zéro : trois raisons et une limite | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q2 | 🧠 | Premières couches génériques, dernières couches spécialisées : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q3 | 🧠 | Où trouver un modèle pré-entraîné, et quoi lire avant de s'en servir | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q4 | 🧠 | weights.transforms() : pourquoi le prétraitement fait partie du modèle | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q5 | 🧠 | Extraction de features, linear probe, fine-tuning : qui s'entraîne ? | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q6 | 🧠 | Pourquoi un learning rate 10 à 100 fois plus petit pour fine-tuner ? | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q7 | 🧠 | Batchnorm pendant le fine-tuning sur de tout petits batches | ★★ | 3 | — | 02 | — | R | manual |
-| B1.Q8 | 🧠 | Peu ou beaucoup de données, domaine proche ou lointain : la bonne stratégie | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q9 | 🧠 | Transfert négatif et oubli catastrophique : reconnaître les symptômes | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q10 | 🧠 | Classer sans exemple d'entraînement : le zéro-shot de CLIP | ★ | 3 | — | 02 | — | R | manual |
-| B1.Q11 | 🧠 | Auto-supervisé (DINOv2) ou supervisé sur ImageNet : quels embeddings ? | ★★ | 3 | — | 02 | — | – | manual |
-| B1.R1 | 🔁 | Licence d'un dataset et décalage de distribution | ★ | 5 | — | 02 | 29 | R | manual |
-| B1.R2 | 🔁 | Geler un réseau et remplacer sa tête en PyTorch | ★ | 5 | — | 02 | 23 | R | manual |
-| B1.R3 | 🔁 | Ce que détectent les filtres des premières et des dernières couches | ★ | 5 | — | 02 | 21 | R | manual |
+| B1.Q1 | 🧠 | Réutiliser plutôt que repartir de zéro : trois raisons et une limite | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q2 | 🧠 | Premières couches génériques, dernières couches spécialisées : vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q3 | 🧠 | Où trouver un modèle pré-entraîné, et quoi lire avant de s'en servir | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q4 | 🧠 | weights.transforms() : pourquoi le prétraitement fait partie du modèle | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q5 | 🧠 | Extraction de features, linear probe, fine-tuning : qui s'entraîne ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q6 | 🧠 | Pourquoi un learning rate 10 à 100 fois plus petit pour fine-tuner ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q7 | 🧠 | Batchnorm pendant le fine-tuning sur de tout petits batches | ★★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q8 | 🧠 | Peu ou beaucoup de données, domaine proche ou lointain : la bonne stratégie | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q9 | 🧠 | Transfert négatif et oubli catastrophique : reconnaître les symptômes | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q10 | 🧠 | Classer sans exemple d'entraînement : le zéro-shot de CLIP | ★ | 3 | — | 02 | — | R | wb.check |
+| B1.Q11 | 🧠 | Auto-supervisé (DINOv2) ou supervisé sur ImageNet : quels embeddings ? | ★★ | 3 | — | 02 | — | – | wb.check |
+| B1.R1 | 🔁 | Licence d'un dataset et décalage de distribution | ★ | 5 | — | 02 | 29 | R | wb.check |
+| B1.R2 | 🔁 | Geler un réseau et remplacer sa tête en PyTorch | ★ | 5 | — | 02 | 23 | R | wb.check |
+| B1.R3 | 🔁 | Ce que détectent les filtres des premières et des dernières couches | ★ | 5 | — | 02 | 21 | R | wb.check |
 | B1.1 | ✏️ | Nouvelle tête : formes des tenseurs de l'image 32×32 redimensionnée jusqu'aux logits | ★ | 15 | CIFAR-10 | 02 | 21, 23 | RM | wb.check |
 | B1.2 | ✏️ | k plus proches voisins cosinus sur six embeddings donnés | ★ | 10 | — | 02 | 0B, 13 | M | wb.check |
 | B1.3 | ✏️ | Learning rates discriminatifs et warmup : le learning rate de chaque groupe, pas à pas | ★ | 15 | — | 02 | 19 | M | wb.check |
@@ -4770,7 +4770,7 @@ Entraîner un grand réseau de zéro demande des données et du calcul que l'on 
 | B1.24 | 📦 | Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts | ★★ | 30 | CIFAR-10 | 03 | B1.5, B1.11 | RC | manual |
 | B1.25 | 📦 | Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe) | ★★★ | 40 | CIFAR-10 | 03 | B1.24, B1.13 | C | manual |
 | B1.26 | 🔬 | Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small | ★★ | 30 | CIFAR-10 | 03 | B1.11 | RC | manual |
-| B1.27 | 🛠️ | Publier un modèle fine-tuné : safetensors, configuration et model card qui cite le modèle de base | ★★ | 25 | CIFAR-10 | 03 | B1.19, 23 | RC | manual |
+| B1.27 | 🛠️ | Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base | ★★ | 25 | CIFAR-10 | 03 | B1.19, 23 | RC | manual |
 | B1.28 | 🏆 | Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU | ★★★★ | 120 | CIFAR-10 | 03 | B1.19, B1.25 | C | wb.check |
 | B1.E1 | 💼 | Feature extraction ou fine-tuning : comment choisis-tu ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E2 | 💼 | Tu as 500 images médicales étiquetées : quelle stratégie de transfer learning ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -4781,10 +4781,10 @@ Entraîner un grand réseau de zéro demande des données et du calcul que l'on 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
 - **sources de modèles pré-entraînés** — livre : absent du livre (2018) ; le livre charge VGG16 par Keras (ch. 23 et 28) · aujourd'hui : torchvision.models (enum Weights, weights.transforms(), weights.meta) ; Hugging Face Hub (AutoModel, AutoImageProcessor) ; timm (non installé) · à vérifier : doc torchvision.models 0.26 ; doc transformers 5.17 (AutoModel, AutoImageProcessor, CLIPModel)
-- **backbones de référence en 2026** — livre : VGG16, ResNet50 · aujourd'hui : ConvNeXt, EfficientNet, ViT ; backbones auto-supervisés (DINOv2, DINOv3) et texte-image (CLIP, SigLIP 2) comme extracteurs génériques · à vérifier : model cards facebook/dinov2-small, openai/clip-vit-base-patch32 ; disponibilité et tailles des variantes plus récentes (DINOv3, SigLIP 2) à revérifier sur le Hub
+- **backbones de référence en 2026** — livre : VGG16, ResNet50 · aujourd'hui : ConvNeXt, EfficientNet, ViT ; backbones auto-supervisés (DINOv2, DINOv3) et texte-image (CLIP, SigLIP 2) comme extracteurs génériques · à vérifier : fiches modèles facebook/dinov2-small, openai/clip-vit-base-patch32 ; disponibilité et tailles des variantes plus récentes (DINOv3, SigLIP 2) à revérifier sur le Hub
 - **transformers 5.x** — livre : — · aujourd'hui : PyTorch seul ; processeurs d'images « rapides » adossés à torchvision ; argument dtype (torch_dtype déprécié) · à vérifier : MIGRATION_GUIDE_V5.md du dépôt huggingface/transformers
 - **recette de fine-tuning** — livre : — · aujourd'hui : AdamW, warmup + cosinus, learning rates par groupe, dégel progressif (ULMFiT) ; pour les très grands modèles, PEFT/LoRA (B4) · à vérifier : Howard & Ruder (2018) ; doc torch.optim (param_groups)
-- **licences des poids** — livre : — · aujourd'hui : licences variées (Apache 2.0, MIT, CC BY-NC, licences « open weights » avec restrictions) ; conditions d'usage d'ImageNet non commerciales · à vérifier : model cards des modèles utilisés ; conditions d'ImageNet
+- **licences des poids** — livre : — · aujourd'hui : licences variées (Apache 2.0, MIT, CC BY-NC, licences « open weights » avec restrictions) ; conditions d'usage d'ImageNet non commerciales · à vérifier : fiches modèles des modèles utilisés ; conditions d'ImageNet
 - **sauvegarde** — livre : — · aujourd'hui : torch.load(weights_only=True) par défaut depuis torch 2.6 ; safetensors pour publier des poids · à vérifier : doc torch.load 2.11 ; doc safetensors 0.8
 
 **Thèmes 💼** : Feature extraction ou fine-tuning · Stratégie avec peu de données étiquetées · Learning rate du fine-tuning · Modèles de fondation et zéro-shot · Licences des modèles pré-entraînés

@@ -122,7 +122,7 @@ Les chapitres 23 et 24 du livre (Keras) deviennent « PyTorch en pratique ». Le
 |---|---|---|---|---|---|---|
 | **0 Prérequis** | 0A | Python, notebooks & outils (Colab, numpy, pandas, matplotlib, bases de git) | — | Penguins | structure du package, 1er test | — |
 | | 0B | Maths du lycée au ML (vecteurs, matrices, produit matriciel, fonctions, dérivées, règle de la chaîne, dérivées partielles, Σ, exp/log, bases de probas) | — | synthétiques | `linalg_basics` | — |
-| **I Fondations** | 1 | Introduction | V1 ch1 | les 4 fils rouges (découverte) | — | panorama 2026 (LLM, diffusion, foundation models) |
+| **I Fondations** | 1 | Introduction | V1 ch1 | les 4 fils rouges (découverte) | — | panorama 2026 (LLM, diffusion, modèles de fondation) |
 | | 2 | Hasard et statistiques | V1 ch2 | Penguins, synth | `stats` (mean, var, cov, corr, bootstrap) | |
 | | 3 | Probabilités et mesure de la qualité | V1 ch3 | synth, Penguins | `metrics` (confusion_matrix, accuracy, precision, recall, f1) | ROC-AUC, PR-AUC, calibration |
 | | 4 | Règle de Bayes | V1 ch4 | synth (pièces), Penguins | `bayes` | |

@@ -9,7 +9,7 @@
   "title_en": "An Introduction to Machine Learning and Deep Learning",
   "pages": "1-45"
  },
- "summary": "Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », le vocabulaire de base (échantillon, feature, label, paramètre, loss, learning rate, généralisation) et la carte des familles d'apprentissage (supervisé, non supervisé, génératif, par renforcement, deep learning). Tu découvres les quatre fils rouges du workbook (Penguins, MNIST, Holmes/Verne, taches solaires) et tu fais tourner tes premiers modèles, d'abord à la main puis en boîte noire. Un panorama 2026 (LLM, diffusion, foundation models) relie ces idées de 2018 à l'IA d'aujourd'hui.",
+ "summary": "Premier tour d'horizon : ce que veut dire « apprendre à partir d'exemples », le vocabulaire de base (échantillon, feature, label, paramètre, loss, learning rate, généralisation) et la carte des familles d'apprentissage (supervisé, non supervisé, génératif, par renforcement, deep learning). Tu découvres les quatre fils rouges du workbook (Penguins, MNIST, Holmes/Verne, taches solaires) et tu fais tourner tes premiers modèles, d'abord à la main puis en boîte noire. Un panorama 2026 (LLM, diffusion, modèles de fondation) relie ces idées de 2018 à l'IA d'aujourd'hui.",
  "objectives": [
   "Expliquer la différence entre un programme à règles écrites (système expert) et un modèle appris à partir d'exemples",
   "Employer correctement le vocabulaire de base : échantillon, feature, label, paramètre, hyperparamètre, loss, learning rate, généralisation",
@@ -17,7 +17,7 @@
   "Charger et décrire les quatre fils rouges du workbook et dire quel type de problème chacun illustre",
   "Coder une boucle d'entraînement minimale et observer l'effet du learning rate",
   "Diagnostiquer une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement)",
-  "Situer les LLM, les modèles de diffusion et les foundation models sur la carte du machine learning"
+  "Situer les LLM, les modèles de diffusion et les modèles de fondation sur la carte du machine learning"
  ],
  "sections": [
   {
@@ -118,7 +118,7 @@
   "apprentissage par renforcement : agent, environnement, récompense",
   "feature learning",
   "GPU et accélérateurs",
-  "panorama 2026 : auto-supervision, LLM, diffusion, foundation models"
+  "panorama 2026 : auto-supervision, LLM, diffusion, modèles de fondation"
  ],
  "formulas": [
   "$\\text{accuracy} = \\frac{\\text{prédictions correctes}}{\\text{nombre total d'échantillons}}$, $\\text{taux d'erreur} = 1 - \\text{accuracy}$",
@@ -213,7 +213,7 @@
   {
    "topic": "Panorama de l'IA en 2026",
    "book": "deep learning de 2018 : réseaux convolutifs de type VGG pour les images, réseaux récurrents pour les séquences, Keras ; les générateurs (GAN) sont un sujet de recherche en plein essor, encore loin du grand public",
-   "today": "Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; foundation models multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA)",
+   "today": "Transformers partout ; LLM (GPT, Claude, Gemini, Llama, Mistral…) pré-entraînés à prédire le token suivant puis alignés sur des préférences humaines ; modèles de diffusion pour l'image, la vidéo et le son ; modèles de fondation multimodaux réutilisés par prompting, RAG ou fine-tuning léger (LoRA)",
    "keep": "oui : échantillons, labels, loss, learning rate et généralisation restent le socle de tous ces systèmes",
    "verify": "Stanford AI Index (dernière édition), documentation Hugging Face, fiches techniques des modèles cités"
   },
@@ -1138,7 +1138,7 @@
   "Paramètre contre hyperparamètre",
   "Pourquoi un jeu de test séparé, et ce qui arrive si on triche",
   "Supervisé, non supervisé, auto-supervisé, renforcement",
-  "Qu'est-ce qu'un LLM, un foundation model"
+  "Qu'est-ce qu'un LLM, un modèle de fondation"
  ],
  "pro_skill": "Lire une data card (provenance, licence, biais, limites) avant d'utiliser un dataset",
  "flashcards": 20,

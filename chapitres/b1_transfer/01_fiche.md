@@ -38,7 +38,7 @@ La fiche et les exercices papier posent les idées et les calculs (formes des te
 
 À la fin de ce chapitre, tu sais :
 1. **Expliquer** pourquoi les features d'un réseau pré-entraîné se transfèrent, et **choisir** entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine.
-2. **Charger** un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et **vérifier** sa model card et sa licence.
+2. **Charger** un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub) et **vérifier** sa fiche modèle et sa licence.
 3. **Entraîner** un linear probe et un k plus proches voisins sur des embeddings figés.
 4. **Fine-tuner** un réseau en PyTorch : dégel progressif, learning rates par groupe, warmup, batchnorm maîtrisée.
 5. **Mesurer** le gain du pré-entraînement par des courbes d'apprentissage, et **diagnostiquer** transfert négatif et oubli catastrophique.
@@ -56,7 +56,7 @@ La fiche et les exercices papier posent les idées et les calculs (formes des te
 7. Le pré-entraînement rapporte d'autant plus que les données sont **rares** et le domaine **proche** ; sur un domaine lointain, il peut ne rien rapporter, voire nuire (transfert négatif).
 8. Un fine-tuning trop énergique **oublie** ce que le modèle savait (oubli catastrophique) ; un petit learning rate, peu d'epochs ou une pénalité L2-SP le limitent.
 9. Les **modèles de fondation** (DINOv2, CLIP) donnent des embeddings génériques ; CLIP classe même **sans exemple** (zéro-shot), en comparant une image à des phrases comme « a photo of a dog ».
-10. En production, on choisit un backbone sur sa licence, sa latence et son accuracy sur **ta** validation ; on publie le modèle dérivé en safetensors, avec une model card qui cite le modèle de base.
+10. En production, on choisit un backbone sur sa licence, sa latence et son accuracy sur **ta** validation ; on publie le modèle dérivé en safetensors, avec une fiche modèle qui cite le modèle de base.
 
 > 📐 **Conventions de la fiche** — $\mathbf{x}$ est une image, $\phi(\mathbf{x}) \in \mathbb{R}^d$ son embedding (la sortie du backbone), de dimension $d$ ; $K$ est le nombre de classes de la nouvelle tâche ; $\theta$ désigne les paramètres d'un réseau, $\theta_0$ leurs valeurs pré-entraînées. Les groupes de paramètres d'un fine-tuning sont numérotés $\ell = 1, \dots, L$ de l'entrée vers la tête ($\ell = L$ est la tête). Un mini-batch d'images a la forme $(N, C, H, W)$, comme aux ch. 21 et 23. $s$ est l'échelle des logits de CLIP (`logit_scale`). Les blocs portent les noms de torchvision : le *stem* (les couches d'entrée : `conv1`, `bn1`, ReLU, `maxpool`), `layer1` à `layer4`, `fc` (la tête). **Écarts au §6** : $d$ est la dimension de l'embedding (quand les embeddings servent de features à un classifieur, il y en a $p = d$) ; $L$ compte des groupes, pas la loss (la fiche n'écrit aucune loss) ; $\theta$ s'écrit en maigre, comme dans les articles, bien que ce soit un vecteur.
 
@@ -103,12 +103,12 @@ Le choix dépend surtout de deux choses : combien d'images étiquetées tu as, e
 
 ---
 
-## 201.2 · Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, model cards, licences ⏩
+## 201.2 · Trouver et charger un modèle pré-entraîné : torchvision, Hugging Face Hub, fiches modèles, licences ⏩
 
 ### Trois sources
 
 - **`torchvision.models`** : 80 classifieurs d'images (ResNet, EfficientNet, MobileNet, ConvNeXt, ViT…), presque tous entraînés sur ImageNet-1k ; `get_model("resnet50", weights="DEFAULT")`.
-- **Le Hugging Face Hub** : plus d'un million de modèles, dont les modèles de fondation (DINOv2, CLIP, SigLIP 2), chacun avec sa model card et sa licence ; `AutoModel.from_pretrained("facebook/dinov2-base")`.
+- **Le Hugging Face Hub** : plus d'un million de modèles, dont les modèles de fondation (DINOv2, CLIP, SigLIP 2), chacun avec sa fiche modèle et sa licence ; `AutoModel.from_pretrained("facebook/dinov2-base")`.
 - **`timm`** (PyTorch Image Models) : des centaines d'architectures de vision et leurs poids ; préinstallé sur Colab, absent de l'environnement du workbook.
 
 Le workbook utilise les deux premières : torchvision pour les CNN classiques, le Hub pour les modèles de fondation.
@@ -135,7 +135,7 @@ print(len(meta["categories"]), meta["categories"][:2])     # 1000 ['tench', 'gol
 
 ### Hugging Face Hub : `AutoModel` et `AutoImageProcessor`
 
-Sur le Hub, chaque modèle est un dépôt git (`facebook/dinov2-base`) qui contient sa configuration (`config.json`), ses poids (`model.safetensors`), son prétraitement (`preprocessor_config.json`) et sa model card (`README.md`) : `transformers` reconstruit le modèle et son prétraitement à partir du seul nom du dépôt.
+Sur le Hub, chaque modèle est un dépôt git (`facebook/dinov2-base`) qui contient sa configuration (`config.json`), ses poids (`model.safetensors`), son prétraitement (`preprocessor_config.json`) et sa fiche modèle (`README.md`) : `transformers` reconstruit le modèle et son prétraitement à partir du seul nom du dépôt.
 
 > 🧮 **Rappel outil — l'API transformers pour la vision** — `AutoImageProcessor.from_pretrained(nom)` rend le **processeur d'images** du modèle : appelé sur une image PIL ou une liste d'images, il redimensionne, recadre, normalise et rend un dictionnaire dont `pixel_values` est un tenseur $(N, 3, H, W)$. `AutoModel.from_pretrained(nom)` rend le **backbone**, sans tête de classification ; sa sortie a des champs nommés (`last_hidden_state`, `pooler_output`). Pour CLIP, `CLIPProcessor` et `CLIPModel` traitent images **et** textes (201.8). Deux arguments utiles de `from_pretrained` : `revision=` fixe une version du dépôt (le hash d'un commit, comme pour les datasets au ch. 29) et `dtype=` la précision des poids. Le premier appel télécharge dans `~/.cache/huggingface`, les suivants relisent le disque.
 
@@ -160,15 +160,15 @@ Ici $d = 768$. DINOv2-base est un **Vision Transformer** (ViT, bonus B3) : il d�
 
 > 🕰️ **Mise à jour (2026) — transformers 5** — **Le livre :** n'en parle pas (la bibliothèque est née fin 2018, sous un autre nom). · **Aujourd'hui :** la version 5 ne garde que **PyTorch** (TensorFlow et JAX ont été retirés) ; les processeurs d'images s'appuient par défaut sur **torchvision** (`use_fast` cède la place à `backend`) ; `from_pretrained` prend `dtype=` (`torch_dtype=` affiche « `torch_dtype` is deprecated! Use `dtype` instead! ») ; `get_image_features` et `get_text_features` de CLIP rendent un objet dont l'embedding est dans `.pooler_output`, et non plus un tenseur. · **Faut-il quand même l'apprendre ?** Oui, avec la bonne version de la documentation : beaucoup de tutoriels datent de la version 4 et leur code casse. · *Sources :* [guide de migration vers la v5](https://raw.githubusercontent.com/huggingface/transformers/v5.20.0/MIGRATION_GUIDE_V5.md) ; [annonce de transformers v5](https://huggingface.co/blog/transformers-v5).
 
-### Lire la model card avant de télécharger
+### Lire la fiche modèle avant de télécharger
 
-Une **model card** (ch. 23 ; Mitchell et coll., 2019) est au modèle ce que la data card est au dataset (ch. 29). On y cherche six réponses : la **licence** (usage commercial, citation, conditions d'accès) ; les **données d'entraînement** (provenance, biais) ; l'**usage prévu** et les usages exclus (*out of scope*) ; le **prétraitement** ; les **performances**, et sur quels benchmarks ; les **limites** connues. Pour les modèles de ce chapitre, vérifié sur leurs pages le 31 octobre 2026 :
+Une **fiche modèle** (*fiche modèle* ; ch. 23 ; Mitchell et coll., 2019) est au modèle ce que la data card est au dataset (ch. 29). On y cherche six réponses : la **licence** (usage commercial, citation, conditions d'accès) ; les **données d'entraînement** (provenance, biais) ; l'**usage prévu** et les usages exclus (*out of scope*) ; le **prétraitement** ; les **performances**, et sur quels benchmarks ; les **limites** connues. Pour les modèles de ce chapitre, vérifié sur leurs pages le 31 octobre 2026 :
 
 | Modèle | Licence des poids | À savoir |
 |---|---|---|
 | poids ImageNet de torchvision | code sous BSD 3-Clause ; pas de licence propre aux poids | la documentation te laisse la responsabilité de vérifier ton droit de t'en servir ; ImageNet a ses propres conditions |
 | `facebook/dinov2-*` | Apache 2.0 | publié sous CC BY-NC en avril 2023, passé en Apache 2.0 le 31 août 2023 |
-| `openai/clip-vit-base-patch32` | aucun champ de licence sur le Hub | la model card exclut **tout** déploiement, commercial ou non, et déconseille même un usage interne sans tests poussés dans le domaine visé |
+| `openai/clip-vit-base-patch32` | aucun champ de licence sur le Hub | la fiche modèle exclut **tout** déploiement, commercial ou non, et déconseille même un usage interne sans tests poussés dans le domaine visé |
 | `facebook/dinov3-*` | *DINOv3 License*, propre à Meta | accès soumis à l'acceptation de la licence ; mention « Built with DINOv3 » en cas de redistribution ; usages militaires interdits |
 | `google/siglip2-*` | Apache 2.0 | |
 
@@ -499,7 +499,7 @@ Après un fine-tuning, le réseau est bon sur la nouvelle tâche ; mais qu'est d
 
 Pour le **mesurer**, on remet l'ancienne tête sur le backbone fine-tuné et l'on compare ses prédictions à celles du modèle d'origine, sur les mêmes images : la part d'images où elles coïncident (l'accord top-1) dit ce qui reste (🔬 B1.23). Pour le **limiter** : un petit learning rate et peu d'epochs ; des learning rates discriminatifs et le gel des premiers blocs ; la pénalité L2-SP, ou sa cousine **EWC** (J. Kirkpatrick et coll., 2017), qui pondère le rappel par l'importance de chaque poids pour l'ancienne tâche ; LP-FT ; et, quand c'est possible, **garder deux modèles**, ou un backbone gelé partagé et une tête par tâche.
 
-> ⚖️ **Biais hérités** — Un modèle pré-entraîné transmet ses features, et avec elles les biais de ses données. Les images d'ImageNet viennent surtout d'Amérique du Nord et d'Europe ; celles de CLIP, récoltées sur Internet, représentent davantage « les personnes et les sociétés les plus connectées à Internet », plutôt des pays développés, plutôt jeunes et masculines, dit sa model card. Un modèle dérivé hérite de ces absences, même entraîné ensuite sur des données soignées : sa model card doit le dire, et l'évaluation doit le mesurer sur les populations de l'usage visé (⚖️ B1.9, bonus B6).
+> ⚖️ **Biais hérités** — Un modèle pré-entraîné transmet ses features, et avec elles les biais de ses données. Les images d'ImageNet viennent surtout d'Amérique du Nord et d'Europe ; celles de CLIP, récoltées sur Internet, représentent davantage « les personnes et les sociétés les plus connectées à Internet », plutôt des pays développés, plutôt jeunes et masculines, dit sa fiche modèle. Un modèle dérivé hérite de ces absences, même entraîné ensuite sur des données soignées : sa fiche modèle doit le dire, et l'évaluation doit le mesurer sur les populations de l'usage visé (⚖️ B1.9, bonus B6).
 
 ---
 
@@ -551,9 +551,9 @@ with torch.inference_mode():
 
 **Les gabarits comptent.** Le nom seul (« cat ») est ambigu ; une phrase ressemble davantage aux légendes vues à l'entraînement. Dans l'article, le gabarit « A photo of a {label}. » faisait gagner 1,3 point sur ImageNet par rapport au nom seul, et la moyenne des embeddings de **80 gabarits** (« a blurry photo of a {} », « a drawing of a {} »…) 3,5 points de plus : c'est un **ensemble de prompts** (*prompt ensembling*). On normalise chaque vecteur de texte, on fait la moyenne par classe et l'on renormalise (📦 B1.24). Les embeddings d'image de CLIP et de DINOv2 se prêtent aussi aux prototypes de 201.6, et avec CLIP on peut combiner le vecteur de texte d'une classe et le prototype de ses quelques images (📦 B1.25).
 
-**Les limites.** Sa model card le dit : CLIP peine sur les classifications fines et le comptage d'objets, ses performances dépendent beaucoup de la liste de classes proposée, et il n'a été évalué qu'en anglais. Le zéro-shot est un formidable point de départ, rarement le point d'arrivée.
+**Les limites.** Sa fiche modèle le dit : CLIP peine sur les classifications fines et le comptage d'objets, ses performances dépendent beaucoup de la liste de classes proposée, et il n'a été évalué qu'en anglais. Le zéro-shot est un formidable point de départ, rarement le point d'arrivée.
 
-> 🕰️ **Mise à jour (2026) — les backbones de référence** — **Le livre :** VGG16 (ch. 23 et 28), entraîné sur ImageNet-1k avec des labels, comme ResNet-50, l'autre référence de 2018. · **Aujourd'hui :** côté supervisé, des CNN modernes (ConvNeXt, EfficientNet) et des Vision Transformers (ViT, Swin) ; côté modèles de fondation, des backbones auto-supervisés (**DINOv2**, 2023, Apache 2.0 ; **DINOv3**, 2025, de ViT-S à ViT-7B, 1,7 milliard d'images, licence propre à Meta) et texte-image (**CLIP**, 2021 ; **SigLIP 2**, 2025, de 86 millions à 1 milliard de paramètres, multilingue, Apache 2.0) ; leurs petites versions tournent sur un CPU. · **Faut-il quand même l'apprendre ?** Oui : le principe (un backbone, un embedding, une tête) ne change pas, seul le backbone change. · *Sources :* [Oquab et coll., DINOv2, arXiv:2304.07193](https://arxiv.org/abs/2304.07193) ; [model card de DINOv3 ViT-S/16](https://huggingface.co/facebook/dinov3-vits16-pretrain-lvd1689m/blob/main/README.md) ; [Tschannen et coll., SigLIP 2, arXiv:2502.14786](https://arxiv.org/abs/2502.14786) ; [Radford et coll., CLIP, arXiv:2103.00020](https://arxiv.org/abs/2103.00020).
+> 🕰️ **Mise à jour (2026) — les backbones de référence** — **Le livre :** VGG16 (ch. 23 et 28), entraîné sur ImageNet-1k avec des labels, comme ResNet-50, l'autre référence de 2018. · **Aujourd'hui :** côté supervisé, des CNN modernes (ConvNeXt, EfficientNet) et des Vision Transformers (ViT, Swin) ; côté modèles de fondation, des backbones auto-supervisés (**DINOv2**, 2023, Apache 2.0 ; **DINOv3**, 2025, de ViT-S à ViT-7B, 1,7 milliard d'images, licence propre à Meta) et texte-image (**CLIP**, 2021 ; **SigLIP 2**, 2025, de 86 millions à 1 milliard de paramètres, multilingue, Apache 2.0) ; leurs petites versions tournent sur un CPU. · **Faut-il quand même l'apprendre ?** Oui : le principe (un backbone, un embedding, une tête) ne change pas, seul le backbone change. · *Sources :* [Oquab et coll., DINOv2, arXiv:2304.07193](https://arxiv.org/abs/2304.07193) ; [fiche modèle de DINOv3 ViT-S/16](https://huggingface.co/facebook/dinov3-vits16-pretrain-lvd1689m/blob/main/README.md) ; [Tschannen et coll., SigLIP 2, arXiv:2502.14786](https://arxiv.org/abs/2502.14786) ; [Radford et coll., CLIP, arXiv:2103.00020](https://arxiv.org/abs/2103.00020).
 
 ---
 
@@ -622,7 +622,7 @@ Dans l'ordre où les questions éliminent des candidats :
 Un modèle fine-tuné est un **modèle dérivé** : il hérite des poids, de la licence et des biais de son modèle de base. Le publier proprement, même dans ton portfolio, demande trois fichiers (🛠️ B1.27) :
 - **les poids**, en **safetensors**, un format qui ne contient que des tenseurs et se charge sans exécuter de code (ch. 23) ;
 - **une configuration** (`config.json`) : l'architecture et le nom exact des poids de départ, le nombre de classes et leurs noms **dans l'ordre des sorties**, le prétraitement, les versions des bibliothèques ;
-- **une model card** (`README.md`) : le **modèle de base**, sa licence et un lien ; les données du fine-tuning et leur licence ; la recette ; les résultats sur un test jamais vu ; les limites et les biais hérités.
+- **une fiche modèle** (`README.md`) : le **modèle de base**, sa licence et un lien ; les données du fine-tuning et leur licence ; la recette ; les résultats sur un test jamais vu ; les limites et les biais hérités.
 
 ```python
 from safetensors.torch import load_file, save_file
@@ -655,7 +655,7 @@ model.load_state_dict(load_file("model.safetensors"))       # no pickle: nothing
 | Le nom de classe seul en zéro-shot | `texts = ["cat", "dog"]` | un gabarit, voire un ensemble de gabarits |
 | Des embeddings de CLIP non normalisés | `u @ v.T` sur des vecteurs bruts | diviser chaque vecteur par sa norme |
 | Prendre l'initialisation pour l'échelle apprise | $s = e^{2{,}6592} \approx 14{,}3$, lu dans `config.json` | `model.logit_scale.exp()`, lu dans les poids |
-| Ignorer la licence | un modèle CC BY-NC dans un produit payant | lire la model card d'abord ; citer le modèle de base |
+| Ignorer la licence | un modèle CC BY-NC dans un produit payant | lire la fiche modèle d'abord ; citer le modèle de base |
 | Charger des poids inconnus sans précaution | `torch.load(f, weights_only=False)` sur un fichier téléchargé | `weights_only=True` (le défaut) ou safetensors |
 
 ## Liens avec les autres chapitres 🔗
@@ -663,7 +663,7 @@ model.load_state_dict(load_file("model.safetensors"))       # no pickle: nothing
 - **0B, ch. 12, 13 et 15** : la similarité cosinus ; PCA et UMAP ; le k-NN et la régression logistique, appliqués ici à des embeddings.
 - **Ch. 9, 16, 17 et 19** : la régularisation L2, qui devient L2-SP ; les paramètres d'une couche dense ; la softmax ; AdamW, warmup et cosinus, ici groupe par groupe.
 - **Ch. 20 et 21** : la batchnorm et ses statistiques glissantes ; ResNet, le pooling moyen global, les cartes d'activation.
-- **Ch. 23** : un ResNet-18 gelé et une nouvelle tête sur Fashion-MNIST (📦 23.24), `fit()`, `weights_only=True`, la model card ; B1 va jusqu'au fine-tuning complet, à l'oubli et au zéro-shot.
+- **Ch. 23** : un ResNet-18 gelé et une nouvelle tête sur Fashion-MNIST (📦 23.24), `fit()`, `weights_only=True`, la fiche modèle ; B1 va jusqu'au fine-tuning complet, à l'oubli et au zéro-shot.
 - **Ch. 24 et 29** : l'augmentation avec `transforms.v2` ; licences, décalage de distribution, data card.
 - **B2 et B3** : les embeddings de mots et de phrases, comparés eux aussi par cosinus (B2.R1) ; les Vision Transformers, derrière DINOv2 et CLIP.
 - **B4** : le fine-tuning des LLM avec PEFT et LoRA, la recherche par embeddings d'un RAG (B4.R2).

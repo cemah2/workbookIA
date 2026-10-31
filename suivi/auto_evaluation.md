@@ -541,3 +541,17 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Je sais évaluer et comparer deux générateurs : distance de Fréchet, modes couverts, mémorisation (0 à 3) | |
 | Je sais juger un dataset avant usage : licence, consentement, retraits, fuites (0 à 3) | |
 <!-- wb:end CP6 -->
+<!-- wb:section B1 -->
+## B1 — Transfer learning et modèles pré-entraînés
+
+| Compétence | Niveau |
+|---|:-:|
+| Choisir entre extraction de features, fine-tuning partiel et fine-tuning complet selon le volume de données et la distance de domaine | |
+| Charger un modèle pré-entraîné avec son prétraitement (torchvision, Hugging Face Hub), et lire sa model card et sa licence | |
+| Suivre les formes d'un mini-batch dans un backbone et compter les paramètres entraînables de chaque stratégie | |
+| Entraîner un linear probe et un k plus proches voisins sur des embeddings figés, et sonder les blocs d'un backbone | |
+| Fine-tuner : learning rates par groupe, warmup puis cosinus, dégel progressif, batchnorms en mode eval | |
+| Mesurer le gain du pré-entraînement par des courbes d'apprentissage, et diagnostiquer transfert négatif et oubli catastrophique | |
+| Classer en zéro-shot avec CLIP et en few-shot par prototypes de classe | |
+| Comparer des backbones (accuracy, taille, latence sur CPU) et publier un modèle dérivé avec sa model card | |
+<!-- wb:end B1 -->

@@ -37,7 +37,7 @@ e) Un linear probe entraîné sur la sortie d'un bloc intermédiaire mesure si l
 *Fiche §201.2 · parcours R*
 
 a) Pour charger DINOv2 depuis le Hugging Face Hub : (A) `torchvision.models.get_model("dinov2", weights="DEFAULT")` ; (B) `torch.load("dinov2.pt", weights_only=True)` ; (C) `AutoModel.from_pretrained("facebook/dinov2-small")`.
-b) Parmi ces informations, lesquelles se cherchent dans la model card avant d'utiliser un modèle ? (A) la licence ; (B) les données d'entraînement ; (C) les usages déconseillés ; (D) la vitesse de ta connexion. Écris leurs lettres.
+b) Parmi ces informations, lesquelles se cherchent dans la fiche modèle avant d'utiliser un modèle ? (A) la licence ; (B) les données d'entraînement ; (C) les usages déconseillés ; (D) la vitesse de ta connexion. Écris leurs lettres.
 c) Vrai ou faux : un modèle téléchargeable sans compte ni conditions à accepter peut servir dans un produit commercial.
 d) La licence des poids `facebook/dinov2-*` aujourd'hui : (A) CC BY-NC, comme à leur sortie ; (B) Apache 2.0 ; (C) aucune, comme CLIP.
 e) Vrai ou faux : l'argument `revision=` de `from_pretrained` fixe la version du dépôt que l'on charge.
@@ -298,17 +298,17 @@ Explique en cinq lignes au plus, à quelqu'un qui ne fait pas de deep learning, 
 
 ### Ex B1.9 — Biais et licences hérités d'un modèle pré-entraîné : un projet d'imagerie médicale ⚖️ ★★ ⏱️ 25 min
 **Objectif :** repérer ce qu'un modèle dérivé hérite de son modèle de base (licence, biais, limites) et ce qu'il faut vérifier avant un usage médical.
-**Prérequis :** fiche §201.2 (licences, model cards), §201.7 (encadré ⚖️) · ch. 29 (licences, décalage de distribution, data card) · **Parcours :** R
+**Prérequis :** fiche §201.2 (licences, fiches modèles), §201.7 (encadré ⚖️) · ch. 29 (licences, décalage de distribution, data card) · **Parcours :** R
 
 Une start-up veut aider des dermatologues à repérer des lésions suspectes sur des photos de peau. Elle dispose de 2 000 photos étiquetées par trois dermatologues d'un même hôpital, et hésite entre trois backbones : un ResNet-50 de torchvision (poids ImageNet), DINOv2 (`facebook/dinov2-base`) et CLIP (`openai/clip-vit-base-patch32`). Réponds dans ta copie.
 
-1. Pour chacun des trois backbones, que dit sa licence (ou son absence de licence) et sa model card d'un usage dans un produit commercial ? Lequel écarter d'emblée, et pourquoi ?
+1. Pour chacun des trois backbones, que dit sa licence (ou son absence de licence) et sa fiche modèle d'un usage dans un produit commercial ? Lequel écarter d'emblée, et pourquoi ?
 2. Les poids ImageNet viennent d'une base réservée « à la recherche non commerciale et à l'enseignement ». Qu'est-ce qui est tranché, qu'est-ce qui ne l'est pas, et que fait en pratique une entreprise prudente ?
 3. Quels biais le modèle peut-il hériter de son pré-entraînement, et quels biais viennent des 2 000 photos elles-mêmes (couleurs de peau, appareils, hôpital, annotateurs) ? Donne un exemple de chaque.
 4. Comment mesurer ces biais avant un déploiement ? Quels sous-groupes, quelle métrique (pense au recall des lésions malignes), et quelles données d'évaluation ?
 5. Les photos sont des données de santé. Que faut-il vérifier avant de s'en servir pour un fine-tuning (consentement, base légale, RGPD), et que doit dire la data card ?
 6. Dans l'Union européenne, un logiciel d'aide au diagnostic est un dispositif médical, et un système d'IA à haut risque au sens du règlement sur l'IA. Qu'est-ce que cela change pour la documentation, l'évaluation et la surveillance après la mise sur le marché ?
-7. Rédige les cinq lignes de la section « Limites et biais hérités » de la model card du modèle dérivé.
+7. Rédige les cinq lignes de la section « Limites et biais hérités » de la fiche modèle du modèle dérivé.
 
 ### Ex B1.10 — Yosinski et coll. (2014) : jusqu'où les features se transfèrent-elles ? 📄 ★★★ ⏱️ 45 min
 **Objectif :** lire l'article qui a mesuré couche par couche ce qui se transfère d'une tâche à l'autre, et distinguer ses deux causes de dégradation.
@@ -379,7 +379,7 @@ Ces exercices sont dans `03_notebook.ipynb`, en quatre phases : charger et sonde
 | B1.24 | Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts | 📦 | ★★ | 30 |
 | B1.25 | Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe) | 📦 | ★★★ | 40 |
 | B1.26 | Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small | 🔬 | ★★ | 30 |
-| B1.27 | Publier un modèle fine-tuné : safetensors, configuration et model card qui cite le modèle de base | 🛠️ | ★★ | 25 |
+| B1.27 | Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base | 🛠️ | ★★ | 25 |
 | B1.28 | Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU | 🏆 | ★★★★ | 120 |
 
 Le notebook télécharge ResNet-18 et MobileNetV3-small (torchvision) et DINOv2-small (Hugging Face Hub), environ 150 Mo en tout, puis CLIP ViT-B/32 (environ 600 Mo) pour la dernière phase ; si ce téléchargement échoue, le few-shot se rabat sur les prototypes de DINOv2. En mode rapide, les embeddings sont calculés une fois et mis en cache, sur 2 000 images de 96 à 128 pixels ; les fine-tunings complets à 224 pixels (B1.19, B1.21) sont marqués 🚀 : mode rapide sur CPU, mode complet sur un GPU de Colab.
