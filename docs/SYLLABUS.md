@@ -4755,23 +4755,23 @@ Entraîner un grand réseau de zéro demande des données et du calcul que l'on 
 | B1.9 | ⚖️ | Biais et licences hérités d'un modèle pré-entraîné : un projet d'imagerie médicale | ★★ | 25 | — | 02 | 29 | R | manual |
 | B1.10 | 📄 | Yosinski et coll. (2014) : jusqu'où les features se transfèrent-elles ? | ★★★ | 45 | — | 02 | 21 | M | manual |
 | B1.11 | 📦 | Trois modèles pré-entraînés en main : ResNet-18, MobileNetV3-small, DINOv2-small | ★★ | 20 | CIFAR-10 | 03 | 23 | RMC | wb.check |
-| B1.12 | 🔮 | Prédire : un ResNet ImageNet face à des images CIFAR-10 de 32×32 pixels | ★ | 10 | CIFAR-10 | 03 | B1.11 | C | manual |
+| B1.12 | 🔮 | Prédire : un ResNet ImageNet face à des images CIFAR-10 de 32×32 pixels | ★ | 10 | CIFAR-10 | 03 | B1.11 | C | wb.check |
 | B1.13 | 📦 | Extraire des embeddings figés, puis linear probe et k plus proches voisins | ★★ | 30 | CIFAR-10 | 03 | B1.11, 15, 13 | RMC | manual |
 | B1.14 | 🔬 | Résolution d'entrée : accuracy du linear probe contre temps de calcul (32 à 224 pixels) | ★★★ | 40 | CIFAR-10 | 03 | B1.13, B1.12 | C | manual |
-| B1.15 | 📈 | Lire des projections PCA/UMAP : pixels bruts, ResNet et DINOv2 | ★★ | 20 | CIFAR-10 | 03 | B1.13, 12 | C | manual |
+| B1.15 | 📈 | Lire des projections PCA/UMAP : pixels bruts, ResNet et DINOv2 | ★★ | 20 | CIFAR-10 | 03 | B1.13, 12 | C | wb.check |
 | B1.16 | 🔬 | Sonder chaque bloc : linear probe couche par couche, CIFAR-10 contre Fashion-MNIST | ★★★ | 45 | CIFAR-10 | 03 | B1.13, B1.10 | MC | manual |
 | B1.17 | 📦 | Fine-tuning partiel : dégeler le dernier bloc avec des learning rates par groupe | ★★★ | 45 | CIFAR-10 | 03 | B1.13, B1.3, 23 | RC | manual |
 | B1.18 | 🐛 | Le fine-tuning qui détruit le modèle : quatre erreurs à trouver | ★★ | 25 | CIFAR-10 | 03 | B1.17 | RC | manual |
 | B1.19 | 📦 | Fine-tuning complet : warmup + cosinus, early stopping, meilleur checkpoint 🚀 | ★★★ | 50 | CIFAR-10 | 03 | B1.17, 23 | RC | manual |
-| B1.20 | 🔮 | Prédire : où le pré-entraînement rapporte-t-il le plus, 10 ou 1 000 images par classe ? | ★ | 10 | CIFAR-10 | 03 | B1.13 | RC | manual |
-| B1.21 | 🔬 | Courbes d'apprentissage : from scratch, linear probe et fine-tuning de 10 à 1 000 images par classe 🚀 | ★★★ | 60 | CIFAR-10 | 03 | B1.20, B1.19 | C | manual |
-| B1.22 | 🔬 | Domaine lointain : transférer vers Fashion-MNIST, comparé au CNN from scratch | ★★★ | 45 | Fashion-MNIST | 03 | B1.17, 21 | C | manual |
-| B1.23 | 🔬 | Oubli catastrophique : que reste-t-il des prédictions ImageNet après le fine-tuning ? | ★★ | 25 | CIFAR-10 | 03 | B1.19 | C | wb.check |
+| B1.20 | 🔮 | Prédire : où le pré-entraînement rapporte-t-il le plus, 10 ou 1 000 images par classe ? | ★ | 10 | CIFAR-10 | 03 | B1.13 | RC | wb.check |
+| B1.21 | 🔬 | Courbes d'apprentissage : from scratch, linear probe et fine-tuning de 10 à 1 000 images par classe 🚀 | ★★★ | 60 | CIFAR-10 | 03 | B1.20, B1.19, B1.13 | C | manual |
+| B1.22 | 🔬 | Domaine lointain : transférer vers Fashion-MNIST, comparé au CNN from scratch | ★★★ | 45 | Fashion-MNIST | 03 | B1.21, B1.17, B1.16, B1.13, 21 | C | manual |
+| B1.23 | 🔬 | Oubli catastrophique : que reste-t-il des prédictions ImageNet après le fine-tuning ? | ★★ | 25 | CIFAR-10 | 03 | B1.19, B1.17 | C | wb.check |
 | B1.24 | 📦 | Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts | ★★ | 30 | CIFAR-10 | 03 | B1.5, B1.11 | RC | manual |
 | B1.25 | 📦 | Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe) | ★★★ | 40 | CIFAR-10 | 03 | B1.24, B1.13 | C | manual |
 | B1.26 | 🔬 | Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small | ★★ | 30 | CIFAR-10 | 03 | B1.11 | RC | manual |
 | B1.27 | 🛠️ | Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base | ★★ | 25 | CIFAR-10 | 03 | B1.19, 23 | RC | manual |
-| B1.28 | 🏆 | Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU | ★★★★ | 120 | CIFAR-10 | 03 | B1.19, B1.25 | C | wb.check |
+| B1.28 | 🏆 | Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU | ★★★★ | 120 | CIFAR-10 | 03 | B1.19, B1.25 | C | manual |
 | B1.E1 | 💼 | Extraction de features ou fine-tuning : comment choisis-tu ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E2 | 💼 | Tu as 500 images médicales étiquetées : quelle stratégie de transfer learning ? | ★★ | 10 | — | 02 | — | R | manual |
 | B1.E3 | 💼 | Pourquoi un learning rate plus faible pour les couches pré-entraînées ? | ★★ | 10 | — | 02 | — | R | manual |

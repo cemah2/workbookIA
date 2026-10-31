@@ -1387,3 +1387,40 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP6.13 ✏️ Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam ★ 10 min
 - [ ] Mini-projet MP6 — Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST (≈ 10 h)
 <!-- wb:end CP6 -->
+
+<!-- wb:section B1 -->
+## B1 — Transfer learning et modèles pré-entraînés ⏱️ 19 h
+
+- [ ] B1.Q1–Q11 🧠 Quiz (11 questions, 33 min)
+- [ ] B1.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B1.1 ✏️ Nouvelle tête : formes des tenseurs de l'image 32×32 redimensionnée jusqu'aux logits ★ 15 min
+- [ ] B1.2 ✏️ k plus proches voisins cosinus sur six embeddings donnés ★ 10 min
+- [ ] B1.3 ✏️ Learning rates discriminatifs et warmup : le learning rate de chaque groupe, pas à pas ★ 15 min
+- [ ] B1.4 ✏️ Compter les paramètres entraînables : tête seule, dernier bloc, réseau entier ★★ 20 min
+- [ ] B1.5 ✏️ Zéro-shot CLIP à la main : cosinus, logit_scale et softmax ★★ 20 min
+- [ ] B1.6 ∂ Rester près des poids pré-entraînés : le gradient de la pénalité L2-SP ★★ 25 min
+- [ ] B1.7 🧮 Fermi : pré-entraîner sur ImageNet ou fine-tuner sur 5 000 images (GPU-heures, énergie, coût) ★★ 20 min
+- [ ] B1.8 🗣️ Le transfer learning expliqué en cinq lignes ★ 10 min
+- [ ] B1.9 ⚖️ Biais et licences hérités d'un modèle pré-entraîné : un projet d'imagerie médicale ★★ 25 min
+- [ ] B1.10 📄 Yosinski et coll. (2014) : jusqu'où les features se transfèrent-elles ? ★★★ 45 min
+- [ ] B1.11 📦 Trois modèles pré-entraînés en main : ResNet-18, MobileNetV3-small, DINOv2-small ★★ 20 min
+- [ ] B1.12 🔮 Prédire : un ResNet ImageNet face à des images CIFAR-10 de 32×32 pixels ★ 10 min
+- [ ] B1.13 📦 Extraire des embeddings figés, puis linear probe et k plus proches voisins ★★ 30 min
+- [ ] B1.14 🔬 Résolution d'entrée : accuracy du linear probe contre temps de calcul (32 à 224 pixels) ★★★ 40 min
+- [ ] B1.15 📈 Lire des projections PCA/UMAP : pixels bruts, ResNet et DINOv2 ★★ 20 min
+- [ ] B1.16 🔬 Sonder chaque bloc : linear probe couche par couche, CIFAR-10 contre Fashion-MNIST ★★★ 45 min
+- [ ] B1.17 📦 Fine-tuning partiel : dégeler le dernier bloc avec des learning rates par groupe ★★★ 45 min
+- [ ] B1.18 🐛 Le fine-tuning qui détruit le modèle : quatre erreurs à trouver ★★ 25 min
+- [ ] B1.19 📦 Fine-tuning complet : warmup + cosinus, early stopping, meilleur checkpoint ★★★ 50 min 🚀
+- [ ] B1.20 🔮 Prédire : où le pré-entraînement rapporte-t-il le plus, 10 ou 1 000 images par classe ? ★ 10 min
+- [ ] B1.21 🔬 Courbes d'apprentissage : from scratch, linear probe et fine-tuning de 10 à 1 000 images par classe ★★★ 60 min 🚀
+- [ ] B1.22 🔬 Domaine lointain : transférer vers Fashion-MNIST, comparé au CNN from scratch ★★★ 45 min
+- [ ] B1.23 🔬 Oubli catastrophique : que reste-t-il des prédictions ImageNet après le fine-tuning ? ★★ 25 min
+- [ ] B1.24 📦 Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts ★★ 30 min
+- [ ] B1.25 📦 Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe) ★★★ 40 min
+- [ ] B1.26 🔬 Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small ★★ 30 min
+- [ ] B1.27 🛠️ Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base ★★ 25 min
+- [ ] B1.28 🏆 Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU ★★★★ 120 min
+- [ ] B1.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (24 cartes)
+<!-- wb:end B1 -->
