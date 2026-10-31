@@ -656,12 +656,12 @@ EXPERIMENT_16 = r'''with checked("B1.16"):
     print(f"{'bloc':>8} " + " ".join(f"{name:>14}" for name in results_16))
     for b_16 in RESNET_BLOCKS:
         print(f"{b_16:>8} " + " ".join(f"{pct(results_16[name][b_16]):>14}" for name in results_16))
-    plt.figure(figsize=(6, 3.6))
+    plt.figure(figsize=(7, 3.8))
     for name_16, accs_16 in results_16.items():
         plt.plot(list(RESNET_BLOCKS), [accs_16[b] for b in RESNET_BLOCKS], "o-", label=name_16)
     plt.ylabel("accuracy du linear probe (test)")
     plt.xlabel("bloc sondé (sortie, pooling moyen global)")
-    plt.title(f"Linear probe bloc par bloc, ResNet-18 ImageNet gelé, {BLOCK_PER_CLASS} images par classe")
+    plt.title(f"Linear probe bloc par bloc (ResNet-18 gelé, {BLOCK_PER_CLASS} images par classe)", fontsize=10)
     plt.legend()
     plt.tight_layout()
     plt.show()'''
@@ -1002,7 +1002,7 @@ GIVEN_18 = r'''def diagnose_18(fn, steps=12):
          "les poids de la tête n'ont pas bougé : quels paramètres l'optimiseur met-il à jour, et depuis quand existe la tête ?"),
         ("la première convolution reçoit des entrées à l'échelle de son pré-entraînement", std_in > 0.6,
          f"entrées de conv1 : moyenne {fr(mean_in, 2)}, écart-type {fr(std_in, 2)}",
-         "des valeurs de moyenne ≈ 0,45 et d'écart-type ≈ 0,25 : est-ce ainsi qu'étaient préparées les images d'ImageNet ?"),
+         "ce sont des pixels entre 0 et 1 : est-ce ainsi qu'étaient préparées les images sur lesquelles ResNet-18 a appris ?"),
         ("les statistiques glissantes des batchnorms restent celles d'ImageNet", drift < 1e-6,
          f"plus grand écart de bn1.running_mean à sa valeur ImageNet : {fr(drift, 4)}",
          f"bn1.running_mean a dérivé en {steps} pas de 4 images : avec quelles statistiques les batchnorms normalisent-elles "
@@ -1203,11 +1203,14 @@ EXPERIMENT_19 = r'''with checked("B1.19"), torch.random.fork_rng():
           f"; meilleure epoch : {history_19['best_epoch']} ; test du meilleur modèle : {pct(test_19)} ({seconds_19:.0f} s)")
     lr_19 = np.array(history_19["lr"])
     fig_19, axes_19 = plt.subplots(1, 2, figsize=(10, 3.4))
+    steps_19 = np.arange(1, len(lr_19))                 # step 0 has a learning rate of 0: no place on a log scale
     for k_19 in range(lr_19.shape[1]):
-        axes_19[0].plot(lr_19[:, k_19], lw=1)
-    axes_19[0].set(yscale="log", xlabel="pas", ylabel="learning rate (échelle log)", title="Un planning par groupe")
+        axes_19[0].plot(steps_19, lr_19[1:, k_19], lw=1)
+    axes_19[0].set(yscale="log", xlabel="pas", ylabel="learning rate (échelle log)",
+                   title="Un planning par groupe (deux groupes par module)")
     axes_19[1].plot(range(len(history_19["val_acc"])), history_19["val_acc"], "o-")
     axes_19[1].axvline(history_19["best_epoch"], color="gray", ls="--", lw=1)
+    axes_19[1].set_xticks(range(len(history_19["val_acc"])))
     axes_19[1].set(xlabel="epoch", ylabel="accuracy de validation", title="Validation et meilleur checkpoint")
     plt.tight_layout()
     plt.show()'''

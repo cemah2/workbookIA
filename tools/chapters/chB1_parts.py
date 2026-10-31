@@ -154,7 +154,7 @@ Dans tes notes : décris les deux courbes. Où l'accuracy cesse-t-elle de beauco
        "lire des projections en deux dimensions de trois représentations des mêmes images, et dire ce qu'elles "
        "montrent et ce qu'elles ne prouvent pas.",
        "Ex B1.13 · ch. 12 (PCA, UMAP) · fiche §201.3 (regarder et sonder), §201.8 (DINOv2)", tracks="C",
-       body=r"""La cellule suivante projette en deux dimensions les mêmes 600 images de test (60 par classe), sous trois représentations : (A) les **pixels bruts** (3 072 valeurs), (B) les embeddings de **ResNet-18** (512), (C) ceux de **DINOv2-small** (384, images à `DINO_SIZE` pixels), chacune standardisée, puis réduite par une **PCA** (en haut) et par **UMAP** (en bas, `n_neighbors=15`, graine fixée). Une couleur par classe (≈ 30 s la première fois).
+       body=r"""La cellule suivante projette en deux dimensions les mêmes 600 images de test (60 par classe), sous trois représentations : (A) les **pixels bruts** (3 072 valeurs), (B) les embeddings de **ResNet-18** (512), (C) ceux de **DINOv2-small** (384, images à `DINO_SIZE` pixels), chacune standardisée, puis réduite par une **PCA** (en haut) et par **UMAP** (en bas, `n_neighbors=15`, graine fixée). Une couleur par classe (≈ 1 min 30 s la première fois : les embeddings DINOv2 de tout `X_TEST` sont calculés, puis mis en cache pour la suite du notebook ; ≈ 25 s ensuite).
 
 Lis la figure et écris :
 a) la lettre de la représentation dont l'UMAP montre les groupes **les plus nets** : `"A"`, `"B"` ou `"C"` ;
