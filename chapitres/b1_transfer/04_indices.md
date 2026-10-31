@@ -921,7 +921,7 @@ Relis « Quatre mesures à ne pas confondre » et « Mesurer une latence correct
 </details>
 <details><summary>Indice 2</summary>
 
-`latency_ms_26` : `model.eval()`, puis sous `torch.inference_mode()` d'abord `warmup` appels non chronométrés, puis `reps` appels entourés de `time.perf_counter()` ; rends `1000 * np.median(...)`, en `float`. `size_26` : parcours `model.parameters()` ; `p.numel()` compte les valeurs, `p.element_size()` les octets de chacune (4 en `float32`, 2 en `float16`). `profile_26` : deux appels à ta latence, l'un sur `torch.randn(1, 3, size, size)`, l'autre sur un batch de `batch` images avec `reps=5` ; le débit est `batch` divisé par la durée du batch **en secondes**.
+`latency_ms_26` : `model.eval()`, puis sous `torch.inference_mode()` d'abord `warmup` appels non chronométrés, puis `reps` appels entourés de `time.perf_counter()` ; rends `1000 * np.median(...)`, en `float`. `size_26` : parcours `model.parameters()` ; `p.numel()` compte les valeurs, `p.element_size()` les octets de chacune (4 en `float32`, 2 en `float16`). `profile_26` : deux appels à ta latence, l'un sur `torch.randn(1, 3, size, size)`, l'autre sur un batch de `batch` images avec `reps=5` et `warmup=1` ; le débit est `batch` divisé par la durée du batch **en secondes**.
 
 </details>
 <details><summary>Indice 3</summary>

@@ -258,6 +258,8 @@ def answers_cd() -> dict:
     another, with a margin of 3 points to the bounds)."""
     lc = HISTORY.get("lc21", {})
     p20 = lc.get("p20", {})
+    p20 = {k: list(v) for k, v in p20.items()}
+    p20.setdefault("1000", []).extend(HISTORY.get("p20", {}).get("runs1000", []))   # two more draws at 1 000
     out = {}
     for size, key in (("10", "gap10"), ("1000", "gap1000")):
         gaps = [100 * (r["probe"] - r["scratch"]) for r in p20.get(size, [])] or ([35.0] if size == "10" else [18.0])
@@ -328,7 +330,7 @@ L'écart se compte **en points d'accuracy** : l'accuracy du linear probe moins c
 a) l'écart avec **10** images par classe (100 images) : `"A"` moins de 10 points, `"B"` de 10 à 25 points, `"C"` plus de 25 points ;
 b) l'écart avec **1 000** images par classe (10 000 images), mêmes catégories.
 
-La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont pas écrites. Elle mesure le tirage du notebook à 10 images par classe (≈ 5 s), puis affiche le même protocole précalculé, à 96 pixels, sur trois tirages à 10 images par classe et sur un tirage à 1 000 images par classe ; tes prédictions sont vérifiées sur ce tableau.""",
+La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont pas écrites. Elle mesure le tirage du notebook à 10 images par classe (≈ 5 s), puis affiche le même protocole précalculé, à 96 pixels, sur trois tirages à 10 et à 1 000 images par classe ; tes prédictions sont vérifiées sur ce tableau.""",
        todo=C.TODO_20, solution=SOLUTION_20, hypothesis=True, record=RECORD_20,
        after=[("code", guarded(C.EXPERIMENT_20.replace("{RUNS_20}", _packed(B["runs20"])), ["gap10_20", "gap1000_20"],
                                "⏳ Ex B1.20 : écris d'abord tes deux prédictions dans la cellule précédente.")),
@@ -442,9 +444,9 @@ Dans tes notes : combien d'exemples par classe faut-il aux prototypes de CLIP po
 **Contrat** (les docstrings)
 - `latency_ms_26(model, x, reps=20, warmup=3)` : le temps d'un appel `model(x)`, en millisecondes : la **médiane** de `reps` appels chronométrés (`time.perf_counter()`), après `warmup` appels non chronométrés ; le modèle en `eval()`, les appels sous `torch.inference_mode()` ;
 - `size_26(model)` : `(nombre de paramètres, leur taille en Mo)`, la taille étant la somme de `numel() × element_size()` des paramètres, divisée par $10^6$ ;
-- `profile_26(model, size, batch=32)` : `{"params", "mb", "latency_ms", "images_per_s"}` : `size_26`, la latence d'**une** image (`torch.randn(1, 3, size, size)`), et le débit en images par seconde de batches de `batch` images (`batch` divisé par la latence d'un tel batch, en secondes ; `reps=5` pour les batches).
+- `profile_26(model, size, batch=32)` : `{"params", "mb", "latency_ms", "images_per_s"}` : `size_26`, la latence d'**une** image (`torch.randn(1, 3, size, size)`), et le débit en images par seconde de batches de `batch` images (`batch` divisé par la latence d'un tel batch, en secondes ; `reps=5` et `warmup=1` pour les batches).
 
-La cellule de vérification essaie tes fonctions sur un faux backbone dont on connaît le temps (des appels de chauffe lents, un appel lent au milieu, comme une tâche de fond) et sur un petit réseau en `float32` et `float16`. La cellule suivante mesure les trois backbones à 224 pixels (latence d'une image, débit par batches de 32), la latence au côté de leur linear probe (`SIZE` ou `DINO_SIZE` pixels), et l'accuracy de test d'un linear probe appris sur 100 images par classe (≈ 45 s la première fois, surtout les embeddings DINOv2, mis en cache pour B1.28). Une mesure de temps dépend de la machine : elle ne se vérifie que par un seuil, jamais par sa valeur.
+La cellule de vérification essaie tes fonctions sur un faux backbone dont on connaît le temps (des appels de chauffe lents, un appel lent au milieu, comme une tâche de fond) et sur un petit réseau en `float32` et `float16`. La cellule suivante mesure les trois backbones à 224 pixels (latence d'une image, débit par batches de 16), la latence au côté de leur linear probe (`SIZE` ou `DINO_SIZE` pixels), et l'accuracy de test d'un linear probe appris sur 100 images par classe (≈ 45 s la première fois, surtout les embeddings DINOv2, mis en cache pour B1.28). Une mesure de temps dépend de la machine : elle ne se vérifie que par un seuil, jamais par sa valeur.
 
 Dans tes notes : MobileNetV3-small fait 0,06 GFLOPS par image de 224 pixels, ResNet-18 1,8 (`weights.meta["_ops"]`) : le rapport des latences suit-il celui des FLOPS (fiche §201.9) ? Quel backbone choisirais-tu pour répondre en moins de 20 ms par image sur ce CPU, et lequel pour classer un million d'images en une nuit ? Que coûte chaque point d'accuracy gagné ? Que changerait la demi-précision (`float16`) à la taille ?""",
        given=C.GIVEN_26, todo=C.TODO_26, check=C.CHECK_26, solution=C.SOLUTION_26 + "\n\n\n" + C.CHECK_26,

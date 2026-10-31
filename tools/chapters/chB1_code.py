@@ -2078,7 +2078,7 @@ def size_26(model):
 def profile_26(model, size, batch=32):
     """{"params", "mb", "latency_ms", "images_per_s"} of a backbone at size x size pixels: size_26; the latency of ONE
     image (a batch of 1, torch.randn(1, 3, size, size)); the throughput in images per second of batches of `batch`
-    images (batch / the latency of such a batch, in seconds), with reps=5 for the batches."""
+    images (batch / the latency of such a batch, in seconds), with reps=5 and warmup=1 for the batches."""
     raise NotImplementedError("profile_26")'''
 
 SOLUTION_26 = r'''def latency_ms_26(model, x, reps=20, warmup=3):
@@ -2105,10 +2105,10 @@ def size_26(model):
 def profile_26(model, size, batch=32):
     """{"params", "mb", "latency_ms", "images_per_s"} of a backbone at size x size pixels: size_26; the latency of ONE
     image (a batch of 1, torch.randn(1, 3, size, size)); the throughput in images per second of batches of `batch`
-    images (batch / the latency of such a batch, in seconds), with reps=5 for the batches."""
+    images (batch / the latency of such a batch, in seconds), with reps=5 and warmup=1 for the batches."""
     n, mb = size_26(model)
     one = latency_ms_26(model, torch.randn(1, 3, size, size))
-    many = latency_ms_26(model, torch.randn(batch, 3, size, size), reps=5)
+    many = latency_ms_26(model, torch.randn(batch, 3, size, size), reps=5, warmup=1)
     return {"params": n, "mb": mb, "latency_ms": one, "images_per_s": batch / (many / 1000)}'''
 
 CHECK_26 = r'''class Clocked_26(nn.Module):
@@ -2169,13 +2169,14 @@ EXPERIMENT_26 = r'''with checked("B1.26"):
     from sklearn.preprocessing import StandardScaler
     rows_26 = {}
     for name_26, (bb_26, side_26) in BACKBONES_26.items():
+        rows_26[name_26] = {**profile_26(bb_26.model, 224, batch=16), "side": side_26,
+                            "latency_side_ms": latency_ms_26(bb_26.model, torch.randn(1, 3, side_26, side_26))}
+    for name_26, (bb_26, side_26) in BACKBONES_26.items():     # the accuracy, once the timings are done
         E_tr_26 = transfer.cached_embeddings(bb_26, X_TRAIN[idx_26], size=side_26, subset="train", verbose=False)
         E_te_26 = transfer.cached_embeddings(bb_26, X_TEST, size=side_26, subset="test", verbose=False)
-        acc_26 = float(make_pipeline(StandardScaler(), LogisticRegression(C=0.01, max_iter=3000)).fit(E_tr_26, Y_TRAIN[idx_26])
-                       .score(E_te_26, Y_TEST))
-        rows_26[name_26] = {**profile_26(bb_26.model, 224), "side": side_26, "accuracy": acc_26,
-                            "latency_side_ms": latency_ms_26(bb_26.model, torch.randn(1, 3, side_26, side_26))}
-    print(f"{'backbone':<18} {'paramètres':>11} {'Mo':>6} {'latence 224 px':>15} {'images/s (32)':>14} "
+        rows_26[name_26]["accuracy"] = float(make_pipeline(StandardScaler(), LogisticRegression(C=0.01, max_iter=3000))
+                                             .fit(E_tr_26, Y_TRAIN[idx_26]).score(E_te_26, Y_TEST))
+    print(f"{'backbone':<18} {'paramètres':>11} {'Mo':>6} {'latence 224 px':>15} {'images/s (16)':>14} "
           f"{'latence, côté du probe':>23} {'probe (100 / classe)':>21}")
     for name_26, r_26 in rows_26.items():
         side_text_26 = f"{fr(r_26['latency_side_ms'], 1)} ms ({r_26['side']} px)"

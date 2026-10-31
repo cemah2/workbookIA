@@ -2,7 +2,7 @@
 """Calibrate the predictions, replay the bug hunt and precompute the long experiments of chapter B1 (used by Claude).
 
     python tools/chapters/history_chB1.py                 # everything (about 1 h 15 min on a 2-core CPU)
-    python tools/chapters/history_chB1.py --only bug18    # one entry: p12, u15, bug18, variants, timing, lc21, fm22, o23, c28
+    python tools/chapters/history_chB1.py --only bug18    # one entry: p12, u15, bug18, variants, timing, lc21, fm22, o23, p20, c28
 
 Writes tools/chapters/history_chB1.json (statistics only), which chB1_parts.py reads:
 - "p12": 🔮 B1.12 for three draws of the nested subsets (seeds): the linear probe accuracy on the embeddings of the
@@ -19,6 +19,7 @@ Writes tools/chapters/history_chB1.json (statistics only), which chB1_parts.py r
 - "fm22": 🔬 B1.22, the same curves on Fashion-MNIST (from scratch, frozen probes of layer3 and layer4, partial
   fine-tuning), at 64 pixels (≈ 12 min);
 - "o23": 🔬 B1.23, the ImageNet top-1 agreement after the fine-tunings of B1.17 and B1.19, three seeds;
+- "p20": 🔮 B1.20, two more draws at 1 000 images per class (probe and from scratch);
 - "c28": 🏆 B1.28, the reference of the challenge (DINOv2-small frozen and a linear probe) on five draws.
 The cells of the notebook are reused as is (tools/chapters/chB1_code.py), executed in one namespace.
 """
@@ -282,6 +283,17 @@ def o23(ns) -> dict:
     return {"runs": runs}
 
 
+def p20(ns) -> dict:
+    """🔮 B1.20: two more draws at 1 000 images per class (probe and from scratch), for the category of b)."""
+    runs = []
+    for seed in (1, 2):
+        rows = {name: ns["learning_curve_21"](fn, {1000: (seed,)}, (ns["X_TEST"], ns["Y_TEST"]))[0]["accuracy"]
+                for name, fn in (("probe", ns["probe_21"]), ("scratch", ns["scratch_21"]))}
+        runs.append({"seed": seed, "probe": round(rows["probe"], 4), "scratch": round(rows["scratch"], 4)})
+        print(f"  p20 {runs[-1]}", flush=True)
+    return {"runs1000": runs}
+
+
 def c28(ns) -> dict:
     """🏆 B1.28: the reference (DINOv2-small frozen + a linear probe) on five draws of 100 images per class."""
     import numpy as np
@@ -334,6 +346,7 @@ ENTRIES = {"p12": ((), p12), "u15": ((), u15), "bug18": (("GIVEN_B", "SOLUTION_1
            "lc21": (("SOLUTION_13", "GIVEN_B", "SOLUTION_17", "SOLUTION_19", "GIVEN_C", "SOLUTION_21"), lc21),
            "fm22": (("SOLUTION_13", "GIVEN_B", "SOLUTION_17", "GIVEN_C", "SOLUTION_21", "GIVEN_22", "SOLUTION_22"), fm22),
            "o23": (("GIVEN_B", "SOLUTION_17", "SOLUTION_19", "GIVEN_C", "SOLUTION_23"), o23),
+           "p20": (("SOLUTION_13", "GIVEN_B", "GIVEN_C", "SOLUTION_21"), p20),
            "c28": ((), c28)}
 
 
