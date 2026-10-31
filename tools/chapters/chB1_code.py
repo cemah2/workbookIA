@@ -626,7 +626,12 @@ CHECK_16 = r'''with checked("B1.16"):
             want_16 = RESNET.embed_blocks(sample_16, 64, batch_size=4)
             calls_16.clear()                             # count the passes of YOUR function only
             grad_16.clear()
-            got_16 = block_embeddings_16(net_16, sample_16, 64, batch_size=4)
+            try:
+                got_16 = block_embeddings_16(net_16, sample_16, 64, batch_size=4)
+            except RuntimeError as exc_16:
+                if "requires grad" not in str(exc_16):
+                    raise
+                got_16, grad_16 = None, [True]           # numpy() refused an output that requires a gradient
             passes_16 = list(calls_16)
             if any(grad_16):
                 print(f"❌ Ex B1.16 : {name_16} : les passes avant se font avec le calcul du gradient : le contrat demande "
@@ -2095,6 +2100,9 @@ with checked("B1.25"):
 
 EXPERIMENT_25 = r'''with checked("B1.25"):
     need("B1.25", "few_shot_25", "prototypes_25", "predict_25")
+    if not globals().get("ok_25"):
+        print("⏳ Ex B1.25 : l'expérience attend que prototypes_25 et predict_25 passent la vérification ci-dessus.")
+        raise StopCheck
     models_25 = {name: emb for name, emb in (("DINOv2-small", (DINO_S_25, DINO_D_25)), ("CLIP B/32", (CLIP_S_25, CLIP_D)))
                  if emb[0] is not None}
     if not models_25:
