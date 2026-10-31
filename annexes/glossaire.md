@@ -186,7 +186,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | bigramme | bigram | paire de symboles consécutifs (deux caractères, deux mots) | 1 |
 | LLM | grand modèle de langage (large language model) | très grand réseau pré-entraîné à prédire le token suivant sur d'immenses textes, puis aligné | 1 |
 | alignement, RLHF | alignment, reinforcement learning from human feedback | ajuster un LLM sur des préférences humaines, par renforcement ou des méthodes voisines (DPO) | 1 |
-| foundation model | modèle de fondation | modèle géant entraîné une fois sur des données très variées, puis réutilisé pour de nombreuses tâches | 1 |
+| modèle de fondation | foundation model | modèle géant entraîné une fois sur des données très variées, sans viser une tâche précise, puis réutilisé pour de nombreuses tâches (R. Bommasani et coll., 2021) : LLM, DINOv2, CLIP (bonus B1) | 1 |
 | modèle de diffusion | diffusion model | générateur qui apprend à reconstruire une image à partir d'une version bruitée | 1 |
 | machine learning (ML) | apprentissage automatique | ensemble des méthodes qui apprennent à partir d'exemples au lieu d'appliquer des règles écrites à la main | 1 |
 | jeu de validation | validation set | exemples mis de côté pour comparer des modèles et régler les hyperparamètres, sans toucher au jeu de test | 1 |
@@ -900,6 +900,31 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | licence Creative Commons | Creative Commons license | famille de licences de contenus : CC0 (aucune condition), CC BY (citer l'auteur), NC (pas d'usage commercial), SA (partager à l'identique), ND (pas de modification) | 29 |
 | Croissant | Croissant | format de métadonnées de datasets lisible par machine (MLCommons, 2024), fondé sur schema.org | 29 |
 | dataset retiré | retracted dataset | dataset que ses auteurs ne distribuent plus (consentement absent, contenus injurieux ou illégaux) ; une copie sur un miroir ne lève pas le problème | 29 |
+| backbone | tronc | les couches d'un réseau pré-entraîné qui transforment une image en embedding $\phi(\mathbf{x})$, de `conv1` au pooling moyen global pour un ResNet ; on le réutilise et l'on remplace la tête | B1 |
+| extraction de features | feature extraction | réutiliser un backbone gelé : ses embeddings, calculés une fois, nourrissent un classifieur simple (linear probe, k plus proches voisins) | B1 |
+| embedding figé | frozen embedding | embedding d'un backbone qui ne change plus pendant l'entraînement : on le calcule une seule fois et on le sauvegarde (`.npz`) | B1 |
+| linear probe | sonde linéaire | régression logistique entraînée sur des embeddings figés, $\operatorname{softmax}(\mathbf{W}\phi(\mathbf{x}) + \mathbf{b})$ ; sert de baseline et à sonder ce que contient une couche (G. Alain et Y. Bengio, 2016) | B1 |
+| fine-tuning partiel, complet | partial, full fine-tuning | continuer d'entraîner seulement les derniers blocs et la tête, ou tout le réseau, en partant des poids pré-entraînés | B1 |
+| learning rates discriminatifs | discriminative learning rates, discriminative fine-tuning | un learning rate par groupe de paramètres, qui décroît de la tête vers l'entrée : $\eta_\ell = \eta_{\text{tête}}\,\gamma^{L-\ell}$ (ULMFiT, J. Howard et S. Ruder, 2018) | B1 |
+| groupe de paramètres | parameter group, param group | ensemble de paramètres qu'un optimiseur PyTorch traite avec ses propres réglages (learning rate, weight decay) : `AdamW([{"params": ..., "lr": ...}, ...])` | B1 |
+| dégel progressif | gradual unfreezing | fine-tuning qui dégèle un groupe de plus à chaque epoch, de la tête vers l'entrée (ULMFiT) | B1 |
+| LP-FT | linear probing then fine-tuning | entraîner d'abord un linear probe, puis fine-tuner tout le réseau : la tête est raisonnable avant que le backbone bouge (A. Kumar et coll., 2022) | B1 |
+| L2-SP | L2 starting point | pénalité $\frac{\lambda}{2}\lVert\theta - \theta_0\rVert^2$ qui tire les poids vers leurs valeurs pré-entraînées, et non vers 0 (X. Li, Y. Grandvalet et F. Davoine, 2018) | B1 |
+| EWC | elastic weight consolidation | variante de L2-SP qui pondère le rappel de chaque poids par son importance pour l'ancienne tâche (J. Kirkpatrick et coll., 2017) | B1 |
+| distance de domaine | domain gap | écart entre le genre de données du pré-entraînement et celui de la tâche cible (photos, radiographies, spectrogrammes…) ; la version « features » du décalage de distribution | B1 |
+| transfert négatif | negative transfer | partir d'un modèle pré-entraîné donne un résultat pire que partir de zéro, à budget égal ; se voit contre des baselines | B1 |
+| oubli catastrophique | catastrophic forgetting | après un fine-tuning, le modèle ne sait plus faire son ancienne tâche (M. McCloskey et N. Cohen, 1989) ; se mesure par l'accord des prédictions avec l'ancienne tête | B1 |
+| few-shot | à quelques exemples | classer avec quelques exemples étiquetés par classe (1, 5, 16), par exemple par prototypes de classe | B1 |
+| prototype de classe | class prototype | moyenne des embeddings des exemples d'une classe, $\mathbf{m}_c = \frac{1}{|S_c|}\sum_{\mathbf{x} \in S_c} \phi(\mathbf{x})$ ; une image va au prototype le plus proche au sens du cosinus (J. Snell et coll., 2017) | B1 |
+| support (few-shot) | support set | l'ensemble $S_c$ des exemples étiquetés d'une classe dans un problème few-shot (à ne pas confondre avec le support d'une classe du ch. 3) | B1 |
+| zéro-shot | zero-shot | classer sans aucun exemple de la tâche cible : CLIP compare l'image à une phrase par classe | B1 |
+| gabarit (de prompt) | prompt template | phrase à trou qui fabrique une phrase par classe pour le zéro-shot : « a photo of a {classe} » | B1 |
+| ensemble de prompts | prompt ensembling | moyenne, pour chaque classe, des embeddings normalisés de plusieurs gabarits, puis renormalisation | B1 |
+| apprentissage contrastif | contrastive learning | apprendre des embeddings en rapprochant les paires qui vont ensemble (une image et sa légende) et en éloignant les autres paires du mini-batch (CLIP) | B1 |
+| échelle des logits (CLIP) | logit scale | $s = $ `model.logit_scale.exp()`, apprise, qui multiplie les cosinus avant la softmax ; `logit_scale_init_value` de `config.json` n'est que sa valeur de départ | B1 |
+| latence | latency | temps de réponse d'un modèle à une seule requête (batch de 1), mesuré sur la machine cible | B1 |
+| débit | throughput | nombre d'images traitées par seconde en regroupant les requêtes en batches | B1 |
+| modèle dérivé | derived model | modèle obtenu par fine-tuning d'un modèle de base : il hérite de ses poids, de sa licence et de ses biais, et sa model card le cite | B1 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

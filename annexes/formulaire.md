@@ -727,5 +727,19 @@ Notations : $N$ exemples, $n_c$ de la classe $c$ ; 1 Mo = $10^6$ octets, 1 Go = 
 | somme de contrôle | SHA-256 : 256 bits, 64 caractères hexadécimaux, calculée par morceaux | `hashlib.sha256()`, `update(morceau)`, `hexdigest()` (🛠️ 29.15) |
 
 ## Partie VII : bonus
-### B1 à B8
+### B1 · Transfer learning et modèles pré-entraînés
+
+Notations : $\phi(\mathbf{x}) \in \mathbb{R}^d$ l'embedding (la sortie du backbone), $K$ classes, $\theta_0$ les poids pré-entraînés, groupes de paramètres $\ell = 1, \dots, L$ de l'entrée vers la tête, $s$ l'échelle des logits de CLIP.
+
+| Notion | Formule | En code |
+|---|---|---|
+| linear probe | $\hat{\mathbf{y}} = \operatorname{softmax}(\mathbf{W}\,\phi(\mathbf{x}) + \mathbf{b})$, $\mathbf{W} \in \mathbb{R}^{K \times d}$, sur l'embedding figé | `make_pipeline(StandardScaler(), LogisticRegression())` |
+| paramètres d'une tête linéaire | $d \times K + K$ | `nn.Linear(model.fc.in_features, K)` (✏️ B1.4) |
+| learning rates discriminatifs | $\eta_\ell = \eta_{\text{tête}}\,\gamma^{L-\ell}$, $0 < \gamma < 1$ | `AdamW([{"params": g.parameters(), "lr": head_lr * gamma ** k} ...])` (✏️ B1.3) |
+| warmup linéaire | $\eta_t = \eta_{\max}\,\min\left(1, \frac{t}{t_{\text{warmup}}}\right)$, puis un cosinus ; le même facteur pour chaque groupe | `LambdaLR(optimizer, f)` (✏️ B1.3) |
+| L2-SP | $\Omega(\theta) = \frac{\lambda}{2}\lVert\theta - \theta_0\rVert^2$, $\nabla\Omega = \lambda(\theta - \theta_0)$ ; avec $\nabla L = 0$, $\theta_{t+1} - \theta_0 = (1 - \eta\lambda)(\theta_t - \theta_0)$ | `lam / 2 * sum(((p - p0) ** 2).sum() ...)`, `weight_decay=0` (∂ B1.6) |
+| zéro-shot CLIP | $p(c \mid \mathbf{x}) = \frac{\exp(s \cos(\mathbf{u}_x, \mathbf{v}_c))}{\sum_{c'} \exp(s \cos(\mathbf{u}_x, \mathbf{v}_{c'}))}$, $s = $ `exp(logit_scale)` | `(model.logit_scale.exp() * u @ v.T).softmax(-1)` (✏️ B1.5) |
+| prototype de classe | $\mathbf{m}_c = \frac{1}{\lvert S_c \rvert}\sum_{\mathbf{x} \in S_c} \phi(\mathbf{x})$ ; classe du prototype de plus grand cosinus | `emb[labels == c].mean(axis=0)` |
+
+### B2 à B8
 *(à compléter)*

@@ -1,6 +1,8 @@
 # B1 — notes pour le rédacteur des exercices (temporaire, à supprimer avant le commit)
 
-Session 63. Fiche : `01_fiche.md` (≈ 11 540 mots, soit ≈ 92 min à 125 mots/min ; les bonus gardent la durée du contrat, 90 min). Figures : `python tools/chapters/figures_chB1.py` → `figures/strategies.png`, `matrice_decision.png`, `planning_lr.png`, `clip_zero_shot.png`, `backbones.png` (aucun entraînement, hors ligne, < 5 s).
+> **Mise à jour du relecteur indépendant de la fiche (session 63)** : sections touchées ci-dessous, « Ce que la fiche utilise déjà » (latences, débits et rapport MobileNet/ResNet recalés sur de nouvelles mesures ; nouveaux faits : top-1/top-5 définis, Mio défini, `vit_b_16` n'accepte que 224 × 224, 196 et 100 classes de Stanford Cars et FGVC Aircraft, `layer4` = 64 % de ResNet-50, tête K = 5 = 0,04 % du réseau). La fiche ne renvoie plus à 🐛 B1.18 dans ses paragraphes sur la batchnorm et sur l'optimiseur créé avant la tête (le 🐛 garde ses quatre erreurs, la ligne du tableau section → exercices reste). La rubrique « Auto-évaluation » a été retirée (hors §12). Fiche : ≈ 11 300 mots.
+
+Session 63. Fiche : `01_fiche.md` (≈ 11 300 mots après relecture, soit ≈ 90 min à 125 mots/min ; les bonus gardent la durée du contrat, 90 min). Figures : `python tools/chapters/figures_chB1.py` → `figures/strategies.png`, `matrice_decision.png`, `planning_lr.png`, `clip_zero_shot.png`, `backbones.png` (aucun entraînement, hors ligne, < 5 s).
 
 ## ⚠️ À faire par le coordinateur
 
@@ -34,7 +36,7 @@ Session 63. Fiche : `01_fiche.md` (≈ 11 540 mots, soit ≈ 92 min à 125 mots/
 - **L2-SP** : λ = 0,01, θ₀ = 0,8, θ = 1,1 → Ω = 0,00045, ∇ = 0,003. La fiche donne Ω et ∇Ω (contrat) mais **ne dérive pas** l'effet sur un pas de SGD (θ − θ₀ multiplié par 1 − ηλ, rappel géométrique vers θ₀, comparaison au weight decay vers 0) : c'est la matière de ∂ B1.6.
 - **Zéro-shot CLIP** : cosinus 0,31 / 0,27 / 0,22, s = 100 → 0,982 / 0,018 / 0,0001 ; avec s = 1 → 0,348 / 0,334 / 0,318 (le rôle de s est donc expliqué). La fiche affirme s = exp(logit_scale) = 100 pour ce modèle. → B1.5 : autres cosinus, idéalement quatre classes, et une question qui ne soit pas « que se passe-t-il avec s = 1 ».
 - **Prototypes** : 2D, pomme (0,8 ; 0,2) / poire (0,3 ; 0,8), q = (0,6 ; 0,5) → 0,900 / 0,869.
-- **Latence** (2 cœurs, 224 px) : MobileNetV3-large ≈ 20-26 ms, EfficientNet-B0 ≈ 28-39, ConvNeXt-T ≈ 85-105, ResNet-50 ≈ 95-120 ms ; débits ≈ 70 / 45 / 16 / 12 images/s ; « 19 fois moins de FLOPS, ≈ 5 fois plus rapide ». Les trois modèles de B1.26 sont exclus de la table et de la figure `backbones.png`.
+- **Latence** (2 cœurs, 224 px, fourchettes sur plusieurs exécutions, machine parfois chargée) : MobileNetV3-large ≈ 18-30 ms, EfficientNet-B0 ≈ 28-46, ConvNeXt-T ≈ 85-105, ResNet-50 ≈ 95-140 ms ; débits ≈ 55-70 / 35-45 / 14-16 / 11-12 images/s ; « 19 fois moins de FLOPS, seulement 4 à 6 fois plus rapide ». ResNet-50 : 25 557 032 paramètres, ≈ 102 Mo (97,5 Mio) en float32 ; fichier safetensors à tête K = 5 : 94,3 Mo. Les trois modèles de B1.26 sont exclus de la table et de la figure `backbones.png`.
 - **Coût ∝ pixels** : (224/160)² ≈ 2 donné en exemple.
 
 ## Ce que la fiche ne dit pas (à garder pour les 🔮, 📄 et 🔬)

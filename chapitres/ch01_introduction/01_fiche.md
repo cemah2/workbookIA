@@ -42,7 +42,7 @@ Ce chapitre est une **carte** : il présente le vocabulaire et les grandes famil
 - **charger et décrire** les quatre fils rouges du workbook, et dire quel type de problème chacun illustre ;
 - **coder** une boucle d'entraînement minimale et **observer** l'effet du learning rate ;
 - **diagnostiquer** une évaluation faussée (mémorisation, jeu de test vu pendant l'entraînement, fuite de données) ;
-- **situer** les LLM, les modèles de diffusion et les foundation models sur la carte du machine learning.
+- **situer** les LLM, les modèles de diffusion et les modèles de fondation sur la carte du machine learning.
 
 ## L'essentiel en 10 lignes
 
@@ -303,7 +303,7 @@ En 2018, le deep learning, c'était surtout des réseaux convolutifs pour les im
 > - l'architecture **Transformer** (2017, une architecture de réseau fondée sur un mécanisme d'« attention », bonus B3) s'est imposée partout ;
 > - les **grands modèles de langage** (*large language models*, LLM) comme GPT, Claude, Gemini, Llama ou Mistral sont **pré-entraînés** à prédire le **token** (*jeton*) suivant (un morceau de texte : un mot, un bout de mot, une ponctuation) sur d'immenses quantités de texte (auto-supervisé), puis **alignés** sur des préférences humaines ; depuis 2024, des modèles « de raisonnement » sont en plus entraînés par **renforcement** sur des tâches dont la réponse se vérifie automatiquement (mathématiques, code), ch. 11 ; ChatGPT, lancé le 30 novembre 2022, les a fait connaître du grand public ;
 > - les **modèles de diffusion** génèrent images, vidéos et sons (Stable Diffusion, 2022) ;
-> - on appelle **foundation models** (*modèles de fondation*) ces modèles géants entraînés une fois sur des données très variées, puis réutilisés pour mille tâches : par simple **prompting** (en leur écrivant une consigne, le *prompt*), en leur donnant des documents à consulter (**RAG**, *retrieval-augmented generation*), ou par un **fine-tuning** (*réglage fin*) léger, qui réentraîne un peu le modèle sur une nouvelle tâche (par exemple avec la méthode **LoRA**) ;
+> - on appelle **modèles de fondation** (*foundation models*) ces modèles géants entraînés une fois sur des données très variées, puis réutilisés pour mille tâches : par simple **prompting** (en leur écrivant une consigne, le *prompt*), en leur donnant des documents à consulter (**RAG**, *retrieval-augmented generation*), ou par un **fine-tuning** (*réglage fin*) léger, qui réentraîne un peu le modèle sur une nouvelle tâche (par exemple avec la méthode **LoRA**) ;
 > - selon l'AI Index 2026 de Stanford, l'industrie a produit plus de 90 % des modèles d'IA marquants de 2025.
 >
 > **Faut-il quand même l'apprendre ?** Oui : un LLM est un réseau de neurones profond, entraîné par une boucle « prédire, mesurer l'erreur, corriger » sur des échantillons, avec une loss et un learning rate, et on vérifie qu'il généralise. Le socle de ce chapitre est exactement le sien ; les chapitres bonus B2 à B5 y mènent. · *Sources :* A. Vaswani et coll., « [Attention Is All You Need](https://arxiv.org/abs/1706.03762) », 2017 ; R. Bommasani et coll., « [On the Opportunities and Risks of Foundation Models](https://arxiv.org/abs/2108.07258) », 2021 ; OpenAI, « [Introducing ChatGPT](https://openai.com/index/chatgpt/) », 2022 ; R. Rombach et coll., « [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752) », CVPR 2022 ; [Stanford HAI, AI Index Report 2026](https://hai.stanford.edu/ai-index/2026-ai-index-report).

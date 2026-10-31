@@ -116,7 +116,7 @@ Pour chaque tâche : clustering, débruitage ou réduction de dimension ?
 
 1. Pendant son pré-entraînement, un grand modèle de langage (LLM) apprend à prédire le token suivant d'un texte. Est-ce supervisé, non supervisé, auto-supervisé ou par renforcement ?
 2. À quelle famille du chapitre appartient Stable Diffusion, qui produit des images à partir d'une phrase ?
-3. Qu'est-ce qu'un *foundation model* ?
+3. Qu'est-ce qu'un modèle de fondation ?
 4. Qu'est-ce qu'un token ?
 5. Vrai ou faux : le vocabulaire de ce chapitre (échantillon, loss, learning rate, généralisation) ne s'applique plus aux LLM.
 

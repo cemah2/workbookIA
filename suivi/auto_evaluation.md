@@ -61,7 +61,7 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Charger et décrire les quatre fils rouges (Penguins, MNIST, Holmes et Verne, taches solaires) et lire leur data card | |
 | Coder une boucle d'entraînement minimale et expliquer l'effet du learning rate | |
 | Diagnostiquer une évaluation faussée : mémorisation, test vu à l'entraînement, fuite du label | |
-| Situer les LLM, les modèles de diffusion et les foundation models sur la carte du ML (réponse d'entretien en une minute) | |
+| Situer les LLM, les modèles de diffusion et les modèles de fondation sur la carte du ML (réponse d'entretien en une minute) | |
 <!-- wb:end 1 -->
 <!-- wb:section 2 -->
 ## 2 — Hasard et statistiques de base

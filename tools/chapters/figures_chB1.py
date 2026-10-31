@@ -74,7 +74,7 @@ def figure_strategies() -> None:
     fig, ax = plt.subplots(figsize=(10.6, 5.0))
     names = ["stem", "bloc 1", "bloc 2", "bloc 3", "bloc 4"]
     w, h, gap = 1.25, 0.9, 0.28
-    head_w, in_w = 1.55, 1.15
+    head_w, in_w = 1.55, 1.45
     rows = [
         ("Extraction de features\n(linear probe, k-NN)", [False] * 5, "embeddings calculés une fois,\nmis en cache"),
         ("Fine-tuning partiel\n(dernier bloc dégelé)", [False, False, False, False, True],
@@ -84,7 +84,7 @@ def figure_strategies() -> None:
     for r, (title, trained, note) in enumerate(rows):
         y = 2 * (len(rows) - 1 - r)
         ax.text(-in_w + 0.6, y + h / 2, title, ha="right", va="center", fontsize=9.5, color=INK, fontweight="bold")
-        box(ax, (-in_w + 0.8, y), in_w, h, "image\n(N, 3, H, W)", "white", fontsize=7.5, ec=MUTED)
+        box(ax, (-in_w + 0.8, y), in_w, h, "image\n(N, 3, H, W)", "white", fontsize=7.2, ec=MUTED)
         x = 0.8 + gap
         arrow(ax, (0.8, y + h / 2), (x, y + h / 2))
         for k, (name, on) in enumerate(zip(names, trained)):
@@ -107,10 +107,10 @@ def figure_strategies() -> None:
     ax.annotate("", xy=(0.8 + gap, -0.3), xytext=(0.8 + gap + 5 * (w + gap) - gap, -0.3),
                 arrowprops=dict(arrowstyle="<->", color=MUTED, lw=1))
     ax.legend(handles=[Patch(fc=FROZEN, ec=INK, label="gelé (requires_grad = False)"),
-                       Patch(fc=TRAINED, ec=INK, label="entraîné"),
+                       Patch(fc=TRAINED, ec=INK, label="entraîné (plus clair : learning rate plus petit)"),
                        Patch(fc=NEW, ec=INK, label="nouvelle couche, initialisée au hasard")],
               loc="upper center", bbox_to_anchor=(0.55, -0.02), ncol=3, fontsize=8.5)
-    ax.set_xlim(-3.6, 14.2)
+    ax.set_xlim(-4.0, 14.2)
     ax.set_ylim(-0.9, 5.2)
     ax.axis("off")
     save(fig, "strategies.png")
@@ -136,7 +136,7 @@ def figure_decision() -> None:
         x, y = 1.0 + 4.2 * i, 0.4 + 2.9 * j
         ax.add_patch(FancyBboxPatch((x, y), 3.9, 2.6, boxstyle="round,pad=0.02,rounding_size=0.12",
                                     fc=matplotlib.colors.to_rgba(color, 0.16), ec=color, lw=1.6))
-        ax.text(x + 1.95, y + 2.3, title, ha="center", va="center", fontsize=9, fontweight="bold", color=INK)
+        ax.text(x + 1.95, y + 2.3, title, ha="center", va="center", fontsize=8.6, fontweight="bold", color=INK)
         ax.text(x + 1.95, y + 1.1, text, ha="center", va="center", fontsize=8.6, color=INK)
     arrow(ax, (1.0, 0.1), (9.3, 0.1), color=MUTED)
     ax.text(5.15, -0.25, "taille du dataset cible (images étiquetées par classe) →", ha="center", fontsize=9,
@@ -230,7 +230,8 @@ def figure_clip() -> None:
     bx = fig.add_axes([0.71, 0.2, 0.27, 0.62])
     bx.bar(range(3), probs, color=[C[0], C[1], C[2]])
     for k, p in enumerate(probs):
-        bx.text(k, p + 0.02, french_number(round(float(p), 4)), ha="center", fontsize=8.5, color=INK)
+        label = f"{p:.3f}" if p >= 0.01 else f"{p:.4f}"        # 0,982 ; 0,018 ; 0,0001, as in the text
+        bx.text(k, p + 0.02, label.replace(".", ","), ha="center", fontsize=8.5, color=INK)
     bx.set_xticks(range(3), labels)
     bx.set_ylim(0, 1.1)
     bx.set_ylabel("p(c | x)")
@@ -253,7 +254,7 @@ def figure_backbones() -> None:
     fig, ax = plt.subplots(figsize=(8.6, 4.8))
     for k, (name, ops, acc, params) in enumerate(rows):
         ax.scatter(ops, acc, s=12 + 3.2 * params, color=C[k % 8], alpha=0.75, edgecolor=INK, lw=0.6, zorder=3)
-        ax.annotate(f"{name}\n{french_number(round(params, 1))} M", (ops, acc), textcoords="offset points",
+        ax.annotate(f"{name}\n{params:.1f} M".replace(".", ","), (ops, acc), textcoords="offset points",
                     xytext=OFFSETS.get(name, (7, -3)), fontsize=7.4, color=INK)
     ax.set_xscale("log")
     ax.set_xticks([0.2, 0.5, 1, 2, 5, 10, 20], ["0,2", "0,5", "1", "2", "5", "10", "20"])
