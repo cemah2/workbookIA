@@ -51636,6 +51636,41 @@
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },
+    "B1.20a": {
+      "hash": "af57c69397260a1ee9d45cf094c068630a5f0204399d8ec95ffb72111bb991bd",
+      "kind": "str",
+      "mistakes": {
+        "057728f4708c14a1803e2058c4bbbfdf97ebe505978e6d81fbf051e5b3f2e6f4": "regarde les lignes à 10 images par classe : l'écart est-il sous 10 points ?",
+        "2e671409b7e36090e5ca75100503ce01cabb5e72a224b6d943169e7fb9ba04dc": "regarde les lignes à 10 images par classe : l'écart est-il entre 10 et 25 points ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.20b": {
+      "hash": "163a7b19b1c934a02ffec89afd877c6fcc7a22e804b4af0362d6a7ebc0f6050e",
+      "kind": "str",
+      "mistakes": {
+        "4a6ed87562787002fee757414861b3a550fb4e6513cf41188791ab0bf206ec10": "regarde les lignes à 1 000 images par classe : l'écart dépasse-t-il 25 points ?",
+        "6dda6cf83f9ce7f3ccac9895dfbfb43e0ccbf1b0c7e9790b5242d34f76967fdf": "regarde les lignes à 1 000 images par classe : l'écart est-il sous 10 points ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.23a": {
+      "hash": "fcffaf7ca23c4eb703d123766c8ff6d6a9dc4074af1405961cdc018df5f1f833",
+      "kind": "str",
+      "mistakes": {
+        "8b6bee6c8f9c096c4b381d1e99d247a279e65bcf2e8d6b45b96ac9d2ac35852e": "relis la ligne de MODEL_19 : l'accord dépasse-t-il 70 % ?",
+        "9a691b1df4af4c22e1b73f9b53311552517f452b862d3f7bd947f9b7bbadf86c": "relis la ligne de MODEL_19 : l'accord est-il entre 30 et 70 % ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.23b": {
+      "hash": "dc5a2f6203419c5d43278a90225f0b8b0c380216f473ae5d4dc66753557ed4a5",
+      "kind": "bool",
+      "mistakes": {
+        "2a07ccd3e08b47897fc5a8f893350fdd06737693d07cc390faf875a2aa9213f4": "compare les lignes de MODEL_17 et de MODEL_19 : lequel garde la plus grande part des prédictions ImageNet ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
     "B1.Q1a": {
       "hash": "16640f2bcaf1629c674683e41d06f60775a5a79d66722d703e612a43f2b35127",
       "kind": "str",

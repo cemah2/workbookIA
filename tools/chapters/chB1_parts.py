@@ -282,7 +282,7 @@ def answers_cd() -> dict:
 
 
 B = answers_cd()
-_GAP_HINTS = {"gap10": "regarde les lignes à 10 images par classe", "gap1000": "regarde la ligne à 1 000 images par classe"}
+_GAP_HINTS = {"gap10": "regarde les lignes à 10 images par classe", "gap1000": "regarde les lignes à 1 000 images par classe"}
 
 
 def _gap_mistakes(key):
@@ -479,13 +479,17 @@ Dans tes notes : qu'est-ce que ton modèle hérite de son modèle de base, et qu
 Écris `method_28(X, y)` : elle s'entraîne sur ces images et ces labels **seulement**, et rend une fonction `predict(images)` qui donne les labels (des entiers). Tout ce que le chapitre a montré est permis : un backbone pré-entraîné de `wb.transfer`, gelé ou fine-tuné, des embeddings, des prototypes, le zéro-shot, l'augmentation. Interdit : d'autres images étiquetées, et toute variable du test (`X_TEST`, `Y_TEST`) ou d'autres labels globaux.
 
 `evaluate_28(method_28)` (cellule suivante) :
-1. un **contrôle anti-fuite** : ta méthode, entraînée sur des labels **mélangés** (les variables globales de labels mélangées elles aussi, le temps du contrôle), doit rester près du hasard sur la validation ;
+1. un **contrôle anti-fuite** : ta méthode, entraînée sur des labels **mélangés** (les variables globales de labels mélangées elles aussi, le temps du contrôle), doit rester au hasard : ses prédictions ne doivent retrouver ni les vrais labels de la validation, ni les labels globaux mélangés de la validation et du test ;
 2. l'accuracy sur la **validation** `X_VAL` (500 images, jamais dans `X_TR_28`) : le test n'est révélé que si elle atteint `GATE_28` = 80 % ;
 3. le test, révélé **une fois par session** : le premier résultat est figé (`REVEALED_28`), une nouvelle exécution affiche le même.
 
 Règles d'honneur : règle ta méthode sur `X_VAL`, jamais sur le test ; le temps compte le premier calcul de tes embeddings, même si le cache les relit ensuite (dis-le dans tes notes si tu relances).
 
 Dans tes notes : ta démarche, tes essais sur la validation et leur temps ; ce que tu gardes, et pourquoi ; ce que coûterait ta méthode en production (B1.26) ; et ce que dit la licence du backbone choisi d'un usage commercial (§201.2).""",
+       note="Ici, les embeddings DINOv2 des images d'entraînement, de validation et de test viennent du cache (calculés "
+            "par B1.15, B1.26 et le contrôle anti-fuite) : le temps affiché est presque nul. À froid, la même méthode coûte "
+            "≈ 75 s sur deux cœurs (≈ 27 s pour les 1 000 images d'entraînement, ≈ 48 s pour les 2 000 images de test, "
+            "`tools/chapters/history_chB1.py`) : loin des 10 minutes.",
        given=C.GIVEN_28, todo=C.TODO_28, check=C.CHECK_28,
        solution=C.SOLUTION_28.replace("{C28}", repr(B["c28"])) + "\n\n\n" + C.CHECK_28),
 ])

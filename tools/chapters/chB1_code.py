@@ -1457,9 +1457,12 @@ with checked("B1.21"):
     verdict("B1.21", all(isinstance(r["accuracy"], float) and math.isclose(r["accuracy"], 0.001 * len(c["y"]) / 10 + c["seed"] / 1000)
                          for r, c in zip(rows_21, rec_21.calls)),
             "accuracy : la valeur rendue par fit_eval, en float.", "les accuracies rendues ne sont pas celles de fit_eval (en float).")
-    fm_rows_21 = learning_curve_21(Recorder_21(), {10: (4,)}, test_21, load=wb.datasets.load_fashion_mnist_subset)
-    verdict("B1.21", isinstance(fm_rows_21, list) and len(fm_rows_21) == 1 and math.isclose(fm_rows_21[0]["accuracy"], 0.01 + 0.004),
-            "load= remplace le chargement (Fashion-MNIST pour B1.22).", "learning_curve_21 n'utilise pas son argument load.")
+    fm_rec_21 = Recorder_21()
+    learning_curve_21(fm_rec_21, {10: (4,)}, test_21, load=wb.datasets.load_fashion_mnist_subset)
+    verdict("B1.21", len(fm_rec_21.calls) == 1 and np.ndim(fm_rec_21.calls[0]["X"]) == 3,
+            "load= remplace le chargement (Fashion-MNIST pour B1.22).",
+            "avec load=wb.datasets.load_fashion_mnist_subset, fit_eval n'a pas reçu d'images de Fashion-MNIST : "
+            "learning_curve_21 doit charger par son argument load.")
 
 with checked("B1.21"):
     rows_s_21 = [{"size": 30, "seed": 1, "accuracy": 0.5}, {"size": 10, "seed": 1, "accuracy": 0.2},
@@ -1709,7 +1712,7 @@ CHECK_23 = r'''with checked("B1.23"):
     with torch.no_grad(), torch.random.fork_rng():
         torch.manual_seed(23)
         for p_23 in toy_23.layer4.parameters():
-            p_23.add_(0.02 * torch.randn_like(p_23))
+            p_23.add_(0.005 * torch.randn_like(p_23))
     toy_23.train()
     fc_before_23 = toy_23.fc.weight.detach().clone()
     images_23 = X_TEST[nested(10, "test")]
@@ -1720,13 +1723,11 @@ CHECK_23 = r'''with checked("B1.23"):
     ref_23.fc = RESNET.full.fc
     with torch.inference_mode():
         x_23 = to_input(images_23, 64)
-        want_23 = float((ref_23(x_23).argmax(1) == RESNET.full(x_23).argmax(1)).float().mean())
-        own_23 = float((toy_23.eval()(x_23).argmax(1) == RESNET.full(x_23).argmax(1)).float().mean())
-    toy_23.train()
+        want_23 = int((ref_23(x_23).argmax(1) == RESNET.full(x_23).argmax(1)).sum()) / len(images_23)
     if isinstance(got_23, bool) or not isinstance(got_23, (float, np.floating)):
         print(f"❌ Ex B1.23 : attendu une part (un float entre 0 et 1), reçu {got_23!r:.60}.")
         raise StopCheck
-    verdict("B1.23", abs(float(got_23) - want_23) < 1e-9,
+    verdict("B1.23", abs(float(got_23) - want_23) < 1e-6,
             f"sur 100 images et un réseau dont layer4 a bougé : accord {pct(float(got_23))}, comme attendu.",
             f"accord {pct(float(got_23))}, attendu {pct(want_23)}"
             + (" : c'est la part de 1 si tout est compté comme accord ; compares-tu bien des classes ImageNet ?" if got_23 == 1 else
@@ -1834,11 +1835,17 @@ with checked("B1.24"):
             print(f"❌ Ex B1.24 : zero_shot_24 sur 6 images et 3 classes : attendu la forme {want_24.shape}, reçu {got_24.shape}.")
             raise StopCheck
         if not np.allclose(got_24, want_24, atol=1e-6):
+            v_unit_24 = v_24 / np.linalg.norm(v_24, axis=1, keepdims=True)
+            u_unit_24 = u_24 / np.linalg.norm(u_24, axis=1, keepdims=True)
             hints_24 = [(softmax_rows_24(scale_24 * (u_24 @ v_24.T)), "divise chaque embedding par sa norme : on compare des cosinus"),
+                        (softmax_rows_24(scale_24 * (u_24 @ v_unit_24.T)), "divise aussi les embeddings d'image par leur norme"),
+                        (softmax_rows_24(scale_24 * (u_unit_24 @ v_24.T)), "divise aussi les vecteurs de texte par leur norme"),
                         (softmax_rows_24(cos_24), "multiplie les cosinus par scale avant la softmax"),
                         ((lambda e: e / e.sum(axis=0, keepdims=True))(np.exp(scale_24 * cos_24 - (scale_24 * cos_24).max())),
                          "la softmax se fait sur les classes, pour chaque image (axis=1)")]
-            why_24 = next((m for w, m in hints_24 if np.allclose(got_24, w, atol=1e-6)), "relis la formule du zéro-shot (§201.8)")
+            why_24 = next((m for w, m in hints_24 if np.allclose(got_24, w, atol=1e-6)),
+                          "la softmax se fait sur les classes, pour chaque image : chaque ligne doit sommer à 1"
+                          if not np.allclose(got_24.sum(axis=1), 1) else "relis la formule du zéro-shot (§201.8)")
             print(f"❌ Ex B1.24 : zero_shot_24 avec scale = {fr(scale_24, 0)} ne rend pas les probabilités attendues : {why_24}.")
             raise StopCheck
     verdict("B1.24", True, "zero_shot_24 : softmax sur les classes de scale × cosinus, pour des embeddings de normes quelconques.", "")
@@ -2343,7 +2350,7 @@ CHECK_27 = r'''with checked("B1.27"):
     for label_27, needles_27 in (("le modèle de base", ["resnet-18", "imagenet1k_v1"]), ("sa licence", ["bsd-3-clause"]),
                                  ("les conditions d'ImageNet", ["imagenet", "commercial"]), ("le dataset", ["cifar-10", "krizhevsky"]),
                                  ("l'accuracy de test", [pct(acc_27).lower()])):
-        if not all(n in low_27 for n in needles_27):
+        if not all(re.search(r"(?<![\d,.])" + re.escape(n), low_27) for n in needles_27):
             problems_27.append(f"{label_27} ({' et '.join(needles_27)}) n'apparaît pas")
     words_27 = len(re.findall(r"\w+", card_27))
     if words_27 < 150:
@@ -2392,15 +2399,21 @@ def evaluate_28(method):
     saved = (Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B)
     try:
         Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = (rng.permutation(v) for v in saved)
-        shuffled = Y_TR_28.copy()
-        fake = method(X_TR_28.copy(), shuffled)
-        leak = float(np.mean(np.asarray(fake(X_VAL.copy())) == saved[1]))
+        fake = method(X_TR_28.copy(), Y_TR_28.copy())
+        on_val = np.asarray(fake(X_VAL.copy()))
+        on_test = np.asarray(fake(X_TEST.copy()))
+        # an honest method trained on shuffled labels agrees with no labelling: neither the true validation labels,
+        # nor the shuffled global labels it could have read (validation, test)
+        leaks = {"labels de validation": float(np.mean(on_val == saved[1])),
+                 "labels globaux mélangés de la validation": float(np.mean(on_val == Y_VAL)),
+                 "labels globaux mélangés du test": float(np.mean(on_test == Y_TEST))}
     finally:
         Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = saved
-    verdict("B1.28", leak < 0.3, f"contrôle anti-fuite : entraînée sur des labels mélangés, ta méthode fait {pct(leak)} sur la "
-            "validation (le hasard : 10 %).",
-            f"entraînée sur des labels mélangés, ta méthode fait encore {pct(leak)} sur la validation : elle lit des labels "
-            "ailleurs que dans ses arguments (une variable globale ?).")
+    leak = max(leaks.values())
+    verdict("B1.28", leak < 0.3, "contrôle anti-fuite : entraînée sur des labels mélangés, ta méthode reste au hasard "
+            f"({pct(leaks['labels de validation'])} sur la validation ; le hasard : 10 %).",
+            f"entraînée sur des labels mélangés, ta méthode retrouve encore des labels ({max(leaks, key=leaks.get)} : "
+            f"{pct(leak)}) : elle lit des labels ailleurs que dans ses arguments (une variable globale ?).")
     if leak >= 0.3:
         return None
     start = time.perf_counter()
