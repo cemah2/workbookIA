@@ -51517,6 +51517,125 @@
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },
+    "B1.11a": {
+      "hash": "54e305b48bcde9928e0a62b4a7fca39cb009cf9d6fda4c26ffa566a141401875",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "29e56ea5b6a55ef350b27b313205a1320984f96517238dee6860afa51bae074e": "c'est le nombre de sorties de la tête ImageNet",
+        "47dbfdcfd17a8f7726682700bd9e14e519af353f5bee763d39606cbd1c34c343": "960, c'est MobileNetV3-large : relis le nom du modèle",
+        "522623c20341b4ba25ed1ed6dc50267d46df2b3665290db31e1caa391f2f32d8": "c'est la taille entre les deux couches denses : on demande l'entrée de classifier"
+      },
+      "sign": 1,
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.11b": {
+      "hash": "e24ddc865db25a4fdef44ad02be49ef529196c574aefc960cad0fa5570299ee2",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "020c792da9034729c0a1111a70d579f401b6a715f618e3a50fea62c804abe4f6": "c'est la taille à l'entrée de classifier : on demande celle entre ses deux couches denses",
+        "0d75121152ab23220528820a7ec6d2b969e6b9ce932b24231a39587466e264bc": "1 280, c'est MobileNetV3-large : relis le nom du modèle",
+        "84e4c44789def1530a2bf93af5949d2f6353a30edc605e8f1ad6b3007b38ee9c": "c'est le nombre de sorties de la tête ImageNet"
+      },
+      "sign": 1,
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.11c": {
+      "hash": "f5d3341ab116b60b45b171fb0be77ecfc5cd2524ca5f0615df062904aba4a695",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "33010db5c00089c420b8c1eed4595092db9e04f32b907d6130ae887fce8e4155": "768, c'est DINOv2-base : relis le nom du dépôt",
+        "4149d043e1ad65491a3dfcfc794edba32e992e5013119639120e1e120404ac24": "257 est un nombre de tokens, pas la taille de chacun",
+        "ed0a3d1a27631e3f3d3e9d13a41a377417a9ad1b54b9974928eb7d69cb317d23": "c'est la taille cachée du MLP de chaque bloc : lis hidden_size dans la configuration"
+      },
+      "sign": 1,
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.11d": {
+      "hash": "e5f133e8faf0bf3c2d93d0e7fc72100f5cfe1b3b688c3e0c763bf19526a1e6f4",
+      "kind": "bool",
+      "mistakes": {
+        "bdc3d9d6081dad10ad850b039f020fa6229e6a23fea7aaa7ab33356add511bc6": "compare les deux tenseurs avec torch.allclose, sur une même passe avant de DINOv2"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.11e": {
+      "hash": "991f23b27583883a3aa775d6de6f8d6170f71e631b21d1144ee775a1d610102e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "197fe45f363589d0871d181bb1c09460d8be6dd5d6e97baf7a7a24ae7ac5e383": "232 est le redimensionnement d'autres poids (encadré 🧮 de la fiche) : lis ceux de ResNet-18",
+        "21a5c026d9c002769ad51db6f27e2294e60901f3c89a277b7d2883bfc59d3955": "224 est la taille du recadrage (crop_size)"
+      },
+      "sign": 1,
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.11f": {
+      "hash": "ac446d7026ad1be34980753a7e00e8bb0afbed7541a4899bf14d87f4e38d6d7a",
+      "kind": "str",
+      "mistakes": {
+        "0704cf87889e604c9397f0c409220dff26f8e6baa7cbdddf8ae034d493c93394": "MobileNetV3-small a-t-il la même interpolation que DINOv2 ? relis print(preprocess)",
+        "5a3512ac979b188291a64ef15bc6908fd19a965eaec4c190f97ddda36880552d": "relis l'interpolation de ResNet-18, puis le champ resample du processeur de DINOv2",
+        "8e05746f738724e27eba0f7716c1b9cdcc8ceec40f113eedea7c8dfa8fc7938c": "relis l'interpolation des deux CNN, puis le champ resample du processeur de DINOv2",
+        "b6af4bc91c8d374fcc35351c69e74be34f2432250727565473d1398bb26864de": "relis l'interpolation de MobileNetV3-small, puis le champ resample du processeur de DINOv2",
+        "d11fa89cfc68950d38f74772e19eb27edec11acf03ecf4e9a634eddb831ad310": "print(preprocess) affiche l'interpolation des deux CNN : relis-la",
+        "d8b2e1061075a030f104ba2788bf54db1639bb70440c02696cad18bbdbd8b82f": "les deux CNN ont-ils la même interpolation que DINOv2 ? relis print(preprocess)"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.12a": {
+      "hash": "7d8137c4c140e7a0f41e0059030b592faa88914554658b839532205102584c05",
+      "kind": "str",
+      "mistakes": {
+        "2fece534cef4eb837df952ea02d8d475cebdab85dcc0aae69de0fbb8e54d93dc": "regarde la ligne des 32 pixels : l'accuracy du linear probe dépasse-t-elle 70 % ?",
+        "cd828e38c55328e706f3174a19b3e292604d619d44b867be4d8db8a2ca155a6b": "regarde la ligne des 32 pixels : l'accuracy du linear probe est-elle sous 30 % ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.12b": {
+      "hash": "c575592bb5af93026950e93aec6ae00f74a004370483f0863fcf73db8c2f831a",
+      "kind": "str",
+      "mistakes": {
+        "72974f6014306053841ddff6710b51be7b798db8482567836fbd1e9226332af9": "regarde la ligne des 32 pixels : combien de classes ImageNet différentes le réseau prédit-il ?",
+        "86236295bea74c98308dd3f7d69906fb7bdf2e5a0438b2caf2f92ec96bb79c34": "regarde la ligne des 32 pixels : quelle part des images couvrent les 5 classes ImageNet les plus fréquentes ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.15a": {
+      "hash": "0323190b849de95a097070b8e9228b1622dc38229e91863aec48e6f041a87a7e",
+      "kind": "str",
+      "mistakes": {
+        "953091b6e27958293c466de49b635c73dbc17736add4fc1f6e94e02c8f6cd433": "compare les trois panneaux du bas : où les nuages d'une seule couleur sont-ils les plus nets ?",
+        "bb5978f816a9034050bea7c75020fd5b926a3cd6ff320cdc185d89cbfa55ffcd": "compare les panneaux UMAP de (B) et de (C) : lesquels ont les groupes les plus nets et les moins mêlés ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.15b": {
+      "hash": "c306a22cddabe4e36f6e2438718f10e7deaa6b0973a7d20c8bd8bd253b19c0cb",
+      "kind": "bool",
+      "mistakes": {
+        "8fa5d39de32eb186eec2a34704045015573e23ac18dade471218571cc2e1b0f9": "regarde les couleurs de chaque groupe dans l'UMAP de (A) : un groupe y est-il fait d'une seule couleur ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.15c": {
+      "hash": "fca216a91558cc31e30dad25b2cae5195a2e28432ada21061dd7e8fc40b4c007",
+      "kind": "bool",
+      "mistakes": {
+        "b8c2b9052c658e0054c80a2539c0156ce0865489138109d80f7533c4317a1680": "regarde où tombent les quatre couleurs des véhicules dans l'UMAP de (B) : à part des animaux, ou mêlées à eux ?"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
+    "B1.15d": {
+      "hash": "a29f8e15313b643ab897d9cdb21ef1f99b49503f493a75939091a52a6c9d4353",
+      "kind": "bool",
+      "mistakes": {
+        "c2ccb9437b4c7a7dfb4c429576a6e93f86b55a63549aa84bd4c8c6162eb7c392": "une projection en 2 dimensions garde peu de l'information : compare au linear probe de B1.13, entraîné sur les 512 dimensions"
+      },
+      "source": "chapitres/b1_transfer/05_solutions.ipynb"
+    },
     "B1.Q1a": {
       "hash": "16640f2bcaf1629c674683e41d06f60775a5a79d66722d703e612a43f2b35127",
       "kind": "str",

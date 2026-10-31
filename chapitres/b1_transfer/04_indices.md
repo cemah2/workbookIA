@@ -550,4 +550,219 @@ Commence par : « Téléchargeable ne veut pas dire utilisable : je lis la fiche
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B1.11 à B1.28) seront ajoutés à la prochaine session de génération, avec les parties A à D du notebook.
+### Ex B1.11 — Trois modèles pré-entraînés en main : ResNet-18, MobileNetV3-small, DINOv2-small 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §201.2 de la fiche (les énumérations de poids de torchvision, `weights.transforms()`, l'API `AutoModel` et `AutoImageProcessor`) et « La nouvelle tête » (§201.5) pour la forme de `classifier` chez MobileNet.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque modèle de torchvision : prends la valeur `IMAGENET1K_V1` de son énumération de poids, construis le modèle avec `weights=`, passe-le en `eval()`, et range le couple (modèle, `weights.transforms()`). Pour DINOv2 : `from_pretrained` avec le nom du dépôt **et** `revision=`, pour le modèle comme pour le processeur. Pour les valeurs : `print(model.classifier)` montre les couches et leurs tailles ; `model.config` contient `hidden_size` ; une passe avant de deux images préparées par le processeur donne les deux sorties à comparer ; `print(preprocess)` et l'attribut `resample` du processeur (un entier de PIL) disent l'interpolation.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def load_backbones_11():
+    out = {}
+    for name, builder, weights in (("resnet18", resnet18, ResNet18_Weights.IMAGENET1K_V1), ...):
+        out[name] = (builder(weights=weights).eval(), weights.transforms())
+    ...                      # DINOv2: AutoImageProcessor and AutoModel, both with revision=DINOV2_REVISION
+    return out
+```
+a) lis `in_features` de la première couche de `classifier` ; b) celui de sa dernière couche ; d) `torch.allclose(out.pooler_output, out.last_hidden_state[:, 0])` ; f) PIL numérote ses interpolations : `Image.Resampling(3)` te dit laquelle est la 3.
+
+</details>
+
+### Ex B1.12 — Prédire : un ResNet ImageNet face à des images CIFAR-10 de 32×32 pixels 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La résolution » (§201.5) et ta réponse au ✏️ B1.1 f) : à 32 pixels, que reste-t-il de la carte de `layer4` avant le pooling ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), deux arguments s'opposent : les filtres attendent des motifs à l'échelle d'une image de 224 pixels, mais un linear probe n'a besoin que de 512 nombres qui varient avec la classe, même s'ils ne « voient » plus les objets comme sur ImageNet. Compare à deux repères : le hasard (10 %) et ce que donnent des embeddings à la bonne échelle. Pour b), demande-toi si une image trop petite pousse le réseau vers une poignée de classes « par défaut », ou si de petites différences entre images suffisent à changer sa classe la plus probable parmi 1 000.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris tes deux raisonnements avant de choisir : a) « une carte 1 × 1 garde ou perd … parce que … » ; b) « parmi 1 000 classes, la plus probable change ou ne change pas d'une image à l'autre parce que … ». Puis place chaque estimation dans les catégories de l'énoncé.
+
+</details>
+
+### Ex B1.13 — Extraire des embeddings figés, puis linear probe et k plus proches voisins 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §201.3 de la fiche (calculer les embeddings une fois, le linear probe, les k plus proches voisins) et l'encadré 🧮 sur `weights.transforms()` (§201.2) pour les étapes de la préparation.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`make_backbone_13` : `model.fc = nn.Identity()`, puis `eval()`. `embed_13` : une boucle sur les mini-batches ; pour chacun, `torch.from_numpy`, `permute(0, 3, 1, 2)` (NHWC → NCHW), `float() / 255`, `F.interpolate(..., size=(size, size), mode="bilinear")`, puis soustraire la moyenne et diviser par l'écart-type, deux tenseurs de forme `(1, 3, 1, 1)` ; le tout sous `torch.inference_mode()`, et `torch.cat` à la fin. `probe_13` : `make_pipeline` du ch. 15 ; `knn_13` : `KNeighborsClassifier` du ch. 13 avec `metric="cosine"` ; `score` rend l'accuracy.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def embed_13(backbone, images, size, batch_size=64):
+    out = []
+    with torch.inference_mode():
+        for i in range(0, len(images), batch_size):
+            x = torch.from_numpy(images[i:i + batch_size]).permute(0, 3, 1, 2).float() / 255
+            ...              # resize to size x size, normalise, then the backbone
+    return torch.cat(out).numpy()
+```
+Une seule ligne par classifieur : `float(make_pipeline(StandardScaler(), LogisticRegression(C=C, max_iter=2000)).fit(...).score(...))`.
+
+</details>
+
+### Ex B1.14 — Résolution d'entrée : accuracy du linear probe contre temps de calcul (32 à 224 pixels) 🔬
+
+<details><summary>Indice 1</summary>
+
+Tu as déjà les deux briques : `embed_13` et `probe_13`. Relis « Mesurer une latence correctement » (§201.9) pour le temps.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque taille : les embeddings de `train` et de `test` à cette taille, puis le probe ; ensuite, `repeats` fois, `time.perf_counter()` avant et après `embed_13` sur `X_test[:64]`, et tu gardes la plus petite durée, divisée par 64 et multipliée par 1 000. Le premier appel d'une taille paie des préparations (allocation de la mémoire, choix des algorithmes) : c'est pour cela qu'on ne garde pas une mesure unique.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+(X_tr, y_tr), (X_te, y_te) = train, test
+rows = []
+for size in sizes:
+    accuracy = probe_13(embed_13(backbone, X_tr, size), y_tr, embed_13(backbone, X_te, size), y_te)
+    ...                      # repeats timings of embed_13 on X_te[:64], keep the smallest
+    rows.append({"size": size, "accuracy": accuracy, "ms_per_image": ...})
+return rows
+```
+
+</details>
+
+### Ex B1.15 — Lire des projections PCA/UMAP : pixels bruts, ResNet et DINOv2 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « Regarder et sonder » (§201.3) et les précautions du ch. 12 sur UMAP : il garde les voisinages, pas les distances entre groupes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un groupe net, c'est un nuage d'une seule couleur, compact, peu envahi par les autres couleurs. Pour b), UMAP fabrique des groupes à partir de n'importe quelles données : regarde de quelles couleurs sont faits ceux des pixels bruts. Pour c), repère les quatre couleurs des véhicules dans l'UMAP de (B). Pour d), demande-toi ce que perd une projection de 512 dimensions sur 2.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Dans les panneaux du bas, les pixels bruts (A) ne forment aucun groupe d'une seule couleur ; reste à comparer (B) et (C) : lequel a les nuages les plus compacts et les moins mêlés ? b) Dans l'UMAP de (A), choisis un groupe : combien de couleurs y vois-tu ? c) Les véhicules tombent-ils d'un même côté de la figure ? d) Compare ce que montre la PCA de (B) à l'accuracy de ton linear probe en B1.13.
+
+</details>
+
+### Ex B1.16 — Sonder chaque bloc : linear probe couche par couche, CIFAR-10 contre Fashion-MNIST 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis la fin de « Regarder et sonder » (§201.3 : `create_feature_extractor`), « Les canaux » (§201.5) et « La distance de domaine » (§201.7).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`create_feature_extractor(model, return_nodes={...})` rend, en une passe, un dictionnaire des sorties des nœuds demandés : les blocs s'appellent `"layer1"` … `"layer4"`, et la sortie du stem est celle du nœud `"maxpool"`. Le pooling moyen global d'une carte `(N, C, H, W)` est `.mean(dim=(2, 3))`. Prépare chaque mini-batch par `to_input(batch, size)`. `probe_by_block_16` : les embeddings des deux jeux pour tous les blocs, puis un `probe_13` par bloc.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+nodes = {("maxpool" if b == "stem" else b): b for b in blocks}
+extractor = create_feature_extractor(model, return_nodes=nodes)
+with torch.inference_mode():
+    for i in range(0, len(images), batch_size):
+        maps = extractor(to_input(images[i:i + batch_size], size))
+        ...                  # for each block: maps[b].mean(dim=(2, 3)), kept in a list
+```
+
+</details>
+
+### Ex B1.17 — Fine-tuning partiel : dégeler le dernier bloc avec des learning rates par groupe 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le §201.4 de la fiche : partiel ou complet, learning rates discriminatifs (les groupes de paramètres), la batchnorm pendant le fine-tuning ; et ton ✏️ B1.3.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`param_groups_17` : pour le $k$-ième module, la liste de ses paramètres qui demandent un gradient, coupée en deux selon `p.ndim >= 2` ; un dictionnaire par liste non vide. `make_partial_17` : la nouvelle tête d'abord, puis tout geler (`requires_grad_(False)`), puis dégeler `layer4` et `fc`. `freeze_batchnorm_17` : `model.modules()` et `isinstance(m, nn.modules.batchnorm._BatchNorm)`. `train_partial_17` : l'optimiseur une fois, avant la boucle des epochs ; dans chaque epoch, `model.train()` puis `freeze_batchnorm_17`, puis la boucle du ch. 23 sur `batches(...)`, et la moyenne de la loss pondérée par la taille des mini-batches.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def param_groups_17(modules, head_lr, gamma, weight_decay=0.01):
+    groups = []
+    for k, module in enumerate(modules):
+        params = [p for p in module.parameters() if p.requires_grad]
+        ...                  # two lists by p.ndim, one dict {"params", "lr": head_lr * gamma ** k, "weight_decay"} each
+    return groups
+```
+Dans `train_partial_17` : `optimizer = torch.optim.AdamW(param_groups_17([model.fc, model.layer4], head_lr, gamma))`.
+
+</details>
+
+### Ex B1.18 — Le fine-tuning qui détruit le modèle : quatre erreurs à trouver 🐛
+
+<details><summary>Indice 1</summary>
+
+Lis les messages des diagnostics dans l'ordre : chacun mesure un symptôme et pose une question. Relis le §201.4 (learning rate, batchnorm) et le §201.5 (normalisation, nouvelle tête).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Point 1 : que contient l'optimiseur au moment où il est créé ? Point 2 : compare la préparation des images à celle de ton `embed_13`. Point 3 : dans quel mode sont les batchnorms pendant la boucle, et que font-elles de leurs statistiques glissantes en ce mode ? Point 4 : quel pas reçoit chaque paramètre pré-entraîné, comparé à la fourchette de la fiche pour AdamW ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Chaque erreur est sur une ou deux lignes de `finetune_18`, avant la boucle ou dans sa préparation des images. Après chaque correction, relance la cellule de vérification : le point suivant te dit où chercher. Pour le point 4, un squelette :
+```python
+optimizer = torch.optim.AdamW([{"params": ..., "lr": ...},      # the new head
+                               {"params": ..., "lr": ...}])     # the pre-trained layers
+```
+
+</details>
+
+### Ex B1.19 — Fine-tuning complet : warmup + cosinus, early stopping, meilleur checkpoint 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Warmup puis cosinus, groupe par groupe » (§201.4, avec son code `warmup_cosine`), ton ✏️ B1.3, et la fonction `fit()` du ch. 23 (early stopping, meilleur checkpoint).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`warmup_cosine_19` : deux cas, le warmup puis le cosinus, la progression comptée à partir de la fin du warmup et bornée à 1. `fine_tune_19` : l'optimiseur sur `param_groups_17` des cinq modules, un `LambdaLR` dont la fonction reçoit le numéro du pas ; dans la boucle des mini-batches, note les learning rates des groupes, puis `optimizer.step()`, puis `scheduler.step()`. À la fin de chaque epoch : `evaluate` sur la validation ; si c'est un record strict, `copy.deepcopy(model.state_dict())` et le compteur d'attente à 0 ; sinon, le compteur augmente, et l'on sort de la boucle quand il atteint `patience`. Après la boucle, `load_state_dict` de la copie.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+t_total = epochs * math.ceil(len(X) / batch_size)
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda t: warmup_cosine_19(t, t_warmup, t_total))
+for epoch in range(epochs):
+    ...                      # train() + freeze_batchnorm_17, the mini-batches, history["lr"].append([...]) before step()
+    acc = evaluate(model, X_val, y_val)
+    if acc > best_acc:
+        best_acc, best_state, waited = acc, copy.deepcopy(model.state_dict()), 0
+    ...                      # else: one more epoch without progress; stop at patience
+```
+
+</details>
+
+*Les indices des exercices B1.20 à B1.28 (parties C et D) seront ajoutés à la prochaine étape de génération.*

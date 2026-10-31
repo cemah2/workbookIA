@@ -8,6 +8,7 @@ TOOLS = r'''# Tools for the notebook exercises (parts A and B)
 import copy
 import math
 import time
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -21,15 +22,16 @@ except ImportError:                       # a computer without PyTorch (Mac Inte
     torch = None
     print("⏳ PyTorch absent sur cet ordinateur : ce chapitre se fait sur Colab (00_setup/INSTALL_LOCAL.md).")
 
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers)
 from wb import transfer
 from wb.transfer import DINOV2_NAME, DINOV2_REVISION
 
 DEVICE = cfg.device                       # "cuda" on a Colab GPU, else "cpu"
 SIZE = 96 if FAST_MODE else 224           # the side of the images given to ResNet-18 (CIFAR-10 images are 32 x 32)
-DINO_SIZE = 112 if FAST_MODE else 224     # the side of the images given to DINOv2 (a multiple of its 14-pixel patches)
+DINO_SIZE = 140 if FAST_MODE else 224     # the side of the images given to DINOv2 (a multiple of its 14-pixel patches)
 PER_CLASS = 200 if FAST_MODE else 1000    # training images per class (nested, stratified subsets of CIFAR-10)
 TEST_PER_CLASS = 200 if FAST_MODE else 1000   # test images per class (1 000 = the whole test split)
-VAL_PER_CLASS = 30 if FAST_MODE else 100      # validation images per class, never in a training subset
+VAL_PER_CLASS = 50 if FAST_MODE else 100      # validation images per class, never in a training subset
 CLASSES = wb.datasets.CIFAR10_CLASSES
 X_TRAIN, Y_TRAIN = wb.datasets.load_cifar10_subset(PER_CLASS)          # uint8 (N, 32, 32, 3), int64 labels
 X_TEST, Y_TEST = wb.datasets.load_cifar10_subset(TEST_PER_CLASS, "test")
@@ -408,24 +410,30 @@ SOLUTION_14 = r'''def resolution_sweep_14(backbone, sizes, train, test, repeats=
     return rows'''
 
 CHECK_14 = r'''class SlowFirstCall_14(nn.Module):
-    """A probe around a backbone: the first call at each image size waits 0.3 s more (a cold start)."""
+    """A probe around a backbone: the first call at each image size waits 0.5 s more (a cold start); it also times
+    its other calls, image by image."""
 
     def __init__(self, inner):
         super().__init__()
-        self.inner, self.seen = inner, set()
+        self.inner, self.seen, self.fast_ms = inner, set(), {}
 
     def forward(self, x):
         if x.shape[-1] not in self.seen:
             self.seen.add(x.shape[-1])
-            time.sleep(0.3)
-        return self.inner(x)
+            time.sleep(0.5)
+            return self.inner(x)
+        start = time.perf_counter()
+        out = self.inner(x)
+        ms = 1000 * (time.perf_counter() - start) / len(x)
+        self.fast_ms[x.shape[-1]] = min(ms, self.fast_ms.get(x.shape[-1], ms))
+        return out
 
 
 with checked("B1.14"):
-    need("B1.14", "embed_13", "probe_13")
     small_tr_14 = (X_TRAIN[nested(10)], Y_TRAIN[nested(10)])
     small_te_14 = (X_TEST[nested(10, "test")], Y_TEST[nested(10, "test")])
-    rows_14 = resolution_sweep_14(SlowFirstCall_14(RESNET.model), [48, 32], small_tr_14, small_te_14, repeats=3)
+    probe_net_14 = SlowFirstCall_14(RESNET.model)
+    rows_14 = resolution_sweep_14(probe_net_14, [48, 32], small_tr_14, small_te_14, repeats=3)
     if not returned("B1.14", "resolution_sweep_14", rows_14):
         raise StopCheck
     ok_14 = (isinstance(rows_14, list) and len(rows_14) == 2 and all(isinstance(r, dict) for r in rows_14)
@@ -439,15 +447,23 @@ with checked("B1.14"):
     for r_14 in rows_14:
         want_14 = reference_probe(RESNET.embed(small_tr_14[0], r_14["size"]), small_tr_14[1],
                                   RESNET.embed(small_te_14[0], r_14["size"]), small_te_14[1])
-        verdict("B1.14", abs(float(r_14["accuracy"]) - want_14) < 0.011,
+        acc_ok_14 = isinstance(r_14["accuracy"], (float, np.floating)) and abs(float(r_14["accuracy"]) - want_14) < 0.011
+        verdict("B1.14", acc_ok_14,
                 f"{r_14['size']} pixels : accuracy {pct(float(r_14['accuracy']))}, comme le linear probe de référence.",
-                f"{r_14['size']} pixels : accuracy {r_14['accuracy']!r}, attendu {pct(want_14)} (probe_13 sur les "
+                f"{r_14['size']} pixels : accuracy {r_14['accuracy']!r:.40}, attendu {pct(want_14)} (probe_13 sur les "
                 "embeddings de embed_13 à cette taille).")
-    ms_14 = [float(r["ms_per_image"]) for r in rows_14]
-    verdict("B1.14", all(0 < m < 2.5 for m in ms_14),
-            f"temps par image {fr(ms_14[0], 2)} et {fr(ms_14[1], 2)} ms : le démarrage lent du premier appel n'est pas compté.",
-            f"temps par image {fr(ms_14[0], 2)} et {fr(ms_14[1], 2)} ms : le premier appel à chaque taille dure ici 0,3 s "
-            "de plus ; garde la plus petite de plusieurs mesures, en millisecondes par image.")'''
+    for r_14 in rows_14:
+        ms_14, fast_14 = float(r_14["ms_per_image"]), probe_net_14.fast_ms.get(r_14["size"])
+        if fast_14 is None:
+            print(f"❌ Ex B1.14 : {r_14['size']} pixels : le backbone n'a été appelé qu'une fois à cette taille : "
+                  "mesure plusieurs fois.")
+            continue
+        verdict("B1.14", 0.5 * fast_14 <= ms_14 <= 1.5 * fast_14 + 1.0,
+                f"{r_14['size']} pixels : {fr(ms_14, 2)} ms par image ; le démarrage lent du premier appel n'est pas compté.",
+                f"{r_14['size']} pixels : {fr(ms_14, 4)} ms par image, alors qu'une passe chaude de ce backbone prend "
+                f"{fr(fast_14, 2)} ms par image et que le premier appel à chaque taille dure ici 0,5 s de plus : garde "
+                "la plus petite de plusieurs mesures, en millisecondes par image.")'''
+
 
 EXPERIMENT_14 = r'''SWEEP_SIZES = (32, 64, 96, 128, 160, 224)
 SWEEP_PER_CLASS = 30 if FAST_MODE else 200     # train and test images per class of the sweep
@@ -480,8 +496,6 @@ GIVEN_15 = r'''# Six projections of the same 600 test images (60 per class): PCA
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-import warnings
-
 wb.ensure("umap-learn")
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")        # umap imports tqdm, which warns about Jupyter widgets
@@ -492,14 +506,14 @@ idx_15 = nested(60, "test")
 y_15 = Y_TEST[idx_15]
 REPS_15 = {"(A) pixels bruts": X_TEST[idx_15].reshape(len(idx_15), -1) / 255.0,
            "(B) ResNet-18": reference_embeddings(X_TEST, SIZE, "test")[idx_15]}
-if DINO is not None:
-    REPS_15["(C) DINOv2-small"] = transfer.cached_embeddings(DINO, X_TEST[idx_15], size=DINO_SIZE, subset="test-60",
-                                                             verbose=False)
+if DINO is not None:   # the embeddings of the whole X_TEST, computed once (≈ 1 min) and reused by parts C and D
+    DINO_TEST = transfer.cached_embeddings(DINO, X_TEST, size=DINO_SIZE, subset="test", verbose=False)
+    REPS_15["(C) DINOv2-small"] = DINO_TEST[idx_15]
 PROJ_15 = {}
 for name_15, E_15 in REPS_15.items():
     Z_15 = StandardScaler().fit_transform(E_15)
     PROJ_15[name_15] = {"PCA": PCA(2, svd_solver="full").fit_transform(Z_15),
-                        "UMAP": umap.UMAP(n_neighbors=15, min_dist=0.1, random_state=0).fit_transform(Z_15)}
+                        "UMAP": umap.UMAP(n_neighbors=15, min_dist=0.1, random_state=0, n_jobs=1).fit_transform(Z_15)}
 fig_15, axes_15 = plt.subplots(2, len(PROJ_15), figsize=(4.2 * len(PROJ_15), 8.2), squeeze=False)
 colors_15 = plt.cm.tab10(np.arange(10))
 for j_15, (name_15, proj_15) in enumerate(PROJ_15.items()):
@@ -515,20 +529,22 @@ axes_15[0, -1].legend(fontsize=7, markerscale=2, loc="upper left", bbox_to_ancho
 plt.tight_layout()
 plt.show()'''
 
-TODO_15 = r'''separated_15 = ...   # a) the letter of the representation whose UMAP shows the best-separated groups: "A", "B" or "C"
-mixed_15 = ...       # b) in the UMAP of (C), the pair of classes the most mixed together:
-                     #    (A) cat and dog, (B) automobile and truck, (C) airplane and ship, (D) deer and horse
-vehicles_15 = ...    # c) True or False: in the UMAP of (B), the four vehicles (airplane, automobile, ship, truck) form a
-                     #    region apart from the six animals
-pca_says_15 = ...    # d) True or False: the PCA of (B) mixes the classes, so a linear classifier on these embeddings
-                     #    cannot do much better than chance'''
+TODO_15 = r'''separated_15 = ...       # a) the letter of the representation whose UMAP shows the best-separated groups: "A", "B" or "C"
+pixel_classes_15 = ...   # b) True or False: the groups seen in the UMAP of the raw pixels (A) are classes
+vehicles_15 = ...        # c) True or False: in the UMAP of (B), the four vehicles (airplane, automobile, ship, truck)
+                         #    form a region apart from the six animals
+pca_says_15 = ...        # d) True or False: the PCA of (B) mixes the classes, so a linear classifier on these
+                         #    embeddings cannot do much better than chance'''
 
-CHECK_15 = r'''for id_15, value_15 in (("B1.15a", separated_15), ("B1.15b", mixed_15), ("B1.15c", vehicles_15), ("B1.15d", pca_says_15)):
+CHECK_15 = r'''for id_15, value_15 in (("B1.15a", separated_15), ("B1.15b", pixel_classes_15), ("B1.15c", vehicles_15), ("B1.15d", pca_says_15)):
     with wb.attempt(id_15):
-        wb.check(id_15, value_15)
-if filled(separated_15, mixed_15, vehicles_15, pca_says_15):
-    # what the figure was showing, measured: 10-NN accuracy IN the 2-D projection (5-fold cross-validation), and the
-    # share of images whose 10 nearest neighbours in 2-D are of the same family (vehicles or animals)
+        wb.check(id_15, value_15)'''
+
+MEASURES_15 = r'''if not filled(separated_15, pixel_classes_15, vehicles_15, pca_says_15):
+    print("⏳ Ex B1.15 : les mesures s'affichent une fois tes quatre réponses écrites.")
+else:
+    # what the figure was showing, measured: the accuracy of the 10 nearest neighbours IN the plane of each projection
+    # (5-fold cross-validation), and the share of images put in the right family (vehicles or animals)
     from sklearn.model_selection import cross_val_predict
     from sklearn.neighbors import KNeighborsClassifier
     vehicle_15 = np.isin(y_15, [0, 1, 8, 9])
@@ -537,8 +553,9 @@ if filled(separated_15, mixed_15, vehicles_15, pca_says_15):
         for method_15 in ("PCA", "UMAP"):
             pred_15 = cross_val_predict(KNeighborsClassifier(10), proj_15[method_15], y_15, cv=5)
             family_15 = np.mean(np.isin(pred_15, [0, 1, 8, 9]) == vehicle_15)
-            line_15.append(f"{method_15} : 10-NN en 2D {pct(np.mean(pred_15 == y_15), 0)}, famille juste {pct(family_15, 0)}")
-        print(f"{name_15} — " + " ; ".join(line_15))'''
+            line_15.append(f"{method_15} : 10-NN dans le plan {pct(np.mean(pred_15 == y_15), 0)}, bonne famille {pct(family_15, 0)}")
+        print(f"{name_15} — " + " ; ".join(line_15))
+    print("(le hasard : 10 % pour la classe ; le linear probe de B1.13, sur les 512 dimensions de (B) : plus de 70 %)")'''
 
 GIVEN_16 = r'''# Two datasets for the probes, block by block: CIFAR-10 (close to ImageNet) and Fashion-MNIST (far: grayscale clothes)
 from wb.transfer import RESNET_BLOCKS, to_input   # to_input(images, size): what embed_13 does, grayscale accepted
@@ -596,19 +613,20 @@ CHECK_16 = r'''with checked("B1.16"):
     hook_16 = RESNET.full.conv1.register_forward_hook(lambda m, i, o: calls_16.append(o.shape[0]))
     try:
         for name_16, sample_16 in (("CIFAR-10", X_TEST[:6].copy()), ("Fashion-MNIST", XF_TE_16[:6].copy())):
-            calls_16.clear()
+            want_16 = RESNET.embed_blocks(sample_16, 64, batch_size=4)
+            calls_16.clear()                             # count the passes of YOUR function only
             got_16 = block_embeddings_16(RESNET.full, sample_16, 64, batch_size=4)
+            passes_16 = list(calls_16)
             if not returned("B1.16", "block_embeddings_16", got_16):
                 raise StopCheck
             if not isinstance(got_16, dict) or set(got_16) != set(RESNET_BLOCKS):
                 print(f"❌ Ex B1.16 : attendu un dictionnaire aux clés {list(RESNET_BLOCKS)}, reçu "
                       f"{sorted(got_16) if isinstance(got_16, dict) else type(got_16).__name__}.")
                 raise StopCheck
-            want_16 = RESNET.embed_blocks(sample_16, 64, batch_size=4)
             ok_16 = all(same("B1.16", f"{name_16}, bloc {b}", got_16[b], want_16[b], rtol=1e-4, atol=1e-4)
                         for b in RESNET_BLOCKS)
-            verdict("B1.16", calls_16 == [4, 2], f"{name_16} : une seule passe avant par mini-batch pour les cinq blocs.",
-                    f"{name_16} : {len(calls_16)} passes dans conv1 pour 6 images en mini-batches de 4 ({calls_16}) : "
+            verdict("B1.16", passes_16 == [4, 2], f"{name_16} : une seule passe avant par mini-batch pour les cinq blocs.",
+                    f"{name_16} : {len(passes_16)} passes dans conv1 pour 6 images en mini-batches de 4 ({passes_16}) : "
                     "attendu une passe par mini-batch, tous les blocs à la fois.")
     finally:
         hook_16.remove()
@@ -626,7 +644,9 @@ CHECK_16 = r'''with checked("B1.16"):
                                   RESNET.embed(X_TEST[te_16], 64, b_16), Y_TEST[te_16])
         verdict("B1.16", abs(float(probes_16[b_16]) - want_16) < 0.011,
                 f"probe_by_block_16, bloc {b_16} : {pct(float(probes_16[b_16]))}, comme la référence.",
-                f"probe_by_block_16, bloc {b_16} : {probes_16[b_16]!r}, attendu {pct(want_16)}.")'''
+                f"probe_by_block_16, bloc {b_16} : "
+                + (pct(float(probes_16[b_16])) if isinstance(probes_16[b_16], (float, np.floating)) else repr(probes_16[b_16]))
+                + f", attendu {pct(want_16)}.")'''
 
 EXPERIMENT_16 = r'''with checked("B1.16"):
     need("B1.16", "probe_by_block_16")
@@ -842,6 +862,9 @@ with checked("B1.17"):
             "après model.train() puis freeze_batchnorm_17(model), attendu les batchnorms en eval() et le reste en train().")
 
 with checked("B1.17"), torch.random.fork_rng():
+    model_17 = make_partial_17()                       # a fresh model for two training steps
+    if not returned("B1.17", "make_partial_17", model_17):
+        raise StopCheck
     head_before_17 = model_17.fc.weight.detach().clone()
     SpyAdamW_17.seen.clear()
     adamw_17, torch.optim.AdamW = torch.optim.AdamW, SpyAdamW_17
@@ -985,7 +1008,7 @@ GIVEN_18 = r'''def diagnose_18(fn, steps=12):
          f"bn1.running_mean a dérivé en {steps} pas de 4 images : avec quelles statistiques les batchnorms normalisent-elles "
          "pendant l'entraînement, et que mettent-elles à jour ?"),
         ("les couches pré-entraînées bougent peu et la loss reste finie", rel < 0.02 and math.isfinite(last),
-         f"changement relatif des poids de conv1 : {pct(rel)} ; loss moyenne des 4 derniers pas : "
+         f"changement relatif des poids de conv1 : {pct(rel, 2)} ; loss moyenne des 4 derniers pas : "
          + (fr(last, 3) if abs(last) < 1e4 else f"{last:.2e}".replace(".", ",")),
          "les premières couches changent beaucoup en quelques pas : quelle taille de pas reçoivent-elles ?"),
     ]
@@ -1000,16 +1023,17 @@ GIVEN_18 = r'''def diagnose_18(fn, steps=12):
     print("✅ Ex B1.18 : les quatre diagnostics passent.")
     return True'''
 
-CHECK_18 = r'''with checked("B1.18"):
+CHECK_18 = r'''STEPS_18 = 60 if FAST_MODE else 300     # the steps of the training that follows the diagnoses
+with checked("B1.18"):
     ok_18 = diagnose_18(finetune_18)'''
 
 EXPERIMENT_18 = r'''if not globals().get("ok_18"):
     print("⏳ Ex B1.18 : l'entraînement attend que les quatre points de la cellule précédente passent.")
 else:
     with checked("B1.18"), torch.random.fork_rng():
-        model_18, losses_18 = finetune_18(XT_B, YT_B, steps=100)
+        model_18, losses_18 = finetune_18(XT_B, YT_B, steps=STEPS_18)
         acc_18 = evaluate(model_18, X_TEST[nested(100, "test")], Y_TEST[nested(100, "test")])
-        print(f"100 pas de 4 images : loss {fr(np.mean(losses_18[:10]), 2)} sur les 10 premiers pas, "
+        print(f"{STEPS_18} pas de 4 images : loss {fr(np.mean(losses_18[:10]), 2)} sur les 10 premiers pas, "
               f"{fr(np.mean(losses_18[-10:]), 2)} sur les 10 derniers ; accuracy de test {pct(acc_18)} (le hasard : 10 %).")
         verdict("B1.18", acc_18 > 0.3, "le fine-tuning réparé apprend.",
                 "l'accuracy reste proche du hasard : une erreur silencieuse reste-t-elle ?")'''

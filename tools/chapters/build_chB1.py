@@ -11,8 +11,9 @@ B1.1 to B1.5 (02_exercices.md). The derivation ∂ B1.6, the estimate 🧮 B1.7,
 📄 B1.10) and the interview are corrected with 05_solutions.md. The answers of the ✏️ are computed by hand formulas
 and checked against PyTorch, torchvision and scikit-learn in the context cell of the solutions notebook (no download:
 `resnet18(weights=None)`).
-Parts A to D (exercises B1.11 to B1.28) come at the second generation session (NEXT_SESSION): load and probe,
-fine-tune, when transfer helps or fails, foundation models, cost and delivery.
+Parts A and B (exercises B1.11 to B1.19, tools/chapters/chB1_parts.py and chB1_code.py; experiments calibrated by
+tools/chapters/history_chB1.py): load and probe, then fine-tune. Parts C and D (B1.20 to B1.28) come next
+(NEXT_SESSION): when transfer helps or fails, foundation models, cost and delivery.
 """
 
 from __future__ import annotations
@@ -469,15 +470,12 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to D (exercises B1.11 to B1.28): second generation session
+# Parts A and B (exercises B1.11 to B1.19); parts C and D (B1.20 to B1.28) at the next step (NEXT_SESSION)
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB1_code  # noqa: E402
+from chB1_parts import PARTS  # noqa: E402
+
 NEXT_SESSION = [
-    ("A", "B1.11 à B1.16", "charger et sonder : trois modèles pré-entraînés, un ResNet face aux images de 32 pixels, "
-                           "embeddings figés, linear probe et k plus proches voisins, résolution, projections, "
-                           "sondage bloc par bloc"),
-    ("B", "B1.17 à B1.19", "fine-tuner : le dernier bloc avec des learning rates par groupe, un fine-tuning qui "
-                           "détruit le modèle, le fine-tuning complet"),
     ("C", "B1.20 à B1.23", "quand le transfert aide ou échoue : courbes d'apprentissage, domaine lointain, oubli "
                            "catastrophique"),
     ("D", "B1.24 à B1.28", "modèles de fondation, coût et livraison : zéro-shot avec CLIP, few-shot par prototypes, "
@@ -492,9 +490,7 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine étape de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B1 · Transfer learning et modèles pré-entraînés — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -502,7 +498,11 @@ def header_cells(kind: str) -> list:
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou des tests). « Tout "
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
-               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
+               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Le "
+               "notebook télécharge ResNet-18 et MobileNetV3-small (torchvision) et DINOv2-small (Hugging Face Hub), "
+               "≈ 150 Mo, et CIFAR-10 (≈ 145 Mo) s'il n'est pas déjà là ; les embeddings sont calculés une fois puis "
+               "mis en cache (`data/downloads/embeddings`, hors du dépôt). Tout tourne sur CPU en mode rapide ; 🚀 : "
+               "en mode complet (`FAST_MODE = False`), 224 pixels et beaucoup plus d'images, sur un GPU de Colab.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b1_transfer/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B1`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
@@ -535,11 +535,10 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B1.11 à B1.28 (parties A à D : charger et sonder, fine-tuner, quand le "
-             "transfert aide ou échoue, modèles de fondation, coût et livraison) seront ajoutés à la prochaine "
-             "session de génération ; relance alors `python tools/start_chapter.py B1` pour obtenir le notebook "
-             "complet.*")
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B1.20 à B1.28 (parties C et D : quand le transfert aide ou échoue, modèles de "
+             "fondation, coût et livraison) seront ajoutés à la prochaine étape de génération ; relance alors "
+             "`python tools/start_chapter.py B1` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu suivre les formes d'un mini-batch dans un ResNet pré-entraîné et compter ce que tu "
@@ -558,6 +557,10 @@ def build(kind: str) -> list:
     cells.append(setup_cell(kind, chapter=CHAPTER) if kind == "exercise" else setup_cell(kind))
     cells += objectives_cell()
     cells += paper_cells(kind, PAPER, PAPER_CONTEXT + LIBRARY_CHECKS, PAPER_INTRO)
+    cells += [md("## Outils du notebook\n\nLa cellule suivante importe PyTorch, charge les sous-ensembles de CIFAR-10 "
+                 "(`X_TRAIN`, `X_VAL`, `X_TEST`), le ResNet-18 gelé de référence `RESNET` et définit les petits outils des "
+                 "parties A et B : `nested`, `reference_embeddings`, `reference_probe`, `pct`… Lis leurs docstrings au "
+                 "besoin. Le premier lancement télécharge CIFAR-10 et les poids de ResNet-18."), code(chB1_code.TOOLS)]
     for part in PARTS:
         cells += part_cells(part, kind)
     cells += footer_cells(kind)
