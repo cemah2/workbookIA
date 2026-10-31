@@ -467,6 +467,109 @@ def load_cifar10(split: str = "train", n: int | None = None, *, normalize: bool 
     return X, y
 
 
+# ---------------------------------------------------------------------------
+# Nested, stratified subsets (bonus chapter B1: a "small dataset" of controlled size)
+# ---------------------------------------------------------------------------
+CIFAR10_SUBSET_SEED = 2011
+CIFAR10_SUBSET_SIZES = (10, 30, 100, 300, 1000)     # images per class of the learning curves (B1.21)
+SUBSET_VAL_POOL = 500                               # per class, at the end of each permutation: never in a train subset
+_SUBSET_PARTS = ("train", "val", "test")
+
+
+def stratified_indices(y, per_class: int, seed: int, *, offset: int = 0, salt: int = 0) -> np.ndarray:
+    """Indices of ``per_class`` examples of each class of ``y``, sorted.
+
+    Each class is shuffled once by its own generator (``np.random.default_rng([seed, salt, class])``) and the
+    positions ``offset`` to ``offset + per_class`` of that permutation are kept: two calls with the same seed and a
+    larger ``per_class`` give a **superset** (nested subsets), and every class has exactly ``per_class`` examples.
+    """
+    y = np.asarray(y)
+    if isinstance(per_class, bool) or int(per_class) != per_class or per_class < 1:
+        raise ValueError(f"per_class must be a positive whole number, got {per_class!r}")
+    per_class = int(per_class)
+    out = []
+    for c in np.unique(y):
+        members = np.flatnonzero(y == c)
+        if offset + per_class > len(members):
+            raise ValueError(f"class {c} has {len(members)} examples: cannot take {per_class} from position {offset}")
+        order = np.random.default_rng([int(seed), int(salt), int(c)]).permutation(members)
+        out.append(order[offset:offset + per_class])
+    return np.sort(np.concatenate(out))
+
+
+def _subset_indices(y, per_class: int, part: str, seed: int) -> np.ndarray:
+    if part not in _SUBSET_PARTS:
+        raise ValueError(f"part must be one of {_SUBSET_PARTS}, got {part!r}")
+    if part == "test":
+        return stratified_indices(y, per_class, seed, salt=1)
+    pool = int(np.bincount(np.asarray(y)).min()) - SUBSET_VAL_POOL       # positions reserved for the validation
+    if part == "train":
+        if per_class > pool:
+            raise ValueError(f"at most {pool} training images per class (the last {SUBSET_VAL_POOL} are for 'val')")
+        return stratified_indices(y, per_class, seed)
+    if per_class > SUBSET_VAL_POOL:
+        raise ValueError(f"at most {SUBSET_VAL_POOL} validation images per class")
+    return stratified_indices(y, per_class, seed, offset=pool)
+
+
+_ARRAYS: dict = {}
+
+
+def _memo_arrays(name: str, split: str, loader):
+    """The full split of a dataset, read once per session (CIFAR-10's .npz takes a few seconds to decompress)."""
+    if (name, split) not in _ARRAYS:
+        _ARRAYS[(name, split)] = loader(split)
+    return _ARRAYS[(name, split)]
+
+
+def cifar10_subset_indices(per_class: int, part: str = "train", seed: int = CIFAR10_SUBSET_SEED) -> np.ndarray:
+    """Indices (sorted) of a nested, stratified subset of CIFAR-10.
+
+    ``part="train"``: ``per_class`` training images of each class (at most 4 500), nested from one size to the next
+    for a given seed (the 10 per class are among the 30, which are among the 100...). ``part="val"``: images of the
+    training split too, taken from the last 500 positions of the same permutations, so never in a train subset
+    (at most 500 per class). ``part="test"``: from the test split (at most 1 000 per class; 1 000 is the whole split).
+    """
+    split = "test" if part == "test" else "train"
+    _, y = _memo_arrays("cifar10", split, lambda s: load_cifar10(s))
+    return _subset_indices(y, per_class, part, seed)
+
+
+def load_cifar10_subset(per_class: int, part: str = "train", seed: int = CIFAR10_SUBSET_SEED, *,
+                        channels_first: bool = False):
+    """``(X, y)`` of :func:`cifar10_subset_indices`: uint8 images (N, 32, 32, 3) (``channels_first`` -> (N, 3, 32,
+    32)) and int64 labels, in the order of the dataset (classes mixed)."""
+    split = "test" if part == "test" else "train"
+    X, y = _memo_arrays("cifar10", split, lambda s: load_cifar10(s))
+    idx = _subset_indices(y, per_class, part, seed)
+    Xs = X[idx]
+    if channels_first:
+        Xs = Xs.transpose(0, 3, 1, 2)
+    return np.ascontiguousarray(Xs), y[idx].astype(np.int64)
+
+
+def load_fashion_mnist_subset(per_class: int, part: str = "test", seed: int = CIFAR10_SUBSET_SEED):
+    """``(X, y)``: a nested, stratified subset of Fashion-MNIST, uint8 (N, 28, 28), the same rules as
+    :func:`load_cifar10_subset` (train: at most 5 500 per class; val: the last 500; test: at most 1 000)."""
+    split = "test" if part == "test" else "train"
+    X, y = _memo_arrays("fashion_mnist", split, lambda s: load_fashion_mnist(s))
+    idx = _subset_indices(y, per_class, part, seed)
+    return np.ascontiguousarray(X[idx]), y[idx].astype(np.int64)
+
+
+def fashion_mnist_rgb(images, size: int = 96):
+    """Fashion-MNIST images uint8 (N, 28, 28) -> what an ImageNet network expects: a float32 tensor
+    (N, 3, size, size), the single channel resized, then repeated (``x.expand(-1, 3, -1, -1)``), then normalised
+    with the ImageNet statistics. The domain is far from ImageNet (grayscale clothes on a black background):
+    the far domain of B1.16 and B1.22."""
+    from wb.transfer import to_input
+
+    images = np.asarray(images)
+    if images.ndim != 3 or images.dtype != np.uint8:
+        raise ValueError(f"expected uint8 grayscale images (N, H, W), got {images.dtype} {images.shape}")
+    return to_input(images, size, IMAGENET_MEAN, IMAGENET_STD, "bilinear")
+
+
 def torchvision_dataset(name: str, train: bool = True, transform=None, download: bool = True):
     """A torchvision dataset object (MNIST, FashionMNIST, CIFAR10...) stored in the cache.
 

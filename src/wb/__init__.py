@@ -9,12 +9,13 @@
 >>> mylearn = wb.load_mylearn("learner") # your own library (or "ref" in solutions)
 >>> from wb.nbtools import checked, same, run_pytest_group   # tools of the check cells (ch. 21 on)
 >>> from wb import exams                 # oracles of part B of the exam notebooks (CP4 on), out of sight
+>>> bb = wb.transfer.load_backbone("resnet18")   # frozen pre-trained backbones and cached embeddings (B1)
 
 Importing ``wb`` is light: PyTorch is only imported by ``setup()`` (if
 installed) and by the functions that need it.
 """
 
-from wb import datasets, plot, synth
+from wb import datasets, plot, synth, transfer
 from wb._versions import __version__
 from wb.checker import attempt, check, record
 from wb.core import Config, by_mode, ensure, environment_report, get_device, is_colab, repo_root, seed_everything, setup, timer
@@ -43,4 +44,5 @@ __all__ = [
     "synth",
     "plot",
     "nbtools",
+    "transfer",
 ]
