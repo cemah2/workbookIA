@@ -102,7 +102,7 @@ Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstra
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
 | Complet | 2028 | 666 h | 920 h | 100 % |
-| Rapide | 1312 | 319 h | 549 h | 60 % |
+| Rapide | 1312 | 319 h | 550 h | 60 % |
 | Maths | 801 | 307 h | 561 h | 61 % |
 | Code | 890 | 462 h | 736 h | 80 % |
 
@@ -4016,7 +4016,7 @@ Traduction Keras → PyTorch : chaque section a son équivalent (KerasClassifier
 | CP5.13 | 💼 | model.eval() et torch.inference_mode() : à quoi servent-ils ? | ★ | 4 | 0,5 | 23, 24 | RMC |
 | CP5.14 | ⚖️ | « Le modèle B gagne 0,8 point » sur une seule graine : que peut-on écrire au client ? | ★★ | 4 | 0,5 | 24 | RMC |
 
-**Synthèse** (carte mentale et fiche d'une page) : Convolution : noyau, partage de poids, padding, stride, dilatation, canaux, formule des tailles de sortie · Pooling, stride et champ récepteur ; convolutions 1D et 1×1 ; convolution transposée · Architectures d'images : convnet MNIST, LeNet-5, VGG16, blocs résiduels, Vision Transformers (🕰️) · Ce que voit un CNN : filtres, cartes d'activation, maximisation d'activation ; exemples adversariaux (FGSM) · Récurrence : état, déroulement, BPTT, gradients évanescents et explosifs, gradient clipping · LSTM et GRU : portes, cellule mémoire et chemin additif, ordre des portes PyTorch, comptage des paramètres · Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM · Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches · Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots · Workflow PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks · Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batchnorm, augmentation, validation croisée, recherche d'hyperparamètres · Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile
+**Synthèse** (carte mentale et fiche d'une page) : Convolution : noyau, partage de poids, padding, stride, dilatation, canaux, formule des tailles de sortie · Pooling, stride et champ récepteur ; convolutions 1D et 1×1 ; convolution transposée · Architectures d'images : convnet MNIST, LeNet-5, VGG16, blocs résiduels, Vision Transformers (🕰️) · Ce que voit un CNN : filtres, cartes d'activation, maximisation d'activation ; exemples adversariaux (FGSM) · Récurrence : état, déroulement, BPTT, gradients évanescents et explosifs, gradient clipping · LSTM et GRU : portes, cellule mémoire et chemin additif, ordre des portes PyTorch, comptage des paramètres · Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM · Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches · Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots · Marche à suivre en PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks · Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batchnorm, augmentation, validation croisée, recherche d'hyperparamètres · Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile
 
 **Mini-projet MP5 — Classifieur d'images CIFAR-10 de bout en bout** (`projets/partie_5_classifieur_cifar10/`, ≈ 10 h, données : CIFAR-10 (50 000 images d'entraînement, 10 000 de test) ; Fashion-MNIST autorisé pour les itérations rapides)
 
@@ -4186,7 +4186,7 @@ COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre fa
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 |
 | **Dossier** | `chapitres/ch26_rl/` |
 | **Exercices** | 58 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 6 · 📦 4 · 🔬 8 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **29 h** (lecture 7,8 h, exercices 20 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **29 h** (lecture 7,9 h, exercices 20 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 25, 23, 11 |
 | **Compétence 🛠️** | Rapporter un résultat stochastique honnêtement : plusieurs graines, moyenne et intervalle, configuration sauvegardée en JSON |
@@ -4206,7 +4206,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 
 **Sections du livre couvertes** : 26 sections et sous-sections, toutes couvertes (§26.1 à §26.10 ; détail dans la matrice de couverture).
 
-**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,8 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
+**Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,9 h) : 18 sections sur 26 ; sections laissées de côté : §26.1, §26.2.1, §26.3.6, §26.5, §26.6, §26.7.1, §26.7.2, §26.10.
 
 **Notions enseignées** : boucle agent-environnement ; API gymnasium (reset, step, terminated, truncated) ; politique ; retour actualisé et facteur γ ; Q-learning tabulaire ; SARSA ; ε-greedy et softmax (Boltzmann) ; équation de Bellman ; itération sur les valeurs ; on-policy / off-policy ; experience replay ; conception de la récompense ; masques d'actions ; discrétisation d'un état continu ; self-play ; reproductibilité en RL (graines multiples)
 
@@ -4258,7 +4258,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 | 26.25 | 🔬 | Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties | ★★★ | 40 | Flippers | 03 | 26.21, 26.17 | C | manual |
 | 26.26 | 🔨 | Itération sur les valeurs : la référence quand le modèle est connu | ★★★ | 40 | FrozenLake | 03 | 26.8, 26.22 | MC | pytest |
 | 26.27 | 🔬 | α, γ, ε : balayage d'hyperparamètres sur Flippers bruité | ★★★ | 45 | Flippers | 03 | 26.25 | C | manual |
-| 26.28 | 🔮 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | ★ | 10 | — | 03 | 26.20 | RC | wb.check |
+| 26.28 | 🔮 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | ★ | 10 | — | 03 | 26.20, 26.21 | RC | wb.check |
 | 26.29 | 🔬 | Q-learning contre SARSA sur Flippers et CliffWalking | ★★★ | 45 | Flippers | 03 | 26.28, 26.25 | C | manual |
 | 26.30 | 🎨 | Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) | ★★★ | 35 | Flippers | 03 | 26.29 | C | manual |
 | 26.31 | 🔨 | Une mémoire de rejeu (replay buffer) | ★★ | 20 | — | 03 | 0A | RC | pytest |
@@ -4390,7 +4390,7 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 | 27.17 | 🔮 | Prédire l'effet d'un discriminateur trop fort | ★★ | 15 | synth | 03 | 27.12 | C | wb.check |
 | 27.18 | 🔬 | Loss saturante ou non saturante : la dynamique du début | ★★ | 30 | synth | 03 | 27.6, 27.12 | MC | manual |
 | 27.19 | 🔬 | Le round en quatre temps du livre contre la boucle standard | ★★★ | 40 | synth | 03 | 27.12 | C | manual |
-| 27.20 | 📦 | Un DCGAN sur MNIST selon les règles de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.1, 21 | RC | manual |
+| 27.20 | 📦 | Un DCGAN sur MNIST selon les règles de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.1, 21, 27.12 | RC | manual |
 | 27.21 | 🔬 | Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.20 | C | manual |
 | 27.22 | 🔨 | Distance de Fréchet entre deux gaussiennes (la formule du FID) | ★★★ | 35 | — | 03 | 12, 2 | MC | pytest |
 | 27.23 | 📦 | Évaluer un générateur : distance de Fréchet sur les features d'un classifieur | ★★★ | 40 | MNIST | 03 | 27.22, 27.20, 24 | C | manual |

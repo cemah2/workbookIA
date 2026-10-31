@@ -97,7 +97,7 @@
 
 ## 🔁 Rappels
 
-### 28.R1 — Un réseau qui sert de loss (le discriminateur)
+### 28.R1 — Ch. 27 : un réseau qui sert de loss (le discriminateur)
 
 - a) :
 - b) :
@@ -106,7 +106,7 @@
 - e) :
 
 
-### 28.R2 — Mélange de contenu contre mélange de représentations
+### 28.R2 — Ch. 25 : mélange de contenu contre mélange de représentations
 
 - a) :
 - b) :
@@ -115,7 +115,7 @@
 - e) :
 
 
-### 28.R3 — Champ récepteur et hiérarchie des filtres de VGG16
+### 28.R3 — Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16
 
 - a) :
 - b) :

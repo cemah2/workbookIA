@@ -52,15 +52,15 @@ a) **B** : un pic de la distribution. b) **B** : partiel, il reste quelques 7. c
 
 ## 🔁 Rappels
 
-### 27.R1 — Deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
 a) **A**. b) **Faux** : deux réseaux différents, aux rôles opposés ; en auto-apprentissage, une seule table joue les deux camps. c) **B** : le morpion parfait est nul. d) **Vrai** : dans les deux cas, l'adversaire évolue, la cible n'est pas fixe. e) **A** : un gradient, qui dit dans quelle direction modifier chaque sortie ; un agent de RL ne reçoit qu'un nombre.
 **À retenir** : GAN et auto-apprentissage sont deux jeux à cible mouvante ; le GAN a l'avantage d'un signal dérivable.
 
-### 27.R2 — Precision et recall pour juger un générateur (fidélité contre diversité)
+### 27.R2 — Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité)
 a) **0,727** : $\frac{80}{80 + 30}$. b) **0,80** : $\frac{80}{80 + 20}$. c) **A**. d) **A** : chaque échantillon est fidèle, mais le générateur ne couvre presque rien. e) **Vrai** : un manque de diversité change la covariance et fait monter le FID, comme un manque de fidélité.
 **À retenir** : precision générative = fidélité, recall génératif = diversité ; le FID mêle les deux.
 
-### 27.R3 — Batchnorm, où la placer, train() ou eval()
+### 27.R3 — Ch. 20 : batchnorm, où la placer, train() ou eval()
 a) **A**. b) **B**. c) **A**. d) **Vrai** : en `eval()`, la normalisation ne dépend plus du mini-batch. e) **128** : $\gamma$ et $\beta$ pour chacun des 64 canaux ; la moyenne et la variance glissantes sont des *buffers*, pas des paramètres appris.
 **À retenir** : on génère en `eval()` ; sinon l'image d'un $\mathbf{z}$ dépend des autres $\mathbf{z}$ du mini-batch.
 

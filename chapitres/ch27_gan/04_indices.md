@@ -192,7 +192,7 @@ a) Le mode est un pic de la distribution des données (B), pas une manière de t
 
 ## 🔁 Rappels
 
-### 27.R1 — Deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
 
 <details><summary>Indice 1</summary>
 
@@ -210,7 +210,7 @@ a) L'agent joue contre une copie de lui-même (A). Pour b), un GAN a-t-il un seu
 
 </details>
 
-### 27.R2 — Precision et recall pour juger un générateur (fidélité contre diversité)
+### 27.R2 — Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité)
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ a) $TP = 80$, $FP = 30$ : precision $= \frac{80}{110}$. Pour b), $FN = 100 - 80$
 
 </details>
 
-### 27.R3 — Batchnorm, où la placer, train() ou eval()
+### 27.R3 — Ch. 20 : batchnorm, où la placer, train() ou eval()
 
 <details><summary>Indice 1</summary>
 
@@ -250,7 +250,7 @@ a) En `train()`, la moyenne et l'écart-type du mini-batch (A). Pour b), quelles
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 27.1 — Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour
+### Ex 27.1 — Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ a) $7 \times 7 \times 128 = 6\,272$ neurones. Pour b), $1\,024 \times 6\,272$ po
 
 </details>
 
-### Ex 27.2 — Valeur minimax d'une petite matrice de gains
+### Ex 27.2 — Valeur minimax d'une petite matrice de gains ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Les minimums des lignes : A → −1, B → 0, C → −3 ; le meilleur des t
 
 </details>
 
-### Ex 27.3 — Losses BCE du discriminateur et du générateur à partir de sorties données
+### Ex 27.3 — Losses BCE du discriminateur et du générateur à partir de sorties données ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $-\frac{1}{2}(\ln 0{,}8 + \ln 0{,}6) = \frac{1}{2}(0{,}2231 + 0{,}5108) \appr
 
 </details>
 
-### Ex 27.4 — À l'équilibre, la loss vaut ln 2 et non 0,5
+### Ex 27.4 — À l'équilibre, la loss vaut ln 2 et non 0,5 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) Deux termes de $-\ln \frac{1}{2}$ : $2\ln 2 \approx 1{,}386$. Pour b), un seu
 
 </details>
 
-### Ex 27.5 — Le discriminateur optimal D* = p_data / (p_data + p_g)
+### Ex 27.5 — Le discriminateur optimal D* = p_data / (p_data + p_g) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ Relis le §27.4.4 de la fiche (le discriminateur optimal, Jensen-Shannon) et la 
 
 </details>
 
-### Ex 27.6 — Pourquoi log(1 − D(G(z))) sature et pas −log D(G(z))
+### Ex 27.6 — Pourquoi log(1 − D(G(z))) sature et pas −log D(G(z)) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ $\sigma'(a) = \sigma(a)(1 - \sigma(a))$. Dérive $\ln(u(a))$ en $\frac{u'(a)}{u(
 
 </details>
 
-### Ex 27.7 — Croissance progressive : où passe le temps de calcul ?
+### Ex 27.7 — Croissance progressive : où passe le temps de calcul ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ Les côtés sont $4 \times 2^k$ pour $k = 0, \dots, 8$ ; les nombres de pixels $
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 27.8 — Un GAN en cinq lignes, sans faux billets
+### Ex 27.8 — Un GAN en cinq lignes, sans faux billets 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ Un plan possible : (1) qui produit, à partir de quoi ; (2) qui juge, en compara
 
 </details>
 
-### Ex 27.9 — Visages qui n'existent pas, deepfakes et obligation de transparence
+### Ex 27.9 — Visages qui n'existent pas, deepfakes et obligation de transparence ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Pour 3, l'article 50 du règlement distingue le **fournisseur** du système (qui
 
 </details>
 
-### Ex 27.10 — Lire Goodfellow et coll. (2014), « Generative Adversarial Nets »
+### Ex 27.10 — Lire Goodfellow et coll. (2014), « Generative Adversarial Nets » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -532,7 +532,7 @@ Structure : (1) pourquoi (cible mouvante, pas de garantie de convergence, satura
 
 ## Exercices du notebook
 
-### Ex 27.11 — Distance de Wasserstein 1D entre deux échantillons
+### Ex 27.11 — Distance de Wasserstein 1D entre deux échantillons 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -558,7 +558,7 @@ def wasserstein_1d(u, v):
 
 </details>
 
-### Ex 27.12 — Un GAN minuscule pour une gaussienne 1D
+### Ex 27.12 — Un GAN minuscule pour une gaussienne 1D 📦
 
 <details><summary>Indice 1</summary>
 
@@ -591,7 +591,7 @@ def train_gan_12(...):
 
 </details>
 
-### Ex 27.13 — Prédire la moyenne et l'écart-type générés au fil des epochs
+### Ex 27.13 — Prédire la moyenne et l'écart-type générés au fil des epochs 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -609,7 +609,7 @@ Pour a), demande-toi ce que $D$ sait, à la fin de l'epoch 1, des valeurs qu'il 
 
 </details>
 
-### Ex 27.14 — Lire les courbes d'un GAN : losses, D(x) et D(G(z))
+### Ex 27.14 — Lire les courbes d'un GAN : losses, D(x) et D(G(z)) 📈
 
 <details><summary>Indice 1</summary>
 
@@ -627,7 +627,7 @@ a) Cherche l'entraînement où l'écart entre `d_real` et `d_fake` reste grand j
 
 </details>
 
-### Ex 27.15 — Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21)
+### Ex 27.15 — Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -655,7 +655,7 @@ def plot_clouds_15(snapshots, data):
 
 </details>
 
-### Ex 27.16 — Le GAN qui s'entraînait à l'envers
+### Ex 27.16 — Le GAN qui s'entraînait à l'envers 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -673,7 +673,7 @@ Un exemple : le point 1 compte les passes arrière qui atteignent $G$ ; la loss 
 
 </details>
 
-### Ex 27.17 — Prédire l'effet d'un discriminateur trop fort
+### Ex 27.17 — Prédire l'effet d'un discriminateur trop fort 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -691,7 +691,7 @@ Pour a), situe $D(G(\mathbf{z}))$ entre deux extrêmes : 0 (tous les faux repér
 
 </details>
 
-### Ex 27.18 — Loss saturante ou non saturante : la dynamique du début
+### Ex 27.18 — Loss saturante ou non saturante : la dynamique du début 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -718,7 +718,7 @@ def generator_grad_norm_18(G, D, z, saturating):
 
 </details>
 
-### Ex 27.19 — Le round en quatre temps du livre contre la boucle standard
+### Ex 27.19 — Le round en quatre temps du livre contre la boucle standard 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -745,7 +745,7 @@ Une petite fonction interne `learn(logits, target, selected, optimizer)` fait un
 
 </details>
 
-### Ex 27.20 — Un DCGAN sur MNIST selon les règles de Radford
+### Ex 27.20 — Un DCGAN sur MNIST selon les règles de Radford 📦
 
 <details><summary>Indice 1</summary>
 
@@ -775,7 +775,7 @@ def init_weights_20(module):
 
 </details>
 
-### Ex 27.21 — Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford
+### Ex 27.21 — Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -801,7 +801,7 @@ Générateur : deux `nn.Linear` (la seconde suivie d'une `nn.BatchNorm1d`), des 
 
 </details>
 
-### Ex 27.22 — Distance de Fréchet entre deux gaussiennes (la formule du FID)
+### Ex 27.22 — Distance de Fréchet entre deux gaussiennes (la formule du FID) 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -826,7 +826,7 @@ def frechet_distance(mu1, sigma1, mu2, sigma2):
 
 </details>
 
-### Ex 27.23 — Évaluer un générateur : distance de Fréchet sur les features d'un classifieur
+### Ex 27.23 — Évaluer un générateur : distance de Fréchet sur les features d'un classifieur 📦
 
 <details><summary>Indice 1</summary>
 
@@ -848,7 +848,7 @@ def fid_23(G, clf, real_feats, n=2000, seed=0):
 
 </details>
 
-### Ex 27.24 — Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes)
+### Ex 27.24 — Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes) 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -872,7 +872,7 @@ def modes_covered_24(points, k=8, radius=2.0, threshold=0.15, min_share=0.01):
 
 </details>
 
-### Ex 27.25 — Un GAN conditionnel : choisir le chiffre généré
+### Ex 27.25 — Un GAN conditionnel : choisir le chiffre généré 📦
 
 <details><summary>Indice 1</summary>
 
@@ -899,7 +899,7 @@ class CondDiscriminator25(nn.Module):
 
 </details>
 
-### Ex 27.26 — Se promener dans l'espace latent du générateur
+### Ex 27.26 — Se promener dans l'espace latent du générateur 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -922,7 +922,7 @@ def path_report_26(clf, images):
 
 </details>
 
-### Ex 27.27 — Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique
+### Ex 27.27 — Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -946,7 +946,7 @@ def save_gan_checkpoint_27(path, G, D, opt_g, opt_d, epoch, gen):
 
 </details>
 
-### Ex 27.28 — Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet
+### Ex 27.28 — Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet 🏆
 
 <details><summary>Indice 1</summary>
 

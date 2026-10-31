@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 28.Q1 — Pourquoi partir d'un réseau pré-entraîné comme VGG16 🧠 ⏱️ 3 min
-*Fiche §28.1, §28.2.1 · livre §28.1, §28.2, §28.2.1*
+*Fiche §28.1, §28.2.1 · livre §28.1, §28.2, §28.2.1 · parcours R*
 
 a) Vrai ou faux : dans les expériences de ce chapitre, les poids de VGG16 changent à chaque pas d'optimisation.
 b) Combien VGG16 a-t-il de couches à poids (convolutions et couches denses) ?
@@ -25,7 +25,7 @@ d) Le jeu d'entraînement d'ImageNet-1k (ILSVRC) compte environ : (A) 500 000 im
 e) Combien de classes ce jeu distingue-t-il ?
 
 ### 28.Q2 — Montée de gradient sur l'entrée, poids gelés 🧠 ⏱️ 3 min
-*Fiche §28.2.2 · livre §28.2.2*
+*Fiche §28.2.2 · livre §28.2.2 · parcours R*
 
 a) À chaque pas de la visualisation d'un filtre, on modifie : (A) les poids du réseau ; (B) les pixels de l'image d'entrée ; (C) le learning rate.
 b) Vrai ou faux : faire une montée de gradient sur l'activation $a(\mathbf{x})$ revient à faire une descente de gradient sur $-a(\mathbf{x})$.
@@ -34,7 +34,7 @@ d) En PyTorch, l'optimiseur reçoit : (A) `model.parameters()` ; (B) `[x]`, l'im
 e) Vrai ou faux : si tous les poids du réseau sont gelés (`requires_grad_(False)`), `loss.backward()` calcule quand même le gradient de la loss par rapport à l'image.
 
 ### 28.Q3 — Visualiser une couche entière, pondérer ses filtres 🧠 ⏱️ 3 min
-*Fiche §28.2.3 · livre §28.2.3*
+*Fiche §28.2.3 · livre §28.2.3 · parcours R*
 
 a) Pour visualiser une couche entière, on maximise : (A) l'activation d'un seul de ses filtres ; (B) la somme, éventuellement pondérée, des activations de tous ses filtres ; (C) la sortie de la dernière couche dense.
 b) Les images obtenues pour les couches du premier bloc montrent surtout : (A) des rayures, des couleurs et des textures fines ; (B) des objets reconnaissables, comme des yeux ou des têtes.
@@ -43,7 +43,7 @@ d) Combien de filtres compte la couche bloc 4, conv 3 de VGG16 ?
 e) Pour une entrée de 224 × 224, la carte d'activation d'une convolution du bloc 4 mesure combien de pixels de côté ?
 
 ### 28.Q4 — Deep dream : ce qui change par rapport à la visualisation d'une couche 🧠 ⏱️ 3 min
-*Fiche §28.3 · livre §28.3*
+*Fiche §28.3 · livre §28.3 · parcours R*
 
 a) Parmi ces différences avec la visualisation d'une couche, lesquelles sont vraies ? (A) on part d'une photo et non d'un bruit ; (B) on combine plusieurs couches, chacune avec son poids ; (C) on met à jour les poids du réseau ; (D) on fait baisser les activations au lieu de les faire monter. Écris leurs lettres.
 b) Vrai ou faux : le deep dream amplifie ce que le réseau croit déjà voir dans l'image.
@@ -52,7 +52,7 @@ d) Pour ne rêver que dans une partie de l'image, on : (A) coupe le réseau apr�
 e) Vrai ou faux : le transfert de style, comme le deep dream, fait monter une activation.
 
 ### 28.Q5 — Des yeux partout : l'écho des données d'entraînement 🧠 ⏱️ 3 min
-*Fiche §28.3 · livre §28.3*
+*Fiche §28.3 · livre §28.3 · parcours R*
 
 a) Pourquoi le deep dream fait-il apparaître tant d'yeux et de têtes de chiens ? (A) VGG16 contient une couche conçue à la main pour détecter les yeux ; (B) c'est un effet du bruit uniforme que l'on ajoute à la photo avant de commencer ; (C) ImageNet contient de très nombreuses photos d'animaux, et le réseau a appris des détecteurs pour leurs parties.
 b) Vrai ou faux : moins d'un dixième des 1 000 classes d'ImageNet-1k sont des races de chiens.
@@ -61,7 +61,7 @@ d) Rêver avec une couche **profonde** fait apparaître surtout : (A) des traits
 e) Vrai ou faux : ces hallucinations révèlent un biais des données d'entraînement, dont il faut tenir compte quand on interprète ce qu'un réseau « voit ».
 
 ### 28.Q6 — Image de base, référence de style, image générée : que minimise-t-on ? 🧠 ⏱️ 3 min
-*Fiche §28.4, §28.4.2 · livre §28.4, §28.4.2*
+*Fiche §28.4, §28.4.2 · livre §28.4, §28.4.2 · parcours R*
 
 a) Pendant le transfert de style, on optimise : (A) l'image de contenu ; (B) la référence de style ; (C) l'image générée ; (D) les poids du réseau.
 b) La loss de contenu compare les activations de l'image générée à celles de : (A) l'image de contenu ; (B) la référence de style.
@@ -70,7 +70,7 @@ d) Vrai ou faux : le réseau (VGG16) s'entraîne pendant le transfert de style, 
 e) Les cibles (activations du contenu, matrices de Gram du style) sont calculées une fois pour toutes avant la boucle. Combien d'images passent alors dans le réseau à chaque pas d'optimisation ?
 
 ### 28.Q7 — Ce que la matrice de Gram retient et ce qu'elle oublie 🧠 ⏱️ 3 min
-*Fiche §28.4.1, §28.4.6 · livre §28.4.1, §28.4.6*
+*Fiche §28.4.1, §28.4.6 · livre §28.4.1, §28.4.6 · parcours R, M*
 
 a) La matrice de Gram d'une couche de $C$ filtres, dont les cartes mesurent $H \times W$, est de taille : (A) $C \times C$ ; (B) $HW \times HW$ ; (C) $C \times HW$.
 b) L'entrée $G_{ij}$ mesure : (A) la distance entre les pixels $i$ et $j$ ; (B) à quel point les filtres $i$ et $j$ s'activent ensemble, aux mêmes endroits ; (C) la position où le filtre $i$ s'active le plus.
@@ -79,7 +79,7 @@ d) Le coefficient diagonal $G_{ii}$ est proportionnel à : (A) le nombre de posi
 e) Vrai ou faux : selon Li et coll. (2017), égaler les matrices de Gram ne correspond à aucune mesure connue de l'écart entre deux distributions de features.
 
 ### 28.Q8 — Loss de contenu : couches précoces ou profondes ? 🧠 ⏱️ 3 min
-*Fiche §28.4.3 · livre §28.4.3*
+*Fiche §28.4.3 · livre §28.4.3 · parcours R*
 
 a) Partir d'un bruit et égaler les activations d'une couche **précoce** de la photo donne : (A) une image presque identique à la photo ; (B) seulement la disposition générale des objets.
 b) Avec une couche **profonde**, l'image reconstruite : (A) est identique à la photo, au pixel près ; (B) garde la structure et les objets, mais perd les couleurs et les détails fins.
@@ -88,7 +88,7 @@ d) Vrai ou faux : Gatys et coll. (2015) prennent eux aussi une couche du premier
 e) Pourquoi une couche de contenu profonde laisse-t-elle plus de place au style ? (A) ses filtres ont moins de paramètres, donc ils contraignent moins l'image ; (B) elle ne fixe que la structure, et laisse libres les couleurs et les textures ; (C) elle est plus rapide à calculer, donc on peut faire plus de pas.
 
 ### 28.Q9 — Loss de style, poids relatifs et variation totale 🧠 ⏱️ 3 min
-*Fiche §28.4.4, §28.4.5 · livre §28.4.4, §28.4.5*
+*Fiche §28.4.4, §28.4.5 · livre §28.4.4, §28.4.5 · parcours R*
 
 a) Le livre calcule la loss de style sur : (A) une seule couche ; (B) toutes les couches de convolution.
 b) Avec les poids du livre, $\alpha = 0{,}025$ pour le contenu et $\beta = 1$ pour le style, combien de fois le poids du style est-il plus grand que celui du contenu ?
@@ -97,7 +97,7 @@ d) Vrai ou faux : un bon réglage de $\alpha$ et $\beta$ dépend de la façon do
 e) Vrai ou faux : partir d'un bruit plutôt que de l'image de contenu fait en général converger en moins d'itérations.
 
 ### 28.Q10 — Générer du texte mot à mot : ce qu'implique « le mot le plus probable » 🧠 ⏱️ 3 min
-*Fiche §28.5 · livre §28.5*
+*Fiche §28.5 · livre §28.5 · parcours R*
 
 a) Le livre choisit, à chaque pas : (A) le mot le plus probable ; (B) un mot tiré au hasard selon les probabilités du modèle.
 b) Vrai ou faux : le décodage glouton peut donner deux suites différentes pour un même début de texte.
@@ -109,8 +109,8 @@ e) Diviser les logits par une température $T < 1$ avant le softmax rend la dist
 
 ## 🔁 Rappels
 
-### 28.R1 — Un réseau qui sert de loss (le discriminateur) 🔁 ⏱️ 5 min
-*ch. 27 · fiche §28.4.2*
+### 28.R1 — Ch. 27 : un réseau qui sert de loss (le discriminateur) 🔁 ★ ⏱️ 5 min
+*Ch. 27 · fiche §28.4.2 · parcours R*
 
 a) Dans un GAN, le générateur reçoit son signal d'apprentissage : (A) du gradient d'une loss calculée par le discriminateur ; (B) d'une loss pixel à pixel avec une vraie image.
 b) Dans le transfert de style, le réseau qui sert à calculer la loss (VGG16) est : (A) entraîné en même temps, comme le discriminateur ; (B) gelé.
@@ -118,8 +118,8 @@ c) Vrai ou faux : dans les deux cas, le gradient traverse un réseau pour attein
 d) Dans le transfert de style de Gatys, ce que l'on optimise : (A) les poids d'un générateur ; (B) les pixels d'une image.
 e) Une loss calculée sur les features d'un réseau pré-entraîné, plutôt que sur les pixels, s'appelle : (A) une loss adversariale ; (B) une loss perceptuelle.
 
-### 28.R2 — Mélange de contenu contre mélange de représentations 🔁 ⏱️ 5 min
-*ch. 25 · fiche §28.4*
+### 28.R2 — Ch. 25 : mélange de contenu contre mélange de représentations 🔁 ★ ⏱️ 5 min
+*Ch. 25 · fiche §28.4 · parcours R*
 
 a) La moyenne, pixel à pixel, d'une image MNIST de 1 et d'une image de 7 donne : (A) un chiffre plausible, entre les deux ; (B) les deux chiffres superposés, en transparence.
 b) Le point milieu entre les codes latents d'un 1 et d'un 7, passé dans le décodeur d'un VAE, donne plutôt : (A) une forme intermédiaire plausible ; (B) les deux chiffres superposés.
@@ -127,8 +127,8 @@ c) Vrai ou faux : le transfert de style mélange lui aussi des représentations 
 d) L'interpolation $\mathbf{z}(t) = (1 - t)\,\mathbf{z}_1 + t\,\mathbf{z}_2$ avec $\mathbf{z}_1 = (0, 2)$, $\mathbf{z}_2 = (4, -2)$ et $t = 0{,}25$ : sa première coordonnée.
 e) Vrai ou faux : la matrice de Gram de la moyenne de deux activations, $\frac{1}{2}(F_1 + F_2)$, est la moyenne de leurs deux matrices de Gram.
 
-### 28.R3 — Champ récepteur et hiérarchie des filtres de VGG16 🔁 ⏱️ 5 min
-*ch. 21 · fiche §28.2.1*
+### 28.R3 — Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16 🔁 ★ ⏱️ 5 min
+*Ch. 21 · fiche §28.2.1 · parcours R*
 
 a) Deux convolutions 3 × 3 empilées, de pas 1 : le côté du champ récepteur d'un neurone de la seconde, en pixels de l'entrée.
 b) Trois convolutions 3 × 3 empilées, de pas 1 : le côté du champ récepteur.
@@ -291,15 +291,19 @@ Lis L. A. Gatys, A. S. Ecker et M. Bethge, « A Neural Algorithm of Artistic Sty
 Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : réponse modèle et relances possibles.
 
 ### 28.E1 — Comment visualiser ce qu'a appris un CNN ? 💼 ★★ ⏱️ 10 min
+*Fiche §28.2 · parcours R*
 « Comment savoir ce qu'un réseau convolutif a appris ? Quelles techniques connaissez-vous, et quelles sont leurs limites ? »
 
 ### 28.E2 — Expliquer le transfert de style neuronal et la matrice de Gram 💼 ★★ ⏱️ 10 min
+*Fiche §28.4 · parcours R*
 « Expliquez le transfert de style neuronal. Pourquoi la matrice de Gram ? »
 
 ### 28.E3 — Quelles stratégies de décodage pour générer du texte ? 💼 ★★ ⏱️ 10 min
+*Fiche §28.5 · parcours R*
 « Un modèle de langue donne une distribution sur le mot suivant. Comment choisissez-vous le mot à écrire ? Quels compromis ? »
 
 ### 28.E4 — Pourquoi la diffusion a-t-elle remplacé deep dream et le transfert de style de Gatys ? 💼 ★★ ⏱️ 10 min
+*Fiche §28.3, §28.4.6 · parcours R*
 « Aujourd'hui, comment feriez-vous un outil qui applique un style artistique à une photo ? Pourquoi pas la méthode de Gatys ? »
 
 <a id="notebook"></a>

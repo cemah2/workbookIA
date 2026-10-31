@@ -52,15 +52,15 @@ a) **A**. b) **Faux** : le glouton est déterministe ; même début, même suite
 
 ## 🔁 Rappels
 
-### 28.R1 — Un réseau qui sert de loss (le discriminateur)
+### 28.R1 — Ch. 27 : un réseau qui sert de loss (le discriminateur)
 a) **A** : le générateur ne voit jamais de vraie image ; il apprend par le gradient qui traverse le discriminateur. b) **B**. c) **Vrai**. d) **B** : chez Gatys, on optimise les pixels d'une image ; le transfert rapide de Johnson et coll. entraîne, lui, un réseau générateur. e) **B** : une loss perceptuelle ; une loss adversariale vient d'un discriminateur qui s'entraîne en même temps.
 **À retenir** : dans un GAN comme dans le transfert de style, un réseau dérivable sert de critère ; dans le premier il apprend, dans le second il est gelé.
 
-### 28.R2 — Mélange de contenu contre mélange de représentations
+### 28.R2 — Ch. 25 : mélange de contenu contre mélange de représentations
 a) **B** : la moyenne de deux images superpose leurs traits, chacun à moitié d'intensité. b) **A** : le décodeur d'un VAE rend une image qui ressemble aux données, même entre deux codes. c) **Vrai**. d) **1** : $0{,}75 \times 0 + 0{,}25 \times 4$. e) **Faux** : $\frac{1}{4}(F_1 + F_2)(F_1 + F_2)^\top = \frac{1}{4}(F_1F_1^\top + F_2F_2^\top + F_1F_2^\top + F_2F_1^\top)$ ; les termes croisés font la différence avec la moyenne $\frac{1}{2}(F_1F_1^\top + F_2F_2^\top)$.
 **À retenir** : mélanger des représentations n'est pas mélanger des pixels ; et une statistique quadratique ne se mélange pas linéairement.
 
-### 28.R3 — Champ récepteur et hiérarchie des filtres de VGG16
+### 28.R3 — Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16
 a) **5**. b) **7** : chaque convolution 3 × 3 de pas 1 ajoute 2 pixels au côté du champ récepteur. c) **Vrai**. d) **1** : $32 / 2^5$. e) **36 928** : $64 \times 64 \times 3 \times 3 + 64$.
 **À retenir** : les poolings divisent le côté par 2, les convolutions 3 × 3 élargissent le champ récepteur de 2 ; c'est pourquoi les couches profondes voient des motifs plus grands.
 

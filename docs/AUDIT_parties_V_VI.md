@@ -2,10 +2,9 @@
 
 *Chapitres 21 à 29, checkpoints V et VI, mini-projets MP5 et MP6. Prompt P5 (`docs/METHODE.md` §3), session 62.*
 
-> **Statut : 🔍 en cours (2026-10-31).**
+> **Statut : ✅ audit terminé (2026-10-31) ; propositions R1 à R9 à valider (§3).**
 > - Onze relecteurs indépendants ont travaillé en lecture seule sur le commit `b961aa3`. Leurs rapports bruts sont dans `docs/audit_P5_parties_V_VI/`, de A01 à A11.
-> - Des correcteurs par zone (F1 à F7) vérifient puis appliquent les constats mineurs : voir le §4.
-> - Les propositions R1 à R7 (§3) attendent ta décision.
+> - Sept correcteurs par zone (F1 à F7) ont vérifié puis appliqué les constats mineurs : voir le §4. La vérification finale est au §5.
 
 ## 1. Méthode
 
@@ -58,7 +57,7 @@ Les onze rapports bruts sont dans `docs/audit_P5_parties_V_VI/`. Les citations d
 
 ## 3. Corrections majeures proposées (à valider)
 
-Ces sept points changent le contrat (titres, termes retenus, types, étoiles, durées, parcours, énoncés), une convention transversale ou la structure des outils. Ils sont exclus des corrections directes du §4 et attendent ta décision. Pour chacun, la recommandation est donnée en tête.
+Ces neuf points changent le contrat (titres, termes retenus, types, étoiles, durées, parcours, énoncés), une convention transversale ou la structure des outils. Ils sont exclus des corrections directes du §4 et attendent ta décision. Pour chacun, la recommandation est donnée en tête.
 
 **R1 — Titres et termes des parties V et VI.** *Recommandé : A.* (A1 6, 7, 8, 9, 10 ; A3 24)
 
@@ -169,15 +168,129 @@ Options :
   - déclarer des prérequis d'exercice dans `cp5.json` ;
   - écrire dans les cahiers des charges de MP5 et MP6 : « fais d'abord 23.18, 23.23, 23.25 et 24.23 (MP5), 27.20 et 27.27 (MP6) ».
 
-*D'autres propositions peuvent venir des correcteurs du §4 : ce seront des énoncés à préciser qu'ils ne peuvent pas changer seuls.*
+**R8 — Neuf énoncés à préciser (réponses inchangées).** *Recommandé : tous, sauf 25.25 (facultatif).* (propositions des correcteurs F1 à F7, rapports `F*.md`)
 
-## 4. Tri et application des constats mineurs
+| Exercice | Ce qui change dans l'énoncé | Raison |
+|---|---|---|
+| 21.Q8 a | « … et des couches suivantes (**sans dropout**) partent d'une même valeur… » | le dropout casse la symétrie ; la solution le disait, pas l'énoncé (A4 13) |
+| 22.20 | le contrat ajoute : « elle rend un **nouveau** tableau NumPy `float64` de la forme des logits » | ce que dit la docstring figée et ce que vérifie le test ajouté (A10 12) |
+| 24.R1 a | option D : « le learning rate de chaque epoch (utile dès qu'un planning le fait varier) » | l'historique du ch. 23 n'a pas de learning rate : « AB » se défendait (A5 12) |
+| 26.17 | « N'utilise pas `Flippers().min_moves` : elle donne la réponse. » (la phrase qui la nommait comme outil est déjà retirée par F3, sans changer le sens) | la méthode fournie calculait les trois réponses en une ligne (A11 4) |
+| 26.35 | « … et contre minimax, un adversaire **parfait** (fiche §26.10) : il joue toujours le coup qui donne le meilleur résultat dans le pire des cas » | minimax était utilisé avant le ch. 27 ; la fiche a maintenant son encadré (A2 12) |
+| 25.25 (facultatif) | décrire des symptômes au lieu de nommer les trois diagnostics ; les corrections passent à l'indice 2 | l'énoncé nommait chaque bug (A11 11, suggestion) |
+| 29.15 | « Modèle : les six sections ci-dessus ; les fiches de `data/cards/` montrent le niveau de détail attendu (elles n'ont pas toutes ces six titres). » | un apprenant qui recopie `cifar10.md` échouait à `check_card` (A8 18) |
+| CP6.8 | « des **logits** tirés au hasard, comme ceux d'un décodeur pas encore entraîné… : la reconstruction sera bien plus grande que celle d'un VAE entraîné » | « un décodeur a rendus » laissait croire à un VAE entraîné (A9 19 ; à faire avec R2) |
+| CP6.7 | « (une lettre par panneau, **1/3 de point chacune** ; …) » | le sous-barème n'était que dans le corrigé (A9 20) |
 
-*En cours.*
+**R9 — Trois conventions de forme à écrire dans la bible.** *Recommandé : A pour chacune.*
 
-## 5. Vérification finale
+- **Encadré 📐 « Conventions de la fiche »** (ch. 22 à 29) : il est absent du §14 (A1 18).
+  - A : l'ajouter au §14 (« notations du chapitre, et tout écart au §6, signalé une fois ») ;
+  - B : le remplacer par l'encadré 🧮.
+- **Gloses répétées** (A1 26). Le §5 veut une glose à la première occurrence, dans le chapitre qui définit le terme ; or les parties V et VI rappellent des gloses d'autres parties (« le stride (*pas*), ch. 20 »).
+  - A : écrire au §5 qu'un chapitre peut rappeler une fois la glose d'un terme défini ailleurs, avec le renvoi ;
+  - B : retirer ces rappels.
+- **Relances des 💼** (A1 5). Les ch. 12 à 28 les écrivent sur une ligne ; le ch. 29, en liste à puces.
+  - A : la ligne partout, et le ch. 29 aligné ;
+  - B : la liste partout, à la prochaine reconstruction de chaque chapitre.
 
-*À venir.*
+Une fois ces choix faits (et R1), trois tests de format pourront être ajoutés à `tests/infra/test_syllabus.py` (proposition de F7) :
+- l'icône du type à la fin des en-têtes de `04_indices.md` et `05_solutions.md` ;
+- le préfixe « Ch. N : » et « 🔁 ★ » des rappels ;
+- le temps du parcours rapide du guide de lecture.
+
+Ils empêcheraient la dérive constatée par A1 et A3, la deuxième d'un audit à l'autre.
+
+## 4. Tri et application des constats mineurs (2026-10-31)
+
+### Les correcteurs
+
+Sept correcteurs (des sous-agents) ont travaillé, chacun sur une zone du dépôt.
+- **Ce qu'ils ont fait.** Ils ont lu les onze rapports et vérifié chaque constat de leur zone dans les fichiers : calculs refaits, code rejoué, livre relu, et pour le ch. 27 le code de l'auteur. Ils ont ensuite appliqué ce qui ne change pas le contrat.
+- **Ce qui leur était interdit.** Les propositions R1 à R7 ; ils ont reporté au §3 (R8, R9) ce qui touchait un énoncé.
+- **Leurs vérifications.** Chacun a reconstruit ses notebooks par leur script. Dans une copie du dépôt, il a ensuite fait un « Tout exécuter » à vide et exécuté les solutions.
+- **Le partage de la machine.** Les commandes lourdes passaient par un verrou commun, une seule à la fois.
+- **Leurs rapports.** Leurs tableaux de décision (constat → appliqué, non retenu avec la raison, reporté Rn, proposé, hors zone) sont dans `docs/audit_P5_parties_V_VI/F1_ch21_22.md` à `F7_transversal.md`.
+
+| Zone | Correcteur | Décisions | L'essentiel |
+|---|---|---|---|
+| ch. 21 et 22 | F1 | 28 appliqués, 1 non retenu, 4 reportés | Environ 70 messages `mistakes` du ch. 21 et une trentaine du ch. 22 réécrits : ils nomment l'oubli sans poser le calcul (A11 1). Deux d'entre eux donnaient la réponse elle-même (22.R1 c, 22.4 a), et 21.13 certifiait les réponses de 21.1 c et f. 1 199 882 n'est plus écrit en clair en 21.22 et 21.24. Les cellules des 🔨 passent une copie de l'entrée et signalent une entrée modifiée. 22.14 ne note ses prédictions qu'après l'expérience. Temps de lecture du ch. 21 recalculés (8 h et 5,3 h). « État caché » défini. Renvoi de 22.R1. Flashcards du ch. 22 en MathJax. Formats. |
+| ch. 23 et 24 | F2 | 24 appliqués, 2 non retenus, 2 reportés | `view` et la contiguïté. La confusion *channels_last* de la p. 1106 signalée. Extraits scikit-learn de la fiche 24 qui tournent tels quels. `num_workers` sous Windows et macOS. Indices 3 de 23.5, 23.25 et 24.2 réduits. Variante de 24.20 (rapport 3,5). Liens figés sur PyTorch 2.11 et torchvision 0.26. 🐛 24.19 enchaîné selon R11 B, rejoué sur ses 64 versions partiellement corrigées. 24.16 à 24.18 attendent le code de 24.16 au lieu d'accuser le leur. *Run* et *worker* glosés. |
+| ch. 25 et 26 | F3 | 27 appliqués, 3 non retenus, 3 reportés | Le L-learning du livre n'est plus dit « marcher ». La fiche ne donne plus la réponse de 26.17. Le RLHF renvoie au B8. Encadré « minimax, le joueur parfait » au §26.10. Notation de Sutton et Barto. Solutions de 25.20, 25.21 et 26.26. Plus d'avertissement en 25.38. 26.17 comparé à une recherche privée de `wb.envs`. 26.19 et 26.28 mieux gardés (`prereq` de 26.28 complété). Onze flashcards en questions actives. Formats. |
+| ch. 27 et 28 | F4 | 25 appliqués, 2 reportés | Bruit gaussien de 27.15 (code de l'auteur). Le « scénario Helvetica » : le livre avait raison. Normalisation du gradient du deep dream. FID « pour peu d'images ». Dimension du bruit. L'erreur « backward through the graph a second time ». Flashcard « minimax ». Deux figures. 28.6. Paraphrases réécrites. Indice 3 de 27.22. Rubriques des 🗣️, ⚖️, 📄 et 💼. 🐛 28.21 enchaîné. `prereq` de 27.20. « mini-batches » et « suréchantillonnage » dans la prose. |
+| ch. 29, data cards, `wb.datasets` | F5 | 24 appliqués, 2 reportés | Le dataset piégé écorche maintenant le vrai fruit de la ligne : trois labels n'étaient plus faux, et un test le garde. Les réponses sont inchangées ; seule une précision affichée passe de 0,963 à 0,967. Fiche du ch. 29 (prérequis Fashion-MNIST, liens, Boston). Solution 29.11 (CC BY-SA). Data cards : chapitres, tailles en Mio (Mo), liens, empreintes SHA-256 vérifiées par un test. `pretrained.md` couvre ResNet-18 et MobileNetV3. CIFAR-10 se charge du Hub à une révision figée. Formats. |
+| checkpoints et mini-projets | F6 | 24 appliqués, 3 non retenus, 10 reportés | La synthèse de CP6 ne donne plus l'issue du 🔮 CP6.6. Le kit MP5 range son modèle dans un dossier propre à la session, et son coffre ne s'ouvre plus sans commit (sept cas essayés). Messages de CP5.6 et CP6.9. Erreurs fréquentes de CP5.2 et CP6.6 (2,7). Remédiations de CP5.11 d et CP6.1 a. Rubriques de CP6.11 et CP6.12. Titres des sujets alignés sur le contrat (sauf CP6.9, R2). « fine-tuning » et « marche à suivre ». Commandes de reproduction de MP5 et MP6. |
+| annexes, code, tests, outils | F7 | 42 appliqués, 2 reportés | Glossaire (sept doublons, une dizaine de termes), formulaire (GRU de Keras, σ, BCE, PSNR), erreurs fréquentes, aide-mémoire PyTorch (sections des ch. 26 et 29), ressources et métiers des parties V et VI. Référence : `rng` entier dans `rl.py`, NaN refusés par `sample_from_logits` (Q9). Nouveaux tests : le slerp à 10⁻³ rad tue le mutant survivant, le type de `temperature_softmax`, les groupes `-k` des notebooks couvrent tout leur fichier de tests. `wb` : `attempt`, `checked`, `same` et `as_numpy` face aux tenseurs PyTorch. `chapter_kit` : 🚀 et fil rouge lus dans le contrat. `test_terminology.py` lit les `ch*_parts.py` et `ch*_code.py`. README (partie VI ✅) et `00_setup/` (hors ligne, Colab, entraînements longs). |
+
+### Ce que le coordinateur a fait en plus
+
+- **Ch. 27 et 28** : il a appliqué les formats que F4 avait laissés hors de sa liste. Les icônes des en-têtes de `04_indices.md` (57 en-têtes) ; le préfixe « Ch. N : », l'étoile et le parcours des rappels ; la ligne « parcours » des quiz et des 💼 dans `02_exercices.md`.
+- **Autres fichiers** :
+  - la taille de CIFAR-10 (≈ 145 Mo depuis le Hub) dans le kit et le cahier des charges de MP5, et dans `00_setup/demo.ipynb` ;
+  - deux lignes de `suivi/PROGRESS.md`.
+
+### Réponses enregistrées
+
+Aucune bonne réponse ne change de valeur. Seuls changent des messages d'erreur classique :
+- au ch. 21, environ 70 sous-ID ;
+- au ch. 22, environ 30 sous-ID ;
+- les messages de 25.R3 d, 29.Q7 e et CP5.2 c.
+
+### Laissés pour plus tard (notés)
+
+- **Termes en attente de R1.** « convolutions à pas » et « sur-échantillonnage » restent dans la prose des ch. 20, 21, 25, 27 et 28. « affiné » reste au ch. 11. Ils seront remplacés avec R1, et les motifs de `test_terminology.py` ajoutés à ce moment-là (texte prêt dans F7).
+- **Tableau des exercices.** La ligne du tableau de la cellule 0 par `Ex.table_row` (🚀 dans le tableau) n'est pas encore adoptée par les ch. 21 à 26 ; l'en-tête de chaque exercice porte déjà le 🚀.
+- **Garde-fous des mini-projets.** Un module `wb.projects`, qui réunirait les garde-fous des mini-projets (MP4 à MP6), reste à créer (A3 8).
+- **Coffre de MP3.** Le `committed` de MP3 prend un dépôt sans aucun commit pour « pas de dépôt git » ; la version corrigée de MP5 est à y reporter.
+- **Infinis dans `vae`.** Le refus de ±inf par `vae` (cohérence avec `gen_metrics`) n'est pas fait : il faut d'abord le vérifier sur les expériences du ch. 25 qui font diverger `log_var`.
+
+## 5. Vérification finale (2026-10-31)
+
+### Reconstruction et exécution
+
+- **Reconstruction.** Les treize scripts (`build_ch21.py` à `build_ch29.py`, `build_cp5.py`, `build_cp6.py`, `build_mp5.py`, `build_mp6.py`) ont été relancés après la modification de `chapter_kit.py` par F7 (🚀, fil rouge). Les notebooks reconstruits ne diffèrent des versions des correcteurs que par les identifiants de cellules.
+- **Notebooks de solutions.** Les treize ont été réexécutés à la suite, une fois les correcteurs arrêtés, sur une machine calme :
+
+  | Notebook | Durée |
+  |---|---|
+  | ch. 21 | 155 s |
+  | ch. 22 | 171 s |
+  | ch. 23 | 121 s |
+  | ch. 24 | 331 s |
+  | ch. 25 | 183 s |
+  | ch. 26 | 138 s |
+  | ch. 27 | 206 s |
+  | ch. 28 | 131 s |
+  | ch. 29 | 13 s |
+  | CP5 | 44 s |
+  | CP6 | 5 s |
+  | MP5 | 373 s |
+  | MP6 | 219 s |
+
+  Aucun n'est hors budget (§4), et aucune sortie n'a d'erreur ni d'avertissement sur stderr. Les seuls ❌ et ⏳ sont ceux des cellules données des 🐛 corrigés sur place (25.25, 26.24, 27.16, 28.21, R11). Dans `results_rapide.json` (MP6) et `runs_rapide.csv` (MP5), seuls les temps et les dates changent.
+- **« Tout exécuter » à vide.** Les neuf notebooks d'exercices, les deux examens et les deux kits sont allés au bout sans erreur.
+
+### Réponses, tests et cohérence
+
+- **Réponses.** `answers.json` a été régénéré (4 590 réponses). Aucune bonne réponse ne change. 122 sous-ID ne changent que par leurs messages : ceux des ch. 21 et 22 (A11 1), ainsi que 25.R3 d, 29.Q7 e et CP5.2 c.
+- **Tests.**
+
+  | Mode | Résultat |
+  |---|---|
+  | apprenant | 504 réussis, 3 964 ignorés |
+  | `--impl=ref` | 4 463 réussis, 5 ignorés |
+  | `--impl=stubs` (tests de chapitre) | 3 953 échecs attendus ; le seul test qui passe porte sur une fonction fournie |
+
+- **Cohérence.**
+  - `syllabus.py build` a été relancé, puis `syllabus.py check` (2 028 exercices, 0 problème).
+  - `build_answers.py --check`, `export_flashcards.py --check` (757 cartes) et `check_env.py` sont au vert.
+  - L'en-tête du ch. 26 a été recalé sur le SYLLABUS (lecture 7,9 h, parcours rapide 5,9 h).
+  - `mon_travail/` est intact.
+
+### Suivi
+
+- `suivi/PROGRESS.md` : session 62, les écarts, la ligne 35 « À valider sur Colab » (CIFAR-10 à sa révision figée, durée du mode rapide du MP5), deux lignes corrigées.
+- Sept lignes au §22 de la bible.
 
 ## Annexe A — consignes des relecteurs
 
@@ -187,4 +300,4 @@ Les consignes communes reprennent celles des audits précédents (`docs/AUDIT_pa
 - **la machine partagée** : un seul processus lourd à la fois, aucune durée jugée ;
 - **les citations du livre en anglais**, balisées dans les rapports bruts, sont retirées de la version versionnée.
 
-Chaque relecteur a écrit son rapport au fur et à mesure (constat, sévérité, fichier et ligne, extrait exact, problème, correction précise), puis un bilan.
+Le texte complet des consignes est dans `docs/audit_P5_parties_V_VI/00_consignes_communes.md` (relecteurs) et `00_consignes_F.md` (correcteurs). Chaque relecteur a écrit son rapport au fur et à mesure (constat, sévérité, fichier et ligne, extrait exact, problème, correction précise), puis un bilan.

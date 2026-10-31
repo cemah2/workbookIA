@@ -2535,7 +2535,7 @@ PART_C = Part("C", "Des CNN sur CIFAR-10",
               "profond et tu lis leurs formes (24.20) ; tu compares batchnorm et dropout (24.21) ; tu prédis l'effet "
               "de transformations sur un modèle déjà entraîné (24.22) ; tu écris l'augmentation de données avec "
               "`torchvision.transforms.v2` (24.23) ; puis un flux d'images synthétiques (24.24).\n\n"
-              "La cellule suivante charge CIFAR-10 (le premier chargement télécharge 170 Mo, une seule fois) : "
+              "La cellule suivante charge CIFAR-10 (le premier chargement télécharge environ 145 Mo, une seule fois) : "
               "`N_CIFAR` images d'entraînement (5 000 en mode rapide, 45 000 sinon), les 5 000 dernières du fichier "
               "pour la validation, et les 10 000 de test, au format NHWC `uint8` que rend `wb.datasets`. Sur un CPU, "
               "les entraînements de CNN sont courts (`EPOCHS_C` = 2 epochs en mode rapide) : les historiques longs, "

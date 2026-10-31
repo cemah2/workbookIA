@@ -97,7 +97,7 @@
 
 ## 🔁 Rappels
 
-### 27.R1 — Deux agents qui jouent l'un contre l'autre (self-play)
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play)
 
 - a) :
 - b) :
@@ -106,7 +106,7 @@
 - e) :
 
 
-### 27.R2 — Precision et recall pour juger un générateur (fidélité contre diversité)
+### 27.R2 — Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité)
 
 - a) :
 - b) :
@@ -115,7 +115,7 @@
 - e) :
 
 
-### 27.R3 — Batchnorm, où la placer, train() ou eval()
+### 27.R3 — Ch. 20 : batchnorm, où la placer, train() ou eval()
 
 - a) :
 - b) :

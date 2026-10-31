@@ -5,7 +5,7 @@
 | | |
 |---|---|
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 (§26.1 à §26.10) |
-| **Temps total estimé** | ≈ 29 h : lecture du livre et de la fiche ≈ 7,8 h, exercices ≈ 20 h, 30 flashcards ≈ 1,0 h |
+| **Temps total estimé** | ≈ 29 h : lecture du livre et de la fiche ≈ 7,9 h, exercices ≈ 20 h, 30 flashcards ≈ 1,0 h |
 | **Prérequis** | 0A (classes, dictionnaires, générateur aléatoire de NumPy) · 0B (sommes, suite géométrique, espérance) · ch. 2 (intervalle de confiance bootstrap) · ch. 11 (bandit à bras multiples, ε-greedy, UCB, conditionnement opérant) · ch. 16 (un réseau comme approximateur de fonction) · ch. 17 (softmax et température) · ch. 19 (moyenne mobile) · ch. 23 (sauvegarder et reprendre un entraînement) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `rl.py` : retours, politiques gloutonne et softmax, mises à jour du Q-learning et de SARSA, boucle d'entraînement tabulaire, évaluation d'une politique, itération sur les valeurs, mémoire de rejeu ; il réutilise `bandit.py` (ch. 11) |
@@ -338,7 +338,7 @@ Le livre s'arrête en 2018, avant l'usage le plus visible du RL aujourd'hui : l'
 
 ## Guide de lecture et de travail
 
-Le chapitre du livre est long et sans formule : lis-le pour les idées et les exemples, et prends les formules dans la fiche. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 5,8 h : il laisse de côté la motivation (§26.1), le morpion de l'amie (§26.2.1), la mémoire d'expérience (§26.3.6), la construction du L-learning (§26.5) et l'introduction du Q-learning (§26.6), que la fiche résume, ainsi que les expériences détaillées de SARSA (§26.7.1, §26.7.2) et les deux applications (§26.10). Le notebook suit les six phases du livre : la boucle et le L-learning, le cœur de ta librairie `rl.py`, le Q-learning en action, SARSA, le rejeu et les récompenses, puis le morpion, CartPole et l'auto-apprentissage.
+Le chapitre du livre est long et sans formule : lis-le pour les idées et les exemples, et prends les formules dans la fiche. Le **parcours rapide** lit toute la fiche et les sections ⏩ du livre, soit environ 5,9 h : il laisse de côté la motivation (§26.1), le morpion de l'amie (§26.2.1), la mémoire d'expérience (§26.3.6), la construction du L-learning (§26.5) et l'introduction du Q-learning (§26.6), que la fiche résume, ainsi que les expériences détaillées de SARSA (§26.7.1, §26.7.2) et les deux applications (§26.10). Le notebook suit les six phases du livre : la boucle et le L-learning, le cœur de ta librairie `rl.py`, le Q-learning en action, SARSA, le rejeu et les récompenses, puis le morpion, CartPole et l'auto-apprentissage.
 
 ## Pour aller plus loin
 

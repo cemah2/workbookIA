@@ -113,7 +113,7 @@ copie le kit de départ dans `mon_travail/projets/partie_5_classifieur_cifar10/`
 python -m pytest mon_travail/projets/partie_5_classifieur_cifar10 -q
 ```
 
-CIFAR-10 se charge avec `data.load_cifar10()` (environ 170 Mo la première fois, puis le cache du workbook) ; le test, avec `data.open_test(dossier, description)`, à la toute fin. Pour le mode complet sur Colab : *Exécution → Modifier le type d'exécution → GPU*, puis `FAST_MODE = False` dans la cellule de setup ; enregistre ensuite ta copie et les fichiers produits (`results.json`, `runs.csv`, `model.pt`, `model.json`, `figures/`, `test_log.json`) dans ton dépôt.
+CIFAR-10 se charge avec `data.load_cifar10()` (environ 145 Mo depuis le Hugging Face Hub la première fois, puis le cache du workbook) ; le test, avec `data.open_test(dossier, description)`, à la toute fin. Pour le mode complet sur Colab : *Exécution → Modifier le type d'exécution → GPU*, puis `FAST_MODE = False` dans la cellule de setup ; enregistre ensuite ta copie et les fichiers produits (`results.json`, `runs.csv`, `model.pt`, `model.json`, `figures/`, `test_log.json`) dans ton dépôt.
 
 Tu peux faire corriger ton projet par Claude avec le prompt P9 : il lit ton dossier, sans jamais y écrire, et le note avec cette grille.
 

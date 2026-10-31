@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 27.Q1 — À quoi bon générer des données ? 🧠 ⏱️ 3 min
-*Fiche §27.1 · livre §27.1*
+*Fiche §27.1 · livre §27.1 · parcours R*
 
 a) Parmi ces usages, lesquels le livre donne-t-il pour un générateur ? (A) fabriquer des données d'entraînement en plus pour d'autres réseaux ; (B) proposer des idées, comme des plans de jardin ou un meuble assorti à un salon ; (C) compresser un fichier sans perte d'information ; (D) retrouver une photo existante dans une base d'images. Écris leurs lettres.
 b) Vrai ou faux : un générateur bien entraîné rend, pour chaque bruit, une image de son jeu d'entraînement.
@@ -25,7 +25,7 @@ d) Vrai ou faux : 10 000 images générées par un GAN entraîné sur un dataset
 e) Le « A » de GAN veut dire : (A) *Antagonistic* ; (B) *Adversarial* ; (C) *Autoencoding*.
 
 ### 27.Q2 — Le faussaire, l'inspectrice et les quatre verdicts 🧠 ⏱️ 3 min
-*Fiche §27.2 · livre §27.2, §27.2.2*
+*Fiche §27.2 · livre §27.2, §27.2.2 · parcours R*
 
 Glenn (le générateur) fabrique de faux billets, Dawn (la discriminatrice) répond « vrai » (positif) ou « faux » (négatif).
 a) Un vrai billet que Dawn déclare faux est : (A) un vrai positif ; (B) un faux négatif ; (C) un faux positif ; (D) un vrai négatif.
@@ -35,7 +35,7 @@ d) Selon le livre, dans combien des quatre cas personne n'apprend-il ?
 e) Vrai ou faux : dans la pratique (une cross-entropy binaire sur tout le mini-batch), un vrai billet bien reconnu, avec $D(\mathbf{x}) = 0{,}9$, donne quand même un gradient au discriminateur.
 
 ### 27.Q3 — Pourquoi le générateur ne voit-il jamais de vrais billets ? 🧠 ⏱️ 3 min
-*Fiche §27.2.1, §27.4.2 · livre §27.2.1, §27.4.2*
+*Fiche §27.2.1, §27.4.2 · livre §27.2.1, §27.4.2 · parcours R*
 
 a) Le générateur reçoit en entrée : (A) un vrai billet abîmé ; (B) des nombres tirés au hasard ; (C) le label vrai ou faux ; (D) la sortie du discriminateur.
 b) D'où le générateur tire-t-il ce qu'il sait des vraies données ? (A) de nulle part : il ne l'apprend jamais ; (B) du gradient qui traverse le discriminateur, lui-même entraîné sur les vraies données ; (C) d'une copie des vraies images qu'on lui donne à la fin de chaque epoch.
@@ -44,7 +44,7 @@ d) Le bruit d'entrée joue le rôle : (A) de variables latentes ; (B) d'un label
 e) Vrai ou faux : comme dans un VAE (ch. 25), ces variables latentes s'obtiennent en encodant une donnée réelle.
 
 ### 27.Q4 — Le round d'apprentissage du livre en quatre temps 🧠 ⏱️ 3 min
-*Fiche §27.2.3, §27.4.3 · livre §27.2.3, §27.4.3*
+*Fiche §27.2.3, §27.4.3 · livre §27.2.3, §27.4.3 · parcours R*
 
 Trois sortes d'étapes : (A) on montre un **faux** à $D$, et $D$ apprend s'il s'est fait duper ; (B) on montre un **vrai** à $D$, et $D$ apprend s'il s'est trompé ; (C) on montre un **faux** à $D$, et $G$ apprend si son faux est repéré.
 a) Écris les lettres des quatre étapes d'un round du livre, dans l'ordre (une lettre peut revenir).
@@ -54,7 +54,7 @@ d) Vrai ou faux : dans la boucle standard (Goodfellow et coll. 2014, tutoriel Py
 e) Dans cette boucle en PyTorch, on écrit `fake.detach()` à l'étape de $D$ pour que : (A) la mémoire de $G$ soit libérée ; (B) la loss de $D$ ne calcule pas de gradient dans les poids de $G$ ; (C) $D$ soit gelé.
 
 ### 27.Q5 — Coopératifs ou antagonistes : somme nulle, minimax et équilibre de Nash 🧠 ⏱️ 3 min
-*Fiche §27.3, §27.4.4 · livre §27.3, §27.4.4*
+*Fiche §27.3, §27.4.4 · livre §27.3, §27.4.4 · parcours R, M*
 
 a) Vrai ou faux : dans la formulation de Goodfellow et coll. (2014), $G$ et $D$ jouent sur la même fonction $V(D, G)$ : $D$ cherche à la maximiser, $G$ à la minimiser.
 b) Un jeu est à somme nulle quand : (A) la somme des gains des joueurs vaut zéro, quelle que soit l'issue ; (B) les ressources à se partager sont en quantité fixe ; (C) personne ne gagne jamais.
@@ -63,7 +63,7 @@ d) Un équilibre de Nash est une situation où : (A) aucun joueur ne gagne à ch
 e) À l'équilibre idéal d'un GAN, quelle valeur rend le discriminateur, pour toute entrée ?
 
 ### 27.Q6 — Trois modèles, des couches partagées et un discriminateur gelé 🧠 ⏱️ 3 min
-*Fiche §27.4, §27.4.3 · livre §27.4, §27.4.3, §27.5*
+*Fiche §27.4, §27.4.3 · livre §27.4, §27.4.3, §27.5 · parcours R*
 
 a) Combien de modèles le livre construit-il pour entraîner un GAN ?
 b) Vrai ou faux : le modèle combiné du livre contient des **copies** du générateur et du discriminateur, qu'il faut resynchroniser après chaque étape.
@@ -72,7 +72,7 @@ d) Vrai ou faux : à l'étape de $G$, avec deux optimiseurs, `loss_g.backward()`
 e) Ce qui empêche cette étape de modifier $D$ : (A) `loss_g.backward()` ne touche pas $D$ ; (B) seul `opt_g.step()` est appelé, et les gradients laissés dans $D$ sont effacés par `opt_d.zero_grad()` avant son pas suivant ; (C) on entoure l'étape de `torch.no_grad()`.
 
 ### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé 🧠 ⏱️ 3 min
-*Fiche §27.5 · livre §27.5*
+*Fiche §27.5 · livre §27.5 · parcours R*
 
 a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batches 32 points. Combien de pas le discriminateur fait-il par epoch, à raison d'un pas par mini-batch (le dernier, incomplet, compte aussi) ?
 b) Vrai ou faux : le discriminateur du livre (deux couches de 16 neurones, une sortie) reçoit le mini-batch entier et juge l'ensemble des points.
@@ -81,7 +81,7 @@ d) Pour une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 dans chaque dire
 e) Le générateur du livre : 4 nombres en entrée, une couche dense de 16 neurones, puis une couche dense de 2 neurones. Combien a-t-il de paramètres, biais compris ?
 
 ### 27.Q8 — Les règles de Radford : vrai ou faux 🧠 ⏱️ 3 min
-*Fiche §27.6.1 · livre §27.6.1*
+*Fiche §27.6.1 · livre §27.6.1 · parcours R*
 
 D'après l'article de Radford et coll. (2016), vrai ou faux ?
 a) Dans le discriminateur, on remplace le pooling par des convolutions à pas (*stride*) de 2.
@@ -91,7 +91,7 @@ d) Pas de batchnorm sur la couche de sortie du générateur, ni sur la couche d'
 e) Le générateur finit par une tanh, donc on ramène les pixels des images d'entraînement dans $[-1, 1]$.
 
 ### 27.Q9 — Grandes images et croissance progressive 🧠 ⏱️ 3 min
-*Fiche §27.7.1 · livre §27.7.1*
+*Fiche §27.7.1 · livre §27.7.1 · parcours R*
 
 a) Combien de nombres (features) contient une photo **couleur** de 1 000 × 1 000 pixels ?
 b) Une difficulté des GAN sur de grandes images : (A) le discriminateur distingue trop facilement les faux, et les gradients donnés au générateur deviennent peu utiles ; (B) les images ne tiennent pas dans un fichier PNG ; (C) le générateur n'a pas assez de bruit en entrée.
@@ -100,7 +100,7 @@ d) Vrai ou faux : dans l'article de Karras et coll. (2018), les couches de la no
 e) En doublant le côté à chaque étape, de 4 × 4 jusqu'à 1 024 × 1 024, combien de résolutions traverse-t-on, les deux extrêmes compris ?
 
 ### 27.Q10 — Effondrement de mode total ou partiel 🧠 ⏱️ 3 min
-*Fiche §27.7.2 · livre §27.7.2*
+*Fiche §27.7.2 · livre §27.7.2 · parcours R*
 
 a) Dans « effondrement de mode » (*mode collapse*), le mode désigne : (A) une manière de travailler ; (B) un pic de la distribution des données ; (C) le mode `train()` ou `eval()` d'un réseau.
 b) Un DCGAN entraîné sur MNIST ne produit presque que des 1, avec quelques 7 : l'effondrement est (A) total ou (B) partiel ?
@@ -112,8 +112,8 @@ e) Parmi ces moyens, lesquels combattent l'effondrement de mode ? (A) une couche
 
 ## 🔁 Rappels
 
-### 27.R1 — Deux agents qui jouent l'un contre l'autre (self-play) 🔁 ⏱️ 5 min
-*ch. 26 · fiche §27.3*
+### 27.R1 — Ch. 26 : deux agents qui jouent l'un contre l'autre (self-play) 🔁 ★ ⏱️ 5 min
+*Ch. 26 · fiche §27.3 · parcours R*
 
 a) En auto-apprentissage (*self-play*, ch. 26), l'agent joue contre : (A) une copie de lui-même ; (B) un humain ; (C) un adversaire qui joue au hasard.
 b) Vrai ou faux : dans un GAN, comme au morpion en auto-apprentissage, les deux joueurs partagent les mêmes poids.
@@ -121,8 +121,8 @@ c) Au morpion, deux joueurs parfaits aboutissent à : (A) une victoire des croix
 d) Vrai ou faux : en auto-apprentissage comme dans un GAN, la cible bouge, car l'adversaire change à mesure que l'on apprend.
 e) Ce que le générateur reçoit de plus qu'un agent de RL : (A) un gradient, qui dit dans quelle direction changer sa sortie ; (B) une récompense ; (C) rien de plus.
 
-### 27.R2 — Precision et recall pour juger un générateur (fidélité contre diversité) 🔁 ⏱️ 5 min
-*ch. 3 · fiche « Au-delà du livre »*
+### 27.R2 — Ch. 3 : precision et recall pour juger un générateur (fidélité contre diversité) 🔁 ★ ⏱️ 5 min
+*Ch. 3 · fiche « Au-delà du livre » · parcours R*
 
 Un discriminateur juge 100 vrais et 100 faux. Il répond « vrai » pour 80 des vrais et pour 30 des faux. La classe positive est « vrai ».
 a) La precision du discriminateur, à 3 décimales.
@@ -131,8 +131,8 @@ c) Pour un **générateur**, la precision de Kynkäänniemi et coll. (2019) mesu
 d) Un générateur effondré sur un seul chiffre parfait a : (A) une precision haute et un recall bas ; (B) une precision basse et un recall haut ; (C) les deux hauts.
 e) Vrai ou faux : le FID mêle fidélité et diversité en un seul nombre.
 
-### 27.R3 — Batchnorm, où la placer, train() ou eval() 🔁 ⏱️ 5 min
-*ch. 20 · fiche §27.6.1*
+### 27.R3 — Ch. 20 : batchnorm, où la placer, train() ou eval() 🔁 ★ ⏱️ 5 min
+*Ch. 20 · fiche §27.6.1 · parcours R*
 
 a) Pendant l'entraînement (`train()`), une batchnorm normalise avec : (A) la moyenne et l'écart-type du mini-batch ; (B) des moyennes glissantes calculées pendant l'entraînement.
 b) En mode `eval()`, elle normalise avec : (A) la moyenne et l'écart-type du mini-batch ; (B) les moyennes glissantes.
@@ -292,18 +292,23 @@ Lis I. Goodfellow et coll., « Generative Adversarial Nets », NeurIPS 2014 ([ar
 Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : réponse modèle et relances possibles.
 
 ### 27.E1 — Expliquer l'entraînement d'un GAN et sa loss 💼 ★★ ⏱️ 10 min
+*Fiche §27.4.3 · parcours R*
 « Comment entraîne-t-on un GAN ? Quelle loss pour chacun des deux réseaux ? »
 
 ### 27.E2 — Qu'est-ce que l'effondrement de mode et comment le combattre ? 💼 ★★ ⏱️ 10 min
+*Fiche §27.7.2 · parcours R*
 « Qu'est-ce que le *mode collapse* ? Comment le détectez-vous, et que faites-vous contre ? »
 
 ### 27.E3 — GAN, VAE ou diffusion : lequel choisir et pourquoi ? 💼 ★★ ⏱️ 10 min
+*Fiche §27.1 · parcours R*
 « Pour générer des images, choisiriez-vous un GAN, un VAE ou un modèle de diffusion ? Pourquoi ? »
 
 ### 27.E4 — Comment évaluer un modèle génératif (FID et ses limites) ? 💼 ★★ ⏱️ 10 min
+*Fiche §27.7 · parcours R*
 « Comment mesurez-vous la qualité d'un modèle génératif ? Qu'est-ce que le FID, et quelles sont ses limites ? »
 
 ### 27.E5 — Pourquoi l'entraînement des GAN est-il instable ? 💼 ★★ ⏱️ 10 min
+*Fiche §27.7, §27.4.4 · parcours R*
 « Pourquoi les GAN sont-ils réputés difficiles à entraîner ? Que faites-vous pour les stabiliser ? »
 
 <a id="notebook"></a>

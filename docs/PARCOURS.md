@@ -11,7 +11,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
 | [Parcours complet](#complet) | 2028 | 666 h | 0 (0,0 h) | 159 h | 95 h | **920 h** |
-| [Parcours rapide](#rapide) | 1312 | 319 h | 59 (7,7 h) | 128 h | 95 h | **549 h** |
+| [Parcours rapide](#rapide) | 1312 | 319 h | 59 (7,7 h) | 128 h | 95 h | **550 h** |
 | [Parcours orienté maths](#maths) | 801 | 307 h | 8 (0,3 h) | 159 h | 95 h | **561 h** |
 | [Parcours orienté code](#code) | 890 | 462 h | 188 (20 h) | 159 h | 95 h | **736 h** |
 
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1312 exercices, 319 h d'exercices, ≈ 549 h au total.**
+**1312 exercices, 319 h d'exercices, ≈ 550 h au total.**
 
 ### Partie 0 · Prérequis
 

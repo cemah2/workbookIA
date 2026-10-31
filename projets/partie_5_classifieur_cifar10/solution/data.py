@@ -23,7 +23,7 @@ CLASSES = list(wb.datasets.CIFAR10_CLASSES)
 
 def load_cifar10() -> tuple[np.ndarray, np.ndarray]:
     """(X, y): the 50 000 training images of CIFAR-10, uint8 (N, 32, 32, 3) in their original order, and their labels
-    (int64, 0-9). The first call downloads about 170 MB (then: the cache of the workbook)."""
+    (int64, 0-9). The first call downloads about 145 MB from the Hugging Face Hub (then: the cache of the workbook)."""
     X, y = wb.datasets.load_cifar10("train", seed=None)
     return np.ascontiguousarray(X, dtype=np.uint8), np.asarray(y, dtype=np.int64)
 

@@ -192,7 +192,7 @@ a) **A** : le livre prend « le mot suivant le plus probable ». Pour b), que do
 
 ## 🔁 Rappels
 
-### 28.R1 — Un réseau qui sert de loss (le discriminateur)
+### 28.R1 — Ch. 27 : un réseau qui sert de loss (le discriminateur)
 
 <details><summary>Indice 1</summary>
 
@@ -210,7 +210,7 @@ a) **A** : le générateur ne voit jamais de vraie image ; il apprend par le gra
 
 </details>
 
-### 28.R2 — Mélange de contenu contre mélange de représentations
+### 28.R2 — Ch. 25 : mélange de contenu contre mélange de représentations
 
 <details><summary>Indice 1</summary>
 
@@ -228,7 +228,7 @@ a) **B** : la moyenne de deux images superpose leurs traits, chacun à moitié d
 
 </details>
 
-### 28.R3 — Champ récepteur et hiérarchie des filtres de VGG16
+### 28.R3 — Ch. 21 : champ récepteur et hiérarchie des filtres de VGG16
 
 <details><summary>Indice 1</summary>
 
@@ -250,7 +250,7 @@ a) **5** : la seconde convolution voit 3 sorties de la première, qui voient cha
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 28.1 — Tailles des activations et des matrices de Gram le long de VGG16
+### Ex 28.1 — Tailles des activations et des matrices de Gram le long de VGG16 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -268,7 +268,7 @@ a) $64 \times 224 \times 224 = 3\,211\,264$. Pour b), le bloc 4 travaille sur de
 
 </details>
 
-### Ex 28.2 — Une matrice de Gram à la main
+### Ex 28.2 — Une matrice de Gram à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $(1, 0, 2, 1) \cdot (0, 3, 1, 1) = 0 + 0 + 2 + 1 = 3$. Pour b), le produit sc
 
 </details>
 
-### Ex 28.3 — Mélanger les positions ne change pas la matrice de Gram
+### Ex 28.3 — Mélanger les positions ne change pas la matrice de Gram ∂
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ Relis le §28.4.1 de la fiche (ce que la matrice de Gram oublie) et la figure de
 
 </details>
 
-### Ex 28.4 — Losses de contenu, de style et de variation totale sur un mini-exemple
+### Ex 28.4 — Losses de contenu, de style et de variation totale sur un mini-exemple ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) Écarts $(0, 2, -1, 0)$, carrés $0 + 4 + 1 + 0 = 5$. Pour b), `F.mse_loss` d
 
 </details>
 
-### Ex 28.5 — Le gradient de la loss de style
+### Ex 28.5 — Le gradient de la loss de style ∂
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ $\frac{\partial F_{ik}}{\partial F_{ab}} = \delta_{ia}\delta_{kb}$. Dérive le p
 
 </details>
 
-### Ex 28.6 — Combien coûte un transfert de style sur CPU ?
+### Ex 28.6 — Combien coûte un transfert de style sur CPU ? 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ Temps = nombre de pas × coût d'un pas / vitesse du CPU, avec un pas = 3 passes
 
 </details>
 
-### Ex 28.7 — Vocabulaire de mots et taille de la couche de sortie d'un LSTM
+### Ex 28.7 — Vocabulaire de mots et taille de la couche de sortie d'un LSTM 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -380,7 +380,7 @@ Une couche dense de $n$ entrées et $m$ sorties a $(n + 1)\,m$ paramètres ; un 
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 28.8 — Pourquoi la matrice de Gram capture le style, en cinq lignes
+### Ex 28.8 — Pourquoi la matrice de Gram capture le style, en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -398,7 +398,7 @@ Commence par « Imagine des détecteurs qui parcourent le tableau, chacun cherch
 
 </details>
 
-### Ex 28.9 — Imiter le style d'un artiste : droit d'auteur, domaine public, consentement
+### Ex 28.9 — Imiter le style d'un artiste : droit d'auteur, domaine public, consentement ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ Relis l'encadré ⚠️ du §28.4.5 et l'encadré 🕰️ sur le droit d'auteur,
 
 </details>
 
-### Ex 28.10 — Lire Gatys, Ecker et Bethge (2015), « A Neural Algorithm of Artistic Style »
+### Ex 28.10 — Lire Gatys, Ecker et Bethge (2015), « A Neural Algorithm of Artistic Style » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -514,7 +514,7 @@ Commence par « Gatys optimise chaque image et ne connaît du style que des stat
 
 ## Exercices du notebook
 
-### Ex 28.11 — Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé
+### Ex 28.11 — Un extracteur multi-couches par hooks sur un réseau pré-entraîné gelé 📦
 
 <details><summary>Indice 1</summary>
 
@@ -541,7 +541,7 @@ Pour a) et b), lis `.numel()` et `.shape[-1]` sur les tenseurs rendus.
 
 </details>
 
-### Ex 28.12 — Prédire l'image qui excite un filtre précoce, puis un filtre profond
+### Ex 28.12 — Prédire l'image qui excite un filtre précoce, puis un filtre profond 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -559,7 +559,7 @@ Pour chaque couche, estime deux nombres en pixels de l'image : la région que vo
 
 </details>
 
-### Ex 28.13 — Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle
+### Ex 28.13 — Visualiser un filtre d'un réseau ImageNet : la montée de gradient du ch. 21 passe à l'échelle 📦
 
 <details><summary>Indice 1</summary>
 
@@ -583,7 +583,7 @@ return to_image(x)
 
 </details>
 
-### Ex 28.14 — Une galerie couche par couche (fig. 28.7)
+### Ex 28.14 — Une galerie couche par couche (fig. 28.7) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -601,7 +601,7 @@ La loss devient `-(net[:layer_index + 1](normalize(x)) ** 2).mean()` ; le reste 
 
 </details>
 
-### Ex 28.15 — Régulariser la visualisation : décalages, flou, octaves
+### Ex 28.15 — Régulariser la visualisation : décalages, flou, octaves 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -624,7 +624,7 @@ Sans régularisation, ta fonction doit faire exactement les mêmes opérations q
 
 </details>
 
-### Ex 28.16 — Deep dream sur une photo libre
+### Ex 28.16 — Deep dream sur une photo libre 📦
 
 <details><summary>Indice 1</summary>
 
@@ -647,7 +647,7 @@ Le masque se redimensionne avec `mode="nearest"`, et multiplie `g` avant la mise
 
 </details>
 
-### Ex 28.17 — Choisir couches et poids, ne rêver que dans une zone
+### Ex 28.17 — Choisir couches et poids, ne rêver que dans une zone 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -669,7 +669,7 @@ Pour les couches, garde au moins une couche intermédiaire (`fire5` à `fire7`) 
 
 </details>
 
-### Ex 28.18 — La matrice de Gram en PyTorch, vérifiée contre NumPy
+### Ex 28.18 — La matrice de Gram en PyTorch, vérifiée contre NumPy 📦
 
 <details><summary>Indice 1</summary>
 
@@ -693,7 +693,7 @@ Pour `tv_loss_18`, les écarts verticaux sont `x[..., 1:, :] - x[..., :-1, :]`.
 
 </details>
 
-### Ex 28.19 — Prédire une reconstruction depuis le bruit : contenu profond seul, style seul
+### Ex 28.19 — Prédire une reconstruction depuis le bruit : contenu profond seul, style seul 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -711,7 +711,7 @@ Une erreur pixel moyenne d'environ 0,005 correspond à une image presque identiq
 
 </details>
 
-### Ex 28.20 — Lire les courbes de losses d'un transfert de style
+### Ex 28.20 — Lire les courbes de losses d'un transfert de style 📈
 
 <details><summary>Indice 1</summary>
 
@@ -729,7 +729,7 @@ a) **A** : c'est le seul essai dont la courbe de contenu existe dès le pas 0 (l
 
 </details>
 
-### Ex 28.21 — Le transfert de style qui ne produisait que du gris
+### Ex 28.21 — Le transfert de style qui ne produisait que du gris 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -747,7 +747,7 @@ Le premier diagnostic désigne la ligne K : l'optimiseur reçoit `net.parameters
 
 </details>
 
-### Ex 28.22 — Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24)
+### Ex 28.22 — Reconstructions de contenu et de style couche par couche (fig. 28.19, 28.23, 28.24) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -770,7 +770,7 @@ Dans la boucle : `F.mse_loss(acts[n], goals[n])` pour le contenu, `((gram_matrix
 
 </details>
 
-### Ex 28.23 — Transfert de style complet sous budget CPU
+### Ex 28.23 — Transfert de style complet sous budget CPU 📦
 
 <details><summary>Indice 1</summary>
 
@@ -793,7 +793,7 @@ for step in range(steps + 1):
 
 </details>
 
-### Ex 28.24 — Poids contenu/style, variation totale et image de départ
+### Ex 28.24 — Poids contenu/style, variation totale et image de départ 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -814,7 +814,7 @@ Complète avec un départ par le bruit, et lis le tableau colonne par colonne.
 
 </details>
 
-### Ex 28.25 — Au-delà de Gram : moyennes et écarts-types des canaux
+### Ex 28.25 — Au-delà de Gram : moyennes et écarts-types des canaux 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -835,7 +835,7 @@ Puis `flat.mean(dim=2)` ; pour l'écart-type, `flat.var(dim=2, unbiased=False)`,
 
 </details>
 
-### Ex 28.26 — Crédits, licences et paramètres : documenter une galerie générée
+### Ex 28.26 — Crédits, licences et paramètres : documenter une galerie générée 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -857,7 +857,7 @@ lines.append("- Réglages : " + ", ".join(f"{k}: {v}" for k, v in entry["params"
 
 </details>
 
-### Ex 28.27 — Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases
+### Ex 28.27 — Plus de Verne : réutiliser le code du LSTM mot à mot de 24.30 sur Verne et l'entraîner plus longtemps, du charabia aux phrases 📦
 
 <details><summary>Indice 1</summary>
 
@@ -878,7 +878,7 @@ WORD_RE_27 = re.compile(r"[^\W\d_]+['’]?|\S")
 
 </details>
 
-### Ex 28.28 — Glouton, température, top-k ou top-p : répétitions et diversité
+### Ex 28.28 — Glouton, température, top-k ou top-p : répétitions et diversité 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -901,7 +901,7 @@ Pour `repeated_share_28`, un ensemble des n-grammes déjà vus, parcourus dans l
 
 </details>
 
-### Ex 28.29 — Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable
+### Ex 28.29 — Défi : un transfert de style en moins de 2 minutes de CPU, loss de style divisée par 10 et contenu reconnaissable 🏆
 
 <details><summary>Indice 1</summary>
 
