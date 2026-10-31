@@ -206,6 +206,34 @@ def test_cached_embeddings_key_follows_images_size_and_seed(tmp_path):
     assert transfer.clear_embeddings_cache(tmp_path) == 2 and not list(tmp_path.glob("*.npz"))
 
 
+def test_cached_embeddings_key_follows_model_revision_block_and_subset(tmp_path):
+    import dataclasses
+
+    bb = _fake_backbone()
+    variants = [(bb, None, "s"), (dataclasses.replace(bb, revision="v1"), None, "s"),
+                (dataclasses.replace(bb, name="fake2"), None, "s"), (bb, "layer3", "s"), (bb, None, "t")]
+    files = {transfer.cache_file(transfer.embedding_key(b, _images(), size=16, block=block, subset=subset), tmp_path)
+             for b, block, subset in variants}
+    assert len(files) == 5, "expected a different file for another model, revision, block or subset"
+
+
+def test_cached_embeddings_recompute_for_another_revision(tmp_path):
+    import dataclasses
+
+    bb = _fake_backbone()
+    calls = []
+    bb.model.register_forward_hook(lambda module, inputs, output: calls.append(1))
+    first = transfer.cached_embeddings(bb, _images(), size=16, subset="s", folder=tmp_path, verbose=False)
+    n = len(calls)
+    assert n > 0, "expected the first call to compute the embeddings"
+    transfer.cached_embeddings(bb, _images(), size=16, subset="s", folder=tmp_path, verbose=False)
+    assert len(calls) == n, "expected the second call to read the cache, not to compute again"
+    newer = dataclasses.replace(bb, revision="v1")
+    again = transfer.cached_embeddings(newer, _images(), size=16, subset="s", folder=tmp_path, verbose=False)
+    assert len(calls) > n, "expected the embeddings of another revision computed again, never read from the old file"
+    assert np.allclose(first, again, atol=1e-6) and len(list(tmp_path.glob("*.npz"))) == 2
+
+
 def test_embeddings_dir_lives_in_the_cache(monkeypatch, tmp_path):
     monkeypatch.setenv("WB_CACHE_DIR", str(tmp_path))
     assert transfer.embeddings_dir() == tmp_path / "embeddings" and (tmp_path / "embeddings").is_dir()

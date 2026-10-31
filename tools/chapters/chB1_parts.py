@@ -189,7 +189,7 @@ PART_B = Part("B", "Fine-tuner : le dernier bloc, puis tout le réseau",
               "On ne gèle plus tout le backbone : on dégèle le dernier bloc, puis tout le réseau, avec des learning "
               "rates par groupe, un planning et des batchnorms maîtrisées. En mode rapide : `FT_PER_CLASS` = 50 images "
               "par classe (500 images), 96 pixels, mini-batches de 32, `FT_EPOCHS` = 3 epochs ; un pas de fine-tuning "
-              "complet de ResNet-18 coûte alors ≈ 0,6 s sur deux cœurs. 🚀 En mode complet (`FAST_MODE = False`) : "
+              "complet de ResNet-18 coûte alors ≈ 0,7 s sur deux cœurs. 🚀 En mode complet (`FAST_MODE = False`) : "
               "1 000 images par classe à 224 pixels et 10 epochs, à lancer sur un GPU de Colab. La cellule suivante donne "
               "`batches(X, y, batch_size, seed)` (des mini-batches mélangés, préparés et normalisés), "
               "`evaluate(model, X, y)` (l'accuracy, en mode `eval()`) et `IMAGENET_RESNET18` (les poids pré-entraînés, "
@@ -249,6 +249,17 @@ def _packed(data) -> str:
     return base64.b64encode(zlib.compress(json.dumps(data, ensure_ascii=False).encode("utf-8"), 9)).decode("ascii")
 
 
+def _summary_rows(rows) -> dict:
+    """{size: [mean, standard deviation (ddof = 0), number of points]} of the rows of a learning curve."""
+    sizes = sorted({r["size"] for r in rows})
+    out = {}
+    for size in sizes:
+        acc = [r["accuracy"] for r in rows if r["size"] == size]
+        mean = sum(acc) / len(acc)
+        out[str(size)] = [mean, (sum((a - mean) ** 2 for a in acc) / len(acc)) ** 0.5, len(acc)]
+    return out
+
+
 def _gap_cat(points):
     return "A" if points < 10 else ("B" if points <= 25 else "C")
 
@@ -275,8 +286,11 @@ def answers_cd() -> dict:
         raise ValueError(f"🔬 B1.23: the answers change from one seed to another: {runs23}")
     out["kept19"], out["partial_more"] = cats19.pop(), more.pop()
     out["runs20"] = {k: [{"seed": r["seed"], "probe": r["probe"], "scratch": r["scratch"]} for r in v] for k, v in p20.items()}
-    out["curves21"] = lc.get("summary", {})
-    out["curves22"] = {k: v["summary"] for k, v in HISTORY.get("fm22", {}).items()}
+    # the summaries are recomputed from the rows (exact accuracies): the rounded "summary" of the history would round
+    # twice (a standard deviation of 1,152 points stored as 0.0115, then shown as 1,1)
+    out["curves21"] = {k: _summary_rows(v) for k, v in lc.get("rows", {}).items()} or lc.get("summary", {})
+    out["curves22"] = {k: _summary_rows(v["rows"]) if "rows" in v else v["summary"]
+                       for k, v in HISTORY.get("fm22", {}).items()}
     out["c28"] = HISTORY.get("c28", {}).get("C", 0.1)
     return out
 
@@ -353,7 +367,7 @@ et deux fonctions du protocole :
 - `learning_curve_21(fit_eval, plan, test, load=wb.datasets.load_cifar10_subset)` : `plan` associe une taille (images par classe) à ses graines ; un point `{"size", "seed", "accuracy"}` par taille, dans l'ordre **croissant**, et par graine, dans l'ordre donné ; chaque point reçoit `load(size, "train", seed)` et le test ;
 - `summarize_21(rows)` : `{taille: (moyenne, écart-type, nombre de points)}`, écart-type de `np.std` (`ddof = 0`).
 
-La cellule de vérification essaie `learning_curve_21` avec un faux `fit_eval` qui note ce qu'il reçoit (tailles, graines, sous-ensembles, test), puis tes trois stratégies sur de tout petits jeux (pour `finetune_21`, sans entraînement : seuls les arguments passés à `fine_tune_19` sont lus). La cellule suivante trace les courbes du linear probe et du CNN from scratch mesurées par ton code (10 et 30 images par classe sur trois tirages, 100 sur un ; ≈ 40 s en mode rapide), à côté des trois courbes complètes précalculées (jusqu'à 1 000 images par classe, fine-tuning compris). 🚀 Mode complet : tout le protocole avec les trois stratégies, à 224 pixels ; plusieurs heures sur CPU (le seul fine-tuning à 1 000 images par classe compte ≈ 940 pas de 3 s), quelques dizaines de minutes sur un GPU de Colab.
+La cellule de vérification essaie `learning_curve_21` avec un faux `fit_eval` qui note ce qu'il reçoit (tailles, graines, sous-ensembles, test), puis tes trois stratégies sur de tout petits jeux (pour `finetune_21`, sans entraînement : seuls les arguments passés à `fine_tune_19` sont lus). La cellule suivante trace les courbes du linear probe et du CNN from scratch mesurées par ton code (10 et 30 images par classe sur trois tirages, 100 sur un ; ≈ 40 s en mode rapide), à côté des trois courbes complètes précalculées (jusqu'à 1 000 images par classe, fine-tuning compris). 🚀 Mode complet : tout le protocole avec les trois stratégies, à 224 pixels ; plusieurs heures sur CPU (le seul fine-tuning à 1 000 images par classe compte jusqu'à ≈ 3 100 pas de 3 s : 10 epochs de 313 pas, moins si l'early stopping l'arrête), quelques dizaines de minutes sur un GPU de Colab.
 
 Dans tes notes : où le fine-tuning complet dépasse-t-il le linear probe, et où reste-t-il dessous ? À quelle taille l'écart-type d'un tirage à l'autre est-il le plus grand, et que vaut une conclusion tirée d'un seul tirage à cette taille ? Pourquoi le même test et des sous-ensembles emboîtés ? Que rapporte le passage de 100 à 1 000 images par classe à chaque stratégie ?""",
        todo=C.TODO_21, check=C.CHECK_21, solution=C.SOLUTION_21 + "\n\n\n" + C.CHECK_21,
@@ -479,7 +493,7 @@ Dans tes notes : qu'est-ce que ton modèle hérite de son modèle de base, et qu
 Écris `method_28(X, y)` : elle s'entraîne sur ces images et ces labels **seulement**, et rend une fonction `predict(images)` qui donne les labels (des entiers). Tout ce que le chapitre a montré est permis : un backbone pré-entraîné de `wb.transfer`, gelé ou fine-tuné, des embeddings, des prototypes, le zéro-shot, l'augmentation. Interdit : d'autres images étiquetées, et toute variable du test (`X_TEST`, `Y_TEST`) ou d'autres labels globaux.
 
 `evaluate_28(method_28)` (cellule suivante) :
-1. un **contrôle anti-fuite** : ta méthode, entraînée sur des labels **mélangés** (les variables globales de labels mélangées elles aussi, le temps du contrôle), doit rester au hasard : ses prédictions ne doivent retrouver ni les vrais labels de la validation, ni les labels globaux mélangés de la validation et du test ;
+1. un **contrôle anti-fuite** : ta méthode, entraînée sur des labels **mélangés** (toutes les variables globales de labels mélangées elles aussi, le temps du contrôle : `LABEL_GLOBALS_28`), doit rester au hasard : ses prédictions ne doivent retrouver ni les vrais labels de la validation, ni les labels globaux mélangés de la validation, du test et des sous-ensembles du test gardés par les parties précédentes (`Y_D`, `YC_TE_16`, `y_15`) ;
 2. l'accuracy sur la **validation** `X_VAL` (500 images, jamais dans `X_TR_28`) : le test n'est révélé que si elle atteint `GATE_28` = 80 % ;
 3. le test, révélé **une fois par session** : le premier résultat est figé (`REVEALED_28`), une nouvelle exécution affiche le même.
 

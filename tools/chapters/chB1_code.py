@@ -210,7 +210,7 @@ wb.record("B1.11e", resize_11, mistakes={
     "232 est le redimensionnement d'autres poids (encadré 🧮 de la fiche) : lis ceux de ResNet-18": 232})
 wb.record("B1.11f", bicubic_11, mistakes={
     "print(preprocess) affiche l'interpolation des deux CNN : relis-la": "ABC",
-    "les deux CNN ont-ils la même interpolation que DINOv2 ? relis print(preprocess)": "AC",
+    "ResNet-18 a-t-il la même interpolation que DINOv2 ? relis print(preprocess)": "AC",
     "MobileNetV3-small a-t-il la même interpolation que DINOv2 ? relis print(preprocess)": "BC",
     "relis l'interpolation des deux CNN, puis le champ resample du processeur de DINOv2": "AB",
     "relis l'interpolation de ResNet-18, puis le champ resample du processeur de DINOv2": "A",
@@ -235,7 +235,7 @@ EXPERIMENT_12 = r'''with checked("B1.12"):
         print(f"{size_12:>3} pixels : linear probe {pct(acc_12)} ; {len(names_12)} classes ImageNet différentes prédites "
               f"pour {len(imagenet_12)} images ; les 5 plus fréquentes ({', '.join(RESNET.categories[names_12[k]] for k in top_12)}) "
               f"couvrent {pct(share_12)} des images.")
-    print("(le hasard : 10 % ; linear probe entraîné sur", len(X_TRAIN), "images, mesuré sur", len(X_TEST), ")")
+    print(f"(le hasard : 10 % ; linear probe entraîné sur {len(X_TRAIN)} images, mesuré sur {len(X_TEST)})")
     wb.check("B1.12a", probe32_12)
     wb.check("B1.12b", top5_12)'''
 
@@ -2386,29 +2386,40 @@ with checked("B1.27"):
 GIVEN_28 = r'''# The challenge: 100 training images per class, the test revealed once, 10 minutes of CPU
 X_TR_28, Y_TR_28 = X_TRAIN[nested(100)], Y_TRAIN[nested(100)]   # the ONLY labelled images of the challenge
 GOAL_28, GATE_28, LIMIT_28 = 0.90, 0.80, 600.0      # test accuracy to reach; validation needed to reveal; seconds
+# every global variable of the notebook that holds CIFAR-10 labels (the test subsets of B1.15, B1.16 and part D too)
+LABEL_GLOBALS_28 = ("Y_TRAIN", "Y_VAL", "Y_TEST", "Y_TR_28", "YT_B", "Y_D", "YS_25", "YC_TR_16", "YC_TE_16", "y_15")
 
 
 def evaluate_28(method):
     """Run the challenge: method(X, y) -> predict, predict(images) -> labels (N,).
-    1. a leak control: the method trained on SHUFFLED labels (the global labels shuffled too, then restored) must stay
-       near chance on the validation images;
+    1. a leak control: the method trained on SHUFFLED labels (every global variable of labels, LABEL_GLOBALS_28,
+       shuffled too, then restored) must stay near chance;
     2. the real run, timed (training + predicting the test), the validation accuracy first: the test is revealed only
        above GATE_28, and only once per session (REVEALED_28)."""
-    global Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B
+    g = globals()
+    names = [n for n in LABEL_GLOBALS_28 if g.get(n) is not None]
+    saved = {n: g[n] for n in names}
+    # the positions in X_TEST of the test subsets whose labels are kept in other variables
+    subsets = {"Y_D": g.get("idx_D"), "y_15": g.get("idx_15"),
+               "YC_TE_16": nested(g["BLOCK_PER_CLASS"], "test") if "BLOCK_PER_CLASS" in g else None}
     rng = np.random.default_rng(28)
-    saved = (Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B)
     try:
-        Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = (rng.permutation(v) for v in saved)
+        for n in names:
+            g[n] = rng.permutation(saved[n])
         fake = method(X_TR_28.copy(), Y_TR_28.copy())
         on_val = np.asarray(fake(X_VAL.copy()))
         on_test = np.asarray(fake(X_TEST.copy()))
         # an honest method trained on shuffled labels agrees with no labelling: neither the true validation labels,
-        # nor the shuffled global labels it could have read (validation, test)
-        leaks = {"labels de validation": float(np.mean(on_val == saved[1])),
-                 "labels globaux mélangés de la validation": float(np.mean(on_val == Y_VAL)),
-                 "labels globaux mélangés du test": float(np.mean(on_test == Y_TEST))}
+        # nor the shuffled global labels it could have read (validation, test, the test subsets)
+        leaks = {"labels de validation": float(np.mean(on_val == saved["Y_VAL"])),
+                 "labels globaux mélangés de la validation": float(np.mean(on_val == g["Y_VAL"])),
+                 "labels globaux mélangés du test": float(np.mean(on_test == g["Y_TEST"]))}
+        for n, pos in subsets.items():
+            if n in saved and pos is not None and len(pos) == len(saved[n]):
+                leaks[f"labels globaux mélangés de {n}"] = float(np.mean(on_test[pos] == g[n]))
     finally:
-        Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = saved
+        for n in names:
+            g[n] = saved[n]
     leak = max(leaks.values())
     verdict("B1.28", leak < 0.3, "contrôle anti-fuite : entraînée sur des labels mélangés, ta méthode reste au hasard "
             f"({pct(leaks['labels de validation'])} sur la validation ; le hasard : 10 %).",

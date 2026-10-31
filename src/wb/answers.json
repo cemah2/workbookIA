@@ -51581,7 +51581,7 @@
         "8e05746f738724e27eba0f7716c1b9cdcc8ceec40f113eedea7c8dfa8fc7938c": "relis l'interpolation des deux CNN, puis le champ resample du processeur de DINOv2",
         "b6af4bc91c8d374fcc35351c69e74be34f2432250727565473d1398bb26864de": "relis l'interpolation de MobileNetV3-small, puis le champ resample du processeur de DINOv2",
         "d11fa89cfc68950d38f74772e19eb27edec11acf03ecf4e9a634eddb831ad310": "print(preprocess) affiche l'interpolation des deux CNN : relis-la",
-        "d8b2e1061075a030f104ba2788bf54db1639bb70440c02696cad18bbdbd8b82f": "les deux CNN ont-ils la même interpolation que DINOv2 ? relis print(preprocess)"
+        "d8b2e1061075a030f104ba2788bf54db1639bb70440c02696cad18bbdbd8b82f": "ResNet-18 a-t-il la même interpolation que DINOv2 ? relis print(preprocess)"
       },
       "source": "chapitres/b1_transfer/05_solutions.ipynb"
     },

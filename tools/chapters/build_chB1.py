@@ -495,7 +495,8 @@ def header_cells(kind: str) -> list:
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
                "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Le "
                "notebook télécharge ResNet-18 et MobileNetV3-small (torchvision) et DINOv2-small (Hugging Face Hub), "
-               "≈ 150 Mo, et CIFAR-10 (≈ 145 Mo) s'il n'est pas déjà là ; les embeddings sont calculés une fois puis "
+               "≈ 150 Mo, CLIP ViT-B/32 (≈ 600 Mo, partie D), CIFAR-10 (≈ 145 Mo) et Fashion-MNIST (≈ 30 Mo) s'ils ne "
+               "sont pas déjà là ; les embeddings sont calculés une fois puis "
                "mis en cache (`data/downloads/embeddings`, hors du dépôt). Tout tourne sur CPU en mode rapide ; 🚀 : "
                "en mode complet (`FAST_MODE = False`), 224 pixels et beaucoup plus d'images, sur un GPU de Colab.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b1_transfer/03_notebook.ipynb`, créée par "
@@ -555,7 +556,11 @@ def build(kind: str) -> list:
     cells += [md("## Outils du notebook\n\nLa cellule suivante importe PyTorch, charge les sous-ensembles de CIFAR-10 "
                  "(`X_TRAIN`, `X_VAL`, `X_TEST`), le ResNet-18 gelé de référence `RESNET` et définit les petits outils des "
                  "parties A et B : `nested`, `reference_embeddings`, `reference_probe`, `pct`… Lis leurs docstrings au "
-                 "besoin. Le premier lancement télécharge CIFAR-10 et les poids de ResNet-18."), code(chB1_code.TOOLS)]
+                 "besoin. Le premier lancement télécharge CIFAR-10 et les poids de ResNet-18.\n\n"
+                 "**Données et poids** : CIFAR-10 (A. Krizhevsky, 2009 ; pas de licence formelle, citer le rapport "
+                 "technique : `data/cards/cifar10.md`), Fashion-MNIST (H. Xiao, K. Rasul et R. Vollgraf, 2017 ; licence "
+                 "MIT : `data/cards/fashion_mnist.md`) ; les poids pré-entraînés, leurs révisions et leurs licences "
+                 "(torchvision et ImageNet, DINOv2, CLIP) : `data/cards/pretrained.md`."), code(chB1_code.TOOLS)]
     for part in PARTS:
         cells += part_cells(part, kind)
     cells += footer_cells(kind)
