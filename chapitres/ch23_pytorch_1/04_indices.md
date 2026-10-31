@@ -107,7 +107,7 @@ Relis les §23.3.4 et §23.5.1 de la fiche, et la figure des deux rangements.
 </details>
 <details><summary>Indice 2</summary>
 
-Une forme d'image se lit toujours (hauteur, largeur), le nombre de lignes d'abord ; channels_first met les canaux devant, channels_last derrière. Pour d), `permute` reçoit, pour chaque axe du **résultat**, le numéro de l'axe d'origine qui y va.
+Une forme d'image se lit toujours (hauteur, largeur), le nombre de lignes d'abord ; `channels_first` met les canaux devant, `channels_last` derrière. Pour d), `permute` reçoit, pour chaque axe du **résultat**, le numéro de l'axe d'origine qui y va.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -246,7 +246,7 @@ a) `"(32, 20, 50)"` : 32 phrases, 20 tokens, 50 valeurs par token. Pour b), éch
 
 </details>
 
-### 23.R2 — Ch. 20 : Les cinq lignes d'une étape d'entraînement
+### 23.R2 — Ch. 20 : les cinq lignes d'une étape d'entraînement
 
 <details><summary>Indice 1</summary>
 
@@ -260,11 +260,11 @@ Il faut des logits avant de calculer une loss, une loss avant de calculer des gr
 </details>
 <details><summary>Indice 3</summary>
 
-a) La suite commence par B ; enchaîne la passe avant, la loss, la passe arrière, puis la mise à jour. Pour b), relis ce que fait `zero_grad` ; pour c), demande-toi laquelle des quatre options est le travail de l'autograd ; pour d), `loss` est relié à tout le graphe de calcul du mini-batch, `loss.item()` est un nombre Python ; pour e), relis le §23.10.2 sur la place de `scheduler.step()`.
+a) La suite commence par B ; enchaîne la passe avant, la loss, la passe arrière, puis la mise à jour. Pour b), relis ce que fait `zero_grad` ; pour c), demande-toi laquelle des quatre options est le travail de l'autograd ; pour d), `loss` est relié à tout le graphe de calcul du mini-batch, `loss.item()` est un nombre Python ; pour e), relis la note du corrigé de 📦 20.23, où l'on appelle `ReduceLROnPlateau` : combien de fois par epoch, et après quoi ? Le §23.10.2, plus loin dans ce chapitre, le dira en détail.
 
 </details>
 
-### 23.R3 — Ch. 2 : Moyenne et écart-type du train pour normaliser les pixels
+### 23.R3 — Ch. 2 : moyenne et écart-type du train pour normaliser les pixels
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) $\mu = (0 + 0{,}2 + 0{,}4 + 0{,}4 + 1)/5 = 0{,}4$. Pour b), les écarts sont 
 
 ## ✏️ 🧮 Papier-crayon
 
-### Ex 23.1 — Remodeler 12 éléments : indices et ordre de lecture
+### Ex 23.1 — Remodeler 12 éléments : indices et ordre de lecture ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) Position $2 \times 4 + 1 = 9$, la lettre V (M est 0, N 1… V 9). Pour b) et 
 
 </details>
 
-### Ex 23.2 — De NHWC à NCHW : où atterrit chaque pixel ?
+### Ex 23.2 — De NHWC à NCHW : où atterrit chaque pixel ? ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $9 \times 1 + 3 \times 2 + 0 = 15$. Pour b), écris les tailles de `x` dans l
 
 </details>
 
-### Ex 23.3 — 623 290 paramètres : refaire le compte du livre
+### Ex 23.3 — 623 290 paramètres : refaire le compte du livre ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $(784 + 1) \times 784 = 615\,440$. Pour b), applique la formule à 784 entré
 
 </details>
 
-### Ex 23.4 — Une cross-entropy à la main : indice de classe ou one-hot
+### Ex 23.4 — Une cross-entropy à la main : indice de classe ou one-hot ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $e^2 / (e^1 + e^2 + e^0) = 7{,}389 / 11{,}107 \approx 0{,}665$. Pour b), pren
 
 </details>
 
-### Ex 23.5 — Batches par epoch et nombre de mises à jour
+### Ex 23.5 — Batches par epoch et nombre de mises à jour ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -372,11 +372,11 @@ Le train fait $60\,000 - 6\,000 = 54\,000$ images. Sans `drop_last`, on arrondit
 </details>
 <details><summary>Indice 3</summary>
 
-a) $54\,000 / 256 = 210{,}9$, arrondi au-dessus : 211. Pour b), arrondis en dessous ; pour c), calcule $54\,000 - 210 \times 256$ ; pour d), multiplie a) par le nombre d'epochs ; pour e) et f), refais a) avec les nouveaux $N$ et $B$ ; pour g), multiplie b) par la taille d'un mini-batch.
+a) $54\,000 / 256 = 210{,}9$, arrondi au-dessus : 211. Pour b), arrondis en dessous ; pour c), retire de 54 000 les images des mini-batches complets (ta réponse à b) fois 256) ; pour d), multiplie a) par le nombre d'epochs ; pour e) et f), refais a) avec les nouveaux $N$ et $B$ ; pour g), multiplie b) par la taille d'un mini-batch.
 
 </details>
 
-### Ex 23.6 — Early stopping à la main : patience et min_delta
+### Ex 23.6 — Early stopping à la main : patience et min_delta ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) Remplis le tableau epoch par epoch (attention : 0,379 < 0,38) : le compteur a
 
 </details>
 
-### Ex 23.7 — Plannings de learning rate : le planning du livre avec LambdaLR
+### Ex 23.7 — Plannings de learning rate : le planning du livre avec LambdaLR ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ a) $1 \times \max(0{,}1 ;\ 1 - 0{,}25) = 0{,}75$. Pour b), résous $1 - 0{,}01\,
 
 </details>
 
-### Ex 23.8 — Fermi : durée d'une epoch et poids d'un checkpoint
+### Ex 23.8 — Fermi : durée d'une epoch et poids d'un checkpoint 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ a) $6 \times 623\,290 \times 60\,000 = 2{,}24 \times 10^{11}$, soit 224,4 millia
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 23.9 — Pourquoi le prétraitement doit voyager avec le modèle
+### Ex 23.9 — Pourquoi le prétraitement doit voyager avec le modèle 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Commence par : « Un modèle, c'est comme un traducteur qui n'a appris qu'une se
 
 </details>
 
-### Ex 23.10 — Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités
+### Ex 23.10 — Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Pour 1., la documentation de torchvision dit que les poids « peuvent avoir leur
 
 </details>
 
-### Ex 23.11 — Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet
+### Ex 23.11 — Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet 📄
 
 <details><summary>Indice 1</summary>
 
@@ -931,7 +931,7 @@ class SchedulerCallback_25:
 
     def __call__(self, epoch, history, model, optimizer):
         history.setdefault("lr", []).append(optimizer.param_groups[0]["lr"])
-        # ReduceLROnPlateau: self.scheduler.step(history["val_loss"][-1]) ; otherwise: self.scheduler.step()
+        ...  # step the scheduler: ReduceLROnPlateau needs the last validation loss, the others nothing
         return False
 ```
 

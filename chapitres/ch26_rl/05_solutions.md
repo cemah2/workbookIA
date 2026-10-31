@@ -60,15 +60,15 @@ a) **16** : une colonne par case du plateau ; le livre en compte 9 par erreur. b
 
 ## 🔁 Rappels
 
-### 26.R1 — Un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
+### 26.R1 — Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
 a) **C** : 20 nombres réels peuvent prendre une infinité de valeurs. b) **Vrai** : un réseau généralise aux entrées voisines de ses données (25.Q11 montre aussi la limite : loin des données, il ressort ce qu'il connaît). c) **4** : une valeur Q par action, en un seul passage.
 **À retenir** : un réseau est une table infinie et compressée, qui généralise près de ses données.
 
-### 26.R2 — Que sauvegarder pour reprendre un entraînement ?
+### 26.R2 — Ch. 23 : que sauvegarder pour reprendre un entraînement ?
 a) **« ABCD »** : les poids, l'état de l'optimiseur (les moyennes d'Adam), la position dans la boucle et les générateurs aléatoires ; le code de PyTorch n'est pas un état. b) **A** : la table Q, ce qui est appris. c) **Faux** : il faut aussi savoir où l'on en était dans le calendrier de $\varepsilon$ (le numéro d'épisode) et l'état du générateur aléatoire, sinon la suite n'est pas la même.
 **À retenir** : un checkpoint contient tout ce qui change pendant l'entraînement, hasard compris.
 
-### 26.R3 — Bandit à bras multiples, ε-greedy et UCB
+### 26.R3 — Ch. 11 : bandit à bras multiples, ε-greedy et UCB
 a) **A** : un seul état, des bras qui sont les actions. b) **3,5** $= 3 + 0{,}25 \times (5 - 3)$, la même forme que la mise à jour du Q-learning, avec la cible à la place du gain. c) **B** : le gain moyen plus un bonus qui grandit quand le bras a été peu essayé.
 **À retenir** : le Q-learning est un bandit dont la cible regarde l'état suivant ; `rl.py` réutilise `epsilon_greedy_action` et `incremental_update` du ch. 11.
 
@@ -513,7 +513,7 @@ return V, backup(V)
 ```
 **Démarche** : sur la chaîne, $V^* = (0{,}5 ; 1 ; 0)$ avec $\gamma = 0{,}5$, et un seul balayage ne donne une valeur qu'à l'état qui précède la récompense : la valeur remonte d'un état par balayage, comme dans ✏️ 26.6. Sur le lac glissant, $V^*(0) = 0{,}54$ avec $\gamma = 0{,}99$, et la politique optimale réussit 73,2 % des épisodes de 100 pas. Elle va « contre le mur » à côté des trous, pour ne glisser que vers des cases sûres. La table de 26.22 choisit la même action dans les 16 états ; ses valeurs s'écartent de $Q^*$ de 0,18 au plus, surtout dans les cases peu visitées, que la politique gloutonne évite et dont les valeurs ont reçu peu de mises à jour.
 **Erreurs fréquentes** : mettre à jour $V$ sur place pendant le balayage (c'est Gauss-Seidel : ça converge aussi, mais `max_iter=k` ne rend plus le $k$-ième itéré) ; oublier le facteur `(1 - done)` ; s'arrêter quand la variation vaut **exactement** `theta` ; rendre le `Q` du balayage d'avant.
-**Variante** : avec $\gamma = 0{,}9$, $V^*(0)$ ne vaut plus que **0,069** et la politique optimale réussit **71,6 %** des épisodes : elle change dans un état sur seize. Un but lointain compte moins : le long détour sûr coûte trop cher, et l'agent prend un chemin plus court et plus risqué.
+**Variante** : avec $\gamma = 0{,}9$, $V^*(0)$ ne vaut plus que **0,069**, et la politique optimale change dans un état sur seize. Elle réussit à peine moins souvent : sur 20 000 épisodes (graines 0 à 19 999), **72,7 %** contre 73,6 % avec $\gamma = 0{,}99$, à ± 0,3 point près ; sur 2 000 épisodes, l'écart serait noyé dans le bruit. Un but lointain compte moins : le long détour sûr coûte trop cher, et l'agent prend un chemin plus court et plus risqué.
 
 ### Ex 26.27 — α, γ, ε : balayage d'hyperparamètres sur Flippers bruité 🔬
 **Réponse** :

@@ -110,7 +110,7 @@ Trois mécanismes expliquent ces courbes :
 
 > 🕰️ **Mise à jour (2026) — taille de batch et learning rate** — **Le livre :** les petits batches surapprennent davantage sur son exemple, et les grands batches sont préférables. · **Aujourd'hui :** on sait que la taille de batch se règle **avec** le learning rate. La règle d'échelle linéaire (Goyal et coll., 2017) multiplie le learning rate par $k$ quand le batch est multiplié par $k$, avec un warmup au début ; Keskar et coll. (2017) ont observé que les très grands batches généralisent souvent moins bien (des minima « pointus » : des creux étroits de la loss, où un petit déplacement des poids la fait beaucoup monter), et Hoffer et coll. (2017) que cet écart se réduit en entraînant plus longtemps ; le rapport learning rate / taille de batch règle le niveau de bruit (Smith et Le, 2018), au point qu'augmenter la taille de batch peut remplacer une baisse du learning rate (Smith et coll., 2018). Le constat du livre vaut donc pour son learning rate et ses 100 epochs, pas en général. · **Faut-il quand même l'apprendre ?** Oui : changer la taille de batch sans retoucher le learning rate change deux choses à la fois. · *Sources :* [Goyal et coll., arXiv:1706.02677](https://arxiv.org/abs/1706.02677), [Keskar et coll., arXiv:1609.04836](https://arxiv.org/abs/1609.04836), [Hoffer et coll., arXiv:1705.08741](https://arxiv.org/abs/1705.08741), [Smith et Le, arXiv:1710.06451](https://arxiv.org/abs/1710.06451), [Smith et coll., arXiv:1711.00489](https://arxiv.org/abs/1711.00489).
 
-Le 🔬 24.11 refait l'expérience sur Fashion-MNIST, en mesurant la loss, l'écart entre train et validation et le temps par epoch, et le 🛠️ 24.15 te fait noter chaque run dans un journal.
+Le 🔬 24.11 refait l'expérience sur Fashion-MNIST, en mesurant la loss, l'écart entre train et validation et le temps par epoch, et le 🛠️ 24.15 te fait noter chaque **run** (*exécution* : un entraînement complet, avec ses réglages et ses résultats) dans un journal.
 
 ### 24.2.3 · Autres façons d'améliorer ⏩
 
@@ -177,7 +177,7 @@ Le 📦 24.13 te fait ajouter dropout et max-norm au MLP de 32 + 32 neurones, pu
 
 Le bilan du livre : une très grande couche cachée surapprend presque tout de suite ; une couche beaucoup plus petite surapprend moins mais perd de l'accuracy ; deux petites couches avec dropout ramènent l'accuracy sans overfitting. Le livre laisse les autres essais au lecteur (p. 1231) : régler soi-même un petit modèle forge l'intuition, qui servira quand chaque essai coûtera des heures.
 
-> 💼 **En entreprise — le journal d'expériences** — Après une dizaine d'essais, plus personne ne sait quel run a donné quel chiffre. Une habitude professionnelle : **un run, une ligne** dans un fichier (CSV ou JSON lines), écrite automatiquement à la fin de l'entraînement, avec la date, le commit git du code, tous les hyperparamètres (y compris ceux laissés par défaut), la graine, les métriques finales et la meilleure epoch, la durée et la machine. Les outils de suivi d'expériences (MLflow, Weights & Biases, TensorBoard) font la même chose avec des graphiques ; le principe est le même. C'est le 🛠️ 24.15 ; le B7 y revient.
+> 💼 **En entreprise** — Le journal d'expériences : après une dizaine d'essais, plus personne ne sait quel run a donné quel chiffre. Une habitude professionnelle : **un run, une ligne** dans un fichier (CSV ou JSON lines), écrite automatiquement à la fin de l'entraînement, avec la date, le commit git du code, tous les hyperparamètres (y compris ceux laissés par défaut), la graine, les métriques finales et la meilleure epoch, la durée et la machine. Les outils de suivi d'expériences (MLflow, Weights & Biases, TensorBoard) font la même chose avec des graphiques ; le principe est le même. C'est le 🛠️ 24.15 ; le B7 y revient.
 
 ## 24.3 · Utiliser scikit-learn ⏩
 
@@ -224,11 +224,12 @@ class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
 
 Pourquoi valider par folds quand MNIST fournit un grand jeu de validation ? Le livre répond par deux cas. Le jeu de validation peut **ne pas représenter** les données : son image est celle d'un paquet de cartes neuf, rangé par couleur, dont on garderait le dernier quart pour valider ; ce quart ne contient qu'une seule couleur, absente du reste. Le même accident arrive avec un fichier trié (Fashion-MNIST rangé par classe : les 10 % de la fin ne contiendraient que des bottines). Et le dataset peut être **trop petit** pour qu'on en sacrifie une part (ch. 8).
 
-La validation croisée du livre (listings 24.8 à 24.11) prend son MLP de deux couches de 32 neurones avec dropout, enveloppé, et le passe à `cross_val_score` avec un `StratifiedKFold(n_splits=10, shuffle=True, random_state=...)`, sur les 60 000 images d'entraînement et les labels **entiers** (pas one-hot : scikit-learn veut un label par exemple). Elle trouve une accuracy moyenne de 0,955, proche de la validation de la fig. 24.13 : rassurant, mais dix fois plus long. En PyTorch, rien ne change côté scikit-learn :
+La validation croisée du livre (listings 24.8 à 24.11) prend son MLP de deux couches de 32 neurones avec dropout, enveloppé, et le passe à `cross_val_score` avec un `StratifiedKFold(n_splits=10, shuffle=True, random_state=...)`, sur les 60 000 images d'entraînement et les labels **entiers** (pas one-hot : scikit-learn veut un label par exemple). Elle trouve une accuracy moyenne de 0,955, proche de la validation de la fig. 24.13 : rassurant, mais dix fois plus long. En PyTorch, rien ne change côté scikit-learn, à un détail près : un estimateur de scikit-learn reçoit un tableau 2D, une ligne par exemple. Les images `(60 000, 28, 28)` du ch. 23 s'aplatissent donc d'abord en lignes de 784 pixels, comme celles du livre :
 
 ```python
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 
+X_train = X_train.reshape(len(X_train), -1).astype(np.float32) / 255   # (60000, 784): one row per example
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
 scores = cross_val_score(TorchMLPClassifier(epochs=3), X_train, y_train, cv=cv)   # one fresh network per fold
 print(scores.mean(), scores.std())
@@ -310,7 +311,7 @@ Le livre rappelle aussi que le pooling perd du terrain au profit des convolution
 
 Un MLP voit chaque image comme une ligne de 784 nombres, et perd la notion de voisinage vertical entre pixels. Un CNN garde l'image en volume : canaux, lignes, colonnes. En PyTorch, un mini-batch a la forme $(N, C, H, W)$ : 1 canal pour MNIST et Fashion-MNIST, 3 pour une image en couleur (rouge, vert, bleu), une dizaine pour une image satellite. Un dataset de 50 000 images CIFAR-10 a donc la forme $(50\,000, 3, 32, 32)$.
 
-> ⚠️ **Le livre, corrigé — channels_last ou channels_first ?** — Le livre annonce le format *channels_last* et le code en conséquence, `(60 000, 28, 28, 1)`, mais décrit et légende à plusieurs reprises un tenseur `60 000 × 1 × 28 × 28`, qui est le format *channels_first* (p. 1264-1266, puis « 4D channels-first » p. 1276). PyTorch tranche : les modules de convolution attendent $(N, C, H, W)$, le format *channels_first*. Pour passer d'un tableau NHWC (le format que rendent `wb.datasets.load_cifar10` et les images PIL) à NCHW, c'est `permute(0, 3, 1, 2)`, jamais un `reshape` (ch. 23).
+> ⚠️ **Le livre, corrigé — `channels_last` ou `channels_first` ?** — Le livre annonce le format `channels_last` et le code en conséquence, `(60 000, 28, 28, 1)`, mais décrit et légende à plusieurs reprises un tenseur `60 000 × 1 × 28 × 28`, qui est le format `channels_first` (p. 1264-1266, puis « 4D channels-first » p. 1276). PyTorch tranche : les modules de convolution attendent $(N, C, H, W)$, le format `channels_first`. Pour passer d'un tableau NHWC (le format que rendent `wb.datasets.load_cifar10` et les images PIL) à NCHW, c'est `permute(0, 3, 1, 2)`, jamais un `reshape` (ch. 23).
 
 Le livre ramène les pixels dans $[-1, 1]$ en citant les notes du cours CS231n de Stanford, avec `np.interp` (listing 24.26). La formule est simple : $x' = x / 127{,}5 - 1$ pour des pixels entre 0 et 255.
 
@@ -397,7 +398,7 @@ La règle d'or du livre : une transformation doit produire une image **plausible
 
 ![Une photo de CIFAR-10 et sept versions transformées : miroir, recadrage décalé avec marge, petite rotation, luminosité et contraste, recadrage et miroir, léger agrandissement ; en dernier, un retournement haut-bas, barré : une transformation implausible](figures/augmentation.png)
 
-Keras 2 faisait l'augmentation avec `ImageDataGenerator`, un **générateur** Python (0A) qui fabriquait les batches transformés à la demande, et `fit_generator`, qui devait savoir combien de batches composent une epoch (`steps_per_epoch`), puisqu'un générateur ne s'arrête jamais. Le listing 24.49 écrit encore `samples_per_epoch`, le nom de Keras 1, que Keras 2.0 convertissait en `samples_per_epoch // batch_size` avec un avertissement, et passe `seed=42` à `fit_generator`, qui le refuserait : la graine se donne à `flow()`. En PyTorch, l'augmentation est une transformation appliquée par le `Dataset` à chaque fois qu'il rend une image : à chaque epoch, chaque image du train est transformée **différemment**, sans rien stocker, et `DataLoader(num_workers=...)` prépare les batches suivants en parallèle pendant que le modèle calcule.
+Keras 2 faisait l'augmentation avec `ImageDataGenerator`, un **générateur** Python (0A) qui fabriquait les batches transformés à la demande, et `fit_generator`, qui devait savoir combien de batches composent une epoch (`steps_per_epoch`), puisqu'un générateur ne s'arrête jamais. Le listing 24.49 écrit encore `samples_per_epoch`, le nom de Keras 1, que Keras 2.0 convertissait en `samples_per_epoch // batch_size` avec un avertissement, et passe `seed=42` à `fit_generator`, qui le refuserait : la graine se donne à `flow()`. En PyTorch, l'augmentation est une transformation appliquée par le `Dataset` à chaque fois qu'il rend une image : à chaque epoch, chaque image du train est transformée **différemment**, sans rien stocker, et `DataLoader(num_workers=...)` prépare les batches suivants en parallèle pendant que le modèle calcule, dans des **workers** (*processus de chargement* : `num_workers` processus Python lancés à côté de l'entraînement). Sur Colab (Linux), les workers naissent par copie du processus (méthode `"fork"`) et `num_workers=2` marche directement. Sous Windows et macOS, ils sont lancés par la méthode `"spawn"`, repartent d'un interpréteur neuf et ne voient pas une classe définie dans une cellule de notebook (l'erreur dit `Can't get attribute ... on <module '__main__'>`) : on met alors cette classe dans un fichier `.py` que le notebook importe, ou l'on garde `num_workers=0`.
 
 ```python
 train_tf = v2.Compose([
@@ -472,6 +473,8 @@ def sum_of_sines(n_steps, d_theta, start, freqs, amps, phases):
 ```
 
 ![Une somme de deux sinus : le train (200 points) puis, plus loin, le test ; en encart, une fenêtre de 5 points et la valeur qui la suit, la cible](figures/sinus.png)
+
+*Une série d'exemple, plus simple que celles du livre, avec un test qui commence au point 300 (au point 400 dans le livre).*
 
 ### 24.5.2 · Préparer les données d'un RNN
 
@@ -578,7 +581,7 @@ Trois détails à connaître :
 - `batch_first=True` change la forme de l'entrée et d'`output`, **pas** celle de `h_n` et `c_n`, dont l'axe des exemples reste au milieu ;
 - avec `bidirectional=True`, la dernière dimension d'`output` double ($2H$ : les deux sens, côte à côte) et `h_n` a $2L$ lignes (les deux sens de chaque couche).
 
-![Un LSTM de 2 couches déroulé sur T pas de temps : output rassemble les sorties de la couche du haut à chaque pas, h_n et c_n rassemblent les états du dernier pas de chaque couche](figures/sorties_lstm.png)
+![Un LSTM de 2 couches déroulé sur T pas de temps : `output` rassemble les sorties de la couche du haut à chaque pas, `h_n` et `c_n` rassemblent les états du dernier pas de chaque couche](figures/sorties_lstm.png)
 
 Le ✏️ 24.4 te fait lire ces formes sur un exemple chiffré, et le 📦 24.27 les vérifier sur les taches solaires.
 
@@ -672,7 +675,7 @@ En PyTorch, il n'y a pas deux API : `nn.Module` est déjà « fonctionnel ». Le
 
 ### 24.6.1 · Les couches d'entrée ⏩
 
-Dans un `Sequential` de Keras, l'entrée est implicite : on donne `input_shape` à la première couche. L'API fonctionnelle demande une couche `Input(shape=...)` explicite, qui ne calcule rien et décrit la forme d'**un** exemple (`shape=(784,)` pour une image aplatie, `(28, 28, 1)` pour une image en *channels_last* ; la virgule de `(784,)` fait un tuple d'un élément). Le livre regrette que l'argument ne s'appelle pas `input_shape` comme ailleurs. En PyTorch, pas de couche d'entrée : le premier module reçoit le tenseur, et un appel sur un tenseur factice (`model(torch.zeros(1, 3, 32, 32)).shape`) vérifie les formes.
+Dans un `Sequential` de Keras, l'entrée est implicite : on donne `input_shape` à la première couche. L'API fonctionnelle demande une couche `Input(shape=...)` explicite, qui ne calcule rien et décrit la forme d'**un** exemple (`shape=(784,)` pour une image aplatie, `(28, 28, 1)` pour une image en `channels_last` ; la virgule de `(784,)` fait un tuple d'un élément). Le livre regrette que l'argument ne s'appelle pas `input_shape` comme ailleurs. En PyTorch, pas de couche d'entrée : le premier module reçoit le tenseur, et un appel sur un tenseur factice (`model(torch.zeros(1, 3, 32, 32)).shape`) vérifie les formes.
 
 ### 24.6.2 · Construire un modèle fonctionnel ⏩
 

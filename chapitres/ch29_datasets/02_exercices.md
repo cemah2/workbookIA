@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 29.Q1 — Partir de l'existant : modèle pré-entraîné, dataset public ou collecte ? 🧠 ⏱️ 3 min
-*Fiche §29.1 · livre §29.1*
+*Fiche §29.1 · livre §29.1 · parcours R*
 
 a) L'ordre que conseille le livre : (A) collecter ses données, puis chercher un modèle ; (B) un modèle déjà entraîné, ajusté si besoin, sinon un dataset public, et la collecte en dernier ; (C) toujours entraîner de zéro, pour maîtriser le résultat.
 b) Vrai ou faux : ajuster un modèle pré-entraîné en entraînant quelques couches de plus sur ses propres données, c'est du transfer learning.
@@ -25,7 +25,7 @@ d) Vrai ou faux : un dataset public ne peut servir dans un produit commercial qu
 e) Avant d'investir du temps dans un dataset trouvé en ligne, le livre conseille : (A) d'entraîner un grand modèle pour voir ; (B) de lire ses règles d'usage et d'inspecter les données à la main ; (C) de le doubler par augmentation.
 
 ### 29.Q2 — Licences et restrictions d'usage : vrai ou faux 🧠 ⏱️ 3 min
-*Fiche §29.1 · livre §29.1*
+*Fiche §29.1 · livre §29.1 · parcours R*
 
 a) Un dataset sous licence CC BY peut servir à un usage commercial, à condition de citer sa source.
 b) Un dataset sous licence CC BY-NC peut servir dans un produit vendu.
@@ -34,7 +34,7 @@ d) Une licence libre garantit que toutes les personnes photographiées dans un d
 e) Les données personnelles d'un dataset publié restent soumises au RGPD.
 
 ### 29.Q3 — Les défauts qu'une inspection manuelle révèle 🧠 ⏱️ 3 min
-*Fiche §29.1, « Au-delà du livre : auditer un dataset » · livre §29.1*
+*Fiche §29.1, « Au-delà du livre : auditer un dataset » · livre §29.1 · parcours R*
 
 a) Parmi ces défauts, lesquels le livre cite-t-il ? (A) des champs vides ; (B) des labels qui n'apparaissent qu'une fois ; (C) des fautes d'orthographe ; (D) des poids de réseau mal initialisés. Écris leurs lettres.
 b) La valeur −999 dans une colonne de poids de fruits est le plus probablement : (A) un fruit au poids négatif ; (B) une valeur manquante codée par un nombre.
@@ -43,7 +43,7 @@ d) Pour repérer des diamètres notés tantôt en centimètres, tantôt en milli
 e) Vrai ou faux : on a trouvé des erreurs de labels jusque dans les jeux de test des benchmarks les plus utilisés.
 
 ### 29.Q4 — MNIST et Fashion-MNIST : même format, difficulté différente 🧠 ⏱️ 3 min
-*Fiche §29.2 · livre §29.2*
+*Fiche §29.2 · livre §29.2 · parcours R*
 
 a) Combien d'images compte Fashion-MNIST au total ?
 b) Le côté d'une image, en pixels.
@@ -52,7 +52,7 @@ d) Vrai ou faux : un code qui charge et entraîne un modèle sur MNIST peut pass
 e) Fashion-MNIST est plus difficile que MNIST parce que : (A) ses images sont en couleur ; (B) certaines classes se ressemblent beaucoup (T-shirt, chemise, pull) ; (C) il a moins d'exemples.
 
 ### 29.Q5 — Les datasets de scikit-learn : lequel pour quelle tâche, et pourquoi Boston a disparu 🧠 ⏱️ 3 min
-*Fiche §29.3.1 · livre §29.3.1*
+*Fiche §29.3.1 · livre §29.3.1 · parcours R*
 
 a) Combien d'images rend `sklearn.datasets.load_digits()` ?
 b) `load_boston` a été retiré de scikit-learn dans la version : (A) 0.24 ; (B) 1.2 ; (C) 2.0.
@@ -61,7 +61,7 @@ d) Pour une régression de prix immobiliers, le workbook utilise : (A) Iris ; (B
 e) Vrai ou faux : Diabetes, dans scikit-learn, est un dataset de textes.
 
 ### 29.Q6 — Des datasets de Keras à torchvision et Hugging Face 🧠 ⏱️ 3 min
-*Fiche §29.3.2 · livre §29.3.2*
+*Fiche §29.3.2 · livre §29.3.2 · parcours R*
 
 a) `keras.datasets.mnist.load_data()` rend : (A) un DataFrame ; (B) un `DataLoader` ; (C) deux couples `(x_train, y_train), (x_test, y_test)` de tableaux NumPy.
 b) Combien d'images compte CIFAR-10 au total (entraînement et test) ?
@@ -70,16 +70,16 @@ d) L'équivalent PyTorch pour charger CIFAR-10 : (A) `torch.load("cifar10")` ; (
 e) Vrai ou faux : l'argument `revision=` de `load_dataset` fixe la version exacte du dataset que l'on charge.
 
 ### 29.Q7 — Collections de datasets : UCI, Kaggle, OpenML, Hugging Face Hub et liens morts 🧠 ⏱️ 3 min
-*Fiche §29.4 · livre §29.4*
+*Fiche §29.4 · livre §29.4 · parcours R*
 
 a) Parmi ces sites, lesquels sont aujourd'hui de grandes sources de datasets ? (A) le Hugging Face Hub ; (B) Kaggle ; (C) OpenML ; (D) deeplearning.net. Écris leurs lettres.
 b) Vrai ou faux : l'outil en ligne de commande `kaggle` télécharge un dataset sans compte ni clé d'API personnelle.
 c) `fetch_openml` fait partie de : (A) torchvision ; (B) Hugging Face `datasets` ; (C) scikit-learn.
 d) Vrai ou faux : tous les liens vers des collections de datasets notés dans le livre (2018) marchent encore aujourd'hui.
-e) Sur le Hugging Face Hub, la page qui décrit un dataset (contenu, licence, usages, limites) s'appelle : (A) une *dataset card* ; (B) un *model card* ; (C) un *README de code*.
+e) Sur le Hugging Face Hub, la page qui décrit un dataset (contenu, licence, usages, limites) s'appelle : (A) une *dataset card* ; (B) une fiche modèle ; (C) un *README de code*.
 
 ### 29.Q8 — Les « nouveaux » datasets de 2018 : tâches, tailles et retraits 🧠 ⏱️ 4 min
-*Fiche §29.5 · livre §29.5*
+*Fiche §29.5 · livre §29.5 · parcours R*
 
 a) Open Images compte environ combien de millions d'images ?
 b) Parmi ces datasets, lesquels ont été retirés par leurs auteurs ? (A) MS-Celeb-1M ; (B) COCO ; (C) 80 Million Tiny Images ; (D) Fashion-MNIST. Écris leurs lettres.
@@ -91,8 +91,8 @@ e) Vrai ou faux : utiliser la copie d'un dataset retiré par ses auteurs, trouv�
 
 ## 🔁 Rappels
 
-### 29.R1 — Qui possède les droits d'une image de style ? 🔁 ⏱️ 5 min
-*ch. 28 · fiche §29.1*
+### 29.R1 — Ch. 28 : qui possède les droits d'une image de style ? 🔁 ★ ⏱️ 5 min
+*Ch. 28 (domaine public, licences des images) · fiche §29.1 · parcours R*
 
 a) Picasso est mort en 1973. En quelle année ses œuvres entreront-elles dans le domaine public de l'Union européenne ?
 b) Vrai ou faux : dans l'Union européenne, une photo fidèle d'un tableau du domaine public crée de nouveaux droits pour le photographe.
@@ -100,8 +100,8 @@ c) Vrai ou faux : un style de peinture est protégé par le droit d'auteur.
 d) Les photos livrées avec scikit-learn (`china.jpg`, `flower.jpg`) sont sous licence : (A) CC BY 2.0, avec attribution ; (B) domaine public, sans condition.
 e) Van Gogh est mort en 1890. Selon la règle actuelle des 70 ans, depuis quelle année ses œuvres sont-elles dans le domaine public de l'Union européenne ?
 
-### 29.R2 — En RL, d'où viennent les données ? 🔁 ⏱️ 5 min
-*ch. 26 · fiche §29.1*
+### 29.R2 — Ch. 26 : en RL, d'où viennent les données ? 🔁 ★ ⏱️ 5 min
+*Ch. 26 (la boucle agent-environnement, la mémoire de rejeu) · fiche §29.1 · parcours R*
 
 a) En apprentissage par renforcement, les données d'entraînement viennent : (A) d'un dataset annoté à l'avance ; (B) des interactions de l'agent avec son environnement.
 b) Vrai ou faux : la distribution des données change quand la politique de l'agent change.
@@ -109,8 +109,8 @@ c) Une mémoire de rejeu (*replay buffer*) stocke : (A) des transitions $(s, a, 
 d) Combien d'états a FrozenLake 4 × 4 ?
 e) Vrai ou faux : on découpe les données d'un agent de RL en entraînement et test une fois pour toutes, comme un dataset supervisé.
 
-### 29.R3 — Biais d'échantillonnage : un dataset représente-t-il la population visée ? 🔁 ⏱️ 5 min
-*ch. 2 · fiche §29.1 (encadré ⚠️)*
+### 29.R3 — Ch. 2 : biais d'échantillonnage : un dataset représente-t-il la population visée ? 🔁 ★ ⏱️ 5 min
+*Ch. 2 (échantillon et population) · fiche §29.1 (encadré ⚠️) · parcours R*
 
 a) Combien de manchots compte le dataset Palmer Penguins ?
 b) Combien d'espèces ?
@@ -126,7 +126,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 
 ### Ex 29.1 — Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10 ✏️ ★ ⏱️ 10 min
 **Objectif :** estimer la mémoire d'un dataset d'images avant de le charger, selon son type numérique.
-**Prérequis :** fiche (conventions) · 0A (types NumPy) · **Parcours :** M
+**Prérequis :** fiche (conventions) · 0A (types NumPy) · **Fil rouge :** MNIST · **Parcours :** M
 
 Mémoire $= N \times H \times W \times C \times$ (octets par valeur).
 
@@ -175,7 +175,7 @@ Réponds dans ta copie, avec des ordres de grandeur.
 **Objectif :** formuler clairement le problème, les données et la mesure de réussite de ton projet final.
 **Prérequis :** fiche (toute) · **Parcours :** R
 
-En cinq lignes au plus, présente ton projet final à quelqu'un qui ne fait pas de deep learning : (1) le problème et pour qui il compte ; (2) les données (source, taille, licence) ; (3) ce que le modèle prendra en entrée et rendra en sortie ; (4) comment tu sauras si c'est réussi (une métrique et une référence simple à battre) ; (5) un risque ou une limite connue. Cette présentation est le premier livrable du projet final.
+En cinq lignes au plus, présente ton projet final à quelqu'un qui ne fait pas de deep learning : (1) le problème et pour qui il compte ; (2) les données (source, taille, licence) ; (3) ce que le modèle prendra en entrée et rendra en sortie ; (4) comment tu sauras si c'est réussi (une métrique et une baseline simple à battre) ; (5) un risque ou une limite connue. Cette présentation est le premier livrable du projet final.
 
 ### Ex 29.5 — Retirés, restreints ou biaisés : que vérifier avant d'utiliser un dataset ? ⚖️ ★★ ⏱️ 25 min
 **Objectif :** construire et appliquer une liste de vérifications éthiques et juridiques avant d'adopter un dataset.
@@ -210,15 +210,23 @@ Lis T. Gebru, J. Morgenstern, B. Vecchione, J. Wortman Vaughan, H. Wallach, H. D
 Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : réponse modèle et relances possibles.
 
 ### 29.E1 — Comment choisir et valider un dataset pour un nouveau projet ? 💼 ★★ ⏱️ 10 min
+*Fiche §29.1, « Au-delà du livre : auditer un dataset », encadré 💼 · parcours R*
+
 « On vous confie un nouveau projet de classification. Comment choisissez-vous les données, et comment vous assurez-vous qu'elles conviennent ? »
 
 ### 29.E2 — Qu'est-ce qu'une data card et que doit-elle contenir ? 💼 ★★ ⏱️ 10 min
+*Fiche « Au-delà du livre : documenter et télécharger » · parcours R*
+
 « Qu'est-ce qu'une data card (ou datasheet) ? Que mettez-vous dedans, et à quoi sert-elle ? »
 
 ### 29.E3 — Comment détecter une fuite de données entre entraînement et test ? 💼 ★★ ⏱️ 10 min
+*Fiche « Au-delà du livre : auditer un dataset » (quasi-doublons, fuite de la cible) · parcours R*
+
 « Votre modèle obtient 99,5 % sur le test. Comment vérifiez-vous qu'il n'y a pas de fuite ? »
 
 ### 29.E4 — Données publiques et usage commercial : que vérifier ? 💼 ★★ ⏱️ 10 min
+*Fiche §29.1, §29.5 (encadré 🕰️) · parcours R*
+
 « Nous voulons utiliser un dataset public trouvé en ligne pour un produit. Que vérifiez-vous avant ? »
 
 <a id="notebook"></a>
@@ -240,4 +248,4 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 29.15 | Data card et script de téléchargement vérifié pour le projet final | 🛠️ | ★★★ | 60 |
 | 29.16 | Le dataset piégé : trouver les huit défauts | 🏆 | ★★★ | 60 |
 
-Tout tourne sur CPU en quelques minutes. Les exercices 29.10 et 29.11 interrogent le Hugging Face Hub et OpenML : sans réseau, ils utilisent des résultats mis en cache et le disent.
+Tout tourne sur CPU en quelques minutes. Les exercices 29.10 et 29.11 interrogent le Hugging Face Hub et OpenML : sans réseau, leurs vérifications passent quand même (copie locale, services simulés) et les parties en direct sont sautées.

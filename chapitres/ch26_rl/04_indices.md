@@ -228,7 +228,7 @@ a) Un plateau 4 × 4 a 16 cases, donc 16 actions et 16 colonnes. Pour b), relis 
 
 ## 🔁 Rappels
 
-### 26.R1 — Un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
+### 26.R1 — Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) 20 nombres **réels** peuvent prendre une infinité de valeurs : aucune table
 
 </details>
 
-### 26.R2 — Que sauvegarder pour reprendre un entraînement ?
+### 26.R2 — Ch. 23 : que sauvegarder pour reprendre un entraînement ?
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) Le `state_dict` du modèle (A) est nécessaire ; applique le même critère (
 
 </details>
 
-### 26.R3 — Bandit à bras multiples, ε-greedy et UCB
+### 26.R3 — Ch. 11 : bandit à bras multiples, ε-greedy et UCB
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Un seul état (A). Pour b), $3 + 0{,}25 \times (5 - 3)$ ; pour c), relis la f
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 26.1 — Retours total et actualisé d'une partie de six coups
+### Ex 26.1 — Retours total et actualisé d'une partie de six coups ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $1 + 0 + 0 + 2 + 0 + 4 = 7$. Pour b), somme les récompenses des coups 3 à 6
 
 </details>
 
-### Ex 26.2 — Taille des tables : de Flippers au Go
+### Ex 26.2 — Taille des tables : de Flippers au Go ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $2^9 = 512$. Pour b), multiplie par 9 actions ; pour c), $2^{16}$ plateaux et
 
 </details>
 
-### Ex 26.3 — Une mise à jour de Q-learning à la main
+### Ex 26.3 — Une mise à jour de Q-learning à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) Le max de la ligne de $s'$ vaut 0,6 : $y = 0{,}2 + 0{,}9 \times 0{,}6 = 0{,}7
 
 </details>
 
-### Ex 26.4 — La même transition vue par SARSA
+### Ex 26.4 — La même transition vue par SARSA ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) L'action 2 est la troisième valeur de la ligne, 0,3 : $y = 0{,}2 + 0{,}9 \ti
 
 </details>
 
-### Ex 26.5 — Probabilités d'action : ε-greedy (standard et version du livre) et softmax
+### Ex 26.5 — Probabilités d'action : ε-greedy (standard et version du livre) et softmax ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $1 - 0{,}2 + 0{,}2/4 = 0{,}85$. Pour b), $\varepsilon/4$ ; pour c) et d), la 
 
 </details>
 
-### Ex 26.6 — Regarder la valeur remonter une chaîne d'états
+### Ex 26.6 — Regarder la valeur remonter une chaîne d'états ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Fais un tableau : une ligne par épisode, une colonne par état, et remplis-le *
 
 </details>
 
-### Ex 26.7 — Somme géométrique et horizon effectif de γ
+### Ex 26.7 — Somme géométrique et horizon effectif de γ ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Relis l'encadré 🧮 du §26.3.7 et les Ex 0B.13 et 0B.14.
 
 </details>
 
-### Ex 26.8 — Équation de Bellman : le point fixe que vise le Q-learning
+### Ex 26.8 — Équation de Bellman : le point fixe que vise le Q-learning ∂
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Relis l'encadré 🧮 du §26.6.4 (l'équation de Bellman) et l'Ex 26.3.
 
 </details>
 
-### Ex 26.9 — Mémoire d'une table Q : morpion 4×4, 5×5 et Go
+### Ex 26.9 — Mémoire d'une table Q : morpion 4×4, 5×5 et Go 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Mémoire = nombre de lignes × nombre de colonnes × 4 octets. Garde les puissan
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 26.10 — Attribution du crédit et exploration expliquées en cinq lignes
+### Ex 26.10 — Attribution du crédit et exploration expliquées en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Commence par « Quand on gagne une partie, on ne sait pas quels coups ont compt�
 
 </details>
 
-### Ex 26.11 — Quand l'agent optimise la mauvaise récompense
+### Ex 26.11 — Quand l'agent optimise la mauvaise récompense ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Pour chaque cas, sépare ce qu'on **voulait**, ce qu'on a **récompensé** et la
 
 </details>
 
-### Ex 26.12 — Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning »
+### Ex 26.12 — Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -604,7 +604,7 @@ Commence par « un modèle pré-entraîné prolonge du texte, il ne cherche pas 
 
 ## Exercices du notebook
 
-### Ex 26.13 — Prendre en main gymnasium avec FrozenLake
+### Ex 26.13 — Prendre en main gymnasium avec FrozenLake 📦
 
 <details><summary>Indice 1</summary>
 
@@ -631,7 +631,7 @@ def play_actions_13(env, actions, seed=None):
 
 </details>
 
-### Ex 26.14 — Retours actualisés et retours à venir
+### Ex 26.14 — Retours actualisés et retours à venir 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -651,14 +651,14 @@ def returns_to_go(rewards, gamma=1.0):
     out = np.empty_like(r)
     G = 0.0
     for t in range(len(r) - 1, -1, -1):
-        G = r[t] + gamma * G
-        # store G at position t
+        ...   # the return from step t, from the one of step t + 1 (✏️ 26.1), stored at position t
+    return out
 ```
-`discounted_return` peut rendre `float(returns_to_go(rewards, gamma)[0])` (0,0 pour un épisode vide).
+`discounted_return` : les récompenses pondérées par les poids de l'indice 2, sommées, rendues en `float` Python (relis le contrat pour l'épisode vide).
 
 </details>
 
-### Ex 26.15 — Reproduire les courbes d'actualisation (fig. 26.13-26.14)
+### Ex 26.15 — Reproduire les courbes d'actualisation (fig. 26.13-26.14) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -682,7 +682,7 @@ returns = np.array([mylearn.rl.discounted_return(rewards, g) for g in gammas])
 
 </details>
 
-### Ex 26.16 — Prédire l'effet du camion sur la table L
+### Ex 26.16 — Prédire l'effet du camion sur la table L 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -700,7 +700,7 @@ Pour a), demande-toi quand l'agent glouton essaie un coup dont la case vaut 0, a
 
 </details>
 
-### Ex 26.17 — Flippers : la longueur optimale de chaque partie par recherche exhaustive
+### Ex 26.17 — Flippers : la longueur optimale de chaque partie par recherche exhaustive 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -729,7 +729,7 @@ while frontier:
 
 </details>
 
-### Ex 26.18 — L-learning sur Flippers, sans puis avec camion
+### Ex 26.18 — L-learning sur Flippers, sans puis avec camion 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -754,7 +754,7 @@ for _ in range(n_games):
 
 </details>
 
-### Ex 26.19 — Politiques gloutonne et softmax (ε-greedy importée du ch. 11)
+### Ex 26.19 — Politiques gloutonne et softmax (ε-greedy importée du ch. 11) 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -776,7 +776,7 @@ probs = np.exp((q - q.max()) / temperature)
 
 </details>
 
-### Ex 26.20 — Mises à jour de Q-learning et de SARSA, états terminaux compris
+### Ex 26.20 — Mises à jour de Q-learning et de SARSA, états terminaux compris 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -801,7 +801,7 @@ else:
 
 </details>
 
-### Ex 26.21 — La boucle d'entraînement tabulaire et l'évaluation d'une politique
+### Ex 26.21 — La boucle d'entraînement tabulaire et l'évaluation d'une politique 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -830,7 +830,7 @@ for episode in range(n_episodes):
 
 </details>
 
-### Ex 26.22 — Q-learning sur FrozenLake, glissant ou non
+### Ex 26.22 — Q-learning sur FrozenLake, glissant ou non 📦
 
 <details><summary>Indice 1</summary>
 
@@ -854,7 +854,7 @@ def epsilon_schedule_22(n_episodes, start=1.0, end=0.05, fraction=0.8):
 
 </details>
 
-### Ex 26.23 — Lire des courbes d'apprentissage RL bruitées
+### Ex 26.23 — Lire des courbes d'apprentissage RL bruitées 📈
 
 <details><summary>Indice 1</summary>
 
@@ -872,7 +872,7 @@ a) **C** : c'est la seule courbe qui monte nettement, comme une exploration qui 
 
 </details>
 
-### Ex 26.24 — L'agent qui n'apprenait rien
+### Ex 26.24 — L'agent qui n'apprenait rien 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -893,7 +893,7 @@ target = reward if terminated else reward + gamma * ...   # the row of which sta
 
 </details>
 
-### Ex 26.25 — Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties
+### Ex 26.25 — Q-learning sur Flippers avec camion : 300, 3 000 puis 6 000 parties 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -917,7 +917,7 @@ for k, n in enumerate(stages):
 
 </details>
 
-### Ex 26.26 — Itération sur les valeurs : la référence quand le modèle est connu
+### Ex 26.26 — Itération sur les valeurs : la référence quand le modèle est connu 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -941,7 +941,7 @@ for _ in range(max_iter):
 
 </details>
 
-### Ex 26.27 — α, γ, ε : balayage d'hyperparamètres sur Flippers bruité
+### Ex 26.27 — α, γ, ε : balayage d'hyperparamètres sur Flippers bruité 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -965,7 +965,7 @@ for alpha, gamma, truck in settings:
 
 </details>
 
-### Ex 26.28 — Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise
+### Ex 26.28 — Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -983,7 +983,7 @@ Le long du bord, chaque pas d'exploration tire « bas » une fois sur quatre : e
 
 </details>
 
-### Ex 26.29 — Q-learning contre SARSA sur Flippers et CliffWalking
+### Ex 26.29 — Q-learning contre SARSA sur Flippers et CliffWalking 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1008,7 +1008,7 @@ for algorithm in ("q_learning", "sarsa"):
 
 </details>
 
-### Ex 26.30 — Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60)
+### Ex 26.30 — Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -1031,7 +1031,7 @@ for n, Q in tables.items():
 
 </details>
 
-### Ex 26.31 — Une mémoire de rejeu (replay buffer)
+### Ex 26.31 — Une mémoire de rejeu (replay buffer) 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1054,7 +1054,7 @@ def sample(self, batch_size):
 
 </details>
 
-### Ex 26.32 — Concevoir la récompense : finale, pénalité par coup ou façonnée
+### Ex 26.32 — Concevoir la récompense : finale, pénalité par coup ou façonnée 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1078,7 +1078,7 @@ def step(self, action):
 
 </details>
 
-### Ex 26.33 — Rejouer l'expérience pour apprendre avec moins d'épisodes
+### Ex 26.33 — Rejouer l'expérience pour apprendre avec moins d'épisodes 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1102,7 +1102,7 @@ if replay_updates > 0 and len(buffer) >= replay_updates:
 
 </details>
 
-### Ex 26.34 — Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle
+### Ex 26.34 — Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -1124,7 +1124,7 @@ low, high = mylearn.stats.bootstrap_ci(results, confidence=0.95, n_boot=2000, rn
 
 </details>
 
-### Ex 26.35 — Morpion contre un adversaire aléatoire : masque d'actions ou pénalité
+### Ex 26.35 — Morpion contre un adversaire aléatoire : masque d'actions ou pénalité 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1148,7 +1148,7 @@ for _ in range(n_games):
 
 </details>
 
-### Ex 26.36 — CartPole : discrétiser un état continu pour un Q-learning tabulaire
+### Ex 26.36 — CartPole : discrétiser un état continu pour un Q-learning tabulaire 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1172,7 +1172,7 @@ def observation(self, observation):
 
 </details>
 
-### Ex 26.37 — Auto-apprentissage au morpion : l'agent joue les deux camps
+### Ex 26.37 — Auto-apprentissage au morpion : l'agent joue les deux camps 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1196,7 +1196,7 @@ if winner[after] == 1:
 
 </details>
 
-### Ex 26.38 — Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500
+### Ex 26.38 — Défi CartPole tabulaire : tenir 475 pas en moyenne sur 500 🏆
 
 <details><summary>Indice 1</summary>
 

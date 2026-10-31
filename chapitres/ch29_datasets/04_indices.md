@@ -30,7 +30,7 @@ a) **B** : du moins cher au plus cher, la collecte en dernier. Pour b), rapproch
 
 <details><summary>Indice 1</summary>
 
-Relis le deuxième paragraphe du §29.1 de la fiche (les trois précautions).
+Relis le deuxième paragraphe du §29.1 de la fiche (les trois points du livre, vus d'aujourd'hui).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -156,7 +156,7 @@ a) **9** (millions d'images). Pour b), cherche les deux datasets de l'encadré q
 
 ## 🔁 Rappels
 
-### 29.R1 — Qui possède les droits d'une image de style ?
+### 29.R1 — Ch. 28 : qui possède les droits d'une image de style ?
 
 <details><summary>Indice 1</summary>
 
@@ -174,7 +174,7 @@ a) Picasso meurt en 1973 : 1973 + 70 = 2043, et l'œuvre entre dans le domaine p
 
 </details>
 
-### 29.R2 — En RL, d'où viennent les données ?
+### 29.R2 — Ch. 26 : en RL, d'où viennent les données ?
 
 <details><summary>Indice 1</summary>
 
@@ -192,7 +192,7 @@ a) **B** : des interactions de l'agent avec son environnement. Pour b) et e), si
 
 </details>
 
-### 29.R3 — Biais d'échantillonnage : un dataset représente-t-il la population visée ?
+### 29.R3 — Ch. 2 : biais d'échantillonnage : un dataset représente-t-il la population visée ?
 
 <details><summary>Indice 1</summary>
 
@@ -214,7 +214,7 @@ a) **344** manchots, lignes incomplètes comprises. Pour b), compte les espèces
 
 ## ✏️ 🧮 Papier-crayon
 
-### Ex 29.1 — Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10
+### Ex 29.1 — Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -232,7 +232,7 @@ a) $70\,000 \times 28 \times 28 \times 1 \times 1 = 54\,880\,000$ octets, soit *
 
 </details>
 
-### Ex 29.2 — Découpage stratifié et référence « classe majoritaire »
+### Ex 29.2 — Découpage stratifié et référence « classe majoritaire » ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -250,7 +250,7 @@ a) $0{,}70 \times 200 = $ **140** exemples de C dans l'entraînement. Pour b), m
 
 </details>
 
-### Ex 29.3 — Télécharger Open Images ou LAION : stockage et temps
+### Ex 29.3 — Télécharger Open Images ou LAION : stockage et temps 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -272,7 +272,7 @@ a) $0{,}70 \times 200 = $ **140** exemples de C dans l'entraînement. Pour b), m
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 29.4 — Présenter son projet final en cinq lignes
+### Ex 29.4 — Présenter son projet final en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -286,15 +286,15 @@ Une ligne par point, sans jargon : qui a le problème, d'où viennent les donné
 </details>
 <details><summary>Indice 3</summary>
 
-Ligne 1, sur le modèle : « Aider [qui] à [quoi], parce que [pourquoi c'est utile]. » Pour les lignes 2 à 5 : une source précise avec sa taille et sa licence ; une entrée et une sortie concrètes (« une photo », « une classe parmi 10 ») ; une métrique **et** une référence simple (classe majoritaire, régression logistique) ; un risque nommé (biais, décalage, licence).
+Ligne 1, sur le modèle : « Aider [qui] à [quoi], parce que [pourquoi c'est utile]. » Pour les lignes 2 à 5 : une source précise avec sa taille et sa licence ; une entrée et une sortie concrètes (« une photo », « une classe parmi 10 ») ; une métrique **et** une baseline simple (classe majoritaire, régression logistique) ; un risque nommé (biais, décalage, licence).
 
 </details>
 
-### Ex 29.5 — Retirés, restreints ou biaisés : que vérifier avant d'utiliser un dataset ?
+### Ex 29.5 — Retirés, restreints ou biaisés : que vérifier avant d'utiliser un dataset ? ⚖️
 
 <details><summary>Indice 1</summary>
 
-Relis les encadrés 🕰️ des §29.3.1 et §29.5, et le paragraphe sur les trois précautions du §29.1.
+Relis les encadrés 🕰️ des §29.3.1 et §29.5, et les deux premiers paragraphes du §29.1 (les trois points du livre).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -308,7 +308,7 @@ Pour 1, une vérification commence par un verbe : « lire la licence », « vér
 
 </details>
 
-### Ex 29.6 — Lire Gebru et coll., « Datasheets for Datasets »
+### Ex 29.6 — Lire Gebru et coll., « Datasheets for Datasets » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -388,7 +388,7 @@ Commence par : « 99,5 %, c'est d'abord un signal d'alerte : je compare au nivea
 
 <details><summary>Indice 1</summary>
 
-Relis le §29.1 (les trois précautions) et l'encadré 🕰️ du §29.5.
+Relis le §29.1 (les trois points du livre) et l'encadré 🕰️ du §29.5.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -398,7 +398,7 @@ Relis le §29.1 (les trois précautions) et l'encadré 🕰️ du §29.5.
 </details>
 <details><summary>Indice 3</summary>
 
-Commence par : « Je lis la licence : CC BY ou MIT autorisent un produit, NC ou "recherche seulement" l'interdisent. » Puis : les droits des contenus eux-mêmes, le RGPD s'il y a des personnes, les retraits et les miroirs, et la traçabilité (une data card, une version figée). Termine par l'avis d'un juriste quand le doute persiste.
+Commence par : « Je lis la licence : CC BY ou MIT autorisent un produit, NC ou “recherche seulement” l'interdisent. » Puis : les droits des contenus eux-mêmes, le RGPD s'il y a des personnes, les retraits et les miroirs, et la traçabilité (une data card, une version figée). Termine par l'avis d'un juriste quand le doute persiste.
 
 </details>
 
@@ -406,7 +406,7 @@ Commence par : « Je lis la licence : CC BY ou MIT autorisent un produit, NC ou 
 
 ## Exercices du notebook
 
-### Ex 29.7 — Les datasets intégrés de scikit-learn, et une affirmation du livre à vérifier
+### Ex 29.7 — Les datasets intégrés de scikit-learn, et une affirmation du livre à vérifier 📦
 
 <details><summary>Indice 1</summary>
 
@@ -424,14 +424,14 @@ Pour `inventory_7`, une boucle sur `SKLEARN_LOADERS_7.items()`, une ligne de dic
 rows = []
 for name, loader in SKLEARN_LOADERS_7.items():
     X, y = getattr(skd, loader)(return_X_y=True)
-    rows.append({"dataset": name, "exemples": X.shape[0], ...})   # variables, tache, classes
+    rows.append({"dataset": name, "exemples": X.shape[0], ...})   # then the keys variables, tache, classes
 return pd.DataFrame(rows)
 ```
 Pour `has_loader_7`, `except (AttributeError, ImportError): return False`. Pour b), `np.bincount(y)` sur Breast Cancer donne les deux effectifs.
 
 </details>
 
-### Ex 29.8 — Prédire : le même modèle sur MNIST puis sur Fashion-MNIST
+### Ex 29.8 — Prédire : le même modèle sur MNIST puis sur Fashion-MNIST 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -449,7 +449,7 @@ Pour a), demande-toi ce que deux epochs sur 10 000 images changent par rapport �
 
 </details>
 
-### Ex 29.9 — Prédire la chute d'accuracy en changeant de source de chiffres
+### Ex 29.9 — Prédire la chute d'accuracy en changeant de source de chiffres 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -467,7 +467,7 @@ Imagine un « 1 » de scikit-learn agrandi à 28 × 28 : un trait épais qui va 
 
 </details>
 
-### Ex 29.10 — torchvision.datasets et Hugging Face datasets : mêmes données, deux API
+### Ex 29.10 — torchvision.datasets et Hugging Face datasets : mêmes données, deux API 📦
 
 <details><summary>Indice 1</summary>
 
@@ -483,13 +483,13 @@ Relis l'encadré 🧮 « Hugging Face `datasets` et `huggingface_hub` » du §29
 
 ```python
 X = np.stack([np.asarray(img, dtype=np.uint8) for img in split["image"]])
-...                                   # y : les labels, en int64
+...                                   # y: the labels, as int64
 ```
 Pour `compare_10` : traite d'abord le cas `Xa.shape != Xb.shape` (rends tout de suite `max_diff = -1` et `same_pixels = False`) ; sinon, l'écart se calcule après `Xa.astype(np.int64)`. Les labels se comparent après avoir vérifié qu'ils ont la même longueur.
 
 </details>
 
-### Ex 29.11 — Explorer le Hugging Face Hub et OpenML : chercher, filtrer, lire la licence
+### Ex 29.11 — Explorer le Hugging Face Hub et OpenML : chercher, filtrer, lire la licence 📦
 
 <details><summary>Indice 1</summary>
 
@@ -515,7 +515,7 @@ Pour `openml_summary_11`, `rows, columns = bunch.frame.shape`, puis lis les clé
 
 </details>
 
-### Ex 29.12 — Profil express d'un dataset inconnu
+### Ex 29.12 — Profil express d'un dataset inconnu 📈
 
 <details><summary>Indice 1</summary>
 
@@ -538,7 +538,7 @@ Pour a), `idxmax()` sur la colonne `"manquants"` du profil ; pour b), `ADULT_12.
 
 </details>
 
-### Ex 29.13 — Un score trop beau pour être vrai : doublons entre entraînement et test
+### Ex 29.13 — Un score trop beau pour être vrai : doublons entre entraînement et test 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -555,14 +555,14 @@ Lis chaque ligne en te demandant : « cette étape voit-elle des lignes de test 
 La ligne **B** découpe au hasard : les quatre photos d'un vêtement se répartissent des deux côtés, et le 1-NN retrouve la jumelle. Cherche les deux autres lignes avec la question de l'indice 2. Pour b), refais le découpage de la ligne B sur `GROUPS_13` (mêmes réglages), puis compte les lignes de test dont le groupe est aussi dans l'entraînement (`np.isin`). Pour `evaluate_fixed_13`, le squelette :
 ```python
 train, test = next(GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=0).split(X, y, groups))
-fit, val = ...                        # un second GroupShuffleSplit sur les lignes de train (random_state=1)
-fit, val = train[fit], train[val]     # ses indices sont relatifs à train
-...                                   # PCA sur X[fit], k choisi sur X[val] ; puis PCA et k-NN sur X[train], un seul score sur X[test]
+fit, val = ...                        # a second GroupShuffleSplit on the rows of train (random_state=1)
+fit, val = train[fit], train[val]     # its indices are relative to train
+...                                   # PCA on X[fit], k chosen on X[val]; then PCA and k-NN on X[train], one score on X[test]
 ```
 
 </details>
 
-### Ex 29.14 — Décalage de distribution : un modèle MNIST face aux chiffres de scikit-learn
+### Ex 29.14 — Décalage de distribution : un modèle MNIST face aux chiffres de scikit-learn 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -585,7 +585,7 @@ Pour `"naive"`, la même interpolation directement à 28 × 28. Pour `"center"`,
 
 </details>
 
-### Ex 29.15 — Data card et script de téléchargement vérifié pour le projet final
+### Ex 29.15 — Data card et script de téléchargement vérifié pour le projet final 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -601,17 +601,17 @@ Relis l'encadré 🧮 « une somme de contrôle SHA-256 » de la fiche, et ouvre
 
 ```python
 dest = Path(dest)
-if ...:                               # dest existe ET sa somme est la bonne
+if ...:                               # dest exists AND its checksum is the right one
     return dest
 part = dest.with_name(dest.name + ".part")
-...                                   # télécharger dans part, puis comparer sha256_15(part) à sha256
-part.replace(dest)                    # seulement si la somme est juste ; sinon part.unlink() et ValueError
+...                                   # download into part, then compare sha256_15(part) with sha256
+part.replace(dest)                    # only if the checksum is right; otherwise part.unlink() and a ValueError
 ```
 Pour la data card, remplace chaque `...` ; la somme se calcule avec ta fonction une fois le fichier téléchargé.
 
 </details>
 
-### Ex 29.16 — Le dataset piégé : trouver les huit défauts
+### Ex 29.16 — Le dataset piégé : trouver les huit défauts 🏆
 
 <details><summary>Indice 1</summary>
 

@@ -36,11 +36,11 @@ def _pair(value, name: str, minimum: int) -> tuple[int, int]:
     return pair
 
 
-def _batch(x: ArrayLike, name: str = "x") -> np.ndarray:
-    """A new float64 copy of a 4-D batch (N, C, H, W)."""
+def _batch(x: ArrayLike, name: str = "x", layout: str = "(N, C, H, W)") -> np.ndarray:
+    """A new float64 copy of a 4-D array: a batch (N, C, H, W), or a weight with its own ``layout``."""
     arr = np.array(x, dtype=np.float64, copy=True)
     if arr.ndim != 4:
-        raise ValueError(f"{name} must be 4-D (N, C, H, W), got {arr.ndim}-D of shape {arr.shape}")
+        raise ValueError(f"{name} must be 4-D {layout}, got {arr.ndim}-D of shape {arr.shape}")
     return arr
 
 
@@ -306,7 +306,7 @@ def conv2d(
     (2, 8, 28, 28)
     """
     arr = _batch(x)
-    w = _batch(weight, "weight")
+    w = _batch(weight, "weight", "(C_out, C_in // groups, k_h, k_w)")
     n, c_in, h, width = arr.shape
     c_out, c_group, kh, kw = w.shape
     if not _is_int(groups) or groups < 1:
@@ -408,7 +408,7 @@ def conv2d_backward(
     array([4.])
     """
     arr = _batch(x)
-    w = _batch(weight, "weight")
+    w = _batch(weight, "weight", "(C_out, C_in, k_h, k_w)")
     n, c_in, h, width = arr.shape
     c_out, c_w, kh, kw = w.shape
     if c_w != c_in:
@@ -584,7 +584,7 @@ def conv_transpose2d(
              [1., 2., 1.]]]])
     """
     arr = _batch(x)
-    w = _batch(weight, "weight")
+    w = _batch(weight, "weight", "(C_in, C_out, k_h, k_w)")
     n, c_in, h, width = arr.shape
     if w.shape[0] != c_in:
         raise ValueError(f"weight of shape {w.shape} expects C_in={w.shape[0]} (input channels first), "

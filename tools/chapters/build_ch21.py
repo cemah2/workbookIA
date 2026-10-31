@@ -108,9 +108,9 @@ PAPER = [
     Paper("21.Q1", "Les deux sens de « profondeur »", [
         ("a", WHOLE, "3",
          r'''mistakes={"la profondeur d'une image, ce sont ses canaux, pas sa taille": 224,
-          "une photo en couleur a un canal par couleur primaire": 1}'''),
+          "une photo en couleur a plus d'un canal": 1}'''),
         ("b", WHOLE, "64",
-         r'''mistakes={"la profondeur d'un tenseur (C, H, W) est son nombre de canaux, le premier nombre": 112}'''),
+         r'''mistakes={"la profondeur d'un tenseur, ce sont ses canaux, pas sa hauteur ni sa largeur": 112}'''),
         ("c", LETTER, '"B"',
          r'''mistakes={"c'est la profondeur d'un réseau : de quoi est-il fait ?": "A",
           "le nombre de bits par pixel est un autre sens, rare ici": "C",
@@ -118,7 +118,7 @@ PAPER = [
         ("d", WHOLE, "3 * 32 * 32",
          r'''mistakes={"trois valeurs PAR PIXEL, pas trois features par image : relis l'encadré « Le livre, corrigé » du §21.2": 3,
           "n'oublie pas les trois canaux": 32 * 32,
-          "32 × 32 pixels, chacun avec 3 valeurs : un produit, pas une somme": 32 + 32 + 3}'''),
+          "tu as additionné les dimensions : chaque pixel porte ses propres valeurs": 32 + 32 + 3}'''),
         ("e", TF, "False",
          r'''mistakes={"le convnet MNIST du livre a aussi un pooling, un dropout et des couches denses : est-ce un CNN ?": True}'''),
     ]),
@@ -126,9 +126,9 @@ PAPER = [
         ("a", TF, "True",
          r'''mistakes={"relis le §21.2.3 : le neurone emporte-t-il ses poids avec lui ?": False}'''),
         ("b", WHOLE, "25",
-         r'''mistakes={"5 × 5 poids, et un seul canal": 10, "le biais n'est pas demandé": 26}'''),
+         r'''mistakes={"tu as additionné les deux côtés du filtre : il a un poids par case": 10, "le biais n'est pas demandé": 26}'''),
         ("c", TF, "False",
-         r'''mistakes={"un filtre 5 × 5 a ses 25 poids, sur une image de 100 × 100 comme de 1 000 × 1 000": True}'''),
+         r'''mistakes={"les poids d'un filtre dépendent-ils de la taille de l'image qu'il parcourt ?": True}'''),
         ("d", LETTER, '"B"',
          r'''mistakes={"le noyau, ce sont les poids du filtre": "A",
           "le champ récepteur est tout le carré de pixels lu par le filtre": "C",
@@ -143,24 +143,26 @@ PAPER = [
          r'''mistakes={"relis l'encadré 🕰️ du §21.3 : que dit la documentation de PyTorch ?": True}'''),
         ("b", "a whole number", "int(np.dot([1, 2, 3], [1, 0, -1]))",
          r'''mistakes={"c'est la convolution (noyau retourné) : la corrélation croisée ne retourne pas le noyau": 2,
-          "la première fenêtre couvre x₀, x₁, x₂ : 1 × 1 + 2 × 0 + 3 × (−1)": -3}'''),
+          "il manque un des trois produits de la première fenêtre": -3}'''),
         ("c", "a whole number", "int(np.dot([1, 2, 3], [-1, 0, 1]))",
          r'''mistakes={"c'est la corrélation croisée : la convolution retourne d'abord le noyau": -2}'''),
         ("d", TF, "True",
          r'''mistakes={"retourner (1, 2, 1) donne… (1, 2, 1)": False}'''),
         ("e", WHOLE, "(6 - 3 + 1) ** 2",
-         r'''mistakes={"(H − k + 1) positions dans chaque direction : un produit des deux": 4,
+         r'''mistakes={"c'est le nombre de positions sur une seule ligne : le filtre descend aussi": 4,
           "une image 6 × 6 n'a pas 36 morceaux 3 × 3 entiers : le filtre doit tenir dans l'image": 36,
           "ça, c'est pour une image 5 × 5": 9}'''),
         ("f", WHOLE, "3 * 3 * 3",
-         r'''mistakes={"chaque morceau a k² valeurs PAR CANAL": 9, "3 canaux de 3 × 3 valeurs : un produit": 9 + 3}'''),
+         r'''mistakes={"tu as oublié les canaux : un morceau prend sa fenêtre dans chacun": 9,
+          "tu as additionné les canaux au lieu de compter les valeurs de chacun": 9 + 3}'''),
     ]),
     Paper("21.Q4", "Détecteurs de motifs et hiérarchie de filtres", [
         ("a", WHOLE, "3",
          r'''mistakes={"les pixels noirs (0) ne retirent rien : seuls les blancs sous un −1 font baisser le score": 9,
-          "chaque blanc sous un +1 ajoute 1 : combien de +1 y a-t-il ?": 1}'''),
+          "le meilleur morceau met du blanc sous tous les +1, pas sous un seul": 1}'''),
         ("b", WHOLE, "3 - 1",
-         r'''mistakes={"le pixel du centre est sous un −1 : il retire 1": 3, "la colonne de gauche compte 3 pixels blancs sous des +1": 1}'''),
+         r'''mistakes={"le pixel du centre est blanc aussi : sous quel poids est-il ?": 3,
+          "recompte les pixels blancs de la colonne de gauche": 1}'''),
         ("c", TF, "False",
          r'''mistakes={"relis la fin du §21.3.1 : qui règle les poids des filtres ?": True}'''),
         ("d", LETTER, '"B"',
@@ -174,13 +176,15 @@ PAPER = [
     ]),
     Paper("21.Q5", "Padding et stride : que devient la taille ?", [
         ("a", WHOLE, "out_size(12, 5)",
-         r'''mistakes={"sans padding, on perd k − 1 = 4 pixels, pas k": 7, "sans padding, la sortie est plus petite que l'entrée": 12}'''),
+         r'''mistakes={"tu as retiré tout le côté du filtre : à sa dernière position, il tient encore dans l'image": 7,
+          "sans padding, la sortie est plus petite que l'entrée": 12}'''),
         ("b", WHOLE, "(7 - 1) // 2",
-         r'''mistakes={"(k − 1)/2 de chaque côté, pas k − 1": 6, "un filtre 7 × 7 déborde de 3 pixels de chaque côté": 1}'''),
+         r'''mistakes={"c'est la bordure totale : on demande le padding de chaque côté": 6,
+          "un filtre 7 × 7 déborde de plus d'un pixel autour de son centre": 1}'''),
         ("c", WHOLE, "out_size(7, 3, s=2)",
-         r'''mistakes={"⌊(7 − 3)/2⌋ + 1 : n'oublie pas le + 1, et prends le stride vertical (2)": 2}'''),
+         r'''mistakes={"n'oublie pas le + 1 de la formule, et prends le stride vertical pour la hauteur": 2}'''),
         ("d", WHOLE, "out_size(12, 3, s=3)",
-         r'''mistakes={"la largeur avec le stride horizontal, 3": 5, "⌊(12 − 3)/3⌋ + 1": 3}'''),
+         r'''mistakes={"pour la largeur, prends le stride horizontal": 5, "tu as oublié le + 1 de la formule": 3}'''),
         ("e", TF, "True",
          r'''mistakes={"avec un stride égal au côté du filtre, les fenêtres se recouvrent-elles ?": False}'''),
     ]),
@@ -189,20 +193,22 @@ PAPER = [
          r'''mistakes={"la profondeur d'un filtre est celle de son ENTRÉE": 4, "un filtre 3 × 3 a une profondeur, en plus": 3}'''),
         ("b", WHOLE, "4", r'''mistakes={"un canal de sortie par filtre": 6}'''),
         ("c", WHOLE, "4 * 6 * 3 * 3",
-         r'''mistakes={"chaque filtre a 6 canaux de 3 × 3 poids": 4 * 9, "4 filtres de 6 × 3 × 3 poids": 6 * 9}'''),
+         r'''mistakes={"tu as oublié les canaux d'entrée : un filtre a la profondeur de son entrée": 4 * 9,
+          "tu as compté un seul filtre": 6 * 9}'''),
         ("d", WHOLE, "4 * (6 * 3 * 3 + 1)",
-         r'''mistakes={"un biais par filtre, pas par poids": 4 * 6 * 9 * 2, "ajoute les 4 biais": 216}'''),
+         r'''mistakes={"un biais par filtre, pas par poids": 4 * 6 * 9 * 2, "tu as oublié les biais": 216}'''),
         ("e", WHOLE, "6 * 3 * 3",
-         r'''mistakes={"par canal : chaque filtre n'a qu'UN canal, et il y en a 6": 6 * 6 * 9,
-          "un filtre 3 × 3 par canal, 6 canaux": 9}'''),
+         r'''mistakes={"en convolution par canal, chaque filtre ne lit qu'un canal de l'entrée": 6 * 6 * 9,
+          "tu as compté un seul filtre : il y en a un par canal": 9}'''),
     ]),
     Paper("21.Q7", "Convolution 1D ou convolution 1×1 ?", [
         ("a", WHOLE, "3 * 50",
-         r'''mistakes={"le filtre couvre toute la largeur : 50 nombres par mot": 3, "3 mots de 50 nombres : un produit": 53}'''),
+         r'''mistakes={"le filtre couvre toute la largeur de chaque mot, pas un nombre par mot": 3,
+          "tu as additionné : chaque mot apporte tous ses nombres au filtre": 53}'''),
         ("b", WHOLE, "20 - 3 + 1",
-         r'''mistakes={"sans padding, le filtre doit tenir entier dans la phrase": 20, "n − k + 1": 17}'''),
+         r'''mistakes={"sans padding, le filtre doit tenir entier dans la phrase": 20, "tu as oublié le + 1 de la formule": 17}'''),
         ("c", WHOLE, "300 * 175",
-         r'''mistakes={"un poids par canal d'entrée et par filtre : un produit": 300 + 175,
+         r'''mistakes={"tu as additionné les deux nombres de canaux : chaque filtre a un poids par canal d'entrée": 300 + 175,
           "le biais n'est pas demandé": 300 * 175 + 175}'''),
         ("d", TF, "True", r'''mistakes={"un filtre 1 × 1 lit-il les pixels voisins ?": False}'''),
         ("e", WHOLE, "28",
@@ -212,7 +218,8 @@ PAPER = [
         ("a", TF, "True",
          r'''mistakes={"si tout est symétrique au départ, les gradients des filtres sont-ils différents ?": False}'''),
         ("b", WHOLE, "64 * 3 * 3",
-         r'''mistakes={"le fan-in compte toutes les valeurs reçues : 64 canaux de 3 × 3": 9, "64 canaux × 9 valeurs": 64}'''),
+         r'''mistakes={"tu as oublié les canaux : le fan-in compte toutes les valeurs reçues": 9,
+          "chaque canal apporte toute une fenêtre de valeurs, pas une seule": 64}'''),
         ("c", "a number, 3 decimals", "math.sqrt(2 / 576)",
          r'''decimals=3, mistakes={"l'écart-type, pas la variance": 2 / 576,
           "avec un fan-in de 9 seulement, tu as oublié les 64 canaux": math.sqrt(2 / 9),
@@ -228,24 +235,26 @@ PAPER = [
         ("a", TF, "False",
          r'''mistakes={"relis l'encadré « Le livre, corrigé » du §21.8 : que espace la dilatation ?": True}'''),
         ("b", WHOLE, "(4 - 1) * 2 + 3",
-         r'''mistakes={"(H − 1) s − 2p + k, avec p = 0": 8, "la convolution transposée AGRANDIT : (H − 1) s + k": 1}'''),
+         r'''mistakes={"tu as compté H × s : relis la formule de la convolution transposée (§21.8)": 8,
+          "la convolution transposée AGRANDIT son entrée : relis sa formule (§21.8)": 1}'''),
         ("c", WHOLE, "(4 - 1) * 2 - 2 + 3",
-         r'''mistakes={"le padding retire p cases de CHAQUE côté : − 2p": 8, "sans padding, ce serait 9": 9}'''),
-        ("d", WHOLE, "3 - 1", r'''mistakes={"s − 1 zéros entre deux pixels": 3}'''),
+         r'''mistakes={"le padding retire p cases de CHAQUE côté": 8, "relis la question : la couche a maintenant padding=1": 9}'''),
+        ("d", WHOLE, "3 - 1", r'''mistakes={"tu as pris le stride lui-même : un pixel occupe déjà une des cases de l'écart": 3}'''),
         ("e", TF, "True",
          r'''mistakes={"relis la fin du §21.8 et sa figure : les tampons se recouvrent-ils de façon égale ?": False}'''),
         ("f", WHOLE, "3 * (3 - 1) + 1",
-         r'''mistakes={"un noyau k de dilatation d couvre d(k − 1) + 1 pixels": 9, "d(k − 1) + 1 = 3 × 2 + 1": 6}'''),
+         r'''mistakes={"la dilatation espace les cases du noyau : elle ne multiplie pas son côté": 9,
+          "tu as oublié le + 1 : compte les pixels couverts, pas les intervalles entre eux": 6}'''),
     ]),
     Paper("21.Q10", "VGG16 et ce que voient ses filtres", [
         ("a", SHAPE, '"(256, 28, 28)"',
-         r'''mistakes={"trois poolings ont divisé 224 par 2³": "(256, 56, 56)",
+         r'''mistakes={"recompte les poolings jusqu'à la sortie du troisième bloc, le sien compris": "(256, 56, 56)",
           "le format (C, H, W) : les canaux d'abord": "(28, 28, 256)",
           "le troisième bloc a 256 filtres": "(128, 28, 28)"}'''),
         ("b", WHOLE, "5", r'''mistakes={"un pooling par bloc, et VGG16 a cinq blocs": 4}'''),
         ("c", WHOLE, "224 // 2 ** 4",
-         r'''mistakes={"le cinquième bloc est précédé de quatre poolings, pas cinq": 7,
-          "quatre poolings ont divisé 224 par 2⁴": 28}'''),
+         r'''mistakes={"le pooling du cinquième bloc vient après ses convolutions, pas avant block5_conv1": 7,
+          "as-tu compté le pooling du quatrième bloc ?": 28}'''),
         ("d", LETTER, '"B"',
          r'''mistakes={"on ne touche pas aux poids : le réseau n'apprend rien ici": "A",
           "le dropout n'agit pas sur l'image": "C",
@@ -261,7 +270,7 @@ PAPER = [
         ("c", TF, "False",
          r'''mistakes={"VGG16, très bien entraîné, est-il trompé par le tigre attaqué ?": True}'''),
         ("d", "a number, 2 decimals", "0.03 * 28 * 28",
-         r'''decimals=2, mistakes={"chaque pixel bouge d'exactement ε : il y a 28 × 28 pixels": 0.03,
+         r'''decimals=2, mistakes={"c'est la variation d'un seul pixel : on demande la somme sur toute l'image": 0.03,
           "la somme des valeurs absolues des variations, pas leur racine": 0.03 * 28}'''),
         ("e", LETTER, '"B"',
          r'''mistakes={"une attaque non ciblée cherche n'importe quelle erreur": "A",
@@ -273,9 +282,10 @@ PAPER = [
          r'''mistakes={"ResNet utilise surtout des filtres 3 × 3": "A", "ResNet s'entraîne par rétropropagation": "C",
           "c'est la tête de VGG16 que ResNet a abandonnée": "D"}'''),
         ("b", WHOLE, "(224 // 16) ** 2",
-         r'''mistakes={"224/16 = 14 patchs dans CHAQUE direction": 14, "14 × 14, pas 16 × 16": 256}'''),
+         r'''mistakes={"c'est le nombre de patchs le long d'un côté : l'image en a dans les deux directions": 14,
+          "16 est le côté d'un patch, pas le nombre de patchs par côté": 256}'''),
         ("c", WHOLE, "512",
-         r'''mistakes={"le pooling moyen global garde une valeur PAR CANAL": 7 * 7,
+         r'''mistakes={"tu as gardé les positions : le pooling moyen global en fait la moyenne": 7 * 7,
           "il ne garde pas les 7 × 7 positions de chaque canal": 512 * 49}'''),
         ("d", TF, "True",
          r'''mistakes={"relis l'encadré 🕰️ du §21.9.1 : que télécharge weights=\"DEFAULT\" ?": False}'''),
@@ -284,7 +294,8 @@ PAPER = [
     Paper("21.R1", "Ce que changent model.train() et model.eval() pour le dropout", [
         ("a", TF, "True", r'''mistakes={"en évaluation, le dropout inversé ne coupe plus rien et ne multiplie rien": False}'''),
         ("b", "a number, 4 decimals", "1 / (1 - 0.25)",
-         r'''decimals=4, mistakes={"on divise par 1 − p, on ne multiplie pas": 0.75, "on divise par 1 − p, pas par p": 4.0}'''),
+         r'''decimals=4, mistakes={"c'est la part gardée : le dropout inversé la compense, il ne l'applique pas une seconde fois": 0.75,
+          "le facteur compense la part GARDÉE, pas la part coupée": 4.0}'''),
         ("c", "a whole number (%)", "25",
          r'''fractional="en pourcentage : une proportion de 0,25 vaut 25 %", mistakes={"c'est la part GARDÉE": 75}'''),
         ("d", LETTER, '"A"',
@@ -293,44 +304,47 @@ PAPER = [
     ]),
     Paper("21.R2", "Le gradient d'un poids utilisé à plusieurs endroits", [
         ("a", WHOLE, "1 + 2 + 3",
-         r'''mistakes={"chaque y_i dépend de w avec le coefficient x_i : additionne les x_i, pas les ∂L/∂y_i seuls (qui valent 1)": 3}'''),
+         r'''mistakes={"tu as additionné les ∂L/∂y_i seuls : chaque contribution passe aussi par ∂y_i/∂w": 3}'''),
         ("b", WHOLE, "1 * 1 + (-1) * 2 + 2 * 3",
-         r'''mistakes={"chaque contribution est (∂L/∂y_i) × x_i : n'oublie pas le signe −": 9,
-          "somme des (∂L/∂y_i) × x_i, pas des ∂L/∂y_i seuls": 2}'''),
+         r'''mistakes={"relis le signe de ∂L/∂y₂": 9,
+          "tu as additionné les ∂L/∂y_i sans les pondérer par ∂y_i/∂w": 2}'''),
         ("c", TF, "True", r'''mistakes={"relis la fiche du ch. 18 : `+=` ou `=` dans backward ?": False}'''),
     ]),
     Paper("21.R3", "Le produit scalaire, ce que calcule un filtre en chaque position", [
         ("a", WHOLE, "int(np.dot([1, 2, -1], [3, 0, 2]))",
          r'''mistakes={"n'oublie pas le signe de −1 × 2": 5, "la somme des produits terme à terme": 6}'''),
         ("b", WHOLE, "1 * 0 + 2 * 1 + 3 * 1 + 4 * 0",
-         r'''mistakes={"terme à terme, pas un produit matriciel": 10, "les cases hors diagonale (2 et 3) comptent : la seconde grille y vaut 1": 0}'''),
+         r'''mistakes={"terme à terme, pas un produit matriciel": 10, "les cases hors diagonale comptent aussi : relis la seconde grille": 0}'''),
         ("c", TF, "True",
          r'''mistakes={"w · x = ‖w‖ ‖x‖ cos θ : quand est-il le plus grand ?": False}'''),
     ]),
     # ---------------------------------------------------------------- paper exercises
     Paper("21.1", "Le détecteur de jaune à la main", [
         ("a", "a number, 2 decimals", "float(YELLOW @ [0.9, 0.85, 0.1])",
-         r'''decimals=2, mistakes={"le bleu compte avec le poids −1 : R + G − B, pas R + G + B": 1.85}'''),
-        ("b", "a number, 2 decimals", "float(YELLOW @ [1.0, 0.5, 0.0])", r'''decimals=2, mistakes={"R + G − B avec B = 0": 0.5}'''),
+         r'''decimals=2, mistakes={"le bleu compte avec le poids −1, pas +1": 1.85}'''),
+        ("b", "a number, 2 decimals", "float(YELLOW @ [1.0, 0.5, 0.0])", r'''decimals=2, mistakes={"relis le signe du poids du vert": 0.5}'''),
         ("c", "a number, 2 decimals", "float(YELLOW @ [1.0, 1.0, 1.0])",
-         r'''decimals=2, mistakes={"le bleu du blanc retire 1": 2, "1 + 1 − 1": 3}'''),
-        ("d", "a number, 2 decimals", "0.0", r'''decimals=2, mistakes={"un pixel noir a ses trois composantes à 0": 1}'''),
+         r'''decimals=2, mistakes={"le blanc contient aussi du bleu : as-tu compté sa composante B ?": 2,
+          "le bleu a le poids −1 : il fait baisser le score, pas monter": 3}'''),
+        ("d", "a number, 2 decimals", "0.0", r'''decimals=2, mistakes={"que vaut chacune des trois composantes d'un pixel noir ?": 1}'''),
         ("e", LETTER, '"A"',
          r'''mistakes={"compare les scores de a) à d) : lequel est le plus grand ?": "B",
           "le blanc a du bleu, que le neurone retire": "C", "le noir a un score nul": "D"}'''),
         ("f", "a number, 2 decimals", "2.0",
-         r'''decimals=2, mistakes={"le maximum est atteint pour R = G = 1 et B = 0": 3, "avec B = 0, pas B = 1": 1}'''),
+         r'''decimals=2, mistakes={"le bleu compte en négatif : il ne peut pas augmenter le score": 3,
+          "le bleu retire au score : quelle valeur de B le rend le plus grand ?": 1}'''),
         ("g", "a whole number", "-1",
          r'''mistakes={"le magenta n'a pas de vert : le vert doit faire baisser le score": 1, "le vert doit compter, en négatif": 0}'''),
         ("h", WHOLE, "4 * 6",
          r'''mistakes={"un score par pixel, pas par valeur (le neurone combine les trois canaux)": 4 * 6 * 3,
-          "4 × 6 pixels": 10}'''),
+          "tu as additionné les deux côtés de l'image : il y a un score par pixel": 10}'''),
         ("i", TF, "True",
          r'''mistakes={"un neurone qui lit les 3 canaux d'un seul pixel, avec les mêmes poids partout : relis le §21.6": False}'''),
     ]),
     Paper("21.2", "Une corrélation 5×5 par 3×3 à la main", [
         ("a", WHOLE, "Y_212.shape[1]",
-         r'''mistakes={"sans padding, un filtre 3 × 3 fait perdre 2 pixels, pas 3": 2, "sans padding, la sortie rétrécit": 5}'''),
+         r'''mistakes={"tu as retiré tout le côté du filtre : à sa dernière position, il tient encore dans l'image": 2,
+          "sans padding, la sortie rétrécit": 5}'''),
         ("b", "a whole number", "int(Y_212[0, 0])",
          r'''mistakes={"c'est la valeur avec le noyau retourné (convolution) : nn.Conv2d ne retourne pas le noyau": int(CONV_212[0, 0]),
           "le noyau a des 2 sur sa ligne du milieu": int(np.sum(X_212[:3, :3] * np.array([[1, 0, -1]] * 3)))}'''),
@@ -355,94 +369,107 @@ PAPER = [
     ]),
     Paper("21.3", "Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100", [
         ("a", WHOLE, "out_size(600, 5, s=2, p=2)",
-         r'''mistakes={"⌊(600 + 4 − 5)/2⌋ + 1 : n'oublie pas le + 1": 299}'''),
+         r'''mistakes={"tu as oublié le + 1 de la formule": 299}'''),
         ("b", WHOLE, "out_size(300, 3, s=3, p=2)",
          r'''mistakes={"c'est ce qu'annonce le livre : applique la formule": 100,
-          "⌊·⌋ arrondit vers le bas : ⌊301/3⌋ = 100, puis + 1": 102}'''),
+          "la partie entière ⌊·⌋ arrondit vers le bas, jamais vers le haut": 102}'''),
         ("c", WHOLE, "0",
-         r'''mistakes={"essaie p = 0 : ⌊(300 − 3)/3⌋ + 1": 1, "avec p = 2, on trouve b)": 2}'''),
+         r'''mistakes={"as-tu essayé un padding plus petit ?": 1,
+          "relis la question : on demande le plus PETIT padding qui donne exactement 100": 2}'''),
         ("d", WHOLE, "1",
-         r'''mistakes={"avec p = 2, on trouve b), pas 100": 2, "p = 1 donne-t-il encore 100 ?": 0}'''),
+         r'''mistakes={"calcule la largeur avec ce padding : vaut-elle encore 100 ?": 2,
+          "relis la question : on demande le plus GRAND padding qui donne encore 100": 0}'''),
         ("e", WHOLE, "8",
          r'''mistakes={"c'est ce qu'écrit le livre ; la profondeur d'un filtre est celle de son entrée": 4,
-          "l'entrée du second étage est la sortie du premier, qui a 8 filtres": 1}'''),
+          "le second étage ne lit pas l'image : il lit la sortie du premier": 1}'''),
         ("f", WHOLE, "out_size(28, 3, d=2)",
-         r'''mistakes={"le noyau dilaté couvre d(k − 1) + 1 = 5 pixels, pas 3": 26, "il couvre 5 pixels, pas 6": 23}'''),
+         r'''mistakes={"tu as oublié la dilatation : le noyau dilaté couvre plus de pixels que son côté": 26,
+          "la dilatation espace les cases du noyau : son étendue n'est pas d × k": 23}'''),
         ("g", WHOLE, "2",
-         r'''mistakes={"le noyau dilaté couvre 5 pixels : il déborde de 2 de chaque côté": 1, "la bordure totale, 4, se partage en deux": 4}'''),
+         r'''mistakes={"le noyau dilaté déborde davantage qu'un noyau 3 × 3 ordinaire : relis f)": 1,
+          "c'est la bordure totale : on demande le padding de chaque côté": 4}'''),
         ("h", WHOLE, "(100 - 1) * 3 + 3",
-         r'''mistakes={"(H − 1) s + k, pas H × s + k": 303, "c'est la formule d'une convolution ordinaire : une convolution transposée agrandit": 33}'''),
+         r'''mistakes={"tu as compté H × s : relis le premier terme de la formule": 303,
+          "c'est la formule d'une convolution ordinaire : une convolution transposée agrandit": 33}'''),
         ("i", WHOLE, "(7 - 1) * 2 - 2 * 1 + 4",
-         r'''mistakes={"− 2p : un de chaque côté": 15, "(H − 1) s − 2p + k = 12 − 2 + 4": 16}'''),
+         r'''mistakes={"le padding se retire des DEUX côtés": 15, "tu as oublié le padding : la convolution transposée le retire": 16}'''),
         ("j", WHOLE, "out_size(14, 4, s=2, p=1)",
-         r'''mistakes={"vérifie le padding (+ 2p) et le + 1 : ⌊(14 + 2 − 4)/2⌋ + 1": 6, "il manque le padding (+ 2) et le + 1": 5}'''),
+         r'''mistakes={"tu as oublié le + 1 de la formule": 6, "il manque le padding et le + 1": 5}'''),
     ]),
     Paper("21.4", "Compter les paramètres : convolution contre couche dense", [
         ("a", WHOLE, "P_CONV1_214",
-         r'''mistakes={"ajoute un biais par filtre": 32 * 9, "32 filtres de 3 × 3 poids sur un canal, plus un biais chacun": 9 + 1}'''),
+         r'''mistakes={"tu as oublié les biais : un par filtre": 32 * 9, "tu as compté un seul filtre": 9 + 1}'''),
         ("b", WHOLE, "P_CONV2_214",
-         r'''mistakes={"chaque filtre a 32 canaux de 3 × 3 poids": 64 * 10, "ajoute les 64 biais": 64 * 32 * 9}'''),
+         r'''mistakes={"tu as oublié les canaux d'entrée : un filtre a la profondeur de son entrée": 64 * 10,
+          "tu as oublié les biais": 64 * 32 * 9}'''),
         ("c", WHOLE, "P_FC1_214",
-         r'''mistakes={"ajoute les 128 biais": 9216 * 128, "l'entrée est l'aplatissement de 64 × 12 × 12 = 9 216 valeurs": 64 * 128 + 128}'''),
-        ("d", WHOLE, "P_FC2_214", r'''mistakes={"ajoute les 10 biais": 1280}'''),
+         r'''mistakes={"tu as oublié les biais": 9216 * 128,
+          "l'entrée de la couche dense est tout le tenseur aplati, pas ses seuls canaux": 64 * 128 + 128}'''),
+        ("d", WHOLE, "P_FC2_214", r'''mistakes={"tu as oublié les biais": 1280}'''),
         ("e", WHOLE, "P_TOTAL_214",
-         r'''mistakes={"n'oublie pas la dernière couche dense : additionne a) à d)": P_TOTAL_214 - P_FC2_214,
-          "ajoute les biais de chaque couche": P_TOTAL_214 - 32 - 64 - 128 - 10}'''),
+         r'''mistakes={"il manque une couche dans ta somme": P_TOTAL_214 - P_FC2_214,
+          "tu as oublié les biais d'une ou de plusieurs couches": P_TOTAL_214 - 32 - 64 - 128 - 10}'''),
         ("f", "a number (%), 1 decimal", "100 * P_FC1_214 / P_TOTAL_214",
          r'''decimals=1, mistakes={"la part de la première couche dense, pas celle des convolutions": 100 * (P_CONV1_214 + P_CONV2_214) / P_TOTAL_214}'''),
         ("g", WHOLE, "784 * 32 * 26 * 26 + 32 * 26 * 26",
-         r'''mistakes={"ajoute un biais par sortie : 32 × 26 × 26": 784 * 32 * 26 * 26,
-          "une couche dense relie chaque entrée (784) à chaque sortie (32 × 26 × 26)": 32 * 26 * 26}'''),
+         r'''mistakes={"tu as oublié les biais : un par sortie": 784 * 32 * 26 * 26,
+          "une couche dense relie CHAQUE entrée à chaque sortie": 32 * 26 * 26}'''),
         ("h", WHOLE, "26 * 26 * 32 * 9",
-         r'''mistakes={"9 multiplications par position et par filtre, sur les 26 × 26 positions": 26 * 26 * 9,
-          "le nombre de positions de SORTIE, 26 × 26, pas 28 × 28": 28 * 28 * 32 * 9}'''),
+         r'''mistakes={"tu as compté un seul filtre": 26 * 26 * 9,
+          "on compte les positions de SORTIE, pas les pixels de l'entrée": 28 * 28 * 32 * 9}'''),
     ]),
     Paper("21.5", "Champ récepteur effectif d'une pile convolution + pooling", [
-        ("a", WHOLE, "receptive_field([(3, 1), (3, 1)])", r'''mistakes={"chaque couche ajoute k − 1 = 2 pixels, pas 3": 6, "3 + 2": 3}'''),
-        ("b", WHOLE, "receptive_field([(3, 1)] * 3)", r'''mistakes={"1 + 2 + 2 + 2": 9}'''),
+        ("a", WHOLE, "receptive_field([(3, 1), (3, 1)])",
+         r'''mistakes={"chaque couche ajoute moins que son côté : relis le facteur (k − 1) du rappel": 6, "tu as compté une seule couche": 3}'''),
+        ("b", WHOLE, "receptive_field([(3, 1)] * 3)",
+         r'''mistakes={"les champs ne se multiplient pas d'une couche à l'autre : chaque couche ajoute son débord au précédent": 9}'''),
         ("c", WHOLE, "3 * 9 * 64 * 64",
-         r'''mistakes={"trois couches de 64 × 64 × 3 × 3 poids": 9 * 64 * 64, "le biais n'est pas demandé": 3 * (9 * 64 + 1) * 64}'''),
+         r'''mistakes={"tu as compté une seule couche": 9 * 64 * 64, "le biais n'est pas demandé": 3 * (9 * 64 + 1) * 64}'''),
         ("d", WHOLE, "7 * 7 * 64 * 64",
-         r'''mistakes={"le champ récepteur de b) est 7 × 7 : une seule convolution 7 × 7": 5 * 5 * 64 * 64}'''),
+         r'''mistakes={"relis la question : le noyau unique doit avoir le champ récepteur de TROIS convolutions": 5 * 5 * 64 * 64}'''),
         ("e", WHOLE, "receptive_field([(3, 1), (3, 3), (3, 1)])",
          r'''mistakes={"c'est le compte du livre : il oublie le débord des filtres du niveau 1": 9,
-          "après le pooling, deux cases voisines sont espacées de 3 pixels : le dernier noyau ajoute (3 − 1) × 3": 7}'''),
+          "après le pooling, deux cases voisines ne sont plus des pixels voisins : relis le produit des strides": 7}'''),
         ("f", WHOLE, "receptive_field([(3, 1), (3, 3), (3, 1), (3, 3), (3, 1)])",
-         r'''mistakes={"après le second pooling, deux cases voisines sont espacées de 9 pixels": 23,
-          "le dernier noyau ajoute (3 − 1) × 9, et le pooling d'avant (3 − 1) × 3": 27}'''),
+         r'''mistakes={"le second pooling multiplie encore l'espacement des cases par son stride": 23,
+          "les champs ne se multiplient pas d'un niveau à l'autre : applique la formule du rappel, couche par couche": 27}'''),
         ("g", WHOLE, "receptive_field([(5, 2), (3, 3)])",
-         r'''mistakes={"c'est l'approximation du livre (6 × 6) ; le second noyau ajoute (3 − 1) × 2 au premier": 6,
-          "le premier stride, 2, multiplie le débord du second noyau": 7}'''),
+         r'''mistakes={"c'est l'approximation du livre (6 × 6) : applique la formule du rappel": 6,
+          "le débord du second noyau est multiplié par le stride qui le précède": 7}'''),
         ("h", WHOLE, "receptive_field([(3, 1), (3, 1), (2, 2)])",
-         r'''mistakes={"le pooling 2 × 2 compte comme une couche de noyau 2": 5, "2 + 2 + 1, partant de 1": 7}'''),
+         r'''mistakes={"le pooling compte comme une couche : il ajoute lui aussi son débord": 5,
+          "pour le pooling aussi, le débord est k − 1, pas k": 7}'''),
     ]),
     Paper("21.6", "Convolution transposée à la main : insérer des zéros puis corréler", [
         ("a", WHOLE, "Y_216.shape[1]",
-         r'''mistakes={"(H − 1) s + k = 1 × 2 + 3": 4, "les tampons se chevauchent : (H − 1) s + k = 1 × 2 + 3, pas 2 × 3": 6}'''),
-        ("b", WHOLE, "2 - 1", r'''mistakes={"s − 1 zéros entre deux pixels": 2}'''),
-        ("c", WHOLE, "3 - 1 - 0", r'''mistakes={"k − 1 − p, avec k = 3 et p = 0": 1, "k − 1 − p = 2": 3}'''),
+         r'''mistakes={"tu as compté H × s : le dernier tampon déborde de tout le noyau": 4,
+          "les tampons se chevauchent : la sortie est plus petite que H × k": 6}'''),
+        ("b", WHOLE, "2 - 1", r'''mistakes={"tu as pris le stride lui-même : un pixel occupe déjà une des cases de l'écart": 2}'''),
+        ("c", WHOLE, "3 - 1 - 0",
+         r'''mistakes={"relis la valeur de p : cette convolution transposée n'a pas de padding": 1,
+          "tu as pris le côté du noyau : relis la formule de l'énoncé": 3}'''),
         ("d", "a whole number", "int(Y_216[0, 0])",
-         r'''mistakes={"seul le tampon de x[0, 0] = 2 couvre la case (0, 0)": 1}'''),
+         r'''mistakes={"le tampon déposé est x[0, 0] × w, pas w seul": 1}'''),
         ("e", "a whole number", "int(Y_216[1, 1])",
-         r'''mistakes={"seul le tampon de x[0, 0] couvre la case (1, 1) : x[0, 0] × w[1, 1]": int(X_216.sum() * W_216[1, 1])}'''),
+         r'''mistakes={"combien de tampons couvrent vraiment la case (1, 1) ?": int(X_216.sum() * W_216[1, 1])}'''),
         ("f", "a whole number", "int(Y_216[0, 2])",
-         r'''mistakes={"la case (0, 2) reçoit DEUX tampons : celui de x[0, 0] et celui de x[0, 1]": 4,
-          "le tampon de x[0, 1] commence en (0, 2) : il y dépose x[0, 1] × w[0, 0]": -1}'''),
+         r'''mistakes={"la case (0, 2) reçoit plusieurs tampons : as-tu compté celui de x[0, 1] ?": 4,
+          "la case (0, 2) reçoit plusieurs tampons : as-tu compté celui de x[0, 0] ?": -1}'''),
         ("g", "a whole number", "int(Y_216[2, 2])",
          r'''mistakes={"la case (2, 2) reçoit les QUATRE tampons, celui de x[1, 1] compris": int(X_216[0, 0] * W_216[2, 2] + X_216[0, 1] * W_216[2, 0] + X_216[1, 0] * W_216[0, 2])}'''),
         ("h", "a whole number", "int(Y_216.sum())",
-         r'''mistakes={"chaque tampon a pour somme x[i, j] × (somme de w)": int(X_216.sum()),
-          "la somme de y est (somme de x) × (somme de w)": int(W_216.sum())}'''),
+         r'''mistakes={"tu as oublié les poids du noyau : chaque tampon est x[i, j] × w": int(X_216.sum()),
+          "tu as oublié les valeurs de x : chaque tampon est pondéré par son pixel": int(W_216.sum())}'''),
         ("i", WHOLE, "Y_PAD_216.shape[1]", r'''mistakes={"− 2p : on retire une colonne de CHAQUE côté": 4}'''),
         ("j", "a whole number", "int(Y_PAD_216[1, 1])",
          r'''mistakes={"le centre de la sortie 3 × 3 est la case (2, 2) de la sortie sans padding": int(Y_216[1, 1])}'''),
     ]),
     Paper("21.8", "Fermi : paramètres, mémoire et calcul de VGG16", [
         ("a", "a number of millions, 1 decimal", "MACS_208[0] / 1e6",
-         r'''decimals=1, mistakes={"224 × 224 positions, 64 filtres, 3 × 3 × 3 = 27 poids chacun": 224 * 224 * 64 * 9 / 1e6,
+         r'''decimals=1, mistakes={"tu as oublié les canaux de l'image d'entrée": 224 * 224 * 64 * 9 / 1e6,
           "en millions": MACS_208[0] / 1e9}'''),
         ("b", "a number of billions, 2 decimals", "MACS_208[1] / 1e9",
-         r'''decimals=2, mistakes={"chaque filtre a 64 canaux de 3 × 3 poids": 224 * 224 * 64 * 9 / 1e9,
+         r'''decimals=2, mistakes={"tu as oublié les canaux d'entrée de cette couche": 224 * 224 * 64 * 9 / 1e9,
           "en milliards": MACS_208[1] / 1e6}'''),
         ("c", "a number of billions, 1 decimal", "sum(MACS_208) / 1e9",
          r'''decimals=1, mistakes={"chaque pooling divise par 2 le côté de l'image des blocs suivants": sum(c_in * c_out * 224 * 224 * 9 for c_in, c_out in [(3, 64), (64, 64), (64, 128), (128, 128), (128, 256), (256, 256), (256, 256), (256, 512), (512, 512), (512, 512), (512, 512), (512, 512), (512, 512)]) / 1e9,
@@ -450,9 +477,9 @@ PAPER = [
         ("d", "a number (%), 1 decimal", "100 * FC_208 / (FC_208 + sum(MACS_208))",
          r'''decimals=1, mistakes={"la part des couches denses dans le CALCUL, pas dans les paramètres": 89.4}'''),
         ("e", "a number of MB, 1 decimal", "4 * ACTS_208 / 1e6",
-         r'''decimals=1, mistakes={"4 octets par valeur float32": ACTS_208 / 1e6, "en Mo de 10⁶ octets": 4 * ACTS_208 / 2 ** 20}'''),
+         r'''decimals=1, mistakes={"tu as compté des valeurs, pas des octets": ACTS_208 / 1e6, "en Mo de 10⁶ octets": 4 * ACTS_208 / 2 ** 20}'''),
         ("f", "a number of GB, 2 decimals", "64 * 4 * ACTS_208 / 1e9",
-         r'''decimals=2, mistakes={"multiplie par les 64 images du mini-batch": 4 * ACTS_208 / 1e9,
+         r'''decimals=2, mistakes={"c'est pour une seule image : relis la taille du mini-batch": 4 * ACTS_208 / 1e9,
           "Go de 10⁹ octets, pas Gio": 64 * 4 * ACTS_208 / 2 ** 30}'''),
         ("g", TF, "True",
          r'''mistakes={"compare ta réponse de d) à la part des paramètres des couches denses (✏️ 20.6)": False}'''),
@@ -514,6 +541,14 @@ TEST_FILE = "tests/test_ch21_conv.py"     # the tests of your library conv.py
 def n_params(model):
     """The number of parameters (learned numbers) of a torch module."""
     return sum(p.numel() for p in model.parameters())
+
+
+def _book_convnet_params():
+    """Parameters of the MNIST convnet of the book (sheet §21.9), counted by PyTorch on a model built here."""
+    features = nn.Sequential(nn.Conv2d(1, 32, 3), nn.Conv2d(32, 64, 3), nn.MaxPool2d(2), nn.Flatten())
+    with torch.no_grad():
+        width = features(torch.zeros(1, 1, 28, 28)).shape[1]
+    return n_params(features) + n_params(nn.Linear(width, 128)) + n_params(nn.Linear(128, 10))
 
 
 def accuracy(model, X, y, batch_size=1000):
@@ -583,11 +618,15 @@ CHECK_12 = r'''with checked("21.12"):
     refuses("21.12", "conv_output_size(0, 1, padding=1) (une taille nulle)", lambda: C.conv_output_size(0, 1, padding=1))
     refuses("21.12", "conv_output_size(8, 3, stride=0)", lambda: C.conv_output_size(8, 3, stride=0))
     x_12 = np.arange(12.0).reshape(1, 2, 2, 3)
-    out_12 = C.pad2d(x_12, (1, 2))
+    arg_12 = x_12.copy()                                  # pad2d receives a copy; the expected values come from x_12
+    out_12 = C.pad2d(arg_12, (1, 2))
     if returned("21.12", "pad2d", out_12):
+        if not np.array_equal(arg_12, x_12):
+            verdict("21.12", False, "pad2d laisse son entrée intacte.",
+                    "pad2d a modifié le tableau x reçu : ne le modifie pas, écris dans un nouveau tableau.")
         same("21.12", "pad2d(x, (1, 2)) contre np.pad (1 ligne en haut et en bas, 2 colonnes à gauche et à droite)",
              out_12, np.pad(x_12, ((0, 0), (0, 0), (1, 1), (2, 2))))
-        same("21.12", "pad2d(x, 1, value=-inf)", C.pad2d(x_12, 1, value=-np.inf),
+        same("21.12", "pad2d(x, 1, value=-inf)", C.pad2d(x_12.copy(), 1, value=-np.inf),
              np.pad(x_12, ((0, 0), (0, 0), (1, 1), (1, 1)), constant_values=-np.inf))
         copy_12 = C.pad2d(x_12, 0)
         verdict("21.12", isinstance(copy_12, np.ndarray) and copy_12 is not x_12 and not np.shares_memory(copy_12, x_12)
@@ -640,10 +679,10 @@ wb.check("21.13b", negative_13)
 wb.check("21.13c", peak_13)'''
 
 RECORD_13 = r'''wb.record("21.13a", "C", mistakes={"la voiture paraît la plus jaune, mais calcule R + G - B pour l'herbe : beaucoup de vert, peu de bleu": "D",
-          "le blanc vaut 1 + 1 - 1 = 1 : est-ce le plus haut ?": "A", "un ciel bleu : beaucoup de B, retranché": "B"})
+          "le blanc a aussi du bleu, que le neurone retire : son score est-il le plus haut ?": "A", "un ciel bleu : beaucoup de B, retranché": "B"})
 wb.record("21.13b", True, mistakes={"un ciel bleu : B grand, R et G petits ; quel signe pour R + G - B ?": False})
-wb.record("21.13c", "D", mistakes={"le score d'un pixel atteint au plus 2, pour R = G = 1 et B = 0 : quelle photo a des pixels proches de ce jaune pur ?": "C",
-          "un pixel blanc ne dépasse pas 1": "A", "le ciel bleu reste bas partout": "B"})'''
+wb.record("21.13c", "D", mistakes={"quelle couleur donne le plus grand score R + G - B (✏️ 21.1) ? Quelle photo en a des pixels ?": "C",
+          "le bleu du blanc est retranché : un pixel blanc peut-il faire le pic ?": "A", "le ciel bleu reste bas partout": "B"})'''
 
 CHECK_14 = r'''with checked("21.14"):
     C = mylearn.conv
@@ -675,8 +714,14 @@ with checked("21.15"):
     for label_15, shape_15, kw_15, bias_15 in cases_15:
         w_15 = rng_15.normal(size=shape_15)
         b_15 = rng_15.normal(size=shape_15[0]) if bias_15 else None
-        out_15 = C.conv2d(x_15, w_15, b_15, **kw_15)
+        args_15 = (x_15.copy(), w_15.copy(), None if b_15 is None else b_15.copy())   # copies: the expected values use x_15
+        out_15 = C.conv2d(*args_15, **kw_15)
         if not returned("21.15", "conv2d", out_15):
+            break
+        if not (np.array_equal(args_15[0], x_15) and np.array_equal(args_15[1], w_15)
+                and (b_15 is None or np.array_equal(args_15[2], b_15))):
+            verdict("21.15", False, "conv2d laisse ses entrées intactes.",
+                    "conv2d a modifié x, weight ou bias : ne modifie pas ses entrées, écris dans un nouveau tableau.")
             break
         with warnings.catch_warnings():               # PyTorch warns that an even kernel with "same" copies the input
             warnings.simplefilter("ignore", UserWarning)
@@ -995,15 +1040,15 @@ print(f"same weights: largest gap between the Conv1d and the full-width Conv2d =
 for letter_20, value_20 in zip("abcdef", [shape1_20, params1_20, shape2_20, equal_20, params3_20, shape3_20]):
     wb.check(f"21.20{letter_20}", shape_text(value_20) if letter_20 in "acf" else value_20)'''
 
-RECORD_20 = r'''wb.record("21.20a", "(8, 16, 26)", mistakes={"sans padding, un noyau de 5 fait perdre 4 positions, pas 5": "(8, 16, 25)",
+RECORD_20 = r'''wb.record("21.20a", "(8, 16, 26)", mistakes={"tu as retiré tout le noyau : à sa dernière position, il tient encore dans la séquence": "(8, 16, 25)",
           "une Conv1d glisse le long de L (le dernier axe) et remplace les 64 canaux par 16 filtres": "(8, 64, 26)",
           "la sortie garde l'axe des exemples": "(16, 26)"})
 wb.record("21.20b", 16 * (64 * 5 + 1), mistakes={"ajoute un biais par filtre": 16 * 64 * 5,
-          "chaque filtre lit les 64 canaux sur 5 positions": 16 * (5 + 1)})
+          "tu as oublié les canaux : chaque filtre lit tous les canaux de l'entrée": 16 * (5 + 1)})
 wb.record("21.20c", "(8, 16, 26, 1)", mistakes={"le noyau couvre les 64 colonnes : il ne reste qu'une position en largeur": "(8, 16, 26, 64)",
-          "la sortie garde l'axe des colonnes, de taille 1": "(8, 16, 26)", "l'entrée a 30 lignes : 30 - 5 + 1": "(8, 16, 30, 1)"})
-wb.record("21.20d", True, mistakes={"compte : 16 filtres de 1 x 5 x 64 poids, plus 16 biais ; et pour la Conv1d ?": False})
-wb.record("21.20e", 16 * (64 + 1), mistakes={"ajoute un biais par filtre": 16 * 64, "un noyau 1 x 1 lit les 64 canaux d'un pixel : 64 poids par filtre": 16 + 16})
+          "la sortie garde l'axe des colonnes, de taille 1": "(8, 16, 26)", "sans padding, le noyau fait aussi rétrécir les lignes": "(8, 16, 30, 1)"})
+wb.record("21.20d", True, mistakes={"compte, dans les deux couches, les poids d'un filtre et le nombre de filtres : que lisent-ils ?": False})
+wb.record("21.20e", 16 * (64 + 1), mistakes={"ajoute un biais par filtre": 16 * 64, "un noyau 1 x 1 lit tous les canaux d'un pixel, pas un seul": 16 + 16})
 wb.record("21.20f", "(8, 16, 30, 30)", mistakes={"une convolution 1 x 1 garde la taille de l'image": "(8, 16, 29, 29)",
           "les canaux passent de 64 à 16": "(8, 64, 30, 30)"})'''
 
@@ -1215,7 +1260,7 @@ with checked("21.22"):
         want_kinds_22 = ["Conv2d", "ReLU", "Conv2d", "ReLU", "MaxPool2d", "Dropout", "Flatten", "Linear", "ReLU", "Dropout", "Linear"]
         verdict("21.22", kinds_22 == want_kinds_22, "les onze couches du convnet du livre, dans l'ordre.",
                 f"les couches sont {kinds_22} : attendu celles du tableau du §21.9 (la softmax n'est pas une couche : elle est dans la loss).")
-        verdict("21.22", n_params(net_22) == 1_199_882, "le nombre de paramètres est celui de ton calcul de ✏️ 21.4.",
+        verdict("21.22", n_params(net_22) == _book_convnet_params(), "le nombre de paramètres est celui du convnet du livre.",
                 f"le réseau a {n_params(net_22)} paramètres : compare-le, couche par couche, à ton calcul de ✏️ 21.4.")
         start_22 = time.perf_counter()
         history_22 = train_22(net_22, X_TRAIN, Y_TRAIN, epochs=EPOCHS_22, seed=0)
@@ -1237,7 +1282,7 @@ with checked("21.22"):
 wb.check("21.22a", in_features_22)
 wb.check("21.22b", params32_22)'''
 
-RECORD_22 = r'''wb.record("21.22a", in_features_22, mistakes={"deux convolutions sans padding (32 -> 30 -> 28), PUIS le pooling 2 x 2 : 64 canaux de 14 x 14": 64 * 15 * 15,
+RECORD_22 = r'''wb.record("21.22a", in_features_22, mistakes={"le pooling vient après les DEUX convolutions, sans padding chacune": 64 * 15 * 15,
           "n'oublie pas le pooling, qui divise le côté par 2": 64 * 28 * 28, "c'est la taille pour des images 28 x 28 : refais les tailles avec 32": 9216})
 wb.record("21.22b", params32_22, mistakes={"ajoute les biais de chaque couche": params32_22 - 32 - 64 - 128 - 10,
           "seule la première couche dense change : les convolutions gardent leurs poids quelle que soit la taille de l'image": 1_199_882})'''
@@ -1523,7 +1568,7 @@ CHECK_24 = r'''def diagnose_24(net_class):
 with checked("21.24"):
     passed_24 = diagnose_24(Net24)
     if passed_24 == 4:
-        verdict("21.24", n_params(Net24()) == 1_199_882, "le réseau réparé a les paramètres du convnet du livre (sans dropout).",
+        verdict("21.24", n_params(Net24()) == _book_convnet_params(), "le réseau réparé a les paramètres du convnet du livre (sans dropout).",
                 f"le réseau réparé a {n_params(Net24())} paramètres : attendu ceux de ✏️ 21.4.")'''
 
 GIVEN_25 = r'''def small_cnn_25():
@@ -2364,7 +2409,7 @@ Dans tes notes : pourquoi les filtres partis de 0,05 reçoivent-ils exactement l
 
     Ex("21.26", "🔬", 3, 40, "Stride ou pooling : accuracy et temps sur CIFAR-10",
        "comparer deux façons de réduire l'image, par pooling ou par stride, en paramètres, en calcul, en temps et en accuracy.",
-       "Ex 21.22 · ✏️ 21.8 · fiche §21.4.2, §21.9.1 (encadré 🕰️ « après VGG16 »)", thread="CIFAR-10", tracks="C",
+       "Ex 21.22 · 🧮 21.8 · fiche §21.4.2, §21.9.1 (encadré 🕰️ « après VGG16 »)", thread="CIFAR-10", tracks="C",
        body=r"""Deux façons de diviser la taille d'une image par 2 entre deux couches : un max pooling 2 × 2 après une convolution de stride 1, ou une convolution de stride 2. On compare deux petits réseaux sur des photos de CIFAR-10 (`(N, 3, 32, 32)`, valeurs dans $[0, 1]$).
 
 **Contrat**

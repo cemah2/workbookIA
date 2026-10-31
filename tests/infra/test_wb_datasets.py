@@ -1,6 +1,7 @@
 """Tests of wb.datasets. The versioned datasets are always tested; the ones
 that need a download are marked ``network`` (run them with --run-network)."""
 
+import re
 from pathlib import Path
 
 import numpy as np
@@ -127,6 +128,32 @@ def test_catalogue_and_cards():
             assert (ROOT / "data" / file).exists(), f"missing versioned file for {name}"
     text = D.dataset_card("penguins", show=False)
     assert "Licence" in text or "licence" in text
+
+
+def test_card_fingerprints_match_the_versioned_files():
+    """Every « SHA-256 de `data/...` : `hex` » of a data card is the hash of that file (chapter 29: a card gives the
+    fingerprint of what it describes; a rebuilt file must update its card)."""
+    import hashlib
+
+    pattern = re.compile(r"SHA-256 (?:de|du fichier)\s*(?:`(data/[^`]+)`)?\s*:\s*`([0-9a-f]{64})`")
+    seen = 0
+    for card in sorted((ROOT / "data" / "cards").glob("*.md")):
+        text = card.read_text(encoding="utf-8")
+        for match in pattern.finditer(text):
+            path = match.group(1)
+            if path is None:   # « SHA-256 du fichier » : the file of the « **Fichier** » row of the same card
+                path = re.search(r"\*\*Fichier\*\* \| `(data/[^`]+)`", text).group(1)
+            digest = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
+            assert digest == match.group(2), f"expected the SHA-256 of {path} in {card.name}, got {match.group(2)}"
+            seen += 1
+    assert seen >= 7, f"expected at least 7 fingerprints in data/cards, found {seen}"
+
+
+def test_cifar10_huggingface_revision_is_pinned():
+    import inspect
+
+    assert re.fullmatch(r"[0-9a-f]{40}", D.CIFAR10_HF_REVISION)
+    assert "revision=CIFAR10_HF_REVISION" in inspect.getsource(D._cifar_from_huggingface)
 
 
 def test_substitute_is_opt_in(tmp_path, monkeypatch):

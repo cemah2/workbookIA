@@ -4,10 +4,11 @@
 |---|---|
 | **Fichier** | `data/text/verne_tour_du_monde_pg800.txt` (0,45 Mo, UTF-8, fins de ligne LF) |
 | **Chargement** | `wb.datasets.load_verne(strip_header=True)` → `str` |
-| **Source** | Project Gutenberg, eBook n° 800 (transcription « ebooksgratuits ») |
+| **Source** | Project Gutenberg, [eBook n° 800](https://www.gutenberg.org/ebooks/800) (transcription « ebooksgratuits ») |
 | **Taille (sans en-tête Gutenberg)** | ≈ 421 000 caractères, ≈ 67 400 mots |
 | **Langue** | français |
 | **Licence** | domaine public (roman de 1872-1873) ; en-tête et licence Project Gutenberg conservés dans le fichier, retirés au chargement |
+| **Empreinte** | SHA-256 du fichier : `7ec8a7d64e89bce4d86ed83a3b588ce6cd518a987588848e1ccbda7473ba1831` |
 | **Téléchargé le** | 2026-09-29 |
 
 ## Provenance

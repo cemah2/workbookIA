@@ -19,7 +19,7 @@
 
 | Question | Type | Sujet | Points | ⏱️ |
 |---|---|---|---|---|
-| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI | 2,5 | 10 min |
+| CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) | 2,5 | 10 min |
 | CP6.2 | ✏️ | VAE : un tirage reparamétrisé et sa divergence KL | 2 | 10 min |
 | CP6.3 | ✏️ | Deux transitions : mise à jour Q-learning puis SARSA | 2 | 10 min |
 | CP6.4 | ∂ | Discriminateur optimal et losses à l'équilibre | 2 | 12 min |
@@ -31,12 +31,12 @@
 | CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | 1 | 6 min |
 | CP6.11 | ⚖️ | Un dataset de visages pour un produit commercial | 1 | 5 min |
 | CP6.12 | 💼 | Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes | 1 | 6 min |
-| CP6.13 | ✏️ | Retour sur les parties IV et V : convolution et pas d'Adam | 2 | 10 min |
+| CP6.13 | ✏️ | Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam | 2 | 10 min |
 | | | **Total** | **20** | **114 min** |
 
 ---
 
-### CP6.1 — Questions flash : dix réponses courtes sur la partie VI 🧠 ★ ⏱️ 10 min · 2,5 points
+### CP6.1 — Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) 🧠 ★ ⏱️ 10 min · 2,5 points
 
 Réponds sans justifier ; chaque item vaut 0,25 point.
 
@@ -166,7 +166,7 @@ Une start-up veut entraîner un générateur de portraits (un GAN) pour une appl
 
 Le recruteur : « Pour générer des images, vous choisiriez un VAE, un GAN ou un modèle de diffusion ? Expliquez-moi les différences. » Réponds comme à l'oral, en une minute : le principe de chacun, une force et une faiblesse de chacun, et ton choix pour un cas concret que tu nommes. **[1]**
 
-### CP6.13 — Retour sur les parties IV et V : convolution et pas d'Adam ✏️ ★ ⏱️ 10 min · 2 points
+### CP6.13 — Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam ✏️ ★ ⏱️ 10 min · 2 points
 
 **Ch. 21.** Une image `(1, 3, 64, 64)` passe dans `nn.Conv2d(3, 32, kernel_size=5, stride=2, padding=2)`, puis le résultat dans `nn.ConvTranspose2d(32, 16, kernel_size=4, stride=2, padding=1)`.
 

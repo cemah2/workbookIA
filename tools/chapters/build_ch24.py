@@ -316,7 +316,7 @@ PAPER = [
         ("f", TF, "True", r'''mistakes={"relis l'encadré 🕰️ du §24.6": False}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("24.R1", "Ch. 23 : Ce qu'un historique d'entraînement doit contenir pour comparer deux runs", [
+    Paper("24.R1", "Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs", [
         ("a", LETTERS, '"ABD"',
          r'''mistakes={"le test ne se regarde qu'une fois, à la fin : pas à chaque epoch": "ABDE",
           "une copie des poids à chaque epoch coûte trop de mémoire ; on garde le meilleur checkpoint": "ABCD",
@@ -333,7 +333,7 @@ PAPER = [
          r'''mistakes={"relis comment les epochs sont numérotées dans l'énoncé": 4, "la meilleure epoch a la plus petite loss": 1,
           "cherche la plus petite des six valeurs": 3}'''),
     ]),
-    Paper("24.R2", "Ch. 21 : Taille de sortie d'une convolution à padding 'same' et stride 2", [
+    Paper("24.R2", "Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2", [
         ("a", WHOLE, "math.ceil(28 / 2)", r'''mistakes={"avec un stride de 2, la taille est divisée par 2": 28,
           "« same » complète de zéros : la convolution ne perd pas les bords": (28 - 5) // 2 + 1}'''),
         ("b", WHOLE, "math.ceil(15 / 2)",
@@ -349,7 +349,7 @@ PAPER = [
         ("f", TF, "True",
          r'''mistakes={"relis le ch. 21 : PyTorch accepte-t-il un noyau pair avec padding=\"same\" ?": False}'''),
     ]),
-    Paper("24.R3", "Ch. 17 : Ce que change la division des logits avant le softmax", [
+    Paper("24.R3", "Ch. 17 : ce que change la division des logits avant le softmax", [
         ("a", DEC3, "softmax(Z_R3).max()",
          r'''decimals=3, mistakes={"la softmax prend des exponentielles, pas les logits eux-mêmes": 2 / 3,
           "c'est la plus grande probabilité qu'on demande": softmax(Z_R3).min()}'''),
@@ -1271,6 +1271,20 @@ def divide_by_255(X):
 
 
 SCALE_255 = FunctionTransformer(divide_by_255)
+
+
+def mlp_written(predict=True):
+    """False while TorchMLPClassifier (Ex 24.16) still raises NotImplementedError: in fit, or, when `predict` is
+    True, in predict_proba or predict (the searches of 24.17 and 24.18 need all three). A tiny fit on 20 images,
+    which leaves the random generators of torch as they were."""
+    def probe():
+        with torch.random.fork_rng():
+            est = TorchMLPClassifier(epochs=1).fit(XS_TR[:20] / 255.0, YS_TR[:20])
+            if predict:
+                est.predict(XS_TR[:2] / 255.0)
+    return written(probe)
+
+
 print(XS_TR.shape, XS_TR.dtype, YS_TR[:3])'''
 
 TODO_16 = r'''class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
@@ -1360,51 +1374,54 @@ SOLUTION_16 = r'''class TorchMLPClassifier(ClassifierMixin, BaseEstimator):
         """The predicted labels, of the same kind as the y given to fit (taken from classes_)."""
         return self.classes_[self.predict_proba(X).argmax(axis=1)]'''
 
-CHECK_16 = r'''with checked("24.16"):
-    est_16 = TorchMLPClassifier()
-    verdict("24.16", is_classifier(est_16), "scikit-learn reconnaît un classifieur (ClassifierMixin avant BaseEstimator).",
-            "is_classifier est faux : ClassifierMixin doit venir AVANT BaseEstimator dans la liste des classes mères.")
-    want_params_16 = {"batch_size": 256, "epochs": 5, "hidden": (32, 32), "lr": 1e-3, "p_drop": 0.2, "seed": 0}
-    verdict("24.16", est_16.get_params() == want_params_16, "get_params() rend les six réglages de __init__.",
-            f"get_params() : attendu {want_params_16}, reçu {est_16.get_params()}.")
-    other_16 = clone(est_16).set_params(hidden=(16,), lr=3e-3)
-    verdict("24.16", other_16.hidden == (16,) and other_16.lr == 3e-3 and est_16.hidden == (32, 32),
-            "clone puis set_params règlent une copie, sans toucher l'original.",
-            "clone(est).set_params(hidden=(16,), lr=3e-3) doit changer la copie seulement.")
-    small_16 = TorchMLPClassifier(hidden=(64,), epochs=3)
-    fit_16 = small_16.fit(XS_TR / 255.0, YS_TR)
-    verdict("24.16", fit_16 is small_16, "fit rend self (on peut écrire est.fit(X, y).predict(X)).",
-            "fit doit rendre self.")
-    verdict("24.16", list(getattr(small_16, "classes_", [])) == sorted(FASHION_CLASSES)
-            and getattr(small_16, "n_features_in_", None) == 784 and isinstance(getattr(small_16, "model_", None), nn.Module),
-            "après fit : classes_ (les 10 noms triés), n_features_in_ = 784, model_ (le réseau).",
-            "après fit, attendu classes_ = les noms des classes triés (np.unique), n_features_in_ = 784 et model_ un nn.Module.")
-    proba_16 = small_16.predict_proba(XS_VAL[:500] / 255.0)
-    verdict("24.16", isinstance(proba_16, np.ndarray) and proba_16.shape == (500, 10)
-            and np.allclose(proba_16.sum(axis=1), 1, atol=1e-5),
-            "predict_proba : un tableau NumPy (500, 10) dont chaque ligne somme à 1.",
-            f"predict_proba : attendu un tableau NumPy (500, 10) de probabilités, reçu {type(proba_16).__name__} "
-            f"{getattr(proba_16, 'shape', '')}.")
-    pred_16 = small_16.predict(XS_VAL[:500] / 255.0)
-    verdict("24.16", set(np.asarray(pred_16).tolist()) <= set(FASHION_CLASSES)
-            and np.array_equal(pred_16, small_16.classes_[proba_16.argmax(axis=1)]),
-            "predict rend des noms de classes, ceux de la colonne la plus probable.",
-            f"predict doit rendre des labels du même genre que y (ici des noms), reçu {np.asarray(pred_16)[:3]}.")
-    score_16 = small_16.score(XS_VAL / 255.0, YS_VAL)
-    verdict("24.16", score_16 > 0.6, f"score (l'accuracy, de ClassifierMixin) sur la validation : {fr(score_16)}.",
-            f"après 3 epochs, l'accuracy de validation n'est que de {fr(score_16)} : le réseau apprend-il vraiment ?")
-    again_16 = TorchMLPClassifier(hidden=(64,), epochs=3).fit(XS_TR / 255.0, YS_TR).predict_proba(XS_VAL[:500] / 255.0)
-    seed1_16 = TorchMLPClassifier(hidden=(64,), epochs=3, seed=1).fit(XS_TR / 255.0, YS_TR).predict_proba(XS_VAL[:500] / 255.0)
-    verdict("24.16", np.allclose(again_16, proba_16, atol=1e-6) and not np.allclose(seed1_16, proba_16, atol=1e-3),
-            "même graine, même modèle ; autre graine, autre modèle.",
-            "deux fit avec la même graine doivent donner les mêmes probabilités, et une autre graine d'autres : tout le "
-            "hasard (poids, mélange, dropout) doit venir de self.seed.")
-    first_model_16 = small_16.model_
-    half_16 = small_16.set_params(epochs=1).fit(XS_TR[:, :392] / 255.0, YS_TR)       # the SAME estimator, refitted
-    verdict("24.16", half_16.n_features_in_ == 392 and half_16.model_ is not first_model_16,
-            "un nouveau fit construit un réseau neuf, à la taille des nouvelles données (392 colonnes).",
-            "fit doit construire un réseau neuf à chaque appel, dont l'entrée a X.shape[1] valeurs.")
-    refuses("24.16", "predict sur 784 colonnes d'un modèle ajusté sur 392", lambda: half_16.predict(XS_VAL[:5] / 255.0))'''
+CHECK_16 = r'''if not mlp_written(predict=False):
+    print("⏳ Ex 24.16 : pas encore fait (TorchMLPClassifier.fit) : écris fit, predict_proba et predict.")
+else:
+    with checked("24.16"):
+        est_16 = TorchMLPClassifier()
+        verdict("24.16", is_classifier(est_16), "scikit-learn reconnaît un classifieur (ClassifierMixin avant BaseEstimator).",
+                "is_classifier est faux : ClassifierMixin doit venir AVANT BaseEstimator dans la liste des classes mères.")
+        want_params_16 = {"batch_size": 256, "epochs": 5, "hidden": (32, 32), "lr": 1e-3, "p_drop": 0.2, "seed": 0}
+        verdict("24.16", est_16.get_params() == want_params_16, "get_params() rend les six réglages de __init__.",
+                f"get_params() : attendu {want_params_16}, reçu {est_16.get_params()}.")
+        other_16 = clone(est_16).set_params(hidden=(16,), lr=3e-3)
+        verdict("24.16", other_16.hidden == (16,) and other_16.lr == 3e-3 and est_16.hidden == (32, 32),
+                "clone puis set_params règlent une copie, sans toucher l'original.",
+                "clone(est).set_params(hidden=(16,), lr=3e-3) doit changer la copie seulement.")
+        small_16 = TorchMLPClassifier(hidden=(64,), epochs=3)
+        fit_16 = small_16.fit(XS_TR / 255.0, YS_TR)
+        verdict("24.16", fit_16 is small_16, "fit rend self (on peut écrire est.fit(X, y).predict(X)).",
+                "fit doit rendre self.")
+        verdict("24.16", list(getattr(small_16, "classes_", [])) == sorted(FASHION_CLASSES)
+                and getattr(small_16, "n_features_in_", None) == 784 and isinstance(getattr(small_16, "model_", None), nn.Module),
+                "après fit : classes_ (les 10 noms triés), n_features_in_ = 784, model_ (le réseau).",
+                "après fit, attendu classes_ = les noms des classes triés (np.unique), n_features_in_ = 784 et model_ un nn.Module.")
+        proba_16 = small_16.predict_proba(XS_VAL[:500] / 255.0)
+        verdict("24.16", isinstance(proba_16, np.ndarray) and proba_16.shape == (500, 10)
+                and np.allclose(proba_16.sum(axis=1), 1, atol=1e-5),
+                "predict_proba : un tableau NumPy (500, 10) dont chaque ligne somme à 1.",
+                f"predict_proba : attendu un tableau NumPy (500, 10) de probabilités, reçu {type(proba_16).__name__} "
+                f"{getattr(proba_16, 'shape', '')}.")
+        pred_16 = small_16.predict(XS_VAL[:500] / 255.0)
+        verdict("24.16", set(np.asarray(pred_16).tolist()) <= set(FASHION_CLASSES)
+                and np.array_equal(pred_16, small_16.classes_[proba_16.argmax(axis=1)]),
+                "predict rend des noms de classes, ceux de la colonne la plus probable.",
+                f"predict doit rendre des labels du même genre que y (ici des noms), reçu {np.asarray(pred_16)[:3]}.")
+        score_16 = small_16.score(XS_VAL / 255.0, YS_VAL)
+        verdict("24.16", score_16 > 0.6, f"score (l'accuracy, de ClassifierMixin) sur la validation : {fr(score_16)}.",
+                f"après 3 epochs, l'accuracy de validation n'est que de {fr(score_16)} : le réseau apprend-il vraiment ?")
+        again_16 = TorchMLPClassifier(hidden=(64,), epochs=3).fit(XS_TR / 255.0, YS_TR).predict_proba(XS_VAL[:500] / 255.0)
+        seed1_16 = TorchMLPClassifier(hidden=(64,), epochs=3, seed=1).fit(XS_TR / 255.0, YS_TR).predict_proba(XS_VAL[:500] / 255.0)
+        verdict("24.16", np.allclose(again_16, proba_16, atol=1e-6) and not np.allclose(seed1_16, proba_16, atol=1e-3),
+                "même graine, même modèle ; autre graine, autre modèle.",
+                "deux fit avec la même graine doivent donner les mêmes probabilités, et une autre graine d'autres : tout le "
+                "hasard (poids, mélange, dropout) doit venir de self.seed.")
+        first_model_16 = small_16.model_
+        half_16 = small_16.set_params(epochs=1).fit(XS_TR[:, :392] / 255.0, YS_TR)       # the SAME estimator, refitted
+        verdict("24.16", half_16.n_features_in_ == 392 and half_16.model_ is not first_model_16,
+                "un nouveau fit construit un réseau neuf, à la taille des nouvelles données (392 colonnes).",
+                "fit doit construire un réseau neuf à chaque appel, dont l'entrée a X.shape[1] valeurs.")
+        refuses("24.16", "predict sur 784 colonnes d'un modèle ajusté sur 392", lambda: half_16.predict(XS_VAL[:5] / 255.0))'''
 
 TODO_17 = r'''def fold_class_counts_17(cv, X, y):
     """An int array (number of folds, number of classes): row k counts the examples of each class (in the order of
@@ -1469,6 +1486,10 @@ CHECK_17 = r'''with checked("24.17"):
                 f"(reçu {global_17!r}).")'''
 
 EXPERIMENT_17 = r'''with checked("24.17"):
+    if not mlp_written():
+        print("⏳ Ex 24.17 : cette expérience entraîne ton TorchMLPClassifier : écris d'abord fit, predict_proba et predict "
+              "(Ex 24.16).")
+        raise StopCheck
     cv_17 = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
     for name_17, scaler_17 in [("pixels bruts (0 à 255)", "passthrough"), ("MinMaxScaler par pixel", MinMaxScaler()),
                                ("division par 255", SCALE_255)]:
@@ -1566,6 +1587,10 @@ with checked("24.18"):
     same("24.18", "zoom_values_18(0.01)", zoom_18, [0.005, 0.01, 0.02], rtol=1e-9)
     same("24.18", "zoom_values_18(1e-3, factor=3, n=5)", zoom_values_18(1e-3, factor=3, n=5),
          [1e-3 / 9, 1e-3 / 3, 1e-3, 3e-3, 9e-3], rtol=1e-9)
+    if not mlp_written():
+        print("⏳ Ex 24.18 : la suite de la vérification entraîne ton TorchMLPClassifier : écris d'abord fit, predict_proba et predict "
+              "(Ex 24.16).")
+        raise StopCheck
     pipe_18 = Pipeline([("scale", SCALE_255), ("net", CountingMLP_18(epochs=1))])
     CountingMLP_18.fits = 0
     grid_18 = grid_search_18(pipe_18, XS_TR[:1500], YS_TR[:1500])
@@ -1590,6 +1615,10 @@ with checked("24.18"):
                 f"entre 0 et 0,5 ; reçu {CountingMLP_18.fits} entraînements, lr {drawn_18}, p_drop {drops_18}.")'''
 
 EXPERIMENT_18 = r'''with checked("24.18"):
+    if not mlp_written():
+        print("⏳ Ex 24.18 : cette expérience entraîne ton TorchMLPClassifier : écris d'abord fit, predict_proba et predict "
+              "(Ex 24.16).")
+        raise StopCheck
     pipe_18 = make_pipe_17(SCALE_255, epochs=3)
     started_18 = time.perf_counter()
     grid_18 = grid_search_18(pipe_18, XS_TR, YS_TR)
@@ -1754,36 +1783,88 @@ def prepare_19(images):
     std = torch.tensor(STD).view(1, 3, 1, 1)
     return ((x - mean) / std).contiguous()'''
 
-CHECK_19 = r'''with checked("24.19"):
-    model_19 = make_cnn_19()                               # a construction error stops here (❌, with its message)
-    with torch.inference_mode():
-        out_19 = model_19.eval()(torch.zeros(2, 3, 32, 32))  # a size error stops here
-    verdict("24.19", tuple(out_19.shape) == (2, 10), "le modèle se construit et rend (2, 10) pour deux images.",
-            f"pour deux images, attendu une sortie (2, 10), reçu {tuple(out_19.shape)}.")
-    kinds_19 = [type(m).__name__ for m in model_19.children()]
-    verdict("24.19", kinds_19[:3] in (["Conv2d", "ReLU", "MaxPool2d"], ["Conv2d", "MaxPool2d", "ReLU"]),
-            "chaque convolution est suivie de sa ReLU, comme activation=\"relu\" dans Keras.",
-            f"couches : {kinds_19} ; dans Keras, la première Conv2D avait activation=\"relu\" : nn.Conv2d n'a pas "
-            "d'activation.")
-    verdict("24.19", not any(k in ("Softmax", "LogSoftmax") for k in kinds_19),
-            "le modèle rend des logits : nn.CrossEntropyLoss fera la softmax.",
-            "le modèle finit par une softmax : nn.CrossEntropyLoss en applique déjà une, il attend des logits.")
-    images_19 = XC_TR[:4]
-    x_19 = prepare_19(images_19)                           # a broadcasting error stops here
-    want_19 = (np.transpose(images_19, (0, 3, 1, 2)) / 255.0 - np.array(MEAN)[None, :, None, None]) / np.array(STD)[None, :, None, None]
-    same("24.19", "prepare_19(XC_TR[:4]) contre les pixels rangés en (N, C, H, W) et standardisés par canal", x_19, want_19,
-         rtol=1e-5, atol=1e-5)
-    verdict("24.19", x_19.dtype == torch.float32, "prepare_19 rend du float32.", f"attendu float32, reçu {x_19.dtype}.")'''
+CHECK_19 = r'''def point_19(k, ok, success, failure):
+    print(f"{'✅' if ok else '❌'} Ex 24.19 · point {k} : {success if ok else failure}")
+    return ok
 
-EXPERIMENT_19 = r'''with checked("24.19"):
-    torch.manual_seed(2419)
-    model_19 = make_cnn_19()
-    history_19 = train_classifier(model_19, make_loader(prepare_19(XC_TR), torch.from_numpy(YC_TR), 128, 2419),
-                                  prepare_19(XC_VAL), torch.from_numpy(YC_VAL), EPOCHS_C, seed=2419)
-    print(f"{n_params(model_19)} paramètres · accuracy de validation par epoch : {np.round(history_19['val_acc'], 3).tolist()}")
-    verdict("24.19", history_19["val_acc"][-1] > 0.3,
-            f"le modèle réparé apprend : {fr(100 * history_19['val_acc'][-1], 1)} % de validation (10 % pour le hasard).",
-            f"seulement {fr(100 * history_19['val_acc'][-1], 1)} % de validation : un bug silencieux reste-t-il ?")'''
+
+def wait_19(k):
+    print(f"⏳ Ex 24.19 · point {k} : corrige d'abord " + ("le point 1." if k == 2 else "les points précédents."))
+
+
+def raised_19(exc):
+    return f"lève {type(exc).__name__} : {str(exc).strip()[:200].rstrip('.')}"
+
+
+ok_19 = False                                              # the training cell waits for the five points
+with checked("24.19"):
+    try:
+        model_19, problem_19 = make_cnn_19(), None
+    except Exception as exc:                               # an argument that PyTorch refuses
+        model_19, problem_19 = None, raised_19(exc)
+    ok_19 = point_19(1, problem_19 is None, "le modèle se construit.", f"make_cnn_19() {problem_19}.")
+    if ok_19:
+        try:
+            with torch.inference_mode():
+                shape_19 = tuple(model_19.eval()(torch.zeros(2, 3, 32, 32)).shape)
+        except Exception as exc:                           # a size that does not match
+            shape_19 = raised_19(exc)
+        ok_19 = point_19(2, shape_19 == (2, 10), "une passe avant de deux images rend (2, 10).",
+                         f"pour deux images, attendu une sortie (2, 10) ; la passe avant {shape_19}." if isinstance(shape_19, str)
+                         else f"pour deux images, attendu une sortie (2, 10), reçu {shape_19}.")
+    else:
+        wait_19(2)
+    kinds_19 = [type(m).__name__ for m in model_19.children()] if ok_19 else []
+    if ok_19:
+        ok_19 = point_19(3, kinds_19[:3] in (["Conv2d", "ReLU", "MaxPool2d"], ["Conv2d", "MaxPool2d", "ReLU"]),
+                         "chaque convolution est suivie de sa ReLU, comme activation=\"relu\" dans Keras.",
+                         f"couches : {kinds_19} ; compare-les, une à une, aux couches du modèle Keras de la docstring.")
+    else:
+        wait_19(3)
+    if ok_19:
+        ok_19 = point_19(4, not any(k in ("Softmax", "LogSoftmax") for k in kinds_19),
+                         "le modèle rend des logits : nn.CrossEntropyLoss fera la softmax.",
+                         "le modèle finit par une softmax, et il sera entraîné avec nn.CrossEntropyLoss : que reçoit "
+                         "cette loss, et qu'en fait-elle ?")
+    else:
+        wait_19(4)
+    if ok_19:
+        images_19 = XC_TR[:4]
+        want_19 = ((np.transpose(images_19, (0, 3, 1, 2)) / 255.0 - np.array(MEAN)[None, :, None, None])
+                   / np.array(STD)[None, :, None, None])
+        try:
+            x_19 = prepare_19(images_19)
+            got_19 = as_numpy(x_19)
+            if got_19 is None or got_19.shape != want_19.shape:
+                problem_19 = f"rend {type(x_19).__name__} {tuple(getattr(x_19, 'shape', ()))}, au lieu de (4, 3, 32, 32)"
+            elif not np.allclose(got_19, want_19, rtol=1e-5, atol=1e-5):
+                problem_19 = ("rend des valeurs qui ne sont pas les pixels rangés en (N, C, H, W) puis standardisés par "
+                              "canal : affiche une image avant et après, et regarde à quel axe s'appliquent MEAN et STD")
+            elif x_19.dtype != torch.float32:
+                problem_19 = f"rend du {x_19.dtype} au lieu de float32"
+            else:
+                problem_19 = None
+        except Exception as exc:                           # a broadcasting error
+            problem_19 = raised_19(exc)
+        ok_19 = point_19(5, problem_19 is None,
+                         "prepare_19 rend les pixels en (N, C, H, W), en float32, standardisés par canal.",
+                         f"prepare_19(XC_TR[:4]) {problem_19}.")
+    else:
+        wait_19(5)'''
+
+EXPERIMENT_19 = r'''if not globals().get("ok_19"):
+    print("⏳ Ex 24.19 : l'entraînement attend que les cinq points de la cellule précédente passent.")
+else:
+    with checked("24.19"):
+        torch.manual_seed(2419)
+        model_19 = make_cnn_19()
+        history_19 = train_classifier(model_19, make_loader(prepare_19(XC_TR), torch.from_numpy(YC_TR), 128, 2419),
+                                      prepare_19(XC_VAL), torch.from_numpy(YC_VAL), EPOCHS_C, seed=2419)
+        print(f"{n_params(model_19)} paramètres · accuracy de validation par epoch : "
+              f"{np.round(history_19['val_acc'], 3).tolist()}")
+        verdict("24.19", history_19["val_acc"][-1] > 0.3,
+                f"le modèle réparé apprend : {fr(100 * history_19['val_acc'][-1], 1)} % de validation (10 % pour le hasard).",
+                f"seulement {fr(100 * history_19['val_acc'][-1], 1)} % de validation : un bug silencieux reste-t-il ?")'''
 
 # --- 24.20 -------------------------------------------------------------------
 GIVEN_20 = r'''def to_input_c(images):
@@ -2466,7 +2547,7 @@ PART_C = Part("C", "Des CNN sur CIFAR-10",
        tracks="R, C",
        body=r"""Un collègue a traduit un petit CNN Keras en PyTorch, ligne à ligne. Le modèle Keras est dans la docstring de `make_cnn_19`. La traduction contient **six** erreurs : trois lèvent une exception, trois sont silencieuses (le code tourne, mais le modèle apprend mal ou pas du tout). Corrige `make_cnn_19` et `prepare_19` **sur place**, sans changer leurs signatures.
 
-La vérification enchaîne les diagnostics : la construction du modèle, une passe avant, les activations, la sortie, puis la préparation des images (tant qu'une étape lève une exception, les suivantes attendent). Elle tourne dès le premier « Tout exécuter » : ses messages sont ton point de départ. La cellule suivante entraîne le modèle réparé `EPOCHS_C` epochs.
+La vérification enchaîne les diagnostics : la construction du modèle, une passe avant, les activations, la sortie, puis la préparation des images (tant qu'une étape échoue, les suivantes attendent). Elle tourne dès le premier « Tout exécuter » : ses messages sont ton point de départ. Une fois les cinq étapes passées, la cellule suivante entraîne le modèle réparé `EPOCHS_C` epochs.
 
 Dans tes notes : la liste des six erreurs, en séparant celles qui lèvent une exception de celles qui sont silencieuses. Pour chaque erreur silencieuse, comment l'aurais-tu détectée sans cette vérification ? Calcule la taille de l'entrée de la couche dense à la main, couche par couche.""",
        todo=TODO_19, check=CHECK_19, solution=SOLUTION_19 + "\n\n\n" + CHECK_19,
@@ -2578,7 +2659,7 @@ La vérification contrôle tes transformations (forme, type, standardisation, ha
     Ex("24.24", "📦", 2, 30, "Des images synthétiques générées à la volée",
        "dessiner des images synthétiques variées, et les servir en flux infini, reproductible et partagé entre "
        "workers.",
-       "Ex 24.20 · ch. 23 (Dataset) · 0A (générateurs) · fiche §24.4.7", thread="synth", tracks="C",
+       "Ex 24.20 · ch. 23 (Dataset) · 0A (générateurs) · fiche §24.4.7", thread="synthétique", tracks="C",
        body=r"""Le livre dessine cinq formes (un Z, un plus, trois barres, un U carré, un cercle) dans des images $64 \times 64$, en bougeant un peu leurs points à chaque dessin. Tu fais de même en $32 \times 32$, puis tu écris un flux qui en fabrique sans fin. La fiche montre un `ShapeStream` ; le tien partage **exactement** le travail entre les workers. La cellule donnée définit `stroke_24`, qui trace un segment épais dans une image.
 
 **Contrat**
@@ -3055,7 +3136,7 @@ PART_D = Part("D", "Des séries et un LSTM",
        "préparer une série pour un LSTM sans fuite, l'entraîner, et mesurer sa RMSE dans les unités de la série, "
        "contre la persistance.",
        "ch. 22 (`make_windows`, persistance) · ch. 12 (`MinMaxScaler`) · ✏️ 24.5 · 24.Q10 · fiche §24.5.1 à §24.5.4",
-       thread="synth", tracks="C",
+       thread="synthétique", tracks="C",
        body=r"""**Contrat**
 - `prepare_25(train_series, test_series, window)` rend `(scaler, X_train, y_train, X_test, y_test)` : un `SeriesScaler` ajusté sur la colonne `train_series.reshape(-1, 1)` **seule**, les deux séries mises à l'échelle avec lui, puis découpées par `make_windows(..., window)` ; `X` en tenseurs `float32` $(N, w, 1)$, `y` en tenseurs `float32` $(N,)$ ;
 - `fit_25(model, X, y, epochs=100, batch_size=16, lr=1e-2, seed=0)` entraîne `model` sur place (erreur quadratique moyenne, Adam, mini-batches mélangés de `make_loader(X, y, batch_size, seed)`) et rend la liste des losses moyennes d'entraînement, une par epoch ;
@@ -3071,7 +3152,7 @@ Dans tes notes : le réseau bat-il la persistance, et pour quelle fenêtre ? Que
 
     Ex("24.26", "🔬", 3, 45, "Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ?",
        "mesurer séparément l'effet de la fenêtre, de la profondeur et de la quantité de données, à calcul égal.",
-       "Ex 24.25 · ✏️ 24.5 · fiche §24.5.4 à §24.5.7", thread="synth", tracks="C",
+       "Ex 24.25 · ✏️ 24.5 · fiche §24.5.4 à §24.5.7", thread="synthétique", tracks="C",
        body=r"""Sur la série « toujours montante » (la série agitée dont chaque descente est retournée), le livre essaie deux leviers à la fois : plus de couches, puis plus de données avec une fenêtre plus large. Tu les sépares, à **calcul égal** : chaque run fait le même nombre de pas d'optimisation (`STEPS_26`), si bien que plus de données ne veut pas dire plus de calcul.
 
 **Contrat** : `run_26(n_train, window, sizes=(3,), steps=STEPS_26, seed=2426)` entraîne sur les `n_train` premiers points de `upsloping(sum_of_sines(..., **BUSY))` et rend `{"rmse": RMSE de test, "persistence": RMSE de la persistance, "epochs": epochs faites}` : `prepare_25` avec, pour test, `upsloping(sum_of_sines(200, D_THETA, TEST_START_26, **BUSY))` ; le modèle, construit juste après `torch.manual_seed(seed)`, est `TinyForecaster(sizes[0])` si `sizes` a une seule taille, `Stacked(sizes)` sinon ; `fit_25` avec des mini-batches de 32, un learning rate de 0,01, et le nombre d'epochs qui fait au moins `steps` pas.
@@ -3247,7 +3328,7 @@ CHECK_28 = r'''with checked("24.28"):
     d_28 = siamese_28(a_28, b_28)
     same("24.28", "Siamese_28 : distances au carré", d_28, ((encoder_28(a_28) - encoder_28(b_28)) ** 2).sum(dim=1),
          rtol=1e-5, atol=1e-6)
-    verdict("24.28", n_params(siamese_28) == n_params(encoder_28) and float(siamese_28(a_28, a_28).abs().max()) == 0.0,
+    verdict("24.28", n_params(siamese_28) == n_params(encoder_28) and float(siamese_28(a_28, a_28).detach().abs().max()) == 0.0,
             f"un seul encodeur pour les deux entrées : {n_params(siamese_28)} paramètres, distance nulle d'une image à elle-même.",
             f"le modèle siamois doit avoir les {n_params(encoder_28)} paramètres de l'encodeur, pas une copie ; reçu "
             f"{n_params(siamese_28)}.")
@@ -3740,7 +3821,7 @@ PART_E = Part("E", "Au-delà de nn.Sequential",
               "celles de la partie C.",
               given=GIVEN_E, exercises=[
     Ex("24.28", "📦", 3, 45, "Au-delà de nn.Sequential : branches, addition, couches partagées, gel",
-       "écrire dans forward() des branches, une fusion, une couche partagée et un réseau résiduel, et geler une partie "
+       "écrire dans `forward()` des branches, une fusion, une couche partagée et un réseau résiduel, et geler une partie "
        "d'un réseau qui contient de la batchnorm.",
        "Ex 24.20 · 24.Q12 · 📄 24.10 · ch. 23 (Ex 23.24, gel et nouvelle tête) · fiche §24.6 à §24.6.2",
        thread="CIFAR-10", tracks="R, C",

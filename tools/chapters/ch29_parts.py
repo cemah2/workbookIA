@@ -48,7 +48,7 @@ Dans tes notes : lis le message de l'`ImportError` de `load_boston` (`try: skd.l
 
     Ex("29.8", "🔮", 1, 10, "Prédire : le même modèle sur MNIST puis sur Fashion-MNIST",
        "prédire ce que coûte le passage de MNIST à Fashion-MNIST à un même petit réseau, et ce que fait un modèle de chiffres face à des vêtements.",
-       "Ex 29.7 · fiche §29.2", tracks="R, M, C",
+       "Ex 29.7 · fiche §29.2", thread="MNIST", tracks="R, M, C",
        body=r"""La cellule suivante entraîne deux fois le même petit réseau dense (784-128-10, deux epochs d'Adam sur 10 000 images, `train_mlp` dans les outils) : `MODEL_M` sur MNIST, `MODEL_F` sur Fashion-MNIST. Même format, même code, seule la source change. Elle n'affiche rien.
 
 **Avant d'exécuter l'expérience**, écris tes trois prédictions :
@@ -67,7 +67,7 @@ La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont 
 
     Ex("29.9", "🔮", 1, 10, "Prédire la chute d'accuracy en changeant de source de chiffres",
        "prédire ce que devient un modèle MNIST face à d'autres chiffres manuscrits, et s'il s'en rend compte.",
-       "Ex 29.8 · fiche §29.2, « Au-delà du livre : le décalage de distribution »", tracks="R, M, C",
+       "Ex 29.8 · fiche §29.2, « Au-delà du livre : le décalage de distribution »", thread="MNIST", tracks="R, M, C",
        body=r"""scikit-learn fournit d'autres chiffres manuscrits : 1 797 images de 8 × 8 pixels, valeurs de 0 à 16 (`load_digits`). La cellule suivante les agrandit **telles quelles** à 28 × 28, valeurs de 0 à 255 (`digits_naive`, dans les outils) : même format que MNIST, mêmes dix classes. On les donne à `MODEL_M` (29.8), sans autre entraînement.
 
 **Avant d'exécuter**, écris tes deux prédictions :
@@ -85,7 +85,8 @@ La cellule d'expérience montre aussi quelques images des deux sources côte à 
 
     Ex("29.10", "📦", 2, 25, "torchvision.datasets et Hugging Face datasets : mêmes données, deux API",
        "charger un dataset du Hugging Face Hub à une révision fixée, le convertir en tableaux NumPy et le comparer à une autre source.",
-       "ch. 23 (Dataset, DataLoader) · fiche §29.3.2 (encadré 🕰️, encadré 🧮)", tracks="R, M, C",
+       "ch. 20 et 23 (Dataset, DataLoader) · fiche §29.3.2 (encadré 🕰️, encadré 🧮)", thread="Fashion-MNIST",
+       tracks="R, M, C",
        body=r"""La cellule suivante charge le split de test de Fashion-MNIST depuis le Hugging Face Hub, à une **révision** fixée (un commit du dépôt du dataset) : `load_dataset(nom, split="test", revision=...)`. Sans réseau, elle fabrique le même format depuis la copie du workbook et le dit. `wb.datasets.load_fashion_mnist`, lui, passe par `torchvision.datasets.FashionMNIST` (ou un miroir) et rend des tableaux NumPy.
 
 **Contrat**
@@ -148,7 +149,8 @@ Dans tes notes : pour chaque ligne fautive, la fuite qu'elle crée. Laquelle exp
 
     Ex("29.14", "🔬", 3, 35, "Décalage de distribution : un modèle MNIST face aux chiffres de scikit-learn",
        "mesurer ce que récupère une préparation fidèle des images, puis quelques exemples étiquetés, face à un décalage de distribution.",
-       "Ex 29.9 · ch. 23 (fine-tuning) · fiche « Au-delà du livre : le décalage de distribution »", tracks="R, M, C",
+       "Ex 29.9 · ch. 23 (fine-tuning) · fiche « Au-delà du livre : le décalage de distribution »", thread="MNIST",
+       tracks="R, M, C",
        body=r"""En 29.9, les chiffres de scikit-learn, agrandis tels quels, ont dérouté `MODEL_M`. Or les images de MNIST suivent une recette précise : chaque chiffre est réduit pour tenir dans un carré de 20 × 20, puis placé dans l'image de 28 × 28 de sorte que son **centre de masse** soit au centre.
 
 **Contrat** de `to_mnist_14(images, method)` : la docstring de la cellule suivante. Trois méthodes : `"naive"` (comme `digits_naive`), `"box"` (agrandir à 20 × 20, puis 4 pixels noirs de chaque côté) et `"center"` (`"box"`, puis chaque image décalée pour mettre son centre de masse au centre, `(13,5 ; 13,5)`).

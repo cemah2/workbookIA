@@ -173,8 +173,10 @@ def assert_python_float(value, what):
     if value is None:
         _fail("", f"expected {what} to be a Python float, got None (did you forget the return?)")
     if type(value) is not float:
+        why = ("" if type(value).__module__.startswith("torch")
+               else ": a NumPy scalar does not print like the docstring")
         _fail("", f"expected {what} to be a Python float, got {type(value).__name__} {value!r} "
-                  "(convert it with float(...): a NumPy scalar does not print like the docstring)")
+                  f"(convert it with float(...){why})")
 
 
 def assert_unchanged(arrays, saved, what):
@@ -535,8 +537,11 @@ def test_greedy_policy_matches_argmax_with_ties(rl, seed, shape):
     Q = np.random.default_rng(seed).integers(0, 3, size=shape).astype(float)   # many ties
     for _ in range(3):                                                        # ties never go at random
         got = call(rl.greedy_policy, Q.copy(), expected=f"an array of shape ({shape[0]},)")
-        if not isinstance(got, np.ndarray) or got.shape != (shape[0],):
-            _fail("", f"expected an array of shape ({shape[0]},), got {type(got).__name__} {np.shape(got)}")
+        if not isinstance(got, np.ndarray):
+            _fail("", f"expected a NumPy array of shape ({shape[0]},), got {type(got).__name__} "
+                      "(convert with np.asarray(...))")
+        if got.shape != (shape[0],):
+            _fail("", f"expected an array of shape ({shape[0]},), got shape {got.shape}")
         want = np.argmax(Q, axis=1)
         if not np.array_equal(got, want):
             i = int(np.flatnonzero(got != want)[0])

@@ -417,6 +417,8 @@ def sample_from_logits(
     z = np.array(logits, dtype=np.float64)
     if z.ndim not in (1, 2) or z.shape[-1] < 1:
         raise ValueError(f"logits must have shape (V,) or (N, V), got {z.shape}")
+    if np.isnan(z).any():                                       # a NaN would silently give id 0 (BIBLE §22, Q9)
+        raise ValueError("logits contain NaN values: has the model diverged?")
     v = z.shape[-1]
     if top_k is not None:
         k = _positive_int(top_k, "top_k")

@@ -4,7 +4,7 @@ Le checkpoint clôt la partie V. Il vérifie que les architectures tiennent avan
 
 | Fichier | Contenu | Quand |
 |---|---|---|
-| [`05_synthese.md`](05_synthese.md) | carte mentale, les 22 formules clés et leurs fonctions `mylearn`, diagnostiquer formes et courbes, le workflow PyTorch et ses pièges, les choix par défaut, le vocabulaire à dire à l'oral | **avant** l'examen |
+| [`05_synthese.md`](05_synthese.md) | carte mentale, les 22 formules clés et leurs fonctions `mylearn`, diagnostiquer formes et courbes, la marche à suivre en PyTorch et ses pièges, les choix par défaut, le vocabulaire à dire à l'oral | **avant** l'examen |
 | [`01_examen_sujet.md`](01_examen_sujet.md) | le sujet de l'examen blanc : 14 questions, 119 minutes, noté sur 20 | le jour de l'examen |
 | [`02_examen_notebook.ipynb`](02_examen_notebook.ipynb) | partie A : les deux questions de code (CP5.5 en NumPy, CP5.6 en PyTorch) ; partie B : la vérification automatique, après l'examen | pendant, puis après |
 | [`04_mes_reponses.md`](04_mes_reponses.md) | ta copie : une section par question, et le tableau de ta note | pendant, puis après |

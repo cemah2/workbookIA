@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 26.Q1 — Apprendre avec des récompenses : ni supervisé, ni non supervisé 🧠 ⏱️ 3 min
-*Fiche §26.1, §26.2 · livre §26.1, §26.2*
+*Fiche §26.1, §26.2 · livre §26.1, §26.2 · parcours R*
 
 a) Ce qui distingue le RL de l'apprentissage supervisé : (A) il n'utilise pas de réseau de neurones ; (B) on ne donne pas la bonne action, seulement un signal qui dit si le résultat est bon ou mauvais ; (C) il n'a pas besoin de données ; (D) il ne marche que pour les jeux.
 b) Parmi ces problèmes, lesquels se posent naturellement en RL ? (A) régler la position d'attente des ascenseurs d'une tour au fil de la journée ; (B) reconnaître un chiffre manuscrit à partir de 60 000 images étiquetées ; (C) apprendre à un robot à marcher sans lui donner la suite des commandes ; (D) regrouper des clients en segments sans aucun label ; (E) jouer au backgammon contre un adversaire. Écris leurs lettres.
@@ -25,7 +25,7 @@ d) Vrai ou faux : le RL est un algorithme précis, comme les k plus proches vois
 e) Pour le livre, le RL cherche : (A) la réponse objectivement juste ; (B) la meilleure réponse qu'on puisse trouver pour le critère qu'on s'est donné ; (C) la réponse la plus rapide à calculer.
 
 ### 26.Q2 — Les quatre informations données à l'agent du morpion 🧠 ⏱️ 3 min
-*Fiche §26.2.1 · livre §26.2.1*
+*Fiche §26.2.1 · livre §26.2.1 · parcours R*
 
 a) Dans l'exemple du morpion du livre, qui joue le rôle de l'environnement ? (A) l'amie qui joue les croix ; (B) nous, qui jouons les ronds et donnons les récompenses ; (C) le plateau seul.
 b) Parmi ces informations, lesquelles l'agent reçoit-il à chaque tour ? (A) le plateau ; (B) la liste des coups possibles ; (C) la règle du jeu ; (D) une récompense ; (E) le nom du jeu ; (F) la consigne de chercher les plus grandes récompenses. Écris leurs lettres.
@@ -34,7 +34,7 @@ d) Le livre propose une variante où l'agent peut proposer les neuf cases, même
 e) Sur un plateau de morpion où deux cases sont occupées, combien de coups sont permis ?
 
 ### 26.Q3 — État, actions, politique et informations privées 🧠 ⏱️ 3 min
-*Fiche §26.3, §26.3.1 · livre §26.3, §26.3.1*
+*Fiche §26.3, §26.3.1 · livre §26.3, §26.3.1 · parcours R*
 
 a) Remets dans l'ordre les trois temps de la boucle : (A) l'environnement répond ; (B) l'agent se met à jour ; (C) l'agent choisit une action. Écris les lettres dans l'ordre.
 b) Une partie complète, du premier état au dernier, s'appelle : (A) une epoch ; (B) un épisode ; (C) une politique ; (D) une transition.
@@ -43,7 +43,7 @@ d) Vrai ou faux : dans le schéma du livre, c'est l'agent qui exécute l'action 
 e) Vrai ou faux : l'état d'un jeu de société peut contenir autre chose que la position des pièces (l'argent de chacun, des cartes cachées).
 
 ### 26.Q4 — Réponse de l'environnement, épisode et agents libres ou déclenchés 🧠 ⏱️ 3 min
-*Fiche §26.3.2 à §26.3.4 · livre §26.3.2 à §26.3.4*
+*Fiche §26.3.2 à §26.3.4 · livre §26.3.2 à §26.3.4 · parcours R*
 
 a) Après une action, l'environnement renvoie : (A) une nouvelle politique ; (B) un nouvel état et une récompense ; (C) la meilleure action ; (D) la valeur Q de l'action.
 b) Un cuisinier attend la sonnerie de son minuteur, qui tourne de lui-même. Le cuisinier est (A) libre ou (B) déclenché ? Et le minuteur ? Écris les deux lettres, le cuisinier d'abord.
@@ -52,7 +52,7 @@ d) Vrai ou faux : le cas où agent et environnement sont tous deux déclenchés 
 e) Dans Gymnasium, que renvoie `env.step(action)` ? (A) `(state, reward)` ; (B) `(state, info)` ; (C) `(state, reward, terminated, truncated, info)` ; (D) `(reward, done)`.
 
 ### 26.Q5 — MDP, observabilité, attribution du crédit, exploration ou exploitation 🧠 ⏱️ 3 min
-*Fiche §26.3.5 · livre §26.3.5*
+*Fiche §26.3.5 · livre §26.3.5 · parcours R*
 
 a) La propriété de Markov dit que : (A) toutes les actions ont la même probabilité ; (B) l'état présent suffit pour prédire la suite, le passé n'apporte rien de plus ; (C) les récompenses sont toujours positives ; (D) l'environnement est déterministe.
 b) Une partie de poker où l'agent ne voit pas les cartes de ses adversaires est un environnement : (A) totalement observable ; (B) partiellement observable.
@@ -61,7 +61,7 @@ d) Vrai ou faux : une politique qui joue toujours l'action la mieux notée explo
 e) Le dilemme exploration-exploitation est le même que celui du ch. 11 : (A) la régression logistique ; (B) le bandit à bras multiples ; (C) le k-means.
 
 ### 26.Q6 — Retour total, retour actualisé et rôle de γ 🧠 ⏱️ 3 min
-*Fiche §26.3.6, §26.3.7 · livre §26.3.6, §26.3.7*
+*Fiche §26.3.6, §26.3.7 · livre §26.3.6, §26.3.7 · parcours R, M*
 
 a) Une partie de trois coups reçoit les récompenses $(2, 0, 1)$. Son retour total.
 b) Le retour actualisé du premier coup, avec $\gamma = 0{,}5$.
@@ -70,7 +70,7 @@ d) Selon la fiche, $\gamma$ sert surtout à : (A) mesurer combien l'environnemen
 e) L'horizon effectif $1/(1-\gamma)$ pour $\gamma = 0{,}95$.
 
 ### 26.Q7 — Flippers et L-learning : pourquoi « lousy » ? 🧠 ⏱️ 3 min
-*Fiche §26.4, §26.5, §26.5.1 · livre §26.4, §26.5, §26.5.1*
+*Fiche §26.4, §26.5, §26.5.1 · livre §26.4, §26.5, §26.5.1 · parcours R*
 
 a) À Flippers, un plateau est gagnant quand : (A) toutes les tuiles montrent un point ; (B) exactement trois points forment une ligne ou une colonne complète, toutes les autres tuiles vides ; (C) trois points sont alignés, quelle que soit la direction.
 b) Combien de plateaux sont gagnants ?
@@ -79,7 +79,7 @@ d) Vrai ou faux : selon le livre (fig. 26.23 à 26.26), sans le camion, le L-lea
 e) Pourquoi le camion fait-il échouer le L-learning ? (A) il rend le jeu impossible à gagner ; (B) une seule partie malchanceuse efface la bonne valeur d'un coup ; (C) il change le nombre de tuiles.
 
 ### 26.Q8 — La mise à jour du Q-learning : α, γ et la valeur de l'état suivant 🧠 ⏱️ 3 min
-*Fiche §26.6, §26.6.1, §26.6.3 · livre §26.6, §26.6.1, §26.6.3*
+*Fiche §26.6, §26.6.1, §26.6.3 · livre §26.6, §26.6.1, §26.6.3 · parcours R, M*
 
 a) Dans la cible $r + \gamma \max_{a'} Q(s', a')$, le maximum est pris sur la ligne de : (A) l'état courant $s$ ; (B) l'état suivant $s'$ ; (C) l'état initial.
 b) Avec $\alpha = 0$, une mise à jour : (A) remplace la valeur par la cible ; (B) ne change rien ; (C) met la valeur à 0.
@@ -88,7 +88,7 @@ d) Vrai ou faux : le Q-learning attend la fin de l'épisode pour mettre la table
 e) $Q(s, a) = 0{,}4$, $r = 0$, $\gamma = 1$, $\max_{a'} Q(s', a') = 0{,}8$, $\alpha = 0{,}5$. La nouvelle valeur de $Q(s, a)$.
 
 ### 26.Q9 — ε-greedy ou softmax : vrai ou faux 🧠 ⏱️ 3 min
-*Fiche §26.6.2 · livre §26.6.2*
+*Fiche §26.6.2 · livre §26.6.2 · parcours R*
 
 a) Vrai ou faux : dans la définition standard d'ε-greedy, l'exploration tire une action parmi **toutes** les actions, la meilleure comprise.
 b) Avec ε-greedy standard, $\varepsilon = 0{,}1$ et 5 actions, la probabilité de jouer l'action gloutonne.
@@ -97,7 +97,7 @@ d) Vrai ou faux : contrairement à ε-greedy, softmax explore surtout les action
 e) La « softmax » du livre divise les valeurs par leur somme. Que donne-t-elle pour une ligne de zéros, celle de toute table au début ? (A) des probabilités égales ; (B) une division par zéro : elle n'est pas définie ; (C) toujours l'action 0.
 
 ### 26.Q10 — Table initialisée à zéro : comment la valeur remonte et converge 🧠 ⏱️ 3 min
-*Fiche §26.6.4, §26.6.5 · livre §26.6.4, §26.6.5*
+*Fiche §26.6.4, §26.6.5 · livre §26.6.4, §26.6.5 · parcours R*
 
 a) Au début de l'entraînement, la table Q vaut 0 partout et toutes les récompenses intermédiaires sont nulles. Les premières mises à jour : (A) laissent la table à 0 jusqu'à la première récompense non nulle ; (B) donnent des valeurs au hasard ; (C) font diverger la table.
 b) Après une première victoire, quelle case reçoit une valeur non nulle ? (A) toutes les cases de la partie ; (B) celle de la dernière action, qui a mené à la victoire ; (C) celle de la première action.
@@ -106,7 +106,7 @@ d) Les preuves de convergence du Q-learning demandent : (A) que chaque case soit
 e) Dans l'expérience du livre, combien de parties d'entraînement donnent les parties les plus courtes ? (A) 300 ; (B) 3 000 ; (C) 6 000.
 
 ### 26.Q11 — SARSA contre Q-learning : l'action suivante réellement jouée 🧠 ⏱️ 3 min
-*Fiche §26.7 à §26.7.2 · livre §26.7 à §26.7.2*
+*Fiche §26.7 à §26.7.2 · livre §26.7 à §26.7.2 · parcours R*
 
 a) SARSA tient son nom de : (A) *State, Action, Reward, State, Action* ; (B) *Stochastic Approximation with Reward and Stable Actions* ; (C) son inventeur.
 b) Dans la cible de SARSA, $Q(s', a')$ est la valeur de : (A) la meilleure action de $s'$ ; (B) l'action $a'$ que la politique a choisie dans $s'$, et qui sera jouée ; (C) l'action jouée au pas précédent.
@@ -115,7 +115,7 @@ d) Vrai ou faux : quand l'action suivante choisie est l'action gloutonne, SARSA 
 e) Vrai ou faux : selon la fiche, SARSA est meilleur que le Q-learning dans tous les cas.
 
 ### 26.Q12 — Tables géantes, rejeu d'expérience, AlphaGo Zero et lancer de rayons 🧠 ⏱️ 4 min
-*Fiche §26.8 à §26.10 · livre §26.8 à §26.10*
+*Fiche §26.8 à §26.10 · livre §26.8 à §26.10 · parcours R*
 
 a) Combien de colonnes a la table Q d'un morpion 4 × 4 (une par action possible) ?
 b) Le deep RL remplace la table par : (A) un arbre de décision ; (B) un réseau de neurones qui reçoit l'état et rend une valeur par action ; (C) une table plus petite.
@@ -127,22 +127,22 @@ e) Pendant l'auto-apprentissage (*self-play*), l'adversaire d'un joueur fait par
 
 ## 🔁 Rappels
 
-### 26.R1 — Un réseau comme fonction qui remplace une table (le décodeur d'un VAE) 🔁 ⏱️ 5 min
-*ch. 25 · fiche §26.8*
+### 26.R1 — Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE) 🔁 ★ ⏱️ 5 min
+*Ch. 25 (le décodeur d'un VAE) · fiche §26.8 · parcours R*
 
 a) Le décodeur d'un VAE à 20 latents reçoit un code de 20 nombres réels. Combien de codes différents pourrait-il recevoir ? (A) 20 ; (B) $2^{20}$ ; (C) une infinité : aucune table ne pourrait les lister.
 b) Vrai ou faux : un réseau rend une sortie raisonnable pour une entrée qu'il n'a jamais vue si elle ressemble à ses données d'entraînement, ce qu'une table ne sait pas faire.
 c) Un DQN pour un jeu à 4 actions rend, pour chaque état, combien de nombres ?
 
-### 26.R2 — Que sauvegarder pour reprendre un entraînement ? 🔁 ⏱️ 5 min
-*ch. 23*
+### 26.R2 — Ch. 23 : que sauvegarder pour reprendre un entraînement ? 🔁 ★ ⏱️ 5 min
+*Ch. 23 (sauvegarder et reprendre un entraînement) · parcours R*
 
 a) Pour reprendre un entraînement PyTorch exactement où il s'était arrêté, que faut-il sauvegarder ? (A) le `state_dict` du modèle ; (B) le `state_dict` de l'optimiseur ; (C) le numéro de l'epoch ; (D) l'état des générateurs aléatoires ; (E) le code source de PyTorch. Écris les lettres nécessaires.
 b) Pour un agent de Q-learning tabulaire, l'équivalent du `state_dict` est : (A) la table Q ; (B) la liste des récompenses ; (C) l'environnement.
 c) Vrai ou faux : pour reprendre un Q-learning à $\varepsilon$ décroissant, il suffit de sauvegarder la table Q.
 
-### 26.R3 — Bandit à bras multiples, ε-greedy et UCB 🔁 ⏱️ 5 min
-*ch. 11 · fiche §26.6.2*
+### 26.R3 — Ch. 11 : bandit à bras multiples, ε-greedy et UCB 🔁 ★ ⏱️ 5 min
+*Ch. 11 (bandit à bras multiples) · fiche §26.6.2 · parcours R*
 
 a) Un bandit à bras multiples est un problème de RL avec : (A) un seul état ; (B) deux états ; (C) un état par bras.
 b) La mise à jour incrémentale du ch. 11 : estimation 3, nouveau gain 5, pas 0,25. La nouvelle estimation.
@@ -172,7 +172,7 @@ Dans ta copie : vérifie d) en calculant les retours à rebours, $G_t = r_t + \g
 
 ### Ex 26.2 — Taille des tables : de Flippers au Go ✏️ ★ ⏱️ 10 min
 **Objectif :** compter les états et les cases d'une table Q, et voir quand une table devient impossible.
-**Prérequis :** fiche §26.4, §26.8 · 0B (puissances, logarithmes) · **Parcours :** R, M
+**Prérequis :** fiche §26.4, §26.8 · 0B (puissances, logarithmes) · **Fil rouge :** Flippers · **Parcours :** R, M
 
 a) Le nombre de plateaux de Flippers 3 × 3 (chaque tuile a un point ou non).
 b) Le nombre de cases de sa table Q (une ligne par plateau, une colonne par tuile à retourner).
@@ -274,7 +274,7 @@ Un MDP à deux états non terminaux, $A$ et $B$, et un état terminal $T$. Dans 
 
 ### Ex 26.9 — Mémoire d'une table Q : morpion 4×4, 5×5 et Go 🧮 ★★ ⏱️ 15 min
 **Objectif :** estimer la mémoire d'une table Q, et voir quand une table devient démesurée, puis impossible.
-**Prérequis :** Ex 26.2 · fiche §26.8 · **Parcours :** R, M
+**Prérequis :** Ex 26.2 · fiche §26.8 · **Fil rouge :** morpion · **Parcours :** R, M
 
 Une valeur Q est un `float32` (4 octets). Réponds dans ta copie, avec des ordres de grandeur.
 
@@ -325,18 +325,28 @@ Lis V. Mnih et coll., « Human-level control through deep reinforcement learning
 Réponds à voix haute en une minute, puis compare avec `05_solutions.md` : réponse modèle et relances possibles.
 
 ### 26.E1 — Q-learning ou SARSA : on-policy, off-policy, lequel choisir ? 💼 ★★ ⏱️ 10 min
+*Fiche §26.7, §26.7.2 · parcours R*
+
 « Quelle est la différence entre le Q-learning et SARSA ? Dans quel cas prendriez-vous l'un plutôt que l'autre ? »
 
 ### 26.E2 — À quoi sert le facteur d'actualisation γ ? 💼 ★★ ⏱️ 10 min
+*Fiche §26.3.7 · parcours R*
+
 « À quoi sert le facteur d'actualisation, et comment le choisissez-vous ? »
 
 ### 26.E3 — Comment gérer le compromis exploration/exploitation ? 💼 ★★ ⏱️ 10 min
+*Fiche §26.6.2 · parcours R*
+
 « Comment un agent de RL gère-t-il le compromis entre exploration et exploitation ? Citez plusieurs méthodes. »
 
 ### 26.E4 — Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ? 💼 ★★ ⏱️ 10 min
+*Fiche §26.8, §26.9 · parcours R*
+
 « Pourquoi le DQN a-t-il besoin d'une mémoire de rejeu et d'un réseau cible ? »
 
 ### 26.E5 — Qu'est-ce que le RLHF et pourquoi utilise-t-on le RL avec les LLM ? 💼 ★★ ⏱️ 10 min
+*Fiche, « Au-delà du livre : le RL et les modèles de langage » · parcours R*
+
 « Qu'est-ce que le RLHF, et pourquoi utilise-t-on l'apprentissage par renforcement pour entraîner les modèles de langage ? »
 
 <a id="notebook"></a>

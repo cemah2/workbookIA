@@ -308,8 +308,8 @@ def footer_cells(kind: str) -> list:
                "1. Sais-tu écrire une montée de gradient sur l'image d'un réseau gelé, normalisation et plage des "
                "pixels comprises ?\n"
                "2. Sais-tu calculer une matrice de Gram et dire ce qu'elle garde et ce qu'elle oublie ?\n"
-               "3. Sais-tu régler les trois poids d'un transfert de style en lisant la valeur de chaque terme ?\n"
-               "4. Sais-tu choisir une stratégie de décodage, et dire ce qu'est la perplexité ?\n\n"
+               "3. Sais-tu régler les trois poids d'un transfert de style en lisant la valeur de chaque terme, et "
+               "choisir une stratégie de décodage de texte ?\n\n"
                "**Pour aller plus loin** : l'article de Gatys et coll. (2015) et l'article « Feature "
                "Visualization » de Distill (2017), cités dans la fiche. La suite : le ch. 29, les datasets et la "
                "préparation du projet final.")]

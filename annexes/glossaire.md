@@ -24,7 +24,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | pooling | agrégation, sous-échantillonnage | résumer une zone d'une image par un seul nombre (maximum, moyenne) | 20 |
 | padding | remplissage, marge | ajouter des valeurs (souvent des zéros) autour d'une donnée pour garder sa taille | 20 |
 | stride | pas | décalage entre deux positions successives d'un filtre de convolution | 20 |
-| kernel | noyau, filtre | petite grille de poids que l'on fait glisser sur une image (CNN) | |
+| kernel (dans le code : `kernel_size`) | noyau, filtre | dans la prose des CNN, on dit « noyau » ou « filtre » (DÉROGATION du BIBLE §22 ; voir « noyau (d'une convolution) ») | 21 |
 | token | jeton, unité lexicale | morceau de texte (mot, sous-mot, caractère) traité par un modèle de langage | 1 |
 | prompt | invite, instruction | texte donné en entrée à un modèle de langage | 1 |
 | overfitting | surapprentissage, surajustement | le modèle apprend aussi le hasard de son échantillon : excellent sur l'entraînement, il généralise mal | 9 |
@@ -172,8 +172,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | clustering | partitionnement, regroupement | former des groupes d'échantillons qui se ressemblent, sans labels | 1 |
 | débruitage | denoising, noise reduction | retirer le bruit d'un échantillon, ou combler ses valeurs manquantes | 1 |
 | réduction de dimension | dimensionality reduction | décrire les échantillons avec moins de features, en gardant l'essentiel | 1 |
-| générateur | generator, generative model | modèle qui fabrique de nouvelles données ressemblant aux exemples | 1 |
-| apprentissage auto-supervisé | self-supervised learning | les données fournissent elles-mêmes la réponse (le mot suivant, une zone masquée) : pas de labels humains | 1 |
+| générateur (modèle génératif) | generator, generative model | modèle qui fabrique de nouvelles données ressemblant aux exemples ; dans un GAN, le réseau qui transforme un bruit $\mathbf{z}$ en un échantillon $G(\mathbf{z})$, sans voir de données réelles | 1, 27 |
+| apprentissage auto-supervisé | self-supervised learning | la cible est fabriquée à partir de l'entrée elle-même (le mot suivant, une zone masquée, l'entrée à recopier) : pas de labels humains ; à distinguer du semi-supervisé (quelques exemples avec label, beaucoup sans) | 1, 25 |
 | apprentissage semi-supervisé | semi-supervised learning | apprendre avec peu d'exemples étiquetés et beaucoup de non étiquetés | 1 |
 | agent, environnement, action, récompense | agent, environment, action, reward | vocabulaire du renforcement : qui décide ; le reste du monde ; son choix ; le nombre qui évalue ce choix | 1 |
 | exploration / exploitation | exploration / exploitation | essayer d'autres actions / refaire la meilleure connue : le compromis du renforcement | 1 |
@@ -405,7 +405,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | comparaison appariée | paired comparison | comparer deux modèles exemple par exemple (ou fold par fold) sur les mêmes données, ce qui retire la difficulté commune | 8 |
 | bootstrap apparié | paired bootstrap | rééchantillonner les exemples du test avec remise, en gardant les réponses des deux modèles, pour un intervalle de leur écart | 8 |
 | contamination (d'un benchmark) | benchmark contamination | un modèle a vu pendant son entraînement les questions de test d'un benchmark public : son score est trop beau | 8 |
-| dérive des données | data drift, distribution shift | les données de production s'éloignent de celles de l'entraînement et du test (nouvelle population, nouveau capteur, saison) | 8 |
+| dérive des données | data drift | les données de production s'éloignent, avec le temps, de celles de l'entraînement et du test (nouvelle population, nouveau capteur, saison) : le cas d'un décalage de distribution (ch. 29) qui arrive avec le temps | 8 |
 | fiche modèle | model card | document qui décrit l'usage prévu d'un modèle, ses données, son évaluation et ses limites (Mitchell et coll., 2019) | 8 |
 | test par mutation | mutation testing | juger des tests en vérifiant qu'ils échouent sur des versions volontairement modifiées (boguées) du code | 8 |
 | early stopping | arrêt anticipé | arrêter l'entraînement quand l'erreur de validation ne s'améliore plus, puis reprendre les poids de la dernière amélioration (ceux de la meilleure epoch quand `min_delta` = 0) | 9 |
@@ -666,7 +666,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | étape de mise à jour | update step | $w \leftarrow w - \eta\,\partial L / \partial w$ après la rétropropagation ; au sens strict, elle n'en fait pas partie (c'est le rôle des optimiseurs) | 18 |
 | règle de la chaîne à plusieurs chemins | multivariable chain rule | la dérivée par rapport à une quantité qui agit par plusieurs chemins est la somme des dérivées le long de chaque chemin : d'où la somme $\sum_k w_{jk}\,\delta_k$ | 18 |
 | différentiation automatique en mode inverse | reverse-mode automatic differentiation | parcourir le graphe de calcul de la sortie vers les entrées pour obtenir le gradient d'un résultat par rapport à toutes ses entrées, pour un petit multiple du coût du calcul ; la rétropropagation en est un cas | 18 |
-| gradient évanescent | vanishing gradient | gradient qui diminue de façon géométrique en remontant les couches, parce qu'il est un produit de facteurs presque toujours plus petits que 1 ; à l'inverse, des facteurs plus grands que 1 font exploser le gradient (*exploding gradient*) | 0B |
+| gradient évanescent, explosif | vanishing, exploding gradient | gradient qui diminue de façon géométrique en remontant les couches (ou les pas de temps d'un RNN), parce qu'il est un produit de facteurs presque toujours plus petits que 1 ; des facteurs plus grands que 1 le font exploser (*exploding gradient*) ; dans un RNN, le gradient qui remonte $k$ pas est un produit de $k$ jacobiennes, qui tend sûrement vers 0 si la norme spectrale de $W_{hh}$ est inférieure à 1 | 0B, 22 |
 | loss calculée sur les logits | loss on logits | cross-entropy calculée directement à partir des scores bruts (`log_softmax`, forme stable de la BCE) : jamais de $\log 0$, et un gradient $\mathbf{p} - \mathbf{y}$ | 18 |
 | erreur relative (d'un gradient) | relative error | $\lvert g_a - g_n\rvert / \max(\lvert g_a\rvert + \lvert g_n\rvert, 10^{-12})$ entre gradient analytique et numérique ; sous $10^{-7}$ juste, au-dessus de $10^{-3}$ un bug | 18 |
 | accumulation des gradients | gradient accumulation | les gradients s'ajoutent (`+=`) : un nœud utilisé deux fois reçoit la somme de ses contributions, et plusieurs petits batches peuvent préparer une seule mise à jour ; d'où `zero_grad()` | 18 |
@@ -705,7 +705,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | couche utilitaire | utility layer | couche sans neurones qui change la forme ou les valeurs d'un tenseur : aplatissement, remodelage, recadrage, zero-padding, suréchantillonnage, bruit | 20 |
 | aplatissement | flatten | remodelage qui met à plat tout un tenseur (sauf, pour `nn.Flatten`, la dimension des exemples) | 20 |
 | zero-padding | remplissage de zéros | bordure de zéros ajoutée autour d'une image, par exemple pour qu'une convolution garde sa taille | 20 |
-| suréchantillonnage | upsampling | agrandir un tenseur, en général en répétant chaque valeur (`nn.Upsample`) ; l'inverse du pooling | 20 |
+| suréchantillonnage | upsampling | agrandir un tenseur en répétant (ou en interpolant) ses valeurs, sans paramètres (`nn.Upsample`) ; l'inverse du pooling | 20, 25 |
 | accuracy top-5 | top-5 accuracy | part des exemples dont la bonne classe est parmi les 5 plus probables ; le top-1 ne compte que la plus probable | 20 |
 | connexion résiduelle | residual connection, skip connection | un bloc calcule $\mathbf{x} + F(\mathbf{x})$ : le gradient garde une voie directe, ce qui permet d'entraîner des réseaux de centaines de couches (ResNet, 2015) | 20 |
 | hook | hook | fonction qu'on accroche à un module PyTorch et qu'il appelle à chaque passe avant ou arrière (pour lire des activations ou des gradients) ; c'est une raison d'appeler `model(x)` plutôt que `model.forward(x)` | 20 |
@@ -719,12 +719,15 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | boîte noire | black box | modèle dont on ne peut pas expliquer les décisions de l'extérieur | 20 |
 | explication contrefactuelle | counterfactual explanation | « ce qu'il faudrait changer pour obtenir une autre décision » (S. Wachter et coll., 2017) | 20 |
 | biais de sélection | selection bias | les données ne représentent qu'une partie des cas : une banque n'observe le remboursement que des prêts qu'elle a accordés | 20 |
+| règlement européen sur l'IA | AI Act (règlement (UE) 2024/1689) | règlement qui classe les systèmes d'IA par niveau de risque et leur impose des obligations (transparence, documentation, résumé des données d'entraînement des modèles à usage général, art. 53) | 20 |
+| RGPD | GDPR (règlement (UE) 2016/679) | règlement européen sur la protection des données personnelles ; son article 22 encadre les décisions entièrement automatisées | 20 |
 | noyau (d'une convolution) | kernel, filter | la petite grille de poids d'un filtre, de forme $(C_{in}, k_h, k_w)$, que l'on fait glisser sur l'image | 21 |
 | corrélation croisée | cross-correlation | somme des produits du noyau et de chaque morceau de l'entrée, sans retourner le noyau : ce que calcule `nn.Conv2d` (la convolution des mathématiciens le retourne) | 21 |
 | partage de poids | weight sharing | les mêmes poids servent à toutes les positions de l'image : un filtre a un nombre de poids indépendant de la taille de l'image | 21 |
 | champ récepteur | receptive field | les pixels de l'entrée dont dépend une sortie ; il grandit avec la profondeur, les strides et les poolings : $r_\ell = r_{\ell-1} + (k_\ell - 1)\prod_{i<\ell} s_i$ | 21 |
 | ancre, pixel focal | anchor, focal pixel | la case du noyau posée sur le pixel calculé (en général le centre), et ce pixel | 21 |
 | carte de caractéristiques | feature map, activation map | la sortie d'un filtre : une grille qui dit où, dans l'entrée, son motif est présent | 21 |
+| détecteur de motif | feature detector | un filtre vu comme ce qu'il cherche : sa sortie est grande là où l'entrée ressemble à son noyau | 21 |
 | dilatation | dilation, atrous convolution | espacer les poids du noyau de $d - 1$ pixels : il couvre $d(k - 1) + 1$ pixels sans poids en plus | 21 |
 | convolution par canal | depthwise convolution | `groups=C_in` : un filtre d'un seul canal par canal d'entrée, sans mélange entre canaux | 21 |
 | convolution séparable | depthwise separable convolution | une convolution par canal suivie d'une convolution 1 × 1 (MobileNet) | 21 |
@@ -734,7 +737,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | convolution transposée | transposed convolution, fractionally strided convolution | convolution qui agrandit : chaque pixel dépose une copie du noyau, tous les $s$ pixels ; $H_{out} = (H - 1)s - 2p + k$ ; pas l'inverse d'une convolution | 21 |
 | artefacts en damier | checkerboard artifacts | motifs réguliers d'une image générée par une convolution transposée dont le noyau n'est pas un multiple du stride | 21 |
 | pooling moyen global | global average pooling | moyenne de chaque canal sur toutes ses positions : $(C, H, W) \to (C,)$ ; la tête des CNN modernes | 21 |
-| maximisation d'activation | activation maximization | trouver, par montée de gradient sur les pixels (poids fixés), l'image qui excite le plus un filtre | 21 |
+| maximisation d'activation | activation maximization | chercher, par montée de gradient sur l'entrée (poids fixés), l'image qui excite le plus un filtre, une couche ou une classe | 21, 28 |
 | Grad-CAM | gradient-weighted class activation mapping | carte d'attribution : les cartes d'une couche profonde pondérées par le gradient du score d'une classe | 21 |
 | exemple adversarial | adversarial example | entrée modifiée de façon presque invisible, calculée pour tromper le modèle ; la différence est la perturbation adversariale | 21 |
 | attaque ciblée, non ciblée | targeted, untargeted attack | chercher une classe choisie, ou n'importe quelle erreur | 21 |
@@ -747,10 +750,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | fenêtre glissante | sliding window | un morceau de $w$ valeurs consécutives d'une série, qui sert d'entrée ; sa cible est la valeur $h$ pas plus loin (l'horizon) ; $N = \lfloor (T - w - h)/s \rfloor + 1$ fenêtres | 22 |
 | réseau récurrent (RNN) | recurrent neural network | réseau qui lit une séquence pas à pas en gardant un état, avec les mêmes poids à chaque pas | 22 |
 | état caché | hidden state | le vecteur $h_t$ qu'un RNN met à jour à chaque entrée : un résumé de taille fixe de ce qu'il a lu | 22 |
+| taille de l'état | hidden size | le nombre $H$ de valeurs de l'état d'une couche récurrente (`hidden_size` de PyTorch), un hyperparamètre | 22 |
 | pas de temps | time step | une position de la séquence ; `nn.LSTM` attend `(T, N, D)` par défaut, `(N, T, D)` avec `batch_first=True` | 22 |
-| déroulement | unrolling | dessiner (ou calculer) une copie de la cellule par pas de temps : un réseau profond de $T$ couches aux poids partagés | 22 |
+| déroulement | unrolling | dessiner (ou calculer) une copie de la cellule par pas de temps : un réseau profond de $T$ couches aux poids partagés ; le schéma **déroulé** (*unrolled*) s'oppose au schéma **enroulé** (*rolled*), une seule cellule avec une boucle | 22 |
 | rétropropagation dans le temps (BPTT) | backpropagation through time | la rétropropagation appliquée au réseau déroulé ; les gradients d'un poids s'additionnent sur tous les pas ; tronquée (*truncated BPTT*) : par morceaux de séquence | 22 |
-| gradient évanescent, explosif | vanishing, exploding gradient | le gradient qui remonte $k$ pas est un produit de $k$ jacobiennes : il tend vers 0 (sûrement si $\sigma_{\max}(W_{hh}) < 1$) ou explose | 22 |
 | dépendance à long terme | long-term dependency | une sortie qui dépend d'une entrée lointaine, que la descente de gradient a du mal à relier | 22 |
 | porte | gate | vecteur de valeurs entre 0 et 1 (une sigmoïde) qui multiplie une autre valeur élément par élément | 22 |
 | LSTM | long short-term memory | cellule à mémoire $c_t$ et portes d'entrée, d'oubli et de sortie (ordre PyTorch $i, f, g, o$) : $c_t = f \odot c_{t-1} + i \odot g$, $h_t = o \odot \tanh c_t$ (S. Hochreiter et J. Schmidhuber, 1997 ; porte d'oubli : F. Gers et coll., 2000) | 22 |
@@ -763,7 +766,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | persistance (en prévision) | persistence, naive forecast | prévoir la dernière valeur connue ; persistance saisonnière : la valeur de la même période du cycle précédent ; la baseline à battre | 22 |
 | validation glissante | time series cross-validation, rolling origin | plusieurs coupures successives dans le temps, l'entraînement toujours avant la validation (`TimeSeriesSplit`) | 22 |
 | vocabulaire (d'un modèle de langue) | vocabulary | la liste des tokens connus et leur numéro (id) ; les autres deviennent le token inconnu (`<unk>`) | 22 |
-| décodage glouton | greedy decoding | prendre à chaque pas le token le plus probable ; déterministe, il tourne souvent en boucle | 22 |
+| décodage glouton | greedy decoding | prendre à chaque pas le token le plus probable : déterministe, et sujet aux boucles | 22, 28 |
 | top-k, top-p | top-k sampling, nucleus sampling | tirer le token suivant parmi les $k$ plus probables, ou parmi le plus petit ensemble dont la probabilité cumulée atteint $p$ (A. Holtzman et coll., 2020) | 22 |
 | amorce | seed (text) | le début de texte donné au générateur, qu'il prolonge | 22 |
 | modèle à espace d'états (SSM) | state space model | récurrence linéaire entraînable en parallèle (S4, Mamba) : un état de taille fixe, un coût linéaire en la longueur | 22 |
@@ -771,7 +774,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | point d'arrêt, débogueur | breakpoint, debugger | `breakpoint()` arrête l'exécution et ouvre `pdb` à cet endroit pour inspecter les variables | 23 |
 | backend (de Keras) | backend | la bibliothèque qui fait les calculs sous Keras : Theano, TensorFlow ou CNTK pour Keras 2 ; JAX, TensorFlow ou PyTorch pour Keras 3 | 23 |
 | ordre C, ligne par ligne | C order, row-major order | rangement en mémoire où le dernier indice varie le plus vite : l'élément $(i, j, k)$ d'une forme $(D_1, D_2, D_3)$ est à la position $i D_2 D_3 + j D_3 + k$ | 23 |
-| tenseur contigu | contiguous tensor | tenseur dont l'ordre de lecture est celui de sa mémoire ; `permute` et `.T` rendent des vues non contiguës, que `view` refuse et que `.contiguous()` recopie | 23 |
+| tenseur contigu | contiguous tensor | tenseur dont l'ordre de lecture est celui de sa mémoire ; `permute` et `.T` rendent des vues non contiguës, que `view` ne peut pas aplatir et que `.contiguous()` recopie | 23 |
 | channels_first, channels_last | channels first, channels last | les canaux d'une image avant ou après la hauteur et la largeur : `(C, H, W)` (PyTorch) ou `(H, W, C)` (Keras, Pillow) ; on convertit avec `permute`, jamais `reshape` | 23 |
 | historique (d'entraînement) | training history | les mesures de chaque epoch (loss et accuracy du train et de la validation) que rend `fit()` ; en PyTorch, un dictionnaire de listes | 23 |
 | analyse des erreurs | error analysis | regarder où et pourquoi le modèle se trompe : matrice de confusion, exemples mal classés, labels douteux | 23 |
@@ -787,7 +790,9 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | espace de recherche | search space | l'ensemble des combinaisons d'hyperparamètres qu'une recherche peut essayer, un point par réglage, avec son score | 24 |
 | recherche multirésolution | coarse-to-fine search | une grille large et grossière, puis des grilles plus fines autour des meilleures régions | 24 |
 | journal d'expériences | experiment log, experiment tracking | une ligne par run : date, commit, réglages complets, graine, métriques, durée, machine ; MLflow, Weights & Biases et TensorBoard le font avec des graphiques | 24 |
+| run | exécution | un entraînement complet, avec ses réglages (graine, hyperparamètres) et ses résultats : une ligne du journal d'expériences | 24 |
 | données synthétiques | synthetic data | des exemples fabriqués par un programme, à volonté (`IterableDataset` en PyTorch) | 24 |
+| worker (d'un `DataLoader`) | processus de chargement | un des `num_workers` processus qui préparent les mini-batches en parallèle de l'entraînement ; chacun a sa graine | 24 |
 | multiplication-addition (MAC) | multiply-accumulate | une multiplication suivie d'une addition, l'unité de compte du coût d'une couche : $H_{out}W_{out}C_{out}C_{in}k^2$ pour une convolution, $n_{in}n_{out}$ pour une couche dense ; deux opérations | 24 |
 | état porté | stateful RNN, carried state | l'état final de la ligne $i$ d'un batch sert d'état initial à la ligne $i$ du batch suivant ; en PyTorch, `(h, c)` passé au batch suivant après `detach()` | 24 |
 | rétropropagation tronquée dans le temps | truncated BPTT | on porte les valeurs de l'état d'un morceau de séquence au suivant, mais pas les gradients (`detach()`) | 24 |
@@ -803,12 +808,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | goulot | bottleneck | la couche la plus étroite d'un autoencodeur, qui force le réseau à résumer son entrée | 25 |
 | code, variables latentes | code, latent variables | les valeurs du goulot, qui représentent l'entrée ; *latent* : caché | 25 |
 | espace latent | latent space | l'espace des codes, une dimension par variable latente ($d$ dimensions) | 25 |
-| apprentissage auto-supervisé | self-supervised learning | apprentissage dont la cible est fabriquée à partir de l'entrée elle-même (recopier, compléter, prédire la suite), sans label ; à distinguer du semi-supervisé (quelques données étiquetées, beaucoup sans label) | 25 |
 | compression avec ou sans perte | lossy, lossless compression | sans perte : on retrouve exactement l'original (transformation inversible) ; avec perte : une partie de l'information disparaît | 25 |
 | mélange paramétrique | parametric blending | mélanger les nombres qui décrivent deux objets (et non leurs données brutes, le mélange de contenu) | 25 |
 | interpolation sphérique (slerp) | spherical linear interpolation | interpolation qui suit l'arc de grand cercle entre deux vecteurs : $\frac{\sin((1-t)\Omega)}{\sin\Omega}\mathbf{z}_0 + \frac{\sin(t\Omega)}{\sin\Omega}\mathbf{z}_1$ | 25 |
 | autoencodeur débruiteur | denoising autoencoder | autoencodeur qui reçoit une entrée bruitée et doit rendre l'entrée propre | 25 |
-| sur-échantillonnage | upsampling | agrandir une image en répétant (ou en interpolant) ses valeurs, sans paramètres (`nn.Upsample`) | 25 |
 | PSNR | peak signal-to-noise ratio | mesure de fidélité d'une image en décibels : $10\log_{10}(1/\text{MSE})$ pour des pixels dans $[0, 1]$ | 25 |
 | VAE (autoencodeur variationnel) | variational autoencoder | autoencodeur dont l'encodeur donne une loi (moyenne et variance par latent), avec un terme KL vers le prior $\mathcal{N}(\mathbf{0}, \mathbf{I})$ ; son décodeur seul est un générateur | 25 |
 | astuce de reparamétrisation | reparameterization trick | écrire un tirage $z = \mu + \sigma\varepsilon$ avec $\varepsilon \sim \mathcal{N}(0, 1)$ tiré à part, pour que le gradient passe par $\mu$ et $\sigma$ | 25 |
@@ -850,15 +853,15 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | masque d'actions | action mask | la liste des actions permises dans un état (`info["action_mask"]`), pour ne jamais proposer un coup interdit | 26 |
 | discrétiser | discretize | découper une variable continue en intervalles, pour qu'une table puisse lister ses valeurs (l'état de CartPole) | 26 |
 | SARSA espéré | expected SARSA | variante de SARSA dont la cible prend l'espérance de $Q(s', \cdot)$ sous la politique, au lieu de l'action tirée | 26 |
+| gradient de politique | policy gradient | méthodes qui ajustent directement les paramètres de la politique dans le sens qui augmente le retour espéré (REINFORCE, PPO) | 26 |
 | réseau antagoniste génératif (GAN) | generative adversarial network | un générateur et un discriminateur entraînés l'un contre l'autre ; le livre écrit à tort *antagonistic* | 27 |
-| générateur | generator | réseau qui transforme un bruit $\mathbf{z}$ en un échantillon $G(\mathbf{z})$, sans voir de données réelles | 27 |
 | discriminateur | discriminator | classifieur binaire qui rend la probabilité qu'un échantillon soit vrai ; appelé critique (*critic*) dans un WGAN | 27 |
 | loss non saturante | non-saturating loss | le générateur minimise $-\ln D(G(\mathbf{z}))$ au lieu de $\ln(1 - D(G(\mathbf{z})))$ : même but, gradient fort quand $D$ repère les faux | 27 |
 | discriminateur optimal | optimal discriminator | $D^* = p_{\text{data}} / (p_{\text{data}} + p_g)$, le meilleur discriminateur pour un générateur fixé | 27 |
 | jeu à somme nulle | zero-sum game | jeu où les gains des joueurs s'additionnent à zéro, quelle que soit l'issue | 27 |
 | minimax, maximin | minimax, maximin | choisir le coup dont le pire résultat est le meilleur ; $\min_j \max_i$ et $\max_i \min_j$ d'une matrice de gains | 27 |
 | équilibre de Nash | Nash equilibrium | couple de stratégies où aucun joueur ne gagne à changer seul la sienne ; pour un GAN, $p_g = p_{\text{data}}$ et $D = \frac{1}{2}$ | 27 |
-| DCGAN | deep convolutional GAN | GAN convolutif construit selon les règles de Radford (convolutions à pas, convolutions transposées, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$) | 27 |
+| DCGAN | deep convolutional GAN | GAN convolutif construit selon les règles de Radford (convolutions de stride 2, convolutions transposées, batchnorm, ReLU et tanh dans $G$, Leaky ReLU dans $D$) | 27 |
 | effondrement de mode | mode collapse | le générateur ne couvre qu'une partie des pics (modes) de la distribution des données : total (un seul échantillon) ou partiel ; le livre écrit *modal collapse* | 27 |
 | écart-type par mini-batch | minibatch standard deviation | couche de ProGAN qui donne au discriminateur l'écart-type moyen du mini-batch, pour qu'il voie un manque de variété | 27 |
 | discrimination par mini-batch | minibatch discrimination | technique de Salimans et coll. (2016) : le discriminateur compare chaque échantillon aux autres du mini-batch | 27 |
@@ -866,12 +869,12 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | GAN conditionnel | conditional GAN | GAN dont les deux réseaux reçoivent une information $y$ (un label, un texte) ; le générateur produit ce qu'on lui demande | 27 |
 | distance de Wasserstein (1D) | Wasserstein distance, earth mover's distance | travail minimal pour transporter une distribution sur l'autre ; en 1D, l'aire entre les fonctions de répartition, la moyenne des écarts des échantillons triés à tailles égales | 27 |
 | distance de Fréchet | Fréchet distance | entre deux gaussiennes : $\lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2})$ | 27 |
+| pénalité de gradient (WGAN-GP) | gradient penalty | terme qui pousse vers 1 la norme du gradient du critique, sur des points entre vraies et fausses données, à la place de l'écrêtage des poids du WGAN (Gulrajani et coll., 2017) | 27 |
 | FID | Fréchet Inception distance | distance de Fréchet entre les features d'Inception v3 de vraies images et d'images générées ; plus petite, meilleure | 27 |
 | precision et recall génératifs | precision and recall for generative models | fidélité (part des échantillons proches de vraies données) et diversité (part des vraies données approchées par un échantillon) | 27 |
 | trace | trace | somme des éléments diagonaux d'une matrice carrée, égale à la somme de ses valeurs propres | 27 |
 | deepfake | deepfake | image, son ou vidéo truqués par un modèle génératif pour faire dire ou faire à une personne ce qu'elle n'a pas dit ou fait | 27 |
 | montée de gradient sur l'entrée | gradient ascent on the input | modifier les pixels d'une image, réseau gelé, pour faire monter une activation : $\mathbf{x} \leftarrow \mathbf{x} + \eta \nabla_{\mathbf{x}} a(\mathbf{x})$ | 28 |
-| maximisation d'activation | activation maximization | chercher l'image qui excite le plus un filtre, une couche ou une classe, par montée de gradient sur l'entrée | 28 |
 | visualisation de features | feature visualization | images obtenues par maximisation d'activation, régularisées (décalages, flou, octaves) pour être lisibles | 28 |
 | octave | octave | une des échelles successives d'une image (réduite puis agrandie) sur lesquelles on optimise, des grandes structures aux détails | 28 |
 | deep dream | deep dream, inceptionism | montée de gradient sur une photo qui fait monter une somme pondérée des activations de plusieurs couches : le réseau amplifie ce qu'il croit voir | 28 |
@@ -883,12 +886,12 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | loss perceptuelle | perceptual loss | loss calculée sur les features d'un réseau pré-entraîné plutôt que sur les pixels (transfert de style, super-résolution, LPIPS) | 28 |
 | norme de Frobenius | Frobenius norm | $\lVert M \rVert_F = \sqrt{\sum_{i,j} M_{ij}^2}$, la norme euclidienne de tous les coefficients d'une matrice | 28 |
 | variation totale | total variation | somme des (carrés des) écarts entre pixels voisins ; la pénaliser lisse une image | 28 |
-| décodage glouton | greedy decoding | choisir à chaque pas le token le plus probable : déterministe, et sujet aux boucles | 28 |
+| MMD | maximum mean discrepancy | distance entre deux distributions mesurée par l'écart de leurs moyennes dans un espace de features (avec un noyau) | 28 |
 | AdaIN | adaptive instance normalization | aligner la moyenne et l'écart-type de chaque canal des features du contenu sur ceux du style, puis refaire l'image par un décodeur appris : un transfert de style de n'importe quel style en une passe (X. Huang et S. Belongie, 2017) | 28 |
 | domaine public | public domain | statut d'une œuvre dont les droits patrimoniaux ont expiré (dans l'UE, le 1ᵉʳ janvier qui suit les 70 ans de la mort de l'auteur) | 28 |
 | fouille de textes et de données | text and data mining (TDM) | analyse automatisée de contenus ; exception au droit d'auteur dans l'UE (directive 2019/790, art. 4), sauf opposition du titulaire (*opt-out*) | 28 |
 | quasi-doublon | near-duplicate | deux exemples presque identiques (même photo recadrée ou recompressée, même objet photographié deux fois) ; s'ils tombent des deux côtés d'un découpage, le test est trop facile | 29 |
-| décalage de distribution | distribution shift, dataset shift | les données d'usage ne suivent pas la distribution d'entraînement : décalage des entrées (*covariate shift*), des classes (*label shift*) ou de la relation entre les deux (*concept shift*) | 29 |
+| décalage de distribution | distribution shift, dataset shift | les données d'usage ne suivent pas la distribution d'entraînement : décalage des entrées (*covariate shift*), des classes (*label shift*) ou de la relation entre les deux (*concept shift*) ; la dérive des données (ch. 8) en est le cas où le décalage arrive avec le temps | 29 |
 | datasheet (d'un dataset) | datasheet for datasets | questionnaire de T. Gebru et coll. (2018) qui documente un dataset en sept sections : motivation, composition, collecte, prétraitement, usages, distribution, maintenance | 29 |
 | dataset card | dataset card | la data card d'un dataset du Hugging Face Hub : un README avec ses métadonnées (licence, langues, tâches, tailles) | 29 |
 | révision (d'un dataset) | revision | un commit (ou une branche, un tag) du dépôt d'un dataset du Hub ; `load_dataset(..., revision=...)` fige la version chargée | 29 |

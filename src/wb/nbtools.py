@@ -31,7 +31,7 @@ from pathlib import Path
 
 import numpy as np
 
-from wb.checker import attempt
+from wb.checker import NONE_TYPE_ERROR, attempt
 from wb.errors import MylearnMissingError
 
 __all__ = [
@@ -57,6 +57,9 @@ __all__ = [
 # Errors that mean "the learner's code is not written yet": ⏳, never ❌.
 _NOT_WRITTEN = (NotImplementedError, ImportError, MylearnMissingError)
 _NONE_HINT = " ; une fonction ou une méthode oublie-t-elle son return ?"
+_TENSOR_HINT = (" ; une fonction NumPy a-t-elle reçu un tenseur PyTorch ? (rends un tableau NumPy : "
+                "t.detach().cpu().numpy())")
+_TORCH_ARGUMENTS = "received an invalid combination of arguments"   # np.mean(tensor) and the like
 
 
 def _torch_tensor_type():
@@ -111,10 +114,11 @@ def checked(ex_id: str):
     becomes one ❌ line instead of stopping the cell, so that what follows (the tests) can say more.
 
     - ``NotImplementedError``, a missing mylearn module: ⏳ (``wb.attempt``);
-    - ``TypeError`` about ``NoneType``: the forgotten-return message of ``wb.attempt``;
+    - ``TypeError`` about a None used as a value: the forgotten-return message of ``wb.attempt``;
     - :class:`StopCheck`: the reason is already printed, the block stops silently;
-    - any other exception: ``❌ Ex <id> : ton code lève <type> : <message>``, with a hint about a
-      forgotten ``return`` when the message mentions ``NoneType`` (an ``AttributeError`` on None).
+    - any other exception: ``❌ Ex <id> : ton code lève <type> : <message>`` (never an empty message), with
+      a hint about a forgotten ``return`` when the message is about None (an ``AttributeError`` on None),
+      or about a tensor given to NumPy (PyTorch's "received an invalid combination of arguments").
     """
     with attempt(ex_id):
         try:
@@ -124,10 +128,17 @@ def checked(ex_id: str):
         except StopCheck:
             pass
         except Exception as exc:                      # a bug in the learner's code: report it, go on
-            if isinstance(exc, TypeError) and "NoneType" in str(exc):
+            message = str(exc).strip()                # scikit-learn's messages may start with a new line
+            if isinstance(exc, TypeError) and NONE_TYPE_ERROR.search(message):
                 raise                                 # wb.attempt explains the forgotten return
-            hint = _NONE_HINT if "NoneType" in str(exc) else ""
-            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {str(exc)[:300]}{hint}")
+            if NONE_TYPE_ERROR.search(message):
+                hint = _NONE_HINT
+            elif _TORCH_ARGUMENTS in message:
+                hint = _TENSOR_HINT
+            else:
+                hint = ""
+            shown = message[:300] or "(sans message)"
+            print(f"❌ Ex {ex_id} : ton code lève {type(exc).__name__} : {shown}{hint}")
 
 
 def written(probe) -> bool:
@@ -147,15 +158,24 @@ def written(probe) -> bool:
 # ---------------------------------------------------------------------------
 def as_numpy(value):
     """A float64 NumPy array from a tensor (detached, on the CPU), an array, a list or a number; None if
-    impossible (None itself, a dict, a ragged list...)."""
+    impossible (None itself, a dict, a ragged list, complex numbers...).
+
+    A list or a tuple of tensors (``return [h, c]``) is converted element by element, so that a tensor that
+    requires grad is detached there too."""
     if value is None:
         return None
     tensor = _torch_tensor_type()
     if tensor is not None and isinstance(value, tensor):
-        return value.detach().cpu().double().numpy()
+        value = value.detach().cpu()
+        return None if value.is_complex() else value.double().numpy()
     try:
-        return np.asarray(value, dtype=float)
-    except (TypeError, ValueError):
+        if tensor is not None and isinstance(value, (list, tuple)) and any(isinstance(v, tensor) for v in value):
+            value = [v.detach().cpu().double().numpy() if isinstance(v, tensor) else v for v in value]
+        arr = np.asarray(value)
+        if np.iscomplexobj(arr):                      # float() would drop the imaginary part (ComplexWarning)
+            return None
+        return arr.astype(float)
+    except (TypeError, ValueError, RuntimeError):     # RuntimeError: a nested tensor that requires grad
         return None
 
 
@@ -172,7 +192,8 @@ def same(ex_id: str, label: str, got, want, rtol: float = 1e-9, atol: float = 1e
 
     The ❌ line says, in this order: None (a forgotten return), not an array of numbers, a wrong shape
     (a tuple is named), then the values: both of them when ``want`` has at most 6 values, otherwise the
-    first index that differs and the largest gap.
+    first index that differs and the largest gap. A ``float32`` (or ``float16``) result that is right to
+    single precision is told so: its values print like the expected ones.
     """
     if got is None:
         print(f"❌ Ex {ex_id} : {label} renvoie None : as-tu oublié le return ?")
@@ -199,8 +220,17 @@ def same(ex_id: str, label: str, got, want, rtol: float = 1e-9, atol: float = 1e
         largest = f" (plus grand écart {gaps.max():.3g})" if gaps.size else ""
         failure = (f"{label} : première différence à l'indice {at} : attendu {float(want[bad]):.8g}, reçu "
                    f"{float(arr[bad]):.8g}{largest}.")
+    if not ok and _single_precision(got) and np.allclose(arr, want, rtol=1e-5, atol=1e-6, equal_nan=True):
+        failure = (failure[:-1] + f" : ton résultat est en {_single_precision(got)}, la précision attendue est "
+                   "celle du float64 (convertis avec np.asarray(..., dtype=float), ou calcule en float64).")
     verdict(ex_id, ok, f"{label} : {shown}, comme attendu.", failure)
     return ok
+
+
+def _single_precision(value) -> str:
+    """``"float32"`` or ``"float16"`` when ``value`` (a NumPy array or scalar, a tensor) has that dtype, else ``""``."""
+    name = str(getattr(value, "dtype", "")).removeprefix("torch.")
+    return name if name in ("float32", "float16", "bfloat16") else ""
 
 
 def _count_word(n: int) -> str:
@@ -249,11 +279,11 @@ def refuses(ex_id: str, label: str, call, error=ValueError) -> bool:
     (``NotImplementedError``, no mylearn module) goes up to :func:`checked`, which prints ⏳."""
     try:
         call()
+    except _NOT_WRITTEN:              # before `except error`: NotImplementedError is a RuntimeError
+        raise
     except error as exc:
         print(f"✅ Ex {ex_id} : {label} : {error.__name__} levée ({str(exc)[:120]}).")
         return True
-    except _NOT_WRITTEN:
-        raise
     except Exception as exc:
         print(f"❌ Ex {ex_id} : {label} : attendu {error.__name__}, reçu {type(exc).__name__} : {str(exc)[:160]}")
         return False
@@ -335,6 +365,9 @@ class GroupResult:
 
 
 _PENDING_MARK = "⏳"
+# Tests whose failure is the simplest to fix (return self, copies, new arrays, Python scalars): shown first.
+_CLEAR_FIRST = ("returns_self", "copies", "does_not_modify", "new_array", "new_float", "python_int",
+                "python_float")
 _NONE_ATTRIBUTE = "'NoneType' object has no attribute"
 _SUMMARY = re.compile(r"\d+ (passed|failed|errors?|skipped|deselected|xfailed|xpassed)\b|no tests ran")
 
@@ -386,7 +419,8 @@ def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner
 
     Each failure is printed on two lines: ``❌ <test name>`` (``⏳`` when the function is not written yet),
     then its reason (the first line of pytest's message, read with ``COLUMNS=1000``). Real failures come
-    first, the tests of ``return self`` and of copies before the others, then the ⏳ ones; a 💡 line points
+    first, the simplest to fix before the others (``return self``, copies, inputs left unchanged, new
+    arrays, Python scalars: the names in ``_CLEAR_FIRST``), then the ⏳ ones; a 💡 line points
     to a forgotten ``return`` when an attribute is read on None; the last line is pytest's summary.
     """
     if impl not in ("learner", "ref", "stubs"):
@@ -418,7 +452,7 @@ def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner
         node, _, reason = rest.partition(" - ")
         name = node.split("::", 1)[1] if "::" in node else node
         pending = reason.startswith(_PENDING_MARK)
-        clear_first = "returns_self" in name or "copies" in name or _NONE_ATTRIBUTE in reason
+        clear_first = any(key in name for key in _CLEAR_FIRST) or _NONE_ATTRIBUTE in reason
         rank = 2 if pending else (0 if clear_first else 1)
         failures.append((rank, pending, kind, name, reason))
     failures.sort(key=lambda f: f[0])                    # stable: pytest's order within each rank

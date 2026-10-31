@@ -13,7 +13,7 @@
 - Tableaux : miniatures de 500 pixels de Wikimedia Commons (*La Nuit étoilée*, version « Google Art Project » ; *La Grande Vague de Kanagawa* ; *Composition VII*). Elles sont versionnées (moins de 300 Ko au total) parce que Wikimedia limite les téléchargements automatiques (erreur 429 à la troisième requête rapprochée) ; sans la copie versionnée, `load_style_image` télécharge avec un `User-Agent` explicite et vérifie l'empreinte, puis, en dernier recours, rend une texture procédurale (`procedural_style`) avec un avertissement.
 
 ## Utilisation
-Ch. 28 : le deep dream sur une photo, le transfert de style (contenu : une photo ; style : un tableau), la galerie documentée de 🛠️ 28.26.
+Ch. 28 : le deep dream sur une photo, le transfert de style (contenu : une photo ; style : un tableau), la galerie documentée de 🛠️ 28.26. Ch. 29 : les droits d'une image de style (🔁 29.R1).
 
 ## Biais et limites
 - Trois tableaux seulement, tous très texturés ; deux photos seulement, de 640 × 427 pixels.

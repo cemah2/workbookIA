@@ -102,14 +102,14 @@ loss = F.cross_entropy(logits_cnn, labels) + F.cross_entropy(logits_rnn, labels)
 a) Les lettres des quatre lignes fautives (par exemple `"ACEG"`). Une erreur peut se déclarer plus loin que sa cause : on demande la ligne **à corriger**. **[1]**
 b) Pour chacune : la correction, et ce qui se passe sans elle (une erreur, à quelle ligne et pourquoi, ou un résultat faux sans message). **[1]**
 
-### CP5.5 — Écrire `rnn_forward` à partir d'une cellule fournie 🔨 ★ ⏱️ 10 min · 1,5 point
+### CP5.5 — Écrire `rnn_forward` à partir d'une cellule fournie (notebook, NumPy) 🔨 ★ ⏱️ 10 min · 1,5 point
 
 **Dans le notebook de l'examen, partie A, avec NumPy seulement.** La fonction fournie `rnn_cell(x_t, h, Wx, Wh, b)` fait un pas d'un RNN simple pour un mini-batch : $h_t = \tanh(x_t W_x + h_{t-1} W_h + b)$, avec `x_t` de forme `(N, D)` et `h` de forme `(N, H)`.
 
 a) `rnn_forward(X, h0, Wx, Wh, b)` reçoit `X` de forme `(N, T, D)` (batch, temps, features : la convention `batch_first=True`) et l'état de départ `h0`, de forme `(N, H)`. Elle rend le couple `(H_all, h_last)` : `H_all`, de forme `(N, T, H)`, où `H_all[:, t]` est l'état **après** le pas `t` (`h0` n'y figure pas), et `h_last`, l'état après le dernier pas, de forme `(N, H)`. Elle ne modifie pas `X`. **[1,2]**
 b) Avec les données de la cellule (`X_S`, `H0_S`, `WX_S`, `WH_S`, `B_S`), reporte `H_all[1, 4, 0]` (4 décimales). **[0,3]**
 
-### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 20 min · 2 points
+### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch) 🔨 ★★ ⏱️ 20 min · 2 points
 
 **Dans le notebook de l'examen, partie A, avec PyTorch.** `make_cnn()` rend un petit CNN neuf (avec dropout, en `float64`) et `make_loaders()` le couple `(train_loader, val_loader)` sur 2 048 et 1 024 images de Fashion-MNIST ; les mini-batches de validation ont 300 images, sauf le dernier (124).
 

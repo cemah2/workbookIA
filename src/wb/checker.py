@@ -1040,6 +1040,11 @@ def check(ex_id, value, decimals: int | None = None, *, quiet: bool = False, com
     return done(passed, status, message + note, icon)
 
 
+# The messages of a None used as a value (a forgotten `return`), and only them: PyTorch's "got (dtype=NoneType,
+# out=NoneType, ...)" (a NumPy function given a tensor) is another error (audit P5 V-VI, A10 14).
+NONE_TYPE_ERROR = re.compile(r"'NoneType'|NoneType object|not NoneType\b|NoneType\.__")
+
+
 @contextmanager
 def attempt(ex_id: str | None = None):
     """Run exercise code; if it is not written yet, print ⏳ instead of crashing.
@@ -1070,7 +1075,7 @@ def attempt(ex_id: str | None = None):
             raise
         print(f"⏳ {where}pas encore fait (module {exc.name} absent ou incomplet : lance tools/start_chapter.py).")
     except TypeError as exc:      # a None where a result was expected: almost always a forgotten `return`
-        if "NoneType" not in str(exc):
+        if not NONE_TYPE_ERROR.search(str(exc)):
             raise
         print(f"❌ {where}une valeur vaut None là où un résultat était attendu : une de tes fonctions a-t-elle "
               f"oublié son `return` ? (TypeError: {exc})")

@@ -74,11 +74,11 @@ e) Le nombre d'octets d'un nombre `float32`.
 
 Une photo en couleur (3 canaux) fait 64 pixels de large et 48 de haut.
 
-a) Sa forme en channels_first, sans l'axe des exemples.
-b) Sa forme en channels_last.
+a) Sa forme en `channels_first`, sans l'axe des exemples.
+b) Sa forme en `channels_last`.
 c) La forme d'entrée qu'attend `nn.Conv2d` : (A) `(N, C, H, W)` ; (B) `(N, H, W, C)` ; (C) `(C, N, H, W)` ; (D) `(N, W, H, C)`.
 d) Les arguments de `x.permute(...)` qui passent un mini-batch `x` de NHWC à NCHW, écrits comme un tuple entre guillemets.
-e) Vrai ou faux : une image channels_last prise par erreur pour une image channels_first provoque toujours une erreur.
+e) Vrai ou faux : une image `channels_last` prise par erreur pour une image `channels_first` provoque toujours une erreur.
 
 ### 23.Q7 — CPU, GPU, MPS, TPU : où calcule PyTorch ? 🧠 ⏱️ 2 min
 *Fiche §23.3.5 · livre §23.3.5*
@@ -149,7 +149,7 @@ c) La forme de `h_n` rendu par `nn.GRU(50, 64, num_layers=2)`, à un seul sens, 
 d) Vrai ou faux : `batch_first=True` change la forme de `h_n`.
 e) Vrai ou faux : dans `(N, C, H, W)` comme dans `(N, T, D)` avec `batch_first=True`, l'axe 0 est celui des exemples.
 
-### 23.R2 — Ch. 20 : Les cinq lignes d'une étape d'entraînement 🔁 ★ ⏱️ 5 min
+### 23.R2 — Ch. 20 : les cinq lignes d'une étape d'entraînement 🔁 ★ ⏱️ 5 min
 *Ch. 20 (§20.5) · fiche §23.7 · parcours R*
 
 Les cinq lignes d'une étape d'entraînement, dans le désordre : (A) `loss.backward()` ; (B) `optimizer.zero_grad()` ; (C) `logits = model(xb)` ; (D) `optimizer.step()` ; (E) `loss = loss_fn(logits, yb)`.
@@ -160,7 +160,7 @@ c) Ce que fait `loss.backward()` : (A) il met à jour les poids ; (B) il calcule
 d) Vrai ou faux : dans la boucle, `total += loss` garde en mémoire les graphes de calcul de tous les mini-batches, alors que `total += loss.item()` ne les garde pas.
 e) Pour un planning de learning rate par epoch, on appelle `scheduler.step()` : (A) après chaque `optimizer.step()` ; (B) une fois par epoch, après les `optimizer.step()` de l'epoch ; (C) avant le premier `optimizer.step()` ; (D) jamais : l'optimiseur s'en charge.
 
-### 23.R3 — Ch. 2 : Moyenne et écart-type du train pour normaliser les pixels 🔁 ★ ⏱️ 5 min
+### 23.R3 — Ch. 2 : moyenne et écart-type du train pour normaliser les pixels 🔁 ★ ⏱️ 5 min
 *Ch. 2 (moyenne, écart-type) · fiche §23.5.6 · parcours R, M*
 
 Les pixels d'un minuscule train, déjà divisés par 255, valent $0 ;\ 0{,}2 ;\ 0{,}4 ;\ 0{,}4 ;\ 1$.
@@ -197,7 +197,7 @@ Dans ta copie : pourquoi `a.T.reshape(12)` ne rend-il pas `0, 1, 2, …` ? Que f
 **Objectif :** suivre les indices d'un pixel à travers `permute` et comprendre pourquoi `reshape` ne convertit pas un format d'image.
 **Prérequis :** Ex 23.1 · fiche §23.3.4, §23.5.1 · **Parcours :** M
 
-Une image en couleur de 2 lignes et 3 colonnes est rangée en channels_last dans un tenseur `x` de forme `(2, 3, 3)` : `x[h, w, c]` est la valeur du canal `c` (0 rouge, 1 vert, 2 bleu) du pixel de la ligne `h` et de la colonne `w`. Les 18 valeurs sont en mémoire dans l'ordre C.
+Une image en couleur de 2 lignes et 3 colonnes est rangée en `channels_last` dans un tenseur `x` de forme `(2, 3, 3)` : `x[h, w, c]` est la valeur du canal `c` (0 rouge, 1 vert, 2 bleu) du pixel de la ligne `h` et de la colonne `w`. Les 18 valeurs sont en mémoire dans l'ordre C.
 
 a) La position en mémoire de `x[1, 2, 0]`, le rouge du pixel de la ligne 1 et de la colonne 2.
 b) La forme de `y = x.permute(2, 0, 1)`.

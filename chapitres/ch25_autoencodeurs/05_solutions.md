@@ -60,16 +60,16 @@ a) **« ABC »**. b) **B** : une moyenne et une variance par latent ; on fait so
 
 ## 🔁 Rappels
 
-### 25.R1 — Quelles augmentations garder pour des chiffres manuscrits ?
+### 25.R1 — Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?
 a) **« ABE »** : un léger décalage, une petite rotation et un léger zoom gardent le chiffre ; la symétrie gauche-droite (C) transforme un 2 ou un 7 en signe qui n'existe pas, et la rotation de 180° (D) change un 6 en 9. b) **Faux** : le test doit représenter les vraies données. c) **Vrai** : chaque epoch voit des versions bruitées différentes des mêmes images.
 **À retenir** : une augmentation garde le label et le réalisme, et ne touche que le train (ch. 24).
 
-### 25.R2 — Résumer une séquence entière dans l'état final d'un LSTM
+### 25.R2 — Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM
 a) **« (1, 16, 32) »** : $(L, N, H)$, une couche, 16 séquences, 32 valeurs d'état ; `batch_first` ne change pas `h_n` (ch. 22, ch. 24). b) **12,5** $= (50 \times 8)/32$. c) **Vrai** : c'est l'autoencodeur de séquences (*sequence-to-sequence*), où l'état final de l'encodeur sert de code et initialise le décodeur.
 **À retenir** : l'état final d'un RNN est déjà un code de taille fixe pour une séquence de longueur quelconque.
 
-### 25.R3 — La divergence KL, ce que mesure le terme de régularisation du VAE
-a) **0,21** : $0{,}5\log_2(0{,}5/0{,}25) + 0{,}5\log_2(0{,}5/0{,}75) = 0{,}5 - 0{,}2925 = 0{,}2075$ bit. b) **Faux** : $\mathrm{KL}(Q \,\|\, P) = 0{,}25\log_2 0{,}5 + 0{,}75\log_2 1{,}5 = 0{,}1887$ bit, différente. c) **Vrai** : chaque terme vaut $p\log 1 = 0$. d) **Vrai** : l'inégalité de Gibbs (ch. 6). e) **0,14** : $0{,}2075 \times \ln 2 = 0{,}1438$ nat.
+### 25.R3 — Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE
+a) **0,21** : $0{,}5\log_2(0{,}5/0{,}25) + 0{,}5\log_2(0{,}5/0{,}75) = 0{,}5 - 0{,}2925 = 0{,}2075$ bit. b) **Faux** : $\mathrm{KL}(Q \,\|\, P) = 0{,}25\log_2 0{,}5 + 0{,}75\log_2 1{,}5 = 0{,}1887$ bit, différente. c) **Vrai** : chaque terme vaut $p\log 1 = 0$. d) **Vrai** : la KL est positive ou nulle, ce que démontre ∂ 6.7 (on l'appelle l'inégalité de Gibbs). e) **0,14** : $0{,}2075 \times \ln 2 = 0{,}1438$ nat.
 **À retenir** : la KL est positive, nulle seulement entre deux lois identiques, et pas symétrique ; dans un VAE, on la calcule entre $q(\mathbf{z} \mid \mathbf{x})$ et le prior.
 
 <a id="papier"></a>
@@ -396,7 +396,7 @@ def interpolate_latents(z0, z1, n_steps, method="linear"):
     out[0], out[-1] = a, b                      # exactly the ends
     return out
 ```
-**Démarche** : la ligne droite moyenne les coordonnées ; le slerp suit l'arc entre les deux directions. Entre le code d'un 1 (norme 23,2) et celui d'un 0 (norme 14,5), la norme descend jusqu'à 11,2 vers les trois quarts de la ligne droite, alors que le slerp passe en douceur de 23,2 à 14,5 sans creux. Ici, les images des deux chemins se ressemblent : rien n'a imposé aux codes de `AE_DEEP` une norme typique. La différence compte dans un espace où les codes vivent sur une « coquille », comme ceux d'une gaussienne en grande dimension (✏️ 25.6) : celui d'un VAE ou d'un GAN, où le milieu d'une ligne droite tombe là où il n'y a presque jamais de code (25.Q9).
+**Démarche** : la ligne droite moyenne les coordonnées ; le slerp suit l'arc entre les deux directions. Entre le code d'un 1 (norme 23,2) et celui d'un 0 (norme 14,5), la norme descend jusqu'à 11,2 vers les trois quarts de la ligne droite, alors que le slerp passe en douceur de 23,2 à 14,5 sans creux. Ici, les images des deux chemins se ressemblent : rien n'a imposé aux codes de `AE_DEEP` une norme typique. La différence compte dans un espace où les codes vivent sur une « coquille », comme ceux d'une gaussienne en grande dimension (✏️ 25.6) : celui d'un VAE ou d'un GAN, où le milieu d'une ligne droite tombe là où il n'y a presque jamais de code (✏️ 25.6 f et g).
 
 **Erreurs fréquentes** : diviser par les normes avant de les tester (`RuntimeWarning` et NaN pour un vecteur nul) ; un seuil de repli trop large (à 0,05 rad, $\sin\Omega \approx 0{,}05$ : c'est encore un vrai slerp, et les tests le vérifient) ; oublier `np.clip` avant `arccos` (un cosinus de 1,0000000002 donne NaN) ; ne pas forcer les extrémités (une erreur d'arrondi de $10^{-16}$ suffit à faire échouer l'égalité exacte).
 
@@ -420,7 +420,7 @@ def off_manifold_21(model, images):
     images = np.asarray(images, dtype=np.float32).reshape(len(images), -1)
     return mse_per_image(reconstruct(model, images), images)
 ```
-**Démarche** : le fondu des pixels superpose un 1 et un 0 : à mi-chemin, un 0 pâle traversé d'un trait. Les chemins latents décodent des formes qui passent d'un chiffre à l'autre ; entre un 1 et un 0, les étapes du milieu sont des formes ambiguës. La distance à ce que l'autoencodeur sait refaire ne sépare pas bien les fondus des vrais chiffres : de 0,015 à 0,024 pour les étapes du fondu d'un 1 à un 0, alors que le vrai 0 est à 0,020 et qu'un chiffre de test est en moyenne à 0,027 ; entre les deux 5, le fondu (0,017 à 0,022) est même plus « proche » que les deux 5 réels (0,020 et 0,036). Elle mesure surtout la quantité d'encre et sa dispersion, pas la plausibilité. Les étapes latentes sont toutes à environ 0,001 : elles sortent du décodeur, et un autoencodeur redessine presque parfaitement ce que son propre décodeur dessine. La mesure est donc biaisée en faveur des chemins latents : il faut un juge extérieur (la variante). Entre deux 5, tout se passe mieux qu'entre un 1 et un 0 : les deux codes sont voisins, et le chemin reste dans la région des 5. C'est le mélange paramétrique du ✏️ 25.2 : des paramètres bien rangés (ici, appris) donnent des intermédiaires plausibles, un mélange de contenu donne une superposition.
+**Démarche** : le fondu des pixels superpose un 1 et un 0 : à mi-chemin, un 0 pâle traversé d'un trait. Les chemins latents décodent des formes qui passent d'un chiffre à l'autre ; entre un 1 et un 0, les étapes du milieu sont des formes ambiguës. La distance à ce que l'autoencodeur sait refaire ne sépare pas bien les fondus des vrais chiffres : de 0,015 à 0,024 pour les étapes du fondu d'un 1 à un 0, alors que le vrai 0 est à 0,020 et qu'un chiffre de test est en moyenne à 0,027 ; entre les deux 5, le fondu (0,017 à 0,027) est presque partout plus « proche » que le second 5 réel (0,036), et souvent que le premier (0,020). Elle mesure surtout la quantité d'encre et sa dispersion, pas la plausibilité. Les étapes latentes sont toutes à environ 0,001 : elles sortent du décodeur, et un autoencodeur redessine presque parfaitement ce que son propre décodeur dessine. La mesure est donc biaisée en faveur des chemins latents : il faut un juge extérieur (la variante). Entre deux 5, tout se passe mieux qu'entre un 1 et un 0 : les deux codes sont voisins, et le chemin reste dans la région des 5. C'est le mélange paramétrique du ✏️ 25.2 : des paramètres bien rangés (ici, appris) donnent des intermédiaires plausibles, un mélange de contenu donne une superposition.
 
 **Erreurs fréquentes** : interpoler les images reconstruites au lieu des codes ; décoder un chemin en `float64` ; conclure qu'un mélange latent est réaliste parce que l'autoencodeur le reconstruit bien (la mesure est biaisée en sa faveur).
 

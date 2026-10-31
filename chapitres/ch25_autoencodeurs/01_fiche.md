@@ -65,7 +65,7 @@ Le chapitre du livre est fait de figures : des rangées de chiffres d'entrée et
 9. Un **VAE** fait sortir de l'encodeur une moyenne $\boldsymbol{\mu}$ et une log-variance $\log\boldsymbol{\sigma}^2$ par latent, tire $\mathbf{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\varepsilon}$ avec $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ (l'**astuce de reparamétrisation**, qui laisse passer le gradient), et ajoute à la loss une **divergence KL** qui rapproche chaque code du prior $\mathcal{N}(\mathbf{0}, \mathbf{I})$.
 10. Une fois entraîné, le décodeur d'un VAE seul est un **générateur** : on lui donne des tirages de $\mathcal{N}(\mathbf{0}, \mathbf{I})$, il rend des images nouvelles et plausibles. Aujourd'hui, ce rôle est surtout celui d'un premier étage : les générateurs d'images travaillent dans l'espace latent d'un autoencodeur de ce type.
 
-> 📐 **Conventions de la fiche** — Une entrée $\mathbf{x}$ a $p$ valeurs (les $784$ pixels d'une image MNIST, ramenés dans $[0, 1]$), un code $\mathbf{z}$ en a $d$ : $d$ est la dimension de l'**espace latent**, comme dans `mylearn.vae` (BIBLE §6 : $d$ est une dimension géométrique). Les mini-batches d'images sont en $(N, C, H, W)$, comme aux ch. 21 à 24. Le livre écrit ses tenseurs « largeur par hauteur par canaux » ($14 \times 14 \times 16$) ; la fiche les traduit en $(C, H, W)$. $\odot$ est le produit élément par élément, $\log$ le logarithme népérien (les KL sont en **nats**, sauf mention contraire), $\mathcal{N}(\mu, \sigma^2)$ la loi normale de moyenne $\mu$ et de **variance** $\sigma^2$.
+> 📐 **Conventions de la fiche** — Une entrée $\mathbf{x}$ a $p$ valeurs (les $784$ pixels d'une image MNIST, ramenés dans $[0, 1]$), un code $\mathbf{z}$ en a $d$ : $d$ est la dimension de l'**espace latent**, comme dans `mylearn.vae` (BIBLE §6 : $d$ est une dimension géométrique). Les mini-batches d'images sont en $(N, C, H, W)$, comme aux ch. 21 à 24. Le livre écrit ses tenseurs « largeur par hauteur par canaux » ($14 \times 14 \times 16$) ; la fiche les traduit en $(C, H, W)$. $\odot$ est le produit élément par élément, $\ln$ le logarithme népérien (les KL sont en **nats**, sauf mention contraire) ; on garde l'écriture usuelle $\log\sigma^2$ pour la **log-variance**, la sortie `log_var` de l'encodeur ; $\mathcal{N}(\mu, \sigma^2)$ la loi normale de moyenne $\mu$ et de **variance** $\sigma^2$.
 
 ## 25.1 · Pourquoi ce chapitre ? ⏩
 
@@ -121,7 +121,7 @@ $$L_{\text{BCE}} = -\sum_{j=1}^{p} \left[x_j \ln \hat{x}_j + (1 - x_j) \ln (1 - 
 
 Le vrai test est d'entraîner le réseau sur **beaucoup** d'images : avec une centaine de photos (25 photos et leurs rotations), il ne peut plus tricher, et sa reconstruction du tigre devient une tache floue sans rapport, où l'on devine seulement une symétrie due aux rotations (livre p. 1399-1400). Augmenter le goulot aiderait, mais irait contre le but : on veut le plus petit code possible.
 
-> 💼 **En entreprise — l'erreur d'entraînement ne prouve rien** — Une reconstruction parfaite des images d'entraînement peut cacher une mémorisation. On juge un autoencodeur comme tout modèle : sur des données qu'il n'a pas vues, avec un jeu de validation et un jeu de test (ch. 8).
+> 💼 **En entreprise** — L'erreur d'entraînement ne prouve rien : une reconstruction parfaite des images d'entraînement peut cacher une mémorisation. On juge un autoencodeur comme tout modèle : sur des données qu'il n'a pas vues, avec un jeu de validation et un jeu de test (ch. 8).
 
 ## 25.4 · Un meilleur autoencodeur ⏩
 
@@ -206,7 +206,7 @@ Un **autoencodeur linéaire** (des couches sans activation, sans biais, sur des 
 
 > ⚠️ **Le livre, corrigé — un autoencodeur profond n'est pas une ACP** — Le livre parle d'un autoencodeur « comme celui de la figure 25.21 », qui est profond et non linéaire. Le résultat d'équivalence ne vaut que pour l'autoencodeur **linéaire** entraîné à l'erreur quadratique. Avec des ReLU, l'encodeur peut suivre une surface courbe (une **variété**) que l'ACP ne peut approcher qu'avec plus de dimensions ; c'est justement pour cela qu'on l'utilise (Hinton et Salakhutdinov, 2006).
 
-> 💼 **En entreprise — ACP d'abord** — Sur des données tabulaires, essaie l'ACP avant un autoencodeur : elle est exacte, sans hyperparamètres, rapide, et ses composantes s'interprètent. L'autoencodeur se justifie quand les données ont une structure non linéaire (images, sons) ou quand on veut aussi débruiter ou générer.
+> 💼 **En entreprise** — ACP d'abord : sur des données tabulaires, essaie l'ACP avant un autoencodeur : elle est exacte, sans hyperparamètres, rapide, et ses composantes s'interprètent. L'autoencodeur se justifie quand les données ont une structure non linéaire (images, sons) ou quand on veut aussi débruiter ou générer.
 
 ## 25.7 · Autoencodeurs convolutifs ⏩
 
@@ -292,7 +292,7 @@ Avec un prior gaussien et un posterior gaussien de covariance diagonale, la KL a
 
 $$\mathrm{KL}\left(\mathcal{N}(\mu, \sigma^2)\,\|\,\mathcal{N}(0, 1)\right) = \tfrac{1}{2}\left(\mu^2 + \sigma^2 - 1 - \ln \sigma^2\right),$$
 
-et l'on somme sur les $d$ latents (les dimensions sont indépendantes, ch. 6). Elle est toujours positive ou nulle, et nulle exactement pour $\mu = 0$ et $\sigma = 1$. La dérivation ∂ 25.7 part des deux espérances du rappel ci-dessus ; en NumPy, ta fonction `gaussian_kl` la calcule pour chaque exemple.
+et l'on somme sur les $d$ latents (les dimensions sont indépendantes, ch. 6). Attention aux lettres : ici, $q$ est la loi que l'encodeur apprend et le prior est fixé ; c'est la loi apprise qui est en premier, à l'inverse de la règle du ch. 6 pour un modèle qu'on ajuste aux données, $\mathrm{KL}(\text{données} \,\|\, \text{modèle})$, et comme dans la pénalité du RLHF (ch. 6, 🕰️ « la KL aujourd'hui »). Cette KL est toujours positive ou nulle, et nulle exactement pour $\mu = 0$ et $\sigma = 1$. La dérivation ∂ 25.7 part des deux espérances du rappel ci-dessus ; en NumPy, ta fonction `gaussian_kl` la calcule pour chaque exemple.
 
 > 🧮 **Rappel maths — l'ELBO** — Pourquoi cette loss ? Le VAE veut maximiser la probabilité $p(\mathbf{x})$ que son décodeur donne aux images du dataset, une intégrale sur tous les codes possibles qu'on ne sait pas calculer. On montre que $\ln p(\mathbf{x})$ est toujours au moins égal à $\mathbb{E}_{q}[\ln p(\mathbf{x} \mid \mathbf{z})] - \mathrm{KL}(q(\mathbf{z} \mid \mathbf{x}) \,\|\, p(\mathbf{z}))$, une **borne inférieure** appelée **ELBO** (*evidence lower bound*). La loss du VAE est l'opposé de l'ELBO : la minimiser, c'est pousser la borne vers le haut. L'article de Kingma et Welling (📄 25.13) en donne la démonstration.
 

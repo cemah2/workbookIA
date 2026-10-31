@@ -313,7 +313,7 @@ PAPER = [
         ("d", TF, "False", r'''mistakes={"relis la documentation de batch_first : concerne-t-il les états ?": True}'''),
         ("e", TF, "True", r'''mistakes={"compare la place de N dans les deux formes": False}'''),
     ]),
-    Paper("23.R2", "Ch. 20 : Les cinq lignes d'une étape d'entraînement", [
+    Paper("23.R2", "Ch. 20 : les cinq lignes d'une étape d'entraînement", [
         ("a", LETTERS, '"BCEAD"',
          r'''mistakes={"il faut les gradients avant de mettre à jour les poids": "BCEDA",
           "il faut des logits avant de calculer la loss": "BECAD",
@@ -328,7 +328,7 @@ PAPER = [
           "PyTorch avertit si scheduler.step() précède optimizer.step()": "C",
           "l'optimiseur ne connaît pas le planning": "D"}'''),
     ]),
-    Paper("23.R3", "Ch. 2 : Moyenne et écart-type du train pour normaliser les pixels", [
+    Paper("23.R3", "Ch. 2 : moyenne et écart-type du train pour normaliser les pixels", [
         ("a", DEC3, "MU_R3", r'''decimals=3, mistakes={"divise par 5, le nombre de pixels": 0.5}'''),
         ("b", DEC3, "SIGMA_R3",
          r'''decimals=3, mistakes={"avec le diviseur n (ddof=0), pas n − 1": SIGMA1_R3,
@@ -997,7 +997,7 @@ PART_A = Part("A", "L'environnement, les données, le prétraitement et le MLP d
     Ex("23.12", "📦", 2, 20, "Environnement et tenseurs : versions, device, reshape, view, permute",
        "vérifier les versions et le device, convertir des images de NHWC à NCHW, et attraper les avertissements.",
        "ch. 20 (tenseurs) · fiche §23.1.3, §23.2.1, §23.3.2 à §23.3.5, §23.5.1", thread="Fashion-MNIST", tracks="R, C",
-       body=r"""Quatre petites fonctions qu'on retrouve en tête de tout projet. `IMAGES_12` contient 4 images en couleur de 5 lignes et 6 colonnes, au format channels_last `(N, H, W, C)`, en `uint8`.
+       body=r"""Quatre petites fonctions qu'on retrouve en tête de tout projet. `IMAGES_12` contient 4 images en couleur de 5 lignes et 6 colonnes, au format `channels_last` `(N, H, W, C)`, en `uint8`.
 
 **Contrat**
 - `library_versions_12()` rend un dictionnaire `{"python": ..., "numpy": ..., "torch": ..., "torchvision": ...}` : les versions, en chaînes, comme les écrit chaque bibliothèque (Python : `platform.python_version()`) ;
@@ -2009,7 +2009,7 @@ Dans tes notes : pourquoi le fichier JSON doit-il accompagner le fichier de poid
 
     Ex("23.23", "📦", 2, 30, "Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires)",
        "sauvegarder un entraînement et le reprendre plus tard exactement là où il s'était arrêté.",
-       "Ex 23.18 · ✏️ 23.8 · fiche §23.9 à §23.9.3, « Au-delà du livre : la reproductibilité »", thread="Fashion-MNIST",
+       "Ex 23.18 · 🧮 23.8 · fiche §23.9 à §23.9.3, « Au-delà du livre : la reproductibilité »", thread="Fashion-MNIST",
        tracks="R, C",
        body=r"""Un entraînement de plusieurs heures s'interrompt (une coupure, une session Colab qui expire). Avec un bon checkpoint, on le reprend comme s'il ne s'était jamais arrêté : mêmes poids, même état d'Adam, même ordre des mini-batches, mêmes masques de dropout.
 
@@ -2493,7 +2493,7 @@ PART_D = Part("D", "Callbacks, plannings, patience, fiche modèle et défi",
               "fiche du modèle (23.28) ; puis tu relèves le défi de reproductibilité (23.29).",
               exercises=[
     Ex("23.25", "📦", 3, 45, "Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping",
-       "écrire les trois callbacks de Keras pour ta fonction fit_18, et les combiner dans un vrai entraînement.",
+       "écrire les trois callbacks de Keras pour ta fonction `fit_18`, et les combiner dans un vrai entraînement.",
        "Ex 23.18 · Ex 23.23 · ✏️ 23.6, 23.7 · ch. 20 (`EarlyStopping` de mylearn) · fiche §23.10 à §23.10.3",
        thread="Fashion-MNIST", tracks="R, C",
        body=r"""PyTorch n'a pas de callbacks ; ta `fit_18` en accepte (23.18) : des objets appelés `callback(epoch, history, model, optimizer)` à la fin de chaque epoch, dont un `True` arrête l'entraînement. Tu écris les trois du livre sous forme de classes : un objet garde son état (la meilleure valeur, le compteur) d'un appel à l'autre.
@@ -2537,7 +2537,7 @@ Dans tes notes : quels plannings finissent le mieux, et de combien ? Regarde la 
             "moyennes et écarts (23.29)."),
 
     Ex("23.27", "🔬", 2, 20, "Patience de l'early stopping : 1, 3 ou 10",
-       "mesurer l'effet de la patience et de min_delta sur l'early stopping, en rejouant un historique de 50 epochs.",
+       "mesurer l'effet de la patience et de `min_delta` sur l'early stopping, en rejouant un historique de 50 epochs.",
        "Ex 23.19 · Ex 23.25 · ✏️ 23.6 · fiche §23.8.3, §23.10.3", thread="Fashion-MNIST", tracks="C",
        body=r"""Plutôt que de réentraîner le modèle pour chaque patience, on **rejoue** la loss de validation de `HISTORY_19` (23.19, 50 epochs) dans ton `EarlyStopping` : l'arrêt et la meilleure epoch ne dépendent que de cette suite de nombres.
 

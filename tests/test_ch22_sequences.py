@@ -564,6 +564,17 @@ def test_temperature_softmax_low_and_high_temperature(seq):
     assert_close(hot, np.full(3, 1 / 3), atol=5e-3, msg="T = 100: almost uniform")
 
 
+@pytest.mark.parametrize("logits", [[1.0, 2.0, 3.0], np.arange(8.0).reshape(2, 4)], ids=["list-V", "array-N-V"])
+def test_temperature_softmax_returns_a_numpy_array_of_the_shape_of_logits(seq, logits):
+    # the docstring: "ndarray of the shape of logits" (a torch.softmax result would pass every value test)
+    got = call(seq.temperature_softmax, logits, temperature=0.8)
+    shape = np.shape(logits)
+    if not isinstance(got, np.ndarray) or got.shape != shape or got.dtype != np.float64:
+        _fail("", f"expected a float64 NumPy array of shape {shape}, got {type(got).__name__} "
+              f"{getattr(got, 'dtype', '')} of shape {tuple(np.shape(got))} (a torch tensor? convert with "
+              f"np.asarray(..., dtype=float))")
+
+
 def test_temperature_softmax_does_not_modify_its_input(seq):
     logits = np.array([[0.5, -1.0, 2.0]])
     saved = logits.copy()

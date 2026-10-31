@@ -152,6 +152,28 @@ Ton navigateur s'ouvre. Dans le panneau de gauche, ouvre `00_setup/demo.ipynb`, 
 
 ---
 
+## Travailler hors ligne (à partir du ch. 20)
+
+Les petits datasets sont dans le dépôt. À partir du ch. 20, des notebooks téléchargent davantage, **une seule fois** ; le cache sert ensuite :
+
+| Quoi | Taille | Où | Chapitres |
+|---|---|---|---|
+| Fashion-MNIST | ≈ 30 Mo | `data/downloads/` (cache du workbook, jamais versionné) | 20, 21, 23 à 25, 27, 29, CP4, CP5, MP6 |
+| CIFAR-10 | ≈ 145 Mo (depuis Hugging Face), puis un cache de ≈ 173 Mo | `data/downloads/` | 20, 21, 24, MP5 |
+| Fashion-MNIST du Hugging Face Hub (une révision figée) | ≈ 30 Mo | `data/downloads/hf/` | 29 (sans réseau, le notebook prend la copie du workbook) |
+| poids de MobileNet V3 Small, ResNet-18, SqueezeNet 1.1 | ≈ 10, 45 et 5 Mo | le cache de PyTorch (`~/.cache/torch/hub/checkpoints/`) | 20 ; 21, 23 et MP5 ; 28 |
+| poids de VGG16 (mode complet du ch. 28, optionnel) | ≈ 550 Mo | le cache de PyTorch | 28 |
+
+Pour travailler ensuite sans connexion (dans le train, par exemple), lance une fois, **en ligne**, depuis le dossier du dépôt et avec `(.venv)` actif :
+
+```bash
+python -c "import wb, torchvision; wb.datasets.load_fashion_mnist('train'); wb.datasets.load_cifar10('train'); wb.datasets.load_pretrained('squeezenet1_1'); torchvision.models.resnet18(weights='DEFAULT'); torchvision.models.mobilenet_v3_small(weights='DEFAULT')"
+```
+
+Sans réseau ni cache, la cellule qui charge les données s'arrête avec un message clair (`ConnectionError` : « Sources essayées … ») : « Tout exécuter » ne peut pas aller plus loin. Reconnecte-toi, ou lance la commande ci-dessus avant de partir.
+
+---
+
 ## Au quotidien
 
 ```bash

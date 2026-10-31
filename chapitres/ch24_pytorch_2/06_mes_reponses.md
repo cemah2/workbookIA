@@ -121,7 +121,7 @@
 
 ## 🔁 Rappels
 
-### 24.R1 — Ch. 23 : Ce qu'un historique d'entraînement doit contenir pour comparer deux runs
+### 24.R1 — Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs
 
 - a) :
 - b) :
@@ -129,7 +129,7 @@
 - d) :
 
 
-### 24.R2 — Ch. 21 : Taille de sortie d'une convolution à padding 'same' et stride 2
+### 24.R2 — Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2
 
 - a) :
 - b) :
@@ -139,7 +139,7 @@
 - f) :
 
 
-### 24.R3 — Ch. 17 : Ce que change la division des logits avant le softmax
+### 24.R3 — Ch. 17 : ce que change la division des logits avant le softmax
 
 - a) :
 - b) :

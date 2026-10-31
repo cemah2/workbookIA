@@ -39,7 +39,7 @@
 ## CP5.6 — Early stopping et meilleur modèle (notebook, partie A)
 
 - a) le code est dans le notebook ; remarques éventuelles :
-- b) [best_epoch, loss de validation à cette epoch] =
+- b) [`best_epoch`, loss de validation à cette epoch] =
 
 ## CP5.7 — Quatre paires de courbes
 

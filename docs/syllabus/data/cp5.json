@@ -369,7 +369,7 @@
   "Structures récurrentes : many-to-one, many-to-many, profondes, bidirectionnelles, CNN-LSTM",
   "Séquences en pratique : fenêtres sans fuite, scaler ajusté sur le passé, baseline de persistance, sorties de nn.LSTM, état porté entre batches",
   "Génération de texte : vocabulaire, embeddings, température, perplexité, caractères contre mots",
-  "Workflow PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks",
+  "Marche à suivre en PyTorch : données → modèle → loss sur logits → optimiseur → fit() → évaluation → sauvegarde → callbacks",
   "Améliorer un modèle : un hyperparamètre à la fois, journal d'expériences, dropout et batchnorm, augmentation, validation croisée, recherche d'hyperparamètres",
   "Modernisation : Keras 3 multi-backend, Transformers et SSM, précision mixte, torch.compile"
  ],

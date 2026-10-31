@@ -23,6 +23,28 @@ if str(ROOT / "tools") not in sys.path:
 from nbbuild import badge, code, md, setup_cell, write_notebook  # noqa: E402,F401
 
 STARS = {1: "★", 2: "★★", 3: "★★★", 4: "★★★★"}
+ROCKET = "🚀"                      # an exercise whose contract has "gpu": true (BIBLE §11, §12: GPU Colab advised)
+
+THREAD_SHOWN = {"synth": "synthétique"}   # the contracts keep the key "synth"; the headers show the word
+
+_CONTRACT: dict | None = None
+
+
+def contract_entry(ex_id: str) -> dict:
+    """The entry of an exercise in its contract (docs/syllabus/data/*.json); ``{}`` for an ID it does not list."""
+    global _CONTRACT
+    if _CONTRACT is None:
+        _CONTRACT = {}
+        for path in sorted((ROOT / "docs" / "syllabus" / "data").glob("*.json")):
+            data = json.loads(path.read_text(encoding="utf-8"))
+            _CONTRACT.update((e["id"], e) for e in data.get("exercises", []))
+    return _CONTRACT.get(ex_id, {})
+
+
+def gpu_ids() -> set:
+    """The IDs of the exercises whose contract has ``"gpu": true``."""
+    contract_entry("")
+    return {ex_id for ex_id, e in _CONTRACT.items() if e.get("gpu")}
 
 
 @dataclass
@@ -49,12 +71,30 @@ class Ex:
     note: str = ""                 # solutions notebook: short remark after the answer
     mylearn: str = ""              # 🔨: the mylearn file the exercise completes (header of BIBLE §11)
 
+    @property
+    def gpu(self) -> bool:
+        """True when the contract marks the exercise 🚀 (a GPU Colab is advised in full mode)."""
+        return bool(contract_entry(self.id).get("gpu"))
+
+    @property
+    def thread_shown(self) -> str:
+        """The « Fil rouge » of the header (BIBLE §11): the one given to ``Ex``, else the contract's; « — » for none."""
+        thread = self.thread if self.thread != "—" else contract_entry(self.id).get("thread") or "—"
+        return "/".join(THREAD_SHOWN.get(part, part) for part in thread.split("/"))
+
     def header(self) -> str:
-        fil = f" · **Fil rouge :** {self.thread}" if self.thread != "—" else ""
+        thread = self.thread_shown
+        fil = f" · **Fil rouge :** {thread}" if thread != "—" else ""
         lib = f" · **mylearn :** `{self.mylearn}`" if self.mylearn else ""
-        return (f"### Ex {self.id} — {self.title} {self.type} {STARS[self.stars]} ⏱️ {self.minutes} min\n"
+        rocket = f" {ROCKET}" if self.gpu else ""
+        return (f"### Ex {self.id} — {self.title} {self.type} {STARS[self.stars]} ⏱️ {self.minutes} min{rocket}\n"
                 f"**Objectif :** {self.goal}  \n**Prérequis :** {self.prereq}{fil}{lib}"
                 + (f" · **Parcours :** {self.tracks}" if self.tracks else ""))
+
+    def table_row(self, part_key: str = "") -> str:
+        """The row of the exercise in the table of cell 0: ``| A | 21.26 | Titre 🚀 | 🔬 | ★★★ | 40 |``."""
+        title = self.title.replace("|", "\\|") + (f" {ROCKET}" if self.gpu else "")
+        return f"| {part_key} | {self.id} | {title} | {self.type} | {STARS[self.stars]} | {self.minutes} |"
 
 
 @dataclass

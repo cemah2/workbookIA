@@ -49,10 +49,14 @@ Pour tester ta librairie `mylearn` depuis Colab (les notebooks lancent déjà le
 
 *Exécution → Modifier le type d'exécution → Accélérateur matériel : GPU T4*, puis relance la cellule de setup : le rapport affiche `Device : cuda`. Le GPU gratuit est limité en durée : ne l'active que pour les cellules marquées 🚀 ou le mode complet (`FAST_MODE = False`).
 
+**Entraînements longs.** Le mode complet d'un mini-projet ou de certaines parties (MP5, MP6, la partie C du ch. 24) dure de quelques dizaines de minutes à plus d'une heure. Lance-le avec le GPU, l'onglet ouvert. Ce que le notebook écrit dans `mon_travail/` (ton Drive) survit à une coupure de Colab ; ce qui est dans `/content` (le cache des données, les poids téléchargés) disparaît. Si Colab coupe : relance la cellule de setup, puis seulement les cellules de l'étape interrompue (pas « Tout exécuter »). Un entraînement qui sauvegarde ses checkpoints dans `mon_travail/` peut reprendre là où il s'est arrêté, comme la reprise exacte que tu écris au 🛠️ 27.27 et au MP6.4.
+
 ## 4. Données et cache
 
 - Les petits datasets (Penguins, MNIST, textes, taches solaires, California) sont dans le dépôt : rien à télécharger.
-- Fashion-MNIST et CIFAR-10 sont téléchargés dans `/content/wb_cache` (disque local de la machine Colab, bien plus rapide que Drive). Ce cache disparaît quand la session se termine ; il est retéléchargé en moins d'une minute.
+- Fashion-MNIST et CIFAR-10 sont téléchargés dans `/content/wb_cache` (disque local de la machine Colab, bien plus rapide que Drive), comme la révision de Fashion-MNIST que le ch. 29 lit sur le Hub de Hugging Face. Ce cache disparaît quand la session se termine ; il est retéléchargé en moins d'une minute.
+- Les poids des réseaux pré-entraînés (MobileNet V3 Small au ch. 20, ResNet-18 aux ch. 21 et 23 et dans MP5, SqueezeNet 1.1 au ch. 28, VGG16 en option) vont dans le cache de PyTorch de la machine (`/root/.cache/torch`) : retéléchargés eux aussi à chaque nouvelle session (5 à 45 Mo, 550 Mo pour VGG16).
+- En local, la liste complète des téléchargements et une commande pour tout préparer avant de travailler hors ligne sont dans [INSTALL_LOCAL.md](INSTALL_LOCAL.md#travailler-hors-ligne-à-partir-du-ch-20).
 
 ## 5. Sauvegarder ton travail sur GitHub (optionnel, pour ton portfolio)
 

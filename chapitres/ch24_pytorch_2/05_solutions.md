@@ -60,15 +60,15 @@ a) **C** : un seul objet, un seul jeu de poids ; les gradients des deux appels s
 
 ## 🔁 Rappels
 
-### 24.R1 — Ch. 23 : Ce qu'un historique d'entraînement doit contenir pour comparer deux runs
+### 24.R1 — Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs
 a) **« ABD »** : les losses d'entraînement et de validation, l'accuracy de validation et le learning rate de chaque epoch. Une copie des poids à chaque epoch coûterait trop de mémoire : on garde le meilleur checkpoint (ch. 23). La loss de test à chaque epoch inviterait à choisir l'epoch sur le test, une fuite. b) **« BCD »** : la graine, tous les hyperparamètres (défauts compris, qui changent d'une version à l'autre), la durée et la machine ; la couleur des courbes n'apprend rien. c) **Faux** : c'est la moyenne des losses des mini-batches **pendant** l'epoch, alors que les poids changent ; c'est pourquoi elle est un peu plus haute que la loss du modèle de fin d'epoch sur le même train. d) **5** : la plus petite loss, 0,44, est la cinquième valeur.
 **À retenir** : un historique sert à lire les courbes et à choisir une epoch sans toucher au test ; pour comparer deux runs, on note aussi leur graine, leurs réglages, leur durée et leur machine.
 
-### 24.R2 — Ch. 21 : Taille de sortie d'une convolution à padding 'same' et stride 2
+### 24.R2 — Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2
 a) **14** $= \lceil 28/2 \rceil$. b) **8** $= \lceil 15/2 \rceil$. c) **2** $= \lfloor 5/2 \rfloor$. d) **16** $= \lfloor (32 + 4 - 5)/2 \rfloor + 1 = 15 + 1$. e) **7** $= \lfloor (15 - 3)/2 \rfloor + 1 = 6 + 1$. f) **Vrai** : PyTorch accepte un noyau pair avec `padding="same"` et un stride de 1 ; il met alors une ligne de zéros de plus en bas et une colonne de plus à droite (ch. 21).
 **À retenir** : le « same » de Keras avec un stride $s$ donne $\lceil H/s \rceil$ ; en PyTorch, `padding=k // 2` le reproduit pour un noyau impair.
 
-### 24.R3 — Ch. 17 : Ce que change la division des logits avant le softmax
+### 24.R3 — Ch. 17 : ce que change la division des logits avant le softmax
 a) **0,665** $= e^2/(e^2 + e + 1) = 7{,}389/11{,}107$. b) **0,867** : logits $(4, 2, 0)$, $e^4/(e^4 + e^2 + 1) = 54{,}60/62{,}99$. c) **0,51** : logits $(1 ;\ 0{,}5 ;\ 0)$, $e/(e + e^{0{,}5} + 1) = 2{,}718/5{,}367 = 0{,}506$. d) **B** : les écarts entre logits divisés grandissent sans limite, et toute la probabilité va au plus grand. e) **Vrai** : diviser par un nombre positif garde l'ordre des logits, donc l'argmax.
 **À retenir** : $T < 1$ rend la distribution plus pointue (texte plus sage, plus répétitif), $T > 1$ plus plate (plus inventif, plus d'erreurs) ; l'argmax ne change pas.
 
@@ -546,7 +546,7 @@ def trace_shapes_20(model, x):
 a) $32 \times (3 \times 25 + 1) = 2\,432$ pour la convolution, $32\,768 \times 10 + 10 = 327\,690$ pour la couche dense. b) Les six convolutions : $448 + 2\,320 + 4\,640 + 9\,248 + 18\,496 + 36\,928 = 72\,080$, plus $1\,024 \times 10 + 10 = 10\,250$. c) Sans les 224 biais des convolutions, avec deux paramètres par canal pour chacune des six batchnorms ($2 \times 224 = 448$) : $82\,330 - 224 + 448$ ; le dropout n'a pas de paramètres. d) Trois poolings : $32 / 2 / 2 / 2 = 4$. Après 2 epochs sur 5 000 images : simple 44,5 % de validation, profond 33,6 %, une epoch du profond durant environ deux fois plus longtemps.
 **Dans tes notes** : 99 % des paramètres du CNN simple sont dans sa couche dense. Il est devant après deux epochs, parce que le profond, sans batchnorm, démarre lentement ; le profond fait trois fois et demie plus de multiplications-additions par image (9,9 millions contre 2,8). Doubler les canaux à chaque étage garde un coût de calcul du même ordre d'un étage à l'autre.
 **Erreurs fréquentes** : `nn.Linear(64 * 8 * 8, 10)` (deux poolings comptés au lieu de trois) ; des convolutions avec biais devant la batchnorm ; un `nn.Dropout` après chaque convolution au lieu de chaque étage ; imbriquer des `nn.Sequential` par étage (le contrat veut une liste à plat, et `trace_shapes_20` ne verrait que trois blocs) ; oublier `model.eval()` dans `trace_shapes_20` (un dropout changerait les sorties, pas les formes, mais une batchnorm en mode entraînement sur une seule image modifierait ses statistiques glissantes).
-**Variante** : `make_deep_cnn_20(widths=(8, 16, 32))` a **23 314** paramètres, environ quatre fois moins : diviser les largeurs par 2 divise par 4 les poids des convolutions.
+**Variante** : `make_deep_cnn_20(widths=(8, 16, 32))` a **23 314** paramètres, trois fois et demie moins que les 82 330 du réglage par défaut : diviser les largeurs par 2 divise par 4 les poids des convolutions (72 080 → 18 184), mais seulement par 2 ceux de la couche dense (10 250 → 5 130).
 
 ### Ex 24.21 — Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🔬
 **Réponses** : a) **D** ; b) **B** ; c) **22,4** ; d) **C**.

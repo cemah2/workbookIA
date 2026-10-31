@@ -35,7 +35,7 @@ flowchart TD
 
 Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifier par un exemple (« le discriminateur d'un GAN et le VGG16 du transfert de style sont tous deux un réseau qui sert de loss : l'un apprend en même temps, l'autre est gelé, 28.R1 »).
 
-## 2. Fiche d'une page : les formules clés
+## 2. Fiche d'une page : les 18 formules clés
 
 | # | Notion | Formule | Ce qu'il faut savoir dire | Ch. | `mylearn` |
 |---|---|---|---|---|---|
@@ -72,9 +72,9 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 ## 4. L'apprentissage par renforcement en une page
 
 - **La boucle** : `state, info = env.reset(seed=…)`, puis `state, reward, terminated, truncated, info = env.step(action)` jusqu'à `terminated or truncated`. `terminated` : l'épisode est vraiment fini (pas d'amorçage) ; `truncated` : coupé de l'extérieur (on amorce quand même).
-- **Le retour** : la somme des récompenses actualisées par $\gamma$ ; un petit $\gamma$ rend l'agent myope (CP6.6 : avec $\gamma = 0$, il ne voit que les victoires à un coup).
+- **Le retour** : la somme des récompenses actualisées par $\gamma$ ; un petit $\gamma$ rend l'agent myope : l'avenir compte peu.
 - **Bellman → Q-learning, SARSA** : une mise à jour après chaque pas, vers la cible $r + \gamma \cdot$(max, ou action choisie). Off-policy contre on-policy ; au bord d'une falaise, SARSA apprend le chemin prudent.
-- **Explorer** : ε-greedy (souvent décroissant), softmax, ou une table initialisée de façon optimiste ; des égalités départagées au hasard explorent aussi tant que la table est vide.
+- **Explorer** : ε-greedy (souvent décroissant), softmax, ou une table initialisée de façon optimiste.
 - **Régler** : $\alpha$ petit ou décroissant si l'environnement est aléatoire ; $\gamma$ entre 0,9 et 0,99 ; plusieurs graines et un intervalle pour rapporter un résultat.
 - **Au-delà des tables** : un réseau remplace la table (DQN : rejeu d'expérience et réseau cible) ; les méthodes de politique (PPO) ; le RLHF ajuste les modèles de langage avec une récompense apprise de préférences humaines.
 

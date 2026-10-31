@@ -191,6 +191,7 @@ def figure_policies() -> None:
         ax.set_ylim(0, 1)
     axes[0].set_ylabel("probabilité de jouer l'action")
     fig.suptitle("Une même ligne de la table (valeurs Q sous chaque action), trois politiques", fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))        # keep the general title above the titles of the panels
     save(fig, "politiques.png")
 
 

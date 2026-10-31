@@ -124,7 +124,7 @@
 - e) :
 
 
-### 23.R2 — Ch. 20 : Les cinq lignes d'une étape d'entraînement
+### 23.R2 — Ch. 20 : les cinq lignes d'une étape d'entraînement
 
 - a) :
 - b) :
@@ -133,7 +133,7 @@
 - e) :
 
 
-### 23.R3 — Ch. 2 : Moyenne et écart-type du train pour normaliser les pixels
+### 23.R3 — Ch. 2 : moyenne et écart-type du train pour normaliser les pixels
 
 - a) :
 - b) :

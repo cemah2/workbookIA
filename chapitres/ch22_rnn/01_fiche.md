@@ -35,7 +35,7 @@ Le livre avance en trois temps : l'idée d'un état qu'une cellule lit et rééc
 | 22.8 à 22.8.4 Structures | Q10, Q11 | 22.8, 22.10 | 22.22, 22.28 | |
 | 22.9 Un générateur de texte | Q12 | 22.1, 22.5, 22.10 | 22.12, 22.20, 22.24 à 22.27 | E5 |
 | Au-delà du livre : séries temporelles | R3 | 22.1 | 22.21, 22.23, 22.29 | E4 |
-| Après les RNN | Q12 | | | E1 |
+| Au-delà du livre : après les RNN | Q12 | | | E1 |
 
 ## Objectifs d'apprentissage
 
@@ -83,7 +83,7 @@ La première fenêtre occupe les valeurs $0$ à $w - 1$ et sa cible la valeur $w
 
 ## 22.3 · L'état ⏩
 
-L'idée nouvelle est une unité de calcul qui garde de l'information **d'une entrée à la suivante** : son **état** (*state*). Le livre insiste sur la différence avec les poids (p. 1030-1032) : après l'entraînement, les poids sont **figés** ; l'état, lui, **change à chaque entrée**, en production comme à l'entraînement. Le réseau n'apprend pas *ce qu'il faut retenir* au moment où il lit une phrase : il a appris, une fois pour toutes, **comment** mettre à jour son état, et c'est cette mise à jour qui retient, au fil de la lecture, ce qui sert (qui est « elle », de quoi parle la phrase).
+L'idée nouvelle est une unité de calcul qui garde de l'information **d'une entrée à la suivante** : son **état**, ou **état caché** (*hidden state*, $h_t$), interne au réseau par opposition à ses sorties ; on dira simplement « l'état ». Le livre insiste sur la différence avec les poids (p. 1030-1032) : après l'entraînement, les poids sont **figés** ; l'état, lui, **change à chaque entrée**, en production comme à l'entraînement. Le réseau n'apprend pas *ce qu'il faut retenir* au moment où il lit une phrase : il a appris, une fois pour toutes, **comment** mettre à jour son état, et c'est cette mise à jour qui retient, au fil de la lecture, ce qui sert (qui est « elle », de quoi parle la phrase).
 
 ### 22.3.1 · Se servir de l'état ⏩
 
@@ -109,7 +109,7 @@ En vrai, l'entrée, l'état et la sortie sont des vecteurs (p. 1042-1045). Le li
 $$H(D + H) + 2H \text{ paramètres.}$$
 Exemple : $D = 50$, $H = 20$ : $20 \times 70 + 40 = 1\,440$. La cellule du livre (figure 22.18 : 3 entrées, un état de 5 valeurs, 4 sorties, 69 poids) est organisée un peu autrement : trois groupes de neurones, dont un pour la sortie, et un seul vecteur de biais pour l'état ; ✏️ 22.3 te fait retrouver son compte, puis celui de PyTorch.
 
-> 🧮 **Rappel maths — les conventions de ce chapitre** — On reprend les noms de PyTorch : $N$ exemples (notés $n$ ailleurs), $T$ pas de temps, $D$ features par pas (notées $p$ ailleurs), $H$ valeurs d'état ; et, comme dans le code, les vecteurs et les matrices ne sont pas en gras. Un vecteur d'entrée $x_t$ et un état $h_t$ sont des **lignes** ; un mini-batch empile $N$ lignes : $X_t$ de forme $(N, D)$, et la matrice des états, de forme $(N, H)$. Quelques lettres servent deux fois, comme dans les bibliothèques : $h$ est l'horizon d'une fenêtre (§22.2) et $h_t$ l'état ; $T$ est la longueur d'une séquence, et la température au §22.9 ; $z$ sont les logits au §22.9 et $z_t$ la porte du GRU. Le contexte dit toujours laquelle. Les poids suivent la convention de `mylearn` pour les couches denses (ch. 16), $z = x W + b$ avec $W$ de forme $(n_{in}, n_{out})$ : la cellule calcule $X_t W_{ih} + H_{t-1} W_{hh}$. PyTorch range ses matrices dans l'autre sens, `weight_ih` de forme $(H, D)$ et calcule $x\,W^\top$ : nos $W_{ih}$ sont donc les `weight_ih.T` de PyTorch. Le symbole $\odot$ (0B) est le produit **élément par élément** de deux vecteurs de même taille : $(a \odot b)_j = a_j b_j$.
+> 🧮 **Rappel maths — les conventions de ce chapitre** — On reprend les noms de PyTorch : $N$ exemples (notés $n$ ailleurs), $T$ pas de temps, $D$ features par pas (notées $p$ ailleurs), $H$ valeurs d'état ; et, comme dans le code, les vecteurs et les matrices ne sont pas en gras. Un vecteur d'entrée $x_t$ et un état $h_t$ sont des **lignes** ; un mini-batch empile $N$ lignes : $X_t$ de forme $(N, D)$, et la matrice des états, de forme $(N, H)$. Quelques lettres servent deux fois, comme dans les bibliothèques : $h$ est l'horizon d'une fenêtre (§22.2) et $h_t$ l'état ; $T$ est la longueur d'une séquence, et la température au §22.9 ; $z$ sont les logits au §22.9 et $z_t$ la porte du GRU ; $\sigma$ est la sigmoïde des portes, et $\sigma_{\max}(W)$, dans ∂ 22.6, la plus grande valeur singulière de $W$. Le contexte dit toujours laquelle. Les poids suivent la convention de `mylearn` pour les couches denses (ch. 16), $z = x W + b$ avec $W$ de forme $(n_{in}, n_{out})$ : la cellule calcule $X_t W_{ih} + H_{t-1} W_{hh}$. PyTorch range ses matrices dans l'autre sens, `weight_ih` de forme $(H, D)$ et calcule $x\,W^\top$ : nos $W_{ih}$ sont donc les `weight_ih.T` de PyTorch. Le symbole $\odot$ (0B) est le produit **élément par élément** de deux vecteurs de même taille : $(a \odot b)_j = a_j b_j$.
 
 ### 22.4.2 · Que représentent les valeurs de l'état ?
 
@@ -217,7 +217,7 @@ Le livre reprend un schéma célèbre de A. Karpathy (2015), où « plusieurs »
 
 ### 22.8.2 · Le RNN profond ⏩
 
-On peut empiler des couches récurrentes : c'est un **RNN profond** (*deep RNN*) (p. 1070-1071). Chaque couche a son propre état ; la couche $\ell$ reçoit à chaque pas l'état de la couche $\ell - 1$ au même pas. Les couches basses doivent donc rendre **toute leur séquence** d'états, pas seulement le dernier (`return_sequences=True` dans Keras, que le livre retrouvera aux ch. 23 et 24). Dans PyTorch, `nn.LSTM(..., num_layers=3)` empile trois couches et applique, si on le demande (`dropout=...`), un dropout entre elles, jamais après la dernière.
+On peut empiler des couches récurrentes : c'est un **RNN profond** (*deep RNN*) (p. 1070-1071). Chaque couche a son propre état ; la couche $\ell$ reçoit à chaque pas l'état de la couche $\ell - 1$ au même pas. Les couches basses doivent donc rendre **toute leur séquence** d'états, pas seulement le dernier (`return_sequences=True` dans Keras, que le livre retrouvera au ch. 24, §24.5.8). Dans PyTorch, `nn.LSTM(..., num_layers=3)` empile trois couches et applique, si on le demande (`dropout=...`), un dropout entre elles, jamais après la dernière.
 
 ### 22.8.3 · Le RNN bidirectionnel ⏩
 
@@ -268,7 +268,7 @@ Le livre prend des températures comme exemples (§22.2, §22.5) pour illustrer 
 
 > 💼 **En entreprise** — Prévoir la demande d'un produit, la charge d'un serveur ou la consommation électrique : la première question d'un relecteur sera « face à quelle baseline ? », la deuxième « avec quel découpage ? ». Un tableau qui donne la MAE de la persistance, du modèle et de son intervalle sur plusieurs tranches de test vaut mieux qu'une seule courbe de prédiction.
 
-## Après les RNN : Transformers et modèles à espace d'états
+## Au-delà du livre : après les RNN, Transformers et modèles à espace d'états
 
 Le livre date de 2018. Depuis, trois familles se partagent les séquences.
 

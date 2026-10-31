@@ -33,7 +33,7 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 2. **Le prétraitement** : la moyenne et l'écart-type de chaque canal s'apprennent sur les images d'entraînement seules, et sont enregistrés avec le modèle ; l'augmentation ne touche que l'entraînement.
 3. **Les baselines d'abord** : prédire toujours la même classe (10 %), un MLP, un petit CNN. Un modèle qui ne bat pas le petit CNN n'apporte rien.
 4. **Une variable à la fois** : chaque comparaison change une seule chose (le pooling contre le stride, la batchnorm, le dropout, les raccourcis), à budget égal ; **chaque run** (même raté) entre dans le journal `runs.csv`.
-5. **Le test** (les 10 000 images de test) s'ouvre **une seule fois**, en mode complet, pour le modèle retenu ; chaque ouverture est notée dans `test_log.json`.
+5. **Le test** (les 10 000 images de test) s'ouvre **une seule fois**, en mode complet, pour le modèle retenu ; chaque ouverture est notée dans `test_log.json`, que le notebook commite aussitôt ; tant que ce fichier a changé sans commit, le test ne se rouvre pas.
 6. **Les graines** sont écrites : `torch.manual_seed` avant de construire chaque modèle, un `torch.Generator` par `DataLoader`.
 
 ## Les contraintes
@@ -60,7 +60,7 @@ Le notebook appelle aussi `metrics.confusion_matrix` de ta librairie (MP5.6). Le
 | MP5.2 | Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation `transforms.v2`, `Dataset` et `DataLoader` | `pipeline.py`, `figures/augmentation.png` | 60 min |
 | MP5.3 | Boucle d'entraînement réutilisable : `fit()`, meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal | `train.py` (première partie), les premiers runs du journal | 90 min |
 | MP5.4 | Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout | `vgg`, `ResidualBlock`, `resnet`, `build_model`, `figures/architectures.png` | 90 min |
-| MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis l'entraînement complet (GPU Colab 🚀) ; le modèle livré | `save_model`, `load_model`, `model.pt`, `model.json`, `results.json`, `figures/courbes_final.png` | 90 min |
+| MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré | `save_model`, `load_model`, `model.pt`, `model.json`, `results.json`, `figures/courbes_final.png` | 90 min |
 | MP5.6 | Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM | `predict_proba`, `fgsm`, trois figures, tes commentaires | 60 min |
 | MP5.7 | Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites | `resnet18_features`, la comparaison dans le README | 60 min |
 | MP5.8 | Livraison : README, fiche modèle, `predict.py`, tests et mutants, nettoyage | `predict.py`, `test_cifarkit.py`, `README.md`, `MODEL_CARD.md` | 60 min |

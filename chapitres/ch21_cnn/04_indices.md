@@ -148,7 +148,7 @@ Des neurones qui partent des mêmes poids reçoivent les mêmes gradients. Le fa
 </details>
 <details><summary>Indice 3</summary>
 
-a) Vrai : rien ne distingue des filtres égaux, ils restent égaux. Pour b), calcule $64 \times 9$ ; pour c), prends la racine de $2/576$ ; pour d), cherche le nom de la sortie d'un filtre ; pour e), regarde la valeur par défaut de `padding`.
+a) Vrai : rien ne distingue des filtres égaux, ils restent égaux. Pour b), calcule $64 \times 9$ ; pour c), prends la racine de 2 divisé par le fan-in de b) ; pour d), cherche le nom de la sortie d'un filtre ; pour e), regarde la valeur par défaut de `padding`.
 
 </details>
 
@@ -286,7 +286,7 @@ a) $3 + 0 - 2 = 1$. Pour b), seules les cases où la seconde grille vaut 1 compt
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 21.1 — Le détecteur de jaune à la main
+### Ex 21.1 — Le détecteur de jaune à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $0{,}9 + 0{,}85 - 0{,}1 = 1{,}65$. Pour b) à d), même calcul ; pour e), com
 
 </details>
 
-### Ex 21.2 — Une corrélation 5×5 par 3×3 à la main
+### Ex 21.2 — Une corrélation 5×5 par 3×3 à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $5 - 3 + 1 = 3$. Pour b), le morceau des lignes 0 à 2 et colonnes 0 à 2 a p
 
 </details>
 
-### Ex 21.3 — Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100
+### Ex 21.3 — Tailles de sortie : padding, stride et la hiérarchie 600 → 300 → 100 ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $\lfloor (600 + 4 - 5)/2 \rfloor + 1 = 299 + 1 = 300$. Pour b), refais le cal
 
 </details>
 
-### Ex 21.4 — Compter les paramètres : convolution contre couche dense
+### Ex 21.4 — Compter les paramètres : convolution contre couche dense ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $32 \times (9 + 1) = 320$. Pour b), chaque filtre lit 32 canaux ; pour c), l'
 
 </details>
 
-### Ex 21.5 — Champ récepteur effectif d'une pile convolution + pooling
+### Ex 21.5 — Champ récepteur effectif d'une pile convolution + pooling ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $1 + 2 + 2 = 5$. Pour b), une couche de plus ; pour c) et d), $C_{out} \times
 
 </details>
 
-### Ex 21.6 — Convolution transposée à la main : insérer des zéros puis corréler
+### Ex 21.6 — Convolution transposée à la main : insérer des zéros puis corréler ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) $(2 - 1) \times 2 + 3 = 5$. Pour b) et c), applique $s - 1$ et $k - 1 - p$ ; 
 
 </details>
 
-### Ex 21.7 — Rétropropager dans une convolution 1D : la somme sur les positions
+### Ex 21.7 — Rétropropager dans une convolution 1D : la somme sur les positions ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Question 1 : $y_i$ contient le terme $w_u\,x_{i+u}$ pour **chaque** $i$, donc $\
 
 </details>
 
-### Ex 21.8 — Fermi : paramètres, mémoire et calcul de VGG16
+### Ex 21.8 — Fermi : paramètres, mémoire et calcul de VGG16 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ a) $224^2 \times 64 \times 27 = 86\,704\,128$, soit 86,7 millions. Pour b), la m
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 21.9 — Expliquer la convolution en cinq lignes
+### Ex 21.9 — Expliquer la convolution en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Une première phrase possible : « Imagine un petit tampon transparent avec un m
 
 </details>
 
-### Ex 21.10 — Deviner l'âge et le genre sur une photo : jusqu'où aller ?
+### Ex 21.10 — Deviner l'âge et le genre sur une photo : jusqu'où aller ? ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Question 1 : le système reproduit les annotations, l'apparence que des annotate
 
 </details>
 
-### Ex 21.11 — Lire LeCun et coll. (1998) : LeNet-5
+### Ex 21.11 — Lire LeCun et coll. (1998) : LeNet-5 📄
 
 <details><summary>Indice 1</summary>
 

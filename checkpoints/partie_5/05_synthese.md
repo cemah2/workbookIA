@@ -6,7 +6,7 @@
 
 21. **Réseaux convolutifs** : un même petit filtre promené sur toute l'image (partage de poids), des cartes de features de plus en plus abstraites et de plus en plus petites (stride, pooling), un champ récepteur qui grandit couche après couche, et des réseaux qu'on sait aussi tromper (exemples adversariaux).
 22. **Réseaux récurrents** : un état qui porte la mémoire d'un pas de temps au suivant, avec les mêmes poids à chaque pas ; la rétropropagation dans le temps multiplie les dérivées, d'où les gradients évanescents ou explosifs, que le chemin additif du LSTM (et du GRU) contourne.
-23. **PyTorch en pratique (1)** : un workflow complet et reproductible, des données (tenseurs `float32`, `(N, C, H, W)`, split stratifié, normalisation apprise sur l'entraînement) au modèle sauvegardé et rechargé, en passant par une boucle `fit()` avec validation, meilleur checkpoint, planning de learning rate et early stopping.
+23. **PyTorch en pratique (1)** : une marche à suivre complète et reproductible, des données (tenseurs `float32`, `(N, C, H, W)`, split stratifié, normalisation apprise sur l'entraînement) au modèle sauvegardé et rechargé, en passant par une boucle `fit()` avec validation, meilleur checkpoint, planning de learning rate et early stopping.
 24. **PyTorch en pratique (2)** : améliorer un modèle par des expériences contrôlées (un hyperparamètre à la fois, plusieurs graines, un journal), régulariser (dropout, batchnorm, augmentation), valider sans fuite, et sortir de `nn.Sequential` (branches, poids partagés, blocs résiduels, séquences et texte).
 
 ## 1. Carte mentale
@@ -14,12 +14,12 @@
 ```mermaid
 flowchart TD
   C["Convolution (ch. 21)<br/>noyau partagé, canaux<br/>padding, stride, dilatation"]
-  P["Réduire et voir loin (ch. 21)<br/>pooling, stride<br/>champ récepteur, 1×1"]
+  P["Réduire et voir loin (ch. 21)<br/>pooling, stride<br/>champ récepteur, 1 × 1"]
   A["Architectures d'images (ch. 21, 24)<br/>LeNet, VGG, blocs résiduels<br/>pré-entraînés, ViT"]
   R["Récurrence (ch. 22)<br/>état, déroulement<br/>BPTT, clipping"]
   L["LSTM et GRU (ch. 22)<br/>portes, cellule<br/>chemin additif"]
   S["Séquences en pratique (ch. 22, 24)<br/>fenêtres sans fuite, persistance<br/>texte : vocabulaire, embeddings, température"]
-  W["Workflow PyTorch (ch. 23)<br/>données → modèle → loss sur logits<br/>fit() → évaluation → sauvegarde"]
+  W["Marche à suivre en PyTorch (ch. 23)<br/>données → modèle → loss sur logits<br/>fit() → évaluation → sauvegarde"]
   E["Expériences (ch. 24)<br/>un hyperparamètre à la fois<br/>graines, journal, recherche"]
   G["Régulariser (ch. 24)<br/>dropout, batchnorm<br/>augmentation, early stopping"]
   C --> P --> A
@@ -77,12 +77,12 @@ Redessine-la de mémoire, puis compare : chaque flèche doit pouvoir se justifie
 | Une série temporelle « trop bien » prédite | fuite : fenêtres mélangées entre train et validation, scaler ajusté sur tout | split temporel, scaler sur le passé, comparer à la persistance |
 | Un CNN qui s'effondre sur des images décalées de quelques pixels | pas d'augmentation de translation, pas de pooling global | augmentation (`RandomCrop` avec padding), `AdaptiveAvgPool2d` |
 
-## 4. Le workflow PyTorch, en une page
+## 4. La marche à suivre en PyTorch, en une page
 
 ```python
 # data: a stratified split, the normalization learned on the training images only
-x01 = X_train / 255.0                                       # the scale of ToDtype(scale=True): [0, 1]
-mean, std = x01.mean(axis=(0, 2, 3)), x01.std(axis=(0, 2, 3))   # per channel, (N, C, H, W)
+x01 = X_train / 255.0                                       # uint8 images (N, H, W, C), as loaded; ToDtype(scale=True): [0, 1]
+mean, std = x01.mean(axis=(0, 1, 2)), x01.std(axis=(0, 1, 2))   # per channel (ToImage then gives (C, H, W))
 train_tf = v2.Compose([v2.ToImage(), v2.RandomCrop(32, padding=4), v2.RandomHorizontalFlip(),
                        v2.ToDtype(torch.float32, scale=True), v2.Normalize(mean, std)])
 train_loader = DataLoader(train_set, batch_size=128, shuffle=True, generator=torch.Generator().manual_seed(0))
@@ -124,7 +124,7 @@ for epoch in range(1, epochs + 1):
 
 | Question | Le choix par défaut | Quand faire autrement |
 |---|---|---|
-| Images, peu de données | un CNN **pré-entraîné** (ResNet-18, EfficientNet), nouvelle tête, puis affiner | beaucoup de données et du calcul : entraîner depuis zéro, ou un ViT |
+| Images, peu de données | un CNN **pré-entraîné** (ResNet-18, EfficientNet), nouvelle tête, puis fine-tuning | beaucoup de données et du calcul : entraîner depuis zéro, ou un ViT |
 | Images, CNN maison | blocs conv-conv-pool (ou stride 2), batchnorm, `AdaptiveAvgPool2d(1)`, une petite tête | des connexions résiduelles au-delà d'une dizaine de couches |
 | Réduire la taille | stride 2 (moins de calcul) ou max pooling (un peu plus robuste) | |
 | Séries temporelles | baselines (persistance, saisonnalité), puis LSTM / GRU / Conv1d sur des fenêtres | des modèles classiques (gradient boosting sur des features de retard) sont souvent aussi bons |
@@ -152,7 +152,7 @@ Dis chaque définition à voix haute, avec un exemple, **avant** d'ouvrir la ré
 <details><summary><b>Padding, stride, dilatation</b></summary>Ajouter des zéros sur les bords (garder la taille), sauter des positions (réduire la taille et le coût), espacer les poids du noyau (voir plus loin sans paramètres).</details>
 <details><summary><b>Pooling</b></summary>Résumer une fenêtre par son maximum ou sa moyenne, canal par canal, sans paramètres ; le pooling global (`AdaptiveAvgPool2d(1)`) réduit chaque carte à un nombre.</details>
 <details><summary><b>Champ récepteur</b></summary>La zone de l'image d'entrée dont dépend une valeur d'une couche : elle grandit avec la profondeur, surtout après les strides.</details>
-<details><summary><b>Convolution 1×1</b></summary>Un mélange des canaux en chaque pixel, sans regarder les voisins : pour changer le nombre de canaux à bas prix.</details>
+<details><summary><b>Convolution 1 × 1</b></summary>Un mélange des canaux en chaque pixel, sans regarder les voisins : pour changer le nombre de canaux à bas prix.</details>
 <details><summary><b>Exemple adversarial</b></summary>Une entrée modifiée de façon imperceptible qui change la prédiction ; FGSM la fabrique en un pas dans la direction du signe du gradient par rapport à l'entrée.</details>
 <details><summary><b>État caché</b></summary>Le vecteur qu'un réseau récurrent transmet d'un pas au suivant : un résumé de la séquence lue jusque-là, de taille fixe.</details>
 <details><summary><b>Rétropropagation dans le temps (BPTT)</b></summary>La rétropropagation sur le réseau déroulé : un gradient par pas, sommés pour les poids partagés ; tronquée, elle ne remonte que quelques dizaines de pas.</details>
@@ -172,7 +172,7 @@ Dis chaque définition à voix haute, avec un exemple, **avant** d'ouvrir la ré
 
 1. **15 min** : redessine la carte mentale, de mémoire, puis compare avec la section 1.
 2. **30 min** : cache les colonnes « Formule » et « Ce qu'il faut savoir dire » de la section 2 ; pour chaque notion, réécris la formule et invente un exemple chiffré (un petit CNN de ton choix, un pas de LSTM, une fenêtre de série).
-3. **15 min** : réécris de mémoire le workflow de la section 4, puis compare ; pour chaque ligne de la section 3, retrouve l'exercice où tu as vu ce symptôme.
+3. **15 min** : réécris de mémoire la marche à suivre de la section 4, puis compare ; pour chaque ligne de la section 3, retrouve l'exercice où tu as vu ce symptôme.
 4. **15 min** : le vocabulaire de la section 7, à voix haute.
 5. **15 min** : les flashcards en retard des chapitres 21 à 24.
 

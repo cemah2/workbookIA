@@ -114,21 +114,21 @@
 
 ## 🔁 Rappels
 
-### 25.R1 — Quelles augmentations garder pour des chiffres manuscrits ?
+### 25.R1 — Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?
 
 - a) :
 - b) :
 - c) :
 
 
-### 25.R2 — Résumer une séquence entière dans l'état final d'un LSTM
+### 25.R2 — Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM
 
 - a) :
 - b) :
 - c) :
 
 
-### 25.R3 — La divergence KL, ce que mesure le terme de régularisation du VAE
+### 25.R3 — Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE
 
 - a) :
 - b) :

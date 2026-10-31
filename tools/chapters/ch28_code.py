@@ -828,7 +828,7 @@ def style_transfer_buggy_21(net, content, style, steps=60, lr=0.05):
 
 
 def diagnose_21(fn, steps=25):
-    """Four diagnoses in a row, on small images; each one stops the chain when it fails (one bug can hide another)."""
+    """Four diagnoses in a row, on small images; the first one that fails stops the chain (one bug can hide another)."""
     c, s = wb.datasets.load_sample_image("china", 64), wb.datasets.load_style_image("starry_night", 64)
     seen = []
     handle = NET[0].register_forward_pre_hook(lambda m, inputs: seen.append(float(inputs[0].detach().mean())))
@@ -838,24 +838,30 @@ def diagnose_21(fn, steps=25):
         handle.remove()
     img = np.asarray(img)
     moved = float(np.abs(img - 0.5).max())
-    print(f"1. les pixels bougent-ils ? écart maximal à l'image grise de départ : {fr(moved, 4)}")
-    if moved < 1e-6:
-        print("   ❌ l'image n'a pas changé : qu'est-ce que l'optimiseur met à jour ?")
-        return False
-    print(f"2. ce que reçoit la première couche : moyenne des pixels {fr(min(seen), 3)} à {fr(max(seen), 3)}")
-    if min(seen) > 0.2:
-        print("   ❌ des pixels autour de 0,45 : le réseau attend des images normalisées comme celles d'ImageNet.")
-        return False
     ratio = first[1] / max(first[0], 1e-12)
-    print(f"3. au premier pas, terme de style / terme de contenu = {ratio:.3g}")
-    if ratio > 1e6:
-        print("   ❌ le style écrase tout : compare l'échelle des matrices de Gram à celle de la fiche.")
-        return False
-    print(f"4. plage des pixels à la fin : {fr(img.min(), 3)} à {fr(img.max(), 3)}")
-    if img.min() < 0 or img.max() > 1:
-        print("   ❌ des pixels hors de [0, 1] : ils ne s'affichent pas, et le réseau n'en a jamais vu de tels.")
-        return False
-    print("✅ les quatre diagnostics passent.")
+    ratio_text = f"{ratio:.3g}".replace(".", ",")
+    points = [  # (what passes, test, what was measured, what is wrong)
+        ("les pixels bougent", moved >= 1e-6, f"écart maximal à l'image grise de départ : {fr(moved, 4)}",
+         "l'image n'a pas changé : qu'est-ce que l'optimiseur met à jour ?"),
+        ("la première couche reçoit des pixels normalisés", min(seen) <= 0.2,
+         f"moyenne des pixels reçus par la première couche : {fr(min(seen), 3)} à {fr(max(seen), 3)}",
+         "des pixels autour de 0,45 : le réseau attend des images normalisées comme celles d'ImageNet."),
+        ("le style n'écrase pas le contenu au premier pas", ratio <= 1e6,
+         f"terme de style / terme de contenu au premier pas : {ratio_text}",
+         "le style écrase tout : compare l'échelle des matrices de Gram à celle de la fiche."),
+        ("les pixels finissent dans [0, 1]", img.min() >= 0 and img.max() <= 1,
+         f"plage des pixels à la fin : {fr(img.min(), 3)} à {fr(img.max(), 3)}",
+         "des pixels hors de [0, 1] : ils ne s'affichent pas, et le réseau n'en a jamais vu de tels."),
+    ]
+    for k, (name, ok, measured, why) in enumerate(points, start=1):
+        if ok:
+            print(f"✅ Ex 28.21 : point {k}, {name} ({measured}).")
+        else:
+            print(f"❌ Ex 28.21 : point {k} : {measured} ; {why}")
+            for later in range(k + 1, len(points) + 1):
+                print(f"⏳ Ex 28.21 : point {later} : corrige d'abord le point {k}.")
+            return False
+    print("✅ Ex 28.21 : les quatre diagnostics passent.")
     return True
 
 

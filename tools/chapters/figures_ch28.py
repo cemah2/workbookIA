@@ -175,7 +175,7 @@ def figure_tv() -> None:
     noisy = np.clip(crop + rng.normal(0, 0.08, crop.shape), 0, 1)
     smooth = gaussian_filter(noisy, 1.2)
     fig, axes = plt.subplots(1, 3, figsize=(8.4, 3.2))
-    for ax, img, title in zip(axes, (crop, noisy, smooth), ("photo", "photo + bruit", "bruit lissé (flou)")):
+    for ax, img, title in zip(axes, (crop, noisy, smooth), ("photo", "photo + bruit", "photo bruitée, floutée")):
         ax.imshow(img, cmap="gray", vmin=0, vmax=1)
         ax.set_xticks([])
         ax.set_yticks([])

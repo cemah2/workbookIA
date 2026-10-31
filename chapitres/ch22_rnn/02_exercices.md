@@ -132,16 +132,16 @@ e) Vrai ou faux : pour une série temporelle, on compare un LSTM à une baseline
 
 ## 🔁 Rappels
 
-### 22.R1 — Ch. 21 : Une convolution 1D peut-elle lire une séquence ? 🔁 ★ ⏱️ 5 min
+### 22.R1 — Ch. 21 : une convolution 1D peut-elle lire une séquence ? 🔁 ★ ⏱️ 5 min
 *Ch. 21 (§21.5) · fiche §22.2 · parcours R*
 
 a) `nn.Conv1d(in_channels=1, out_channels=1, kernel_size=4)` sur une série de 20 valeurs, sans padding : la longueur de la sortie.
 b) Vrai ou faux : une convolution 1D applique les mêmes poids à toutes les positions de la série.
 c) Le champ récepteur d'une sortie après deux `Conv1d` de noyau 3 empilées (stride 1, sans dilatation) : le nombre de valeurs de l'entrée dont elle dépend.
 d) Avec des noyaux de 3, sans dilatation, combien de couches faut-il empiler pour qu'une sortie dépende d'une valeur placée 1 000 pas plus tôt (un champ récepteur d'au moins 1 001 valeurs) ?
-e) Dans ta copie : un avantage d'une pile de convolutions 1D sur un RNN pour lire une séquence, et ce que change une **dilatation** qui double à chaque couche (ch. 21, §21.3.4).
+e) Dans ta copie : un avantage d'une pile de convolutions 1D sur un RNN pour lire une séquence, et ce que change une **dilatation** qui double à chaque couche (ch. 21, §21.3.3 et l'encadré ⚠️ « la convolution dilatée » du §21.8).
 
-### 22.R2 — Ch. 19 : Gradient clipping et optimiseurs adaptatifs 🔁 ★ ⏱️ 5 min
+### 22.R2 — Ch. 19 : gradient clipping et optimiseurs adaptatifs 🔁 ★ ⏱️ 5 min
 *Ch. 19 · fiche §22.6 · parcours R*
 
 a) Un gradient $(3, 4)$ et `max_norm = 1` : la norme du gradient avant clipping.
@@ -150,7 +150,7 @@ c) Vrai ou faux : le clipping par la norme change la direction du gradient.
 d) RMSprop divise le pas de chaque poids par : (A) la racine d'une moyenne glissante des carrés de ses gradients ; (B) la norme des poids ; (C) le numéro de l'epoch ; (D) le learning rate.
 e) Vrai ou faux : avec Adam, un gradient multiplié par 1 000 donne presque le même premier pas.
 
-### 22.R3 — Ch. 15 : Ajuster le scaler sur le train seulement 🔁 ★ ⏱️ 5 min
+### 22.R3 — Ch. 15 : ajuster le scaler sur le train seulement 🔁 ★ ⏱️ 5 min
 *Ch. 15, ch. 12 · fiche §22.5, section « Au-delà du livre : prévoir une série temporelle » · parcours R*
 
 Une série de 100 valeurs mensuelles : les 80 premières servent à l'entraînement, les 20 dernières au test.
@@ -306,7 +306,7 @@ Dans ta copie, en 5 lignes au plus et sans formule, explique à un ami ce qu'est
 
 ### Ex 22.10 — Écrire « à la manière de », imiter une voix : usages et abus ⚖️ ★★ ⏱️ 20 min
 **Objectif :** analyser les usages légitimes et les risques des modèles qui imitent un style ou une voix.
-**Prérequis :** fiche §22.1, §22.8.1, §22.9 · **Fil rouge :** Holmes et Verne
+**Prérequis :** fiche §22.1, §22.8.1, §22.9 · **Fil rouge :** Holmes/Verne
 
 Le livre présente comme des succès des textes générés « dans la voix » d'un écrivain célèbre, des épisodes de série écrits par un réseau, et la transformation d'une voix en celle de quelqu'un d'autre (p. 1026, p. 1068). Réponds dans ta copie.
 
@@ -337,7 +337,7 @@ Lis S. Hochreiter et J. Schmidhuber, « Long Short-Term Memory », *Neural Compu
 Réponds **à voix haute**, en une minute, comme face à un recruteur ; puis compare avec la « réponse modèle en 60 secondes » de `05_solutions.md`.
 
 ### 22.E1 — Pourquoi les Transformers ont-ils remplacé les RNN pour le texte ? Quand garderais-tu un LSTM ? 💼 ★★ ⏱️ 10 min
-*Fiche §22.1 (encadré 🕰️), section « Après les RNN » · parcours R*
+*Fiche §22.1 (encadré 🕰️), section « Au-delà du livre : après les RNN » · parcours R*
 
 « Pourquoi les Transformers ont-ils remplacé les RNN pour le texte ? Est-ce qu'il vous arrive encore d'utiliser un LSTM, et pour quoi ? »
 

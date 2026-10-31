@@ -14,7 +14,7 @@ are removed; every other function raises NotImplementedError with the step of th
 
 The reference results of the full mode (results.json, runs.csv, model.pt, model.json, the figures shown by the README,
 test_log.json) come from one run of the solution notebook with FAST_MODE = False (on a CPU with 2 cores, about an hour
-and a half; on a Colab GPU, a few minutes); the committed notebook is then executed in fast mode, which writes none of
+and twenty minutes; on a Colab GPU, a few minutes); the committed notebook is then executed in fast mode, which writes none of
 them.
 """
 
@@ -40,7 +40,7 @@ STEPS = [("MP5.1", "Cadrage, protocole de validation (split stratifié) et basel
          ("MP5.2", "Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation transforms.v2, Dataset et DataLoader", 60),
          ("MP5.3", "Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal", 90),
          ("MP5.4", "Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout", 90),
-         ("MP5.5", "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis l'entraînement complet (GPU Colab 🚀) ; le modèle livré", 90),
+         ("MP5.5", "Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré", 90),
          ("MP5.6", "Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM", 60),
          ("MP5.7", "Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites", 60),
          ("MP5.8", "Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage", 60)]
@@ -166,6 +166,7 @@ STARTER_KIT = ROOT / "projets" / PROJECT_NAME / "depart"
 candidates = [Path.cwd(), ROOT / "mon_travail" / "projets" / PROJECT_NAME, STARTER_KIT]
 PROJECT = next(folder for folder in candidates if (folder / "cifarkit" / "__init__.py").exists() and (folder / "data.py").exists())
 FIGURES = PROJECT / "figures"
+COMMIT_TEST_LOG = True    # MP5.5: each opening of the test set is committed at once (test_log.json)
 if PROJECT.resolve() == STARTER_KIT.resolve():
     print("⚠️ Ce dossier est le kit de départ du dépôt, pas ta copie : lance python tools/start_chapter.py CP5, puis "
           "ouvre mon_travail/projets/partie_5_classifieur_cifar10/mp5_classifieur_cifar10.ipynb.")
@@ -184,6 +185,7 @@ PROJECT_SOLUTION = r'''# The project folder of the reference solution
 PROJECT_NAME = "partie_5_classifieur_cifar10"
 PROJECT = ROOT / "projets" / PROJECT_NAME / "solution"
 FIGURES = PROJECT / "figures"
+COMMIT_TEST_LOG = False   # the reference solution: its test_log.json is committed with the workbook
 if str(PROJECT) not in sys.path:
     sys.path.insert(0, str(PROJECT))
 import data  # noqa: E402
@@ -228,7 +230,8 @@ N_PRETRAINED = 2_000 if FAST_MODE else 10_000   # MP5.7: images given to the pre
 SIZE_PRETRAINED = 112 if FAST_MODE else 224     # their size (224 is the size of ImageNet; 112 is 4 times cheaper)
 TARGET = 0.65 if FAST_MODE else 0.80            # the brief: 65 % of validation in fast mode, 80 % of test in full mode
 RUNS = PROJECT / ("runs_rapide.csv" if FAST_MODE else "runs.csv")   # the experiment journal of this mode
-MODEL_DIR = Path(tempfile.gettempdir()) / "cifarkit_rapide" if FAST_MODE else PROJECT   # where the final model goes
+MODEL_DIR = Path(tempfile.mkdtemp(prefix="cifarkit_rapide_")) if FAST_MODE else PROJECT   # where the final model goes
+# (fast mode: a new folder for this session, so that no model of another run, or of the solution, is ever checked)
 
 FAILED = {}         # check cell -> its guardrails that failed at its last run (the test set stays closed while any remain)
 _CURRENT = [None]
@@ -301,6 +304,46 @@ def kit_ok():
         print(f"⚠️ cifarkit ne s'importe pas : {type(exc).__name__}: {exc}")
         return False
     return True
+
+
+def git(path, *args):
+    """Run a git command in the folder of `path` (None when git cannot be found)."""
+    try:
+        return subprocess.run(["git", *args], cwd=path.parent, capture_output=True, text=True)
+    except OSError:
+        return None
+
+
+def committed(path):
+    """(True, "commit abc1234 du 2026-10-16") when the file is committed and unchanged; (False or None, why) otherwise."""
+    log = git(path, "log", "-1", "--format=%h du %as", "--", path.name)
+    status = git(path, "status", "--porcelain", "--", path.name)
+    if log is None:
+        return None, "ne peut pas être vérifié : git est introuvable"
+    if log.returncode != 0:
+        top = git(path, "rev-parse", "--show-toplevel")
+        if top is not None and top.returncode == 0:      # a repository without any commit yet
+            return False, "n'est pas encore commité"
+        return None, "ne peut pas être vérifié : le dossier n'est pas dans un dépôt git"
+    if not log.stdout.strip():
+        return False, "n'est pas encore commité"
+    if status.stdout.strip():
+        return False, f"a changé depuis son commit ({log.stdout.strip()})"
+    return True, f"commit {log.stdout.strip()}"
+
+
+def commit_file(path, message):
+    """Commit this one file with git, from the notebook (with a default identity when git has none)."""
+    top = git(path, "rev-parse", "--show-toplevel")
+    if top is None or top.returncode != 0:
+        print("⚠️ Ce dossier n'est pas dans un dépôt git : rien n'est commité.")
+        return False
+    who = [] if git(path, "config", "user.email").returncode == 0 else ["-c", "user.name=Workbook",
+                                                                       "-c", "user.email=workbook@localhost"]
+    git(path, "add", "--", path.name)
+    result = git(path, *who, "commit", "-m", message, "--", path.name)
+    print((result.stdout or result.stderr).strip())
+    return result.returncode == 0
 
 
 def save(fig, name):
@@ -867,13 +910,13 @@ if ready("MEAN") and kit_ok():
 # ---------------------------------------------------------------------------
 # MP5.5
 # ---------------------------------------------------------------------------
-MP55_MD = r'''## MP5.5 · Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis l'entraînement complet (GPU Colab 🚀) ; le modèle livré ⏱️ 90 min
+MP55_MD = r'''## MP5.5 · Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré ⏱️ 90 min
 
 **Objectif :** régler le learning rate et le weight decay à petit coût, puis entraîner une seule fois le modèle retenu, en entier, et le livrer avec son prétraitement.
 
 a) Écris `sample_config(rng, lr_range, wd_range)` ci-dessous : un learning rate et un weight decay tirés **sur une échelle logarithmique** dans leurs intervalles. La recherche porte sur la meilleure architecture de MP5.4 : quatre tirages au hasard sur `N_SEARCH` images (`EPOCHS_SEARCH` epochs, 400 images de validation en mode rapide), puis deux tirages de **zoom**, autour du meilleur learning rate (un intervalle de ×½ à ×2).
 b) Dans `cifarkit/train.py`, écris `save_model` et `load_model` (leurs docstrings) : le modèle livré, ce sont ses poids, sa configuration et sa normalisation.
-c) **Le choix** : écris `RULE`, la règle, **avant** de lire le tableau de la recherche, puis `FINAL`, la configuration du modèle, et `FINAL_TRAINING`, ses réglages d'entraînement. La cellule suivante entraîne ce modèle une fois, sur `N_FINAL` images pendant `EPOCHS_FINAL` epochs : sur CPU, c'est le mode rapide ; en mode complet (`FAST_MODE = False`), 45 000 images et 30 epochs, à lancer sur un GPU de Colab (🚀, quelques minutes ; cet entraînement final prend environ une demi-heure sur un CPU à deux cœurs, et tout le notebook en mode complet environ une heure vingt). Elle enregistre le modèle (`model.pt` et `model.json`) et n'ouvre le test que si toutes les vérifications des étapes MP5.1 à MP5.4 passent, et seulement en mode complet.'''
+c) **Le choix** : écris `RULE`, la règle, **avant** de lire le tableau de la recherche, puis `FINAL`, la configuration du modèle, et `FINAL_TRAINING`, ses réglages d'entraînement. La cellule suivante entraîne ce modèle une fois, sur `N_FINAL` images pendant `EPOCHS_FINAL` epochs : sur CPU, c'est le mode rapide ; en mode complet (`FAST_MODE = False`), 45 000 images et 30 epochs, à lancer sur un GPU de Colab (🚀, quelques minutes ; cet entraînement final prend environ une demi-heure sur un CPU à deux cœurs, et tout le notebook en mode complet environ une heure vingt). Elle enregistre le modèle (`model.pt` et `model.json`) et n'ouvre le test que si toutes les vérifications des étapes MP5.1 à MP5.4 passent, et seulement en mode complet ; chaque ouverture est notée dans `test_log.json`, que la cellule commite aussitôt (le test ne se rouvre pas tant que ce fichier a changé sans commit).'''
 
 MP55_TODO = r'''def sample_config(rng, lr_range, wd_range):
     """{"lr": ..., "weight_decay": ...}: two floats drawn by rng on a log scale, lr in lr_range = (low, high) and
@@ -986,15 +1029,28 @@ if ready("MEAN", "ARCH_RESULTS", "SEARCH") and filled(RULE, FINAL, FINAL_TRAININ
 MP55_TEST = r'''checks_of("MP5.5 test")
 if final_ok:
     blocking = {cell: [f for f in fails] for cell, fails in FAILED.items() if fails and not cell.startswith("MP5.5 test")}
-    verdict("MP5.5", not blocking, "toutes les vérifications des étapes précédentes passent : le test peut s'ouvrir.",
+    verdict("MP5.5", not blocking, "toutes les vérifications des étapes précédentes passent : "
+            + ("en mode complet, le test pourrait s'ouvrir." if FAST_MODE else "le test peut s'ouvrir."),
             "le test reste fermé tant qu'une vérification échoue : " + " · ".join(f"{cell} : {fails[0].rstrip('.')}" for cell, fails in blocking.items())[:900] + ".")
+    test_log = PROJECT / "test_log.json"
+    logged, logged_detail = committed(test_log)          # a log erased since its commit counts as changed
+    if not test_log.exists() and logged_detail == "n'est pas encore commité":
+        logged = True                                     # no opening yet: the first one may come
     if FAST_MODE:
         print("⏸️ MP5.5 : en mode rapide, le test reste fermé : il ne s'ouvre qu'une fois, pour la mesure finale, en mode "
               "complet (FAST_MODE = False dans la cellule de setup), quand tes choix sont faits sur la validation.")
+    elif not blocking and logged is False:
+        print(f"⏳ MP5.5 : le test reste fermé : test_log.json {logged_detail}. Commite-le (ou restaure-le : git checkout -- "
+              "test_log.json) avant de rouvrir le test : une ouverture qui n'est pas commitée ne laisse aucune trace si le "
+              "fichier est effacé. Relance ensuite cette cellule.")
     elif not blocking:
+        if logged is None:
+            print(f"⚠️ MP5.5 : test_log.json {logged_detail} : tes ouvertures du test ne sont gardées que par ce fichier.")
         description = (f"{FINAL}, {N_FINAL} images, {EPOCHS_FINAL} epochs, SGD Nesterov + OneCycleLR, {FINAL_TRAINING}, "
                        f"graine {SEED}")
         X_test, y_test = data.open_test(PROJECT, description)
+        if COMMIT_TEST_LOG and committed(test_log)[0] is False:      # a new opening: commit it at once
+            commit_file(test_log, "MP5: open the test set")
         test_loader = cifarkit.make_loader(X_test, y_test, cifarkit.make_transform(MEAN, STD), batch_size=500, shuffle=False)
         test_loss, test_acc = cifarkit.evaluate(final_model, test_loader)
         print(f"test (ouvert une fois) : accuracy {test_acc:.4f}, loss {test_loss:.4f} · objectif du cahier des charges : "
@@ -1226,7 +1282,7 @@ c) Termine le `README.md` de portfolio et la fiche modèle `MODEL_CARD.md` (leur
 MP58_CHECK = r'''checks_of("MP5.8")
 if kit_ok():
     with attempt("MP5.8"):
-        if (MODEL_DIR / "model.json").exists():
+        if final_ok and (MODEL_DIR / "model.json").exists():
             folder_png = Path(tempfile.mkdtemp())
             from PIL import Image
             paths = []
@@ -1349,7 +1405,7 @@ OBSERVATIONS: dict[str, str] = {   # the reference solution's answers (fast mode
 - **Les 20 erreurs les plus sûres d'elles** (94 à 98 %) : certaines sont excusables, un bateau vu de très près pris pour un avion, un camion de pompiers dont le label dit « automobile », et au moins deux images dont le label semble faux (une grenouille étiquetée chat, un « cheval » qui ressemble à un avion) ; d'autres non, des chiens debout dans l'herbe pris pour des cerfs : le modèle s'appuie sur le fond autant que sur l'animal. Et il est trop sûr de lui : ses probabilités ne sont pas calibrées.
 - **FGSM** : avec ε = 1/255, un niveau de gris par pixel, l'accuracy passe de 86,5 % à 38,9 % (mode complet ; de 71,6 % à 39,8 % en mode rapide), et à 4/255 il ne reste que 7 %. Pour s'en protéger : un entraînement adversarial (des exemples FGSM ou PGD dans les mini-batches), plus coûteux, qui coûte aussi un peu d'accuracy sur les images normales.""",
     "MP5.7": r"""- **Le ResNet-18 pré-entraîné** (gelé, une tête de 5 130 paramètres) : 86,1 % de validation avec 10 000 images agrandies en 224 × 224 (mode complet), contre 85,8 % pour le VGG entraîné sur 45 000 images ; en mode rapide, 78,6 % avec 2 000 images en 112 × 112, contre 71,7 % pour le VGG avec 12 000 images. Il lui faut beaucoup moins de données étiquetées, mais 25 ms de calcul par image en 224 × 224 (6 ms en 112 × 112), contre 0,3 à 0,5 ms pour le VGG, et 11,7 millions de paramètres à stocker.
-- **Les limites de la comparaison** : les images de CIFAR-10, agrandies de 32 à 224 pixels, sont floues pour un réseau entraîné sur des photos nettes ; affiner tout le réseau (et pas seulement sa tête) ferait bien mieux, mais coûterait un GPU. Ses poids viennent d'ImageNet, avec sa licence (non commerciale pour les images) et ses biais ; et les deux modèles ne sont pas mesurés sur les mêmes quantités de données.""",
+- **Les limites de la comparaison** : les images de CIFAR-10, agrandies de 32 à 224 pixels, sont floues pour un réseau entraîné sur des photos nettes ; un fine-tuning de tout le réseau (et pas seulement de sa tête) ferait bien mieux, mais coûterait un GPU. Ses poids viennent d'ImageNet, avec sa licence (non commerciale pour les images) et ses biais ; et les deux modèles ne sont pas mesurés sur les mêmes quantités de données.""",
 }
 
 

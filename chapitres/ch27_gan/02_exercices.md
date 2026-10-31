@@ -74,7 +74,7 @@ e) Ce qui empêche cette étape de modifier $D$ : (A) `loss_g.backward()` ne tou
 ### 27.Q7 — Pourquoi juger des mini-batchs plutôt qu'un point isolé 🧠 ⏱️ 3 min
 *Fiche §27.5 · livre §27.5*
 
-a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batchs 32 points. Combien de pas le discriminateur fait-il par epoch, à raison d'un pas par mini-batch (le dernier, incomplet, compte aussi) ?
+a) Le jeu d'entraînement du livre compte 10 000 points, et les mini-batches 32 points. Combien de pas le discriminateur fait-il par epoch, à raison d'un pas par mini-batch (le dernier, incomplet, compte aussi) ?
 b) Vrai ou faux : le discriminateur du livre (deux couches de 16 neurones, une sortie) reçoit le mini-batch entier et juge l'ensemble des points.
 c) Quelle technique donne vraiment au discriminateur une information sur tout le mini-batch ? (A) une couche d'écart-type par mini-batch (Karras et coll.) ou la discrimination par mini-batch (Salimans et coll.) ; (B) le dropout ; (C) un learning rate plus petit.
 d) Pour une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 dans chaque direction, la part des points à moins de 1 du centre est d'environ : (A) 68 % ; (B) 39 % ; (C) 95 %.
@@ -148,7 +148,7 @@ Calculatrice autorisée. Écris la démarche dans ta copie de `06_mes_reponses.m
 
 ### Ex 27.1 — Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour ✏️ ★ ⏱️ 15 min
 **Objectif :** suivre la forme des tenseurs dans un générateur et un discriminateur convolutifs, et compter leurs paramètres.
-**Prérequis :** fiche §27.6 · ch. 16 (couche dense) · ch. 21 (taille de sortie d'une convolution) · ch. 25 (convolution transposée) · **Parcours :** R, M
+**Prérequis :** fiche §27.6 · ch. 16 (couche dense) · ch. 21 (taille de sortie d'une convolution) · ch. 25 (convolution transposée) · **Fil rouge :** MNIST · **Parcours :** R, M
 
 Formules (fiche §27.6) : $H_{\text{out}} = \left\lfloor \frac{H_{\text{in}} + 2p - k}{s} \right\rfloor + 1$ pour une convolution, $H_{\text{out}} = (H_{\text{in}} - 1)s - 2p + k + p_{\text{out}}$ pour une convolution transposée.
 
@@ -158,7 +158,7 @@ c) Une convolution de noyau 4, de pas 2, de padding 1, sur une image de 28 × 28
 d) La même convolution appliquée à la sortie de c) : la hauteur de sortie.
 e) Une convolution transposée de noyau 4, de pas 2, de padding 1 (sans `output_padding`), sur un tenseur de 7 × 7 : la hauteur de sortie.
 f) Le nombre de paramètres de `nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1, bias=False)`.
-g) Le générateur du livre fait plutôt un sur-échantillonnage 2 × 2 (qui n'a pas de paramètres) suivi d'une convolution de 128 vers 64 canaux, de noyau 5 × 5, avec biais. Combien de paramètres a cette convolution ?
+g) Le générateur du livre fait plutôt un suréchantillonnage 2 × 2 (qui n'a pas de paramètres) suivi d'une convolution de 128 vers 64 canaux, de noyau 5 × 5, avec biais. Combien de paramètres a cette convolution ?
 
 Dans ta copie : pourquoi 7 × 7 au départ, et pas 6 × 6 ou 8 × 8 ? Laquelle des couches de f) et de g) coûte le plus ? Laquelle des deux façons d'agrandir est la plus exposée au motif en damier (fiche §27.6.1), et pourquoi son noyau de 4 pour un pas de 2 limite-t-il le défaut ?
 

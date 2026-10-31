@@ -116,7 +116,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from matplotlib.ticker import MaxNLocator
 
-from wb.nbtools import filled
+from wb.nbtools import StopCheck, filled   # StopCheck: raised after a ❌ that makes the rest of a check cell meaningless
 
 torch.set_num_threads(max(1, min(4, os.cpu_count() or 1)))
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"   # 🚀 full mode: about 50 min on a 2-core CPU, less on a GPU
@@ -165,10 +165,6 @@ def pending(step, message):
 
 
 PENDING = "⏳ pas encore écrit"   # the first words of a test failure on a function not written yet (conftest.py)
-
-
-class StopCheck(Exception):
-    """Raised by a check cell after a ❌ that makes the rest of its checks meaningless (attempt stops there quietly)."""
 
 
 @contextmanager
@@ -1338,7 +1334,7 @@ MP67_MD = r'''## MP6.7 · README, model card, tests pytest et nettoyage du dép�
 **Objectif :** un dépôt qu'un recruteur comprend en deux minutes, dont les résultats se reproduisent, et dont les tests attrapent des erreurs.
 
 a) Complète `test_genbench.py` : **au moins trois tests** (un est donné), chacun avec un nom clair et un message dont la première ligne dit ce qui était attendu. La vérification les relance contre cinq **mutants** de `genbench` (une erreur glissée dans `vae_loss`, `gan_step`, `classifier_features`, `nearest_neighbors` ou `load_checkpoint`) : de bons tests en attrapent au moins deux.
-b) Termine le `README.md` de portfolio (les résultats chiffrés de `results.json`, la galerie légendée, les limites, la reproduction en une commande : `python tools/run_all_notebooks.py mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb --inplace`, avec `--full` pour le mode complet) et la fiche modèle `MODEL_CARD.md` (usage prévu, données, métriques, limites, risques et usages responsables) : leurs modèles sont dans ton dossier.
+b) Termine le `README.md` de portfolio (les résultats chiffrés de `results.json`, la galerie légendée, les limites, la reproduction en une commande : `jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb`, précédée de `WB_FAST_MODE=0` pour le mode complet) et la fiche modèle `MODEL_CARD.md` (usage prévu, données, métriques, limites, risques et usages responsables) : leurs modèles sont dans ton dossier.
 c) Nettoie : relance tout le notebook de zéro (*Exécution → Tout exécuter*), en mode complet sur Colab si tu peux (🚀), vérifie que le `.gitignore` du projet écarte `runs/` (des checkpoints lourds), puis commite le projet. Le modèle de README pointe vers les figures du mode complet ; si tu n'as que le mode rapide, remplace les liens par les fichiers `…_rapide.png` et dis-le dans le README.'''
 
 MP67_CHECK = r'''checks_of("MP6.7")

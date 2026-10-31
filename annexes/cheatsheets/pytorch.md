@@ -1,6 +1,6 @@
 # Cheatsheet PyTorch
 
-> Aide-mémoire rempli au fil des chapitres (20-27). Une ligne = une commande utile + ce qu'elle fait.
+> Aide-mémoire rempli au fil des chapitres (5 et 10 à 29). Une ligne = une commande utile + ce qu'elle fait.
 
 ## Tenseurs et device
 
@@ -86,10 +86,10 @@
 | Code | Effet |
 |---|---|
 | `nn.LSTM(input_size, hidden_size, num_layers=1, batch_first=False, dropout=0.0, bidirectional=False)` | entrée `(T, N, D)`, ou `(N, T, D)` avec `batch_first=True` ; rend `output, (h_n, c_n)` ; `nn.RNN` et `nn.GRU` rendent `output, h_n` |
-| `output` ; `h_n`, `c_n` | `output` : tous les pas de la dernière couche, `(N, T, D·H)` avec `D = 2` si bidirectionnel ; `h_n` : le dernier pas de chaque couche et de chaque sens, toujours `(couches·D, N, H)`, indice `couche·D + sens` |
+| `output` ; `h_n`, `c_n` | `output` : tous les pas de la dernière couche, `(N, T, n_dir·H)` avec `n_dir = 2` si bidirectionnel (1 sinon) ; `h_n` : le dernier pas de chaque couche et de chaque sens, toujours `(couches·n_dir, N, H)`, indice `couche·n_dir + sens` ($D$ reste le nombre de features par pas) |
 | `out, (h, c) = lstm(x)` puis `out, (h, c) = lstm(x_next, (h, c))` | passer l'état d'un morceau de séquence au suivant ; `(h.detach(), c.detach())` pour ne pas rétropropager au-delà (truncated BPTT) |
 | `lstm.weight_ih_l0`, `weight_hh_l0`, `bias_ih_l0`, `bias_hh_l0` ; `_reverse`, `_l1` | poids `(4H, D)` et `(4H, H)`, blocs de lignes dans l'ordre `i, f, g, o` (GRU : `r, z, n`) ; sens arrière, deuxième couche |
-| `lstm.bias_ih_l0.data[H:2 * H].fill_(1.0)` | biais de la porte d'oubli à 1 (PyTorch ne le fait pas) |
+| `with torch.no_grad(): lstm.bias_ih_l0[H:2 * H].fill_(1.0); lstm.bias_hh_l0[H:2 * H].zero_()` | biais total de la porte d'oubli à 1 : la porte voit `bias_ih + bias_hh` (PyTorch ne le fait pas ; à répéter pour `_l1`, `_l2`…) |
 | `x.permute(1, 0, 2)` | passer de `(N, T, D)` à `(T, N, D)` ; jamais `reshape` |
 | `nn.Embedding(V, E)` | table de vecteurs indexée par des ids entiers : `(N, T)` → `(N, T, E)` ; initialisation $\mathcal{N}(0, 1)$ |
 | `torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)` | entre `loss.backward()` et `optimizer.step()` ; rend la norme **avant** clipping |
@@ -101,7 +101,7 @@
 | Code | Effet |
 |---|---|
 | `"cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"` | choisir le device : GPU NVIDIA (ou AMD), GPU Apple, sinon CPU |
-| `t.reshape(4, -1)` ; `t.view(4, 3)` ; `x.permute(0, 3, 1, 2)` ; `.contiguous()` | regrouper autrement (même ordre) ; idem sans copie, refusé si non contigu ; NHWC → NCHW (change l'ordre) ; recopier dans le nouvel ordre |
+| `t.reshape(4, -1)` ; `t.view(4, 3)` ; `x.permute(0, 3, 1, 2)` ; `.contiguous()` | regrouper autrement (même ordre) ; idem sans copie, refusé si la mémoire ne s'y prête pas (aplatir après `permute`) ; NHWC → NCHW (change l'ordre) ; recopier dans le nouvel ordre |
 | `train_test_split(X, y, test_size=0.1, stratify=y, random_state=0)` | une validation stratifiée prise dans le train |
 | `torch.from_numpy(((X / 255.0 - mu) / sigma).astype(np.float32)).unsqueeze(1)` | des images `uint8` `(N, 28, 28)` en `float32` `(N, 1, 28, 28)`, normalisées avec $\mu$ et $\sigma$ du train |
 | `F.one_hot(y, num_classes=10)` ; `p.argmax(dim=1)` | un one-hot (toujours avec `num_classes`) ; revenir à l'indice de classe |
@@ -178,6 +178,25 @@
 | `flat = A.reshape(*A.shape[:-2], -1)` ; `G = flat @ flat.transpose(-1, -2) / (C * H * W)` | la matrice de Gram normalisée, avec ou sans axe de batch |
 | `((x[..., 1:, :] - x[..., :-1, :]) ** 2).sum() + ((x[..., 1:] - x[..., :-1]) ** 2).sum()` | la variation totale |
 | `torch.roll(x, shifts=(dy, dx), dims=(2, 3))` ; `F.interpolate(x, size=s, mode="bilinear", align_corners=False)` | décalages aléatoires et octaves d'une visualisation |
+
+## Environnements de RL (ch. 26)
+
+| Code | Effet |
+|---|---|
+| `env = gym.make("FrozenLake-v1")` ; `env.observation_space.n`, `env.action_space.n` | un environnement de Gymnasium et ses nombres d'états et d'actions (espaces discrets) |
+| `state, info = env.reset(seed=int(rng.integers(2**31)))` | commencer un épisode ; la graine doit être un `int` Python (un `np.int64` est refusé) |
+| `state, reward, terminated, truncated, info = env.step(action)` | jouer une action ; `terminated` : état terminal (pas d'amorçage), `truncated` : épisode coupé (on amorce quand même) |
+| `env.unwrapped.P[s][a]` | le modèle de FrozenLake : une liste de `(probabilité, état suivant, récompense, terminated)` |
+| `np.flatnonzero(info["action_mask"])` | les actions légales du morpion de `wb.envs` |
+
+## Données publiques (ch. 29)
+
+| Code | Effet |
+|---|---|
+| `datasets.load_dataset(nom, split="test", revision=sha)` | un dataset du Hub de Hugging Face, à une révision figée |
+| `ds.with_format("numpy")[:]["image"]` | les colonnes en tableaux NumPy |
+| `torchvision.datasets.FashionMNIST(root, train=True, download=True)` | un dataset de torchvision, téléchargé une fois dans `root` |
+| `h = hashlib.sha256()` ; `for bloc in iter(lambda: f.read(1 << 20), b""): h.update(bloc)` ; `h.hexdigest()` | la somme SHA-256 d'un fichier lu par morceaux, à noter dans la data card |
 
 ## Dataset et DataLoader
 

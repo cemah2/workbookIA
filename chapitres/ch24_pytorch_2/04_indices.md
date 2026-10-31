@@ -228,7 +228,7 @@ a) `self.fc` est un seul objet, avec un seul jeu de poids : les deux appels util
 
 ## 🔁 Rappels
 
-### 24.R1 — Ch. 23 : Ce qu'un historique d'entraînement doit contenir pour comparer deux runs
+### 24.R1 — Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) Les losses d'entraînement et de validation, l'accuracy de validation et le l
 
 </details>
 
-### 24.R2 — Ch. 21 : Taille de sortie d'une convolution à padding 'same' et stride 2
+### 24.R2 — Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) $\lceil 28/2 \rceil = 14$. Pour b), $\lceil 15/2 \rceil$ ; pour c), $\lfloor 
 
 </details>
 
-### 24.R3 — Ch. 17 : Ce que change la division des logits avant le softmax
+### 24.R3 — Ch. 17 : ce que change la division des logits avant le softmax
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Pour $T = 1$ : $e^2/(e^2 + e^1 + e^0) = 7{,}389/11{,}107 \approx 0{,}665$. Po
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 24.1 — Le coût d'une grille (27 hyperparamètres, 54 entraînements) contre une recherche aléatoire : probabilité de tomber dans les 5 % meilleurs réglages en n essais
+### Ex 24.1 — Le coût d'une grille (27 hyperparamètres, 54 entraînements) contre une recherche aléatoire : probabilité de tomber dans les 5 % meilleurs réglages en n essais ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $2^{27} = 134\,217\,728$ combinaisons. Pour b), divise ce nombre de secondes 
 
 </details>
 
-### Ex 24.2 — Formes et paramètres du CNN à pooling du livre
+### Ex 24.2 — Formes et paramètres du CNN à pooling du livre ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -318,11 +318,11 @@ Avec `padding=2` pour un noyau 5 et `padding=1` pour un noyau 3, une convolution
 </details>
 <details><summary>Indice 3</summary>
 
-a) 256 images, 30 filtres, la taille gardée : `"(256, 30, 28, 28)"`. Pour b), divise $H$ et $W$ par 2 ; pour c), applique $C_{out}(C_{in} k^2 + 1)$ avec $C_{in} = 1$, $k = 5$ ; pour d), avec $C_{in} = 30$, $k = 3$, $C_{out} = 16$ ; pour e), multiplie les trois dimensions de la sortie du second pooling ; pour f), $(n + 1) \times 128$ ; pour g), additionne les six couches qui ont des paramètres ; pour h), divise la somme des trois couches denses par g).
+a) 256 images, 30 filtres, la taille gardée : `"(256, 30, 28, 28)"`. Pour b), divise $H$ et $W$ par 2 ; pour c), applique $C_{out}(C_{in} k^2 + 1)$ avec $C_{in} = 1$, $k = 5$ ; pour d), avec $C_{in} = 30$, $k = 3$, $C_{out} = 16$ ; pour e), multiplie les trois dimensions de la sortie du second pooling ; pour f), $(n + 1) \times 128$ ; pour g), additionne les cinq couches qui ont des paramètres (deux convolutions, trois couches denses) ; pour h), divise la somme des trois couches denses par g).
 
 </details>
 
-### Ex 24.3 — Stride ou pooling : compter les multiplications
+### Ex 24.3 — Stride ou pooling : compter les multiplications ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) $28 \times 28 \times 30 \times 1 \times 5 \times 5 = 588\,000$. Pour b), la s
 
 </details>
 
-### Ex 24.4 — Ce que renvoie nn.LSTM : output, h_n et c_n
+### Ex 24.4 — Ce que renvoie nn.LSTM : output, h_n et c_n ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $N = 8$, $T = 5$, $H = 4$ : `"(8, 5, 4)"`. Pour b), 2 couches, un sens ; pour
 
 </details>
 
-### Ex 24.5 — Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points
+### Ex 24.5 — Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $200 - 13 = 187$ exemples. Pour b), le même calcul avec 20 000 ; pour c), un
 
 </details>
 
-### Ex 24.6 — Dropout inversé et max-norm : espérance et projection
+### Ex 24.6 — Dropout inversé et max-norm : espérance et projection ∂
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ $m$ ne prend que deux valeurs : $\mathbb{E}[m] = 1 - p$ et $\mathbb{E}[m^2] = 1 
 
 </details>
 
-### Ex 24.7 — Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte
+### Ex 24.7 — Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -416,7 +416,7 @@ a) $25 \times 10^6 \times 2 \times 3 \times 50\,000 \times 20 = 1{,}5 \times 10^
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 24.8 — La data augmentation en cinq lignes
+### Ex 24.8 — La data augmentation en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ Commence par : « Pour apprendre à reconnaître un chat, il faut l'avoir vu de 
 
 </details>
 
-### Ex 24.9 — Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres
+### Ex 24.9 — Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Un écart entre deux moyennes ne veut dire quelque chose que s'il est grand deva
 
 </details>
 
-### Ex 24.10 — Lire He et coll. (2016) : les réseaux résiduels
+### Ex 24.10 — Lire He et coll. (2016) : les réseaux résiduels 📄
 
 <details><summary>Indice 1</summary>
 

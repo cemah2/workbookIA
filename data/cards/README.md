@@ -8,7 +8,7 @@ Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, varia
 | California Housing | `wb.datasets.load_california()` | scikit-learn, copie CSV versionnée | [california_housing.md](california_housing.md) |
 | MNIST | `wb.datasets.load_mnist()` | versionné (`data/mnist.npz`, 11,5 Mo) | [mnist.md](mnist.md) |
 | Fashion-MNIST | `wb.datasets.load_fashion_mnist()` | téléchargé (≈ 30 Mo) | [fashion_mnist.md](fashion_mnist.md) |
-| CIFAR-10 | `wb.datasets.load_cifar10()` | téléchargé (≈ 170 Mo) | [cifar10.md](cifar10.md) |
+| CIFAR-10 | `wb.datasets.load_cifar10()` | téléchargé (≈ 145 Mo depuis Hugging Face) | [cifar10.md](cifar10.md) |
 | Holmes (texte anglais) | `wb.datasets.load_holmes()` | versionné (`data/text/`) | [holmes.md](holmes.md) |
 | Verne (texte français) | `wb.datasets.load_verne()` | versionné (`data/text/`) | [verne.md](verne.md) |
 | Taches solaires mensuelles | `wb.datasets.load_sunspots()` | versionné (`data/sunspots_monthly.csv`) | [sunspots.md](sunspots.md) |
@@ -16,7 +16,7 @@ Une fiche par dataset fil rouge (BIBLE §9) : provenance, licence, taille, varia
 | Données synthétiques | `wb.synth.*` | générées | [synthetic.md](synthetic.md) |
 | Environnements RL | `wb.datasets.make_env()` | code | [rl_envs.md](rl_envs.md) |
 | Images du ch. 28 (photos libres, tableaux du domaine public) | `wb.datasets.load_sample_image()`, `load_style_image()` | scikit-learn ; tableaux versionnés (`data/images/`, 0,27 Mo) | [images.md](images.md) |
-| Réseaux pré-entraînés (SqueezeNet 1.1, VGG16) | `wb.datasets.load_pretrained()` | cache de torch (5 Mo ou 528 Mio) | [pretrained.md](pretrained.md) |
+| Réseaux pré-entraînés (MobileNetV3 Small, ResNet-18, SqueezeNet 1.1, VGG16) | `torchvision.models`, `wb.datasets.load_pretrained()` | cache de torch (de 5 Mo à 553 Mo) | [pretrained.md](pretrained.md) |
 | Dataset piégé des fruits (audit du ch. 29) | `wb.datasets.make_trap_dataset()` | généré | [trap.md](trap.md) |
 
 Les fichiers versionnés sont reconstruits depuis leurs sources officielles par `python tools/build_datasets.py` (téléchargés le 2026-09-29). Les téléchargements vont dans `data/downloads/` en local et dans `/content/wb_cache` sur Colab ; ils ne sont jamais versionnés.

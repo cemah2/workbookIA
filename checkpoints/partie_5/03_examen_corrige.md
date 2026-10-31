@@ -38,7 +38,7 @@ e) **[0,4]** Une MAC par poids et par position de sortie : $64 \times (4 \times 
 f) **[0,6]** Chaque couche ajoute $(k - 1) \times j$ pixels, où $j$, l'écart entre deux positions voisines mesuré en pixels de l'image, est le produit des strides **précédents** : conv A, $+2 \times 1$ (3) ; pool A, $+1 \times 1$ (4) ; conv B, $+2 \times 2$ (8) ; pool B, $+1 \times 2$ (10) ; conv C, $+2 \times 4$ : **18 pixels** (0,3 pour la règle, 0,3 pour la valeur). Le stride de la convolution C n'agrandit pas son propre champ, seulement celui des couches suivantes.
 g) **[0,3]** Après `Flatten()`, la couche dense recevrait $64 \times 4 \times 4 = 1\,024$ valeurs : $1\,024 \times 10 + 10 = 10\,250$ paramètres au lieu de 650 (0,15). Autre conséquence, au choix (0,15) : le réseau n'accepterait plus que des images 32 × 32 (la moyenne globale accepte n'importe quelle taille) ; la tête saurait **où** est chaque motif, alors qu'une classe d'objet n'en dépend presque pas (la moyenne donne une invariance à la position) ; plus de paramètres, plus de risque d'overfitting.
 
-**Erreurs fréquentes** : oublier un pooling ; ignorer le stride de la convolution C, ou oublier que le padding s'ajoute des deux côtés (3 au lieu de 4) ; oublier $C_{\text{in}}$ dans les poids d'un filtre ; oublier les biais (24 112) ; compter les MAC sur une carte 8 × 8 ; additionner les noyaux sans tenir compte des strides (7, ou 9) ; oublier l'apport des poolings (15) ; compter le stride de la convolution C dans son propre champ (26), ou multiplier l'écart avant d'ajouter l'apport de chaque couche (29).
+**Erreurs fréquentes** : oublier un pooling ; ignorer le stride de la convolution C (8 au lieu de 4), ou oublier le padding (3 au lieu de 4) ; oublier $C_{\text{in}}$ dans les poids d'un filtre ; oublier les biais (24 112) ; compter les MAC sur une carte 8 × 8 ; additionner les noyaux sans tenir compte des strides (7, ou 9) ; oublier l'apport des poolings (15) ; compter le stride de la convolution C dans son propre champ (26), ou multiplier l'écart avant d'ajouter l'apport de chaque couche (29).
 **Remédiation** : 21.3, 21.4, 21.5, 21.8, 24.2, 24.3.
 
 ## CP5.3 — Un pas de LSTM à la main ✏️ · 2 points
@@ -162,9 +162,9 @@ d) **6 secondes** : $5{,}6 \times 10^{13} / 10^{13}$. Une surestimation : l'embe
 ## CP5.9 — Choisir et justifier une architecture pour trois projets 🗣️ · 1 point
 
 **Réponse modèle**
-1. **Les rayures** : un CNN **pré-entraîné** (un ResNet-18 de torchvision, par exemple), dont on remplace la tête et qu'on affine ; 2 000 photos ne suffisent pas à apprendre de bons filtres depuis zéro, mais les premiers filtres d'un réseau pré-entraîné détectent déjà bords et textures. Pièges : les classes déséquilibrées (peu de défauts : regarder le recall, pas l'accuracy), des augmentations qui effacent la rayure (un recadrage trop serré) ou qui n'arrivent jamais en production, et des photos de la même pièce des deux côtés du split.
+1. **Les rayures** : un CNN **pré-entraîné** (un ResNet-18 de torchvision, par exemple), dont on remplace la tête avant un fine-tuning ; 2 000 photos ne suffisent pas à apprendre de bons filtres depuis zéro, mais les premiers filtres d'un réseau pré-entraîné détectent déjà bords et textures. Pièges : les classes déséquilibrées (peu de défauts : regarder le recall, pas l'accuracy), des augmentations qui effacent la rayure (un recadrage trop serré) ou qui n'arrivent jamais en production, et des photos de la même pièce des deux côtés du split.
 2. **La consommation** : d'abord les **baselines** (la même heure la veille, la même heure la semaine d'avant), puis un LSTM, un GRU ou une convolution 1D sur des fenêtres de quelques jours, avec l'heure et le jour de la semaine en features. Piège : la validation doit être **temporelle** (entraîner sur le passé, valider sur la suite), avec un scaler ajusté sur l'entraînement seulement ; un mélange aléatoire des fenêtres laisse fuir le futur.
-3. **Les messages** : un **Transformer pré-entraîné** (un petit modèle de type BERT) affiné sur les 8 000 messages ; il connaît déjà la langue, ce qu'un LSTM entraîné sur 8 000 messages ne peut pas apprendre. Une baseline TF-IDF et régression logistique d'abord, pour savoir ce que le gros modèle apporte. Piège : des messages en double (ou du même client) des deux côtés du split.
+3. **Les messages** : un **Transformer pré-entraîné** (un petit modèle de type BERT), avec un fine-tuning sur les 8 000 messages ; il connaît déjà la langue, ce qu'un LSTM entraîné sur 8 000 messages ne peut pas apprendre. Une baseline TF-IDF et régression logistique d'abord, pour savoir ce que le gros modèle apporte. Piège : des messages en double (ou du même client) des deux côtés du split.
 
 **Critères** : un choix défendable et une raison juste par projet (0,2 chacun) ; au moins deux pièges justes en tout (0,4).
 **Erreurs fréquentes** : un CNN entraîné depuis zéro sur 2 000 photos ; une validation croisée mélangée sur une série temporelle ; un LSTM depuis zéro pour du texte, sans baseline ; oublier les baselines.
@@ -192,7 +192,7 @@ c) **32** : $(16 - 1) \times 2 - 2 \times 1 + 4 = 32$ ; avec ces réglages (noya
 d) **320 000** : une ligne de 64 valeurs par token, sans biais.
 
 **Erreurs fréquentes** : oublier les canaux d'entrée (48) ; le compte d'un LSTM (2 560) ou un seul biais par bloc (1 860) ; appliquer la formule d'une convolution ordinaire (8) ; oublier de retirer le padding (34).
-**Remédiation** : 21.4, 21.6, 21.20, 22.3.
+**Remédiation** : 21.4, 21.6, 21.20, 22.3, 24.30 ; fiche du ch. 24, §24.5.11 (encadré « un embedding est une lecture de table »).
 
 ## CP5.12 — Rétropropager dans une convolution 1D ∂ · 1 point
 
@@ -239,7 +239,7 @@ d) **[0,2]** Chaque $x_k$ sert aux positions qui le lisent : $\frac{\partial L}{
 | CP5.8 | 1 | 21 à 23 | 22.3, 22.8, 23.8, 21.8 |
 | CP5.9 | 1 | 21 à 24 | 21.E5, 22.E1, 22.E4, 23.24, 24.E2 |
 | CP5.10 | 2 | 15, 18 | 15.17, 15.18, 15.1, 24.17, 18.7, 18.15 |
-| CP5.11 | 1 | 21, 22, 24 | 21.4, 21.6, 21.20, 22.3 |
+| CP5.11 | 1 | 21, 22, 24 | 21.4, 21.6, 21.20, 22.3, 24.30, fiche du ch. 24 (§24.5.11) |
 | CP5.12 | 1 | 21 | 21.7, 21.R2, 21.31, 18.6, 18.7 |
 | CP5.13 | 0,5 | 23, 24 | 23.E2, 23.17, 23.22, 24.E5 |
 | CP5.14 | 0,5 | 24 | 24.9, 24.11, 24.15, 23.29 |
@@ -248,7 +248,7 @@ d) **[0,2]** Chaque $x_k$ sert aux positions qui le lisent : $\frac{\partial L}{
 **Lire ta note**
 - **16 à 20** : la partie V est solide. Passe au mini-projet MP5 ; garde les flashcards des chapitres 21 à 24 dans tes révisions.
 - **12 à moins de 16** : c'est bien. Fais la remédiation des questions où tu as eu moins de la moitié des points, puis le mini-projet.
-- **8 à moins de 12** : avant le mini-projet, refais le 🔨 22.15 (`rnn_forward`), les 📦 23.18 et 23.25 (la boucle `fit()` et ses callbacks), et les ✏️ 21.3 à 21.5 (formes, paramètres, champ récepteur) ; relis la synthèse (`05_synthese.md`), puis repasse les questions ratées sans le corrigé.
+- **8 à moins de 12** : avant le mini-projet, refais (ou fais, s'il n'est pas dans ton parcours) le 🔨 22.15 (`rnn_forward`), les 📦 23.18 et 23.25 (la boucle `fit()` et ses callbacks), et les ✏️ 21.3 à 21.5 (formes, paramètres, champ récepteur) ; relis la synthèse (`05_synthese.md`), puis repasse les questions ratées sans le corrigé.
 - **Moins de 8** : fais tout ce qui précède, reprends en plus les exercices ★★ des chapitres où tu as perdu le plus de points, puis refais l'examen avant le mini-projet.
 
 Dans tous les cas, **refais dans une semaine** les questions où tu as eu moins de la moitié des points, sans regarder ce corrigé : c'est l'effort de rappel qui fixe les notions. Reporte ta note, le temps réellement passé sur chaque question et tes points faibles dans la section CP5 de `mon_travail/suivi/auto_evaluation.md`.

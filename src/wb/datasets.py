@@ -427,12 +427,17 @@ def _quiet_huggingface():
 # Public name (chapter 29 loads a dataset of the Hub itself and keeps its notebook quiet in the same way)
 quiet_huggingface = _quiet_huggingface
 
+# The commit of the Hub repository that the workbook reads (checked on 2026-10-31: still the latest one), so that
+# a later change of the dataset on the Hub cannot change the images (chapter 29: a reproducible download)
+CIFAR10_HF_REVISION = "0b2714987fa478483af9968de7c934580d0bb9a2"
+
+
 def _cifar_from_huggingface():
     from datasets import load_dataset
 
-    print("ℹ️ Premier chargement de CIFAR-10 (≈ 170 Mo depuis Hugging Face) : une seule fois, le cache sert ensuite.")
+    print("ℹ️ Premier chargement de CIFAR-10 (≈ 145 Mo depuis Hugging Face) : une seule fois, le cache sert ensuite.")
     with _quiet_huggingface():
-        ds = load_dataset("uoft-cs/cifar10", cache_dir=str(cache_dir() / "hf"))
+        ds = load_dataset("uoft-cs/cifar10", revision=CIFAR10_HF_REVISION, cache_dir=str(cache_dir() / "hf"))
     out = []
     for split in ("train", "test"):
         part = ds[split]
@@ -447,7 +452,8 @@ def load_cifar10(split: str = "train", n: int | None = None, *, normalize: bool 
     """CIFAR-10: 60 000 colour images 32×32, 10 classes (``CIFAR10_CLASSES``).
 
     ``X`` uint8 (N, 32, 32, 3); ``channels_first=True`` → (N, 3, 32, 32) as
-    PyTorch expects. First call downloads ~170 MB (never versioned).
+    PyTorch expects. First call downloads ~145 MB from Hugging Face (~170 MB from Toronto), then keeps a
+    ~173 MB cache ``cifar10.npz`` (never versioned).
     """
     train = _check_split(split)
     X, y = _load_with_sources(
@@ -687,7 +693,7 @@ def image_credit(name: str) -> str:
 def load_pretrained(name: str = "squeezenet1_1"):
     """A frozen ImageNet network for chapter 28: ``(features, mean, std)``.
 
-    ``features`` is the convolutional part (``model.features``) of ``squeezenet1_1`` (4.7 MB of weights, the fast
+    ``features`` is the convolutional part (``model.features``) of ``squeezenet1_1`` (4.7 MiB of weights, the fast
     mode) or ``vgg16`` (528 MiB, the full mode), in ``eval()`` mode, every parameter with ``requires_grad=False``,
     every ReLU rebuilt with ``inplace=False`` (so that a hook keeps what it records); ``mean`` and ``std`` are the
     ImageNet normalisation, as tensors (1, 3, 1, 1). The weights are downloaded once into the torch cache.
@@ -753,10 +759,16 @@ def make_trap_dataset(seed: int = 2916, n: int = 1200):
     # defect 3: missing values coded -999 in acidite
     miss = rng.choice(df.index.to_numpy(), size=29, replace=False)
     df.loc[miss, "acidite"] = -999.0
-    # defect 7: invalid labels (typos)
+    # defect 7: invalid labels, misspellings of the TRUE fruit (a typo never turns a pear into an apple, so that the
+    # labels can be repaired by normalising them); no random draw here, the stream of rng is unchanged
     typos = rng.choice(df.index.to_numpy(), size=11, replace=False)
-    variants = ["pome", "Poire", "poire ", "pommes", "POMME", "poir"]
-    df.loc[typos, "fruit"] = [variants[i % len(variants)] for i in range(len(typos))]
+    variants = {"pomme": ["pome", "pommes", "POMME"], "poire": ["poire ", "Poire", "poir"], "coing": ["Coing", "coings"]}
+    used = {t: 0 for t in variants}
+    misspelt = []
+    for t in df.loc[typos, "fruit"]:
+        misspelt.append(variants[t][used[t] % len(variants[t])])
+        used[t] += 1
+    df.loc[typos, "fruit"] = misspelt
     # defect 2: near-duplicates of training rows placed in the test split (tiny noise on the measures)
     src = rng.choice(train_idx, size=17, replace=False)
     near = df.loc[src].copy()

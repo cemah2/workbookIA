@@ -287,7 +287,7 @@ PAPER = [
         ("e", TF, "False", r'''mistakes={"le tirage de ε change-t-il d'un passage à l'autre ?": True}'''),
     ]),
     # ---------------------------------------------------------------- recalls
-    Paper("25.R1", "Quelles augmentations garder pour des chiffres manuscrits ?", [
+    Paper("25.R1", "Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?", [
         ("a", LETTERS, '"ABE"',
          r'''mistakes={"un chiffre retourné gauche-droite reste-t-il le même chiffre ?": "ABCE",
           "un 6 tourné de 180°, est-ce encore un 6 ?": "ABDE",
@@ -297,7 +297,7 @@ PAPER = [
         ("b", TF, "False", r'''mistakes={"le test doit représenter les vraies données : faut-il le transformer ?": True}'''),
         ("c", TF, "True", r'''mistakes={"chaque epoch voit-elle les mêmes images bruitées ?": False}'''),
     ]),
-    Paper("25.R2", "Résumer une séquence entière dans l'état final d'un LSTM", [
+    Paper("25.R2", "Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM", [
         ("a", SHAPE, '"(1, 16, 32)"',
          r'''mistakes={"h_n garde l'axe des couches en premier, même avec batch_first=True": "(16, 1, 32)",
           "h_n ne contient que le dernier pas de temps : c'est output qui les a tous": "(16, 50, 32)",
@@ -307,13 +307,13 @@ PAPER = [
           "le code a 32 valeurs, pas 8": 50.0}'''),
         ("c", TF, "True", r'''mistakes={"un encodeur et un décodeur peuvent être des réseaux récurrents": False}'''),
     ]),
-    Paper("25.R3", "La divergence KL, ce que mesure le terme de régularisation du VAE", [
+    Paper("25.R3", "Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE", [
         ("a", DEC2, "kl_bits([0.5, 0.5], [0.25, 0.75])",
          r'''decimals=2, mistakes={"en bits, le logarithme est en base 2": 0.14,
           "KL(P‖Q) moyenne log(P/Q) sous P, pas sous Q": 0.19}'''),
         ("b", TF, "False", r'''mistakes={"calcule KL(Q‖P) avec les lois de a) et compare": True}'''),
         ("c", TF, "True", r'''mistakes={"chaque terme vaut p log(p / p) : que vaut log 1 ?": False}'''),
-        ("d", TF, "True", r'''mistakes={"relis l'inégalité de Gibbs (ch. 6)": False}'''),
+        ("d", TF, "True", r'''mistakes={"relis le signe d'une KL (ch. 6, ∂ 6.7)": False}'''),
         ("e", DEC2, "kl_bits([0.5, 0.5], [0.25, 0.75]) * math.log(2)",
          r'''decimals=2, mistakes={"pour passer des bits aux nats, on multiplie par ln 2": 0.30,
           "relis l'unité demandée": 0.21}'''),
@@ -1447,7 +1447,7 @@ Dans tes notes : à partir de quel bruit les chiffres deviennent-ils illisibles 
 
 La cellule ci-dessous prend les codes d'un 1 et d'un 0 dans l'espace latent de `AE_DEEP`. La première cellule de vérification essaie ta fonction sur une ligne droite et un quart de cercle, puis décode les deux chemins du 1 au 0 et affiche la norme des codes en route. La seconde lance les tests (`-k "test_interpolate_latents_"`).
 
-Dans tes notes : la norme des codes reste-t-elle constante le long du slerp, et le long de la ligne droite ? Ici, les images des deux chemins se ressemblent-elles ? Dans quel espace latent la différence devrait-elle compter le plus (fiche, et 25.Q9) ?""",
+Dans tes notes : la norme des codes reste-t-elle constante le long du slerp, et le long de la ligne droite ? Ici, les images des deux chemins se ressemblent-elles ? Dans quel espace latent la différence devrait-elle compter le plus (fiche, et ✏️ 25.6) ?""",
        todo=TODO_20, check=RELOAD + CHECK_20, solution=TODO_20 + "\n\n" + CHECK_20,
        after=tests_after("25.20", "mylearn.vae.interpolate_latents([0.0], [1.0], 2)", "test_interpolate_latents_")),
 
@@ -1992,9 +1992,13 @@ CHECK_28 = r'''with checked("25.28"):
     V = mylearn.vae
     mu_28 = np.array([[0.5, -1.0, 2.0], [0.0, 3.0, -0.5]])
     lv_28 = np.array([[0.0, 1.0, -2.0], [0.5, -1.0, 2.0]])
-    z_28, eps_28 = V.reparameterize(mu_28, lv_28, rng=np.random.default_rng(0))
+    mu_in_28, lv_in_28 = mu_28.copy(), lv_28.copy()      # the function gets copies: the expected values use mu_28, lv_28
+    z_28, eps_28 = V.reparameterize(mu_in_28, lv_in_28, rng=np.random.default_rng(0))
     same("25.28", "z rendu par reparameterize : mu + exp(0.5 log_var) * eps, avec son eps",
          z_28, mu_28 + np.exp(0.5 * lv_28) * np.asarray(eps_28))
+    verdict("25.28", np.array_equal(mu_in_28, mu_28) and np.array_equal(lv_in_28, lv_28),
+            "reparameterize laisse mu et log_var intacts.",
+            "reparameterize a modifié mu ou log_var : calcule dans un nouveau tableau.")
     same("25.28", "la même graine donne le même eps", V.reparameterize(mu_28, lv_28, rng=0)[1],
          V.reparameterize(mu_28, lv_28, rng=0)[1])
     big_28 = V.reparameterize(np.full((200_000, 1), 2.0), np.full((200_000, 1), np.log(9.0)), rng=1)[0]
@@ -2006,7 +2010,7 @@ CHECK_28 = r'''with checked("25.28"):
     mu_t = torch.tensor(mu_28, requires_grad=True)
     lv_t = torch.tensor(lv_28, requires_grad=True)
     (torch.tensor(dz_28) * (mu_t + torch.exp(0.5 * lv_t) * torch.tensor(np.asarray(eps_28)))).sum().backward()
-    dmu_28, dlv_28 = V.reparameterize_backward(dz_28, eps_28, lv_28)
+    dmu_28, dlv_28 = V.reparameterize_backward(dz_28.copy(), np.array(eps_28), lv_28.copy())
     same("25.28", "dmu de reparameterize_backward, contre torch.autograd", dmu_28, mu_t.grad.numpy())
     same("25.28", "dlog_var de reparameterize_backward, contre torch.autograd", dlv_28, lv_t.grad.numpy())'''
 
@@ -2890,7 +2894,7 @@ CHECK_38 = r'''with checked("25.38"):
             kl_t38 = (0.5 * (mu_t38 ** 2 + torch.exp(lv_t38) - 1 - lv_t38)).sum(dim=1).mean()
             (rec_t38 + kl_t38).backward()
             same("25.38", "(loss, rec, kl) contre le même VAE en PyTorch", [loss_38, rec_38, kl_38],
-                 [float(rec_t38 + kl_t38), float(rec_t38), float(kl_t38)], rtol=1e-8)
+                 [(rec_t38 + kl_t38).item(), rec_t38.item(), kl_t38.item()], rtol=1e-8)
             for part_38 in ("enc", "dec"):
                 for i_38, ((dW_38, db_38), (W_t, b_t)) in enumerate(zip(grads_38[part_38], tp_38[part_38])):
                     same("25.38", f"dW de la couche {i_38} de {part_38} contre torch.autograd", dW_38, W_t.grad.numpy(),

@@ -210,7 +210,7 @@ a) Faux : en temps réel, on n'a pas encore les mots à venir quand il faut rép
 
 <details><summary>Indice 1</summary>
 
-Relis l'encadré 🕰️ du §22.1 et la section « Après les RNN : Transformers et modèles à espace d'états ».
+Relis l'encadré 🕰️ du §22.1 et la section « Au-delà du livre : après les RNN, Transformers et modèles à espace d'états ».
 
 </details>
 <details><summary>Indice 2</summary>
@@ -228,11 +228,11 @@ a) 2017 (A. Vaswani et coll.). Pour b), demande-toi lequel des deux a une dépen
 
 ## 🔁 Rappels
 
-### 22.R1 — Ch. 21 : Une convolution 1D peut-elle lire une séquence ?
+### 22.R1 — Ch. 21 : une convolution 1D peut-elle lire une séquence ?
 
 <details><summary>Indice 1</summary>
 
-Relis la convolution 1D (§21.5) et le champ récepteur (§21.3.4) de la fiche du ch. 21.
+Relis la convolution 1D (§21.5) et le champ récepteur (§21.3.3) de la fiche du ch. 21, avec l'encadré ⚠️ « la convolution dilatée » du §21.8.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -246,7 +246,7 @@ a) 17 : $20 - 4 + 1$. Pour b), relis le partage des poids ; pour c), pars de 3 e
 
 </details>
 
-### 22.R2 — Ch. 19 : Gradient clipping et optimiseurs adaptatifs
+### 22.R2 — Ch. 19 : gradient clipping et optimiseurs adaptatifs
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) 5 : $\sqrt{3^2 + 4^2}$. Pour b), divise la composante par la norme ; pour c),
 
 </details>
 
-### 22.R3 — Ch. 15 : Ajuster le scaler sur le train seulement
+### 22.R3 — Ch. 15 : ajuster le scaler sur le train seulement
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Faux : mélanger mettrait des mois futurs dans l'entraînement. Pour b), dema
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 22.1 — Combien de fenêtres ? Températures, taches solaires et Holmes
+### Ex 22.1 — Combien de fenêtres ? Températures, taches solaires et Holmes ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) La cible doit exister : $p + 4 \le 23$, donc $p$ va de 0 à 19, soit 20 fenê
 
 </details>
 
-### Ex 22.2 — Dérouler à la main une cellule RNN scalaire sur trois pas
+### Ex 22.2 — Dérouler à la main une cellule RNN scalaire sur trois pas ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $h_1 = \tanh(1 \times 2 + 0{,}5 \times 0) = \tanh 2$. Pour b) et c), applique
 
 </details>
 
-### Ex 22.3 — Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM
+### Ex 22.3 — Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) Chaque valeur d'état est calculée par un neurone A qui lit les 10 entrées 
 
 </details>
 
-### Ex 22.4 — Un pas de LSTM à la main
+### Ex 22.4 — Un pas de LSTM à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $a_i = -0{,}5 \times 1 + 1 \times 0{,}5 + 0 = 0$, donc $i_t = \sigma(0)$. Pou
 
 </details>
 
-### Ex 22.5 — Softmax avec température à la main
+### Ex 22.5 — Softmax avec température à la main ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ a) $p(\text{k}) = 1/(1 + e^{-2} + e^{-2{,}5})$. Pour b) et c), divise les écart
 
 </details>
 
-### Ex 22.6 — Pourquoi le gradient s'évanouit : un produit de dérivées de tanh
+### Ex 22.6 — Pourquoi le gradient s'évanouit : un produit de dérivées de tanh ∂
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ Relis le §22.6 de la fiche, paragraphe « Le gradient qui s'évanouit », et la
 
 </details>
 
-### Ex 22.7 — Le chemin additif de la cellule LSTM
+### Ex 22.7 — Le chemin additif de la cellule LSTM ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Relis le §22.7.2 de la fiche, paragraphe « Le chemin additif », et l'encadré
 
 </details>
 
-### Ex 22.8 — Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch
+### Ex 22.8 — Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -434,7 +434,7 @@ a) $64 \times 64$ pixels sur 8 canaux. Pour b), $8 \times (5 \times 5 \times 1 +
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 22.9 — Expliquer l'état caché d'un RNN en cinq lignes
+### Ex 22.9 — Expliquer l'état caché d'un RNN en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -452,7 +452,7 @@ Commence par : « Imagine quelqu'un qui écoute une histoire mot après mot et q
 
 </details>
 
-### Ex 22.10 — Écrire « à la manière de », imiter une voix : usages et abus
+### Ex 22.10 — Écrire « à la manière de », imiter une voix : usages et abus ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Pour 1., Conan Doyle est mort en 1930 et Verne en 1905 : calcule l'année où le
 
 </details>
 
-### Ex 22.11 — Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory
+### Ex 22.11 — Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory 📄
 
 <details><summary>Indice 1</summary>
 
@@ -496,7 +496,7 @@ Pour 3., écris le facteur d'un pas d'une unité reliée à elle-même : $f'(a)\
 
 <details><summary>Indice 1</summary>
 
-Relis l'encadré 🕰️ du §22.1 et la section « Après les RNN ».
+Relis l'encadré 🕰️ du §22.1 et la section « Au-delà du livre : après les RNN ».
 
 </details>
 <details><summary>Indice 2</summary>

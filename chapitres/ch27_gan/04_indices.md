@@ -130,7 +130,7 @@ Un pas par mini-batch, le dernier compris ; une division arrondie au-dessus. Pou
 </details>
 <details><summary>Indice 3</summary>
 
-a) $10\,000 / 32 = 312{,}5$ : 312 mini-batchs pleins et un incomplet. Pour b), compte les entrées du discriminateur du livre ; pour c), relis l'encadré ⚠️ sur le mini-batch ; pour d), calcule $1 - e^{-1/2}$ ; pour e), compte pour chaque couche (entrées + 1) × sorties, puis additionne.
+a) $10\,000 / 32 = 312{,}5$ : 312 mini-batches pleins et un incomplet. Pour b), compte les entrées du discriminateur du livre ; pour c), relis l'encadré ⚠️ sur le mini-batch ; pour d), calcule $1 - e^{-1/2}$ ; pour e), compte pour chaque couche (entrées + 1) × sorties, puis additionne.
 
 </details>
 
@@ -820,7 +820,7 @@ def frechet_distance(mu1, sigma1, mu2, sigma2):
     # validation: mu1 1-D of length d, mu2 of shape (d,), sigma1 and sigma2 of shape (d, d), finite numbers
     eigenvalues = np.linalg.eigvals(sigma1 @ sigma2)
     trace_sqrt = np.sum(np.sqrt(np.clip(eigenvalues.real, 0.0, None)))
-    d2 = ...                          # squared distance of the means + trace(sigma1) + trace(sigma2) - 2 * trace_sqrt
+    d2 = ...                          # the formula of the fiche, with trace_sqrt for its last term
     return float(max(d2, 0.0))
 ```
 
@@ -955,7 +955,7 @@ Mesure d'abord le point de départ : le DCGAN de 27.20, entraîné comme en 27.2
 </details>
 <details><summary>Indice 2</summary>
 
-En 27.20, la distance baissait encore d'une epoch à l'autre : où en est-on après 3 epochs, et combien d'epochs tiennent dans le temps permis ? Les autres leviers : la largeur des réseaux (le coût par epoch monte vite), la taille des mini-batchs (plus de pas par epoch), les learning rates. Chronomètre une epoch avant de choisir.
+En 27.20, la distance baissait encore d'une epoch à l'autre : où en est-on après 3 epochs, et combien d'epochs tiennent dans le temps permis ? Les autres leviers : la largeur des réseaux (le coût par epoch monte vite), la taille des mini-batches (plus de pas par epoch), les learning rates. Chronomètre une epoch avant de choisir.
 
 </details>
 <details><summary>Indice 3</summary>

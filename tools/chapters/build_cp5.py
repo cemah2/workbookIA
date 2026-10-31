@@ -86,7 +86,7 @@ _ORIGINALS = {"X_S": X_S.copy(), "H0_S": H0_S.copy()}          # part B restores
 print("X_S:", X_S.shape, "· images:", tuple(X_IMG.shape), "· labels:", tuple(Y_IMG.shape),
       "· CNN parameters:", sum(p.numel() for p in make_cnn().parameters()))'''
 
-CP55_MD = r'''### CP5.5 — Écrire `rnn_forward` à partir d'une cellule fournie 🔨 ★ ⏱️ 10 min · 1,5 point
+CP55_MD = r'''### CP5.5 — Écrire `rnn_forward` à partir d'une cellule fournie (notebook, NumPy) 🔨 ★ ⏱️ 10 min · 1,5 point
 **Objectif :** dérouler une couche récurrente simple sur toute une séquence, pour un mini-batch.
 
 Avec NumPy seulement. `rnn_cell(x_t, h, Wx, Wh, b)` (fournie) fait un pas : $h_t = \tanh(x_t W_x + h_{t-1} W_h + b)$, avec `x_t` de forme `(N, D)` et `h` de forme `(N, H)`.
@@ -164,7 +164,7 @@ wb.record("CP5.5b", H_all_5[1, 4, 0], decimals=4, mistakes={
     "Wh est appliquée transposée : la cellule calcule h @ Wh, avec Wh de forme (H, H)": variant_5(transpose_wh=True),
     "le biais b manque": variant_5(bias=False)})'''
 
-CP56_MD = r'''### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle 🔨 ★★ ⏱️ 20 min · 2 points
+CP56_MD = r'''### CP5.6 — Entraîner avec early stopping et garder le meilleur modèle (notebook, PyTorch) 🔨 ★★ ⏱️ 20 min · 2 points
 **Objectif :** écrire de mémoire une boucle d'entraînement PyTorch complète : modes entraînement et évaluation, loss de validation par exemple, sauvegarde des meilleurs poids, arrêt après `patience` epochs sans progrès.
 
 Avec PyTorch. `make_cnn()` rend un petit CNN neuf (avec dropout, en `float64`) et `make_loaders()` le couple `(train_loader, val_loader)` sur 2 048 et 1 024 images de Fashion-MNIST ; les mini-batches de validation ont 300 images, sauf le dernier (124).
@@ -400,6 +400,7 @@ if exam_over() and ready("CP5.5", "np", "torch", "nn", "X_S", "H0_S", "WX_S", "W
     if ok is None:
         print("⏳ Ex CP5.5 : rnn_forward n'est pas encore écrite.")
         PENDING.add("CP5.5")
+        RESULTS["CP5.5b"] = wb.check("CP5.5b", ..., quiet=True)
     elif not ok:
         prop("CP5.5", False, "", f"rnn_forward lève une erreur : {result}")
     else:
@@ -511,6 +512,7 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
     if ok is None:
         print("⏳ Ex CP5.6 : fit_early_stopping n'est pas encore écrite.")
         PENDING.add("CP5.6")
+        RESULTS["CP5.6b"] = wb.check("CP5.6b", ..., quiet=True)
     elif not ok:
         prop("CP5.6", False, "", f"fit_early_stopping lève une erreur : {mine}")
     elif mine is None:
@@ -521,6 +523,7 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
     else:
         _, ref, ref_final, ref_saved = run(reference_fit, 30, 3, 3e-3)
         mine_tr, mine_va = losses(mine, "train_loss"), losses(mine, "val_loss")
+        main_ok = False                                     # the losses of every epoch are those of the contract
         if mine_tr is None or mine_va is None:
             prop("CP5.6", False, "", "history[\"train_loss\"] et history[\"val_loss\"] doivent être des listes de nombres "
                  "(un float par epoch : loss.item()).")
@@ -548,12 +551,16 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
                      "neurones), torch.no_grad(), tout val_loader, et la moyenne PAR EXEMPLE (le dernier mini-batch a "
                      "124 images, pas 300).")
             else:
+                main_ok = True
                 prop("CP5.6", True, "à chaque epoch, les losses d'entraînement et de validation sont celles du contrat "
                      "(mode entraînement puis évaluation, moyennes par exemple).", "")
                 prop("CP5.6", len(mine_va) == len(ref_va),
                      f"l'entraînement s'arrête après {len(ref_va)} epochs : 3 epochs de suite sans progrès.",
                      f"{len(mine_va)} epochs faites, attendu {len(ref_va)} : l'arrêt a lieu dès que patience = 3 epochs "
                      "DE SUITE n'ont pas fait strictement mieux que la meilleure loss de validation.")
+            if main_ok and len(mine_va) != len(ref_va):
+                print("   (best_epoch et les poids gardés ne se vérifient qu'une fois l'arrêt juste)")
+            elif main_ok:
                 prop("CP5.6", mine["best_epoch"] == ref["best_epoch"],
                      f"best_epoch = {ref['best_epoch']}, l'epoch de la plus petite loss de validation, comptée à partir de 1.",
                      f"best_epoch = {mine['best_epoch']!r}, attendu {ref['best_epoch']} : l'epoch (numérotée à partir de 1) "
@@ -596,7 +603,8 @@ if exam_over() and ready("CP5.6", "torch", "nn", "make_cnn", "make_loaders", "fi
             short_ok = False
         prop("CP5.6", short_ok, "avec max_epochs = 2 et lr = 1e-3 (256 images), les deux epochs du contrat.",
              "avec max_epochs = 2, patience = 5 et lr = 1e-3 sur 256 images, attendu les deux epochs du contrat : "
-             "fit_early_stopping utilise-t-elle ses arguments (pas 30 epochs ni lr = 3e-3 écrits en dur) ?")
+             + ("fit_early_stopping utilise-t-elle ses arguments (pas 30 epochs ni lr = 3e-3 écrits en dur) ?" if main_ok
+                else "c'est la conséquence de l'écart des losses ci-dessus."))
         if mine_tr is not None and mine_va is not None and isinstance(mine.get("best_epoch"), (int, np.integer)) \
                 and 1 <= mine["best_epoch"] <= len(mine_va):
             code_check("CP5.6b", [int(mine["best_epoch"]), float(mine_va[mine["best_epoch"] - 1])],
@@ -725,7 +733,7 @@ PAPER = [
                      "combien de filtres la convolution du bloc B a-t-elle ?": "(1, 16, 8, 8)"}'''),
         ("c", 'a shape like "(1, 2, 3, 4)"', '"(1, 64, 4, 4)"',
          r'''mistakes={"cette convolution a un stride de 2 : elle saute une position sur deux": "(1, 64, 8, 8)",
-                     "le padding de 1 s'ajoute des deux côtés de la carte": "(1, 64, 3, 3)",
+                     "la convolution C a aussi padding=1 : un pixel ajouté de chaque côté de la carte": "(1, 64, 3, 3)",
                      "on demande la sortie de la convolution C, avant AdaptiveAvgPool2d(1)": "(1, 64, 1, 1)"}'''),
         ("d", "a list of five numbers", "[*PARAMS_2, sum(PARAMS_2)]",
          r'''mistakes={"compte aussi les biais, un par filtre ou par neurone": [*(p - b for p, b in zip(PARAMS_2, (16, 32, 64, 10))), sum(PARAMS_2) - 122],

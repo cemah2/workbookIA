@@ -524,7 +524,12 @@ EXPERIMENT_11 = r'''with checked("27.11"):
                                ("N(5 ; 1,25²), décalée de 1", rng_11.normal(5.0, 1.25, 2000)),
                                ("N(4 ; 2,5²), deux fois plus étalée", rng_11.normal(4.0, 2.5, 2000)),
                                ("2 000 fois le nombre 4 (effondrement)", np.full(2000, 4.0))]:
-        print(f"{label_11:40s} W1 = {fr(mylearn.gen_metrics.wasserstein_1d(data_11, other_11), 3)}")'''
+        w_11 = mylearn.gen_metrics.wasserstein_1d(data_11, other_11)
+        if not isinstance(w_11, float):
+            print(f"⏳ Ex 27.11 : la démonstration attend un float Python de wasserstein_1d (reçu "
+                  f"{type(w_11).__name__}) : corrige d'abord la vérification ci-dessus.")
+            break
+        print(f"{label_11:40s} W1 = {fr(w_11, 3)}")'''
 
 TODO_12 = r'''def gan_step_12(G, D, opt_g, opt_d, real, z):
     """One iteration of the standard GAN loop on a mini-batch (D returns LOGITS).
@@ -676,8 +681,12 @@ EXPERIMENT_12 = r'''with checked("27.12"):
     print(f"10 epochs en {time.perf_counter() - start_12:.0f} s · générés : moyenne {fr(mean_12, 2)}, écart-type "
           f"{fr(std_12, 2)} (cible 4 et 1,25)")
     if written(lambda: mylearn.gen_metrics.wasserstein_1d([0.0], [1.0])):
-        print(f"W1 entre 2 000 nombres générés et 2 000 données : "
-              f"{fr(mylearn.gen_metrics.wasserstein_1d(generate(G_12, Z_FIXED_1D)[:, 0], DATA_1D[:2000, 0].numpy()), 3)}")
+        w_12 = mylearn.gen_metrics.wasserstein_1d(generate(G_12, Z_FIXED_1D)[:, 0], DATA_1D[:2000, 0].numpy())
+        if isinstance(w_12, float):
+            print(f"W1 entre 2 000 nombres générés et 2 000 données : {fr(w_12, 3)}")
+        else:
+            print(f"⏳ Ex 27.12 : la mesure W1 attend un float Python de wasserstein_1d (reçu {type(w_12).__name__}) : "
+                  "corrige d'abord 27.11.")
     fig_12, (left_12, right_12) = plt.subplots(1, 2, figsize=(10, 3.2))
     left_12.hist(DATA_1D[:, 0].numpy(), bins=60, density=True, alpha=0.5, label="données", color=wb.plot.CATEGORICAL[3])
     left_12.hist(generate(G_12, Z_FIXED_1D)[:, 0], bins=60, density=True, alpha=0.5, label="générés", color=wb.plot.CATEGORICAL[0])
@@ -855,7 +864,7 @@ CHECK_15 = r'''with checked("27.15"):
                 f"{fr(final_15.mean(0)[1], 2)}), écarts-types {fr(final_15.std(0)[0], 2)} et {fr(final_15.std(0)[1], 2)}.",
                 f"à l'epoch 13, centre ({fr(final_15.mean(0)[0], 2)} ; {fr(final_15.mean(0)[1], 2)}) et écarts-types "
                 f"{fr(final_15.std(0)[0], 2)} et {fr(final_15.std(0)[1], 2)} : loin de (5 ; 5) et de 1. Vérifie le bruit "
-                "uniforme et les mini-batchs de 32.")'''
+                "uniforme et les mini-batches de 32.")'''
 
 BUGGY_16 = r'''def train_buggy_16(G, D, data, n_epochs, batch_size=64, lr=1e-3, seed=0):
     """A GAN training loop (D returns logits): the code to debug."""
@@ -1511,7 +1520,7 @@ CHECK_20 = r'''with checked("27.20"):
         same("27.20", "le nombre de paramètres de D (width = 32)", n_params(D_c), 36_577)
         kinds_g = [type(m).__name__ for m in G_c.modules()]
         kinds_d = [type(m).__name__ for m in D_c.modules() if not isinstance(m, nn.Sequential)]
-        rules_c = [("ni pooling ni sur-échantillonnage", not any(k in "".join(kinds_g + kinds_d) for k in ("Pool", "Upsample"))),
+        rules_c = [("ni pooling ni suréchantillonnage", not any(k in "".join(kinds_g + kinds_d) for k in ("Pool", "Upsample"))),
                    ("des convolutions transposées dans G", "ConvTranspose2d" in kinds_g),
                    ("G finit par une tanh", kinds_g[-1] == "Tanh"),
                    ("des ReLU dans G, pas de Leaky ReLU", "ReLU" in kinds_g and "LeakyReLU" not in kinds_g),
@@ -1589,7 +1598,7 @@ CHECK_21 = r'''with checked("27.21"):
         same("27.21", "le nombre de paramètres de D", n_params(D_c), 415_169)
         kinds_c = [type(m).__name__ for m in [*G_c.modules(), *D_c.modules()]]
         verdict("27.21", "Upsample" in kinds_c and "MaxPool2d" in kinds_c and "ConvTranspose2d" not in kinds_c,
-                "sur-échantillonnage dans G, max-pooling dans D, comme dans le livre.",
+                "suréchantillonnage dans G, max-pooling dans D, comme dans le livre.",
                 "le modèle du livre agrandit par Upsample et réduit par MaxPool2d, sans convolution transposée.")'''
 
 EXPERIMENT_21 = r'''with checked("27.21"):
@@ -2248,7 +2257,7 @@ PART_A = Part("A", "Des GAN jouets : une gaussienne 1D, le nuage du livre, et ce
               given=GIVEN_A, exercises=[
     Ex("27.11", "🔨", 1, 15, "Distance de Wasserstein 1D entre deux échantillons",
        "écrire dans ta librairie la distance de Wasserstein entre deux échantillons 1D, la mesure qui suivra tes GAN jouets.",
-       "ch. 2 (fonction de répartition empirique) · fiche « Au-delà du livre : mesurer un générateur »", tracks="M, C",
+       "ch. 2 (fonction de répartition empirique) · fiche « Au-delà du livre : mesurer un générateur »", thread="gaussienne 1D", tracks="M, C",
        mylearn="gen_metrics.py",
        body=mylearn_howto() + "\n\n" + COMMON_GEN + r"""
 
@@ -2271,7 +2280,7 @@ Dans tes notes : pourquoi la distance entre les données et l'échantillon déca
 
 **Contrat**
 - `gan_step_12(G, D, opt_g, opt_d, real, z)` fait une itération de la boucle standard : un pas du discriminateur (vrais → label 1, faux → label 0, faux **détachés**), puis un pas du générateur à travers le discriminateur mis à jour (faux → label 1, loss non saturante), où seul `opt_g` avance. Elle rend un dictionnaire de `float` : `"loss_d"` (terme des vrais + terme des faux, deux moyennes de cross-entropy binaire), `"loss_g"`, `"d_real"` et `"d_fake"` (les probabilités moyennes $\sigma(D(\cdot))$ des vrais et des faux, vues par $D$ **avant** son pas) ;
-- `train_gan_12(...)` enchaîne les epochs et les mini-batchs dans l'ordre que donne sa docstring, et rend l'historique (une valeur par pas pour chaque clé). Elle resservira tout le chapitre, aux DCGAN compris : le paramètre `step` permet d'y brancher une autre itération, `on_epoch` de regarder le générateur après chaque epoch.
+- `train_gan_12(...)` enchaîne les epochs et les mini-batches dans l'ordre que donne sa docstring, et rend l'historique (une valeur par pas pour chaque clé). Elle resservira tout le chapitre, aux DCGAN compris : le paramètre `step` permet d'y brancher une autre itération, `on_epoch` de regarder le générateur après chaque epoch.
 
 La cellule de vérification fait **un** pas sur un petit GAN et contrôle les quatre valeurs rendues, puis que $D$ distingue mieux après son pas et que les faux trompent mieux $D$ après celui de $G$. La cellule suivante entraîne le GAN 10 epochs (une dizaine de secondes) et compare ce qu'il produit à la cible.
 
@@ -2321,7 +2330,7 @@ La cellule d'après révèle ce que chaque entraînement produit vraiment, une f
     Ex("27.15", "🎨", 2, 30, "Reproduire l'apprentissage du nuage centré en (5, 5) (fig. 27.20-27.21)",
        "refaire l'expérience du livre sur un nuage gaussien 2D et tracer son évolution, epoch par epoch.",
        "Ex 27.12 · fiche §27.5", thread="nuage 2D du livre", tracks="C",
-       body=r"""L'expérience du §27.5 : 10 000 points d'une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 (`DATA_2D`), les réseaux du livre (`make_book_gan_15` : un générateur 4 → 16 → 2 et un discriminateur 2 → 16 → 16 → 1, Leaky ReLU de pente 0,1), un bruit **uniforme** sur $[0, 1]^4$, des mini-batchs de 32.
+       body=r"""L'expérience du §27.5 : 10 000 points d'une gaussienne 2D de centre $(5, 5)$ et d'écart-type 1 (`DATA_2D`), les réseaux du livre (`make_book_gan_15` : un générateur 4 → 16 → 2 et un discriminateur 2 → 16 → 16 → 1, Leaky ReLU de pente 0,1), un bruit **uniforme** sur $[0, 1]^4$, des mini-batches de 32.
 
 Écris :
 - `train_book_15(seed, n_epochs)`, qui entraîne avec **ton** `train_gan_12` et garde les points générés à partir de `Z_FIXED_15` après les epochs de `EPOCHS_15` (0 à 10, puis 13, comme les panneaux de la fig. 27.20) ;
@@ -2430,7 +2439,7 @@ PART_B = Part("B", "DCGAN sur MNIST : construire, évaluer, conditionner, repren
 - les activations sont des modules `nn` (`nn.ReLU()`, pas `F.relu`), déclarés dans l'ordre du calcul : un `nn.Sequential` convient, et la vérification lit les couches dans cet ordre ;
 - `init_weights_20(module)`, à appliquer avec `G.apply(init_weights_20)` : les poids des couches denses et convolutives selon $\mathcal{N}(0 ;\, 0{,}02^2)$, ceux des batchnorms selon $\mathcal{N}(1 ;\, 0{,}02^2)$ et leurs biais à 0.
 
-La vérification contrôle les formes, les nombres de paramètres, les règles et l'initialisation. La cellule suivante entraîne le DCGAN avec **ton** `train_gan_12` (Adam $2 \cdot 10^{-4}$, $\beta_1 = 0{,}5$, mini-batchs de 64) pendant 3 epochs sur 10 000 images en mode rapide (une trentaine de secondes ; 15 epochs sur 60 000 en mode complet 🚀), garde une copie du générateur après chaque epoch (`SNAPSHOTS_20`, réutilisé en 27.23), puis montre des échantillons et les classes que leur donne le classifieur.
+La vérification contrôle les formes, les nombres de paramètres, les règles et l'initialisation. La cellule suivante entraîne le DCGAN avec **ton** `train_gan_12` (Adam $2 \cdot 10^{-4}$, $\beta_1 = 0{,}5$, mini-batches de 64) pendant 3 epochs sur 10 000 images en mode rapide (une trentaine de secondes ; 15 epochs sur 60 000 en mode complet 🚀), garde une copie du générateur après chaque epoch (`SNAPSHOTS_20`, réutilisé en 27.23), puis montre des échantillons et les classes que leur donne le classifieur.
 
 Dans tes notes : à quoi ressemblent les chiffres après une epoch, puis à la fin ? Toutes les classes sont-elles représentées ? Combien de secondes par epoch ? Pourquoi `G.eval()` (que fait `sample_images`) change-t-il les images d'un même $\mathbf{z}$ par rapport au mode `train()` ?""",
        todo=TODO_20, check=CHECK_20, solution=SOLUTION_20 + "\n\n\n" + CHECK_20, after=[("code", EXPERIMENT_20)]),
@@ -2438,10 +2447,10 @@ Dans tes notes : à quoi ressemblent les chiffres après une epoch, puis à la f
     Ex("27.21", "🔬", 3, 45, "Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford",
        "construire le DCGAN du livre (2016) et le comparer à celui de Radford, entraîné de la même façon.",
        "Ex 27.20 · fiche §27.6, §27.6.1", thread="MNIST", tracks="C",
-       body=r"""Le modèle du livre (fig. 27.22, d'après Gildenblat, 2016) enfreint presque toutes les règles de Radford : des tanh partout, un sur-échantillonnage suivi d'une convolution au lieu d'une convolution transposée, du max-pooling dans le discriminateur, des couches denses cachées. On le réduit pour le CPU (largeurs divisées par 4, bruit de 64 au lieu de 100).
+       body=r"""Le modèle du livre (fig. 27.22, d'après Gildenblat, 2016) enfreint presque toutes les règles de Radford : des tanh partout, un suréchantillonnage suivi d'une convolution au lieu d'une convolution transposée, du max-pooling dans le discriminateur, des couches denses cachées. On le réduit pour le CPU (largeurs divisées par 4, bruit de 64 au lieu de 100).
 
 **Contrat** : `make_gildenblat_21(nz=NZ, width=16, hidden=256)` rend `(G, D)` :
-- $G$ : une couche dense $n_z \to$ `hidden` (tanh), une couche dense vers $2w$ canaux de 7 × 7, une `nn.BatchNorm1d` (avant la mise en forme), une tanh, puis deux fois « sur-échantillonnage × 2 (`nn.Upsample`), convolution de noyau 5 avec padding 2 » (vers $w$ canaux, puis 1 canal), chacune suivie d'une tanh. Avec les valeurs par défaut : **435 969** paramètres ;
+- $G$ : une couche dense $n_z \to$ `hidden` (tanh), une couche dense vers $2w$ canaux de 7 × 7, une `nn.BatchNorm1d` (avant la mise en forme), une tanh, puis deux fois « suréchantillonnage × 2 (`nn.Upsample`), convolution de noyau 5 avec padding 2 » (vers $w$ canaux, puis 1 canal), chacune suivie d'une tanh. Avec les valeurs par défaut : **435 969** paramètres ;
 - $D$ : deux fois « convolution de noyau 5 avec padding 2, tanh, max-pooling 2 × 2 » (vers $w$ puis $2w$ canaux), puis une couche dense vers `hidden` (tanh) et une couche dense vers un logit. **415 169** paramètres.
 
 La cellule suivante l'entraîne **exactement** comme le DCGAN de 27.20 (même boucle, mêmes learning rates, mêmes epochs, même graine), puis compare la taille, le temps par epoch, les échantillons et les classes. 27.23 les comparera avec une mesure.
@@ -2527,7 +2536,7 @@ Dans tes notes : les images passent-elles d'un chiffre à l'autre en douceur, ou
     Ex("27.27", "🛠️", 3, 30, "Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique",
        "sauvegarder tout l'état d'un entraînement de GAN dans un fichier, et reprendre exactement où on s'était arrêté.",
        "Ex 27.20 · ch. 23 (checkpoint complet)", thread="MNIST", tracks="C",
-       body=r"""Un entraînement de GAN dure, et une coupure (fin de session Colab, panne) ne doit pas le faire repartir de zéro. Au ch. 23, tu as sauvegardé un réseau et son optimiseur ; ici, il y a **deux** réseaux, **deux** optimiseurs (avec les moments d'Adam), les statistiques des batchnorms, l'epoch, et les générateurs aléatoires qui fixent l'ordre des mini-batchs et le bruit.
+       body=r"""Un entraînement de GAN dure, et une coupure (fin de session Colab, panne) ne doit pas le faire repartir de zéro. Au ch. 23, tu as sauvegardé un réseau et son optimiseur ; ici, il y a **deux** réseaux, **deux** optimiseurs (avec les moments d'Adam), les statistiques des batchnorms, l'epoch, et les générateurs aléatoires qui fixent l'ordre des mini-batches et le bruit.
 
 **Contrat**
 - `save_gan_checkpoint_27(path, G, D, opt_g, opt_d, epoch, gen)` écrit **un** fichier avec `torch.save` : les `state_dict` de $G$, $D$, `opt_g` et `opt_d`, l'epoch, l'état du `torch.Generator` `gen` (`gen.get_state()`) et l'état aléatoire global de PyTorch (`torch.get_rng_state()`). Il ne contient que des tenseurs, des nombres, des chaînes et des dictionnaires ou listes de ceux-ci : il se recharge avec `torch.load(path, weights_only=True)`, le mode sûr ;
@@ -2546,12 +2555,12 @@ Dans tes notes : qu'est-ce qui, oublié, casserait la reprise exacte (essaie : r
 
 **Règles**
 - `make_gan_28()` rend `(G, D)` : $G$ reçoit un bruit de taille `NZ` (64) et rend des images $(N, 1, 28, 28)$ dans $[-1, 1]$ ; au plus `MAX_PARAMS_28` paramètres pour les deux réseaux ;
-- `train_28(G, D, images)` les entraîne sur `X_FASHION` (tout ou partie) ; tout est permis : architecture, boucle (`train_gan_12` ou la tienne), optimiseurs, learning rates, taille des mini-batchs, nombre d'epochs ; l'entraînement doit tenir en `MAX_SECONDS_28` secondes en mode rapide (900 en mode complet) ;
+- `train_28(G, D, images)` les entraîne sur `X_FASHION` (tout ou partie) ; tout est permis : architecture, boucle (`train_gan_12` ou la tienne), optimiseurs, learning rates, taille des mini-batches, nombre d'epochs ; l'entraînement doit tenir en `MAX_SECONDS_28` secondes en mode rapide (900 en mode complet) ;
 - règles d'honneur : n'utilise pas `XF_TEST` pour entraîner, et ne règle rien sur le jeu caché ; il n'est révélé qu'**une fois par session**, et le résultat est figé.
 
 La vérification compte les paramètres, chronomètre `train_28`, mesure la distance publique, puis, si l'objectif est atteint, révèle le jeu caché. Le DCGAN de 27.20 tel quel (3 epochs) n'y arrive pas : à toi de trouver ce qui compte.
 
-Dans tes notes : qu'as-tu essayé, dans quel ordre, et qu'est-ce qui a le plus aidé (epochs, largeur, taille des mini-batchs, learning rates) ? Combien de secondes ton entraînement laisse-t-il de marge ? Les vêtements générés couvrent-ils les dix classes (`digit_report` marche aussi avec `CLF_FASHION`) ?""",
+Dans tes notes : qu'as-tu essayé, dans quel ordre, et qu'est-ce qui a le plus aidé (epochs, largeur, taille des mini-batches, learning rates) ? Combien de secondes ton entraînement laisse-t-il de marge ? Les vêtements générés couvrent-ils les dix classes (`digit_report` marche aussi avec `CLF_FASHION`) ?""",
        given=GIVEN_28.replace("{GOAL}", repr(_calib28()["goal"])).replace("{SECONDS}", str(_calib28()["seconds"])),
        todo=TODO_28, check=CHECK_28, solution=_solution_28() + "\n\n\n" + CHECK_28),
 ])

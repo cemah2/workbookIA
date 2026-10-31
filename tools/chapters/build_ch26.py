@@ -208,12 +208,12 @@ PAPER = [
         ("d", TF, "False", r'''mistakes={"relis le §26.10 : « Zero » veut dire zéro donnée humaine": True}'''),
         ("e", LETTER, '"B"', letters("B", {"A": "l'adversaire n'est pas une règle de l'agent", "C": "relis le §26.10"})),
     ]),
-    Paper("26.R1", "Un réseau comme fonction qui remplace une table (le décodeur d'un VAE)", [
+    Paper("26.R1", "Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)", [
         ("a", LETTER, '"C"', letters("C", {"A": "les codes sont des nombres réels", "B": "les latents ne sont pas des bits"})),
         ("b", TF, "True", r'''mistakes={"relis 25.Q11 et 25.17 : que fait un autoencodeur d'une entrée voisine de ses données ?": False}'''),
         ("c", WHOLE, "4", r'''mistakes={"un DQN rend une valeur par action": 1}'''),
     ]),
-    Paper("26.R2", "Que sauvegarder pour reprendre un entraînement ?", [
+    Paper("26.R2", "Ch. 23 : que sauvegarder pour reprendre un entraînement ?", [
         ("a", LETTERS, '"ABCD"', r'''mistakes={"l'optimiseur a un état (les moyennes d'Adam)": "ACD",
           "sans l'état des générateurs, la suite ne sera pas la même": "ABC",
           "le code de PyTorch n'est pas un état de l'entraînement": "ABCDE",
@@ -222,7 +222,7 @@ PAPER = [
                                            "C": "l'environnement n'est pas appris"})),
         ("c", TF, "False", r'''mistakes={"où en était ε ? et le générateur aléatoire ?": True}'''),
     ]),
-    Paper("26.R3", "Bandit à bras multiples, ε-greedy et UCB", [
+    Paper("26.R3", "Ch. 11 : bandit à bras multiples, ε-greedy et UCB", [
         ("a", LETTER, '"A"', letters("A", {"B": "un bandit n'a pas d'état qui change", "C": "les bras sont les actions, pas des états"})),
         ("b", DEC2, "3 + 0.25 * (5 - 3)", r'''decimals=2, mistakes={"le pas multiplie l'écart au nouveau gain": 3.25}'''),
         ("c", LETTER, '"B"', letters("B", {"A": "c'est la règle gloutonne", "C": "c'est l'exploration d'ε-greedy"})),
@@ -698,8 +698,8 @@ hardest_17 = int(moves_17.argmax())'''
 CHECK_17 = r'''with checked("26.17"):
     moves_17 = min_moves_17()
     if returned("26.17", "min_moves_17", moves_17):
-        reference_17 = [Flippers().min_moves(s) for s in range(512)]
-        if same("26.17", "les 512 longueurs minimales, comparées à Flippers().min_moves", moves_17, reference_17):
+        reference_17 = wb.envs._flippers_distances(3)       # the reference search of wb.envs
+        if same("26.17", "les 512 longueurs minimales, comparées à une recherche de référence", moves_17, reference_17):
             counts_17 = np.bincount(np.asarray(moves_17, dtype=int))
             plt.figure(figsize=(5, 2.8))
             plt.bar(range(len(counts_17)), counts_17, color=wb.plot.CATEGORICAL[0])
@@ -811,8 +811,9 @@ PART_A = Part("A", "La boucle, les retours, Flippers et le L-learning",
               "(26.18).\n\n"
               "La cellule d'outils sert aux parties A à F. Elle importe Gymnasium et `wb.envs`, qui donne les jeux du "
               "chapitre : `Flippers` (le plateau de 3 × 3 du livre, avec son camion `truck_prob` ; un état est un "
-              "entier de 0 à 511 dont le bit $i$ est la tuile $i$, ligne par ligne ; `board(state)` le dessine, "
-              "`min_moves(state)` donne sa partie la plus courte) et `TicTacToe` (le morpion, partie F). Elle donne "
+              "entier de 0 à 511 dont le bit $i$ est la tuile $i$, ligne par ligne ; `board(state)` le dessine ; "
+              "`evaluate_flippers` connaît la partie la plus courte de chaque plateau, que tu calcules toi-même en "
+              "26.17) et `TicTacToe` (le morpion, partie F). Elle donne "
               "aussi `make_env` (un environnement de Gymnasium, déjà initialisé avec sa graine), `tie_argmax` (la "
               "meilleure valeur d'une ligne, ex æquo au hasard), `moving_average`, `evaluate_flippers` (fait jouer "
               "une table, gloutonnement, sur les 506 plateaux non gagnants), `summary_flippers`, "
@@ -889,7 +890,7 @@ La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont 
 
 **Contrat** : `min_moves_17()` rend un tableau d'entiers de forme `(512,)` : le nombre minimal de coups de chaque plateau (0 pour les 6 gagnants, `Flippers().winning`). Puis, à partir de **ton** tableau : `most_common_17` (la longueur minimale la plus fréquente), `mean_17` (sa moyenne sur les 506 plateaux non gagnants, à 2 décimales) et `hardest_17` (le code du plateau qui demande le plus de coups).
 
-La vérification compare ton tableau à `Flippers().min_moves`, trace l'histogramme des longueurs, puis vérifie tes trois réponses et dessine le plateau le plus difficile.
+La vérification compare ton tableau à une recherche de référence, trace l'histogramme des longueurs, puis vérifie tes trois réponses et dessine le plateau le plus difficile.
 
 Dans tes notes : le livre dit que « la plupart » des plateaux se gagnent en 3 ou 4 coups ; que dit ton histogramme ? Pourquoi le plateau le plus difficile en demande-t-il autant (regarde-le) ? Combien de plateaux une recherche en largeur visite-t-elle, et pourquoi la même méthode serait-elle impossible au go (✏️ 26.2) ?""",
        todo=TODO_17, check=CHECK_17, solution=SOLUTION_17 + "\n\n\n" + CHECK_17, record=RECORD_17),
@@ -918,13 +919,23 @@ CHECK_19 = r'''with checked("26.19"):
     R = mylearn.rl
     same("26.19", "greedy_policy : la meilleure action de chaque ligne, ex æquo vers le plus petit indice",
          R.greedy_policy([[0.0, 1.0, 0.5], [2.0, 2.0, -1.0], [-3.0, -1.0, -1.0]]), [1, 0, 1])
-    same("26.19", "softmax_action : un T minuscule choisit la meilleure action",
-         R.softmax_action([0.0, 3.0, 1.0], temperature=1e-3, rng=np.random.default_rng(0)), 1)
+    a_19 = R.softmax_action([0.0, 3.0, 1.0], temperature=1e-3, rng=np.random.default_rng(0))
+    if not returned("26.19", "softmax_action", a_19):
+        raise StopCheck
+    if type(a_19) is not int:
+        print(f"❌ Ex 26.19 : softmax_action doit rendre un int Python (un indice d'action), reçu {a_19!r} "
+              f"({type(a_19).__name__}) : convertis avec int(...).")
+        raise StopCheck
+    same("26.19", "softmax_action : un T minuscule choisit la meilleure action", a_19, 1)
     q_19, T_19 = np.array([1.0, 2.0, 4.0, 0.5]), 0.8
+    want_19 = np.exp(q_19 / T_19) / np.exp(q_19 / T_19).sum()   # computed before the draws, on the original row
     rng_19 = np.random.default_rng(19)
-    draws_19 = np.array([R.softmax_action(q_19, T_19, rng_19) for _ in range(20_000)])
+    draws_19 = np.array([R.softmax_action(q_19.copy(), T_19, rng_19) for _ in range(20_000)], dtype=int)
     freq_19 = np.bincount(draws_19, minlength=4) / draws_19.size
-    want_19 = np.exp(q_19 / T_19) / np.exp(q_19 / T_19).sum()
+    probe_19 = q_19.copy()
+    R.softmax_action(probe_19, T_19, np.random.default_rng(0))
+    verdict("26.19", np.array_equal(probe_19, q_19), "softmax_action laisse q_values intact.",
+            "softmax_action a modifié q_values : travaille sur une copie.")
     verdict("26.19", np.abs(freq_19 - want_19).max() < 0.015,
             f"softmax (T = 0,8) sur 20 000 tirages : fréquences {np.round(freq_19, 3)}, attendu {np.round(want_19, 3)}.",
             f"softmax (T = 0,8) : fréquences {np.round(freq_19, 3)}, loin de exp(q / T) normalisé {np.round(want_19, 3)}.")
@@ -1580,7 +1591,8 @@ q_falls_28 = ...      # c) how many times does Q-learning fall during its 500 tr
 
 SOLUTION_28 = r'''sarsa_path_28, falls_ratio_28, q_falls_28 = "C", "B", "C"'''
 
-EXPERIMENT_28 = r'''with checked("26.28"):
+EXPERIMENT_28 = r'''ran_28 = False
+with checked("26.28"):
     tables_28, falls_28 = {}, {}
     for algorithm_28 in ("q_learning", "sarsa"):
         cliff_28 = make_env("CliffWalking-v1", seed=0)
@@ -1591,9 +1603,14 @@ EXPERIMENT_28 = r'''with checked("26.28"):
         print(f"{algorithm_28:10s} : {falls_28[algorithm_28].sum():.0f} chutes en 500 épisodes, retour moyen des 100 "
               f"derniers épisodes {fr(history_28['returns'][-100:].mean(), 1)}")
     show_cliff_paths({name_28: cliff_path(Q_28) for name_28, Q_28 in tables_28.items()})
-wb.check("26.28a", sarsa_path_28)
-wb.check("26.28b", falls_ratio_28)
-wb.check("26.28c", q_falls_28)'''
+    ran_28 = True
+if ran_28:
+    wb.check("26.28a", sarsa_path_28)
+    wb.check("26.28b", falls_ratio_28)
+    wb.check("26.28c", q_falls_28)
+else:
+    print("⏳ Ex 26.28 : tes prédictions se vérifient une fois l'expérience terminée ; elle attend ta train_tabular "
+          "(26.21).")'''
 
 RECORD_28 = r'''wb.record("26.28a", "C", mistakes={"c'est le chemin le plus court, celui du Q-learning : compte les pas du chemin de SARSA": "A",
                                    "le chemin de SARSA monte-t-il seulement d'une rangée ?": "B"})
@@ -1745,7 +1762,7 @@ PART_D = Part("D", "SARSA contre le Q-learning",
               exercises=[
     Ex("26.28", "🔮", 1, 10, "Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise",
        "prédire, puis mesurer, ce que l'exploration coûte à chacun des deux algorithmes au bord d'une falaise.",
-       "Ex 26.20 · 26.Q11 · fiche §26.7 (encadré ⚠️)", tracks="R, C",
+       "Ex 26.20 · Ex 26.21 · 26.Q11 · fiche §26.7 (encadré ⚠️)", tracks="R, C",
        body=r"""La fiche le dit : quand l'exploration coûte cher, SARSA apprend un chemin plus prudent, le Q-learning le chemin optimal, qui longe la falaise. Les deux apprennent ici 500 épisodes avec ta `train_tabular` ($\alpha = 0{,}5$, $\gamma = 1$, $\varepsilon = 0{,}1$ constant, 200 pas au plus). Le chemin optimal fait 13 pas : monter d'une case, 11 pas vers la droite, redescendre. Le nombre de chutes d'un épisode se lit dans l'historique : chaque pas coûte −1 et chaque chute −100 de plus.
 
 **Avant d'exécuter**, écris tes trois prédictions dans la cellule suivante :
@@ -2478,12 +2495,14 @@ PART_F = Part("F", "Le morpion, CartPole, l'auto-apprentissage et le défi",
               "Tu apprends le morpion contre un adversaire aléatoire, avec un masque d'actions ou une pénalité "
               "(26.35), tu découpes l'état continu de CartPole pour une table (26.36), tu fais jouer un agent contre "
               "lui-même jusqu'à ne plus perdre contre un joueur parfait (26.37), puis tu relèves le défi CartPole "
-              "(26.38).",
+              "(26.38). Le joueur parfait est `minimax` (`TicTacToe(opponent=\"minimax\")`) : il calcule l'arbre de "
+              "toutes les parties possibles et joue toujours le coup qui donne le meilleur résultat dans le pire des "
+              "cas (encadré 🧮 du §26.10 de la fiche).",
               exercises=[
     Ex("26.35", "📦", 3, 45, "Morpion contre un adversaire aléatoire : masque d'actions ou pénalité",
        "entraîner un agent de morpion avec ta boucle, et comparer un masque d'actions à une pénalité pour les coups "
        "interdits.",
-       "Ex 26.21 · 26.Q2 · fiche §26.2.1, §26.3.4", thread="morpion", tracks="C",
+       "Ex 26.21 · 26.Q2 · fiche §26.2.1, §26.3.4, §26.10 (encadré 🧮 minimax)", thread="morpion", tracks="C",
        body=r"""Le livre propose deux façons de traiter les coups interdits du morpion : ne donner à l'agent que les coups permis, ou lui laisser proposer les neuf cases et punir les coups interdits (fiche §26.2.1). `TicTacToe` fait les deux : `illegal="mask"` met les coups permis dans `info["action_mask"]` (ta `train_tabular` s'en sert), `illegal="penalty"` n'en donne pas, et un coup interdit finit la partie avec −1. L'agent joue les croix (il commence), l'adversaire joue au hasard ; un état est le code en base 3 du plateau (19 683 codes).
 
 **Contrat** : `play_ttt_35(env, Q, n_games, seed=0)` joue `n_games` parties avec la politique gloutonne de `Q` : la meilleure action **permise** quand `info` contient `"action_mask"` (`masked_greedy`), sinon la meilleure action de `Q[state]` ; chaque partie commence par `env.reset(seed=int(rng.integers(2**31)))`, avec `rng = np.random.default_rng(seed)` ; elle rend `{"win": …, "draw": …, "loss": …, "illegal": …}`, le compte de `info["result"]` à la fin des parties, avec les quatre clés.

@@ -626,13 +626,14 @@ def test_interpolate_latents_slerp_stays_on_the_unit_sphere(vae):
                  msg="slerp moves by the same angle between consecutive points (omega / (n_steps - 1))")
 
 
-def test_interpolate_latents_slerp_at_a_small_angle(vae):
+@pytest.mark.parametrize("angle", [0.05, 1e-3], ids=["0.05-rad", "1e-3-rad"])
+def test_interpolate_latents_slerp_at_a_small_angle(vae, angle):
+    # small, but sin(omega) is far from 0: still a real slerp (at 1e-3 rad, the straight line is 1.5e-7 away)
     z0 = np.array([1.0, 0.0, 0.0])
-    angle = 0.05                                     # small, but sin(omega) is far from 0: still a real slerp
     z1 = 1.5 * np.array([np.cos(angle), np.sin(angle), 0.0])
     got = call(vae.interpolate_latents, *copies(z0, z1), 6, method="slerp", expected="a (6, 3) array")
     assert_close(got, np_slerp(z0, z1, 6), rtol=1e-9, atol=1e-12,
-                 msg="at an angle of 0.05 rad, sin(omega) ≈ 0.05 is not « almost 0 »: the slerp formula applies "
+                 msg=f"at an angle of {angle} rad, sin(omega) ≈ {angle} is not « almost 0 »: the slerp formula applies "
                      "(the fallback is only for sin(omega) of the order of rounding errors)")
 
 

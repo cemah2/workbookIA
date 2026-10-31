@@ -99,13 +99,15 @@ Une perturbation d'un seul niveau de gris sur 255 par pixel, invisible, divise l
 
 ## Reproduire
 
+Depuis la racine du dépôt :
+
 ```bash
-python tools/start_chapter.py CP5                                   # from the workbook repository
 python -m pytest projets/partie_5_classifieur_cifar10/solution -q    # the 19 tests, a few seconds
-python -m cifarkit.predict photo.jpg --model .                       # from this folder: classify an image
+cd projets/partie_5_classifieur_cifar10/solution
+python -m cifarkit.predict photo.jpg --model .                       # classify an image with the delivered model
 ```
 
-Puis exécute `mp5_classifieur_cifar10.ipynb` de bout en bout : en mode rapide (`FAST_MODE = True`), une dizaine de minutes sur CPU ; avec `FAST_MODE = False` pour les chiffres de ce README, quelques minutes sur un GPU de Colab, environ une heure et demie sur un CPU à deux cœurs. Les versions sont dans `results.json` et `model.json` (Python 3.13, PyTorch 2.11, torchvision 0.26).
+Puis exécute `mp5_classifieur_cifar10.ipynb` de bout en bout : en mode rapide (`FAST_MODE = True`), une dizaine de minutes sur CPU ; avec `FAST_MODE = False` pour les chiffres de ce README, quelques minutes sur un GPU de Colab, environ une heure vingt sur un CPU à deux cœurs. Les versions sont dans `results.json` et `model.json` (Python 3.13, PyTorch 2.11, torchvision 0.26).
 
 ## Ce que j'ai appris
 

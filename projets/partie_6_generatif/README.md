@@ -48,7 +48,7 @@ Il s'écrit **avant** les expériences, dans ton README (étape MP6.1), et ne ch
 
 ## Les livrables
 
-1. Le notebook `mp6_generatif.ipynb` : propre, « Tout exécuter » sans erreur (moins de 10 minutes en mode rapide sur CPU), avec tes observations ; il se reproduit en une commande, depuis la racine du dépôt : `python tools/run_all_notebooks.py mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb --inplace` (ajoute `--full --timeout 3600` pour le mode complet).
+1. Le notebook `mp6_generatif.ipynb` : propre, « Tout exécuter » sans erreur (moins de 10 minutes en mode rapide sur CPU), avec tes observations ; il se reproduit en une commande, depuis la racine du dépôt : `jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 mon_travail/projets/partie_6_generatif/mp6_generatif.ipynb` (précédée de `WB_FAST_MODE=0` pour le mode complet ; sur Colab, *Exécution → Tout exécuter*).
 2. Le package `genbench/` (`models.py`, `train.py`, `evaluate.py`) et `test_genbench.py`, au moins **trois** tests, qui attrapent au moins deux des cinq mutants de l'étape MP6.7.
 3. `config.json` (écrit avant les expériences) et `results.json` (les métriques par modèle et par graine, le choix de β, la mémorisation, les historiques d'entraînement).
 4. Les figures (`figures/`) : les courbes d'entraînement du VAE et du GAN, les grilles d'échantillons, les interpolations slerp, les classes générées, les plus proches voisins, la distance de Fréchet par graine.

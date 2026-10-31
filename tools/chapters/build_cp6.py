@@ -483,17 +483,28 @@ if exam_over() and ready("CP6.9", "torch", "nn", "bce", "make_gan", "real_batch"
         _, _, _, mine_d1 = run_steps(gan_step_fixed, n=1)
         _, _, _, ref_d1 = run_steps(reference_step, n=1)
         first_d = mine_d1 is not None and all(torch.allclose(a, b, rtol=1e-5, atol=1e-7) for a, b in zip(mine_d1, ref_d1))
+        start_g = [p.detach().clone() for p in make_gan(69)[0].parameters()]
+        still_g = mine_g is not None and all(torch.equal(a, b) for a, b in zip(mine_g, start_g))   # G never moved
+        if first_d:
+            why_d = ("le premier pas de D est juste ; l'écart vient ensuite du pas du générateur "
+                     "(un opt_d.step() de trop, ou un générateur qui a bougé autrement).")
+        elif still_g:
+            why_d = ("l'écart vient du pas du générateur : le générateur n'a pas bougé, et D a fait un second pas avec "
+                     "les gradients de g_loss (ligne J : c'est opt_g qui fait le pas du générateur).")
+        else:
+            why_d = "vrais exemples avec le label 1, faux DÉTACHÉS avec le label 0, et un seul tirage torch.randn (ligne B)."
         prop("CP6.9", same_d, "après trois pas, les poids du discriminateur sont ceux du pas de référence.",
-             "après trois pas, les poids du discriminateur diffèrent de ceux du pas de référence : "
-             + ("vrais exemples avec le label 1, faux DÉTACHÉS avec le label 0, et un seul tirage torch.randn (ligne B)."
-                if not first_d else "le premier pas de D est juste ; l'écart vient ensuite du pas du générateur "
-                "(un opt_d.step() de trop, ou un générateur qui a bougé autrement)."))
+             "après trois pas, les poids du discriminateur diffèrent de ceux du pas de référence : " + why_d)
         prop("CP6.9", same_g, "après trois pas, les poids du générateur sont ceux du pas de référence.",
-             "après trois pas, les poids du générateur diffèrent : sa loss donne le label 1 aux faux (non saturante), "
-             "et c'est opt_g qui fait le pas.")
+             "après trois pas, les poids du générateur diffèrent : "
+             + ("il n'a pas bougé, c'est opt_g qui fait son pas (ligne J)." if still_g else
+                "sa loss donne le label 1 aux faux (non saturante), et c'est opt_g qui fait le pas."))
         if pairs_ok and len(mine) == len(ref):
+            first_losses = np.allclose(np.array(mine[0], dtype=float), np.array(ref[0], dtype=float), rtol=1e-5)
             prop("CP6.9", np.allclose(np.array(mine, dtype=float), np.array(ref, dtype=float), rtol=1e-5),
                  "les losses rendues sont celles du pas de référence.",
+                 "les losses du premier pas sont justes, celles des pas suivants diffèrent : c'est la conséquence de "
+                 "l'écart des poids ci-dessus." if first_losses else
                  "les losses rendues diffèrent de celles du pas de référence : d_loss = BCE(D(vrais), 1) + BCE(D(faux), 0), "
                  "g_loss = BCE(D(faux), 1).")
         if pairs_ok and same_d and same_g:

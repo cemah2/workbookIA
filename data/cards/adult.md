@@ -8,6 +8,7 @@
 | **Taille** | 48 842 lignes × 15 colonnes (14 features + la cible `class`) |
 | **Tâche type** | classification binaire : le revenu annuel dépasse-t-il 50 000 $ ? |
 | **Licence** | Creative Commons Attribution 4.0 (CC BY 4.0), [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/2/adult) |
+| **Empreinte** | SHA-256 de `data/adult.csv.gz` : `ac09585bcc1e0d2832d5c8335d2270bf2b97f8a8e0b54d89b95952b874ced8a8` |
 | **Téléchargé le** | 2026-10-16 (la copie est identique, valeur par valeur, à ce que rend OpenML, vérifié par un test) |
 
 ## Provenance
@@ -44,4 +45,4 @@ Les valeurs manquantes sont des « ? » dans les fichiers d'origine ; OpenML et 
 Sources : [UCI, Adult](https://archive.ics.uci.edu/dataset/2/adult) ; Ding, F., Hardt, M., Miller, J. & Schmidt, L. (2021). [*Retiring Adult: New Datasets for Fair Machine Learning*](https://arxiv.org/abs/2108.04884). NeurIPS 2021.
 
 ## Chapitres
-MP3 (le mini-projet de la partie III : pipeline tabulaire complet, classes déséquilibrées, seuil de décision et audit des erreurs par sous-groupe), B6 (explicabilité et équité).
+MP3 (le mini-projet de la partie III : pipeline tabulaire complet, classes déséquilibrées, seuil de décision et audit des erreurs par sous-groupe), 29 (📈 29.12 : profil express d'un dataset inconnu, colonne qui a le plus de manquants, 52 doublons et part de la classe majoritaire, 0,76, la baseline à battre), B6 (explicabilité et équité).

@@ -115,21 +115,21 @@
 
 ## 🔁 Rappels
 
-### 26.R1 — Un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
+### 26.R1 — Ch. 25 : un réseau comme fonction qui remplace une table (le décodeur d'un VAE)
 
 - a) :
 - b) :
 - c) :
 
 
-### 26.R2 — Que sauvegarder pour reprendre un entraînement ?
+### 26.R2 — Ch. 23 : que sauvegarder pour reprendre un entraînement ?
 
 - a) :
 - b) :
 - c) :
 
 
-### 26.R3 — Bandit à bras multiples, ε-greedy et UCB
+### 26.R3 — Ch. 11 : bandit à bras multiples, ε-greedy et UCB
 
 - a) :
 - b) :

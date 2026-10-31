@@ -90,6 +90,24 @@ def test_checked_a_type_error_on_none_gets_the_message_of_wb_attempt(capsys):
     assert "❌ Ex 21.4 : une valeur vaut None" in text and "oublié son `return`" in text and "suite" in text
 
 
+def test_checked_a_tensor_given_to_numpy_is_not_a_forgotten_return(capsys):
+    """Scenario 25.28: reparameterize returns a tensor, then np.mean(...) on it (audit P5 V-VI, A10 14)."""
+    torch = pytest.importorskip("torch")
+    run_checked(lambda: np.mean(torch.ones(3)))
+    text = out(capsys)
+    assert text.startswith("❌ Ex 21.4 : ton code lève TypeError : mean() received an invalid combination")
+    assert "un tenseur PyTorch" in text and "return" not in text and text.endswith("suite\n")
+
+
+def test_checked_never_prints_an_empty_message(capsys):
+    """Scenario 24.18: scikit-learn's message starts with a new line (audit P5 V-VI, A10 18)."""
+    run_checked(raise_(ValueError("\nAll the 12 fits failed.\nIt is very likely that your model is misconfigured.")))
+    run_checked(raise_(RuntimeError()))
+    lines = out(capsys).splitlines()
+    assert lines[0] == "❌ Ex 21.4 : ton code lève ValueError : All the 12 fits failed."
+    assert "❌ Ex 21.4 : ton code lève RuntimeError : (sans message)" in lines
+
+
 def test_checked_stops_quietly_on_stopcheck(capsys):
     def body():
         print("❌ Ex 21.4 : la raison")
@@ -204,6 +222,40 @@ def test_same_and_as_numpy_read_a_tensor():
     assert as_numpy(None) is None and as_numpy("abc") is None
 
 
+def test_same_and_as_numpy_read_a_list_of_tensors(capsys):
+    """Scenario: `return [h, c]` with tensors that require grad (audit P5 V-VI, A10 10)."""
+    torch = pytest.importorskip("torch")
+    t = torch.ones(2, requires_grad=True)
+    assert as_numpy([t * 1, t * 2]).tolist() == [[1.0, 1.0], [2.0, 2.0]]
+    assert as_numpy((t * 3, [4.0, 5.0])).tolist() == [[3.0, 3.0], [4.0, 5.0]]
+    run_checked(lambda: same("21.4", "f", [t * 1, t * 2], np.ones((2, 2))))
+    text = out(capsys)
+    assert text.startswith("❌ Ex 21.4 : f : attendu [[1.0, 1.0], [1.0, 1.0]], reçu [[1.0, 1.0], [2.0, 2.0]].")
+    assert "lève" not in text
+
+
+def test_as_numpy_refuses_complex_numbers(capsys):
+    assert as_numpy(np.array([1 + 2j, 3.0])) is None and as_numpy([1j]) is None
+    assert same("21.4", "fft", np.array([1.0 + 0j, 2.0 + 1j]), [1.0, 2.0]) is False
+    assert "attendu un tableau de nombres, reçu un objet ndarray" in out(capsys)
+
+
+@pytest.mark.parametrize("make", ["numpy", "torch"])
+def test_same_says_when_a_float32_result_is_right_to_single_precision(capsys, make):
+    """Scenario 21.15: conv2d computed in float32, values that print like the expected ones (A10 11)."""
+    want = np.array([-11.850715, 0.25, 3.0])
+    if make == "torch":
+        torch = pytest.importorskip("torch")
+        got = torch.tensor(want, dtype=torch.float32)
+    else:
+        got = want.astype(np.float32)
+    assert same("21.15", "conv2d", got, want) is False
+    text = out(capsys)
+    assert "ton résultat est en float32, la précision attendue est celle du float64" in text
+    assert same("21.15", "conv2d", np.float32([1.0, 2.0]), [1.0, 2.5]) is False      # really wrong: no hint
+    assert "float32" not in out(capsys)
+
+
 # ---------------------------------------------------------------------------
 # pair, refuses, fitted, shape_text, print_answer
 # ---------------------------------------------------------------------------
@@ -253,6 +305,12 @@ def test_refuses(capsys):
     assert "❌ Ex 20.16 : p = 1,5 : attendu ValueError, reçu TypeError : unsupported operand" in text
     with pytest.raises(NotImplementedError):
         refuses("20.16", "p", raise_(NotImplementedError()))
+    with pytest.raises(NotImplementedError):         # a stub is not "the RuntimeError we expected" (A10 19)
+        refuses("20.16", "p", raise_(NotImplementedError()), error=RuntimeError)
+    with pytest.raises(MylearnMissingError):         # nor "the AttributeError we expected"
+        refuses("20.16", "p", raise_(MylearnMissingError("mylearn.x")), error=AttributeError)
+    run_checked(lambda: refuses("20.16", "p", raise_(NotImplementedError()), error=RuntimeError), ex_id="20.16")
+    assert out(capsys) == "⏳ Ex 20.16 : pas encore fait.\nsuite\n"
 
 
 def test_fitted_survives_a_fit_without_return_self():
@@ -325,6 +383,10 @@ def test_fit_returns_self():
     assert False, "fit must return self"
 
 
+def test_f_does_not_modify_its_input():
+    assert False, "expected x unchanged by f"
+
+
 def test_not_written():
     raise NotImplementedError("Ex 21.4 : softmax_rows")
 
@@ -376,32 +438,33 @@ def test_run_pytest_group_prints_each_failure_on_two_lines(group_root, capsys):
     result = run_pytest_group("tests/test_group.py", "not slow", root=group_root)
     text = out(capsys)
     lines = text.splitlines()
-    assert (result.passed, result.failed, result.errors, result.pending) == (1, 4, 1, 1)
+    assert (result.passed, result.failed, result.errors, result.pending) == (1, 5, 1, 1)
     assert not result.ok
     assert "💡 un attribut est lu sur None" in lines[0]
-    # the clearest failures first (return self, an attribute on None), then the others, the ⏳ at the end
+    # the clearest failures first (an attribute on None, return self, an input modified), then the others,
+    # the ⏳ at the end
     order = [line.split()[1] for line in lines if line[:1] in "❌⏳"]
-    assert order == ["test_reads_an_attribute_on_none", "test_fit_returns_self", "test_value_is_wrong",
-                     "test_uses_a_broken_fixture", "test_not_written"]
+    assert order == ["test_reads_an_attribute_on_none", "test_fit_returns_self", "test_f_does_not_modify_its_input",
+                     "test_value_is_wrong", "test_uses_a_broken_fixture", "test_not_written"]
     i = lines.index("❌ test_value_is_wrong")
     assert lines[i + 1].startswith("   AssertionError: expected 3 rows, got 4: xxx") and lines[i + 1].endswith(" END")
     assert "❌ test_uses_a_broken_fixture (erreur hors du test : import, fixture…)" in lines
     i = lines.index("⏳ test_not_written")
     assert lines[i + 1] == "   pas encore implémenté : Ex 21.4 : softmax_rows"
-    assert lines[-1].startswith("pytest: 4 failed, 1 passed, 1 deselected, 1 error")
+    assert lines[-1].startswith("pytest: 5 failed, 1 passed, 1 deselected, 1 error")
 
 
 def test_run_pytest_group_hides_what_exceeds_max_shown(group_root, capsys):
     run_pytest_group("tests/test_group.py", "not slow and not passes", root=group_root, max_shown=2)
     text = out(capsys)
     assert sum(line[:1] in "❌⏳" for line in text.splitlines()) == 2
-    assert "   … et 3 autre(s) test(s) en échec, dont 1 pas encore écrit(s)" in text
+    assert "   … et 4 autre(s) test(s) en échec, dont 1 pas encore écrit(s)" in text
 
 
 def test_run_pytest_group_all_green(group_root, capsys):
     result = run_pytest_group(group_root / "tests" / "test_group.py", "passes", root=group_root)
     assert result.ok and result.passed == 1
-    assert out(capsys).startswith("pytest: 1 passed, 6 deselected")
+    assert out(capsys).startswith("pytest: 1 passed, 7 deselected")
 
 
 def test_run_pytest_group_stops_an_endless_loop(group_root, capsys):

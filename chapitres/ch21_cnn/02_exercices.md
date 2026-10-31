@@ -408,3 +408,5 @@ Ces exercices sont dans `03_notebook.ipynb`.
 | 21.30 | conv_transpose2d par insertion de zéros | 🔨 | ★★★ | 50 |
 | 21.31 | conv2d_backward : rétropropager à travers une convolution | 🔨 | ★★★★ | 100 |
 | 21.32 | Défi Fashion-MNIST : au moins 92 % avec moins de 100 000 paramètres | 🏆 | ★★★★ | 120 |
+
+🚀 *GPU Colab conseillé* pour le mode complet (`FAST_MODE = False`) de 21.26 ; le mode rapide tourne sur CPU.

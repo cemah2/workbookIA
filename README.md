@@ -45,13 +45,13 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 | **III · ML classique** | 12 Préparation des données · 13 Classifieurs · 14 Ensembles · 15 scikit-learn · [checkpoint III](checkpoints/partie_3/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **IV · Réseaux** | 16 Réseaux feed-forward · 17 Fonctions d'activation · 18 Rétropropagation · 19 Optimiseurs · 20 Deep learning et premiers pas en PyTorch · [checkpoint IV](checkpoints/partie_4/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **V · Architectures** | 21 Réseaux convolutifs · 22 RNN · 23 PyTorch en pratique 1 · 24 PyTorch en pratique 2 · [checkpoint V](checkpoints/partie_5/) (examen blanc, synthèse, mini-projet) | ✅ |
-| **VI · Génératif et RL** | 25 Autoencodeurs et VAE · 26 Apprentissage par renforcement · 27 GAN · 28 Applications créatives · 29 Datasets et projet final | 📅 |
+| **VI · Génératif et RL** | 25 Autoencodeurs et VAE · 26 Apprentissage par renforcement · 27 GAN · 28 Applications créatives · 29 Datasets et projet final · [checkpoint VI](checkpoints/partie_6/) (examen blanc, synthèse, mini-projet) | ✅ |
 | **VII · Bonus** | B1 Transfer learning · B2 Tokenisation et embeddings · B3 Attention et Transformers · B4 LLM en pratique · B5 Diffusion · B6 Explicabilité et éthique · B7 Du notebook à la production · B8 RL moderne | 📅 |
 | **Fin** | Projet final | 📅 |
 
 ✅ disponible · 🛠️ en cours · 📅 planifié. Le plan détaillé de chaque chapitre (≈ 2 000 exercices, temps d'étude, calendrier indicatif) est dans [`docs/SYLLABUS.md`](docs/SYLLABUS.md) ; l'état d'avancement est suivi dans [`suivi/PROGRESS.md`](suivi/PROGRESS.md). Un checkpoint (examen blanc, synthèse, mini-projet) clôt chacune des parties I à VI.
 
-**Quatre parcours** ([`docs/PARCOURS.md`](docs/PARCOURS.md)) : complet (≈ 900 h), **rapide**, l'essentiel pour être employable (≈ 530 h), orienté maths et orienté code. Chaque exercice indique ses parcours (R, M, C) ; checkpoints, mini-projets et projet final sont communs à tous.
+**Quatre parcours** ([`docs/PARCOURS.md`](docs/PARCOURS.md)) : complet (≈ 920 h), **rapide**, l'essentiel pour être employable (≈ 550 h), orienté maths et orienté code. Chaque exercice indique ses parcours (R, M, C) ; checkpoints, mini-projets et projet final sont communs à tous.
 
 ## 🗂️ Organisation du dépôt
 
@@ -80,7 +80,7 @@ jupyter lab                         # ouvre 00_setup/demo.ipynb
 6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards dans Anki (`python tools/export_flashcards.py --chapter 18`, puis dans Anki *Fichier > Importer*, type de note « Basique »).
 7. Note ta séance dans `mon_travail/suivi/journal.md`, ton niveau dans `mon_travail/suivi/auto_evaluation.md`, et coche tes exercices dans `mon_travail/suivi/tableau_de_bord.md`.
 
-À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint ([partie I](checkpoints/partie_1/README.md), [partie II](checkpoints/partie_2/README.md), [partie III](checkpoints/partie_3/README.md), [partie IV](checkpoints/partie_4/README.md)).
+À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint ([partie I](checkpoints/partie_1/README.md), [partie II](checkpoints/partie_2/README.md), [partie III](checkpoints/partie_3/README.md), [partie IV](checkpoints/partie_4/README.md), [partie V](checkpoints/partie_5/README.md), [partie VI](checkpoints/partie_6/README.md)).
 
 ## 🧩 Ta librairie mylearn
 

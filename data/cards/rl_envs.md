@@ -5,7 +5,7 @@
 | **Flippers** | jeu décrit dans le livre (ch. 26), recodé de façon originale | `wb.envs.Flippers(size=3, truck_prob=0.1)` | 26 |
 | **Morpion** (*tic-tac-toe*) | jeu classique, recodé | `wb.envs.TicTacToe(opponent="random" ou "minimax")`, `wb.envs.minimax_policy` | 26 |
 | **CliffWalking-v1** | gymnasium (Farama Foundation), l'exemple 6.6 de Sutton et Barto | `wb.datasets.make_env("CliffWalking-v1", seed=0)` | 26 |
-| **FrozenLake-v1** | gymnasium (Farama Foundation) | `wb.datasets.make_env("FrozenLake-v1", seed=0, is_slippery=False)` | 26 |
+| **FrozenLake-v1** | gymnasium (Farama Foundation), [documentation](https://gymnasium.farama.org/v1.4.0/environments/toy_text/frozen_lake/) | `wb.datasets.make_env("FrozenLake-v1", seed=0, is_slippery=False)` | 26, 29 (🔁 29.R2) |
 | **CartPole-v1** | gymnasium (Farama Foundation) | `wb.datasets.make_env("CartPole-v1", seed=0)` | 26, B8 |
 
 - **Licence** : gymnasium est sous licence MIT. Les jeux recodés font partie du code du workbook.

@@ -26,6 +26,21 @@ def test_trap_dataset_has_its_eight_defects():
     assert clean["fruit"].value_counts(normalize=True)["coing"] < 0.03
 
 
+def test_invalid_labels_are_misspellings_of_the_true_fruit():
+    """Normalising a misspelt label gives back the fruit that its quality code (M, R or C) encodes: the defect is a
+    spelling, never a wrong label (otherwise the cleaning of the solution would introduce label errors)."""
+    letter = {"M": "pomme", "R": "poire", "C": "coing"}
+    repair = {"pome": "pomme", "pommes": "pomme", "poir": "poire", "coings": "coing"}
+    for seed in (2916, 7):
+        df = datasets.make_trap_dataset(seed=seed)
+        bad = df[~df["fruit"].isin(datasets.TRAP_CLASSES)]
+        fixed = bad["fruit"].str.strip().str.lower().replace(repair)
+        assert set(fixed) <= set(datasets.TRAP_CLASSES), f"expected repairable typos, got {sorted(set(bad['fruit']))}"
+        truth = bad["code_qualite"].str[1].map(letter)
+        assert (fixed == truth).all(), (f"expected each typo to spell its own fruit (seed {seed}), got "
+                                        f"{bad.loc[fixed != truth, ['fruit', 'code_qualite']].values.tolist()}")
+
+
 def test_other_seeds_also_work():
     df = datasets.make_trap_dataset(seed=1, n=400)
     assert len(df) == 400 + 17 + 13

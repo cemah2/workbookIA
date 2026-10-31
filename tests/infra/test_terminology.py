@@ -22,6 +22,7 @@ SOURCES = ["chapitres/*/*.md", "chapitres/*/flashcards.csv", "checkpoints/*/*.md
            "suivi/auto_evaluation.md", "suivi/journal.md", "suivi/remediation.md", "suivi/tableau_de_bord.md",
            "docs/METHODE.md", "docs/SYLLABUS.md", "docs/PARCOURS.md", "docs/syllabus/data/*.json",
            "tools/chapters/build_*.py", "tools/chapters/figures_*.py", "tools/chapters/chapter_kit.py",
+           "tools/chapters/ch*_parts.py", "tools/chapters/ch*_code.py",      # the notebooks of ch. 28 on
            "data/cards/*.md", "src/wb/*.py", "tools/*.py", "templates/*.py", "projets/*/*/*.py",
            "projets/*/*/*.md", "projets/*/*/*/*.py"]
 

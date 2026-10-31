@@ -29,7 +29,7 @@ i) **70 000** (60 000 + 10 000).
 j) **Vrai** : CC BY demande de citer la source et la licence (et d'indiquer les modifications) ; c'est NC qui interdit l'usage commercial (ce qui ne dispense pas de vérifier les droits des personnes photographiées, CP6.11).
 
 **Erreurs fréquentes** : diviser dans l'autre sens en a) ; confondre prior et posterior en c) ; oublier le facteur $\gamma^2$ en d) ; écrire (4, 16) en e) ; répondre 1,386 en f) (c'est la loss de $D$, pas sa sortie) ; (196, 196) en h) ; 60 000 en i).
-**Remédiation** : 25.Q7, 25.Q12, 25.31, 26.1, 26.13, 27.4, 27.Q10, 28.1, 29.Q4, 29.Q2.
+**Remédiation** : 25.1, 25.Q7, 25.Q12, 25.31, 26.1, 26.13, 27.4, 27.Q10, 28.1, 29.Q4, 29.Q2.
 
 ## CP6.2 — VAE : un tirage reparamétrisé et sa divergence KL ✏️ · 2 points
 
@@ -82,7 +82,7 @@ c) **[0,3]** Rien ne change : chaque coefficient est une somme sur les positions
 Mesures réelles (`tools/chapters/figures_cp6.py`, trois graines, `mylearn` de référence) : avec $\gamma = 0{,}9$ et $\varepsilon = 0{,}1$, la politique gloutonne gagne 82 % à 93 % des 506 plateaux non gagnants.
 
 a) **[0,4]** **C** : avec $\gamma = 0$, elle n'en gagne que **20,2 %** (pour les trois graines), en 1,5 coup en moyenne. La cible est $y = r$ : seules les actions qui gagnent immédiatement reçoivent une valeur non nulle ; ailleurs, toute la ligne reste à 0, la politique gloutonne joue l'action 0 (`np.argmax`) et tourne en rond.
-b) **[0,4]** **A** : avec $\varepsilon = 0$, elle gagne **100 %** des plateaux (pour les trois graines), en 5 coups environ au lieu de 2,6 au mieux. Tant que la table est nulle, les égalités se départagent au hasard pendant l'entraînement : l'agent explore quand même, comme une marche au hasard ; dès qu'une victoire est trouvée, $\gamma = 0{,}9$ propage sa valeur vers les plateaux d'avant. Mais une fois les valeurs installées, plus rien ne pousse l'agent à essayer d'autres chemins : ses parties restent deux fois plus longues que l'optimum.
+b) **[0,4]** **A** : avec $\varepsilon = 0$, elle gagne **100 %** des plateaux (pour les trois graines), en 5 coups environ au lieu de 2,7 au mieux. Tant que la table est nulle, les égalités se départagent au hasard pendant l'entraînement : l'agent explore quand même, comme une marche au hasard ; dès qu'une victoire est trouvée, $\gamma = 0{,}9$ propage sa valeur vers les plateaux d'avant. Ses parties restent pourtant presque deux fois plus longues que l'optimum, comme celles de l'agent ε = 0,1 (4,2 à 5,3 coups) : 3 000 parties ne suffisent à aucun des deux pour apprendre les chemins les plus courts.
 c) **[0,2]** Une phrase juste pour chacune (0,1 chacune) : γ = 0 rend l'agent myope, l'avenir ne compte plus ; ε = 0 n'empêche pas l'exploration quand la table est vide et que les égalités se tirent au hasard.
 
 **Erreurs fréquentes** : croire que sans ε l'agent n'explore jamais (c'est vrai avec des égalités départagées par l'indice, pas ici) ; croire que γ = 0 ne fait que « raccourcir » les parties.
@@ -118,7 +118,7 @@ c) **[0,3]** **837,68** ($829{,}45 + 3 \times 2{,}75$).
 
 ## CP6.9 — Réparer un pas d'entraînement de GAN 🐛 · 1,5 point
 
-a) **[0,6]** **« CGJ »** (0,2 par lettre juste, −0,1 par lettre en trop).
+a) **[0,6]** **« CGJ »** (0,2 par lettre juste, −0,1 par lettre en trop, sans descendre sous 0). (I) à la place de (C) désigne l'endroit où l'erreur se déclare, pas la ligne à corriger : 0,1 pour cette lettre, sans la pénalité d'une lettre en trop.
 - **C** : `bce(D(fake.detach()), zeros)`. Sans `detach`, le `backward` de E traverse aussi le générateur et **libère son graphe** : le `backward` de I échoue alors (« Trying to backward through the graph a second time »). L'erreur se déclare en I, mais la cause est en C.
 - **G** : `bce(D(fake), ones)`. Le générateur veut que $D$ prenne ses faux pour des vrais : label 1 (la loss non saturante). Avec le label 0, il apprendrait à être reconnu, l'inverse de son but.
 - **J** : `opt_g.step()`. Avec `opt_d.step()`, le générateur ne bouge jamais, et le discriminateur fait un second pas avec les gradients de la loss de $G$, qui le poussent à se tromper.
@@ -145,14 +145,17 @@ e) La **généralisation** : des plateaux voisins ont des valeurs voisines, et l
 
 **Réponse modèle** : avant d'utiliser un dataset, on vérifie sa **licence** (usage commercial permis ?), les **droits des personnes** (visages = données personnelles, consentement, base légale au sens du RGPD, droit à l'image), la **provenance** et l'**histoire** du dataset (retraits, versions corrigées), et ses **biais** (qui est représenté). CelebA est réservé à la recherche non commerciale : non pour l'application. Ses photos de célébrités ont été collectées en ligne sans leur consentement, et un générateur entraîné dessus peut reproduire des visages reconnaissables. Proposer à la place : un dataset sous licence commerciale explicite et documenté, ou des photos collectées avec un consentement écrit pour cet usage, avec une data card ; et signaler les images générées comme telles (le règlement européen sur l'IA impose de marquer les contenus générés).
 
-**Ce qui compte** (1 point) : trois vérifications pertinentes (0,4) ; la conclusion juste sur CelebA, avec sa raison (0,3) ; une alternative réaliste (0,3). « Public, donc libre » ne rapporte rien.
+**Critères** (1 point) : trois vérifications pertinentes (0,4) ; la conclusion juste sur CelebA, avec sa raison (0,3) ; une alternative réaliste (0,3). « Public, donc libre » ne rapporte rien.
+**Erreurs fréquentes** : confondre « téléchargeable » et « libre d'usage » ; ne vérifier que la licence, en oubliant que des visages sont des données personnelles (consentement, RGPD) ; croire que citer la source rend permis un usage que la licence interdit.
 **Remédiation** : 29.5, 29.Q2, 29.Q8, 29.E4, 27.9.
 
 ## CP6.12 — GAN, VAE ou diffusion, en 60 secondes 💼 · 1 point
 
-**Réponse modèle en 60 secondes** : « Un VAE apprend un encodeur et un décodeur avec un espace latent régulier : entraînement stable, une vraie loss à suivre, des interpolations faciles, mais des images souvent floues. Un GAN met un générateur face à un discriminateur : des images nettes et une génération en une passe, mais un entraînement instable, de l'effondrement de mode, et pas de mesure de vraisemblance. La diffusion apprend à retirer du bruit pas à pas : la meilleure qualité et la meilleure diversité aujourd'hui, un entraînement stable, mais une génération lente, en plusieurs dizaines de pas, et un coût de calcul élevé. En pratique, la diffusion travaille souvent dans l'espace latent d'un autoencodeur, comme Stable Diffusion. Pour générer des images de produits en haute qualité, je partirais d'un modèle de diffusion latente pré-entraîné ajusté sur nos données ; pour de la génération en temps réel sur mobile, un GAN distillé ou un modèle de diffusion en peu de pas. »
+**Réponse modèle en 60 secondes** : « Un VAE apprend un encodeur et un décodeur avec un espace latent régulier : entraînement stable, une vraie loss à suivre, des interpolations faciles, mais des images souvent floues. Un GAN met un générateur face à un discriminateur : des images nettes et une génération en une passe, mais un entraînement instable, de l'effondrement de mode, et pas de mesure de vraisemblance. La diffusion apprend à retirer du bruit pas à pas : la meilleure qualité et la meilleure diversité aujourd'hui, un entraînement stable, mais une génération lente, en plusieurs dizaines de pas, et un coût de calcul élevé. En pratique, la diffusion travaille souvent dans l'espace latent d'un autoencodeur, comme Stable Diffusion. Pour générer des images de produits en haute qualité, je partirais d'un modèle de diffusion latente pré-entraîné, avec un fine-tuning sur nos données ; pour de la génération en temps réel sur mobile, un GAN distillé ou un modèle de diffusion en peu de pas. »
 
-**Ce qui compte** (1 point) : le principe de chacun (0,3) ; une force et une faiblesse de chacun (0,4) ; un choix justifié par un cas concret (0,3).
+**Critères** (1 point) : le principe de chacun (0,3) ; une force et une faiblesse de chacun (0,4) ; un choix justifié par un cas concret (0,3).
+**Relances possibles** : « Pourquoi la diffusion a-t-elle supplanté les GAN pour les images ? » (un entraînement stable, une meilleure couverture des modes, le contrôle par le texte, au prix de nombreuses passes à la génération) ; « Et pour générer en temps réel ? » (un GAN, ou un modèle de diffusion distillé, en une ou quelques passes).
+**Erreurs fréquentes** : confondre le VAE et l'autoencodeur simple, qui ne sait pas générer ; dire que la diffusion est rapide à l'échantillonnage ; réciter les trois principes sans jamais choisir pour un cas concret.
 **Remédiation** : 27.E3, 25.E5, 28.E4, 25.11, 27.8.
 
 ## CP6.13 — Retour sur les parties IV et V ✏️ · 2 points
@@ -173,7 +176,7 @@ f) **[0,2]** Au premier pas, $\hat m_1 = g_1$ et $\hat v_1 = g_1^2$ : le pas vau
 
 | Question | Points | Ch. | Si tu as moins de la moitié des points, refais… |
 |---|---|---|---|
-| CP6.1 | 2,5 | 25 à 29 | 25.Q7, 25.Q12, 26.1, 26.13, 27.4, 27.Q10, 28.1, 29.Q4, 29.Q2 |
+| CP6.1 | 2,5 | 25 à 29 | 25.1, 25.Q7, 25.Q12, 25.31, 26.1, 26.13, 27.4, 27.Q10, 28.1, 29.Q4, 29.Q2 |
 | CP6.2 | 2 | 25 | 25.5, 25.7, 25.28, 25.29, 25.R3, 25.E3 |
 | CP6.3 | 2 | 26 | 26.3, 26.4, 26.5, 26.20, 26.Q8, 26.Q11, 26.E1 |
 | CP6.4 | 2 | 27 | 27.3, 27.4, 27.5, 27.6, 27.14, 27.18, 27.E1 |
@@ -191,7 +194,7 @@ f) **[0,2]** Au premier pas, $\hat m_1 = g_1$ et $\hat v_1 = g_1^2$ : le pas vau
 **Lire ta note**
 - **16 à 20** : la partie VI est solide. Passe au mini-projet MP6 ; garde les flashcards des chapitres 25 à 29 dans tes révisions.
 - **12 à moins de 16** : c'est bien. Fais la remédiation des questions où tu as eu moins de la moitié des points, puis le mini-projet.
-- **8 à moins de 12** : avant le mini-projet, refais le 📦 25.30 (un VAE en PyTorch), les 🔨 26.20 et 26.21 (Q-learning, SARSA et la boucle tabulaire), le 🐛 27.16 et le 📦 27.12 (un GAN et ses pièges) ; relis la synthèse (`05_synthese.md`), puis repasse les questions ratées sans le corrigé.
+- **8 à moins de 12** : avant le mini-projet, refais (ou fais, s'il n'est pas dans ton parcours) le 📦 25.30 (un VAE en PyTorch), les 🔨 26.20 et 26.21 (Q-learning, SARSA et la boucle tabulaire), le 🐛 27.16 et le 📦 27.12 (un GAN et ses pièges) ; relis la synthèse (`05_synthese.md`), puis repasse les questions ratées sans le corrigé.
 - **Moins de 8** : fais tout ce qui précède, reprends en plus les exercices ★★ des chapitres où tu as perdu le plus de points, puis refais l'examen avant le mini-projet.
 
 Dans tous les cas, **refais dans une semaine** les questions où tu as eu moins de la moitié des points, sans regarder ce corrigé : c'est l'effort de rappel qui fixe les notions. Reporte ta note, le temps réellement passé sur chaque question et tes points faibles dans la section CP6 de `mon_travail/suivi/auto_evaluation.md`.

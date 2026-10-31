@@ -4,10 +4,11 @@
 |---|---|
 | **Fichier** | `data/text/holmes_adventures_pg1661.txt` (0,6 Mo, UTF-8, fins de ligne LF) |
 | **Chargement** | `wb.datasets.load_holmes(strip_header=True)` → `str` |
-| **Source** | Project Gutenberg, eBook n° 1661 |
+| **Source** | Project Gutenberg, [eBook n° 1661](https://www.gutenberg.org/ebooks/1661) |
 | **Taille (sans en-tête Gutenberg)** | ≈ 562 000 caractères, ≈ 104 500 mots |
 | **Langue** | anglais |
 | **Licence** | domaine public aux États-Unis (publié en 1892) ; le fichier garde l'en-tête et la licence Project Gutenberg, retirés au chargement |
+| **Empreinte** | SHA-256 du fichier : `51bf912e17919195e50cfa25458a6660ef35e00a5f44598b221196285c2220a5` |
 | **Téléchargé le** | 2026-09-29 |
 
 ## Provenance

@@ -114,7 +114,7 @@
 
 ## 🔁 Rappels
 
-### 22.R1 — Ch. 21 : Une convolution 1D peut-elle lire une séquence ?
+### 22.R1 — Ch. 21 : une convolution 1D peut-elle lire une séquence ?
 
 - a) :
 - b) :
@@ -126,7 +126,7 @@
 Dans ta copie :
 
 
-### 22.R2 — Ch. 19 : Gradient clipping et optimiseurs adaptatifs
+### 22.R2 — Ch. 19 : gradient clipping et optimiseurs adaptatifs
 
 - a) :
 - b) :
@@ -135,7 +135,7 @@ Dans ta copie :
 - e) :
 
 
-### 22.R3 — Ch. 15 : Ajuster le scaler sur le train seulement
+### 22.R3 — Ch. 15 : ajuster le scaler sur le train seulement
 
 - a) :
 - b) :

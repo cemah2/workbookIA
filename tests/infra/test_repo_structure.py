@@ -177,3 +177,35 @@ def test_stubs_raise_not_implemented_and_ref_mirrors_them():
                     continue  # helper given to the learner, already implemented
                 body = ast.dump(node)
                 assert "NotImplementedError" in body, f"{rel}:{node.name} must raise NotImplementedError"
+
+
+def _keyword_selects(expression: str, name: str) -> bool:
+    """Whether ``pytest -k expression`` keeps the test function ``name`` (substring match, and/or/not)."""
+    import re
+
+    def term(match):
+        word = match.group(0)
+        return word if word in ("and", "or", "not") else repr(word) + " in name"
+
+    return eval(re.sub(r"[A-Za-z_][A-Za-z0-9_]*", term, expression), {}, {"name": name})
+
+
+def test_notebook_pytest_groups_cover_every_test_of_their_file():
+    """The -k groups that a notebook runs, taken together, select every test of the file (A10 9, audit P5 V-VI)."""
+    import ast
+    import re
+
+    for path in sorted(ROOT.glob("chapitres/*/03_notebook.ipynb")):
+        nb = json.loads(path.read_text(encoding="utf-8"))
+        source = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
+        files = dict(re.findall(r'(TEST_\w*)\s*=\s*"(tests/[^"]+\.py)"', source))
+        groups: dict[str, list[str]] = {}
+        for var, keyword in re.findall(r'run_pytest_group\((TEST_\w*),\s*"([^"]+)"', source):
+            assert var in files, f"{path.parent.name}: run_pytest_group({var}, …) without {var} = \"tests/…\""
+            groups.setdefault(files[var], []).append(keyword)
+        for test_file, keywords in groups.items():
+            tree = ast.parse((ROOT / test_file).read_text(encoding="utf-8"))
+            names = [n.name for n in tree.body if isinstance(n, ast.FunctionDef) and n.name.startswith("test_")]
+            missed = [n for n in names if not any(_keyword_selects(k, n) for k in keywords)]
+            assert not missed, (f"expected the -k groups of {path.parent.name} to select every test of {test_file}, "
+                                f"{len(missed)} left out: {missed[:5]} (name each test after the function it tests)")

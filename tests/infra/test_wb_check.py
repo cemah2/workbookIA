@@ -281,6 +281,25 @@ def test_attempt_turns_a_forgotten_return_into_one_line(capsys):
             len(5)
 
 
+@pytest.mark.parametrize("message", [
+    "'NoneType' object is not subscriptable", "cannot unpack non-iterable NoneType object",
+    "unsupported operand type(s) for *: 'NoneType' and 'float'", "argument after * must be an iterable, not NoneType",
+    "object of type 'NoneType' has no len()", "unsupported format string passed to NoneType.__format__",
+])
+def test_attempt_recognises_the_messages_of_a_none(capsys, message):
+    with wb.attempt("z.9"):
+        raise TypeError(message)
+    assert "oublié son `return`" in capsys.readouterr().out
+
+
+def test_attempt_does_not_take_a_tensor_given_to_numpy_for_a_forgotten_return():
+    """PyTorch's message names NoneType for its arguments: a real bug, not a None (audit P5 V-VI, A10 14)."""
+    torch = pytest.importorskip("torch")
+    with pytest.raises(TypeError, match="invalid combination of arguments"):
+        with wb.attempt("z.10"):
+            np.mean(torch.ones(3))
+
+
 def test_attempt_turns_an_attribute_of_none_into_one_line(capsys):
     class Scaler:
         def fit(self, X):

@@ -1034,7 +1034,8 @@ def clean_16(df):
     out["acidite"] = out["acidite"].replace(-999.0, np.nan)
     out = out.drop(columns=["pays", "code_qualite"])
     out.loc[out["diametre_cm"] > 30, "diametre_cm"] /= 10
-    fixed = out["fruit"].str.strip().str.lower().replace({"pome": "pomme", "pommes": "pomme", "poir": "poire"})
+    fixed = out["fruit"].str.strip().str.lower().replace({"pome": "pomme", "pommes": "pomme", "poir": "poire",
+                                                           "coings": "coing"})
     out["fruit"] = fixed
     return out[out["fruit"].isin(["pomme", "poire", "coing"])].reset_index(drop=True)'''
 
@@ -1065,6 +1066,12 @@ with checked("29.16"):
             f"un diamètre vaut encore {fr(float(clean_c16['diametre_cm'].max()), 1)} : convertis les millimètres.")
     verdict("29.16", set(clean_c16["fruit"]) <= {"pomme", "poire", "coing"}, "tous les labels sont valides.",
             f"labels encore invalides : {sorted(set(clean_c16['fruit']) - {'pomme', 'poire', 'coing'})}.")
+    if "id_lot" in clean_c16.columns:   # each label of the cleaned table is the fruit of its row (no typo sent to another fruit)
+        truth_16 = FRUITS_16.drop_duplicates("id_lot").set_index("id_lot")["code_qualite"].str[1].map(
+            {"M": "pomme", "R": "poire", "C": "coing"})
+        wrong_16 = int((clean_c16["fruit"].to_numpy() != truth_16.reindex(clean_c16["id_lot"]).to_numpy()).sum())
+        verdict("29.16", wrong_16 == 0, "chaque label corrigé est bien le fruit de sa ligne.",
+                f"{wrong_16} label(s) corrigé(s) vers un autre fruit : une faute de frappe garde le fruit qu'elle écorche.")
     tr_c16, te_c16 = clean_c16[clean_c16["split"] == "train"], clean_c16[clean_c16["split"] == "test"]
     key_c16 = [c for c in clean_c16.columns if c not in ("id_lot", "split", "poids_g")]
     left_c16 = te_c16.merge(tr_c16[key_c16], on=key_c16)

@@ -799,21 +799,37 @@ def test_lstm_forward_h_T_and_c_T_are_not_views_of_outputs(rnn):
 
 
 # ================================================================== rnn: float64 whatever the input dtype
-@pytest.mark.parametrize("cell", ["rnn-relu", "lstm", "gru"])
-def test_rnn_cells_return_float64_for_int_and_float32_inputs(rnn, cell):
+# One test per cell, named after its function, so that each notebook group (-k "test_rnn_cell_forward_ ...",
+# "test_lstm_cell_forward_ ...", "test_gru_cell_forward_") runs it.
+def _float64_cell_output(rnn, cell, dtype):
+    x, h = np.ones((1, 1), dtype=dtype), np.ones((1, 1), dtype=dtype)
+    k = {"rnn-relu": 1, "lstm": 4, "gru": 3}[cell]
+    w = [np.ones((1, k), dtype), np.ones((1, k), dtype), np.ones(k, dtype), np.ones(k, dtype)]   # biases too
+    if cell == "rnn-relu":
+        return rnn.rnn_cell_forward(x, h, *w, nonlinearity="relu")
+    if cell == "lstm":
+        return rnn.lstm_cell_forward(x, h, np.ones((1, 1), dtype), *w)[1]
+    return rnn.gru_cell_forward(x, h, *w)
+
+
+def _check_float64_cell(rnn, cell):
     for dtype in (np.int64, np.float32):
-        x, h = np.ones((1, 1), dtype=dtype), np.ones((1, 1), dtype=dtype)
-        k = {"rnn-relu": 1, "lstm": 4, "gru": 3}[cell]
-        w = [np.ones((1, k), dtype), np.ones((1, k), dtype), np.ones(k, dtype), np.ones(k, dtype)]   # biases too
-        if cell == "rnn-relu":
-            out = rnn.rnn_cell_forward(x, h, *w, nonlinearity="relu")
-        elif cell == "lstm":
-            out = rnn.lstm_cell_forward(x, h, np.ones((1, 1), dtype), *w)[1]
-        else:
-            out = rnn.gru_cell_forward(x, h, *w)
+        out = _float64_cell_output(rnn, cell, dtype)
         if not isinstance(out, np.ndarray) or out.dtype != np.float64:
             _fail("", f"expected a float64 result for {np.dtype(dtype)} inputs ({cell}), got "
                   f"{getattr(out, 'dtype', type(out).__name__)} (convert with np.asarray(x, dtype=float))")
+
+
+def test_rnn_cell_forward_returns_float64_for_int_and_float32_inputs(rnn):
+    _check_float64_cell(rnn, "rnn-relu")
+
+
+def test_lstm_cell_forward_returns_float64_for_int_and_float32_inputs(rnn):
+    _check_float64_cell(rnn, "lstm")
+
+
+def test_gru_cell_forward_returns_float64_for_int_and_float32_inputs(rnn):
+    _check_float64_cell(rnn, "gru")
 
 
 # ================================================================== rnn: shapes that NumPy would broadcast silently

@@ -228,7 +228,7 @@ a) La première exigence est que tous les codes soient rassemblés dans une rég
 
 ## 🔁 Rappels
 
-### 25.R1 — Quelles augmentations garder pour des chiffres manuscrits ?
+### 25.R1 — Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ?
 
 <details><summary>Indice 1</summary>
 
@@ -246,7 +246,7 @@ a) Un décalage de 2 pixels laisse un chiffre lisible et inchangé (A est plausi
 
 </details>
 
-### 25.R2 — Résumer une séquence entière dans l'état final d'un LSTM
+### 25.R2 — Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM
 
 <details><summary>Indice 1</summary>
 
@@ -264,7 +264,7 @@ a) Une couche, 16 séquences, 32 valeurs d'état : écris la forme dans l'ordre 
 
 </details>
 
-### 25.R3 — La divergence KL, ce que mesure le terme de régularisation du VAE
+### 25.R3 — Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE
 
 <details><summary>Indice 1</summary>
 
@@ -286,7 +286,7 @@ a) Le premier terme vaut $0{,}5 \log_2(0{,}5/0{,}25) = 0{,}5$ ; calcule le secon
 
 ## ✏️ ∂ 🧮 Papier-crayon
 
-### Ex 25.1 — Compter les paramètres d'un autoencodeur à goulot
+### Ex 25.1 — Compter les paramètres d'un autoencodeur à goulot ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -304,7 +304,7 @@ a) $(784 + 1) \times 20$. Pour b), $(20 + 1) \times 784$ ; pour c), additionne ;
 
 </details>
 
-### Ex 25.2 — Mélanger deux cercles : pixels contre paramètres
+### Ex 25.2 — Mélanger deux cercles : pixels contre paramètres ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -322,7 +322,7 @@ a) $0{,}75 \times (2, 2) + 0{,}25 \times (10, 6) = (1{,}5 + 2{,}5\,;\ 1{,}5 + 1{
 
 </details>
 
-### Ex 25.3 — Suivre les formes dans l'autoencodeur convolutif
+### Ex 25.3 — Suivre les formes dans l'autoencodeur convolutif ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -340,7 +340,7 @@ a) Après la première convolution : 16 canaux de $28 \times 28$ ; le pooling do
 
 </details>
 
-### Ex 25.4 — Retrouver 28×28 : padding et output_padding d'une convolution transposée
+### Ex 25.4 — Retrouver 28×28 : padding et output_padding d'une convolution transposée ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -358,7 +358,7 @@ a) $(7 - 1) \times 2 - 2 \times 1 + 3 + 0 = 13$. Pour b) à e), change les régl
 
 </details>
 
-### Ex 25.5 — Dériver à travers un tirage : l'astuce de reparamétrisation
+### Ex 25.5 — Dériver à travers un tirage : l'astuce de reparamétrisation ∂
 
 <details><summary>Indice 1</summary>
 
@@ -376,7 +376,7 @@ Dérive $z = \mu + \sigma\varepsilon$ comme une fonction ordinaire, avec $\varep
 
 </details>
 
-### Ex 25.6 — Où tombent les tirages d'une gaussienne en grande dimension
+### Ex 25.6 — Où tombent les tirages d'une gaussienne en grande dimension ✏️
 
 <details><summary>Indice 1</summary>
 
@@ -394,7 +394,7 @@ a) Chacune des 20 coordonnées a $\mathbb{E}[z_j^2] = 1$, donc $\mathbb{E}\lVert
 
 </details>
 
-### Ex 25.7 — La divergence KL entre N(μ, σ²) et N(0, 1)
+### Ex 25.7 — La divergence KL entre N(μ, σ²) et N(0, 1) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -412,7 +412,7 @@ Relis l'encadré 🧮 sur la densité et l'espérance d'une gaussienne (§25.9.1
 
 </details>
 
-### Ex 25.8 — Un autoencodeur linéaire retrouve l'ACP (cas 2D guidé)
+### Ex 25.8 — Un autoencodeur linéaire retrouve l'ACP (cas 2D guidé) ∂
 
 <details><summary>Indice 1</summary>
 
@@ -430,7 +430,7 @@ Pour un $\mathbf{w}$ unitaire, $\mathbf{x} - (\mathbf{w}^\top\mathbf{x})\mathbf{
 
 </details>
 
-### Ex 25.9 — Compression réelle : le décodeur n'est pas gratuit
+### Ex 25.9 — Compression réelle : le décodeur n'est pas gratuit 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -448,7 +448,7 @@ Compte en octets : un pixel MNIST en occupe un, un `float32` en occupe quatre. L
 
 </details>
 
-### Ex 25.10 — Pourquoi diffuser dans un espace latent : facteur de compression et coût
+### Ex 25.10 — Pourquoi diffuser dans un espace latent : facteur de compression et coût 🧮
 
 <details><summary>Indice 1</summary>
 
@@ -470,7 +470,7 @@ Compte les valeurs (hauteur × largeur × canaux), puis les positions (hauteur �
 
 ## 🗣️ ⚖️ 📄 Réflexion
 
-### Ex 25.11 — Le VAE expliqué à un ami en cinq lignes
+### Ex 25.11 — Le VAE expliqué à un ami en cinq lignes 🗣️
 
 <details><summary>Indice 1</summary>
 
@@ -488,7 +488,7 @@ Plan en cinq lignes : (1) l'image du quotidien et ce qu'elle résume ; (2) qui r
 
 </details>
 
-### Ex 25.12 — Deepfakes par autoencodeurs : un encodeur, deux décodeurs
+### Ex 25.12 — Deepfakes par autoencodeurs : un encodeur, deux décodeurs ⚖️
 
 <details><summary>Indice 1</summary>
 
@@ -506,7 +506,7 @@ Un code partagé par deux décodeurs ne peut garder que ce qui est commun aux de
 
 </details>
 
-### Ex 25.13 — Lire Kingma et Welling (2013), « Auto-Encoding Variational Bayes »
+### Ex 25.13 — Lire Kingma et Welling (2013), « Auto-Encoding Variational Bayes » 📄
 
 <details><summary>Indice 1</summary>
 
@@ -622,7 +622,7 @@ Commence par « la diffusion fait des dizaines de passes d'un gros réseau », p
 
 ## Exercices du notebook
 
-### Ex 25.14 — Prédire : un autoencodeur entraîné sur une seule image
+### Ex 25.14 — Prédire : un autoencodeur entraîné sur une seule image 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -640,7 +640,7 @@ L'entraînement a pu ranger l'image à deux endroits : dans les biais de sortie 
 
 </details>
 
-### Ex 25.15 — Premier autoencodeur dense 784-20-784 en PyTorch
+### Ex 25.15 — Premier autoencodeur dense 784-20-784 en PyTorch 📦
 
 <details><summary>Indice 1</summary>
 
@@ -669,7 +669,7 @@ def fit_ae_15(model, x, epochs, lr=1e-3, batch_size=128, seed=0):
 
 </details>
 
-### Ex 25.16 — Autoencodeur profond 512-256-128-20
+### Ex 25.16 — Autoencodeur profond 512-256-128-20 📦
 
 <details><summary>Indice 1</summary>
 
@@ -695,7 +695,7 @@ def make_deep_ae_16(n_latent=20, hidden=(512, 256, 128)):
 
 </details>
 
-### Ex 25.17 — Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement
+### Ex 25.17 — Prédire : ce qu'un autoencodeur de chiffres fait d'un vêtement 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -713,7 +713,7 @@ Pour a), compare l'ordre de grandeur des erreurs : un chiffre bien reconstruit s
 
 </details>
 
-### Ex 25.18 — Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30)
+### Ex 25.18 — Reproduire la carte latente 2D et sa grille décodée (fig. 25.29-25.30) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -741,7 +741,7 @@ mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
 
 </details>
 
-### Ex 25.19 — Secouer les variables latentes : bruit global, une seule composante, latents aléatoires
+### Ex 25.19 — Secouer les variables latentes : bruit global, une seule composante, latents aléatoires 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -765,7 +765,7 @@ def noise_mse_19(model, x, scales, seed=0, column=None):
 
 </details>
 
-### Ex 25.20 — Interpoler entre deux codes : linéaire et sphérique
+### Ex 25.20 — Interpoler entre deux codes : linéaire et sphérique 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -789,7 +789,7 @@ path[0], path[-1] = z0, z1          # exactly the ends
 
 </details>
 
-### Ex 25.21 — Mélanger dans l'espace des pixels ou dans l'espace latent
+### Ex 25.21 — Mélanger dans l'espace des pixels ou dans l'espace latent 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -812,7 +812,7 @@ def blend_codes_21(model, x0, x1, n_steps, method="linear"):
 
 </details>
 
-### Ex 25.22 — Taille du goulot et profondeur : la courbe d'erreur de reconstruction
+### Ex 25.22 — Taille du goulot et profondeur : la courbe d'erreur de reconstruction 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -838,7 +838,7 @@ for name, maker in makers.items():
 
 </details>
 
-### Ex 25.23 — L'autoencodeur linéaire face à l'ACP de scikit-learn
+### Ex 25.23 — L'autoencodeur linéaire face à l'ACP de scikit-learn 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -862,7 +862,7 @@ def fit_linear_ae_23(xc, k, epochs=40, lr=3e-3, batch_size=256, seed=2523):
 
 </details>
 
-### Ex 25.24 — Autoencodeur convolutif à 147 latents
+### Ex 25.24 — Autoencodeur convolutif à 147 latents 📦
 
 <details><summary>Indice 1</summary>
 
@@ -888,7 +888,7 @@ decoder = nn.Sequential(nn.Upsample(scale_factor=2), nn.Conv2d(3, 16, 3, padding
 
 </details>
 
-### Ex 25.25 — Le débruiteur qui apprenait le bruit
+### Ex 25.25 — Le débruiteur qui apprenait le bruit 🐛
 
 <details><summary>Indice 1</summary>
 
@@ -912,7 +912,7 @@ inputs = torch.clamp(clean + sigma * torch.randn(clean.shape, generator=g), 0, 1
 
 </details>
 
-### Ex 25.26 — Autoencodeur débruiteur (bruit gaussien, écrêtage)
+### Ex 25.26 — Autoencodeur débruiteur (bruit gaussien, écrêtage) 📦
 
 <details><summary>Indice 1</summary>
 
@@ -934,7 +934,7 @@ def psnr_26(clean, images):
 
 </details>
 
-### Ex 25.27 — Sur-échantillonnage explicite ou convolutions à pas : temps et qualité
+### Ex 25.27 — Sur-échantillonnage explicite ou convolutions à pas : temps et qualité 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -959,7 +959,7 @@ for name, maker in makers.items():
 
 </details>
 
-### Ex 25.28 — La reparamétrisation en NumPy : passe avant et passe arrière
+### Ex 25.28 — La reparamétrisation en NumPy : passe avant et passe arrière 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -982,7 +982,7 @@ z = mu + np.exp(0.5 * log_var) * eps
 
 </details>
 
-### Ex 25.29 — Divergence KL gaussienne et son gradient
+### Ex 25.29 — Divergence KL gaussienne et son gradient 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1003,7 +1003,7 @@ kl = 0.5 * np.sum(mu ** 2 + np.expm1(log_var) - log_var, axis=1)     # shape (n,
 
 </details>
 
-### Ex 25.30 — Un VAE en PyTorch : reconstruction + KL
+### Ex 25.30 — Un VAE en PyTorch : reconstruction + KL 📦
 
 <details><summary>Indice 1</summary>
 
@@ -1030,7 +1030,7 @@ rec = F.binary_cross_entropy_with_logits(logits, x, reduction="none").sum(dim=1)
 
 </details>
 
-### Ex 25.31 — Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE
+### Ex 25.31 — Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE 🔮
 
 <details><summary>Indice 1</summary>
 
@@ -1048,7 +1048,7 @@ Rien n'a demandé aux codes de `AE_DEEP` de ressembler à $\mathcal{N}(\mathbf{0
 
 </details>
 
-### Ex 25.32 — Un VAE est stochastique : sorties répétées, bruit relatif, interpolations
+### Ex 25.32 — Un VAE est stochastique : sorties répétées, bruit relatif, interpolations 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1072,7 +1072,7 @@ with torch.inference_mode():
 
 </details>
 
-### Ex 25.33 — Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68)
+### Ex 25.33 — Reproduire le nuage latent d'un VAE 2D et la grille −3…3 (fig. 25.67-25.68) 🎨
 
 <details><summary>Indice 1</summary>
 
@@ -1095,7 +1095,7 @@ mosaic = images.transpose(0, 2, 1, 3).reshape(28 * n, 28 * n)
 
 </details>
 
-### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du posterior)
+### Ex 25.34 — Diagnostiquer des courbes reconstruction/KL (effondrement du posterior) 📈
 
 <details><summary>Indice 1</summary>
 
@@ -1113,7 +1113,7 @@ a) La KL de chaque run à la dernière epoch : `{k: run["kl"][-1] for k, run in 
 
 </details>
 
-### Ex 25.35 — Exporter le décodeur comme générateur autonome et le tester
+### Ex 25.35 — Exporter le décodeur comme générateur autonome et le tester 🛠️
 
 <details><summary>Indice 1</summary>
 
@@ -1142,7 +1142,7 @@ def test_generator_seed_35():
 
 </details>
 
-### Ex 25.36 — β-VAE : échanger la netteté contre la régularité
+### Ex 25.36 — β-VAE : échanger la netteté contre la régularité 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1165,7 +1165,7 @@ for beta in betas:
 
 </details>
 
-### Ex 25.37 — Détecter des anomalies par l'erreur de reconstruction
+### Ex 25.37 — Détecter des anomalies par l'erreur de reconstruction 🔬
 
 <details><summary>Indice 1</summary>
 
@@ -1186,7 +1186,7 @@ Relis la section « anomalies » de la fiche et ta `roc_auc` du ch. 3 : elle pre
 
 </details>
 
-### Ex 25.38 — Un VAE entièrement en NumPy avec mylearn
+### Ex 25.38 — Un VAE entièrement en NumPy avec mylearn 🔨
 
 <details><summary>Indice 1</summary>
 
@@ -1211,7 +1211,7 @@ dmu, dlog_var = vae.reparameterize_backward(dz, eps, log_var)
 
 </details>
 
-### Ex 25.39 — Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte
+### Ex 25.39 — Défi débruitage Fashion-MNIST : le meilleur PSNR sous contrainte 🏆
 
 <details><summary>Indice 1</summary>
 

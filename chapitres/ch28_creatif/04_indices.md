@@ -533,9 +533,9 @@ acts, handles = {}, []
 for name, index in layers.items():
     handles.append(net[index].register_forward_hook(lambda module, inputs, output, name=name: acts.__setitem__(name, output)))
 try:
-    ...                      # la passe
+    ...                      # the forward pass
 finally:
-    ...                      # retirer chaque hook
+    ...                      # remove every hook
 ```
 Pour a) et b), lis `.numel()` et `.shape[-1]` sur les tenseurs rendus.
 
@@ -577,7 +577,7 @@ Relis le §28.2.2 de la fiche, son encadré 🧮 sur la dérivation par rapport 
 x = (torch.rand(1, 3, size, size, generator=torch.Generator().manual_seed(seed)) * 0.2 + 0.4).requires_grad_(True)
 optimizer = torch.optim.Adam([x], lr=lr)
 for _ in range(steps):
-    ...                      # zero_grad, loss = -activation_13(...), backward, step, puis clamp_
+    ...                      # zero_grad, loss = -activation_13(...), backward, step, then clamp_
 return to_image(x)
 ```
 
@@ -640,7 +640,7 @@ Relis le §28.3 de la fiche (les octaves et le masque).
 
 ```python
 resize = lambda t, s: F.interpolate(t, size=s, mode="bilinear", align_corners=False)
-detail = resize(base, shape) - resize(resize(base, previous_shape), shape)   # ce que la réduction a perdu
+detail = resize(base, shape) - resize(resize(base, previous_shape), shape)   # what the downscaling lost
 (g,) = torch.autograd.grad(dream_loss_16(net, x, layer_weights), x)
 ```
 Le masque se redimensionne avec `mode="nearest"`, et multiplie `g` avant la mise à jour.
@@ -663,7 +663,7 @@ Relis le §28.3 de la fiche et ta `deep_dream_16`.
 
 ```python
 mask_17 = torch.zeros(PHOTO_B.shape[1:])
-mask_17[: PHOTO_B.shape[1] // 3] = 1        # par exemple : le tiers du haut
+mask_17[: PHOTO_B.shape[1] // 3] = 1        # for instance: the top third
 ```
 Pour les couches, garde au moins une couche intermédiaire (`fire5` à `fire7`) et compare deux jeux de poids.
 
@@ -686,8 +686,8 @@ Lis `C, H, W` sur les trois derniers axes, aplatis les deux derniers, multiplie 
 ```python
 def gram_matrix_18(A):
     C, H, W = A.shape[-3:]
-    flat = A.reshape(*A.shape[:-2], H * W)       # les cartes en lignes, axe de batch gardé s'il existe
-    ...                                          # produit par la transposée des DEUX derniers axes, puis la normalisation
+    flat = A.reshape(*A.shape[:-2], H * W)       # the maps as rows, keeping the batch axis if there is one
+    ...                                          # times the transpose of the LAST TWO axes, then the normalisation
 ```
 Pour `tv_loss_18`, les écarts verticaux sont `x[..., 1:, :] - x[..., :-1, :]`.
 
@@ -788,7 +788,7 @@ Trois étapes : les cibles (une fois, sans graphe), le départ (copie du contenu
 layers = {name: LAYERS[name] for name in set(content_layers) | set(style_layers)}
 for step in range(steps + 1):
     t_c, t_s, t_tv = terms(x)              # alpha * L_c, beta * L_s, tv * L_tv
-    ...                                    # enregistrer si step % every == 0 ou step == steps ; s'arrêter si step == steps
+    ...                                    # record if step % every == 0 or step == steps; stop when step == steps
 ```
 
 </details>

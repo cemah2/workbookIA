@@ -21,11 +21,13 @@ Objectif du workbook : une reconversion. Ce document relie les compétences trav
 | Maths pour le ML (algèbre, dérivées, probas) | 0B, 2-6 | ●● | ●●● | ●● | ● |
 | Statistiques et visualisation | 2, 3, 12 | ●●● | ●●● | ● | ● |
 | Métriques et évaluation honnête (train/test, validation croisée) | 3, 8, 9 | ●● | ●●● | ●●● | ●●● |
-| Préparation des données, fuites de données | 12, 15 | ●●● | ●●● | ●● | ● |
+| Préparation des données, fuites de données | 8, 12, 15, 29 | ●●● | ●●● | ●● | ● |
 | ML classique et gradient boosting | 7, 13-15 | ● | ●●● | ●● | ● |
 | Réseaux de neurones, rétropropagation, optimiseurs | 16-20 | | ●● | ●●● | ●● |
 | PyTorch, CNN, RNN | 20-24 | | ●● | ●●● | ●● |
 | Modèles génératifs (VAE, GAN, diffusion) | 25, 27, B5 | | ● | ●● | ●● |
+| Apprentissage par renforcement | 26, B8 | | ● | ●● | ●● |
+| Choisir, auditer et documenter un dataset (licences, data card, téléchargement reproductible) | 29, projet final | ●● | ●●● | ●●● | ●● |
 | Transformers, LLM, RAG, fine-tuning | B2-B4 | | ● | ●● | ●●● |
 | Explicabilité, équité, éthique | B6, ⚖️ de chaque chapitre | ●● | ●●● | ●● | ●● |
 | Mise en production, reproductibilité, tests | B7, 🛠️ | | ● | ●●● | ●● |
@@ -36,6 +38,9 @@ Objectif du workbook : une reconversion. Ce document relie les compétences trav
 
 - Un **mini-projet** par partie (dossier `projets/`) et le **projet final** : chacun avec un README soigné, des résultats reproductibles et une conclusion honnête (limites comprises).
 - Ta librairie **mylearn**, testée : la preuve que tu comprends ce qu'il y a sous le capot.
+- Deux mini-projets de la fin du parcours parlent directement aux recruteurs :
+  - [MP5](../projets/partie_5_classifieur_cifar10/README.md), un classifieur CIFAR-10 empaqueté (`cifarkit` : entraînement reproductible, modèle livré, tests) : le profil ML engineer ;
+  - [MP6](../projets/partie_6_generatif/README.md), un banc d'essai génératif (VAE contre GAN) au protocole écrit d'avance : les profils data scientist et ML engineer.
 - Ton dépôt GitHub lui-même : commits réguliers et lisibles, organisation claire.
 
 ## Préparer les entretiens

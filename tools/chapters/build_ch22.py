@@ -136,7 +136,7 @@ PAPER = [
         ("b", WHOLE, "1", r'''mistakes={"un vecteur one-hot n'a qu'un seul 1": 3000}'''),
         ("c", TF, "False", r'''mistakes={"W_ih a la forme (D, H) : D et H sont-ils liés ?": True}'''),
         ("d", WHOLE, "30 * 64",
-         r'''mistakes={"un poids par couple (entrée, valeur d'état) : un produit": 30 + 64,
+         r'''mistakes={"tu as additionné D et H : chaque entrée est reliée à chaque valeur d'état": 30 + 64,
           "c'est la taille de W_hh, (H, H)": 64 * 64, "sans les biais": 30 * 64 + 64}'''),
         ("e", LETTER, '"B"',
          r'''mistakes={"personne ne fixe le contenu de l'état à l'avance": "A",
@@ -163,11 +163,13 @@ PAPER = [
          r'''mistakes={"la BPTT calcule le gradient ; l'optimiseur s'en sert ensuite": "A",
           "l'initialisation précède l'entraînement": "C", "le dropout est une régularisation": "D"}'''),
         ("b", LETTER, '"C"',
-         r'''mistakes={"0,9⁵⁰ = e^{50 ln 0,9}, avec ln 0,9 ≈ −0,105": "A", "calcule e^{−5,3}": "B",
-          "recalcule e^{−5,3} : tu t'es trompé d'une puissance de 10": "D"}'''),
+         r'''mistakes={"50 facteurs de 0,9 réduisent bien plus qu'on ne le croit : estime le produit par le logarithme": "A",
+          "estime 0,9⁵⁰ par le logarithme, puis reviens par l'exponentielle": "B",
+          "refais l'estimation par le logarithme, puis vérifie la puissance de 10": "D"}'''),
         ("c", LETTER, '"C"',
-         r'''mistakes={"1,1⁵⁰ = e^{50 ln 1,1}, avec ln 1,1 ≈ 0,095": "A", "calcule e^{4,8}": "B",
-          "recalcule e^{4,8} : tu t'es trompé d'une puissance de 10": "D"}'''),
+         r'''mistakes={"50 facteurs de 1,1 grandissent bien plus qu'on ne le croit : estime le produit par le logarithme": "A",
+          "estime 1,1⁵⁰ par le logarithme, puis reviens par l'exponentielle": "B",
+          "refais l'estimation par le logarithme, puis vérifie la puissance de 10": "D"}'''),
         ("d", TF, "False", r'''mistakes={"le clipping agrandit-il un gradient trop petit ?": True}'''),
         ("e", LETTER, '"B"',
          r'''mistakes={"il s'agit de la séquence, pas des poids": "A", "il s'agit d'une entrée lointaine": "C",
@@ -175,7 +177,7 @@ PAPER = [
     ]),
     Paper("22.Q7", "Une porte, c'est une multiplication", [
         ("a", WHOLE, "20",
-         r'''mistakes={"multiplie par 0,25, ne divise pas": 320, "une porte multiplie la valeur, elle ne la remplace pas": 80}'''),
+         r'''mistakes={"une porte multiplie la valeur, elle ne la divise pas": 320, "une porte multiplie la valeur, elle ne la remplace pas": 80}'''),
         ("b", LETTER, '"B"',
          r'''mistakes={"la tanh va de −1 à 1": "A", "la ReLU n'est pas bornée": "C",
           "la softmax normalise un vecteur entier": "D"}'''),
@@ -245,15 +247,17 @@ PAPER = [
          r'''mistakes={"les grands modèles de langage sont des Transformers": "A",
           "pour de très longs textes, l'attention l'emporte": "C", "la génération d'images n'est pas une affaire de RNN": "D"}'''),
         ("d", LETTER, '"B"',
-         r'''mistakes={"un SSM est défini par sa récurrence linéaire sur un état, pas par des convolutions : relis la section « Après les RNN »": "A", "un SSM est un réseau de neurones": "C",
+         r'''mistakes={"un SSM est défini par sa récurrence linéaire sur un état, pas par des convolutions : relis la section « Au-delà du livre : après les RNN »": "A", "un SSM est un réseau de neurones": "C",
           "un modèle à espace d'états a, par définition, un état": "D"}'''),
         ("e", TF, "True", r'''mistakes={"relis la première règle de la section sur les séries temporelles": False}'''),
     ]),
     # ---------------------------------------------------------------- recalls
     Paper("22.R1", "Une convolution 1D peut-elle lire une séquence ?", [
-        ("a", WHOLE, "20 - 4 + 1", r'''mistakes={"n − k + 1 : n'oublie pas le + 1": 16, "sans padding, la sortie raccourcit": 20}'''),
+        ("a", WHOLE, "20 - 4 + 1", r'''mistakes={"tu as oublié le + 1 de la formule": 16, "sans padding, la sortie raccourcit": 20}'''),
         ("b", TF, "True", r'''mistakes={"relis le partage de poids (ch. 21)": False}'''),
-        ("c", WHOLE, "3 + 2", r'''mistakes={"chaque couche ajoute k − 1 = 2": 6, "3 + 2, pas 3 × 3": 9}'''),
+        ("c", WHOLE, "3 + 2",
+         r'''mistakes={"chaque couche ajoute moins que son noyau au champ récepteur": 6,
+          "les champs ne se multiplient pas d'une couche à l'autre : chaque couche ajoute son débord": 9}'''),
         ("d", WHOLE, "500",
          r'''mistakes={"écris le champ récepteur de n couches, puis cherche le plus petit n qui convient": 1000,
           "« au moins 1 001 valeurs » : relis l'inégalité, ≥ et non >": 501, "combien chaque couche de noyau 3 ajoute-t-elle au champ ?": 334}'''),
@@ -261,7 +265,8 @@ PAPER = [
     Paper("22.R2", "Gradient clipping et optimiseurs adaptatifs", [
         ("a", WHOLE, "5", r'''mistakes={"la norme euclidienne, pas la somme": 7}'''),
         ("b", "a number, 2 decimals", "3 / math.hypot(3, 4)",
-         r'''decimals=2, mistakes={"la norme dépasse 1 : il faut réduire le gradient": 3, "divise par la norme, pas par 4": 0.75}'''),
+         r'''decimals=2, mistakes={"la norme dépasse 1 : il faut réduire le gradient": 3,
+          "tu as divisé par une composante : relis par quoi le clipping divise le vecteur": 0.75}'''),
         ("c", TF, "False", r'''mistakes={"on multiplie tout le vecteur par un même nombre positif": True}'''),
         ("d", LETTER, '"A"',
          r'''mistakes={"RMSprop regarde les gradients, pas les poids": "B", "le pas ne dépend pas de l'epoch": "C",
@@ -274,7 +279,7 @@ PAPER = [
          r'''mistakes={"ajuster sur les 100 valeurs fait entrer le test dans le scaler": "A",
           "le scaler s'ajuste sur l'entraînement": "C", "un seul scaler pour toute la série": "D"}'''),
         ("c", "a number, 2 decimals", "(250 - 0) / (200 - 0)",
-         r'''decimals=2, mistakes={"le scaler ne coupe pas les valeurs à 1": 1.0, "(x − min)/(max − min), pas l'inverse": 0.8}'''),
+         r'''decimals=2, mistakes={"le scaler ne coupe pas les valeurs à 1": 1.0, "tu as inversé le rapport du min-max scaler": 0.8}'''),
         ("d", TF, "False", r'''mistakes={"en production, réajusterais-tu le scaler sur chaque nouvelle valeur ?": True}'''),
         ("e", 'a word as a string, e.g. "relu"', '"transform"',
          r'''mistakes={"on ne réajuste pas le scaler sur le test": "fit_transform", "fit ajuste ; il faut appliquer": "fit"}'''),
@@ -285,7 +290,7 @@ PAPER = [
          r'''mistakes={"la cible doit exister : n'oublie pas l'horizon": 21, "n'oublie pas le + 1": 19}'''),
         ("b", WHOLE, "n_windows(24, 4, 1, 2)", r'''mistakes={"n'oublie pas le + 1 de la formule": 9}'''),
         ("c", WHOLE, "(2024 - 1749 + 1) * 12",
-         r'''mistakes={"de 1749 à 2024 inclus, il y a 276 années": 275 * 12, "en mois, pas en années": 276}'''),
+         r'''mistakes={"de 1749 à 2024 inclus : as-tu compté les deux années extrêmes ?": 275 * 12, "en mois, pas en années": 276}'''),
         ("d", WHOLE, "n_windows(3312, 120, 6, 1)",
          r'''mistakes={"l'horizon h = 6 compte": 3193, "n'oublie pas le + 1": 3186}'''),
         ("e", WHOLE, "n_windows(3312 - 600, 120, 6, 1)",
@@ -293,21 +298,22 @@ PAPER = [
         ("f", WHOLE, "n_windows(575_000, 40, 1, 3)",
          r'''mistakes={"une fenêtre tous les 3 caractères": 574_960, "n'oublie pas le + 1": 191_653}'''),
         ("g", LETTER, '"C"',
-         r'''mistakes={"N ≈ T/s : inverse la formule, T ≈ N × s": "A", "chaque fenêtre démarre 3 caractères après la précédente": "B",
-          "recompte les zéros : N × s": "D"}'''),
+         r'''mistakes={"tu as divisé par le pas : on cherche le nombre de caractères, pas celui des fenêtres": "A",
+          "chaque fenêtre démarre 3 caractères après la précédente": "B",
+          "recompte les zéros de ton estimation": "D"}'''),
     ]),
     Paper("22.2", "Dérouler à la main une cellule RNN scalaire sur trois pas", [
         ("a", DEC4, "H_222[0]", r'''decimals=4, mistakes={"applique la tanh": 2.0}'''),
         ("b", DEC4, "H_222[1]", r'''decimals=4, mistakes={"x₂ = 0, mais l'état précédent compte": 0.0}'''),
         ("c", DEC4, "H_222[2]", r'''decimals=4, mistakes={"ajoute w h₂ à u x₃": math.tanh(-1)}'''),
-        ("d", DEC4, "2 * H_222[2]", r'''decimals=4, mistakes={"y₃ = v h₃ avec v = 2": H_222[2]}'''),
+        ("d", DEC4, "2 * H_222[2]", r'''decimals=4, mistakes={"tu as oublié le poids de sortie v": H_222[2]}'''),
         ("e", DEC4, "H_REV_222[2]", r'''decimals=4, mistakes={"n'oublie pas l'état h₂ dans le dernier pas": math.tanh(2)}'''),
         ("f", "a number, 2 decimals", "0.5 ** 2 * 1",
          r'''decimals=2, mistakes={"compte combien de fois x₁ est multiplié par w jusqu'au pas 3": 0.5, "x₁ entre au pas 1 : combien de pas reste-t-il ensuite ?": 0.125}'''),
     ]),
     Paper("22.3", "Compter les poids : la cellule à 69 poids du livre, puis nn.RNN et nn.LSTM", [
-        ("a", WHOLE, "8 * 10", r'''mistakes={"les neurones A n'ont pas de biais": 88, "8 neurones qui lisent 10 entrées : un produit": 18}'''),
-        ("b", WHOLE, "8 * 8", r'''mistakes={"les neurones B n'ont pas de biais": 72, "8 neurones qui lisent 8 valeurs : un produit": 16}'''),
+        ("a", WHOLE, "8 * 10", r'''mistakes={"les neurones A n'ont pas de biais": 88, "tu as additionné : chaque neurone a un poids par entrée": 18}'''),
+        ("b", WHOLE, "8 * 8", r'''mistakes={"les neurones B n'ont pas de biais": 72, "tu as additionné : chaque neurone a un poids par valeur lue": 16}'''),
         ("c", WHOLE, "3 * 8 + 3", r'''mistakes={"les neurones C ont un biais": 24}'''),
         ("d", WHOLE, "80 + 64 + 8 + 27",
          r'''mistakes={"n'oublie pas les 8 biais de l'état": 171, "ajoute les neurones de sortie C": 152}'''),
@@ -322,22 +328,22 @@ PAPER = [
           "compte comme PyTorch : deux vecteurs de biais par couche LSTM": 254_681,
           "n'oublie pas la couche dense": n_recurrent(89, 128, 4) + n_recurrent(128, 128, 4)}'''),
         ("i", WHOLE, "2 * 4 * 128",
-         r'''mistakes={"il y a deux couches LSTM": 512, "un vecteur de biais a 4 × 128 valeurs (une par porte)": 256, "l'écart entre les deux décomptes exacts, pas avec 250 000": 5705}'''),
+         r'''mistakes={"il y a deux couches LSTM": 512, "un vecteur de biais d'un LSTM a une tranche par bloc de portes": 256, "l'écart entre les deux décomptes exacts, pas avec 250 000": 5705}'''),
     ]),
     Paper("22.4", "Un pas de LSTM à la main", [
-        ("a", DEC4, "I_224", r'''decimals=4, mistakes={"σ(0) = 0,5, pas 0": 0.0, "n'oublie pas W_hh h_{t−1}": sigmoid(-0.5)}'''),
+        ("a", DEC4, "I_224", r'''decimals=4, mistakes={"tu as rendu l'argument de la porte : applique la sigmoïde": 0.0, "n'oublie pas W_hh h_{t−1}": sigmoid(-0.5)}'''),
         ("b", DEC4, "F_224", r'''decimals=4, mistakes={"le biais de f vaut 1": 0.5, "attention au signe de W_hh (−2)": sigmoid(3)}'''),
         ("c", DEC4, "G_224", r'''decimals=4, mistakes={"le candidat g passe par une tanh, pas une sigmoïde": sigmoid(1)}'''),
-        ("d", DEC4, "O_224", r'''decimals=4, mistakes={"n'oublie pas W_hh h_{t−1} = 3 × 0,5": sigmoid(-1)}'''),
+        ("d", DEC4, "O_224", r'''decimals=4, mistakes={"n'oublie pas le terme W_hh h_{t−1}": sigmoid(-1)}'''),
         ("e", DEC4, "C_224",
          r'''decimals=4, mistakes={"la porte d'oubli multiplie c_{t−1}": 2 + I_224 * G_224, "ajoute i g": F_224 * 2}'''),
         ("f", DEC4, "H_224",
-         r'''decimals=4, mistakes={"h_t = o tanh(c_t) : n'oublie pas la tanh": O_224 * C_224, "multiplie par la porte de sortie": math.tanh(C_224)}'''),
+         r'''decimals=4, mistakes={"tu as oublié la tanh de c_t": O_224 * C_224, "tu as oublié la porte de sortie": math.tanh(C_224)}'''),
         ("g", DEC4, "C_OPEN_224",
-         r'''decimals=4, mistakes={"σ(−20) ≈ 0 : la porte d'entrée est fermée": 2 + G_224}'''),
+         r'''decimals=4, mistakes={"relis le signe du décalage de la porte d'entrée : est-elle ouverte ou fermée ?": 2 + G_224}'''),
         ("h", DEC4, "F_224", r'''decimals=4, mistakes={"la dérivée de f c_{t−1} par rapport à c_{t−1} n'est pas 1": 1.0}'''),
         ("i", SHAPE, '"(4, 1)"',
-         r'''mistakes={"PyTorch range les 4 blocs dans les LIGNES de weight_ih_l0 : (4H, D)": "(1, 4)",
+         r'''mistakes={"relis l'ordre des axes de weight_ih_l0 dans PyTorch : les blocs sont-ils en lignes ou en colonnes ?": "(1, 4)",
           "4 blocs de portes": "(1, 1)"}'''),
     ]),
     Paper("22.5", "Softmax avec température à la main", [
@@ -347,10 +353,10 @@ PAPER = [
          r'''decimals=4, mistakes={"n'oublie pas le troisième caractère": 1 / (1 + math.exp(-4))}'''),
         ("c", DEC4, "softmax_t(Z_225, 2)[0]",
          r'''decimals=4, mistakes={"n'oublie pas le troisième caractère": 1 / (1 + math.exp(-1))}'''),
-        ("d", DEC4, "1.0", r'''decimals=4, mistakes={"quand T tend vers 0, le plus probable prend toute la probabilité": 0.0}'''),
-        ("e", DEC4, "1 / 3", r'''decimals=4, mistakes={"quand T tend vers l'infini, tous les logits divisés par T tendent vers 0": 0.0}'''),
+        ("d", DEC4, "1.0", r'''decimals=4, mistakes={"quand T tend vers 0, le caractère le plus probable perd-il ou gagne-t-il de la probabilité ?": 0.0}'''),
+        ("e", DEC4, "1 / 3", r'''decimals=4, mistakes={"quand T grandit, la distribution s'aplatit : aucune probabilité ne tombe à 0": 0.0}'''),
         ("f", "a number, 2 decimals", "math.exp((3 - 1) / 0.5)",
-         r'''decimals=2, mistakes={"à T = 0,5, l'écart 3 − 1 est divisé par 0,5": math.exp(2), "le rapport des probabilités, pas des logits": 3.0}'''),
+         r'''decimals=2, mistakes={"tu as oublié la température : les logits sont divisés par T": math.exp(2), "le rapport des probabilités, pas des logits": 3.0}'''),
         ("g", TF, "True", r'''mistakes={"diviser tous les logits par un même T > 0 change-t-il leur ordre ?": False}'''),
     ]),
     Paper("22.8", "Fermi : les 17 millions de poids du CNN-LSTM et le prix d'une epoch", [
@@ -359,14 +365,14 @@ PAPER = [
         ("b", WHOLE, "CONV_228", r'''mistakes={"un biais par filtre": 8 * 25, "les images n'ont qu'un canal": 8 * (25 * 3 + 1)}'''),
         ("c", WHOLE, "LSTM_228",
          r'''mistakes={"4 blocs de portes": n_recurrent(D_228, 128, 1),
-          "deux vecteurs de biais de 4 × 128 valeurs": 4 * (D_228 * 128 + 128 * 128)}'''),
+          "tu as oublié les biais : PyTorch en compte deux vecteurs": 4 * (D_228 * 128 + 128 * 128)}'''),
         ("d", WHOLE, "DENSE_228", r'''mistakes={"n'oublie pas les 9 biais": 128 * 9}'''),
         ("e", WHOLE, "CONV_228 + LSTM_228 + DENSE_228",
          r'''mistakes={"additionne les trois couches": LSTM_228}'''),
         ("f", WHOLE, "n_recurrent(D_228, 32, 4)", r'''mistakes={"4 blocs de portes": n_recurrent(D_228, 32, 1)}'''),
-        ("g", WHOLE, "MACS_228", r'''mistakes={"4 blocs de 128 colonnes : D × 4 × 128": D_228 * 128}'''),
+        ("g", WHOLE, "MACS_228", r'''mistakes={"tu as oublié les 4 blocs de portes": D_228 * 128}'''),
         ("h", WHOLE, "int(math.log10(MACS_228 * 1000 * 16))",
-         r'''fractional="un nombre entier : l'exposant n de l'écriture a × 10ⁿ, avec 1 ≤ a < 10", mistakes={"pour toute l'epoch : 1 000 vidéos de 16 images": 7, "1 000 × 16 = 16 000 images, pas 1 000": 10}'''),
+         r'''fractional="un nombre entier : l'exposant n de l'écriture a × 10ⁿ, avec 1 ≤ a < 10", mistakes={"c'est pour une seule image : on demande toute l'epoch": 7, "chaque vidéo a plusieurs images : relis le nombre d'images de l'epoch": 10}'''),
     ]),
 ]
 
@@ -524,8 +530,9 @@ CHECK_12 = r'''with checked("22.12"):
     wb.check("22.12c", S.encode("Watson", stoi_12), computed=True)
     stoi_w_12, itos_w_12 = pair("22.12", "build_vocab(VERNE_WORDS, max_size=2000, unk_token='<unk>')",
                                 S.build_vocab(VERNE_WORDS, max_size=2000, unk_token="<unk>"), names=("stoi", "itos"))
-    ids_w_12 = np.asarray(S.encode(VERNE_WORDS, stoi_w_12, unk_token="<unk>"))
-    wb.check("22.12d", float(np.mean(ids_w_12 == stoi_w_12.get("<unk>"))), computed=True)
+    ids_w_12 = S.encode(VERNE_WORDS, stoi_w_12, unk_token="<unk>")
+    if returned("22.12", "encode(VERNE_WORDS, stoi, unk_token='<unk>')", ids_w_12):
+        wb.check("22.12d", float(np.mean(np.asarray(ids_w_12) == stoi_w_12.get("<unk>"))), computed=True)
     wb.check("22.12e", itos_w_12[1] if len(itos_w_12) > 1 else None, computed=True)
     refuses("22.12", "encode('Holmes!', stoi) sans unk_token, « ! » absent du vocabulaire",
             lambda: S.encode("Holmes!", S.build_vocab("Holmes")[0]))
@@ -546,14 +553,18 @@ wb.record("22.12e", itos_w_12[1], mistakes={"<unk> prend l'id 0, même s'il n'ap
 
 CHECK_13 = r'''with checked("22.13"):
     S = mylearn.sequences
-    X_13, y_13 = pair("22.13", "make_windows(SPOTS, 120, horizon=6)", S.make_windows(SPOTS, 120, horizon=6), names=("X", "y"))
+    spots_13 = SPOTS.copy()                    # make_windows receives a copy: SPOTS stays intact for the whole notebook
+    X_13, y_13 = pair("22.13", "make_windows(SPOTS, 120, horizon=6)", S.make_windows(spots_13, 120, horizon=6), names=("X", "y"))
+    if not np.array_equal(spots_13, SPOTS, equal_nan=True):
+        verdict("22.13", False, "make_windows laisse la série intacte.",
+                "make_windows a modifié la série reçue : ne la modifie pas, écris dans de nouveaux tableaux.")
     view_13 = np.lib.stride_tricks.sliding_window_view(SPOTS, 120)[:len(SPOTS) - 125]   # windows that keep a target
     same("22.13", "X de make_windows(SPOTS, 120, horizon=6) contre sliding_window_view, en (N, w, 1)", X_13, view_13[:, :, None])
     same("22.13", "y : la valeur 6 mois après la dernière valeur de chaque fenêtre", y_13, SPOTS[125:])
-    X2_13, y2_13 = pair("22.13", "make_windows(SPOTS[:100], 12, stride=12)", S.make_windows(SPOTS[:100], 12, stride=12), names=("X", "y"))
+    X2_13, y2_13 = pair("22.13", "make_windows(SPOTS[:100], 12, stride=12)", S.make_windows(SPOTS[:100].copy(), 12, stride=12), names=("X", "y"))
     same("22.13", "les cibles de make_windows(SPOTS[:100], 12, stride=12)", y2_13, SPOTS[12:100:12])
     ids_13 = np.arange(1001)
-    X3_13, Y3_13 = pair("22.13", "make_sequence_pairs(np.arange(1001), 40)", S.make_sequence_pairs(ids_13, 40), names=("X", "Y"))
+    X3_13, Y3_13 = pair("22.13", "make_sequence_pairs(np.arange(1001), 40)", S.make_sequence_pairs(ids_13.copy(), 40), names=("X", "Y"))
     same("22.13", "X de make_sequence_pairs(np.arange(1001), 40) : 25 morceaux disjoints", X3_13, ids_13[:1000].reshape(25, 40))
     same("22.13", "Y : les mêmes morceaux décalés d'un pas", Y3_13, ids_13[1:1001].reshape(25, 40))
     refuses("22.13", "make_windows(SPOTS[:5], 5) (pas de place pour une cible)", lambda: S.make_windows(SPOTS[:5], 5))
@@ -578,7 +589,8 @@ c_vs_mean_14 = ...   # c) is the test MSE of variant 3 less than 70 % of the MSE
 
 SOLUTION_14 = r'''shuffled_14, two_beats_14, c_vs_mean_14 = "C", True, False'''
 
-EXPERIMENT_14 = r'''with checked("22.14"):
+EXPERIMENT_14 = r'''ran_14 = False
+with checked("22.14"):
     X_14, y_14 = mylearn.sequences.make_windows(WAVE_14, 8)        # your make_windows: (N, 8, 1) and (N,)
     X_14, y_14 = np.asarray(X_14)[:, :, 0], np.asarray(y_14)
     N_TRAIN_14 = 900                                               # the first 900 windows train, the others test
@@ -598,9 +610,13 @@ EXPERIMENT_14 = r'''with checked("22.14"):
             mse_14[name_14] = np.mean((mlp_14.predict(inputs_14[N_TRAIN_14:]) - target_14) ** 2)
     for name_14, value_14 in mse_14.items():
         print(f"{name_14:55s} MSE de test {value_14:.4f}")
-wb.check("22.14a", shuffled_14)
-wb.check("22.14b", two_beats_14)
-wb.check("22.14c", c_vs_mean_14)'''
+    ran_14 = True
+if ran_14:
+    wb.check("22.14a", shuffled_14)
+    wb.check("22.14b", two_beats_14)
+    wb.check("22.14c", c_vs_mean_14)
+else:
+    print("⏳ Ex 22.14 : tes prédictions se vérifient après l'expérience : écris d'abord make_windows (22.13).")'''
 
 RECORD_14 = (r'''wb.record("22.14a", "C", mistakes=''' + letters("C", {
     "A": "dans la variante 3, le réseau a les huit valeurs, mais sait-il si la série monte ou descend ?",
@@ -872,7 +888,7 @@ PART_B = Part("B", "Ta librairie rnn.py : RNN, LSTM et GRU contre PyTorch, et le
               exercises=[
     Ex("22.15", "🔨", 2, 30, "rnn_cell_forward et rnn_forward",
        "écrire la cellule d'Elman et sa boucle sur le temps, avec les poids et le format de PyTorch.",
-       "✏️ 22.2 · Ex 22.13 · fiche §22.4, §22.4.1, §22.5", tracks="R, M, C", mylearn="rnn.py",
+       "✏️ 22.2 · Ex 22.13 · fiche §22.4, §22.4.1, §22.5", thread="synthétique", tracks="R, M, C", mylearn="rnn.py",
        body=mylearn_howto("rnn.py") + "\n\n" + COMMON_RNN + r"""
 
 Écris `rnn_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None, nonlinearity="tanh")` et `rnn_forward(x, W_ih, W_hh, b_ih=None, b_hh=None, h0=None, nonlinearity="tanh")`. **Contrat** propre à ces deux fonctions :
@@ -886,7 +902,7 @@ La première cellule copie les poids d'une `nn.RNN` (et d'une `nn.RNNCell` en Re
 
     Ex("22.16", "🔨", 3, 45, "lstm_cell_forward et lstm_forward (portes i, f, g, o)",
        "écrire un pas de LSTM et sa boucle sur le temps, portes rangées comme dans PyTorch.",
-       "Ex 22.15 · ✏️ 22.4 · fiche §22.7.1, §22.7.2", tracks="M, C", mylearn="rnn.py",
+       "Ex 22.15 · ✏️ 22.4 · fiche §22.7.1, §22.7.2", thread="synthétique", tracks="M, C", mylearn="rnn.py",
        body=mylearn_howto("rnn.py") + "\n\n" + COMMON_RNN + r"""
 
 Écris `lstm_cell_forward(x_t, h_prev, c_prev, W_ih, W_hh, b_ih=None, b_hh=None)` et `lstm_forward(x, W_ih, W_hh, b_ih=None, b_hh=None, h0=None, c0=None)`. **Contrat** :
@@ -904,7 +920,7 @@ Dans tes notes : écris l'expression de `outputs[:, -1]` en fonction de `h_T`. Q
 
     Ex("22.17", "🔨", 2, 25, "gru_cell_forward (portes r, z, n)",
        "écrire un pas de GRU dans la convention de PyTorch, où la porte de réinitialisation agit après $W_{hn}$.",
-       "Ex 22.16 · fiche §22.7.2 (le GRU)", tracks="C", mylearn="rnn.py",
+       "Ex 22.16 · fiche §22.7.2 (le GRU)", thread="synthétique", tracks="C", mylearn="rnn.py",
        body=mylearn_howto("rnn.py") + "\n\n" + COMMON_RNN + r"""
 
 Écris `gru_cell_forward(x_t, h_prev, W_ih, W_hh, b_ih=None, b_hh=None)`. **Contrat** :
@@ -918,8 +934,8 @@ La première cellule compare ta cellule à `nn.GRUCell`, puis à un cas où seul
                          "TEST_RNN", "test_gru_cell_forward_", "ta fonction")),
 
     Ex("22.18", "🛠️", 2, 20, "Benchmark : ta cellule NumPy contre nn.LSTM",
-       "mesurer proprement le temps d'une fonction (chauffe, plusieurs mesures, la plus courte) et comparer ta lstm_forward à celle de PyTorch.",
-       "Ex 22.16 · ch. 0B (ordre des produits, mesure du temps) · fiche §22.7.2", tracks="C",
+       "mesurer proprement le temps d'une fonction (chauffe, plusieurs mesures, la plus courte) et comparer ta `lstm_forward` à celle de PyTorch.",
+       "Ex 22.16 · ch. 0B (ordre des produits, mesure du temps) · fiche §22.7.2", thread="synthétique", tracks="C",
        body=r"""Mesurer un temps d'exécution est une compétence de métier : une seule mesure ne veut rien dire (le premier appel paie l'allocation de la mémoire et les caches, et le système d'exploitation peut interrompre n'importe quel appel). La méthode courante, celle du module `timeit` de Python : un appel de chauffe, puis plusieurs mesures, et l'on garde la **plus courte**, la moins perturbée.
 
 **Contrat**
@@ -939,7 +955,7 @@ Dans tes notes : quel est le rapport entre le temps de ta version et celui de `n
 
     Ex("22.19", "🔬", 2, 30, "Mesurer la disparition du gradient : RNN tanh contre LSTM",
        "mesurer avec l'autograd la norme du gradient par rapport à chaque entrée, et la comparer d'une cellule et d'une initialisation à l'autre.",
-       "Ex 22.15 · ∂ 22.6 · ∂ 22.7 · ch. 20 (autograd) · fiche §22.6, §22.7.2", tracks="M, C",
+       "Ex 22.15 · ∂ 22.6 · ∂ 22.7 · ch. 20 (autograd) · fiche §22.6, §22.7.2", thread="synthétique", tracks="M, C",
        body=r"""∂ 22.6 et ∂ 22.7 ont montré sur le papier que le gradient qui remonte le temps est un produit de facteurs. Ici, tu le mesures. On prend la somme des sorties du **dernier** pas, $L = \sum$ `output[:, -1]`, et l'on regarde, pour chaque pas $t$, la taille du gradient de $L$ par rapport à l'entrée de ce pas.
 
 **Contrat**
@@ -968,7 +984,7 @@ CHECK_20 = r'''with checked("22.20"):
     logits_20 = np.array([[2.0, 1.0, 0.1, -1.0], [1000.0, 999.0, 0.0, -1000.0]])
     with warnings.catch_warnings():
         warnings.simplefilter("error", RuntimeWarning)          # an overflow becomes an error, shown as ❌
-        probs_20 = S.temperature_softmax(logits_20, temperature=0.5)
+        probs_20 = S.temperature_softmax(logits_20.copy(), temperature=0.5)   # a copy: the expected values use logits_20
     same("22.20", "temperature_softmax(logits, 0.5) contre scipy.special.softmax(logits / 0.5, axis=-1), lignes de ±1 000 comprises",
          probs_20, softmax(logits_20 / 0.5, axis=-1))
     greedy_20 = S.sample_from_logits([0.0, 3.0, 3.0, 1.0], temperature=0)
@@ -1192,7 +1208,7 @@ wb.record("22.22b", "(6, 4, 20)", mistakes={"h_n garde H valeurs par ligne : les
 wb.record("22.22c", 24_960, mistakes={"les couches 2 et 3 lisent les deux sens de la couche du dessous : D = 2H": 3 * 2 * 4 * (10 * 20 + 400 + 40),
           "un réseau bidirectionnel a deux jeux de poids par couche": 24_960 // 2,
           "PyTorch compte deux vecteurs de biais par couche et par sens": 24_960 - 3 * 2 * 4 * 20})
-wb.record("22.22d", 4, mistakes={"h_n range les couches à l'extérieur et les sens à l'intérieur : couche × 2 + sens": 2,
+wb.record("22.22d", 4, mistakes={"h_n range les couches à l'extérieur et les sens à l'intérieur": 2,
           "le sens avant a l'indice 0 dans chaque couche": 5})
 wb.record("22.22e", 0, mistakes={"le sens arrière lit la séquence à l'envers : où finit-il ?": 6, "les pas se comptent à partir de 0": 1})'''
 
@@ -1310,7 +1326,7 @@ with checked("22.23"):
             plt.show()'''
 
 RECORD_23 = r'''pers_h1_23 = float(np.sqrt(np.mean((SPOTS[I86 - 1:I06 - 1] - SPOTS[I86:I06]) ** 2)))
-wb.record("22.23a", n_train_23, mistakes={"N = (T - w - h) // s + 1 : n'oublie pas le + 1": n_train_23 - 1,
+wb.record("22.23a", n_train_23, mistakes={"tu as oublié le + 1 de la formule du nombre de fenêtres": n_train_23 - 1,
           "l'horizon vaut 6 : la cible est 6 mois après la fin de la fenêtre": I86 - 60})
 wb.record("22.23b", persistence_23, decimals=1, mistakes={"la persistance à 6 mois répète la valeur d'il y a 6 mois, pas celle du mois précédent": pers_h1_23,
           "en taches, pas à l'échelle de l'entraînement": persistence_23 / scale_23})'''
@@ -1406,8 +1422,8 @@ Dans tes notes : quel bug produit, à lui seul, une persistance d'erreur nulle ?
             "courte et 15 epochs ne suffisent pas pour mieux (22.23 fait mieux avec 60 mois)."),
 
     Ex("22.22", "📦", 2, 25, "RNN profonds et bidirectionnels : formes de output et h_n",
-       "lire ce que rendent output et h_n d'un RNN profond et bidirectionnel de PyTorch, et en tirer l'état final de la dernière couche.",
-       "Ex 22.15 · fiche §22.8.2 à §22.8.4, encadré 🕰️ de §22.5", tracks="R, C",
+       "lire ce que rendent `output` et `h_n` d'un RNN profond et bidirectionnel de PyTorch, et en tirer l'état final de la dernière couche.",
+       "Ex 22.15 · fiche §22.8.2 à §22.8.4, encadré 🕰️ de §22.5", thread="synthétique", tracks="R, C",
        body=r"""On construit `lstm_22 = nn.LSTM(10, 20, num_layers=3, bidirectional=True, batch_first=True)` et on lui donne `x_22`, un mini-batch de 4 séquences de 7 pas, de forme `(4, 7, 10)`. Elle rend `output_22, (h_n_22, c_n_22)`.
 
 **Contrat**
@@ -1453,7 +1469,7 @@ Dans tes notes : le LSTM bat-il la persistance partout, ou surtout à certains m
             "annoncée serait optimiste. D'où le test caché du défi 22.29, ouvert une seule fois."),
 
     Ex("22.24", "🔮", 1, 10, "Température : prédire l'allure du texte généré",
-       "prédire l'effet de la température sur un générateur de texte, puis le mesurer avec ton sample_from_logits.",
+       "prédire l'effet de la température sur un générateur de texte, puis le mesurer avec ton `sample_from_logits`.",
        "Ex 22.20 · ✏️ 22.5 · fiche §22.9", thread="Holmes", tracks="C", hypothesis=True,
        body=r"""Le plus simple des générateurs de texte : un **modèle de paires de lettres** (bigrammes, ch. 6). Pour chaque caractère de Holmes, on compte les caractères qui le suivent ; les logits du caractère suivant sont les logarithmes de ces fréquences (avec +1 partout, pour qu'aucun caractère ne soit impossible). La cellule suivante le construit et définit `generate_bigram_24(temperature)`, qui tire 2 000 caractères l'un après l'autre avec **ton** `sample_from_logits` (22.20), en partant de « T ».
 
@@ -1801,7 +1817,7 @@ class BallCNNLSTM_28(nn.Module):
         return self.head(out[:, -1])'''
 
 RECORD_28 = r'''wb.record("22.28a", 21_043, mistakes={"PyTorch donne deux vecteurs de biais à chaque porte du LSTM": 21_043 - 4 * 32,
-          "le LSTM reçoit 8 × 4 × 4 = 128 valeurs par image, pas 8": 208 + 4 * (8 * 32 + 32 * 32 + 64) + 99,
+          "le LSTM reçoit toute la carte aplatie de chaque image, pas une valeur par filtre": 208 + 4 * (8 * 32 + 32 * 32 + 64) + 99,
           "n'oublie pas les biais de la convolution et de la couche dense": 21_043 - 8 - 3})'''
 
 GIVEN_29 = r'''SERIES_29 = SPOTS.copy()                       # a private copy: the evaluation reads this one
@@ -2060,7 +2076,7 @@ Dans tes notes : ton hypothèse tient-elle ? La comparaison est-elle juste (mêm
 
     Ex("22.28", "📦", 3, 50, "CNN-LSTM : la balle monte-t-elle ou descend-elle ?",
        "assembler un CNN-LSTM : une convolution lit chaque image, un LSTM lit la suite des images.",
-       "Ex 22.22 · ch. 21 (convolution, pooling) · 🧮 22.8 · fiche §22.8.1", thread="synth", tracks="C",
+       "Ex 22.22 · ch. 21 (convolution, pooling) · 🧮 22.8 · fiche §22.8.1", thread="synthétique", tracks="C",
        body=r"""Le CNN-LSTM du §22.8.1, en petit. Chaque vidéo a 16 images de 32 × 32 : une balle floue traverse l'image de gauche à droite en montant (classe 0), en descendant (1) ou à plat (2), à une hauteur moyenne tirée au hasard, avec du bruit. Une image seule ne dit donc pas la classe : il faut l'ordre des images. La cellule suivante crée 1 500 vidéos d'entraînement et 600 de test, de forme `(N, 16, 1, 32, 32)`, montre trois vidéos et définit `fit_28` (Adam, 8 epochs).
 
 **Contrat**

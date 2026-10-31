@@ -4,10 +4,11 @@
 |---|---|
 | **Fichier** | `data/sunspots_monthly.csv` (0,11 Mo) |
 | **Chargement** | `wb.datasets.load_sunspots(definitive_only=False)` → DataFrame |
-| **Source** | WDC-SILSO, Observatoire royal de Belgique, Bruxelles : nombre total de taches solaires, moyenne mensuelle, version 2.0 (`SN_m_tot_V2.0.csv`) |
+| **Source** | [WDC-SILSO](https://www.sidc.be/SILSO/), Observatoire royal de Belgique, Bruxelles : nombre total de taches solaires, moyenne mensuelle, version 2.0 (`SN_m_tot_V2.0.csv`) |
 | **Période** | janvier 1749 → août 2026 : 3 332 mois |
 | **Licence** | **CC BY-NC 4.0** : usage non commercial, attribution obligatoire |
 | **Citation** | *Source: WDC-SILSO, Royal Observatory of Belgium, Brussels*, DOI : 10.24414/qnza-ac80 |
+| **Empreinte** | SHA-256 de `data/sunspots_monthly.csv` : `c9927c70052162df29ef1be03fde2eb2db5530caa1bdc9b5a94652076c460d7f` |
 | **Téléchargé le** | 2026-09-29 |
 
 ## Pourquoi ce choix (décision de la session 1)

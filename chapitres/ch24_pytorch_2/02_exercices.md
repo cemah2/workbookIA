@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 24.Q1 — Compter les hyperparamètres et n'en changer qu'un 🧠 ⏱️ 3 min
-*Fiche §24.2.1 à §24.2.3 · livre §24.1 à §24.2.2*
+*Fiche §24.2.1 à §24.2.3 · livre §24.1 à §24.2.2 · parcours R*
 
 a) Parmi ces grandeurs, lesquelles sont des hyperparamètres ? (A) les poids de la première couche ; (B) la taille de batch ; (C) le learning rate d'Adam ; (D) les biais de la couche de sortie ; (E) le taux de dropout ; (F) les moyennes glissantes qu'Adam range dans son état. Écris leurs lettres.
 b) Un réseau a 6 hyperparamètres, et l'on essaie 3 valeurs pour chacun : le nombre de combinaisons possibles.
@@ -25,7 +25,7 @@ d) Vrai ou faux : quand deux hyperparamètres interagissent, les régler une foi
 e) Ce que conseille le livre pour améliorer un modèle : (A) viser tous les objectifs à la fois ; (B) trouver le réglage optimal exact avant de passer à la suite ; (C) un ou deux objectifs à la fois, puis passer aux suivants ; (D) changer plusieurs hyperparamètres à chaque essai, pour gagner du temps.
 
 ### 24.Q2 — Taille de batch : bruit, overfitting et temps 🧠 ★★ ⏱️ 3 min
-*Fiche §24.2.2 · livre §24.2.2*
+*Fiche §24.2.2 · livre §24.2.2 · parcours R*
 
 On entraîne sur $N = 50\,000$ images, sans `drop_last`.
 
@@ -36,7 +36,7 @@ d) Vrai ou faux : à learning rate égal, passer d'un batch de 512 à un batch d
 e) Sur le CPU du livre, quand la taille de batch diminue, la durée d'une epoch : (A) augmente ; (B) diminue ; (C) ne change pas.
 
 ### 24.Q3 — Plus de neurones, moins de neurones, dropout 🧠 ⏱️ 3 min
-*Fiche §24.2.4 à §24.2.6 · livre §24.2.4 à §24.2.6*
+*Fiche §24.2.4 à §24.2.6 · livre §24.2.4 à §24.2.6 · parcours R*
 
 a) Un MLP sur-apprend déjà ; on lui ajoute une deuxième couche cachée aussi large que la première. Ce que le livre attend, et observe : (A) moins d'overfitting ; (B) aucune différence ; (C) une accuracy d'entraînement plus basse ; (D) un overfitting plus rapide.
 b) La fraction des valeurs que `nn.Dropout(p=0.3)` met à zéro, en moyenne, pendant l'entraînement.
@@ -45,7 +45,7 @@ d) Avec `p = 0.2`, en entraînement, une activation de valeur 2,0 qui est gardé
 e) Vrai ou faux : en mode `model.eval()`, `nn.Dropout` multiplie ses entrées par $1 - p$.
 
 ### 24.Q4 — Valider un réseau : coût, jeu non représentatif, normalisation dans chaque fold 🧠 ★★ ⏱️ 3 min
-*Fiche §24.3 à §24.3.3 · livre §24.3 à §24.3.3*
+*Fiche §24.3 à §24.3.3 · livre §24.3 à §24.3.3 · parcours R*
 
 a) Un entraînement dure 40 minutes. La durée d'une validation croisée à 5 folds, en minutes.
 b) Un fichier de 10 000 radios est trié par hôpital : les 6 000 premières viennent de l'hôpital A, les 4 000 suivantes de l'hôpital B. On garde les 2 000 dernières pour valider. Le problème : (A) la validation ne contient que l'hôpital B, absent d'une partie de l'entraînement : elle ne représente pas les données ; (B) la validation est trop petite ; (C) les labels fuient vers la validation ; (D) aucun.
@@ -78,7 +78,7 @@ e) Vrai ou faux : la couche `GaussianNoise` de Keras ajoute aussi son bruit pend
 f) Ce que normalise une batchnorm : (A) les poids de la couche ; (B) les gradients ; (C) les activations de chaque canal, sur le mini-batch, avant d'appliquer $\gamma$ et $\beta$ appris ; (D) seulement les images d'entrée.
 
 ### 24.Q7 — Préparer des images pour nn.Conv2d 🧠 ⏱️ 3 min
-*Fiche §24.4.2, §24.4.3 · livre §24.4.2, §24.4.3*
+*Fiche §24.4.2, §24.4.3 · livre §24.4.2, §24.4.3 · parcours R*
 
 a) La forme d'un mini-batch de 16 images CIFAR-10 (32 × 32, en couleur) attendue par `nn.Conv2d`.
 b) Un tableau d'images a la forme `(16, 32, 32, 3)`. Pour le donner à `nn.Conv2d` : (A) `x.reshape(16, 3, 32, 32)` ; (B) `x.transpose(1, 3)` ; (C) `x.permute(0, 2, 3, 1)` ; (D) `x.permute(0, 3, 1, 2)`.
@@ -88,7 +88,7 @@ e) Un pixel de valeur 51 (sur 255) mis dans $[-1, 1]$ par $x/127{,}5 - 1$.
 f) Vrai ou faux : `nn.Conv2d` applique une ReLU à sa sortie, sauf si on le lui interdit.
 
 ### 24.Q8 — Augmentation et données synthétiques : quelles transformations sont plausibles ? 🧠 ⏱️ 3 min
-*Fiche §24.4.6, §24.4.7 · livre §24.4.6, §24.4.7*
+*Fiche §24.4.6, §24.4.7 · livre §24.4.6, §24.4.7 · parcours R*
 
 a) L'augmentation de données s'applique : (A) au train et à la validation ; (B) au train seulement ; (C) à toutes les données ; (D) au test seulement.
 b) Vrai ou faux : quand l'augmentation est faite par le `Dataset`, une image donnée est transformée de la même façon à chaque epoch.
@@ -107,7 +107,7 @@ d) Le livre remplace le pooling par un stride de 2 dans les convolutions (fig. 2
 e) Les CNN modernes finissent le plus souvent par : (A) trois grosses couches denses ; (B) un `Flatten` de toute la dernière carte ; (C) un pooling moyen global, puis une couche linéaire.
 
 ### 24.Q10 — Séries pour un RNN : fenêtres, scaler, inverse_transform, RMSE 🧠 ⏱️ 3 min
-*Fiche §24.5 à §24.5.4 · livre §24.5 à §24.5.4*
+*Fiche §24.5 à §24.5.4 · livre §24.5 à §24.5.4 · parcours R*
 
 a) Le `MinMaxScaler` d'une série s'ajuste sur : (A) toute la série ; (B) chaque fenêtre ; (C) le test ; (D) le train seul.
 b) La forme du tenseur `X` attendue par `nn.LSTM(batch_first=True)` pour 500 fenêtres de 12 pas d'une série à une seule variable.
@@ -117,7 +117,7 @@ e) La dernière couche du prévisionniste du livre : (A) une couche dense suivie
 f) Pour savoir si un LSTM apprend vraiment quelque chose sur une série, on le compare d'abord à : (A) un réseau plus gros ; (B) la persistance (prédire la dernière valeur connue) ; (C) sa RMSE sur le train.
 
 ### 24.Q11 — 🕰️ return_sequences, stateful, TimeDistributed : que devient chaque option en PyTorch ? 🧠 ★★ ⏱️ 3 min
-*Fiche §24.5.8 à §24.5.10 · livre §24.5.8 à §24.5.10*
+*Fiche §24.5.8 à §24.5.10 · livre §24.5.8 à §24.5.10 · parcours R*
 
 `output, (h_n, c_n) = nn.LSTM(D, H, num_layers=2, batch_first=True)(x)`, à un seul sens.
 
@@ -142,7 +142,7 @@ f) Vrai ou faux : Keras 3 a gardé l'API fonctionnelle.
 
 ## 🔁 Rappels
 
-### 24.R1 — Ch. 23 : Ce qu'un historique d'entraînement doit contenir pour comparer deux runs 🔁 ★ ⏱️ 5 min
+### 24.R1 — Ch. 23 : ce qu'un historique d'entraînement doit contenir pour comparer deux runs 🔁 ★ ⏱️ 5 min
 *Ch. 23 (§23.7, §23.8.3) · fiche §24.2.2, §24.2.7 · parcours R*
 
 a) Ce que garde l'historique d'une fonction `fit()` honnête : (A) la loss d'entraînement de chaque epoch ; (B) la loss et l'accuracy de validation de chaque epoch ; (C) une copie des poids de chaque epoch ; (D) le learning rate de chaque epoch ; (E) la loss de test de chaque epoch. Écris leurs lettres.
@@ -150,8 +150,8 @@ b) Ce qu'il faut noter en plus pour comparer deux runs : (A) la couleur des cour
 c) Vrai ou faux : la loss d'entraînement qu'affiche une boucle comme celle du ch. 23 est calculée avec les poids de fin d'epoch.
 d) Les losses de validation d'un run, epoch par epoch à partir de l'epoch 1, valent $0{,}52 ;\ 0{,}47 ;\ 0{,}45 ;\ 0{,}46 ;\ 0{,}44 ;\ 0{,}45$. Le numéro de la meilleure epoch.
 
-### 24.R2 — Ch. 21 : Taille de sortie d'une convolution à padding 'same' et stride 2 🔁 ★ ⏱️ 5 min
-*Ch. 21 (§21.5) · fiche §24.4.3 · parcours R, M*
+### 24.R2 — Ch. 21 : taille de sortie d'une convolution à padding 'same' et stride 2 🔁 ★ ⏱️ 5 min
+*Ch. 21 (§21.3.4, §21.3.5) · fiche §24.4.3 · parcours R, M*
 
 Rappel : avec `padding="same"`, Keras rend une sortie de $\lceil H/s \rceil$ lignes ; PyTorch suit $H_{out} = \lfloor (H + 2p - k)/s \rfloor + 1$.
 
@@ -162,7 +162,7 @@ d) Avec ce padding, la hauteur de la sortie de PyTorch pour une image $32 \times
 e) La hauteur de la sortie de `nn.Conv2d(·, ·, 3, stride=2, padding=0)` pour une image $15 \times 15$.
 f) Vrai ou faux : en PyTorch, `padding="same"` avec un stride de 1 garde la taille de l'image, même pour un noyau de taille paire.
 
-### 24.R3 — Ch. 17 : Ce que change la division des logits avant le softmax 🔁 ★ ⏱️ 5 min
+### 24.R3 — Ch. 17 : ce que change la division des logits avant le softmax 🔁 ★ ⏱️ 5 min
 *Ch. 17 (§17.7) et ch. 22 (température) · fiche §24.5.11 · parcours R*
 
 Un modèle rend les logits $(2, 1, 0)$ pour trois tokens. On tire le suivant dans $\text{softmax}(z/T)$.
@@ -306,7 +306,7 @@ Dans ta copie, en 5 lignes au plus et sans formule, explique à un collègue qui
 
 ### Ex 24.9 — Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres ⚖️ ★★ ⏱️ 20 min
 **Objectif :** juger si une comparaison de réglages est honnête, et dire ce qu'un rapport d'expériences doit contenir.
-**Prérequis :** Ex 24.1 · ch. 2 (moyenne, écart-type) · ch. 8 (validation, test) · fiche §24.2.7, §24.3.4
+**Prérequis :** Ex 24.1 · ch. 2 (moyenne, écart-type) · ch. 8 (validation, test) · fiche §24.2.7, §24.3.4 · **Parcours :** R
 
 Une équipe compare deux réglages A et B d'un CNN sur CIFAR-10. Avec une graine chacun, A obtient 87,4 % d'accuracy de validation et B 86,9 % ; le rapport interne conclut : « A est meilleur de 0,5 point ». Un collègue relance chaque réglage avec 5 graines : A obtient $87{,}4 ;\ 86{,}6 ;\ 86{,}9 ;\ 87{,}1 ;\ 86{,}5$ et B $86{,}9 ;\ 87{,}3 ;\ 87{,}0 ;\ 86{,}8 ;\ 87{,}2$ (en %). Réponds dans ta copie.
 

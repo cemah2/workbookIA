@@ -16,7 +16,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courtes dans la partie 0 du notebook, puis lis les explications de `05_solutions.md`.
 
 ### 25.Q1 — Avec ou sans perte : le test de l'inversibilité 🧠 ⏱️ 3 min
-*Fiche §25.1 à §25.2.1 · livre §25.1 à §25.2.1*
+*Fiche §25.1 à §25.2.1 · livre §25.1 à §25.2.1 · parcours R*
 
 a) Parmi ces transformations, lesquelles sont **sans perte** ? (A) écrire un entier en binaire au lieu du décimal ; (B) arrondir des températures au degré près ; (C) compresser un fichier texte en ZIP ; (D) garder une lettre sur deux d'un message ; (E) enregistrer une photo en JPEG de qualité 90 ; (F) passer une photo couleur en niveaux de gris. Écris leurs lettres.
 b) Vrai ou faux : une transformation est sans perte si, et seulement si, on peut retrouver exactement l'entrée à partir de la sortie.
@@ -25,7 +25,7 @@ d) Un fichier de 2 400 000 octets est compressé en un fichier de 300 000 octets
 e) Vrai ou faux : un compresseur sans perte bien conçu peut rendre plus court **n'importe quel** fichier.
 
 ### 25.Q2 — Pourquoi JPEG et MP3 battent un autoencodeur généraliste 🧠 ⏱️ 3 min
-*Fiche §25.2.2 · livre §25.2.2*
+*Fiche §25.2.2 · livre §25.2.2 · parcours R*
 
 a) Ce qui rend JPEG si efficace sur les photos : (A) il a été entraîné sur des millions de photos ; (B) il est sans perte ; (C) il a été conçu à partir de la structure des images et de la vision humaine, pour jeter d'abord ce que l'œil remarque le moins ; (D) il range chaque image dans un dictionnaire.
 b) Un autoencodeur entraîné sur des radios thoraciques compresse une photo de paysage : (A) aussi bien qu'une radio ; (B) mieux, car un paysage est plus simple ; (C) mal, car son code est adapté aux radios.
@@ -34,7 +34,7 @@ d) Les deux usages pratiques que le livre donne aux autoencodeurs classiques : (
 e) Un morceau de 3 minutes encodé à 128 kbit/s (128 000 bits par seconde) : sa taille en millions d'octets (8 bits par octet), à 2 décimales.
 
 ### 25.Q3 — Mélange de contenu ou mélange de paramètres ? 🧠 ⏱️ 3 min
-*Fiche §25.2.3 · livre §25.2.3*
+*Fiche §25.2.3 · livre §25.2.3 · parcours R*
 
 a) Superposer deux photos en prenant 50 % de chaque pixel de l'une et 50 % de l'autre est un mélange : (A) de contenu ; (B) paramétrique.
 b) On mélange deux mots lettre à lettre avec la règle du livre : pour chaque position, la lettre du milieu de l'alphabet entre les deux lettres (A = 1, …, Z = 26), en comptant à rebours si la seconde vient avant la première, et la plus proche du début de l'alphabet quand il y a deux lettres au milieu. Le mélange de « LUNE » et « SOIR », en majuscules.
@@ -42,7 +42,7 @@ c) Vrai ou faux : mélanger ainsi des codes compressés (comme des mots écrits)
 d) Ce qu'il faut à un code pour que le milieu de deux codes se décode en un objet intermédiaire sensé : (A) un code court ; (B) un code binaire ; (C) un code où des objets proches ont des codes proches, sans trous entre eux ; (D) un code sans perte.
 
 ### 25.Q4 — Goulot, code, variables latentes : vrai ou faux 🧠 ⏱️ 3 min
-*Fiche §25.3 · livre §25.3*
+*Fiche §25.3 · livre §25.3 · parcours R*
 
 a) Vrai ou faux : pour entraîner un autoencodeur, il faut des labels.
 b) Vrai ou faux : la cible d'un autoencodeur est son entrée elle-même.
@@ -51,7 +51,7 @@ d) Le terme employé aujourd'hui pour l'apprentissage d'un autoencodeur : (A) su
 e) Vrai ou faux : un autoencodeur dont le code a autant de valeurs que l'entrée peut reconstruire parfaitement sans rien comprimer.
 
 ### 25.Q5 — Le réseau qui ne savait redessiner qu'une image 🧠 ⏱️ 3 min
-*Fiche §25.3 · livre §25.3*
+*Fiche §25.3 · livre §25.3 · parcours R*
 
 Un autoencodeur à deux couches denses prend des images en niveaux de gris de $64 \times 64$ pixels et a un goulot de 10 neurones.
 
@@ -62,7 +62,7 @@ d) Vrai ou faux : une erreur de reconstruction très faible sur les images d'ent
 e) Ce qui révèle le mieux une mémorisation : (A) l'erreur sur les images d'entraînement ; (B) le nombre d'epochs ; (C) la sortie pour des images jamais vues, très différentes ; (D) la taille du goulot.
 
 ### 25.Q6 — Profondeur ou nombre de latents : qui améliore quoi ? 🧠 ⏱️ 3 min
-*Fiche §25.4 · livre §25.4*
+*Fiche §25.4 · livre §25.4 · parcours R*
 
 a) Dans l'autoencodeur MNIST à deux couches, passer de 20 à 3 latents donne : (A) des reconstructions plus nettes ; (B) aucune différence ; (C) des chiffres flous et mélangés.
 b) À 20 latents, passer de cet autoencodeur à deux couches à un autoencodeur profond (plusieurs couches de chaque côté) donne : (A) des reconstructions plus floues ; (B) des reconstructions plus nettes ; (C) les mêmes reconstructions.
@@ -71,7 +71,7 @@ d) Vrai ou faux : diviser la largeur par deux d'une couche à la suivante est un
 e) L'intérêt d'un goulot de 2 latents seulement : (A) de meilleures reconstructions ; (B) pouvoir dessiner l'espace latent sur une page ; (C) un entraînement sans loss ; (D) supprimer le décodeur.
 
 ### 25.Q7 — Du bruit dans l'espace latent d'un autoencodeur classique 🧠 ⏱️ 3 min
-*Fiche §25.5, §25.5.1 · livre §25.5, §25.5.1*
+*Fiche §25.5, §25.5.1 · livre §25.5, §25.5.1 · parcours R*
 
 Un autoencodeur dense a 20 latents positifs qui montent jusqu'à quelques centaines.
 
@@ -82,7 +82,7 @@ d) Vrai ou faux : dans un autoencodeur classique, toute région de l'espace late
 e) On décode 20 latents tirés au hasard entre 0 et 25 : (A) des taches qui ne sont pas des chiffres ; (B) des chiffres nets.
 
 ### 25.Q8 — Lire une carte latente à deux dimensions 🧠 ⏱️ 3 min
-*Fiche §25.5.2, §25.5.3 · livre §25.5.2, §25.5.3*
+*Fiche §25.5.2, §25.5.3 · livre §25.5.2, §25.5.3 · parcours R*
 
 Un autoencodeur à 2 latents place les codes de 10 000 chiffres sur une carte : les 1 ont leur région, les 4, 7 et 9 se chevauchent, et de grandes zones de la carte sont vides.
 
@@ -93,7 +93,7 @@ d) Vrai ou faux : la moyenne des codes d'un 2 et d'un 4 se décode forcément en
 e) Le milieu des codes $\mathbf{z}_0 = (2, 6)$ et $\mathbf{z}_1 = (8, 0)$, comme vecteur.
 
 ### 25.Q9 — Autoencodeur linéaire et ACP 🧠 ⏱️ 3 min
-*Fiche §25.6 · livre §25.6*
+*Fiche §25.6 · livre §25.6 · parcours R, M*
 
 a) Un autoencodeur **linéaire** (sans activation) à $d$ latents, entraîné à l'erreur quadratique sur des données centrées, apprend à l'optimum : (A) exactement les $d$ premiers axes principaux, dans l'ordre ; (B) le sous-espace des $d$ premières composantes principales, sans forcément ses axes ; (C) un sous-espace quelconque ; (D) les $d$ dernières composantes.
 b) Vrai ou faux : un autoencodeur profond à ReLU donne toujours la même chose que l'ACP.
@@ -102,7 +102,7 @@ d) Ce qu'un autoencodeur non linéaire peut faire de plus que l'ACP : (A) suivre
 e) Dans le plan, la première composante principale de données centrées est $\mathbf{u} = (0{,}6\,;\ 0{,}8)$. Le code (un seul latent) que donne l'autoencodeur linéaire optimal d'encodeur $\mathbf{u}$ au point $\mathbf{x} = (5, 0)$.
 
 ### 25.Q10 — Autoencodeurs convolutifs et débruiteurs 🧠 ⏱️ 3 min
-*Fiche §25.7, §25.7.1, §25.8 · livre §25.7, §25.7.1, §25.8*
+*Fiche §25.7, §25.7.1, §25.8 · livre §25.7, §25.7.1, §25.8 · parcours R*
 
 a) Dans un autoencodeur débruiteur, l'entrée et la cible sont : (A) l'image propre et l'image bruitée ; (B) l'image bruitée et l'image propre ; (C) l'image bruitée deux fois ; (D) l'image propre deux fois.
 b) Vrai ou faux : dans un débruiteur, le code doit avoir moins de valeurs que l'image.
@@ -111,7 +111,7 @@ d) Ce qui remplace aujourd'hui souvent un pooling suivi, au décodage, d'un sur-
 e) Vrai ou faux : un débruiteur entraîné sur des chiffres MNIST débruite aussi bien des photos.
 
 ### 25.Q11 — Une entrée jamais vue : un tigre chez les chiffres 🧠 ⏱️ 3 min
-*Fiche §25.5.4, §25.7.2 · livre §25.5.4, §25.7.2*
+*Fiche §25.5.4, §25.7.2 · livre §25.5.4, §25.7.2 · parcours R*
 
 a) Un autoencodeur entraîné sur MNIST reçoit une photo réduite en $28 \times 28$. Il rend : (A) la photo fidèlement ; (B) une image noire ; (C) une forme faite de morceaux de chiffres ; (D) un chiffre net, toujours le même.
 b) Vrai ou faux : une erreur de reconstruction élevée peut signaler une entrée qui ne ressemble pas aux données d'entraînement.
@@ -120,7 +120,7 @@ d) Pourquoi la reconstruction de la photo a-t-elle un cadre noir ? (A) les pixel
 e) Pour un autoencodeur entraîné sur MNIST, lesquelles de ces entrées sont hors de sa distribution ? (A) un chiffre du jeu de test MNIST ; (B) une chaussure de Fashion-MNIST ; (C) une photo de chat réduite en $28 \times 28$. Écris leurs lettres.
 
 ### 25.Q12 — Les trois exigences d'un VAE et l'astuce de reparamétrisation 🧠 ⏱️ 4 min
-*Fiche §25.9 à §25.10 · livre §25.9 à §25.10*
+*Fiche §25.9 à §25.10 · livre §25.9 à §25.10 · parcours R, M*
 
 a) Les trois exigences du livre pour un espace latent dont on peut tirer des codes : (A) les codes rassemblés dans une région connue ; (B) des entrées semblables ont des codes proches ; (C) le moins de trous possible ; (D) des latents entiers ; (E) un seul code par classe. Écris leurs lettres.
 b) Pour chaque latent, l'encodeur d'un VAE produit : (A) une seule valeur ; (B) une moyenne et une variance (en pratique, sa log-variance) ; (C) un label ; (D) une probabilité entre 0 et 1.
@@ -132,14 +132,14 @@ e) Vrai ou faux : un VAE entraîné rend exactement la même sortie à chaque pa
 
 ## 🔁 Rappels
 
-### 25.R1 — Quelles augmentations garder pour des chiffres manuscrits ? 🔁 ⏱️ 5 min
+### 25.R1 — Ch. 24 : quelles augmentations garder pour des chiffres manuscrits ? 🔁 ★ ⏱️ 5 min
 *Ch. 24 (augmentation de données) · parcours R*
 
 a) Lesquelles de ces transformations sont plausibles pour augmenter des chiffres MNIST ? (A) un décalage de 2 pixels ; (B) une rotation de ±10° ; (C) une symétrie gauche-droite ; (D) une rotation de 180° ; (E) un léger zoom. Écris leurs lettres.
 b) Vrai ou faux : on applique aussi l'augmentation aux images de test.
 c) Vrai ou faux : tirer un bruit neuf à chaque mini-batch pour un débruiteur est une forme d'augmentation de données.
 
-### 25.R2 — Résumer une séquence entière dans l'état final d'un LSTM 🔁 ⏱️ 5 min
+### 25.R2 — Ch. 22 : résumer une séquence entière dans l'état final d'un LSTM 🔁 ★ ⏱️ 5 min
 *Ch. 22 (LSTM, formes de `nn.LSTM`) · parcours R*
 
 `lstm = nn.LSTM(input_size=8, hidden_size=32, batch_first=True)` reçoit `x` de forme `(16, 50, 8)` : 16 séquences de 50 pas, 8 features par pas.
@@ -148,7 +148,7 @@ a) La forme de `h_n`.
 b) Si l'on prend l'état final de chaque séquence comme code, le facteur de compression d'une séquence (nombre de valeurs de la séquence divisé par celui du code), à 1 décimale.
 c) Vrai ou faux : un autoencodeur de séquences peut utiliser un LSTM comme encodeur et un autre LSTM comme décodeur.
 
-### 25.R3 — La divergence KL, ce que mesure le terme de régularisation du VAE 🔁 ⏱️ 5 min
+### 25.R3 — Ch. 6 : la divergence KL, ce que mesure le terme de régularisation du VAE 🔁 ★ ⏱️ 5 min
 *Ch. 6 (divergence KL) · parcours R, M*
 
 a) $\mathrm{KL}(P \,\|\, Q)$ en **bits** pour $P = (0{,}5\ ;\ 0{,}5)$ et $Q = (0{,}25\ ;\ 0{,}75)$, à 2 décimales.

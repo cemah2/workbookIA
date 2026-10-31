@@ -88,9 +88,9 @@ def figure_game() -> None:
             color=C[1])
     ax.text(7.0, 3.85, "$L_D = -\\ln D(\\mathbf{x}) - \\ln(1 - D(G(\\mathbf{z})))$", ha="center", fontsize=9.5,
             color=INK)
-    ax.text(7.4, 0.75, "étape de $G$ : faux → label 1, $D$ gelé (seul l'optimiseur de $G$ avance)", ha="center",
-            fontsize=9, color=C[0])
-    ax.text(7.4, 0.3, "$L_G = -\\ln D(G(\\mathbf{z}))$ (loss non saturante)", ha="center", fontsize=9.5, color=INK)
+    ax.text(7.9, 0.95, "étape de $G$ : faux → label 1\n$D$ gelé (seul l'optimiseur de $G$ avance)", ha="center",
+            va="center", fontsize=9, color=C[0])
+    ax.text(7.9, 0.3, "$L_G = -\\ln D(G(\\mathbf{z}))$ (loss non saturante)", ha="center", fontsize=9.5, color=INK)
     save(fig, "jeu_gan.png")
 
 

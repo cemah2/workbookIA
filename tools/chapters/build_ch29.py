@@ -114,7 +114,7 @@ PAPER = [
         ("c", LETTER, '"C"', letters("C", {"A": "torchvision fournit des datasets d'images, pas l'accès à OpenML",
                                            "B": "datasets charge le Hugging Face Hub, pas OpenML"})),
         ("d", TF, "False", r'''mistakes={"relis l'encadré 🕰️ du §29.4 : plusieurs liens du livre sont morts ou redirigés": True}'''),
-        ("e", LETTER, '"A"', letters("A", {"B": "une model card décrit un modèle, pas un dataset",
+        ("e", LETTER, '"A"', letters("A", {"B": "une fiche modèle décrit un modèle, pas un dataset",
                                            "C": "le README d'un dépôt de code ne dit pas la licence ni les limites des données"})),
     ]),
     Paper("29.Q8", "Les « nouveaux » datasets de 2018 : tâches, tailles et retraits", [
@@ -126,14 +126,14 @@ PAPER = [
         ("d", LETTER, '"B"', letters("B", {"A": "la licence de CelebA exclut l'usage commercial"})),
         ("e", TF, "True", r'''mistakes={"une copie ne lève ni le retrait ni ses raisons : l'utiliser reste un problème": False}'''),
     ]),
-    Paper("29.R1", "Qui possède les droits d'une image de style ?", [
+    Paper("29.R1", "Ch. 28 : qui possède les droits d'une image de style ?", [
         ("a", WHOLE, "2044", r'''mistakes={"70 ans après 1973, puis le 1ᵉʳ janvier suivant : 2044, pas 2043": 2043}'''),
         ("b", TF, "False", r'''mistakes={"la directive de 2019 (art. 14) : une reproduction fidèle d'une œuvre du domaine public n'est pas protégée": True}'''),
         ("c", TF, "False", r'''mistakes={"le droit d'auteur protège des œuvres, pas un style": True}'''),
         ("d", LETTER, '"A"', letters("A", {"B": "les photos de scikit-learn sont sous CC BY 2.0 : il faut créditer leurs auteurs"})),
         ("e", WHOLE, "1961", r'''mistakes={"1890 + 70 = 1960, puis le 1ᵉʳ janvier suivant": 1960}'''),
     ]),
-    Paper("29.R2", "En RL, d'où viennent les données ?", [
+    Paper("29.R2", "Ch. 26 : en RL, d'où viennent les données ?", [
         ("a", LETTER, '"B"', letters("B", {"A": "en RL, aucun dataset annoté : l'agent produit ses données en agissant"})),
         ("b", TF, "True", r'''mistakes={"une autre politique visite d'autres états : les données changent avec elle": False}'''),
         ("c", LETTER, '"A"', letters("A", {"B": "le rejeu stocke des transitions vécues, pas des images annotées",
@@ -141,7 +141,7 @@ PAPER = [
         ("d", WHOLE, "16", r'''mistakes={"4 × 4 cases, c'est 16 états ; 4, c'est le nombre d'actions": 4}'''),
         ("e", TF, "False", r'''mistakes={"les données d'un agent changent avec sa politique : un découpage figé n'a pas de sens": True}'''),
     ]),
-    Paper("29.R3", "Biais d'échantillonnage — un dataset représente-t-il la population visée ?", [
+    Paper("29.R3", "Ch. 2 : biais d'échantillonnage — un dataset représente-t-il la population visée ?", [
         ("a", WHOLE, "344", r'''mistakes={"333, c'est après avoir retiré les lignes incomplètes : compte-les toutes": 333}'''),
         ("b", WHOLE, "3", r'''mistakes={"trois espèces (Adélie, Chinstrap, Gentoo) ; trois îles aussi": 2}'''),
         ("c", LETTER, '"A"', letters("A", {"B": "une erreur de mesure fausse chaque valeur, pas le choix des exemples",
@@ -245,8 +245,9 @@ def footer_cells(kind: str) -> list:
                "1. Sais-tu charger un même dataset par deux API et vérifier qu'elles rendent les mêmes données ?\n"
                "2. Sais-tu dire, en lisant sa page, si un dataset peut servir à ton projet (licence, provenance, "
                "retraits) ?\n"
-               "3. Sais-tu repérer une fuite entre entraînement et test, et découper par groupes ?\n"
-               "4. As-tu choisi le dataset de ton projet final, avec sa data card et un téléchargement vérifié ?\n\n"
+               "3. Sais-tu repérer une fuite entre entraînement et test, et découper par groupes ?\n\n"
+               "**Avant le checkpoint** : choisis le dataset de ton projet final, avec sa data card et un "
+               "téléchargement vérifié (🛠️ 29.15).\n\n"
                "**Pour aller plus loin** : Gebru et coll., « Datasheets for Datasets », et l'article de Northcutt et "
                "coll. sur les erreurs de labels des benchmarks, cités dans la fiche. La suite : le checkpoint de la "
                "partie VI, puis le projet final.")]

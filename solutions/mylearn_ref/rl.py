@@ -337,7 +337,7 @@ def softmax_action(
     T = _real(temperature, "temperature")
     if not T > 0:
         raise ValueError(f"temperature must be > 0, got {temperature}")
-    rng = np.random.default_rng() if rng is None else rng
+    rng = np.random.default_rng(rng)                  # None, an int or a Generator (BIBLE §22, Q9)
     probs = np.exp((q - q.max()) / T)                 # max subtracted: exp never overflows
     probs /= probs.sum()
     return int(rng.choice(q.size, p=probs))           # one draw: inverse CDF of one rng.random()
@@ -620,7 +620,7 @@ def train_tabular(
             raise ValueError(f"Q_init must have shape ({n_states}, {n_actions}), got {Q.shape}")
         if np.isnan(Q).any():
             raise ValueError("Q_init contains NaN values")
-    rng = np.random.default_rng() if rng is None else rng
+    rng = np.random.default_rng(rng)                  # None, an int or a Generator (BIBLE §22, Q9)
     returns = np.zeros(n_episodes)
     lengths = np.zeros(n_episodes, dtype=np.int64)
     epsilons = np.zeros(n_episodes)
@@ -718,7 +718,7 @@ def evaluate_policy(
 
         def act(state, info):
             return int(table[state])
-    rng = np.random.default_rng() if rng is None else rng
+    rng = np.random.default_rng(rng)                  # None, an int or a Generator (BIBLE §22, Q9)
     returns = np.zeros(n_episodes)
     lengths = np.zeros(n_episodes)
     for episode in range(n_episodes):

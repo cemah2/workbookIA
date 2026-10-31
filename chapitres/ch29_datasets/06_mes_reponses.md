@@ -79,7 +79,7 @@
 
 ## 🔁 Rappels
 
-### 29.R1 — Qui possède les droits d'une image de style ?
+### 29.R1 — Ch. 28 : qui possède les droits d'une image de style ?
 
 - a) :
 - b) :
@@ -88,7 +88,7 @@
 - e) :
 
 
-### 29.R2 — En RL, d'où viennent les données ?
+### 29.R2 — Ch. 26 : en RL, d'où viennent les données ?
 
 - a) :
 - b) :
@@ -97,7 +97,7 @@
 - e) :
 
 
-### 29.R3 — Biais d'échantillonnage : un dataset représente-t-il la population visée ?
+### 29.R3 — Ch. 2 : biais d'échantillonnage : un dataset représente-t-il la population visée ?
 
 - a) :
 - b) :
