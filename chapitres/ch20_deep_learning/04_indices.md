@@ -502,7 +502,7 @@ Lis d'abord le résumé et l'introduction des deux articles, puis reviens aux qu
 </details>
 <details><summary>Indice 3</summary>
 
-1. Le changement de la distribution des entrées d'une couche pendant l'entraînement, parce que les couches précédentes changent. 2. Avec $\gamma = \sqrt{\mathrm{Var}[x]}$ et $\beta = \mathbb{E}[x]$, on retrouve l'identité. 3. Cherche l'estimation sans biais de la variance. 4. Toutes les positions d'une carte de features partagent les statistiques. 5. Cherche le nombre de pas pour atteindre l'accuracy d'Inception. 6. Un bruit qui recrée artificiellement un décalage de distribution, et la vitesse d'entraînement qui reste bonne. 7. Le gradient change moins brusquement : un pas plus grand dans sa direction reste sûr. 8. La méthode marche ; c'est l'explication qui a changé.
+1. Le changement de la distribution des entrées d'une couche pendant l'entraînement, parce que les couches précédentes changent. 2. Avec $\gamma = \sqrt{\mathrm{Var}[x]}$ et $\beta = \mathbb{E}[x]$, on retrouve l'identité. 3. Cherche l'estimation sans biais de la variance. 4. Toutes les positions d'une carte d'activation partagent les statistiques. 5. Cherche le nombre de pas pour atteindre l'accuracy d'Inception. 6. Un bruit qui recrée artificiellement un décalage de distribution, et la vitesse d'entraînement qui reste bonne. 7. Le gradient change moins brusquement : un pas plus grand dans sa direction reste sûr. 8. La méthode marche ; c'est l'explication qui a changé.
 
 </details>
 

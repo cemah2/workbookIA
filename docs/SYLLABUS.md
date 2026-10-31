@@ -2,7 +2,7 @@
 
 > **Statut : contrat.** Ce document fixe, pour chaque chapitre, les exercices (ID **stables**), les signatures de `mylearn` (**figées**), les sections du livre couvertes, les rappels, les points de modernisation et le temps d'étude. Il est **généré** à partir de `docs/syllabus/data/*.json` et des stubs `templates/mylearn_stubs/` par `python tools/syllabus.py build` : on ne l'édite pas à la main. Tout écart pendant la génération d'un chapitre est consigné dans `suivi/PROGRESS.md` (§ Écarts).
 
-**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 920 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
+**En chiffres** : 39 chapitres, 6 checkpoints et le projet final · **2028 exercices** · **≈ 923 h d'étude** · 67 sessions de génération de chapitres (+ checkpoints, audits et finalisation).
 
 ## Sommaire
 
@@ -59,13 +59,13 @@
 | [19](#ch-19) | Optimiseurs | V1 ch. 19 | 48 | 21 h | 2 | `optim` |
 | [20](#ch-20) | Deep learning et premiers pas en PyTorch | V2 ch. 20 | 51 | 24 h | 2 | `nn/regularization` |
 | [CP4](#ch-cp4) | Checkpoint IV — Réseaux de neurones | — | 14 | 11 h |  | — |
-| [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 28 h | 2 | `conv` |
+| [21](#ch-21) | Réseaux convolutifs (CNN) | V2 ch. 21 | 52 | 29 h | 2 | `conv` |
 | [22](#ch-22) | Réseaux récurrents (RNN, LSTM, GRU) | V2 ch. 22 | 49 | 23 h | 2 | `rnn`, `sequences` |
 | [23](#ch-23) | PyTorch en pratique 1 : du dataset au modèle sauvegardé | V2 ch. 23 | 49 | 20 h | 2 | — |
 | [24](#ch-24) | PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | V2 ch. 24 | 51 | 29 h | 2 | — |
 | [CP5](#ch-cp5) | Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | — | 14 | 13 h |  | — |
 | [25](#ch-25) | Autoencodeurs et VAE | V2 ch. 25 | 59 | 29 h | 2 | `vae` |
-| [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 29 h | 2 | `rl` |
+| [26](#ch-26) | Apprentissage par renforcement | V2 ch. 26 | 58 | 32 h | 2 | `rl` |
 | [27](#ch-27) | Réseaux antagonistes génératifs (GAN) | V2 ch. 27 | 46 | 21 h | 1 | `gen_metrics` |
 | [28](#ch-28) | Applications créatives | V2 ch. 28 | 46 | 20 h | 2 | — |
 | [29](#ch-29) | Datasets et préparation du projet final | V2 ch. 29 | 31 | 9,5 h | 1 | — |
@@ -91,20 +91,20 @@
 | II · Concepts | 55 | 15 | 32 | 11 | 33 | 9 | 14 | 11 | 6 | 6 | 1 | 5 | 5 | 4 | 5 | 5 | 23 | 5 | **245** | 106 h |
 | III · ML classique | 47 | 12 | 27 | 6 | 20 | 30 | 11 | 9 | 7 | 5 | 3 | 5 | 4 | 2 | 3 | 4 | 21 | 4 | **220** | 106 h |
 | IV · Réseaux | 59 | 15 | 30 | 13 | 27 | 11 | 9 | 11 | 6 | 6 | 6 | 6 | 3 | 5 | 5 | 5 | 24 | 5 | **246** | 113 h |
-| V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 114 h |
-| VI · Génératif et RL | 53 | 15 | 24 | 10 | 12 | 23 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 122 h |
+| V · Architectures | 49 | 12 | 26 | 5 | 14 | 31 | 9 | 9 | 5 | 5 | 5 | 5 | 5 | 4 | 2 | 4 | 21 | 4 | **215** | 115 h |
+| VI · Génératif et RL | 53 | 15 | 24 | 10 | 13 | 22 | 27 | 12 | 6 | 6 | 8 | 5 | 6 | 5 | 7 | 5 | 24 | 5 | **253** | 125 h |
 | VII · Bonus | 93 | 24 | 40 | 10 | 21 | 50 | 27 | 16 | 8 | 9 | 9 | 8 | 10 | 8 | 0 | 8 | 40 | 8 | **389** | 158 h |
 | PF · Projet final | 0 | 0 | 1 | 0 | 0 | 3 | 1 | 0 | 0 | 2 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 3 | **13** | 41 h |
-| **Total** | **448** | **114** | **250** | **71** | **196** | **192** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **920 h** |
+| **Total** | **448** | **114** | **250** | **71** | **197** | **191** | **116** | **87** | **50** | **47** | **37** | **45** | **39** | **34** | **27** | **39** | **190** | **46** | **2028** | **923 h** |
 
 Légende des types : 🧠 quiz · 🔁 rappel · ✏️ calcul · ∂ démonstration · 🔨 from scratch · 📦 librairie · 🔬 expérience · 🔮 prédiction · 🐛 bug · 📈 graphique · 🧮 Fermi · 🗣️ Feynman · ⚖️ éthique · 📄 article · 🎨 figure · 🏆 défi · 💼 entretien · 🛠️ pro
 
 | Parcours | Exercices | Temps d'exercices | Temps total | Part du temps total |
 |---|---|---|---|---|
-| Complet | 2028 | 666 h | 920 h | 100 % |
-| Rapide | 1312 | 319 h | 550 h | 60 % |
-| Maths | 801 | 307 h | 561 h | 61 % |
-| Code | 890 | 462 h | 736 h | 80 % |
+| Complet | 2028 | 669 h | 923 h | 100 % |
+| Rapide | 1312 | 322 h | 553 h | 60 % |
+| Maths | 814 | 316 h | 571 h | 62 % |
+| Code | 890 | 466 h | 740 h | 80 % |
 
 Temps total d'un parcours = ses exercices + les corrigés de ses prérequis hors parcours (un tiers du temps) + la lecture (sélective pour le parcours rapide) + flashcards, synthèses, mini-projets et projet final (communs). Détail : `docs/PARCOURS.md`.
 
@@ -303,28 +303,28 @@ Rythme régulier de **10 h par semaine** (≈ 1 h 30 par jour), parcours complet
 | 43–45 | 26 juil. 2027 → 15 août 2027 | 19 · Optimiseurs | 21 h |
 | 45–48 | 9 août 2027 → 5 sept. 2027 | 20 · Deep learning et premiers pas en PyTorch | 24 h |
 | 48–49 | 30 août 2027 → 12 sept. 2027 | CP4 · Checkpoint IV — Réseaux de neurones | 11 h |
-| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 28 h |
+| 49–52 | 6 sept. 2027 → 3 oct. 2027 | 21 · Réseaux convolutifs (CNN) | 29 h |
 | 52–54 | 27 sept. 2027 → 17 oct. 2027 | 22 · Réseaux récurrents (RNN, LSTM, GRU) | 23 h |
 | 54–56 | 11 oct. 2027 → 31 oct. 2027 | 23 · PyTorch en pratique 1 : du dataset au modèle sauvegardé | 20 h |
 | 56–59 | 25 oct. 2027 → 21 nov. 2027 | 24 · PyTorch en pratique 2 : améliorer, chercher, CNN et RNN | 29 h |
 | 59–60 | 15 nov. 2027 → 28 nov. 2027 | CP5 · Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) | 13 h |
 | 60–63 | 22 nov. 2027 → 19 déc. 2027 | 25 · Autoencodeurs et VAE | 29 h |
-| 63–66 | 13 déc. 2027 → 9 janv. 2028 | 26 · Apprentissage par renforcement | 29 h |
-| 66–68 | 3 janv. 2028 → 23 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 21 h |
-| 68–70 | 17 janv. 2028 → 6 févr. 2028 | 28 · Applications créatives | 20 h |
-| 70–71 | 31 janv. 2028 → 13 févr. 2028 | 29 · Datasets et préparation du projet final | 9,5 h |
-| 71–73 | 7 févr. 2028 → 27 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
-| 73–74 | 21 févr. 2028 → 5 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
-| 74–76 | 28 févr. 2028 → 19 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
-| 76–78 | 13 mars 2028 → 2 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
-| 78–81 | 27 mars 2028 → 23 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
+| 63–67 | 13 déc. 2027 → 16 janv. 2028 | 26 · Apprentissage par renforcement | 32 h |
+| 67–69 | 10 janv. 2028 → 30 janv. 2028 | 27 · Réseaux antagonistes génératifs (GAN) | 21 h |
+| 69–71 | 24 janv. 2028 → 13 févr. 2028 | 28 · Applications créatives | 20 h |
+| 71–72 | 7 févr. 2028 → 20 févr. 2028 | 29 · Datasets et préparation du projet final | 9,5 h |
+| 72–73 | 14 févr. 2028 → 27 févr. 2028 | CP6 · Checkpoint VI — Génératif et apprentissage par renforcement | 13 h |
+| 73–75 | 21 févr. 2028 → 12 mars 2028 | B1 · Transfer learning et modèles pré-entraînés | 19 h |
+| 75–77 | 6 mars 2028 → 26 mars 2028 | B2 · Tokenisation et embeddings | 18 h |
+| 77–79 | 20 mars 2028 → 9 avr. 2028 | B3 · Attention et Transformers : un mini-GPT from scratch | 22 h |
+| 79–81 | 3 avr. 2028 → 23 avr. 2028 | B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA | 21 h |
 | 81–83 | 17 avr. 2028 → 7 mai 2028 | B5 · Modèles de diffusion : un DDPM minimal | 21 h |
 | 83–85 | 1 mai 2028 → 21 mai 2028 | B6 · Explicabilité, équité et éthique | 19 h |
-| 85–86 | 15 mai 2028 → 28 mai 2028 | B7 · Du notebook à la production | 18 h |
-| 86–88 | 22 mai 2028 → 11 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
-| 88–92 | 5 juin 2028 → 9 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
+| 85–87 | 15 mai 2028 → 4 juin 2028 | B7 · Du notebook à la production | 18 h |
+| 87–89 | 29 mai 2028 → 18 juin 2028 | B8 · RL moderne : DQN, gradient de politique, PPO et RLHF | 21 h |
+| 89–93 | 12 juin 2028 → 16 juil. 2028 | PF · Projet final : un projet de bout en bout sur ton propre dataset | 41 h |
 
-Fin estimée : semaine 92 (9 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
+Fin estimée : semaine 93 (16 juil. 2028), soit environ 1,8 an à ce rythme. La génération garde deux chapitres d'avance sur l'étude (METHODE §1).
 
 <a id="plan-détaillé"></a>
 
@@ -3418,7 +3418,7 @@ class EarlyStopping:
 - **batchnorm** — livre : couche sans paramètre ni réglage, présentée comme une régularisation · aujourd'hui : γ et β appris + moyenne et variance glissantes, comportement différent en train et en eval ; son efficacité est surtout attribuée à une optimisation plus facile (Santurkar 2018) ; layer norm et RMSNorm dans les Transformers · à vérifier : doc torch.nn.BatchNorm1d ; Santurkar et coll. 2018 ; Zhang & Sennrich 2019 (RMSNorm)
 - **dropout** — livre : neurones déconnectés au début de chaque epoch · aujourd'hui : nouveau masque à chaque passe avant (chaque mini-batch), dropout inversé (1/(1−p)), désactivé par model.eval() ; peu utilisé dans les CNN avec batchnorm, 0,1 dans les Transformers, souvent 0 dans les grands LLM · à vérifier : doc torch.nn.Dropout
 - **connexions résiduelles** — livre : absentes (ResNet paraît fin 2015) · aujourd'hui : partout : ResNet, Transformers ; elles rendent entraînables des réseaux de centaines de couches · à vérifier : He et coll. 2016
-- **pooling** — livre : en perte de vitesse face aux convolutions à pas (stride) · aujourd'hui : convolutions à pas et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21 · à vérifier : doc torchvision.models (ResNet, ConvNeXt)
+- **pooling** — livre : en perte de vitesse face aux convolutions de stride 2 · aujourd'hui : convolutions de stride 2 et global average pooling fréquents ; max pooling encore présent ; détaillé au ch. 21 · à vérifier : doc torchvision.models (ResNet, ConvNeXt)
 - **VGG16** — livre : exemple phare d'architecture · aujourd'hui : dépassé (ResNet, EfficientNet, ConvNeXt, ViT) ; poids lourds (≈ 528 Mo) ; on utilise ici un petit modèle torchvision pré-entraîné pour les prédictions · à vérifier : doc torchvision.models (tailles des poids)
 - **explicabilité et régulation** — livre : l'explicabilité est difficile, les techniques s'améliorent · aujourd'hui : SHAP, Grad-CAM (bonus B6) ; AI Act européen : le scoring de crédit est un système « à haut risque » ; RGPD art. 22 sur les décisions automatisées · à vérifier : EUR-Lex, règlement (UE) 2024/1689, annexe III ; CNIL (RGPD art. 22)
 - **tenseurs** — livre : tableau de nombres à plusieurs dimensions · aujourd'hui : torch.Tensor : forme, dtype, device et suivi des gradients (autograd) · à vérifier : doc torch.Tensor
@@ -3504,7 +3504,7 @@ Extensions : Couche Conv2d par im2col (aperçu du ch. 21) et comparaison avec nn
 | **Livre** | vol. 2, ch. 21 « Convolutional Neural Networks », p. 927-1022 |
 | **Dossier** | `chapitres/ch21_cnn/` |
 | **Exercices** | 52 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 1 · 🔨 6 · 📦 5 · 🔬 2 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **28 h** (lecture 8,0 h, exercices 20 h, 25 flashcards 0,8 h) |
+| **Temps d'étude** | **29 h** (lecture 8,0 h, exercices 20 h, 25 flashcards 0,8 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 20, 18, 0B |
 | **Compétence 🛠️** | Écrire des tests pytest paramétrés (formes, cas limites, comparaison à un oracle) |
@@ -3559,7 +3559,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 | 21.9 | 🗣️ | Expliquer la convolution en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 21.10 | ⚖️ | Deviner l'âge et le genre sur une photo : jusqu'où aller ? | ★★ | 20 | — | 02 | — | R | manual |
 | 21.11 | 📄 | Lire LeCun et coll. (1998) : LeNet-5 | ★★★ | 45 | MNIST | 02 | 21.4 | M | manual |
-| 21.12 | 🔨 | conv_output_size et pad2d | ★ | 15 | — | 03 | 0A, 21.3 | RMC | pytest |
+| 21.12 | 🔨 | conv_output_size et pad2d | ★★ | 30 | — | 03 | 0A, 21.3 | RMC | pytest |
 | 21.13 | 🔮 | Prédire où une image CIFAR-10 « jaunit » | ★ | 10 | CIFAR-10 | 03 | 21.1 | C | wb.check |
 | 21.14 | 🔨 | im2col : la vue « œil de mouche » | ★★ | 30 | — | 03 | 21.12 | MC | pytest |
 | 21.15 | 🔨 | conv2d : stride, padding, dilatation et groupes | ★★★ | 90 | — | 03 | 21.14, 21.2 | MC | pytest |
@@ -3570,7 +3570,7 @@ Un seul petit neurone, promené sur toute l'image avec les mêmes poids, devient
 | 21.20 | 🔮 | Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres | ★★ | 15 | — | 03 | 21.15 | C | wb.check |
 | 21.21 | 🎨 | Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) | ★★★ | 45 | synth | 03 | 21.15, 21.18, 21.5 | C | wb.check |
 | 21.22 | 📦 | Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST | ★★★ | 45 | Fashion-MNIST | 03 | 20, 21.4 | RMC | wb.check |
-| 21.23 | 📈 | Diagnostiquer les courbes et la matrice de confusion du CNN | ★★ | 15 | Fashion-MNIST | 03 | 21.22, 3 | RC | wb.check |
+| 21.23 | 📈 | Diagnostiquer les courbes et la matrice de confusion du CNN | ★★ | 25 | Fashion-MNIST | 03 | 21.22, 3 | RC | wb.check |
 | 21.24 | 🐛 | Le CNN dont les formes ne passent pas | ★★ | 20 | Fashion-MNIST | 03 | 21.22 | RC | manual |
 | 21.25 | 🔬 | Briser la symétrie : filtres identiques, aléatoires ou He | ★★ | 25 | Fashion-MNIST | 03 | 21.22, 16 | C | manual |
 | 21.26 | 🔬 | Stride ou pooling : accuracy et temps sur CIFAR-10 🚀 | ★★★ | 40 | CIFAR-10 | 03 | 21.22 | C | manual |
@@ -3605,7 +3605,7 @@ def conv_transpose2d(x: ArrayLike, weight: ArrayLike, bias: ArrayLike | None=Non
 
 - **convolution ou corrélation croisée** — livre : parle de convolution en omettant des « détails formels » · aujourd'hui : nn.Conv2d calcule une corrélation croisée (noyau non retourné) ; la vraie convolution retourne le noyau · à vérifier : doc torch.nn.Conv2d
 - **architectures de référence** — livre : VGG16 (2014) comme exemple de grand réseau · aujourd'hui : ResNet (connexions résiduelles), EfficientNet, ConvNeXt et Vision Transformers ; poids pré-entraînés via torchvision.models (enum Weights) · à vérifier : doc torchvision.models ; He et coll. 2016 ; Dosovitskiy et coll. 2021 ; Liu et coll. 2022 (ConvNeXt)
-- **sous-échantillonnage et tête du réseau** — livre : pooling ou stride ; flatten + deux couches denses de 4096 · aujourd'hui : convolutions à stride 2 et global average pooling (nn.AdaptiveAvgPool2d) avant une seule couche linéaire · à vérifier : code source de torchvision.models.resnet
+- **sous-échantillonnage et tête du réseau** — livre : pooling ou stride ; flatten + deux couches denses de 4096 · aujourd'hui : convolutions de stride 2 et global average pooling (nn.AdaptiveAvgPool2d) avant une seule couche linéaire · à vérifier : code source de torchvision.models.resnet
 - **vocabulaire « convolution dilatée »** — livre : appelle dilatée l'insertion de zéros entre les pixels d'entrée · aujourd'hui : la dilatation (atrous) espace les coefficients du noyau (paramètre dilation) ; l'insertion de zéros dans l'entrée correspond à une convolution transposée de stride > 1 · à vérifier : Dumoulin & Visin 2016 ; doc torch.nn.Conv2d (dilation)
 - **initialisation par défaut** — livre : Keras : Glorot ; conseil : He si disponible · aujourd'hui : PyTorch initialise nn.Conv2d par kaiming_uniform_ avec a=√5 ; on passe souvent explicitement à kaiming_normal_ pour ReLU · à vérifier : source torch.nn.modules.conv (reset_parameters)
 - **format des images** — livre : channels_last (H, W, C) comme Keras · aujourd'hui : PyTorch attend (N, C, H, W) ; channels_last n'est qu'un format mémoire optionnel · à vérifier : doc torch.nn.Conv2d ; tutoriel memory_format
@@ -3687,8 +3687,8 @@ Un réseau récurrent lit une séquence pas à pas en gardant un état qui résu
 | 22.9 | 🗣️ | Expliquer l'état caché d'un RNN en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 22.10 | ⚖️ | Écrire « à la manière de », imiter une voix : usages et abus | ★★ | 20 | Holmes/Verne | 02 | — | – | manual |
 | 22.11 | 📄 | Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory | ★★★ | 45 | — | 02 | 22.4 | M | manual |
-| 22.12 | 🔨 | build_vocab, encode et decode sur Holmes et Verne | ★ | 15 | Holmes/Verne | 03 | 0A, 6 | RC | wb.check+pytest |
-| 22.13 | 🔨 | make_windows et make_sequence_pairs | ★★ | 20 | taches solaires | 03 | 22.1 | RMC | pytest |
+| 22.12 | 🔨 | build_vocab, encode et decode sur Holmes et Verne | ★★ | 30 | Holmes/Verne | 03 | 0A, 6 | RC | wb.check+pytest |
+| 22.13 | 🔨 | make_windows et make_sequence_pairs | ★★ | 30 | taches solaires | 03 | 22.1 | RMC | pytest |
 | 22.14 | 🔮 | Un MLP sur des fenêtres : l'ordre compte-t-il ? | ★★ | 20 | synth | 03 | 22.13, 16 | C | wb.check |
 | 22.15 | 🔨 | rnn_cell_forward et rnn_forward | ★★ | 30 | synth | 03 | 22.2, 22.13 | RMC | pytest |
 | 22.16 | 🔨 | lstm_cell_forward et lstm_forward (portes i, f, g, o) | ★★★ | 45 | synth | 03 | 22.15, 22.4 | MC | pytest |
@@ -3769,13 +3769,13 @@ Composition standard respectée : 🧠 12, 🔁 3, ✏️/∂ 7, 🔨/📦 10, �
 | **Temps d'étude** | **20 h** (lecture 6,1 h, exercices 14 h, 22 flashcards 0,7 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 22, 20, 2 |
-| **Compétence 🛠️** | Rédiger une fiche de modèle (model card) : données, prétraitement, métriques, limites |
+| **Compétence 🛠️** | Rédiger une fiche modèle (*model card*) : données, prétraitement, métriques, limites |
 
-Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la loss et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche de modèle.
+Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la loss et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche modèle.
 
 **Objectifs d'apprentissage**
 
-- Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines
+- Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, découpage stratifié, DataLoader, graines
 - Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, loss, optimiseur, boucle)
 - Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique
 - Analyser un entraînement : courbes, overfitting, matrice de confusion, exemples mal classés
@@ -3787,7 +3787,7 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 
 **Lecture du parcours rapide** (fiche complète + sections ⏩ du livre, ≈ 5,0 h) : 33 sections sur 44 ; sections laissées de côté : §23.1, §23.1.1, §23.1.2, §23.2, §23.2.2, §23.3, §23.3.1, §23.3.4, §23.4, §23.5, §23.9.4.
 
-**Notions enseignées** : workflow PyTorch complet ; Dataset, DataLoader, transforms ; normalisation et split stratifié ; nn.Sequential, nn.Flatten, nn.Linear ; CrossEntropyLoss et logits ; fonction fit() avec historique ; analyse d'erreurs ; inférence avec eval et inference_mode ; state_dict et checkpoints ; modèle pré-entraîné torchvision ; schedulers de learning rate ; early stopping et meilleur checkpoint ; fiche de modèle
+**Notions enseignées** : workflow PyTorch complet ; Dataset, DataLoader, transforms ; normalisation et découpage stratifié ; nn.Sequential, nn.Flatten, nn.Linear ; CrossEntropyLoss et logits ; fonction fit() avec historique ; analyse d'erreurs ; inférence avec eval et inference_mode ; state_dict et checkpoints ; modèle pré-entraîné torchvision ; schedulers de learning rate ; early stopping et meilleur checkpoint ; fiche modèle
 
 **Notions mobilisées** : matrice de confusion, accuracy (ch. 3) ; cross-entropy (ch. 6) ; train / validation / test, stratification (ch. 8) ; overfitting, early stopping (idée) (ch. 9) ; normalisation, one-hot (ch. 12) ; MLP et comptage des paramètres (ch. 16) ; softmax, ReLU (ch. 17) ; SGD, momentum, Adam, plannings de learning rate (ch. 19) ; tenseurs, autograd, nn.Module, DataLoader, boucle d'entraînement, EarlyStopping de mylearn (ch. 20) ; CNN (pour le modèle pré-entraîné) (ch. 21) ; (N, T, D) et batch_first (ch. 22) ; sérialisation (pickle, JSON) et chemins de fichiers (pathlib) (ch. 0A) ; passer une fonction en argument (lambda) pour LambdaLR (ch. 0A)
 
@@ -3821,23 +3821,23 @@ Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fash
 | 23.9 | 🗣️ | Pourquoi le prétraitement doit voyager avec le modèle | ★ | 10 | — | 02 | — | R | manual |
 | 23.10 | ⚖️ | Réutiliser un modèle pré-entraîné : licence, données d'origine, biais hérités | ★★ | 20 | — | 02 | — | – | manual |
 | 23.11 | 📄 | Lire Krizhevsky et coll. (2012) : la recette d'entraînement d'AlexNet | ★★★ | 45 | — | 02 | 21 | M | manual |
-| 23.12 | 📦 | Environnement et tenseurs : versions, device, reshape, view, permute | ★★ | 20 | Fashion-MNIST | 03 | 20, 23.2 | RC | wb.check |
-| 23.13 | 📦 | Charger et regarder Fashion-MNIST | ★★ | 20 | Fashion-MNIST | 03 | 23.12 | RC | wb.check |
+| 23.12 | 📦 | Environnement et tenseurs : versions, device, reshape, view, permute | ★★ | 20 | Fashion-MNIST | 03 | 20, 23.2 | RMC | wb.check |
+| 23.13 | 📦 | Charger et regarder Fashion-MNIST | ★★ | 20 | Fashion-MNIST | 03 | 23.12 | RMC | wb.check |
 | 23.14 | 🔮 | Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? | ★ | 10 | Fashion-MNIST | 03 | 23.13 | C | wb.check |
-| 23.15 | 📦 | Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader | ★★ | 30 | Fashion-MNIST | 03 | 23.13, 8, 12 | RC | wb.check |
-| 23.16 | 📦 | Le MLP du livre avec nn.Sequential et nn.Flatten | ★ | 15 | Fashion-MNIST | 03 | 23.3, 23.15 | RC | wb.check |
+| 23.15 | 📦 | Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader | ★★ | 30 | Fashion-MNIST | 03 | 23.13, 8, 12 | RMC | wb.check |
+| 23.16 | 📦 | Le MLP du livre avec nn.Sequential et nn.Flatten | ★ | 15 | Fashion-MNIST | 03 | 23.3, 23.15 | RMC | wb.check |
 | 23.17 | 🐛 | Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) | ★★ | 25 | Fashion-MNIST | 03 | 23.16, 23.4 | RC | manual |
-| 23.18 | 📦 | Ta fonction fit() : boucle, validation et historique | ★★★ | 45 | Fashion-MNIST | 03 | 23.16 | RC | manual |
+| 23.18 | 📦 | Ta fonction fit() : boucle, validation et historique | ★★★ | 45 | Fashion-MNIST | 03 | 23.16 | RMC | manual |
 | 23.19 | 📈 | Lire l'historique : 3 epochs, puis 50 | ★★ | 20 | Fashion-MNIST | 03 | 23.18 | RC | wb.check |
 | 23.20 | 📦 | Analyser les erreurs : matrice de confusion et grille des confusions | ★★ | 25 | Fashion-MNIST | 03 | 23.18, 3 | C | manual |
 | 23.21 | 🔮 | Prédire la réaction du MLP à des images « du monde réel » | ★ | 10 | Fashion-MNIST | 03 | 23.18 | RC | wb.check |
 | 23.22 | 📦 | Prédire sur de nouvelles images : eval, inference_mode, probabilités | ★★ | 25 | Fashion-MNIST | 03 | 23.21 | RC | manual |
-| 23.23 | 📦 | Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) | ★★ | 30 | Fashion-MNIST | 03 | 23.18 | RC | manual |
+| 23.23 | 📦 | Reprendre un entraînement interrompu : checkpoint complet (modèle, optimiseur, epoch, générateurs aléatoires) | ★★ | 30 | Fashion-MNIST | 03 | 23.18 | RMC | manual |
 | 23.24 | 📦 | Un modèle pré-entraîné torchvision : transforms, gel et nouvelle tête | ★★★ | 40 | Fashion-MNIST | 03 | 23.23, 21 | C | manual |
-| 23.25 | 📦 | Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping | ★★★ | 45 | Fashion-MNIST | 03 | 23.18, 23.23, 23.6, 23.7 | RC | manual |
+| 23.25 | 📦 | Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping | ★★★ | 45 | Fashion-MNIST | 03 | 23.18, 23.23, 23.6, 23.7 | RMC | manual |
 | 23.26 | 🔬 | Planning de learning rate : constant, par paliers, cosinus ou plateau | ★★ | 30 | Fashion-MNIST | 03 | 23.25 | C | manual |
 | 23.27 | 🔬 | Patience de l'early stopping : 1, 3 ou 10 | ★★ | 20 | Fashion-MNIST | 03 | 23.25 | C | wb.check |
-| 23.28 | 🛠️ | Rédiger la fiche du modèle (model card) | ★★ | 20 | Fashion-MNIST | 03 | 23.23 | C | manual |
+| 23.28 | 🛠️ | Rédiger la fiche modèle | ★★ | 20 | Fashion-MNIST | 03 | 23.23 | C | manual |
 | 23.29 | 🏆 | Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU | ★★★★ | 90 | Fashion-MNIST | 03 | 23.25 | C | manual |
 | 23.E1 | 💼 | Ton entraînement PyTorch est deux fois plus lent que prévu : où cherches-tu, et dans quel ordre ? | ★★ | 10 | — | 02 | — | R | manual |
 | 23.E2 | 💼 | Pourquoi appeler model.eval() et torch.no_grad() (ou inference_mode) à l'inférence ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -3929,7 +3929,7 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 | 24.5 | ✏️ | Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points | ★ | 10 | synth | 02 | 22 | M | wb.check |
 | 24.6 | ∂ | Dropout inversé et max-norm : espérance et projection | ★★ | 25 | — | 02 | 20 | M | manual |
 | 24.7 | 🧮 | Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte | ★★ | 20 | — | 02 | 24.1 | RM | wb.check |
-| 24.8 | 🗣️ | La data augmentation en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
+| 24.8 | 🗣️ | L'augmentation de données en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | 24.9 | ⚖️ | Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres | ★★ | 20 | — | 02 | 24.1 | R | manual |
 | 24.10 | 📄 | Lire He et coll. (2016) : les réseaux résiduels | ★★★ | 45 | CIFAR-10 | 02 | 21 | M | manual |
 | 24.11 | 🔬 | Changer un seul hyperparamètre : la taille de batch | ★★ | 30 | Fashion-MNIST | 03 | 23 | RC | manual |
@@ -3940,11 +3940,11 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 | 24.16 | 📦 | Un réseau PyTorch déguisé en estimateur scikit-learn | ★★★ | 50 | Fashion-MNIST | 03 | 15, 24.13 | RC | manual |
 | 24.17 | 📦 | Validation croisée stratifiée avec normalisation dans un Pipeline | ★★ | 25 | Fashion-MNIST | 03 | 24.16, 8 | RC | manual |
 | 24.18 | 📦 | Grille, hasard, puis zoom : chercher les hyperparamètres 🚀 | ★★★ | 45 | Fashion-MNIST | 03 | 24.17, 24.1 | RC | manual |
-| 24.19 | 🐛 | Un CNN traduit du Keras qui refuse de tourner | ★★ | 25 | CIFAR-10 | 03 | 21, 24.2 | RC | manual |
-| 24.20 | 📦 | Du CNN simple au CNN profond sur CIFAR-10 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.19 | RC | wb.check |
+| 24.19 | 🐛 | Un CNN traduit du Keras qui refuse de tourner | ★★ | 25 | CIFAR-10 | 03 | 21, 24.2 | RMC | manual |
+| 24.20 | 📦 | Du CNN simple au CNN profond sur CIFAR-10 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.19 | RMC | wb.check |
 | 24.21 | 🔬 | Batchnorm, dropout ou les deux : accuracy et écart entre train et validation d'un CNN 🚀 | ★★★ | 40 | CIFAR-10 | 03 | 24.20, 24.3 | C | wb.check |
-| 24.22 | 🔮 | Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris | ★ | 10 | CIFAR-10 | 03 | 24.20 | RC | wb.check |
-| 24.23 | 📦 | Augmentation de données avec torchvision.transforms.v2 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.22 | RC | wb.check |
+| 24.22 | 🔮 | Prédire l'accuracy d'un CNN sur des images retournées, décalées, tournées ou en gris | ★ | 10 | CIFAR-10 | 03 | 24.20 | RMC | wb.check |
+| 24.23 | 📦 | Augmentation de données avec torchvision.transforms.v2 🚀 | ★★★ | 45 | CIFAR-10 | 03 | 24.22 | RMC | wb.check |
 | 24.24 | 📦 | Des images synthétiques générées à la volée | ★★ | 30 | synth | 03 | 24.20 | C | manual |
 | 24.25 | 📦 | Sommes de sinus et LSTM minuscule : fenêtres, scaler, RMSE | ★★★ | 45 | synth | 03 | 22, 24.5 | C | manual |
 | 24.26 | 🔬 | Fenêtre, profondeur ou données : qu'est-ce qui aide vraiment ? | ★★★ | 45 | synth | 03 | 24.25 | C | manual |
@@ -3954,7 +3954,7 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 | 24.30 | 📦 | Générer du texte : embeddings, séquences décalées, mots contre caractères 🚀 | ★★★★ | 100 | Holmes | 03 | 22, 24.27 | C | wb.check |
 | 24.31 | 🏆 | Défi CIFAR-10 frugal : au moins 80 % de test accuracy avec moins de 100 000 paramètres 🚀 | ★★★★ | 180 | CIFAR-10 | 03 | 24.23, 24.28 | C | manual |
 | 24.E1 | 💼 | Comment organises-tu une recherche d'hyperparamètres avec un budget limité ? | ★★ | 10 | — | 02 | — | R | manual |
-| 24.E2 | 💼 | Pourquoi la data augmentation améliore-t-elle la généralisation ? Donne des transformations à éviter | ★★ | 10 | — | 02 | — | R | manual |
+| 24.E2 | 💼 | Pourquoi l'augmentation de données améliore-t-elle la généralisation ? Donne des transformations à éviter | ★★ | 10 | — | 02 | — | R | manual |
 | 24.E3 | 💼 | Dropout ou batchnorm : lequel, où, et peut-on combiner les deux ? | ★★ | 10 | — | 02 | — | R | manual |
 | 24.E4 | 💼 | Comment éviter la fuite de données dans une validation croisée avec prétraitement ? | ★★ | 10 | — | 02 | — | R | manual |
 | 24.E5 | 💼 | Batchnorm : que fait-elle, et pourquoi se comporte-t-elle différemment en train et en eval ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -3972,7 +3972,7 @@ Suite pratique du ch. 23 : améliorer un modèle, chercher ses hyperparamètres,
 - **taille de batch et learning rate** — livre : les petits batches sur-apprennent davantage sur cet exemple · aujourd'hui : le lien batch/learning rate (règle d'échelle linéaire) et l'écart de généralisation des grands batches sont documentés ; à revérifier expérimentalement · à vérifier : Goyal et coll. 2017 ; Keskar et coll. 2017
 - **génération mot par mot** — livre : 8 000 mots les plus fréquents, les autres remplacés par GLORP · aujourd'hui : tokenisation en sous-mots (BPE, WordPiece) qui évite les mots inconnus (voir B2) · à vérifier : doc Hugging Face tokenizers
 
-**Thèmes 💼** : Organiser une recherche d'hyperparamètres avec un budget limité · Pourquoi la data augmentation généralise mieux, et ses pièges · Dropout ou batchnorm, et où les placer · Éviter la fuite de données dans une validation croisée avec prétraitement · Connexion résiduelle : ce que c'est et pourquoi elle permet des réseaux très profonds
+**Thèmes 💼** : Organiser une recherche d'hyperparamètres avec un budget limité · Pourquoi l'augmentation de données généralise mieux, et ses pièges · Dropout ou batchnorm, et où les placer · Éviter la fuite de données dans une validation croisée avec prétraitement · Connexion résiduelle : ce que c'est et pourquoi elle permet des réseaux très profonds
 
 **Articles 📄** : He, Zhang, Ren, Sun (2016), *Deep Residual Learning for Image Recognition* · Srivastava, Hinton, Krizhevsky, Sutskever, Salakhutdinov (2014), *Dropout: A Simple Way to Prevent Neural Networks from Overfitting* · Bergstra, Bengio (2012), *Random Search for Hyper-Parameter Optimization* · Keskar et coll. (2017), *On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima* · Ioffe, Szegedy (2015), *Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift* · Cubuk, Zoph, Shlens, Le (2020), *RandAugment: Practical automated data augmentation with a reduced search space* · Micikevicius et coll. (2018), *Mixed Precision Training* · Strubell, Ganesh, McCallum (2019), *Energy and Policy Considerations for Deep Learning in NLP*
 
@@ -4024,14 +4024,14 @@ Construire, entraîner et documenter en PyTorch un classifieur CIFAR-10, d'une b
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
-| MP5.1 | Cadrage, protocole de validation (split stratifié) et baselines (MLP puis petit CNN) | 60 |
+| MP5.1 | Cadrage, protocole de validation (découpage stratifié) et baselines (MLP puis petit CNN) | 60 |
 | MP5.2 | Pipeline de données : normalisation par canal apprise sur l'entraînement, augmentation transforms.v2, Dataset et DataLoader | 60 |
 | MP5.3 | Boucle d'entraînement réutilisable : fit(), meilleur checkpoint, early stopping, planning de LR, reprise exacte, journal | 90 |
 | MP5.4 | Architectures : CNN type VGG puis blocs résiduels ; comparer stride et pooling, batchnorm et dropout | 90 |
 | MP5.5 | Recherche d'hyperparamètres ciblée (aléatoire puis zoom) sur un sous-ensemble, puis entraînement complet sur GPU Colab ; le modèle livré | 90 |
 | MP5.6 | Analyse d'erreurs et robustesse : confusions, exemples mal classés, FGSM | 60 |
 | MP5.7 | Comparaison avec un ResNet-18 pré-entraîné de torchvision (nouvelle tête seule) : coût, gain, limites | 60 |
-| MP5.8 | Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage | 60 |
+| MP5.8 | Livraison : README, fiche modèle, predict.py, tests et mutants, nettoyage | 90 |
 
 Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `model_selection.train_test_split`, `conv.conv_output_size`, `metrics.confusion_matrix`
 
@@ -4124,8 +4124,8 @@ Un autoencodeur apprend à comprimer ses entrées dans un petit code, l'espace l
 | 25.24 | 📦 | Autoencodeur convolutif à 147 latents | ★★ | 30 | MNIST | 03 | 25.3, 21 | RC | manual |
 | 25.25 | 🐛 | Le débruiteur qui apprenait le bruit | ★★ | 25 | MNIST | 03 | 25.24 | C | wb.check |
 | 25.26 | 📦 | Autoencodeur débruiteur (bruit gaussien, écrêtage) | ★★ | 30 | Fashion-MNIST | 03 | 25.24 | RC | manual |
-| 25.27 | 🔬 | Sur-échantillonnage explicite ou convolutions à pas : temps et qualité 🚀 | ★★★ | 35 | Fashion-MNIST | 03 | 25.26, 25.4 | C | manual |
-| 25.28 | 🔨 | La reparamétrisation en NumPy : passe avant et passe arrière | ★★ | 25 | — | 03 | 25.5 | RMC | pytest |
+| 25.27 | 🔬 | Suréchantillonnage explicite ou convolutions à stride : temps et qualité 🚀 | ★★★ | 35 | Fashion-MNIST | 03 | 25.26, 25.4 | C | manual |
+| 25.28 | 🔨 | La reparamétrisation en NumPy : passe avant et passe arrière | ★★★ | 35 | — | 03 | 25.5 | RMC | pytest |
 | 25.29 | 🔨 | Divergence KL gaussienne et son gradient | ★★ | 20 | — | 03 | 25.7 | RMC | pytest |
 | 25.30 | 📦 | Un VAE en PyTorch : reconstruction + KL | ★★ | 30 | MNIST | 03 | 25.29, 25.28, 25.16 | RMC | manual |
 | 25.31 | 🔮 | Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE | ★★ | 15 | MNIST | 03 | 25.30 | RC | wb.check |
@@ -4186,7 +4186,7 @@ COMPOSITION. 59 exercices (39 numérotés) : chapitre dense (78 pages, quatre fa
 | **Livre** | vol. 2, ch. 26 « Reinforcement Learning », p. 1458-1557 |
 | **Dossier** | `chapitres/ch26_rl/` |
 | **Exercices** | 58 : 🧠 12 · 🔁 3 · ✏️ 6 · ∂ 2 · 🔨 6 · 📦 4 · 🔬 8 · 🔮 2 · 🐛 1 · 📈 1 · 🧮 1 · 🗣️ 1 · ⚖️ 1 · 📄 1 · 🎨 2 · 🏆 1 · 💼 5 · 🛠️ 1 |
-| **Temps d'étude** | **29 h** (lecture 7,9 h, exercices 20 h, 30 flashcards 1,0 h) |
+| **Temps d'étude** | **32 h** (lecture 7,9 h, exercices 23 h, 30 flashcards 1,0 h) |
 | **Génération** | 2 session(s) |
 | **Rappels 🔁** | ch. 25, 23, 11 |
 | **Compétence 🛠️** | Rapporter un résultat stochastique honnêtement : plusieurs graines, moyenne et intervalle, configuration sauvegardée en JSON |
@@ -4244,14 +4244,14 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 | 26.11 | ⚖️ | Quand l'agent optimise la mauvaise récompense | ★★ | 20 | — | 02 | — | R | manual |
 | 26.12 | 📄 | Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning » | ★★★ | 45 | — | 02 | 26.8 | M | manual |
 | 26.13 | 📦 | Prendre en main gymnasium avec FrozenLake | ★ | 15 | FrozenLake | 03 | 0A | RMC | wb.check |
-| 26.14 | 🔨 | Retours actualisés et retours à venir | ★ | 15 | — | 03 | 26.1 | RMC | pytest |
+| 26.14 | 🔨 | Retours actualisés et retours à venir | ★★ | 30 | — | 03 | 26.1 | RMC | pytest |
 | 26.15 | 🎨 | Reproduire les courbes d'actualisation (fig. 26.13-26.14) | ★ | 15 | — | 03 | 26.14 | C | manual |
 | 26.16 | 🔮 | Prédire l'effet du camion sur la table L | ★ | 10 | Flippers | 03 | 26.14 | RC | wb.check |
 | 26.17 | 🔬 | Flippers : la longueur optimale de chaque partie par recherche exhaustive | ★★ | 25 | Flippers | 03 | 0A | C | wb.check |
 | 26.18 | 🔬 | L-learning sur Flippers, sans puis avec camion | ★★★ | 40 | Flippers | 03 | 26.14, 26.17 | C | manual |
-| 26.19 | 🔨 | Politiques gloutonne et softmax (ε-greedy importée du ch. 11) | ★★ | 20 | — | 03 | 26.5, 11 | RMC | pytest |
-| 26.20 | 🔨 | Mises à jour de Q-learning et de SARSA, états terminaux compris | ★★ | 25 | — | 03 | 26.3, 26.4 | RMC | pytest |
-| 26.21 | 🔨 | La boucle d'entraînement tabulaire et l'évaluation d'une politique | ★★★ | 45 | FrozenLake | 03 | 26.19, 26.20, 26.13 | RMC | pytest |
+| 26.19 | 🔨 | Politiques gloutonne et softmax (ε-greedy importée du ch. 11) | ★★★ | 35 | — | 03 | 26.5, 11 | RMC | pytest |
+| 26.20 | 🔨 | Mises à jour de Q-learning et de SARSA, états terminaux compris | ★★★ | 75 | — | 03 | 26.3, 26.4 | RMC | pytest |
+| 26.21 | 🔨 | La boucle d'entraînement tabulaire et l'évaluation d'une politique | ★★★ | 90 | FrozenLake | 03 | 26.19, 26.20, 26.13 | RMC | pytest |
 | 26.22 | 📦 | Q-learning sur FrozenLake, glissant ou non | ★★ | 25 | FrozenLake | 03 | 26.21 | RMC | manual |
 | 26.23 | 📈 | Lire des courbes d'apprentissage RL bruitées | ★★ | 15 | FrozenLake | 03 | 26.22 | RC | wb.check |
 | 26.24 | 🐛 | L'agent qui n'apprenait rien | ★★ | 25 | FrozenLake | 03 | 26.21 | C | wb.check |
@@ -4261,7 +4261,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 | 26.28 | 🔮 | Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise | ★ | 10 | — | 03 | 26.20, 26.21 | RC | wb.check |
 | 26.29 | 🔬 | Q-learning contre SARSA sur Flippers et CliffWalking | ★★★ | 45 | Flippers | 03 | 26.28, 26.25 | C | manual |
 | 26.30 | 🎨 | Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) | ★★★ | 35 | Flippers | 03 | 26.29 | C | manual |
-| 26.31 | 🔨 | Une mémoire de rejeu (replay buffer) | ★★ | 20 | — | 03 | 0A | RC | pytest |
+| 26.31 | 🔨 | Une mémoire de rejeu | ★★★ | 40 | — | 03 | 0A | RC | pytest |
 | 26.32 | 🔬 | Concevoir la récompense : finale, pénalité par coup ou façonnée | ★★ | 30 | Flippers | 03 | 26.25 | C | manual |
 | 26.33 | 🔬 | Rejouer l'expérience pour apprendre avec moins d'épisodes | ★★★ | 35 | FrozenLake | 03 | 26.31, 26.22 | C | manual |
 | 26.34 | 🛠️ | Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle | ★★ | 25 | FrozenLake | 03 | 26.22, 2 | RC | manual |
@@ -4272,7 +4272,7 @@ L'apprentissage par renforcement apprend à agir à partir de récompenses, sans
 | 26.E1 | 💼 | Q-learning ou SARSA : on-policy, off-policy, lequel choisir ? | ★★ | 10 | — | 02 | — | R | manual |
 | 26.E2 | 💼 | À quoi sert le facteur d'actualisation γ ? | ★★ | 10 | — | 02 | — | R | manual |
 | 26.E3 | 💼 | Comment gérer le compromis exploration/exploitation ? | ★★ | 10 | — | 02 | — | R | manual |
-| 26.E4 | 💼 | Pourquoi DQN utilise-t-il un replay buffer et un réseau cible ? | ★★ | 10 | — | 02 | — | R | manual |
+| 26.E4 | 💼 | Pourquoi DQN utilise-t-il une mémoire de rejeu et un réseau cible ? | ★★ | 10 | — | 02 | — | R | manual |
 | 26.E5 | 💼 | Qu'est-ce que le RLHF et pourquoi utilise-t-on le RL avec les LLM ? | ★★ | 10 | — | 02 | — | R | manual |
 
 **mylearn : signatures figées** (source : `templates/mylearn_stubs/`)
@@ -4304,12 +4304,12 @@ class ReplayBuffer:
 - **interprétation de γ** — livre : γ mesure la confiance dans le caractère prévisible de l'environnement · aujourd'hui : γ fait partie de la définition de l'objectif : préférence pour le présent, horizon effectif ≈ 1/(1−γ), somme finie pour les tâches sans fin ; la stochasticité se traite par α et les espérances · à vérifier : Sutton & Barto (2018), §3.3
 - **valeur de α** — livre : α proche de 1 (0,9 à 0,99) · aujourd'hui : en environnement stochastique on préfère un α petit (≈ 0,1) ou décroissant (conditions de Robbins-Monro) ; α = 1 ne convient qu'au déterministe · à vérifier : Watkins & Dayan (1992) ; Sutton & Barto (2018), §2.5
 - **SARSA « toujours meilleur »** — livre : SARSA corrige une « erreur » du Q-learning et joue des parties plus courtes · aujourd'hui : ce sont deux objectifs différents : SARSA (on-policy) apprend la valeur de la politique exploratoire (chemin prudent), Q-learning (off-policy) celle de la politique gloutonne optimale ; exemple canonique CliffWalking · à vérifier : Sutton & Barto (2018), exemple 6.6 ; gymnasium CliffWalking-v1
-- **experience replay** — livre : rejouer à l'agent des séquences enregistrées lorsqu'il retrouve leur état de départ · aujourd'hui : replay buffer de DQN : on stocke des transitions (s, a, r, s', fin) et on échantillonne des mini-batchs aléatoires pour décorréler les données ; variantes prioritaires · à vérifier : Mnih et coll. 2015 ; Schaul et coll., arXiv 1511.05952
+- **experience replay** — livre : rejouer à l'agent des séquences enregistrées lorsqu'il retrouve leur état de départ · aujourd'hui : mémoire de rejeu (replay buffer) de DQN : on stocke des transitions (s, a, r, s', fin) et on échantillonne des mini-batches aléatoires pour décorréler les données ; variantes prioritaires · à vérifier : Mnih et coll. 2015 ; Schaul et coll., arXiv 1511.05952
 - **deep RL** — livre : Q-table remplacée par un réseau (Mnih 2013), AlphaGo, AlphaGo Zero · aujourd'hui : DQN et variantes, méthodes policy gradient/acteur-critique (PPO, SAC), AlphaZero et MuZero ; bibliothèques Stable-Baselines3, CleanRL · à vérifier : Schulman et coll., arXiv 1707.06347 ; Schrittwieser et coll., arXiv 1911.08265
 - **RL et modèles de langage** — livre : absent · aujourd'hui : RLHF (InstructGPT, PPO sur un modèle de récompense), alternatives sans RL explicite (DPO) et RL à récompenses vérifiables pour les modèles de raisonnement (GRPO) · à vérifier : Ouyang et coll., arXiv 2203.02155 ; Rafailov et coll., arXiv 2305.18290 ; Shao et coll., arXiv 2402.03300
 - **comptage des états** — livre : « 20 000 lignes » pour le morpion, « 43 millions de lignes et 9 colonnes » pour le 4×4 · aujourd'hui : 3^9 = 19 683 codages dont 5 478 positions réellement atteignables ; en 4×4 il y a 16 actions, pas 9 · à vérifier : calcul direct (énumération)
 
-**Thèmes 💼** : Q-learning vs SARSA (off-policy / on-policy) · Rôle du facteur d'actualisation γ · Stratégies d'exploration · Replay buffer et réseau cible dans DQN · RLHF et RL pour les LLM
+**Thèmes 💼** : Q-learning vs SARSA (off-policy / on-policy) · Rôle du facteur d'actualisation γ · Stratégies d'exploration · Mémoire de rejeu et réseau cible dans DQN · RLHF et RL pour les LLM
 
 **Articles 📄** : Mnih, Kavukcuoglu, Silver, et coll. (2015), *Human-level control through deep reinforcement learning* · Watkins, Dayan (1992), *Q-learning* · Sutton, Barto (2018), *Reinforcement Learning: An Introduction (2e éd.)* · Schulman, Wolski, Dhariwal, Radford, Klimov (2017), *Proximal Policy Optimization Algorithms* · Ouyang et coll. (2022), *Training language models to follow instructions with human feedback*
 
@@ -4352,7 +4352,7 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 
 **Notions enseignées** : GAN : générateur et discriminateur ; loss minimax et loss non saturante ; discriminateur optimal ; boucle d'entraînement alternée (detach, deux optimiseurs) ; DCGAN ; GAN conditionnel ; effondrement de mode ; distance de Wasserstein 1D ; distance de Fréchet (FID) ; équilibre de Nash (idée)
 
-**Notions mobilisées** : cross-entropy binaire (mylearn.nn.backward.binary_cross_entropy_with_logits) (ch. 18) ; sigmoïde, tanh, ReLU, Leaky ReLU et leurs dérivées (ch. 17) ; batchnorm (ch. 20) ; autograd PyTorch, optimiseurs (ch. 20) ; couches partagées et gel (requires_grad) (ch. 24) ; checkpoint complet (state_dict des modèles et des optimiseurs) (ch. 23) ; .detach() et requires_grad_(False) pour couper ou geler le gradient (encadré) (introduite ici, encadré 🧮) ; Adam (ch. 19) ; convolution à pas, convolution transposée (ch. 21) ; DataLoader, sauvegarde d'un modèle (ch. 23) ; classifieur CNN sur MNIST/Fashion-MNIST (ch. 24) ; interpolation latente (mylearn.vae.interpolate_latents) (ch. 25) ; moyenne, écart-type, covariance (ch. 2) ; matrice de covariance, valeurs propres (ch. 12) ; maximum d'une fonction (dérivée nulle), logarithme (ch. 0B) ; descente de gradient (ch. 5) ; jeu à somme nulle, minimax, équilibre de Nash (encadré) (introduite ici, encadré 🧮) ; trace et racine carrée d'une matrice (encadré 🧮) (introduite ici, encadré 🧮) ; distance de Wasserstein 1D (introduite ici, encadré 🧮)
+**Notions mobilisées** : cross-entropy binaire (mylearn.nn.backward.binary_cross_entropy_with_logits) (ch. 18) ; sigmoïde, tanh, ReLU, Leaky ReLU et leurs dérivées (ch. 17) ; batchnorm (ch. 20) ; autograd PyTorch, optimiseurs (ch. 20) ; couches partagées et gel (requires_grad) (ch. 24) ; checkpoint complet (state_dict des modèles et des optimiseurs) (ch. 23) ; .detach() et requires_grad_(False) pour couper ou geler le gradient (encadré) (introduite ici, encadré 🧮) ; Adam (ch. 19) ; convolution de stride 2, convolution transposée (ch. 21) ; DataLoader, sauvegarde d'un modèle (ch. 23) ; classifieur CNN sur MNIST/Fashion-MNIST (ch. 24) ; interpolation latente (mylearn.vae.interpolate_latents) (ch. 25) ; moyenne, écart-type, covariance (ch. 2) ; matrice de covariance, valeurs propres (ch. 12) ; maximum d'une fonction (dérivée nulle), logarithme (ch. 0B) ; descente de gradient (ch. 5) ; jeu à somme nulle, minimax, équilibre de Nash (encadré) (introduite ici, encadré 🧮) ; trace et racine carrée d'une matrice (encadré 🧮) (introduite ici, encadré 🧮) ; distance de Wasserstein 1D (introduite ici, encadré 🧮)
 
 **Exercices**
 
@@ -4364,11 +4364,11 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 | 27.Q4 | 🧠 | Le round d'apprentissage du livre en quatre temps | ★ | 3 | — | 02 | — | R | wb.check |
 | 27.Q5 | 🧠 | Coopératifs ou antagonistes : somme nulle, minimax et équilibre de Nash | ★ | 3 | — | 02 | — | RM | wb.check |
 | 27.Q6 | 🧠 | Trois modèles, des couches partagées et un discriminateur gelé | ★ | 3 | — | 02 | — | R | wb.check |
-| 27.Q7 | 🧠 | Pourquoi juger des mini-batchs plutôt qu'un point isolé | ★ | 3 | synth | 02 | — | R | wb.check |
+| 27.Q7 | 🧠 | Pourquoi juger des mini-batches plutôt qu'un point isolé | ★ | 3 | synth | 02 | — | R | wb.check |
 | 27.Q8 | 🧠 | Les règles de Radford : vrai ou faux | ★ | 3 | MNIST | 02 | — | R | wb.check |
 | 27.Q9 | 🧠 | Grandes images et croissance progressive | ★ | 3 | — | 02 | — | R | wb.check |
 | 27.Q10 | 🧠 | Effondrement de mode total ou partiel | ★ | 3 | MNIST | 02 | — | R | wb.check |
-| 27.R1 | 🔁 | Deux agents qui jouent l'un contre l'autre (self-play) | ★ | 5 | morpion | 02 | 26 | R | wb.check |
+| 27.R1 | 🔁 | Deux agents qui jouent l'un contre l'autre (auto-apprentissage) | ★ | 5 | morpion | 02 | 26 | R | wb.check |
 | 27.R2 | 🔁 | Precision et recall pour juger un générateur (fidélité contre diversité) | ★ | 5 | — | 02 | 3 | R | wb.check |
 | 27.R3 | 🔁 | Batchnorm, où la placer, train() ou eval() | ★ | 5 | — | 02 | 20 | R | wb.check |
 | 27.1 | ✏️ | Dimensions d'un DCGAN pour MNIST : 6 272 neurones, tailles 7 → 14 → 28 et retour | ★ | 15 | MNIST | 02 | 16, 21, 25 | RM | wb.check |
@@ -4390,14 +4390,14 @@ Un GAN met face à face deux réseaux : un générateur qui fabrique des échant
 | 27.17 | 🔮 | Prédire l'effet d'un discriminateur trop fort | ★★ | 15 | synth | 03 | 27.12 | C | wb.check |
 | 27.18 | 🔬 | Loss saturante ou non saturante : la dynamique du début | ★★ | 30 | synth | 03 | 27.6, 27.12 | MC | manual |
 | 27.19 | 🔬 | Le round en quatre temps du livre contre la boucle standard | ★★★ | 40 | synth | 03 | 27.12 | C | manual |
-| 27.20 | 📦 | Un DCGAN sur MNIST selon les règles de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.1, 21, 27.12 | RC | manual |
+| 27.20 | 📦 | Un DCGAN sur MNIST selon les règles de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.1, 21, 27.12 | RMC | manual |
 | 27.21 | 🔬 | Règles empiriques à l'épreuve : une architecture de 2016 contre celle de Radford 🚀 | ★★★ | 45 | MNIST | 03 | 27.20 | C | manual |
 | 27.22 | 🔨 | Distance de Fréchet entre deux gaussiennes (la formule du FID) | ★★★ | 35 | — | 03 | 12, 2 | MC | pytest |
 | 27.23 | 📦 | Évaluer un générateur : distance de Fréchet sur les features d'un classifieur | ★★★ | 40 | MNIST | 03 | 27.22, 27.20, 24 | C | manual |
 | 27.24 | 🔬 | Provoquer puis soigner un effondrement de mode (anneau de 8 gaussiennes) | ★★★ | 45 | synth | 03 | 27.15, 27.11 | C | manual |
 | 27.25 | 📦 | Un GAN conditionnel : choisir le chiffre généré 🚀 | ★★★ | 45 | MNIST | 03 | 27.20 | C | manual |
 | 27.26 | 🔬 | Se promener dans l'espace latent du générateur | ★★★ | 30 | MNIST | 03 | 27.20, 25 | C | manual |
-| 27.27 | 🛠️ | Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique | ★★★ | 30 | MNIST | 03 | 27.20, 23 | C | manual |
+| 27.27 | 🛠️ | Checkpoint d'un GAN : deux réseaux, deux optimiseurs, états aléatoires, reprise à l'identique | ★★★ | 30 | MNIST | 03 | 27.20, 23 | MC | manual |
 | 27.28 | 🏆 | Défi DCGAN Fashion-MNIST : passer sous un seuil de distance de Fréchet 🚀 | ★★★★ | 120 | Fashion-MNIST | 03 | 27.23 | C | manual |
 | 27.E1 | 💼 | Expliquer l'entraînement d'un GAN et sa loss | ★★ | 10 | — | 02 | — | R | manual |
 | 27.E2 | 💼 | Qu'est-ce que l'effondrement de mode et comment le combattre ? | ★★ | 10 | — | 02 | — | R | manual |
@@ -4592,7 +4592,7 @@ Le dernier chapitre du livre recense des sources de données : datasets intégr�
 | 29.Q8 | 🧠 | Les « nouveaux » datasets de 2018 : tâches, tailles et retraits | ★ | 4 | — | 02 | — | R | wb.check |
 | 29.R1 | 🔁 | Qui possède les droits d'une image de style ? | ★ | 5 | — | 02 | 28 | R | wb.check |
 | 29.R2 | 🔁 | En RL, d'où viennent les données ? | ★ | 5 | FrozenLake | 02 | 26 | R | wb.check |
-| 29.R3 | 🔁 | Biais d'échantillonnage — un dataset représente-t-il la population visée ? | ★ | 5 | Penguins | 02 | 2 | R | wb.check |
+| 29.R3 | 🔁 | Biais d'échantillonnage : un dataset représente-t-il la population visée ? | ★ | 5 | Penguins | 02 | 2 | R | wb.check |
 | 29.1 | ✏️ | Poids en mémoire de MNIST, Fashion-MNIST et CIFAR-10 | ★ | 10 | MNIST | 02 | 0A | M | wb.check |
 | 29.2 | ✏️ | Découpage stratifié et référence « classe majoritaire » | ★ | 10 | — | 02 | 8 | M | wb.check |
 | 29.3 | 🧮 | Télécharger Open Images ou LAION : stockage et temps | ★★ | 15 | — | 02 | 29.1 | M | manual |
@@ -4656,12 +4656,12 @@ CHAPITRE CONCEPTUEL (10 pages, listes de datasets) : composition adaptée et ass
 | CP6.1 | 🧠 | Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) | ★ | 10 | 2,5 | 25, 26, 27, 28, 29 | RMC |
 | CP6.2 | ✏️ | VAE : un tirage reparamétrisé et sa divergence KL | ★ | 10 | 2 | 25 | RMC |
 | CP6.3 | ✏️ | Deux transitions : mise à jour Q-learning puis SARSA | ★ | 10 | 2 | 26 | RMC |
-| CP6.4 | ∂ | Discriminateur optimal et losses à l'équilibre | ★ | 12 | 2 | 27 | RMC |
+| CP6.4 | ∂ | Discriminateur optimal et losses à l'équilibre | ★★ | 12 | 2 | 27 | RMC |
 | CP6.5 | ✏️ | Matrice de Gram de trois cartes d'activation | ★ | 5 | 1 | 28 | RMC |
 | CP6.6 | 🔮 | Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers | ★ | 7 | 1 | 26 | RMC |
 | CP6.7 | 📈 | Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement | ★ | 8 | 1 | 25, 26, 27 | RMC |
-| CP6.8 | 📦 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni | ★★ | 15 | 2 | 25 | RMC |
-| CP6.9 | 🐛 | Réparer une boucle d'entraînement de GAN | ★ | 10 | 1,5 | 27 | RMC |
+| CP6.8 | 🔨 | Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni | ★★ | 15 | 2 | 25 | RMC |
+| CP6.9 | 🐛 | Réparer un pas d'entraînement de GAN | ★★ | 10 | 1,5 | 27 | RMC |
 | CP6.10 | 🧮 | Table Q ou réseau : estimer la mémoire nécessaire | ★ | 6 | 1 | 26 | RMC |
 | CP6.11 | ⚖️ | Un dataset de visages pour un produit commercial | ★ | 5 | 1 | 29, 27 | RMC |
 | CP6.12 | 💼 | Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes | ★ | 6 | 1 | 25, 27 | RMC |
@@ -4671,7 +4671,7 @@ CHAPITRE CONCEPTUEL (10 pages, listes de datasets) : composition adaptée et ass
 
 **Mini-projet MP6 — Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST** (`projets/partie_6_generatif/`, ≈ 10 h, données : Fashion-MNIST (wb.datasets.load_fashion_mnist), data card du workbook)
 
-Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MNIST, puis les comparer avec un protocole d'évaluation écrit AVANT les expériences : distance de Fréchet sur les features d'un classifieur de référence, répartition des classes prédites sur les échantillons (effondrement de mode), plus proches voisins dans l'ensemble d'entraînement (mémorisation) et inspection visuelle. Le dépôt livré est prêt pour le portfolio : résultats reproductibles (graines, configuration), galerie d'interpolations, README et model card qui discutent limites et usages responsables.
+Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MNIST, puis les comparer avec un protocole d'évaluation écrit AVANT les expériences : distance de Fréchet sur les features d'un classifieur de référence, répartition des classes prédites sur les échantillons (effondrement de mode), plus proches voisins dans l'ensemble d'entraînement (mémorisation) et inspection visuelle. Le dépôt livré est prêt pour le portfolio : résultats reproductibles (graines, configuration), galerie d'interpolations, README et fiche modèle qui discutent limites et usages responsables.
 
 | Étape | Titre | ⏱️ |
 |---|---|---|
@@ -4681,15 +4681,15 @@ Entraîner un VAE convolutif et un DCGAN (conditionnel en option) sur Fashion-MN
 | MP6.4 | DCGAN (option cGAN) : entraînement journalisé, checkpoints, reprise | 150 |
 | MP6.5 | Évaluation : distance de Fréchet sur 3 graines, classes générées, plus proches voisins | 90 |
 | MP6.6 | Galerie : grilles, interpolations sphériques, échantillons conditionnels | 45 |
-| MP6.7 | README, model card, tests pytest et nettoyage du dépôt | 75 |
+| MP6.7 | README, fiche modèle, tests pytest et nettoyage du dépôt | 75 |
 
 Fonctions `mylearn` appelées (écrites dans les quatre parcours) : `vae.interpolate_latents`
 
-Grille : Reproductibilité : graines, configuration, notebook exécutable de bout en bout (3 pts) · VAE correct et analysé : courbes, choix de β justifié (4 pts) · GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4 pts) · Évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4 pts) · Galerie claire et légendée (2 pts) · README et model card : résultats chiffrés, limites, usages responsables (3 pts)
+Grille : Reproductibilité : graines, configuration, notebook exécutable de bout en bout (3 pts) · VAE correct et analysé : courbes, choix de β justifié (4 pts) · GAN entraîné de façon stable, journalisé et repris depuis un checkpoint (4 pts) · Évaluation rigoureuse : protocole fixé à l'avance, plusieurs graines, effondrement de mode et mémorisation vérifiés (4 pts) · Galerie claire et légendée (2 pts) · README et fiche modèle : résultats chiffrés, limites, usages responsables (3 pts)
 
-Extensions : diffusion latente miniature : un petit modèle de diffusion dans l'espace latent du VAE (préparation du bonus B5) · comparer la distance de Fréchet sur deux extracteurs de features et discuter la dépendance de la mesure · démo interactive (Gradio) publiée sur un Space Hugging Face avec la model card · volet RL : agent de morpion entraîné en self-play (ch. 26), évalué contre minimax, présenté dans le même dépôt
+Extensions : diffusion latente miniature : un petit modèle de diffusion dans l'espace latent du VAE (préparation du bonus B5) · comparer la distance de Fréchet sur deux extracteurs de features et discuter la dépendance de la mesure · démo interactive (Gradio) publiée sur un Space Hugging Face avec la fiche modèle · volet RL : agent de morpion entraîné par auto-apprentissage (ch. 26), évalué contre minimax, présenté dans le même dépôt
 
-*Examen blanc de 114 min sur 20 points. Répartition approximative : ch. 25 ≈ 5,3 pts (reparamétrisation et KL, loss de VAE en PyTorch), ch. 26 ≈ 4,8 pts (Q-learning/SARSA à la main, prédiction, Fermi), ch. 27 ≈ 5,3 pts (discriminateur optimal, débogage de GAN), ch. 28 ≈ 1,5 pt (Gram), ch. 29 ≈ 1 pt (éthique des données), tous chapitres via les questions flash (0,5 pt chacun) ; 10 % (2 pts, CP6.13) sur les parties antérieures : partie V (taille de sortie d'une convolution, ch. 21) et partie IV (un pas d'Adam, ch. 19). Types couverts : ✏️ ∂ 🔮 📈 📦 🐛 🧮 ⚖️ 🗣️ ; CP6.8 et CP6.9 se font dans le notebook (fichier 03), le reste sur papier. Calculatrice autorisée, pas de notes. Mini-projet MP6 : 10 h, barème sur 20. Conventions alignées sur CP1-CP5 : identifiants numériques CP6.1…CP6.13, questions flash typées ✏️, question d'entretien typée 🗣️ et rappel des parties antérieures typé ✏️ (le validateur exige Q/R/E pour 🧠/🔁/💼, le brief les exclut des checkpoints). Relecture indépendante (session 2) : les checkpoints acceptent maintenant tous les types avec des ID CPk.n ; CP6.1 est typé 🧠 et CP6.12 est typé 💼 (les mentions ✏️ ou 🗣️ ci-dessus pour ces items sont caduques). Les items d'examen, la synthèse et le mini-projet font partie des quatre parcours.*
+*Examen blanc de 114 minutes (2 h au plus), noté sur 20 : 13 questions de 10 types (🧠, ✏️, ∂, 🔮, 📈, 🔨, 🐛, 🧮, ⚖️, 💼) ; ≈ ch. 25 : 5,4 pts, ch. 26 : 4,8, ch. 27 : 5,2, ch. 28 : 1,6, ch. 29 : 1 (questions partagées réparties à parts égales), et 2 pts, soit 10 %, sur les parties IV et V (CP6.13 : taille de sortie d'une convolution du ch. 21, un pas d'Adam du ch. 19). Les deux questions de code se font dans la partie A du notebook d'examen, avec PyTorch (🔨 CP6.8 : la loss d'un VAE au contrat écrit, testée sur un batch fourni ; 🐛 CP6.9 : un pas d'entraînement de GAN à trois lignes fautives) ; la partie B vérifie le code (13 propriétés, contre des oracles importés de wb.exams ; le pas de GAN poids par poids) et les réponses chiffrées (39 réponses, avec une piste par erreur fréquente), et le barème du corrigé fait la note ; entre 8 et 12/20, la remédiation du corrigé fait refaire 25.30, 26.20, 26.21, 27.16 et 27.12 avant le mini-projet. Synthèse : carte mentale Mermaid et fiche d'une page (18 formules clés). Mini-projet MP6 après l'examen (≈ 10 h, barème sur 20), entraînement complet sur GPU Colab (🚀). Examen, synthèse et mini-projet font partie des quatre parcours.*
 
 ## Partie VII · Bonus
 
@@ -5207,7 +5207,7 @@ Un modèle de diffusion apprend à débruiter : on abîme les images en ajoutant
 
 **Notions enseignées** : processus direct et forme fermée ; plannings de bruit linéaire et cosinus ; posterior gaussien ; loss de prédiction du bruit ; U-Net conditionné par le temps ; échantillonnage DDPM ; DDIM ; EMA des poids ; guidance sans classifieur ; évaluation par distance de Fréchet ; mémorisation ; flow matching (initiation)
 
-**Notions mobilisées** : VAE, reparamétrisation, ELBO, espace latent (vae.py) (ch. 25) ; distance de Fréchet (gen_metrics.py), DCGAN, effondrement de mode (ch. 27) ; encodage sinusoïdal des positions (attention.positional_encoding) (ch. B3) ; convolutions, convolution transposée, sur-échantillonnage (ch. 21) ; boucle d'entraînement PyTorch, sauvegarde (ch. 23) ; AdamW, moyenne mobile exponentielle (momentum) (ch. 19) ; loi normale, variance d'une somme (ch. 2) ; plus proches voisins (ch. 13) ; somme de deux gaussiennes indépendantes : les variances s'ajoutent (introduite ici, encadré 🧮) ; produit de deux densités gaussiennes en dimension 1 (compléter le carré) (introduite ici, encadré 🧮) ; méthode d'Euler pour suivre un champ de vitesses (introduite ici, encadré 🧮)
+**Notions mobilisées** : VAE, reparamétrisation, ELBO, espace latent (vae.py) (ch. 25) ; distance de Fréchet (gen_metrics.py), DCGAN, effondrement de mode (ch. 27) ; encodage sinusoïdal des positions (attention.positional_encoding) (ch. B3) ; convolutions, convolution transposée, suréchantillonnage (ch. 21) ; boucle d'entraînement PyTorch, sauvegarde (ch. 23) ; AdamW, moyenne mobile exponentielle (momentum) (ch. 19) ; loi normale, variance d'une somme (ch. 2) ; plus proches voisins (ch. 13) ; somme de deux gaussiennes indépendantes : les variances s'ajoutent (introduite ici, encadré 🧮) ; produit de deux densités gaussiennes en dimension 1 (compléter le carré) (introduite ici, encadré 🧮) ; méthode d'Euler pour suivre un champ de vitesses (introduite ici, encadré 🧮)
 
 **Exercices**
 

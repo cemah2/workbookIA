@@ -798,7 +798,7 @@ if kit_ok() and ready("X_train_t"):
         slopes = [m.negative_slope for m in body_d if isinstance(m, nn.LeakyReLU)]
         verdict("MP6.4", got_d == want_d and genbench.n_parameters(body_d) == 36_577 and slopes == [0.2, 0.2]
                 and body_d[2].bias is None,
-                "discriminator_body(1, 32) : convolutions de pas 2, Leaky ReLU de pente 0,2, batchnorm sur la seconde "
+                "discriminator_body(1, 32) : convolutions de stride 2, Leaky ReLU de pente 0,2, batchnorm sur la seconde "
                 "seulement, des logits ; 36 577 paramètres.",
                 f"discriminator_body(1, 32) : attendu {names(want_d)} (Leaky ReLU de pente 0,2 ; 36 577 paramètres), reçu "
                 f"{names(got_d)} ({genbench.n_parameters(body_d)} paramètres).")

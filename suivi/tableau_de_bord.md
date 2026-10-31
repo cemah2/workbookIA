@@ -998,7 +998,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end CP4 -->
 
 <!-- wb:section 21 -->
-## 21 — Réseaux convolutifs (CNN) ⏱️ 28 h
+## 21 — Réseaux convolutifs (CNN) ⏱️ 29 h
 
 - [ ] 21.Q1–Q12 🧠 Quiz (12 questions, 36 min)
 - [ ] 21.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -1013,7 +1013,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 21.9 🗣️ Expliquer la convolution en cinq lignes ★ 10 min
 - [ ] 21.10 ⚖️ Deviner l'âge et le genre sur une photo : jusqu'où aller ? ★★ 20 min
 - [ ] 21.11 📄 Lire LeCun et coll. (1998) : LeNet-5 ★★★ 45 min
-- [ ] 21.12 🔨 conv_output_size et pad2d ★ 15 min
+- [ ] 21.12 🔨 conv_output_size et pad2d ★★ 30 min
 - [ ] 21.13 🔮 Prédire où une image CIFAR-10 « jaunit » ★ 10 min
 - [ ] 21.14 🔨 im2col : la vue « œil de mouche » ★★ 30 min
 - [ ] 21.15 🔨 conv2d : stride, padding, dilatation et groupes ★★★ 90 min
@@ -1024,7 +1024,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 21.20 🔮 Conv1d, noyau pleine largeur et 1×1 : prédire formes et paramètres ★★ 15 min
 - [ ] 21.21 🎨 Le détecteur de visage hiérarchique (Fig. 21.18 à 21.23) ★★★ 45 min
 - [ ] 21.22 📦 Le convnet MNIST du livre en PyTorch, sur Fashion-MNIST ★★★ 45 min
-- [ ] 21.23 📈 Diagnostiquer les courbes et la matrice de confusion du CNN ★★ 15 min
+- [ ] 21.23 📈 Diagnostiquer les courbes et la matrice de confusion du CNN ★★ 25 min
 - [ ] 21.24 🐛 Le CNN dont les formes ne passent pas ★★ 20 min
 - [ ] 21.25 🔬 Briser la symétrie : filtres identiques, aléatoires ou He ★★ 25 min
 - [ ] 21.26 🔬 Stride ou pooling : accuracy et temps sur CIFAR-10 ★★★ 40 min 🚀
@@ -1054,8 +1054,8 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 22.9 🗣️ Expliquer l'état caché d'un RNN en cinq lignes ★ 10 min
 - [ ] 22.10 ⚖️ Écrire « à la manière de », imiter une voix : usages et abus ★★ 20 min
 - [ ] 22.11 📄 Lire Hochreiter et Schmidhuber (1997) : Long Short-Term Memory ★★★ 45 min
-- [ ] 22.12 🔨 build_vocab, encode et decode sur Holmes et Verne ★ 15 min
-- [ ] 22.13 🔨 make_windows et make_sequence_pairs ★★ 20 min
+- [ ] 22.12 🔨 build_vocab, encode et decode sur Holmes et Verne ★★ 30 min
+- [ ] 22.13 🔨 make_windows et make_sequence_pairs ★★ 30 min
 - [ ] 22.14 🔮 Un MLP sur des fenêtres : l'ordre compte-t-il ? ★★ 20 min
 - [ ] 22.15 🔨 rnn_cell_forward et rnn_forward ★★ 30 min
 - [ ] 22.16 🔨 lstm_cell_forward et lstm_forward (portes i, f, g, o) ★★★ 45 min
@@ -1095,7 +1095,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 23.12 📦 Environnement et tenseurs : versions, device, reshape, view, permute ★★ 20 min
 - [ ] 23.13 📦 Charger et regarder Fashion-MNIST ★★ 20 min
 - [ ] 23.14 🔮 Oublier la conversion en float ou la normalisation : erreur ou entraînement lent ? ★ 10 min
-- [ ] 23.15 📦 Tout le prétraitement au même endroit : split stratifié, float32, normalisation, DataLoader ★★ 30 min
+- [ ] 23.15 📦 Tout le prétraitement au même endroit : découpage stratifié, float32, normalisation, DataLoader ★★ 30 min
 - [ ] 23.16 📦 Le MLP du livre avec nn.Sequential et nn.Flatten ★ 15 min
 - [ ] 23.17 🐛 Trois bugs d'inférence : eval() oublié, gradients calculés pour rien (inference_mode), chargement non sûr (weights_only) ★★ 25 min
 - [ ] 23.18 📦 Ta fonction fit() : boucle, validation et historique ★★★ 45 min
@@ -1108,7 +1108,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 23.25 📦 Les callbacks en PyTorch : meilleur checkpoint, planning de LR, early stopping ★★★ 45 min
 - [ ] 23.26 🔬 Planning de learning rate : constant, par paliers, cosinus ou plateau ★★ 30 min
 - [ ] 23.27 🔬 Patience de l'early stopping : 1, 3 ou 10 ★★ 20 min
-- [ ] 23.28 🛠️ Rédiger la fiche du modèle (model card) ★★ 20 min
+- [ ] 23.28 🛠️ Rédiger la fiche modèle ★★ 20 min
 - [ ] 23.29 🏆 Défi reproductibilité : un MLP Fashion-MNIST à au moins 88 % dont l'accuracy varie de moins de 0,5 point sur 5 graines, en moins de 3 min de CPU ★★★★ 90 min
 - [ ] 23.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (22 cartes)
@@ -1126,7 +1126,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 24.5 ✏️ Fenêtres, pas d'optimisation et durée : de 200 à 20 000 points ★ 10 min
 - [ ] 24.6 ∂ Dropout inversé et max-norm : espérance et projection ★★ 25 min
 - [ ] 24.7 🧮 Fermi : le budget d'une recherche d'hyperparamètres sur CPU, sur GPU et en précision mixte ★★ 20 min
-- [ ] 24.8 🗣️ La data augmentation en cinq lignes ★ 10 min
+- [ ] 24.8 🗣️ L'augmentation de données en cinq lignes ★ 10 min
 - [ ] 24.9 ⚖️ Une seule graine suffit-elle ? Reproductibilité et honnêteté des comparaisons d'hyperparamètres ★★ 20 min
 - [ ] 24.10 📄 Lire He et coll. (2016) : les réseaux résiduels ★★★ 45 min
 - [ ] 24.11 🔬 Changer un seul hyperparamètre : la taille de batch ★★ 30 min
@@ -1205,8 +1205,8 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 25.24 📦 Autoencodeur convolutif à 147 latents ★★ 30 min
 - [ ] 25.25 🐛 Le débruiteur qui apprenait le bruit ★★ 25 min
 - [ ] 25.26 📦 Autoencodeur débruiteur (bruit gaussien, écrêtage) ★★ 30 min
-- [ ] 25.27 🔬 Sur-échantillonnage explicite ou convolutions à pas : temps et qualité ★★★ 35 min 🚀
-- [ ] 25.28 🔨 La reparamétrisation en NumPy : passe avant et passe arrière ★★ 25 min
+- [ ] 25.27 🔬 Suréchantillonnage explicite ou convolutions à stride : temps et qualité ★★★ 35 min 🚀
+- [ ] 25.28 🔨 La reparamétrisation en NumPy : passe avant et passe arrière ★★★ 35 min
 - [ ] 25.29 🔨 Divergence KL gaussienne et son gradient ★★ 20 min
 - [ ] 25.30 📦 Un VAE en PyTorch : reconstruction + KL ★★ 30 min
 - [ ] 25.31 🔮 Prédire : décoder des tirages N(0, I) avec un AE puis avec un VAE ★★ 15 min
@@ -1223,7 +1223,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 <!-- wb:end 25 -->
 
 <!-- wb:section 26 -->
-## 26 — Apprentissage par renforcement ⏱️ 29 h
+## 26 — Apprentissage par renforcement ⏱️ 32 h
 
 - [ ] 26.Q1–Q12 🧠 Quiz (12 questions, 37 min)
 - [ ] 26.R1–R3 🔁 Rappels (3 questions, 15 min)
@@ -1240,14 +1240,14 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 26.11 ⚖️ Quand l'agent optimise la mauvaise récompense ★★ 20 min
 - [ ] 26.12 📄 Lire Mnih et coll. (2015), « Human-level control through deep reinforcement learning » ★★★ 45 min
 - [ ] 26.13 📦 Prendre en main gymnasium avec FrozenLake ★ 15 min
-- [ ] 26.14 🔨 Retours actualisés et retours à venir ★ 15 min
+- [ ] 26.14 🔨 Retours actualisés et retours à venir ★★ 30 min
 - [ ] 26.15 🎨 Reproduire les courbes d'actualisation (fig. 26.13-26.14) ★ 15 min
 - [ ] 26.16 🔮 Prédire l'effet du camion sur la table L ★ 10 min
 - [ ] 26.17 🔬 Flippers : la longueur optimale de chaque partie par recherche exhaustive ★★ 25 min
 - [ ] 26.18 🔬 L-learning sur Flippers, sans puis avec camion ★★★ 40 min
-- [ ] 26.19 🔨 Politiques gloutonne et softmax (ε-greedy importée du ch. 11) ★★ 20 min
-- [ ] 26.20 🔨 Mises à jour de Q-learning et de SARSA, états terminaux compris ★★ 25 min
-- [ ] 26.21 🔨 La boucle d'entraînement tabulaire et l'évaluation d'une politique ★★★ 45 min
+- [ ] 26.19 🔨 Politiques gloutonne et softmax (ε-greedy importée du ch. 11) ★★★ 35 min
+- [ ] 26.20 🔨 Mises à jour de Q-learning et de SARSA, états terminaux compris ★★★ 75 min
+- [ ] 26.21 🔨 La boucle d'entraînement tabulaire et l'évaluation d'une politique ★★★ 90 min
 - [ ] 26.22 📦 Q-learning sur FrozenLake, glissant ou non ★★ 25 min
 - [ ] 26.23 📈 Lire des courbes d'apprentissage RL bruitées ★★ 15 min
 - [ ] 26.24 🐛 L'agent qui n'apprenait rien ★★ 25 min
@@ -1257,7 +1257,7 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 26.28 🔮 Prédire le chemin appris par SARSA et par Q-learning au bord de la falaise ★ 10 min
 - [ ] 26.29 🔬 Q-learning contre SARSA sur Flippers et CliffWalking ★★★ 45 min
 - [ ] 26.30 🎨 Reproduire les comparaisons au fil de l'entraînement (fig. 26.58-26.60) ★★★ 35 min
-- [ ] 26.31 🔨 Une mémoire de rejeu (replay buffer) ★★ 20 min
+- [ ] 26.31 🔨 Une mémoire de rejeu ★★★ 40 min
 - [ ] 26.32 🔬 Concevoir la récompense : finale, pénalité par coup ou façonnée ★★ 30 min
 - [ ] 26.33 🔬 Rejouer l'expérience pour apprendre avec moins d'épisodes ★★★ 35 min
 - [ ] 26.34 🛠️ Rapporter un résultat RL honnête : plusieurs graines, configuration, intervalle ★★ 25 min
@@ -1375,12 +1375,12 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] CP6.1 🧠 Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) ★ 10 min
 - [ ] CP6.2 ✏️ VAE : un tirage reparamétrisé et sa divergence KL ★ 10 min
 - [ ] CP6.3 ✏️ Deux transitions : mise à jour Q-learning puis SARSA ★ 10 min
-- [ ] CP6.4 ∂ Discriminateur optimal et losses à l'équilibre ★ 12 min
+- [ ] CP6.4 ∂ Discriminateur optimal et losses à l'équilibre ★★ 12 min
 - [ ] CP6.5 ✏️ Matrice de Gram de trois cartes d'activation ★ 5 min
 - [ ] CP6.6 🔮 Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers ★ 7 min
 - [ ] CP6.7 📈 Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement ★ 8 min
-- [ ] CP6.8 📦 Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni ★★ 15 min
-- [ ] CP6.9 🐛 Réparer une boucle d'entraînement de GAN ★ 10 min
+- [ ] CP6.8 🔨 Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni ★★ 15 min
+- [ ] CP6.9 🐛 Réparer un pas d'entraînement de GAN ★★ 10 min
 - [ ] CP6.10 🧮 Table Q ou réseau : estimer la mémoire nécessaire ★ 6 min
 - [ ] CP6.11 ⚖️ Un dataset de visages pour un produit commercial ★ 5 min
 - [ ] CP6.12 💼 Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes ★ 6 min

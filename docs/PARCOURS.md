@@ -10,10 +10,10 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 | Parcours | Exercices | Exercices (temps) | Corrigés à lire | Lecture | Flashcards, synthèses, projets | **Total** |
 |---|---|---|---|---|---|---|
-| [Parcours complet](#complet) | 2028 | 666 h | 0 (0,0 h) | 159 h | 95 h | **920 h** |
-| [Parcours rapide](#rapide) | 1312 | 319 h | 59 (7,7 h) | 128 h | 95 h | **550 h** |
-| [Parcours orienté maths](#maths) | 801 | 307 h | 8 (0,3 h) | 159 h | 95 h | **561 h** |
-| [Parcours orienté code](#code) | 890 | 462 h | 188 (20 h) | 159 h | 95 h | **736 h** |
+| [Parcours complet](#complet) | 2028 | 669 h | 0 (0,0 h) | 159 h | 95 h | **923 h** |
+| [Parcours rapide](#rapide) | 1312 | 322 h | 59 (7,7 h) | 128 h | 95 h | **553 h** |
+| [Parcours orienté maths](#maths) | 814 | 316 h | 9 (0,4 h) | 159 h | 95 h | **571 h** |
+| [Parcours orienté code](#code) | 890 | 466 h | 188 (20 h) | 159 h | 95 h | **740 h** |
 
 À 10 h par semaine : complet ≈ 92 semaines, rapide ≈ 55 semaines.
 
@@ -23,7 +23,7 @@ Quel que soit le parcours : fiche du chapitre, flashcards chaque jour, **checkpo
 
 Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
-**2028 exercices, 666 h d'exercices, ≈ 920 h au total.**
+**2028 exercices, 669 h d'exercices, ≈ 923 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -77,7 +77,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 ### Partie VI · Génératif et RL
 
 - **25** Autoencodeurs et VAE (59 ex., 22 h) : 25.Q1–Q12, 25.R1–R3, 25.1–39, 25.E1–E5
-- **26** Apprentissage par renforcement (58 ex., 20 h) : 26.Q1–Q12, 26.R1–R3, 26.1–38, 26.E1–E5
+- **26** Apprentissage par renforcement (58 ex., 23 h) : 26.Q1–Q12, 26.R1–R3, 26.1–38, 26.E1–E5
 - **27** Réseaux antagonistes génératifs (GAN) (46 ex., 16 h) : 27.Q1–Q10, 27.R1–R3, 27.1–28, 27.E1–E5
 - **28** Applications créatives (46 ex., 15 h) : 28.Q1–Q10, 28.R1–R3, 28.1–29, 28.E1–E4
 - **29** Datasets et préparation du projet final (31 ex., 7,9 h) : 29.Q1–Q8, 29.R1–R3, 29.1–16, 29.E1–E4
@@ -104,7 +104,7 @@ Tout le workbook, dans l'ordre : l'objectif d'exhaustivité de la bible.
 
 L'essentiel pour être employable (data scientist, ML engineer) : concepts centraux, pratique scikit-learn et PyTorch, toutes les questions d'entretien, les implémentations clés. On peut revenir plus tard sur le reste.
 
-**1312 exercices, 319 h d'exercices, ≈ 550 h au total.**
+**1312 exercices, 322 h d'exercices, ≈ 553 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -163,8 +163,8 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 ### Partie V · Architectures
 
-- **21** Réseaux convolutifs (CNN) (29 ex., 6,2 h) : 21.Q1–Q6, 21.Q11–Q12, 21.R1–R3, 21.1–4, 21.8–10, 21.12, 21.22–24, 21.27, 21.29, 21.E1–E5
-- **22** Réseaux récurrents (RNN, LSTM, GRU) (29 ex., 6,0 h) : 22.Q1–Q3, 22.Q5–Q6, 22.Q8, 22.Q10, 22.Q12, 22.R1–R3, 22.1–3, 22.5, 22.8–9, 22.12–13, 22.15, 22.20–23, 22.E1–E5
+- **21** Réseaux convolutifs (CNN) (29 ex., 6,7 h) : 21.Q1–Q6, 21.Q11–Q12, 21.R1–R3, 21.1–4, 21.8–10, 21.12, 21.22–24, 21.27, 21.29, 21.E1–E5
+- **22** Réseaux récurrents (RNN, LSTM, GRU) (29 ex., 6,4 h) : 22.Q1–Q3, 22.Q5–Q6, 22.Q8, 22.Q10, 22.Q12, 22.R1–R3, 22.1–3, 22.5, 22.8–9, 22.12–13, 22.15, 22.20–23, 22.E1–E5
 - **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (28 ex., 6,9 h) : 23.Q6, 23.Q9–Q12, 23.R1–R3, 23.1, 23.3–4, 23.9, 23.12–13, 23.15–19, 23.21–23, 23.25, 23.E1–E5
   - corrigés à lire : 23.2, 23.6–7
 - **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (34 ex., 9,5 h) : 24.Q1–Q4, 24.Q7–Q8, 24.Q10–Q11, 24.R1–R3, 24.1–2, 24.4, 24.7–9, 24.11–14, 24.16–20, 24.22–23, 24.28, 24.E1–E5
@@ -173,9 +173,9 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 ### Partie VI · Génératif et RL
 
-- **25** Autoencodeurs et VAE (41 ex., 9,1 h) : 25.Q1–Q12, 25.R1–R3, 25.1, 25.3, 25.5, 25.9–12, 25.14–16, 25.20–21, 25.24, 25.26, 25.28–31, 25.34–35, 25.37, 25.E1–E5
+- **25** Autoencodeurs et VAE (41 ex., 9,3 h) : 25.Q1–Q12, 25.R1–R3, 25.1, 25.3, 25.5, 25.9–12, 25.14–16, 25.20–21, 25.24, 25.26, 25.28–31, 25.34–35, 25.37, 25.E1–E5
   - corrigés à lire : 25.6–7
-- **26** Apprentissage par renforcement (39 ex., 7,6 h) : 26.Q1–Q12, 26.R1–R3, 26.1–4, 26.9–11, 26.13–14, 26.16, 26.19–23, 26.28, 26.31, 26.34, 26.36, 26.E1–E5
+- **26** Apprentissage par renforcement (39 ex., 10 h) : 26.Q1–Q12, 26.R1–R3, 26.1–4, 26.9–11, 26.13–14, 26.16, 26.19–23, 26.28, 26.31, 26.34, 26.36, 26.E1–E5
   - corrigés à lire : 26.5
 - **27** Réseaux antagonistes génératifs (GAN) (28 ex., 4,8 h) : 27.Q1–Q10, 27.R1–R3, 27.1, 27.3–4, 27.7–9, 27.12–14, 27.20, 27.E1–E5
 - **28** Applications créatives (28 ex., 5,1 h) : 28.Q1–Q10, 28.R1–R3, 28.1–2, 28.6, 28.8–9, 28.11–13, 28.18, 28.20, 28.23, 28.E1–E4
@@ -212,7 +212,7 @@ L'essentiel pour être employable (data scientist, ML engineer) : concepts centr
 
 Pour comprendre en profondeur : calculs à la main, démonstrations, estimations de Fermi et implémentations à forte composante mathématique.
 
-**801 exercices, 307 h d'exercices, ≈ 561 h au total.**
+**814 exercices, 316 h d'exercices, ≈ 571 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -262,16 +262,17 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 ### Partie V · Architectures
 
 - **21** Réseaux convolutifs (CNN) (21 ex., 11 h) : 21.Q3, 21.Q9, 21.R2, 21.1–8, 21.11–12, 21.14–15, 21.18, 21.22, 21.27–28, 21.30–31
-- **22** Réseaux récurrents (RNN, LSTM, GRU) (14 ex., 5,6 h) : 22.Q6, 22.1–8, 22.11, 22.13, 22.15–16, 22.19
-- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (8 ex., 2,4 h) : 23.R3, 23.1–4, 23.7–8, 23.11
-- **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (9 ex., 2,8 h) : 24.R2, 24.1–7, 24.10
+- **22** Réseaux récurrents (RNN, LSTM, GRU) (14 ex., 5,8 h) : 22.Q6, 22.1–8, 22.11, 22.13, 22.15–16, 22.19
+- **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (15 ex., 5,8 h) : 23.R3, 23.1–4, 23.7–8, 23.11–13, 23.15–16, 23.18, 23.23, 23.25
+  - corrigés à lire : 23.6
+- **24** PyTorch en pratique 2 : améliorer, chercher, CNN et RNN (13 ex., 4,9 h) : 24.R2, 24.1–7, 24.10, 24.19–20, 24.22–23
 - **CP5** Checkpoint V — Architectures (CNN, RNN, PyTorch en pratique) (14 ex., 2,0 h) : CP5.1–14
 
 ### Partie VI · Génératif et RL
 
 - **25** Autoencodeurs et VAE (24 ex., 11 h) : 25.Q9, 25.Q12, 25.R3, 25.1–10, 25.13, 25.15–16, 25.20, 25.23, 25.28–30, 25.34, 25.36, 25.38
-- **26** Apprentissage par renforcement (19 ex., 6,4 h) : 26.Q6, 26.Q8, 26.1–9, 26.12–14, 26.19–22, 26.26
-- **27** Réseaux antagonistes génératifs (GAN) (13 ex., 4,8 h) : 27.Q5, 27.1–7, 27.10–12, 27.18, 27.22
+- **26** Apprentissage par renforcement (19 ex., 8,5 h) : 26.Q6, 26.Q8, 26.1–9, 26.12–14, 26.19–22, 26.26
+- **27** Réseaux antagonistes génératifs (GAN) (15 ex., 6,0 h) : 27.Q5, 27.1–7, 27.10–12, 27.18, 27.20, 27.22, 27.27
 - **28** Applications créatives (13 ex., 5,0 h) : 28.Q7, 28.1–7, 28.10–11, 28.18, 28.23, 28.25
 - **29** Datasets et préparation du projet final (13 ex., 5,0 h) : 29.1–3, 29.6–15
   - corrigés à lire : 29.4
@@ -298,7 +299,7 @@ Pour comprendre en profondeur : calculs à la main, démonstrations, estimations
 
 Pour devenir solide en implémentation : from scratch, bibliothèques, chasses au bug, défis, expériences et compétences pro.
 
-**890 exercices, 462 h d'exercices, ≈ 736 h au total.**
+**890 exercices, 466 h d'exercices, ≈ 740 h au total.**
 
 ### Partie 0 · Prérequis
 
@@ -367,7 +368,7 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
 
 - **21** Réseaux convolutifs (CNN) (21 ex., 14 h) : 21.12–32
   - corrigés à lire : 21.1–7
-- **22** Réseaux récurrents (RNN, LSTM, GRU) (18 ex., 10 h) : 22.12–29
+- **22** Réseaux récurrents (RNN, LSTM, GRU) (18 ex., 11 h) : 22.12–29
   - corrigés à lire : 22.1–2, 22.4–6
 - **23** PyTorch en pratique 1 : du dataset au modèle sauvegardé (18 ex., 8,7 h) : 23.12–29
   - corrigés à lire : 23.2–4, 23.6–7
@@ -377,9 +378,9 @@ Pour devenir solide en implémentation : from scratch, bibliothèques, chasses a
 
 ### Partie VI · Génératif et RL
 
-- **25** Autoencodeurs et VAE (26 ex., 15 h) : 25.14–39
+- **25** Autoencodeurs et VAE (26 ex., 16 h) : 25.14–39
   - corrigés à lire : 25.1, 25.3–8
-- **26** Apprentissage par renforcement (26 ex., 15 h) : 26.13–38
+- **26** Apprentissage par renforcement (26 ex., 17 h) : 26.13–38
   - corrigés à lire : 26.1, 26.3–5, 26.8
 - **27** Réseaux antagonistes génératifs (GAN) (18 ex., 11 h) : 27.11–28
   - corrigés à lire : 27.1, 27.3–4, 27.6

@@ -24,7 +24,7 @@ Générer des images de vêtements 28 × 28 en niveaux de gris (Fashion-MNIST) a
 
 | Module | Contenu |
 |---|---|
-| `genbench/models.py` | le classifieur de référence ; `ConvVAE` (deux convolutions de pas 2, 16 latents, deux convolutions transposées, des logits) ; le DCGAN selon les règles de Radford (convolutions de pas 2 et transposées, batchnorm, ReLU et tanh dans G, Leaky ReLU dans D), conditionnel en option (un embedding du label) |
+| `genbench/models.py` | le classifieur de référence ; `ConvVAE` (deux convolutions de stride 2, 16 latents, deux convolutions transposées, des logits) ; le DCGAN selon les règles de Radford (convolutions de stride 2 et transposées, batchnorm, ReLU et tanh dans G, Leaky ReLU dans D), conditionnel en option (un embedding du label) |
 | `genbench/train.py` | `vae_loss` (cross-entropy binaire **sommée** sur les pixels, KL sommée sur les latents, les deux divisées par N), `train_vae` ; `gan_step` (loss non saturante, faux détachés), `train_gan` (Adam 2·10⁻⁴, β₁ = 0,5 ; `log.csv` ; un checkpoint complet par epoch et une reprise au bit près) |
 | `genbench/evaluate.py` | les features, la distance de Fréchet (la fonction de ma librairie `mylearn`, sinon SciPy), `class_report`, `nearest_neighbors`, `sample_images`, `interpolate` (le slerp de `mylearn.vae.interpolate_latents`) |
 

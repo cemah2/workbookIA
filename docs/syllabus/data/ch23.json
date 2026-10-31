@@ -9,9 +9,9 @@
   "title_en": "Keras Part 1",
   "pages": "1090-1208"
  },
- "summary": "Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la loss et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche de modèle.",
+ "summary": "Le livre apprend Keras ; ici, chaque étape devient du PyTorch moderne, sur Fashion-MNIST. Tu suis tout le parcours d'un projet : environnement et tenseurs, chargement et inspection des données, prétraitement unique et reproductible, construction du modèle, choix de la loss et de l'optimiseur, boucle d'entraînement, analyse des erreurs, prédiction, sauvegarde et équivalents des callbacks de Keras (meilleur checkpoint, planning de learning rate, early stopping). Tu repars avec une fonction fit() réutilisable et une fiche modèle.",
  "objectives": [
-  "Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, split stratifié, DataLoader, graines",
+  "Préparer un jeu d'images pour PyTorch : types, normalisation calculée sur le train, découpage stratifié, DataLoader, graines",
   "Traduire un modèle Keras (Sequential, Dense, compile, fit) en PyTorch (nn.Sequential, loss, optimiseur, boucle)",
   "Écrire une fonction fit() réutilisable qui gère les modes train/eval, la validation et l'historique",
   "Analyser un entraînement : courbes, overfitting, matrice de confusion, exemples mal classés",
@@ -210,7 +210,7 @@
   "jeux « hello world » : Iris, MNIST, Fashion-MNIST",
   "convention X / y, train / validation / test",
   "problèmes de contenu et problèmes de structure",
-  "split stratifié",
+  "découpage stratifié",
   "normalisation (division par 255, moyenne et écart-type du train)",
   "labels entiers ou one-hot ; num_classes",
   "prétraitement en un seul endroit : Dataset, transforms, DataLoader, graines",
@@ -225,7 +225,7 @@
   "inférence : torch.inference_mode, probabilités softmax",
   "sauvegarde : state_dict, checkpoint complet, weights_only, safetensors",
   "modèle pré-entraîné, gel des couches, nouvelle tête",
-  "sauvegarder le prétraitement, fiche de modèle",
+  "sauvegarder le prétraitement, fiche modèle",
   "callbacks : meilleur checkpoint, planning de learning rate, early stopping",
   "Keras 3 multi-backend (🕰️)"
  ],
@@ -299,7 +299,7 @@
  "teaches": [
   "workflow PyTorch complet",
   "Dataset, DataLoader, transforms",
-  "normalisation et split stratifié",
+  "normalisation et découpage stratifié",
   "nn.Sequential, nn.Flatten, nn.Linear",
   "CrossEntropyLoss et logits",
   "fonction fit() avec historique",
@@ -309,7 +309,7 @@
   "modèle pré-entraîné torchvision",
   "schedulers de learning rate",
   "early stopping et meilleur checkpoint",
-  "fiche de modèle"
+  "fiche modèle"
  ],
  "requires": [
   {
@@ -1461,7 +1461,7 @@
   "100 % en train, 88 % en validation : que faire ?",
   "Keras ou PyTorch : choisir un framework en 2026"
  ],
- "pro_skill": "Rédiger une fiche de modèle (model card) : données, prétraitement, métriques, limites",
+ "pro_skill": "Rédiger une fiche modèle (*model card*) : données, prétraitement, métriques, limites",
  "flashcards": 22,
  "reading_minutes": 300,
  "generation_sessions": 2,

@@ -59,6 +59,21 @@ FORBIDDEN = {
     "variable de substitution": (r"\b[Ii]ndicateurs? indirects?\b", []),
     "fine-tuning": (r"\b[Aa]justements? fins?\b", []),
     "vérification du gradient": (r"\b[Gg]radient[ -]check(?:ing)?\b", ["dlwb::ch05::gradient-check"]),
+    # audit P5 of parts V and VI (R1): the terms of parts V and VI
+    "mini-batches": (r"\b[Mm]ini-batchs\b", []),
+    "stride": (r"\b[Cc]onvolutions?(?: transposées?)? (?:à pas\b|de pas \d)", []),    # « de stride 2 »
+    "suréchantillonnage": (r"\b[Ss]ur-échantillonn", []),
+    "fine-tuning (affiner)": (r"\b[Aa]ffin(?:er|é|ée|és|ées|age|ons|ez|ent|era|erait)\b",
+                              ["affiner encore la grille",          # ch. 26: make a grid finer
+                               "affinent le dosage",                # ch. 28: the weights tune the mix
+                               "« affinage des données »",          # ch. 15: the book's « data refinement »
+                               "s'affinent ensuite"]),              # MP6: generated images get sharper
+    "carte d'activation": (r"\b[Cc]artes? de (?:caractéristiques|features)\b", []),
+    # « split » is the question of a tree node (R5 of session 43): the split of the data is a « découpage ». Only
+    # the unambiguous forms are refused (« le split », « même split » also name a node of ch. 13 and 14).
+    "découpage (des données)": (r"\b[Ss]plits? (?:\*\*)?(?:non )?(?:stratifiés?|temporels?|aléatoires?|"
+                                r"chronologiques?|par groupes|de validation|des données|train ?/|entraînement ?/)"
+                                r"|\bcôtés du split\b", []),
 }
 
 GLOSS = re.compile(r"\(\*[^*\n]+\*|\(<i>[^<\n]+</i>")          # « (*époque*) », « (*taux d'apprentissage* : … »
@@ -115,3 +130,14 @@ def test_the_terminology_check_sees_a_forbidden_form_and_accepts_a_gloss():
     assert list(_violations("elle remonte à l'époque 5", pattern, allowed)) == ["époque"]
     pattern, allowed = FORBIDDEN["batch, mini-batch"]
     assert list(_violations("des mini-lots de 64", pattern, allowed)) == ["mini-lots"]
+    pattern, allowed = FORBIDDEN["mini-batches"]
+    assert list(_violations("312 mini-batchs pleins", pattern, allowed)) == ["mini-batchs"]
+    pattern, allowed = FORBIDDEN["stride"]
+    assert list(_violations("des convolutions à pas au lieu du pooling", pattern, allowed)) == ["convolutions à pas"]
+    assert not list(_violations("une convolution de stride 2 ; un pas de l'optimiseur", pattern, allowed))
+    pattern, allowed = FORBIDDEN["découpage (des données)"]
+    assert list(_violations("un split stratifié à graine", pattern, allowed)) == ["split stratifié"]
+    assert not list(_violations("le meilleur split d'un nœud ; `train_test_split` stratifié", pattern, allowed))
+    pattern, allowed = FORBIDDEN["fine-tuning (affiner)"]
+    assert list(_violations("le modèle a été affiné", pattern, allowed)) == ["affiné"]
+    assert not list(_violations("une fonction affine ; des transformations affines", pattern, allowed))

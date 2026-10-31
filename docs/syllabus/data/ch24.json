@@ -1526,7 +1526,7 @@
  ],
  "interview_themes": [
   "Organiser une recherche d'hyperparamètres avec un budget limité",
-  "Pourquoi la data augmentation généralise mieux, et ses pièges",
+  "Pourquoi l'augmentation de données généralise mieux, et ses pièges",
   "Dropout ou batchnorm, et où les placer",
   "Éviter la fuite de données dans une validation croisée avec prétraitement",
   "Connexion résiduelle : ce que c'est et pourquoi elle permet des réseaux très profonds"
