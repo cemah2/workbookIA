@@ -311,6 +311,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | après quelques pas de fine-tuning, le modèle fait moins bien que le linear probe de départ | learning rate d'un entraînement de zéro sur tout le réseau, sans warmup : la tête aléatoire envoie de grands gradients dans le backbone | 10 à 100 fois plus petit, plus petit vers l'entrée, avec un warmup, ou LP-FT (✏️ B1.3) |
 | un zéro-shot CLIP aux probabilités bien trop étalées | échelle $s$ oubliée, ou lue dans `config.json` (`logit_scale_init_value`, la valeur de départ) | `model.logit_scale.exp()`, lu dans les poids (✏️ B1.5) |
 | un zéro-shot qui donne presque toujours la même classe | embeddings non normalisés : la norme d'une phrase pèse dans le produit scalaire | diviser chaque embedding d'image et de texte par sa norme (✏️ B1.5) |
+| deux stratégies de transfert dont le classement s'inverse d'une exécution à l'autre | une seule graine avec 10 images par classe, ou un test différent d'un point à l'autre de la courbe | sous-ensembles emboîtés et stratifiés, le même test partout, plusieurs graines aux petites tailles, l'écart-type avec la moyenne (🔬 B1.21) |
+| des prototypes de classe dominés par quelques images, un few-shot qui dépend de la norme des embeddings | moyenne des embeddings bruts, ou prototypes non normalisés avant le cosinus | normaliser chaque embedding, faire la moyenne, puis normaliser le prototype (📦 B1.25) |
+| après la mesure de l'oubli, le modèle fine-tuné ne prédit plus ses 10 classes | l'ancienne tête remise sur le modèle lui-même, au lieu d'une copie | `copy.deepcopy(model)`, puis remplacer `fc` sur la copie (🔬 B1.23) |
+| une latence qui double d'une exécution à l'autre, ou un premier appel très lent | premier appel compté (allocations, choix des algorithmes), moyenne tirée par une tâche de fond | quelques passes de chauffe, la médiane de plusieurs mesures, une machine au repos, `torch.get_num_threads()` noté (🔬 B1.26) |
+| `save_file` refuse les métadonnées ou un tenseur | métadonnées qui ne sont pas des chaînes (`{"num_classes": 10}`), tenseur non contigu (`visual_projection.weight` de CLIP) ou resté sur le GPU | `{"num_classes": "10"}` ; `{k: v.detach().cpu().contiguous() for k, v in state.items()}` (🛠️ B1.27) |
 
 ## Erreurs de raisonnement (ML)
 

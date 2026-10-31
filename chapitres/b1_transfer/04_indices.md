@@ -765,4 +765,226 @@ for epoch in range(epochs):
 
 </details>
 
-*Les indices des exercices B1.20 à B1.28 (parties C et D) seront ajoutés à la prochaine étape de génération.*
+### Ex B1.20 — Prédire : où le pré-entraînement rapporte-t-il le plus, 10 ou 1 000 images par classe ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La courbe d'apprentissage selon la taille du train » (§201.6) et tes résultats de B1.13 et B1.14 : que valait déjà le linear probe avec quelques dizaines d'images par classe ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Estime séparément les quatre accuracies, puis fais les deux soustractions. Pour le linear probe, pense à ce que l'embedding sait déjà avant la première image de CIFAR-10. Pour le CNN from scratch, demande-toi ce que peut apprendre un réseau de 24 000 paramètres avec 10 photos par classe, puis avec 1 000 : que doit-il découvrir seul, que le backbone a appris sur ImageNet ? Le hasard vaut 10 %.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris tes quatre estimations avant de choisir : « avec 10 images par classe, le probe fait environ … % et le CNN from scratch environ … %, parce que … » ; puis la même phrase pour 1 000 images par classe. Place chaque différence dans les catégories de l'énoncé (en points, pas en pourcentage relatif).
+
+</details>
+
+### Ex B1.21 — Courbes d'apprentissage : from scratch, linear probe et fine-tuning de 10 à 1 000 images par classe 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis le protocole de la fiche (§201.6, quatre points) : chaque fonction du contrat en applique un. Les trois stratégies réutilisent ce que tu as déjà écrit : `probe_13` (B1.13), `make_full_19` et `fine_tune_19` (B1.19), et la fonction donnée `train_scratch`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`probe_21` : deux appels à `reference_embeddings` (le train avec le sous-ensemble `"curve"`, le test avec `"test"` : le cache reconnaît les images de test déjà calculées), puis `probe_13(..., C=0.01)`. `scratch_21` : une ligne, `train_scratch(...).accuracy(...)`. `finetune_21` : le nombre de pas par epoch est `ceil(len(X) / 32)` ; le nombre d'epochs, le plus grand de `FT_EPOCHS` et `ceil(40 / pas par epoch)` ; `fine_tune_19` reçoit `**FT_RECIPE_21`, puis `evaluate` sur le test ; une graine fixée avant `make_full_19` rend la tête reproductible. `learning_curve_21` : deux boucles, `sorted(plan)` puis les graines dans l'ordre ; `summarize_21` : regroupe par taille et applique `np.mean` et `np.std`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def learning_curve_21(fit_eval, plan, test, load=wb.datasets.load_cifar10_subset):
+    X_test, y_test = test
+    rows = []
+    for size in sorted(plan):
+        for seed in plan[size]:
+            X, y = load(size, "train", seed)
+            ...              # one point: {"size", "seed", "accuracy": float(fit_eval(..., seed=seed))}
+    return rows
+```
+Pour `finetune_21` : `fine_tune_19(model, (X, y), (X_VAL, Y_VAL), epochs=..., t_warmup=per_epoch, batch_size=32, seed=seed, **FT_RECIPE_21)`.
+
+</details>
+
+### Ex B1.22 — Domaine lointain : transférer vers Fashion-MNIST, comparé au CNN from scratch 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « La distance de domaine » et « Le transfert négatif » (§201.7), puis tes courbes de B1.16 : sur Fashion-MNIST, quel bloc donnait le meilleur probe ? Les deux fonctions du contrat ont la forme des `fit_eval` de B1.21, que ton `learning_curve_21` sait déjà appeler.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`fm_probe_22(block)` est une fabrique : elle définit une fonction interne `fit_eval(X, y, X_test, y_test, seed=0)`, qui lit `fm_embeddings(X)[block]` et `fm_embeddings(X_test)[block]` et appelle `probe_13` avec `C=0.01`, puis elle **rend** cette fonction (sans l'appeler). `fm_scratch_22` est la même ligne que `scratch_21` : `train_scratch` accepte des images en niveaux de gris `(N, 28, 28)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fm_probe_22(block):
+    def fit_eval(X, y, X_test, y_test, seed=0):
+        ...                  # probe_13 on the embeddings of this block, C = 0.01
+    return fit_eval          # the function itself, not fit_eval(...)
+```
+
+</details>
+
+### Ex B1.23 — Oubli catastrophique : que reste-t-il des prédictions ImageNet après le fine-tuning ? 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « L'oubli catastrophique » (§201.7) : la mesure remet l'ancienne tête sur le nouveau backbone. Pense aussi à ce que tu as appris au ch. 23 sur la copie d'un modèle et sur `eval()`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour ne pas toucher au modèle reçu, travaille sur une copie (`copy.deepcopy`) : remplace sa tête `fc` par (une copie de) `reference.fc`, passe les deux réseaux en `eval()` et sur le CPU, puis compare, mini-batch par mini-batch, `argmax(1)` des deux sorties sous `torch.inference_mode()` ; l'accord est le nombre d'égalités divisé par le nombre d'images. Pour a) et b), lis les deux lignes de la cellule d'expérience.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+old = copy.deepcopy(model).cpu().eval()
+old.fc = copy.deepcopy(reference.fc)          # the ImageNet head on the fine-tuned backbone
+...                                            # loop over mini-batches: x = to_input(images[i:i + batch_size], size)
+                                               # count (old(x).argmax(1) == reference(x).argmax(1)).sum()
+```
+a) Repère la ligne de `MODEL_19` et place son accord dans les catégories. b) Compare les accords de `MODEL_17` et de `MODEL_19`.
+
+</details>
+
+### Ex B1.24 — Zéro-shot avec CLIP sur CIFAR-10 : gabarits de prompts et ensembles de prompts 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le zéro-shot » et « Les gabarits comptent » (§201.8), avec l'extrait de code de la fiche, et ton ✏️ B1.5 pour le rôle de $s$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`text_embeddings_24` : pour chaque classe, la liste des phrases `[t.format(nom) for t in templates]`, passée au processeur (`text=`, `return_tensors="pt"`, `padding=True`) puis à `get_text_features` ; avec transformers 5, l'embedding est `.pooler_output`. Normalise chaque ligne (`v / v.norm(dim=-1, keepdim=True)`), fais la moyenne sur les phrases, renormalise, empile les classes et convertis en NumPy `float32`. `zero_shot_24` : normalise les deux matrices ligne par ligne, multiplie `u @ v.T` par `scale`, puis une softmax stable sur l'axe des classes (soustrais le maximum de chaque ligne, ch. 17).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def zero_shot_24(image_emb, text_emb, scale):
+    u = image_emb / np.linalg.norm(image_emb, axis=1, keepdims=True)
+    v = ...                  # the same for the text vectors
+    z = scale * (u @ v.T)    # (N, K) logits
+    ...                      # softmax over axis=1, stable
+```
+Dans `text_embeddings_24`, sous `torch.inference_mode()` : `out = model.get_text_features(**processor(text=texts, return_tensors="pt", padding=True))`, puis `v = out.pooler_output`.
+
+</details>
+
+### Ex B1.25 — Few-shot par prototypes de classe avec DINOv2 et CLIP (1 à 16 exemples par classe) 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le few-shot et les prototypes de classe » (§201.6) : la fiche donne déjà le calcul des prototypes et de la prédiction en NumPy. `few_shot_25` répète ce calcul pour chaque nombre d'exemples et chaque tirage du support.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`prototypes_25` : normalise d'abord chaque embedding, puis la moyenne des lignes de chaque classe, `c` de 0 à `n_classes - 1`. `predict_25` : normalise **aussi** les prototypes (la moyenne de vecteurs de norme 1 n'est plus de norme 1), puis `argmax` de la matrice des cosinus. `few_shot_25` : pour chaque `k`, une liste de `draws` accuracies ; pour chaque tirage `d`, `pos = draw_support(y_support, k, d, seed)`, les prototypes de `E_support[pos]`, puis l'accuracy sur les requêtes ; enfin `np.mean` et `np.std`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def few_shot_25(support, query, shots, draws, seed=0):
+    (E_s, y_s), (E_q, y_q) = support, query
+    rows = []
+    for k in shots:
+        accs = []
+        for d in range(draws):
+            pos = draw_support(y_s, k, d, seed)
+            ...              # prototypes of E_s[pos], then the accuracy of predict_25 on the query
+        rows.append({"shots": k, "mean": float(np.mean(accs)), "std": float(np.std(accs))})
+    return rows
+```
+
+</details>
+
+### Ex B1.26 — Taille, latence et accuracy sur CPU : MobileNetV3-small, ResNet-18, DINOv2-small 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Quatre mesures à ne pas confondre » et « Mesurer une latence correctement » (§201.9) : la fiche donne une fonction de latence presque complète, et la différence entre latence et débit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`latency_ms_26` : `model.eval()`, puis sous `torch.inference_mode()` d'abord `warmup` appels non chronométrés, puis `reps` appels entourés de `time.perf_counter()` ; rends `1000 * np.median(...)`, en `float`. `size_26` : parcours `model.parameters()` ; `p.numel()` compte les valeurs, `p.element_size()` les octets de chacune (4 en `float32`, 2 en `float16`). `profile_26` : deux appels à ta latence, l'un sur `torch.randn(1, 3, size, size)`, l'autre sur un batch de `batch` images avec `reps=5` ; le débit est `batch` divisé par la durée du batch **en secondes**.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def latency_ms_26(model, x, reps=20, warmup=3):
+    model.eval()
+    times = []
+    with torch.inference_mode():
+        ...                  # warmup calls, not timed
+        for _ in range(reps):
+            start = time.perf_counter()
+            ...              # one call, then times.append(time.perf_counter() - start)
+    return 1000 * float(np.median(times))
+```
+
+</details>
+
+### Ex B1.27 — Publier un modèle fine-tuné : safetensors, configuration et fiche modèle qui cite le modèle de base 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis « Publier un modèle dérivé » (§201.9, avec l'extrait `save_file` / `load_file`), ta fiche modèle du ch. 23 (🛠️ 23.28), et les deux data cards citées par l'énoncé pour les licences et la source de CIFAR-10.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`publish_27` : crée le dossier (`mkdir(parents=True, exist_ok=True)`) ; pour les poids, un dictionnaire `{nom: tenseur.detach().cpu().contiguous()}` et `save_file(..., metadata={...})` avec des valeurs **chaînes** (`str(10)`) ; pour la configuration, un dictionnaire Python écrit par `json.dumps(..., indent=2)` (les versions viennent de `torch.__version__` et `torchvision.__version__`) ; pour la fiche, un texte Markdown avec les cinq titres `## ` dans l'ordre, rempli avec les chiffres de ton entraînement (`pct(test_accuracy)` écrit l'accuracy à la française). `load_published_27` : `json.loads` de la configuration, `resnet18(weights=None)`, une tête `nn.Linear(512, config["num_classes"])`, puis `load_state_dict(load_file(...))` et `eval()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+state = {k: v.detach().cpu().contiguous() for k, v in model.state_dict().items()}
+save_file(state, folder / "model.safetensors", metadata={"base_model": BASE_MODEL_27, "num_classes": "10"})
+...                          # config.json (json.dumps), then README.md with the "## " sections of CARD_SECTIONS_27
+```
+Pour recharger : `model.load_state_dict(load_file(folder / "model.safetensors"))`, jamais `torch.load`.
+
+</details>
+
+### Ex B1.28 — Défi : au moins 90 % sur le test CIFAR-10 avec 100 images par classe et 10 minutes de CPU 🏆
+
+<details><summary>Indice 1</summary>
+
+Relis tes propres mesures : B1.21 (fine-tuning et linear probe à 100 images par classe), B1.24 (zéro-shot), B1.25 (prototypes) et B1.26 (accuracy et coût de trois backbones). Laquelle de ces approches est déjà la plus proche de 90 %, et pour quel coût ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Compare trois familles sur la **validation** : un ResNet fine-tuné (B1.19) ; un backbone gelé, avec un linear probe ou des prototypes sur ses embeddings ; le zéro-shot de CLIP, éventuellement combiné aux prototypes. Pour un backbone gelé, les embeddings se calculent une fois (`transfer.cached_embeddings`), et les réglages (`C`, la résolution) se choisissent sur `X_VAL` par une petite grille, **avant** de lancer `evaluate_28`. Chronomètre chaque essai à froid : sur deux cœurs, DINOv2-small coûte ≈ 25 à 30 ms par image à 140 pixels, ≈ 70 à 80 ms à 224 ; CLIP ≈ 50 ms à 224.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def method_28(X, y):
+    E = ...                  # the embeddings of X by the backbone you chose (cached_embeddings, subset="train")
+    clf = ...                # a classifier on E, its settings chosen on X_VAL beforehand
+
+    def predict(images):
+        ...                  # the embeddings of `images`, same backbone and same size, then clf
+    return predict
+```
+
+</details>

@@ -925,6 +925,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | latence | latency | temps de réponse d'un modèle à une seule requête (batch de 1), mesuré sur la machine cible | B1 |
 | débit | throughput | nombre d'images traitées par seconde en regroupant les requêtes en batches | B1 |
 | modèle dérivé | derived model | modèle obtenu par fine-tuning d'un modèle de base : il hérite de ses poids, de sa licence et de ses biais, et sa fiche modèle le cite | B1 |
+| accord top-1 | top-1 agreement | part des images pour lesquelles deux classifieurs prédisent la même classe la plus probable ; mesure l'oubli quand on remet l'ancienne tête sur un backbone fine-tuné | B1 |
+| démarrage à froid | cold start | premier appel d'un modèle, plus lent (allocations, choix des algorithmes, caches vides) : on le laisse hors de la mesure par des passes de chauffe | B1 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

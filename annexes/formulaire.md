@@ -740,6 +740,9 @@ Notations : $\phi(\mathbf{x}) \in \mathbb{R}^d$ l'embedding (la sortie du backbo
 | L2-SP | $\Omega(\theta) = \frac{\lambda}{2}\lVert\theta - \theta_0\rVert^2$, $\nabla\Omega = \lambda(\theta - \theta_0)$ ; avec $\nabla L = 0$, $\theta_{t+1} - \theta_0 = (1 - \eta\lambda)(\theta_t - \theta_0)$ | `lam / 2 * sum(((p - p0) ** 2).sum() ...)`, `weight_decay=0` (∂ B1.6) |
 | zéro-shot CLIP | $p(c \mid \mathbf{x}) = \frac{\exp(s \cos(\mathbf{u}_x, \mathbf{v}_c))}{\sum_{c'} \exp(s \cos(\mathbf{u}_x, \mathbf{v}_{c'}))}$, $s = $ `exp(logit_scale)` | `(model.logit_scale.exp() * u @ v.T).softmax(-1)` (✏️ B1.5) |
 | prototype de classe | $\mathbf{m}_c = \frac{1}{\lvert S_c \rvert}\sum_{\mathbf{x} \in S_c} \phi(\mathbf{x})$ ; classe du prototype de plus grand cosinus | `emb[labels == c].mean(axis=0)` |
+| ensemble de prompts | $\mathbf{v}_c = \frac{\bar{\mathbf{v}}}{\lVert \bar{\mathbf{v}} \rVert}$, $\bar{\mathbf{v}} = \frac{1}{T}\sum_{t=1}^{T} \frac{\mathbf{v}_{c,t}}{\lVert \mathbf{v}_{c,t} \rVert}$ pour les $T$ gabarits de la classe $c$ | `v = v / v.norm(dim=-1, keepdim=True)` ; `v = v.mean(0)` ; `v / v.norm()` (📦 B1.24) |
+| accord top-1 (oubli) | $\frac{1}{N}\sum_{i} \mathbb{1}\big[\arg\max h_0(\phi_{\text{ft}}(\mathbf{x}_i)) = \arg\max h_0(\phi_0(\mathbf{x}_i))\big]$, $h_0$ l'ancienne tête | `(old(x).argmax(1) == reference(x).argmax(1)).float().mean()` (🔬 B1.23) |
+| latence et débit | latence : la médiane de plusieurs temps d'un batch de 1 ; débit $= B / t_B$ pour un batch de $B$ images traité en $t_B$ secondes | `1000 * np.median(times)` (🔬 B1.26) |
 
 ### B2 à B8
 *(à compléter)*

@@ -1,4 +1,4 @@
-"""Code cells of the chapter B1 notebook (parts A and B), shared by build_chB1.py and history_chB1.py (used by Claude).
+"""Code cells of the chapter B1 notebook (parts A to D), shared by build_chB1.py and history_chB1.py (used by Claude).
 
 Each constant is the source of one cell: TOOLS (both notebooks), GIVEN_* (both), TODO_* (exercise notebook),
 SOLUTION_* (solutions notebook), CHECK_* and EXPERIMENT_* (both, after the learner's cell), RECORD_* (solutions).
@@ -1214,3 +1214,1244 @@ EXPERIMENT_19 = r'''with checked("B1.19"), torch.random.fork_rng():
     axes_19[1].set(xlabel="epoch", ylabel="accuracy de validation", title="Validation et meilleur checkpoint")
     plt.tight_layout()
     plt.show()'''
+
+# --- Part C -----------------------------------------------------------------------------------------------------------
+GIVEN_C = r'''# Part C: the from-scratch baseline (a small CNN, as in chapter 21) and the learning-curve helpers
+import base64
+import json
+import zlib
+
+SCRATCH_WIDTH = 16          # channels of the first convolution, then x 2 and x 4: 24 000 parameters or so
+
+
+def small_cnn(in_channels=3, width=SCRATCH_WIDTH, num_classes=10):
+    """The from-scratch baseline: three blocks conv 3x3 - batchnorm - ReLU (width, 2 x width, 4 x width channels), a
+    max pooling after the first two, a global average pooling, then a dense layer."""
+    def block(c_in, c_out):
+        return [nn.Conv2d(c_in, c_out, 3, padding=1, bias=False), nn.BatchNorm2d(c_out), nn.ReLU()]
+    return nn.Sequential(*block(in_channels, width), nn.MaxPool2d(2), *block(width, 2 * width), nn.MaxPool2d(2),
+                         *block(2 * width, 4 * width), nn.AdaptiveAvgPool2d(1), nn.Flatten(),
+                         nn.Linear(4 * width, num_classes))
+
+
+def scratch_steps(n, batch_size=32, epochs=15, minimum=200):
+    """The training budget of the baseline: `epochs` passes over the n images, and at least `minimum` steps."""
+    return max(minimum, epochs * math.ceil(n / batch_size))
+
+
+def _pixels(images):
+    x = torch.from_numpy(np.ascontiguousarray(images)).float() / 255
+    return x.unsqueeze(1) if x.ndim == 3 else x.permute(0, 3, 1, 2)     # grayscale (N, H, W) or colour (N, H, W, 3)
+
+
+class ScratchModel:
+    """A small CNN trained from scratch, with the statistics of its training images: predict(images) -> labels."""
+
+    def __init__(self, net, mean, std):
+        self.net, self.mean, self.std = net.eval(), mean, std
+
+    def predict(self, images, batch_size=500):
+        with torch.inference_mode():
+            return np.concatenate([self.net((_pixels(images[i:i + batch_size]) - self.mean) / self.std).argmax(1).numpy()
+                                   for i in range(0, len(images), batch_size)])
+
+    def accuracy(self, images, labels):
+        return float(np.mean(self.predict(images) == labels))
+
+
+def train_scratch(X, y, seed=0, batch_size=32, lr=3e-3, steps=None):
+    """Train small_cnn FROM SCRATCH on uint8 images X, (N, H, W, 3) or grayscale (N, H, W), at their own size: pixels
+    standardised by the mean and standard deviation of THESE images (per channel), mini-batches drawn with replacement,
+    random horizontal flips and shifted crops (reflect padding of H / 8 pixels), AdamW (weight decay 5e-4) with a
+    one-cycle planning, scratch_steps(len(X)) steps by default. Returns a ScratchModel. On the CPU (small images)."""
+    g = torch.Generator().manual_seed(seed)
+    with torch.random.fork_rng():
+        torch.manual_seed(seed)
+        x = _pixels(X)
+        mean, std = x.mean(dim=(0, 2, 3), keepdim=True), x.std(dim=(0, 2, 3), keepdim=True) + 1e-6
+        x, targets = (x - mean) / std, torch.from_numpy(np.asarray(y))
+        net = small_cnn(x.shape[1])
+        steps = steps or scratch_steps(len(X), batch_size)
+        optimizer = torch.optim.AdamW(net.parameters(), lr=lr, weight_decay=5e-4)
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=lr, total_steps=steps)
+        pad, side = x.shape[-1] // 8, x.shape[-1]
+        net.train()
+        for _ in range(steps):
+            idx = torch.randint(0, len(x), (min(batch_size, len(x)),), generator=g)
+            xb = x[idx]
+            flip = torch.rand(len(xb), generator=g) < 0.5
+            xb = torch.where(flip[:, None, None, None], xb.flip(3), xb)
+            i, j = torch.randint(0, 2 * pad + 1, (2,), generator=g).tolist()
+            xb = F.pad(xb, (pad,) * 4, mode="reflect")[:, :, i:i + side, j:j + side]
+            loss = F.cross_entropy(net(xb), targets[idx])
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+    return ScratchModel(net, mean, std)
+
+
+def unpack(text):
+    """Data packed by the builder (zlib + base64 of a JSON text): the numbers stay hidden until the cell runs."""
+    return json.loads(zlib.decompress(base64.b64decode(text)).decode("utf-8"))
+
+
+print(f"from scratch : small_cnn() a {n_params(small_cnn())} paramètres ; train_scratch fait "
+      f"{scratch_steps(100)} pas pour 100 images, {scratch_steps(1000)} pour 1 000.")'''
+
+TODO_20 = r'''gap10_20 = ...     # a) at 10 images per class: accuracy of the linear probe MINUS that of the CNN from scratch, in points:
+                   #    "A" less than 10 points, "B" from 10 to 25 points, "C" more than 25 points
+gap1000_20 = ...   # b) the same gap at 1 000 images per class: "A" less than 10 points, "B" from 10 to 25, "C" more than 25'''
+
+EXPERIMENT_20 = r'''with checked("B1.20"), torch.random.fork_rng():
+    # the draw of the notebook, 10 images per class, measured now (the embeddings come from the cache)
+    idx_20 = nested(10)
+    probe_now_20 = reference_probe(reference_embeddings(X_TRAIN, SIZE, "train")[idx_20], Y_TRAIN[idx_20],
+                                   reference_embeddings(X_TEST, SIZE, "test"), Y_TEST, C=0.01)
+    start_20 = time.perf_counter()
+    scratch_now_20 = train_scratch(X_TRAIN[idx_20], Y_TRAIN[idx_20], seed=0).accuracy(X_TEST, Y_TEST)
+    print(f"10 images par classe, tirage du notebook ({SIZE} pixels) : linear probe {pct(probe_now_20)}, CNN from scratch "
+          f"{pct(scratch_now_20)} ({time.perf_counter() - start_20:.0f} s d'entraînement) ; écart "
+          f"{fr(100 * (probe_now_20 - scratch_now_20), 1)} points")
+    # the same protocol on three draws, and at 1 000 images per class (10 000 images): precomputed, 96 pixels
+    runs_20 = unpack("{RUNS_20}")
+    print("\nprécalculé (tools/chapters/history_chB1.py, 96 pixels, test de 2 000 images) :")
+    for size_20 in ("10", "1000"):
+        for r_20 in runs_20[size_20]:
+            print(f"  {size_20:>4} images par classe, tirage {r_20['seed']} : linear probe {pct(r_20['probe'])}, from scratch "
+                  f"{pct(r_20['scratch'])}, écart {fr(100 * (r_20['probe'] - r_20['scratch']), 1)} points")
+    wb.check("B1.20a", gap10_20)
+    wb.check("B1.20b", gap1000_20)'''
+
+TODO_21 = r'''FT_RECIPE_21 = {"head_lr": 1e-3, "gamma": 0.2, "patience": 2}   # the fine-tuning recipe of the curves (B1.19)
+
+
+def probe_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the linear probe: your probe_13 with C = 0.01 on the frozen embeddings of the reference
+    ResNet-18, reference_embeddings(images, SIZE, subset) ("curve" for the training images, "test" for the test).
+    `seed` is not used (nothing is drawn)."""
+    raise NotImplementedError("probe_21")
+
+
+def scratch_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the from-scratch baseline: train_scratch(X, y, seed=seed), then its accuracy on the test."""
+    raise NotImplementedError("scratch_21")
+
+
+def finetune_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of a full fine-tuning: make_full_19(), then fine_tune_19 on (X, y), validated on (X_VAL, Y_VAL),
+    with FT_RECIPE_21, t_warmup = one epoch of steps (mini-batches of 32), epochs = the larger of FT_EPOCHS and the
+    number of epochs that makes at least 40 steps, and seed=seed; then evaluate on the test."""
+    raise NotImplementedError("finetune_21")
+
+
+def learning_curve_21(fit_eval, plan, test, load=wb.datasets.load_cifar10_subset):
+    """The points of a learning curve: a list of {"size", "seed", "accuracy"}.
+
+    plan: {images per class: seeds}; for each size in INCREASING order, for each of its seeds in the order given:
+    the nested, stratified subset X, y = load(size, "train", seed), then fit_eval(X, y, X_test, y_test, seed=seed),
+    test = (X_test, y_test) being the same for every point."""
+    raise NotImplementedError("learning_curve_21")
+
+
+def summarize_21(rows):
+    """{size: (mean, std, n)} of the accuracies of each size of `rows` (std: np.std, ddof = 0), sizes in increasing
+    order; plain Python floats and ints."""
+    raise NotImplementedError("summarize_21")'''
+
+SOLUTION_21 = r'''FT_RECIPE_21 = {"head_lr": 1e-3, "gamma": 0.2, "patience": 2}   # the fine-tuning recipe of the curves (B1.19)
+
+
+def probe_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the linear probe: your probe_13 with C = 0.01 on the frozen embeddings of the reference
+    ResNet-18, reference_embeddings(images, SIZE, subset) ("curve" for the training images, "test" for the test).
+    `seed` is not used (nothing is drawn)."""
+    return probe_13(reference_embeddings(X, SIZE, "curve"), y, reference_embeddings(X_test, SIZE, "test"), y_test, C=0.01)
+
+
+def scratch_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the from-scratch baseline: train_scratch(X, y, seed=seed), then its accuracy on the test."""
+    return train_scratch(X, y, seed=seed).accuracy(X_test, y_test)
+
+
+def finetune_21(X, y, X_test, y_test, seed=0):
+    """Test accuracy of a full fine-tuning: make_full_19(), then fine_tune_19 on (X, y), validated on (X_VAL, Y_VAL),
+    with FT_RECIPE_21, t_warmup = one epoch of steps (mini-batches of 32), epochs = the larger of FT_EPOCHS and the
+    number of epochs that makes at least 40 steps, and seed=seed; then evaluate on the test."""
+    per_epoch = math.ceil(len(X) / 32)
+    with torch.random.fork_rng():
+        torch.manual_seed(seed)
+        model = make_full_19()
+        fine_tune_19(model, (X, y), (X_VAL, Y_VAL), epochs=max(FT_EPOCHS, math.ceil(40 / per_epoch)),
+                     t_warmup=per_epoch, batch_size=32, seed=seed, **FT_RECIPE_21)
+    return evaluate(model, X_test, y_test)
+
+
+def learning_curve_21(fit_eval, plan, test, load=wb.datasets.load_cifar10_subset):
+    """The points of a learning curve: a list of {"size", "seed", "accuracy"}.
+
+    plan: {images per class: seeds}; for each size in INCREASING order, for each of its seeds in the order given:
+    the nested, stratified subset X, y = load(size, "train", seed), then fit_eval(X, y, X_test, y_test, seed=seed),
+    test = (X_test, y_test) being the same for every point."""
+    X_test, y_test = test
+    rows = []
+    for size in sorted(plan):
+        for seed in plan[size]:
+            X, y = load(size, "train", seed)
+            rows.append({"size": size, "seed": seed, "accuracy": float(fit_eval(X, y, X_test, y_test, seed=seed))})
+    return rows
+
+
+def summarize_21(rows):
+    """{size: (mean, std, n)} of the accuracies of each size of `rows` (std: np.std, ddof = 0), sizes in increasing
+    order; plain Python floats and ints."""
+    out = {}
+    for size in sorted({r["size"] for r in rows}):
+        accs = np.array([r["accuracy"] for r in rows if r["size"] == size])
+        out[size] = (float(accs.mean()), float(accs.std()), int(len(accs)))
+    return out'''
+
+CHECK_21 = r'''class Recorder_21:
+    """A fake fit_eval: remembers what it receives and returns a known accuracy (0.1 x size + seed / 1000)."""
+
+    def __init__(self):
+        self.calls = []
+
+    def __call__(self, X, y, X_test, y_test, seed=0):
+        self.calls.append({"X": X, "y": y, "test": (X_test, y_test), "seed": seed})
+        return 0.001 * len(y) / 10 + seed / 1000
+
+
+with checked("B1.21"):
+    rec_21 = Recorder_21()
+    plan_21 = {30: (5, 3), 10: (3, 5, 7)}                 # given out of order: the sizes are sorted, the seeds are not
+    test_21 = (X_TEST[:7], Y_TEST[:7])
+    rows_21 = learning_curve_21(rec_21, plan_21, test_21)
+    if not returned("B1.21", "learning_curve_21", rows_21):
+        raise StopCheck
+    if not (isinstance(rows_21, list) and all(isinstance(r, dict) and {"size", "seed", "accuracy"} <= set(r) for r in rows_21)):
+        print('❌ Ex B1.21 : learning_curve_21 doit rendre une liste de dictionnaires {"size", "seed", "accuracy"}, '
+              f"reçu {rows_21!r:.120}.")
+        raise StopCheck
+    order_21 = [(r["size"], r["seed"]) for r in rows_21]
+    verdict("B1.21", order_21 == [(10, 3), (10, 5), (10, 7), (30, 5), (30, 3)],
+            "un point par taille et par graine : les tailles croissantes, les graines dans l'ordre reçu.",
+            f"points rendus {order_21}, attendu [(10, 3), (10, 5), (10, 7), (30, 5), (30, 3)] (tailles croissantes, "
+            "graines dans l'ordre du plan).")
+    good_21 = True
+    for call_21, (size_21, seed_21) in zip(rec_21.calls, order_21):
+        X_want_21, y_want_21 = wb.datasets.load_cifar10_subset(size_21, "train", seed_21)
+        if not (np.array_equal(call_21["X"], X_want_21) and np.array_equal(call_21["y"], y_want_21)):
+            good_21 = False
+            got_counts_21 = np.bincount(np.asarray(call_21["y"]), minlength=10).tolist()
+            print(f"❌ Ex B1.21 : pour la taille {size_21} et la graine {seed_21}, fit_eval n'a pas reçu "
+                  f"load({size_21}, \"train\", {seed_21}) (images par classe reçues : {got_counts_21}).")
+            break
+        if call_21["seed"] != seed_21 or not np.array_equal(call_21["test"][0], test_21[0]):
+            good_21 = False
+            print(f"❌ Ex B1.21 : fit_eval doit recevoir le même test à chaque point et seed={seed_21} (reçu seed="
+                  f"{call_21['seed']!r}).")
+            break
+    verdict("B1.21", good_21 and len(rec_21.calls) == 5, "chaque point reçoit son sous-ensemble emboîté et stratifié, "
+            "sa graine et le même test.", f"{len(rec_21.calls)} appels de fit_eval pour 5 points.")
+    verdict("B1.21", all(isinstance(r["accuracy"], float) and math.isclose(r["accuracy"], 0.001 * len(c["y"]) / 10 + c["seed"] / 1000)
+                         for r, c in zip(rows_21, rec_21.calls)),
+            "accuracy : la valeur rendue par fit_eval, en float.", "les accuracies rendues ne sont pas celles de fit_eval (en float).")
+    fm_rows_21 = learning_curve_21(Recorder_21(), {10: (4,)}, test_21, load=wb.datasets.load_fashion_mnist_subset)
+    verdict("B1.21", isinstance(fm_rows_21, list) and len(fm_rows_21) == 1 and math.isclose(fm_rows_21[0]["accuracy"], 0.01 + 0.004),
+            "load= remplace le chargement (Fashion-MNIST pour B1.22).", "learning_curve_21 n'utilise pas son argument load.")
+
+with checked("B1.21"):
+    rows_s_21 = [{"size": 30, "seed": 1, "accuracy": 0.5}, {"size": 10, "seed": 1, "accuracy": 0.2},
+                 {"size": 10, "seed": 2, "accuracy": 0.3}, {"size": 10, "seed": 3, "accuracy": 0.7}]
+    summary_21 = summarize_21(rows_s_21)
+    if not returned("B1.21", "summarize_21", summary_21):
+        raise StopCheck
+    want_s_21 = {10: (0.4, float(np.std([0.2, 0.3, 0.7])), 3), 30: (0.5, 0.0, 1)}
+    ok_s_21 = (isinstance(summary_21, dict) and list(summary_21) == [10, 30]
+               and all(len(summary_21[k]) == 3 and np.allclose(summary_21[k][:2], v[:2]) and summary_21[k][2] == v[2]
+                       for k, v in want_s_21.items()))
+    hint_21 = ""
+    if isinstance(summary_21, dict) and 10 in summary_21 and len(summary_21[10]) == 3:
+        if math.isclose(summary_21[10][1], float(np.std([0.2, 0.3, 0.7], ddof=1))):
+            hint_21 = " : l'écart-type demandé est celui de np.std (ddof = 0)"
+    verdict("B1.21", ok_s_21, "summarize_21 : moyenne, écart-type (ddof = 0) et nombre de points par taille, tailles croissantes.",
+            f"summarize_21 : attendu {want_s_21}, reçu {summary_21!r:.160}{hint_21}.")
+
+with checked("B1.21"):
+    small_21 = wb.datasets.load_cifar10_subset(2, "train", 9)
+    acc_p_21 = probe_21(*small_21, X_TEST[:200], Y_TEST[:200], seed=9)
+    if not returned("B1.21", "probe_21", acc_p_21):
+        raise StopCheck
+    want_p_21 = reference_probe(RESNET.embed(small_21[0], SIZE), small_21[1], reference_embeddings(X_TEST, SIZE, "test")[:200],
+                                Y_TEST[:200], C=0.01)
+    verdict("B1.21", isinstance(acc_p_21, (float, np.floating)) and abs(float(acc_p_21) - want_p_21) < 0.006,
+            f"probe_21 : {pct(float(acc_p_21))}, comme le linear probe de référence (C = 0,01).",
+            f"probe_21 : {acc_p_21!r:.40}, attendu {pct(want_p_21)} (probe_13 avec C = 0,01 sur les embeddings de référence).")
+    steps_21 = scratch_steps                          # a short training (20 steps): the check compares, it does not train
+    scratch_steps = lambda n, batch_size=32: 20
+    try:
+        acc_s_21 = scratch_21(*small_21, X_TEST[:200], Y_TEST[:200], seed=9)
+        want_s_21 = train_scratch(*small_21, seed=9).accuracy(X_TEST[:200], Y_TEST[:200])
+    finally:
+        scratch_steps = steps_21
+    verdict("B1.21", isinstance(acc_s_21, (float, np.floating)) and abs(float(acc_s_21) - want_s_21) < 1e-9,
+            f"scratch_21 : {pct(float(acc_s_21))}, comme train_scratch avec la même graine.",
+            f"scratch_21 : {acc_s_21!r:.40}, attendu {pct(want_s_21)} : train_scratch(X, y, seed=seed), puis accuracy sur le test.")
+
+with checked("B1.21"):
+    need("B1.21", "make_full_19", "fine_tune_19")
+    seen_21, real_ft_21 = {}, fine_tune_19
+
+    def spy_fine_tune_21(model, train, val, epochs, head_lr, gamma, t_warmup, patience, batch_size=32, seed=0):
+        seen_21.update(model=model, n=len(train[0]), val=val[0] is X_VAL, epochs=epochs, head_lr=head_lr, gamma=gamma,
+                       t_warmup=t_warmup, patience=patience, batch_size=batch_size, seed=seed)
+        model.eval()
+        return {"train_loss": [], "val_acc": [], "lr": [], "best_epoch": 0}
+
+    fine_tune_19 = spy_fine_tune_21                 # no training here: the check only reads the arguments
+    try:
+        acc_f_21 = finetune_21(X_TRAIN[nested(5)], Y_TRAIN[nested(5)], X_TEST[:20], Y_TEST[:20], seed=4)
+    finally:
+        fine_tune_19 = real_ft_21
+    if not returned("B1.21", "finetune_21", acc_f_21):
+        raise StopCheck
+    want_f_21 = {"n": 50, "val": True, "epochs": max(FT_EPOCHS, math.ceil(40 / 2)), "head_lr": 1e-3, "gamma": 0.2,
+                 "t_warmup": 2, "patience": 2, "batch_size": 32, "seed": 4}
+    got_f_21 = {k: seen_21.get(k) for k in want_f_21}
+    verdict("B1.21", got_f_21 == want_f_21, "finetune_21 : la recette FT_RECIPE_21, une epoch de warmup, au moins 40 pas, "
+            "la validation X_VAL.", f"finetune_21 sur 50 images : arguments de fine_tune_19 {got_f_21}, attendu {want_f_21}.")
+    if seen_21.get("model") is not None:
+        want_acc_21 = evaluate(seen_21["model"], X_TEST[:20], Y_TEST[:20])
+        verdict("B1.21", isinstance(acc_f_21, (float, np.floating)) and abs(float(acc_f_21) - want_acc_21) < 1e-9,
+                "finetune_21 rend l'accuracy de test du modèle fine-tuné.",
+                f"finetune_21 rend {acc_f_21!r:.40}, attendu evaluate(model, X_test, y_test) = {want_acc_21}.")'''
+
+EXPERIMENT_21 = r'''CURVE_PLAN_21 = ({10: (2011, 1, 2), 30: (2011, 1, 2), 100: (2011,)} if FAST_MODE else
+                 {10: (2011, 1, 2), 30: (2011, 1, 2), 100: (2011, 1, 2), 300: (2011,), 1000: (2011,)})
+with checked("B1.21"):
+    need("B1.21", "learning_curve_21", "summarize_21", "probe_21", "scratch_21")
+    start_21 = time.perf_counter()
+    methods_21 = {"linear probe": probe_21, "from scratch": scratch_21}
+    if not FAST_MODE:                              # 🚀 the fine-tunings: hours on a CPU, minutes on a Colab GPU
+        methods_21["fine-tuning complet"] = finetune_21
+    curves_21 = {name: summarize_21(learning_curve_21(fn, CURVE_PLAN_21, (X_TEST, Y_TEST)))
+                 for name, fn in methods_21.items()}
+    print(f"mesuré maintenant ({time.perf_counter() - start_21:.0f} s) :")
+    for name_21, curve_21 in curves_21.items():
+        print(f"  {name_21:<20}", " ; ".join(f"{k} : {pct(m)} ± {fr(100 * s, 1)} ({n})" for k, (m, s, n) in curve_21.items()))
+    history_21 = unpack("{CURVES_21}")             # the whole protocol, precomputed at 96 pixels (history_chB1.py)
+    print("précalculé (96 pixels, mêmes fonctions, jusqu'à 1 000 images par classe) :")
+    for name_21, curve_21 in history_21.items():
+        print(f"  {name_21:<20}", " ; ".join(f"{k} : {pct(m)} ± {fr(100 * s, 1)} ({n})" for k, (m, s, n) in curve_21.items()))
+    colors_21 = {"linear probe": "C0", "from scratch": "C3", "fine-tuning complet": "C2"}
+    plt.figure(figsize=(7.5, 4.2))
+    for name_21, curve_21 in history_21.items():
+        k_21 = [int(k) for k in curve_21]
+        plt.errorbar(k_21, [v[0] for v in curve_21.values()], yerr=[v[1] for v in curve_21.values()], fmt="o--",
+                     color=colors_21[name_21], alpha=0.45, capsize=3, label=f"{name_21} (précalculé)")
+    for name_21, curve_21 in curves_21.items():
+        plt.errorbar(list(curve_21), [v[0] for v in curve_21.values()], yerr=[v[1] for v in curve_21.values()], fmt="s-",
+                     color=colors_21[name_21], capsize=3, label=f"{name_21} (ton code)")
+    plt.xscale("log")
+    plt.xlabel("images d'entraînement par classe (échelle log)")
+    plt.ylabel(f"accuracy sur les {len(Y_TEST)} images de test")
+    plt.title("Courbes d'apprentissage sur CIFAR-10 (barres : écart-type sur les tirages)", fontsize=10)
+    plt.legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()'''
+
+GIVEN_22 = r'''# Fashion-MNIST, the far domain: the same nested, stratified subsets, a fixed test, cached block embeddings
+FM_SIZE = 64 if FAST_MODE else SIZE          # the side of the enlarged clothes for the frozen ResNet-18
+FM_TEST_PER_CLASS = 100 if FAST_MODE else 1000
+XF_TE_22, YF_TE_22 = wb.datasets.load_fashion_mnist_subset(FM_TEST_PER_CLASS, "test")
+
+
+def fm_embeddings(images):
+    """{"layer3": (N, 256), "layer4": (N, 512)}: the global average pooling of those two blocks of the reference
+    ResNet-18 for grayscale images (N, 28, 28) enlarged to FM_SIZE pixels; one pass, computed once (cache)."""
+    return transfer.cached_block_embeddings(RESNET, images, size=FM_SIZE, blocks=("layer3", "layer4"), subset="fmnist",
+                                            verbose=False)
+
+
+print(f"Fashion-MNIST : test de {len(XF_TE_22)} images ; embeddings à {FM_SIZE} pixels")'''
+
+TODO_22 = r'''def fm_probe_22(block):
+    """A fit_eval function (X, y, X_test, y_test, seed=0) -> test accuracy for Fashion-MNIST: your probe_13 with
+    C = 0.01 on fm_embeddings(images)[block] ("layer3" or "layer4"), the backbone frozen."""
+    raise NotImplementedError("fm_probe_22")
+
+
+def fm_scratch_22(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the from-scratch baseline on grayscale images: train_scratch(X, y, seed=seed), then its
+    accuracy on the test."""
+    raise NotImplementedError("fm_scratch_22")'''
+
+SOLUTION_22 = r'''def fm_probe_22(block):
+    """A fit_eval function (X, y, X_test, y_test, seed=0) -> test accuracy for Fashion-MNIST: your probe_13 with
+    C = 0.01 on fm_embeddings(images)[block] ("layer3" or "layer4"), the backbone frozen."""
+    def fit_eval(X, y, X_test, y_test, seed=0):
+        return probe_13(fm_embeddings(X)[block], y, fm_embeddings(X_test)[block], y_test, C=0.01)
+    return fit_eval
+
+
+def fm_scratch_22(X, y, X_test, y_test, seed=0):
+    """Test accuracy of the from-scratch baseline on grayscale images: train_scratch(X, y, seed=seed), then its
+    accuracy on the test."""
+    return train_scratch(X, y, seed=seed).accuracy(X_test, y_test)'''
+
+CHECK_22 = r'''with checked("B1.22"):
+    Xs_22, ys_22 = wb.datasets.load_fashion_mnist_subset(2, "train", 9)
+    fe_22 = fm_probe_22("layer3")
+    if not returned("B1.22", "fm_probe_22", fe_22):
+        raise StopCheck
+    if not callable(fe_22):
+        print(f"❌ Ex B1.22 : fm_probe_22(block) doit rendre une fonction fit_eval, reçu {type(fe_22).__name__}.")
+        raise StopCheck
+    for block_22 in ("layer3", "layer4"):
+        got_22 = fm_probe_22(block_22)(Xs_22, ys_22, XF_TE_22[:200], YF_TE_22[:200], seed=9)
+        want_22 = reference_probe(fm_embeddings(Xs_22)[block_22], ys_22, fm_embeddings(XF_TE_22[:200])[block_22],
+                                  YF_TE_22[:200], C=0.01)
+        verdict("B1.22", isinstance(got_22, (float, np.floating)) and abs(float(got_22) - want_22) < 0.006,
+                f"fm_probe_22(\"{block_22}\") : {pct(float(got_22))}, comme le probe de référence sur ce bloc.",
+                f"fm_probe_22(\"{block_22}\") : {got_22!r:.40}, attendu {pct(want_22)} (probe_13, C = 0,01, sur fm_embeddings(...)"
+                f"[\"{block_22}\"]).")
+    steps_22 = scratch_steps                          # a short training (20 steps): the check compares, it does not train
+    scratch_steps = lambda n, batch_size=32: 20
+    try:
+        got_s_22 = fm_scratch_22(Xs_22, ys_22, XF_TE_22[:200], YF_TE_22[:200], seed=9)
+        want_s_22 = train_scratch(Xs_22, ys_22, seed=9).accuracy(XF_TE_22[:200], YF_TE_22[:200])
+    finally:
+        scratch_steps = steps_22
+    verdict("B1.22", isinstance(got_s_22, (float, np.floating)) and abs(float(got_s_22) - want_s_22) < 1e-9,
+            f"fm_scratch_22 : {pct(float(got_s_22))}, comme train_scratch avec la même graine.",
+            f"fm_scratch_22 : {got_s_22!r:.40}, attendu {pct(want_s_22)}.")'''
+
+EXPERIMENT_22 = r'''FM_PLAN_22 = ({10: (2011, 1), 100: (2011,), 300: (2011,)} if FAST_MODE else
+              {10: (2011, 1, 2), 30: (2011, 1, 2), 100: (2011, 1, 2), 300: (2011,), 1000: (2011,)})
+with checked("B1.22"):
+    need("B1.22", "learning_curve_21", "summarize_21", "fm_probe_22", "fm_scratch_22")
+    start_22 = time.perf_counter()
+    methods_22 = {"from scratch": fm_scratch_22, "probe layer4 (gelé)": fm_probe_22("layer4"),
+                  "probe layer3 (gelé)": fm_probe_22("layer3")}
+    if not FAST_MODE and globals().get("train_partial_17") is not None:   # 🚀 the partial fine-tuning of B1.17
+
+        def fm_partial_22(X, y, X_test, y_test, seed=0):
+            with torch.random.fork_rng():
+                torch.manual_seed(seed)
+                model = make_partial_17()
+                train_partial_17(model, X, y, max(FT_EPOCHS, math.ceil(40 / math.ceil(len(X) / 32))), 1e-3, 0.1, seed=seed)
+            return evaluate(model, X_test, y_test)
+
+        methods_22["layer4 + tête fine-tunés"] = fm_partial_22
+    curves_22 = {name: summarize_21(learning_curve_21(fn, FM_PLAN_22, (XF_TE_22, YF_TE_22),
+                                                      load=wb.datasets.load_fashion_mnist_subset))
+                 for name, fn in methods_22.items()}
+    print(f"Fashion-MNIST, mesuré maintenant ({time.perf_counter() - start_22:.0f} s) :")
+    for name_22, curve_22 in curves_22.items():
+        print(f"  {name_22:<26}", " ; ".join(f"{k} : {pct(m)}" + (f" ± {fr(100 * s, 1)}" if n > 1 else "")
+                                              for k, (m, s, n) in curve_22.items()))
+    history_22 = unpack("{CURVES_22}")
+    print(f"précalculé ({FM_SIZE if FAST_MODE else 64} pixels pour le ResNet, mêmes fonctions, jusqu'à 1 000 images par classe) :")
+    for name_22, curve_22 in history_22.items():
+        print(f"  {name_22:<26}", " ; ".join(f"{k} : {pct(m)}" for k, (m, s, n) in curve_22.items()))
+    colors_22 = {"from scratch": "C3", "probe layer4 (gelé)": "C0", "probe layer3 (gelé)": "C1", "layer4 + tête fine-tunés": "C2"}
+    plt.figure(figsize=(7.5, 4.2))
+    for name_22, curve_22 in history_22.items():
+        plt.plot([int(k) for k in curve_22], [v[0] for v in curve_22.values()], "o--", color=colors_22[name_22], alpha=0.45,
+                 label=f"{name_22} (précalculé)")
+    for name_22, curve_22 in curves_22.items():
+        plt.plot(list(curve_22), [v[0] for v in curve_22.values()], "s-", color=colors_22[name_22], label=f"{name_22} (ton code)")
+    plt.xscale("log")
+    plt.xlabel("images d'entraînement par classe (échelle log)")
+    plt.ylabel(f"accuracy sur les {len(YF_TE_22)} images de test")
+    plt.title("Fashion-MNIST : transfert depuis ImageNet contre CNN from scratch", fontsize=10)
+    plt.legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()'''
+
+TODO_23 = r'''def imagenet_agreement_23(model, reference, images, size=SIZE, batch_size=128):
+    """The top-1 agreement (a float in [0, 1]) between two ImageNet classifiers on uint8 CIFAR-10 images:
+    - the backbone of `model` (a fine-tuned ResNet-18 whose fc is a 10-class head), topped with the ImageNet head of
+      `reference` (reference.fc), instead of its own head;
+    - `reference` itself (the pre-trained ResNet-18, ImageNet head included).
+    Both in eval() mode, without gradient, the images prepared by to_input(batch, size). `model` is left unchanged:
+    its head, its weights and its mode."""
+    raise NotImplementedError("imagenet_agreement_23")'''
+
+ANSWERS_23 = r'''# What you read in the table of the previous cell (the values, e.g. "B" and True)
+kept19_23 = ...         # a) the agreement of MODEL_19 (whole network fine-tuned): "A" below 30 %, "B" from 30 to 70 %,
+                        #    "C" above 70 %
+partial_more_23 = ...   # b) True or False: MODEL_17 (only layer4 and the head trained) keeps more ImageNet predictions
+                        #    than MODEL_19'''
+
+SOLUTION_23 = r'''def imagenet_agreement_23(model, reference, images, size=SIZE, batch_size=128):
+    """The top-1 agreement (a float in [0, 1]) between two ImageNet classifiers on uint8 CIFAR-10 images:
+    - the backbone of `model` (a fine-tuned ResNet-18 whose fc is a 10-class head), topped with the ImageNet head of
+      `reference` (reference.fc), instead of its own head;
+    - `reference` itself (the pre-trained ResNet-18, ImageNet head included).
+    Both in eval() mode, without gradient, the images prepared by to_input(batch, size). `model` is left unchanged:
+    its head, its weights and its mode."""
+    old = copy.deepcopy(model).cpu().eval()             # a copy: the model of the learner keeps its 10-class head
+    old.fc = copy.deepcopy(reference.fc).cpu()          # the ImageNet head put back on the fine-tuned backbone
+    reference = reference.cpu().eval()
+    same = 0
+    with torch.inference_mode():
+        for i in range(0, len(images), batch_size):
+            x = to_input(images[i:i + batch_size], size)
+            same += int((old(x).argmax(1) == reference(x).argmax(1)).sum())
+    return same / len(images)'''
+
+CHECK_23 = r'''with checked("B1.23"):
+    # a known case: a copy of the pre-trained network, ImageNet head replaced by a 10-class head, layer4 shifted
+    toy_23 = copy.deepcopy(RESNET.full).eval()
+    toy_23.fc = nn.Linear(512, 10)
+    with torch.no_grad(), torch.random.fork_rng():
+        torch.manual_seed(23)
+        for p_23 in toy_23.layer4.parameters():
+            p_23.add_(0.02 * torch.randn_like(p_23))
+    toy_23.train()
+    fc_before_23 = toy_23.fc.weight.detach().clone()
+    images_23 = X_TEST[nested(10, "test")]
+    got_23 = imagenet_agreement_23(toy_23, RESNET.full, images_23, size=64)
+    if not returned("B1.23", "imagenet_agreement_23", got_23):
+        raise StopCheck
+    ref_23 = copy.deepcopy(toy_23).eval()
+    ref_23.fc = RESNET.full.fc
+    with torch.inference_mode():
+        x_23 = to_input(images_23, 64)
+        want_23 = float((ref_23(x_23).argmax(1) == RESNET.full(x_23).argmax(1)).float().mean())
+        own_23 = float((toy_23.eval()(x_23).argmax(1) == RESNET.full(x_23).argmax(1)).float().mean())
+    toy_23.train()
+    if isinstance(got_23, bool) or not isinstance(got_23, (float, np.floating)):
+        print(f"❌ Ex B1.23 : attendu une part (un float entre 0 et 1), reçu {got_23!r:.60}.")
+        raise StopCheck
+    verdict("B1.23", abs(float(got_23) - want_23) < 1e-9,
+            f"sur 100 images et un réseau dont layer4 a bougé : accord {pct(float(got_23))}, comme attendu.",
+            f"accord {pct(float(got_23))}, attendu {pct(want_23)}"
+            + (" : c'est la part de 1 si tout est compté comme accord ; compares-tu bien des classes ImageNet ?" if got_23 == 1 else
+               " : as-tu remis la tête ImageNet de reference sur le backbone de model, en mode eval() ?"))
+    verdict("B1.23", toy_23.fc.out_features == 10 and torch.equal(toy_23.fc.weight.detach(), fc_before_23) and toy_23.training,
+            "model est intact : sa tête à 10 classes et son mode train().",
+            "model a changé (sa tête, ses poids ou son mode) : travaille sur une copie (copy.deepcopy).")'''
+
+EXPERIMENT_23 = r'''with checked("B1.23"):
+    need("B1.23", "imagenet_agreement_23")
+    images_23 = X_TEST[nested(50, "test")]           # 500 test images of CIFAR-10
+    rows_23 = {"réseau pré-entraîné (contrôle)": RESNET.full}
+    for name_23, ex_23, label_23 in (("MODEL_17", "B1.17", "MODEL_17 : layer4 + tête (B1.17)"),
+                                     ("MODEL_19", "B1.19", "MODEL_19 : tout le réseau (B1.19)")):
+        if globals().get(name_23) is None:
+            print(f"⏳ Ex B1.23 : {name_23} n'existe pas encore : fais d'abord Ex {ex_23} (sa cellule d'expérience le crée).")
+        else:
+            rows_23[label_23] = globals()[name_23]
+    for label_23, model_23 in rows_23.items():
+        a_23 = imagenet_agreement_23(model_23, RESNET.full, images_23)
+        print(f"{label_23:<38} accord top-1 avec les prédictions ImageNet d'origine : {pct(a_23)}")'''
+
+CHECK_23B = r'''for id_23, value_23 in (("B1.23a", kept19_23), ("B1.23b", partial_more_23)):
+    with wb.attempt(id_23):
+        wb.check(id_23, value_23)'''
+
+# --- Part D -----------------------------------------------------------------------------------------------------------
+GIVEN_24 = r'''# CLIP ViT-B/32 (≈ 600 Mo the first time) and the test images of part D
+CLIP = transfer.try_backbone("clip_b32", "B1.24")       # None, with a ⏳ line, when CLIP cannot be downloaded
+D_PER_CLASS = 50 if FAST_MODE else TEST_PER_CLASS        # test images per class for the zero-shot and the few-shot
+idx_D = nested(D_PER_CLASS, "test")
+X_D, Y_D = X_TEST[idx_D], Y_TEST[idx_D]
+# the image embeddings of CLIP (224 pixels, its own statistics), computed once (≈ 25 s in fast mode), then cached
+CLIP_D = None if CLIP is None else transfer.cached_embeddings(CLIP, X_D, size=224, subset="test", verbose=False)
+CLIP_SCALE = None if CLIP is None else float(CLIP.full.logit_scale.exp())   # s, read in the trained weights
+# the 18 templates of the CLIP authors for CIFAR-10 (github.com/openai/CLIP, data/prompts.md)
+CLIP_TEMPLATES = ["a photo of a {}.", "a blurry photo of a {}.", "a black and white photo of a {}.",
+                  "a low contrast photo of a {}.", "a high contrast photo of a {}.", "a bad photo of a {}.",
+                  "a good photo of a {}.", "a photo of a small {}.", "a photo of a big {}.", "a photo of the {}.",
+                  "a blurry photo of the {}.", "a black and white photo of the {}.", "a low contrast photo of the {}.",
+                  "a high contrast photo of the {}.", "a bad photo of the {}.", "a good photo of the {}.",
+                  "a photo of the small {}.", "a photo of the big {}."]
+if CLIP is not None:
+    print(f"CLIP : embeddings d'image {CLIP_D.shape} pour {len(X_D)} images de test ; s = exp(logit_scale) = {fr(CLIP_SCALE, 2)}")'''
+
+TODO_24 = r'''def text_embeddings_24(model, processor, classnames, templates):
+    """The CLIP text vector of each class: a float32 NumPy array (K, 512) whose rows have a norm of 1.
+
+    For a class c: the texts template.format(c) for every template, encoded by model.get_text_features(
+    **processor(text=texts, return_tensors="pt", padding=True)) (its .pooler_output with transformers 5), each vector
+    divided by its norm, then their mean, divided again by its norm. Without gradient."""
+    raise NotImplementedError("text_embeddings_24")
+
+
+def zero_shot_24(image_emb, text_emb, scale):
+    """The zero-shot probabilities, a float NumPy array (N, K): for each image, the softmax over the K classes of
+    scale x cos(image, class). image_emb (N, d) and text_emb (K, d) are NumPy arrays, not necessarily normalised."""
+    raise NotImplementedError("zero_shot_24")'''
+
+SOLUTION_24 = r'''def text_embeddings_24(model, processor, classnames, templates):
+    """The CLIP text vector of each class: a float32 NumPy array (K, 512) whose rows have a norm of 1.
+
+    For a class c: the texts template.format(c) for every template, encoded by model.get_text_features(
+    **processor(text=texts, return_tensors="pt", padding=True)) (its .pooler_output with transformers 5), each vector
+    divided by its norm, then their mean, divided again by its norm. Without gradient."""
+    rows = []
+    with torch.inference_mode():
+        for name in classnames:
+            out = model.get_text_features(**processor(text=[t.format(name) for t in templates], return_tensors="pt",
+                                                      padding=True))
+            v = out.pooler_output if hasattr(out, "pooler_output") else out      # transformers 5: an output object
+            v = v / v.norm(dim=-1, keepdim=True)                                 # each sentence on the unit sphere...
+            v = v.mean(dim=0)                                                    # ...the mean of the templates...
+            rows.append(v / v.norm())                                            # ...back on the unit sphere
+    return torch.stack(rows).float().numpy()
+
+
+def zero_shot_24(image_emb, text_emb, scale):
+    """The zero-shot probabilities, a float NumPy array (N, K): for each image, the softmax over the K classes of
+    scale x cos(image, class). image_emb (N, d) and text_emb (K, d) are NumPy arrays, not necessarily normalised."""
+    u = image_emb / np.linalg.norm(image_emb, axis=1, keepdims=True)
+    v = text_emb / np.linalg.norm(text_emb, axis=1, keepdims=True)
+    z = scale * (u @ v.T)                                                        # (N, K) logits
+    z = z - z.max(axis=1, keepdims=True)                                         # a stable softmax (ch. 17)
+    e = np.exp(z)
+    return e / e.sum(axis=1, keepdims=True)'''
+
+CHECK_24 = r'''def softmax_rows_24(z):
+    e = np.exp(z - z.max(axis=1, keepdims=True))
+    return e / e.sum(axis=1, keepdims=True)
+
+
+with checked("B1.24"):
+    rng_24 = np.random.default_rng(24)
+    u_24 = rng_24.normal(size=(6, 8)) * rng_24.uniform(0.5, 3, size=(6, 1))     # image embeddings of various norms
+    v_24 = rng_24.normal(size=(3, 8)) * rng_24.uniform(0.5, 3, size=(3, 1))
+    cos_24 = (u_24 / np.linalg.norm(u_24, axis=1, keepdims=True)) @ (v_24 / np.linalg.norm(v_24, axis=1, keepdims=True)).T
+    for scale_24 in (100.0, 1.0):
+        got_24 = zero_shot_24(u_24.copy(), v_24.copy(), scale_24)
+        if not returned("B1.24", "zero_shot_24", got_24):
+            raise StopCheck
+        got_24 = np.asarray(got_24, dtype=float)
+        want_24 = softmax_rows_24(scale_24 * cos_24)
+        if got_24.shape != want_24.shape:
+            print(f"❌ Ex B1.24 : zero_shot_24 sur 6 images et 3 classes : attendu la forme {want_24.shape}, reçu {got_24.shape}.")
+            raise StopCheck
+        if not np.allclose(got_24, want_24, atol=1e-6):
+            hints_24 = [(softmax_rows_24(scale_24 * (u_24 @ v_24.T)), "divise chaque embedding par sa norme : on compare des cosinus"),
+                        (softmax_rows_24(cos_24), "multiplie les cosinus par scale avant la softmax"),
+                        ((lambda e: e / e.sum(axis=0, keepdims=True))(np.exp(scale_24 * cos_24 - (scale_24 * cos_24).max())),
+                         "la softmax se fait sur les classes, pour chaque image (axis=1)")]
+            why_24 = next((m for w, m in hints_24 if np.allclose(got_24, w, atol=1e-6)), "relis la formule du zéro-shot (§201.8)")
+            print(f"❌ Ex B1.24 : zero_shot_24 avec scale = {fr(scale_24, 0)} ne rend pas les probabilités attendues : {why_24}.")
+            raise StopCheck
+    verdict("B1.24", True, "zero_shot_24 : softmax sur les classes de scale × cosinus, pour des embeddings de normes quelconques.", "")
+
+with checked("B1.24"):
+    if CLIP is None:
+        print("⏳ Ex B1.24 : CLIP n'a pas pu être chargé ici : text_embeddings_24 est à valider sur Colab.")
+        raise StopCheck
+    names_24, temps_24 = ["cat", "truck"], ["a photo of a {}.", "a drawing of a {}."]
+    got_t_24 = text_embeddings_24(CLIP.full, CLIP.processor, names_24, temps_24)
+    if not returned("B1.24", "text_embeddings_24", got_t_24):
+        raise StopCheck
+    with torch.inference_mode():
+        raw_24 = CLIP.full.get_text_features(**CLIP.processor(text=[t.format(c) for c in names_24 for t in temps_24],
+                                                              return_tensors="pt", padding=True))
+    raw_24 = (raw_24.pooler_output if hasattr(raw_24, "pooler_output") else raw_24).numpy().reshape(2, 2, -1)
+    unit_24 = raw_24 / np.linalg.norm(raw_24, axis=-1, keepdims=True)
+    want_t_24 = unit_24.mean(axis=1)
+    want_t_24 = want_t_24 / np.linalg.norm(want_t_24, axis=1, keepdims=True)
+    if not isinstance(got_t_24, np.ndarray):
+        print(f"❌ Ex B1.24 : text_embeddings_24 doit rendre un tableau NumPy, reçu {type(got_t_24).__name__}"
+              + (" (convertis avec .numpy())." if torch.is_tensor(got_t_24) else "."))
+        raise StopCheck
+    if got_t_24.shape != want_t_24.shape:
+        print(f"❌ Ex B1.24 : 2 classes : attendu la forme {want_t_24.shape}, reçu {got_t_24.shape}.")
+        raise StopCheck
+    if not np.allclose(got_t_24, want_t_24, atol=1e-4):
+        mean_raw_24 = raw_24.mean(axis=1)
+        hints_t_24 = [(mean_raw_24 / np.linalg.norm(mean_raw_24, axis=1, keepdims=True),
+                       "divise chaque vecteur de phrase par sa norme AVANT la moyenne"),
+                      (unit_24.mean(axis=1), "divise la moyenne par sa norme : chaque ligne doit être de norme 1"),
+                      (unit_24[:, 0], "fais la moyenne sur TOUS les gabarits")]
+        why_t_24 = next((m for w, m in hints_t_24 if np.allclose(got_t_24, w, atol=1e-4)),
+                        "chaque gabarit se remplit avec le nom de la classe (template.format(c)) ; relis le contrat")
+        print(f"❌ Ex B1.24 : text_embeddings_24 ne rend pas les vecteurs attendus : {why_t_24}.")
+        raise StopCheck
+    verdict("B1.24", got_t_24.dtype == np.float32, "text_embeddings_24 : un vecteur par classe, moyenne des gabarits normalisés, "
+            "de norme 1, en float32.", f"text_embeddings_24 rend du {got_t_24.dtype}, attendu float32.")'''
+
+EXPERIMENT_24 = r'''with checked("B1.24"):
+    if CLIP is None:
+        print("⏳ Ex B1.24 : CLIP absent : le zéro-shot est à valider sur Colab.")
+        raise StopCheck
+    need("B1.24", "text_embeddings_24", "zero_shot_24")
+    sets_24 = {"nom seul": ["{}"], "un gabarit": ["a photo of a {}."], f"{len(CLIP_TEMPLATES)} gabarits": CLIP_TEMPLATES}
+    for label_24, temps_24 in sets_24.items():
+        V_24 = text_embeddings_24(CLIP.full, CLIP.processor, list(CLASSES), temps_24)
+        P_24 = zero_shot_24(CLIP_D, V_24, CLIP_SCALE)
+        print(f"{label_24:<12} : accuracy {pct(np.mean(P_24.argmax(1) == Y_D))} sur {len(Y_D)} images de test ; "
+              f"probabilité moyenne de la classe choisie {fr(P_24.max(1).mean(), 2)}")
+    TEXT_24 = V_24                                   # the class vectors of the 18 templates, reused by B1.25
+    P1_24 = zero_shot_24(CLIP_D, TEXT_24, 1.0)
+    print(f"même ensemble avec s = 1 : même accuracy {pct(np.mean(P1_24.argmax(1) == Y_D))}, probabilité moyenne de la classe "
+          f"choisie {fr(P1_24.max(1).mean(), 3)}")
+    per_class_24 = [np.mean(P_24.argmax(1)[Y_D == c] == c) for c in range(10)]
+    print("par classe (18 gabarits) :", " ; ".join(f"{CLASSES[c]} {pct(a, 0)}" for c, a in enumerate(per_class_24)))'''
+
+GIVEN_25 = r'''# The support pool of the few-shot: 16 training images per class, embedded once by DINOv2 and by CLIP
+SHOTS_25 = (1, 2, 4, 8, 16)
+DRAWS_25 = 10 if FAST_MODE else 20
+idx_S25 = nested(16)
+XS_25, YS_25 = X_TRAIN[idx_S25], Y_TRAIN[idx_S25]
+DINO_S_25 = None if DINO is None else transfer.cached_embeddings(DINO, XS_25, size=DINO_SIZE, subset="train", verbose=False)
+DINO_D_25 = None if DINO is None else DINO_TEST[idx_D]               # the 500 test images of B1.24, by DINOv2
+CLIP_S_25 = None if CLIP is None else transfer.cached_embeddings(CLIP, XS_25, size=224, subset="train", verbose=False)
+
+
+def draw_support(labels, k, draw, seed=0):
+    """The positions (sorted) of k examples of each class of `labels` for the draw number `draw`: always the same for
+    the same (seed, k, draw)."""
+    labels = np.asarray(labels)
+    return np.sort(np.concatenate([np.random.default_rng([seed, k, draw, int(c)]).choice(np.flatnonzero(labels == c), k,
+                                                                                        replace=False)
+                                   for c in np.unique(labels)]))
+
+
+print(f"support : {len(XS_25)} images (16 par classe) ; requêtes : les {len(Y_D)} images de test de B1.24")'''
+
+TODO_25 = r'''def prototypes_25(emb, labels, n_classes=10):
+    """The prototype of each class: the mean of the L2-normalised embeddings of its examples, shape (n_classes, d)."""
+    raise NotImplementedError("prototypes_25")
+
+
+def predict_25(emb, protos):
+    """For each embedding, the class (an int) of the prototype with the largest cosine."""
+    raise NotImplementedError("predict_25")
+
+
+def few_shot_25(support, query, shots, draws, seed=0):
+    """[{"shots": k, "mean": float, "std": float}] for each k of `shots`, in that order. support and query are pairs
+    (embeddings, labels). For each draw d in range(draws): the prototypes of the support examples at the positions
+    draw_support(support_labels, k, d, seed), then the accuracy of predict_25 on the query; mean and std (np.std,
+    ddof = 0) of the `draws` accuracies."""
+    raise NotImplementedError("few_shot_25")'''
+
+SOLUTION_25 = r'''def _unit(a):
+    a = np.asarray(a, dtype=float)
+    return a / np.linalg.norm(a, axis=1, keepdims=True)
+
+
+def prototypes_25(emb, labels, n_classes=10):
+    """The prototype of each class: the mean of the L2-normalised embeddings of its examples, shape (n_classes, d)."""
+    emb, labels = _unit(emb), np.asarray(labels)
+    return np.stack([emb[labels == c].mean(axis=0) for c in range(n_classes)])
+
+
+def predict_25(emb, protos):
+    """For each embedding, the class (an int) of the prototype with the largest cosine."""
+    return (_unit(emb) @ _unit(protos).T).argmax(axis=1)
+
+
+def few_shot_25(support, query, shots, draws, seed=0):
+    """[{"shots": k, "mean": float, "std": float}] for each k of `shots`, in that order. support and query are pairs
+    (embeddings, labels). For each draw d in range(draws): the prototypes of the support examples at the positions
+    draw_support(support_labels, k, d, seed), then the accuracy of predict_25 on the query; mean and std (np.std,
+    ddof = 0) of the `draws` accuracies."""
+    (E_s, y_s), (E_q, y_q) = support, query
+    rows = []
+    for k in shots:
+        accs = []
+        for d in range(draws):
+            pos = draw_support(y_s, k, d, seed)
+            accs.append(np.mean(predict_25(E_q, prototypes_25(E_s[pos], y_s[pos])) == y_q))
+        rows.append({"shots": k, "mean": float(np.mean(accs)), "std": float(np.std(accs))})
+    return rows'''
+
+CHECK_25 = r'''with checked("B1.25"):
+    rng_25 = np.random.default_rng(25)
+    E_25 = rng_25.normal(size=(12, 5)) * rng_25.uniform(0.2, 5, size=(12, 1))   # embeddings of very different norms
+    y_25 = np.array([0, 1, 2] * 4)
+    got_p_25 = prototypes_25(E_25.copy(), y_25.copy(), 3)
+    if not returned("B1.25", "prototypes_25", got_p_25):
+        raise StopCheck
+    unit_25 = E_25 / np.linalg.norm(E_25, axis=1, keepdims=True)
+    want_p_25 = np.stack([unit_25[y_25 == c].mean(0) for c in range(3)])
+    if np.shape(got_p_25) != want_p_25.shape:
+        print(f"❌ Ex B1.25 : prototypes_25 (12 exemples, 3 classes, d = 5) : attendu la forme {want_p_25.shape}, reçu {np.shape(got_p_25)}.")
+        raise StopCheck
+    raw_25 = np.stack([E_25[y_25 == c].mean(0) for c in range(3)])
+    ok_p_25 = np.allclose(np.asarray(got_p_25, dtype=float), want_p_25, atol=1e-6)
+    verdict("B1.25", ok_p_25, "prototypes_25 : la moyenne des embeddings normalisés de chaque classe.",
+            "prototypes_25 : " + ("normalise chaque embedding AVANT la moyenne (ici, la moyenne des embeddings bruts)."
+                                  if np.allclose(np.asarray(got_p_25, dtype=float), raw_25, atol=1e-6) else
+                                  "ce n'est pas la moyenne des embeddings normalisés de chaque classe."))
+    q_25 = rng_25.normal(size=(9, 5)) * rng_25.uniform(0.2, 5, size=(9, 1))
+    protos_25 = rng_25.normal(size=(3, 5)) * np.array([[0.1], [1.0], [8.0]])   # prototypes of very different norms
+    got_c_25 = predict_25(q_25.copy(), protos_25.copy())
+    if not returned("B1.25", "predict_25", got_c_25):
+        raise StopCheck
+    want_c_25 = ((q_25 / np.linalg.norm(q_25, axis=1, keepdims=True))
+                 @ (protos_25 / np.linalg.norm(protos_25, axis=1, keepdims=True)).T).argmax(1)
+    verdict("B1.25", np.array_equal(np.asarray(got_c_25), want_c_25), "predict_25 : la classe du prototype au plus grand cosinus.",
+            "predict_25 : " + ("ce sont les classes du plus grand produit scalaire : normalise les prototypes aussi (cosinus)."
+                               if np.array_equal(np.asarray(got_c_25), (q_25 @ protos_25.T).argmax(1)) else
+                               f"attendu {want_c_25.tolist()}, reçu {np.asarray(got_c_25).tolist()}."))
+
+with checked("B1.25"):
+    sup_25 = (rng_25.normal(size=(40, 6)), np.repeat(np.arange(10), 4))      # 10 classes, 4 support examples each
+    qry_25 = (rng_25.normal(size=(30, 6)), rng_25.integers(0, 10, 30))
+    got_f_25 = few_shot_25(sup_25, qry_25, (1, 3), draws=4, seed=7)
+    if not returned("B1.25", "few_shot_25", got_f_25):
+        raise StopCheck
+    want_f_25 = []
+    for k_25 in (1, 3):
+        accs_25 = []
+        for d_25 in range(4):
+            pos_25 = draw_support(sup_25[1], k_25, d_25, 7)
+            u_25 = sup_25[0][pos_25] / np.linalg.norm(sup_25[0][pos_25], axis=1, keepdims=True)
+            m_25 = np.stack([u_25[sup_25[1][pos_25] == c].mean(0) for c in range(10)])
+            pred_25 = (qry_25[0] / np.linalg.norm(qry_25[0], axis=1, keepdims=True) @ (m_25 / np.linalg.norm(m_25, axis=1, keepdims=True)).T).argmax(1)
+            accs_25.append(np.mean(pred_25 == qry_25[1]))
+        want_f_25.append({"shots": k_25, "mean": float(np.mean(accs_25)), "std": float(np.std(accs_25))})
+    ok_f_25 = (isinstance(got_f_25, list) and len(got_f_25) == 2 and all(isinstance(r, dict) for r in got_f_25)
+               and all(r.get("shots") == w["shots"] and math.isclose(r.get("mean", -1), w["mean"], abs_tol=1e-9)
+                       and math.isclose(r.get("std", -1), w["std"], abs_tol=1e-9) for r, w in zip(got_f_25, want_f_25)))
+    verdict("B1.25", ok_f_25, "few_shot_25 : une ligne par nombre d'exemples, la moyenne et l'écart-type sur les tirages de draw_support.",
+            f"few_shot_25 (k = 1 et 3, 4 tirages, graine 7) : attendu {want_f_25}, reçu {got_f_25!r:.200} "
+            "(relis le contrat : draw_support(labels, k, d, seed), np.std avec ddof = 0).")'''
+
+EXPERIMENT_25 = r'''with checked("B1.25"):
+    need("B1.25", "few_shot_25", "prototypes_25", "predict_25")
+    models_25 = {name: emb for name, emb in (("DINOv2-small", (DINO_S_25, DINO_D_25)), ("CLIP B/32", (CLIP_S_25, CLIP_D)))
+                 if emb[0] is not None}
+    if not models_25:
+        print("⏳ Ex B1.25 : ni DINOv2 ni CLIP n'ont pu être chargés : à valider sur Colab.")
+        raise StopCheck
+    if CLIP is None:
+        print("⏳ Ex B1.25 : CLIP absent : seuls les prototypes de DINOv2 sont mesurés (à valider sur Colab).")
+    curves_25 = {name: few_shot_25((S, YS_25), (Q, Y_D), SHOTS_25, DRAWS_25) for name, (S, Q) in models_25.items()}
+    plt.figure(figsize=(7.5, 4.2))
+    for name_25, rows_25 in curves_25.items():
+        print(f"{name_25:<13}", " ; ".join(f"{r['shots']} : {pct(r['mean'])} ± {fr(100 * r['std'], 1)}" for r in rows_25))
+        plt.errorbar([r["shots"] for r in rows_25], [r["mean"] for r in rows_25], yerr=[r["std"] for r in rows_25],
+                     fmt="o-", capsize=3, label=f"prototypes {name_25}")
+    if CLIP is not None and globals().get("TEXT_24") is not None:
+        zero_25 = float(np.mean(predict_25(CLIP_D, TEXT_24) == Y_D))
+        plt.axhline(zero_25, color="gray", ls="--", label="CLIP zéro-shot (18 gabarits, B1.24)")
+        mixed_25 = []                                # the text vector of each class plus its prototype, renormalised
+        for k_25 in SHOTS_25:
+            accs_25 = []
+            for d_25 in range(DRAWS_25):
+                pos_25 = draw_support(YS_25, k_25, d_25)
+                m_25 = prototypes_25(CLIP_S_25[pos_25], YS_25[pos_25])
+                m_25 = m_25 / np.linalg.norm(m_25, axis=1, keepdims=True)
+                accs_25.append(np.mean(predict_25(CLIP_D, TEXT_24 + m_25) == Y_D))
+            mixed_25.append(float(np.mean(accs_25)))
+        print(f"CLIP zéro-shot {pct(zero_25)} ; texte + prototype :", " ; ".join(f"{k} : {pct(a)}" for k, a in zip(SHOTS_25, mixed_25)))
+        plt.plot(SHOTS_25, mixed_25, "s:", label="CLIP texte + prototype")
+    plt.xscale("log", base=2)
+    plt.xticks(SHOTS_25, [str(k) for k in SHOTS_25])
+    plt.xlabel("exemples étiquetés par classe")
+    plt.ylabel(f"accuracy sur {len(Y_D)} images de test")
+    plt.title(f"Few-shot par prototypes ({DRAWS_25} tirages du support ; barres : écart-type)", fontsize=10)
+    plt.legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()'''
+
+GIVEN_26 = r'''# Three backbones for the comparison: the reference ResNet-18, MobileNetV3-small and DINOv2-small (frozen, eval())
+MOBILE = transfer.load_backbone("mobilenet_v3_small")
+BACKBONES_26 = {"MobileNetV3-small": (MOBILE, SIZE), "ResNet-18": (RESNET, SIZE)}
+if DINO is not None:
+    BACKBONES_26["DINOv2-small"] = (DINO, DINO_SIZE)
+idx_26 = nested(100)                     # 100 training images per class for the linear probe of each backbone
+print(f"threads de PyTorch : {torch.get_num_threads()} ; backbones : {', '.join(BACKBONES_26)}")'''
+
+TODO_26 = r'''def latency_ms_26(model, x, reps=20, warmup=3):
+    """The time of one call model(x), in milliseconds: the MEDIAN of `reps` timed calls (time.perf_counter), after
+    `warmup` calls that are not timed; the model in eval() mode, the calls under torch.inference_mode()."""
+    raise NotImplementedError("latency_ms_26")
+
+
+def size_26(model):
+    """(number of parameters, their size in MB: the sum of numel x element_size of the parameters, divided by 1e6)."""
+    raise NotImplementedError("size_26")
+
+
+def profile_26(model, size, batch=32):
+    """{"params", "mb", "latency_ms", "images_per_s"} of a backbone at size x size pixels: size_26; the latency of ONE
+    image (a batch of 1, torch.randn(1, 3, size, size)); the throughput in images per second of batches of `batch`
+    images (batch / the latency of such a batch, in seconds), with reps=5 for the batches."""
+    raise NotImplementedError("profile_26")'''
+
+SOLUTION_26 = r'''def latency_ms_26(model, x, reps=20, warmup=3):
+    """The time of one call model(x), in milliseconds: the MEDIAN of `reps` timed calls (time.perf_counter), after
+    `warmup` calls that are not timed; the model in eval() mode, the calls under torch.inference_mode()."""
+    model.eval()
+    times = []
+    with torch.inference_mode():
+        for _ in range(warmup):
+            model(x)                                   # warm-up: allocations, choice of the algorithms
+        for _ in range(reps):
+            start = time.perf_counter()
+            model(x)
+            times.append(time.perf_counter() - start)
+    return 1000 * float(np.median(times))              # the median resists a background task
+
+
+def size_26(model):
+    """(number of parameters, their size in MB: the sum of numel x element_size of the parameters, divided by 1e6)."""
+    params = list(model.parameters())
+    return sum(p.numel() for p in params), sum(p.numel() * p.element_size() for p in params) / 1e6
+
+
+def profile_26(model, size, batch=32):
+    """{"params", "mb", "latency_ms", "images_per_s"} of a backbone at size x size pixels: size_26; the latency of ONE
+    image (a batch of 1, torch.randn(1, 3, size, size)); the throughput in images per second of batches of `batch`
+    images (batch / the latency of such a batch, in seconds), with reps=5 for the batches."""
+    n, mb = size_26(model)
+    one = latency_ms_26(model, torch.randn(1, 3, size, size))
+    many = latency_ms_26(model, torch.randn(batch, 3, size, size), reps=5)
+    return {"params": n, "mb": mb, "latency_ms": one, "images_per_s": batch / (many / 1000)}'''
+
+CHECK_26 = r'''class Clocked_26(nn.Module):
+    """A fake backbone with a known timing: 0.3 s for each of its first `slow` calls (a cold start), one call of 0.3 s
+    in the middle (a background task), 10 ms otherwise; it notes its mode and the inference mode of each call."""
+
+    def __init__(self, slow=3, base=0.010):
+        super().__init__()
+        self.lin, self.calls, self.slow, self.base, self.modes = nn.Linear(4, 4), 0, slow, base, set()
+
+    def forward(self, x):
+        self.calls += 1
+        self.modes.add((self.training, torch.is_inference_mode_enabled()))
+        time.sleep(0.3 if self.calls <= self.slow or self.calls == self.slow + 7 else self.base)
+        return x
+
+
+with checked("B1.26"):
+    probe_26 = Clocked_26().train()
+    ms_26 = latency_ms_26(probe_26, torch.zeros(1, 4), reps=20, warmup=3)
+    if not returned("B1.26", "latency_ms_26", ms_26):
+        raise StopCheck
+    ms_26 = float(ms_26)
+    verdict("B1.26", probe_26.calls == 23, "latency_ms_26 : 3 appels de chauffe, puis 20 appels chronométrés.",
+            f"latency_ms_26 a appelé le modèle {probe_26.calls} fois, attendu 3 + 20 = 23.")
+    verdict("B1.26", probe_26.modes == {(False, True)}, "les appels se font en mode eval(), sous torch.inference_mode().",
+            f"modes vus pendant les appels (training, inference_mode) : {sorted(probe_26.modes)}, attendu [(False, True)].")
+    why_26 = ("une durée en secondes ? attendu des millisecondes" if ms_26 < 1 else
+              "c'est la moyenne (un appel lent l'a tirée vers le haut) : garde la médiane" if 18 <= ms_26 <= 40 else
+              "les appels de chauffe sont-ils comptés ?" if ms_26 > 40 else "relis le contrat")
+    verdict("B1.26", 9 <= ms_26 <= 16, f"latency_ms_26 : {fr(ms_26, 1)} ms pour des appels de 10 ms, malgré un appel lent : la médiane.",
+            f"latency_ms_26 : {fr(ms_26, 1)} ms pour des appels de 10 ms (et un seul appel de 300 ms) : {why_26}.")
+
+with checked("B1.26"):
+    toy_26 = nn.Sequential(nn.Linear(10, 5), nn.Linear(5, 3).half())
+    got_26 = size_26(toy_26)
+    if not returned("B1.26", "size_26", got_26):
+        raise StopCheck
+    want_26 = (55 + 18, (55 * 4 + 18 * 2) / 1e6)
+    ok_26 = isinstance(got_26, (tuple, list)) and len(got_26) == 2 and got_26[0] == want_26[0] and math.isclose(got_26[1], want_26[1])
+    verdict("B1.26", ok_26, "size_26 : 73 paramètres, 0,000256 Mo (4 octets en float32, 2 en float16).",
+            f"size_26 sur un petit réseau (55 paramètres en float32, 18 en float16) : attendu {want_26}, reçu {got_26!r:.60}"
+            + (" : compte les octets de chaque paramètre (element_size)" if isinstance(got_26, (tuple, list)) and len(got_26) == 2
+               and got_26[0] == 73 else "") + ".")
+    fast_26 = Clocked_26(slow=0, base=0.002)
+    prof_26 = profile_26(fast_26, 8, batch=16)
+    if not returned("B1.26", "profile_26", prof_26):
+        raise StopCheck
+    keys_ok_26 = isinstance(prof_26, dict) and {"params", "mb", "latency_ms", "images_per_s"} <= set(prof_26)
+    verdict("B1.26", keys_ok_26 and 1.5 <= prof_26["latency_ms"] <= 6 and 16 / 0.006 <= prof_26["images_per_s"] <= 16 / 0.0015,
+            "profile_26 : la latence d'une image et le débit des batches, sur un faux modèle de 2 ms par appel.",
+            f"profile_26 sur un faux modèle de 2 ms par appel, batches de 16 : reçu {prof_26!r:.160} (attendu ≈ 2 ms et ≈ 8 000 images/s).")'''
+
+EXPERIMENT_26 = r'''with checked("B1.26"):
+    need("B1.26", "profile_26")
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+    rows_26 = {}
+    for name_26, (bb_26, side_26) in BACKBONES_26.items():
+        E_tr_26 = transfer.cached_embeddings(bb_26, X_TRAIN[idx_26], size=side_26, subset="train", verbose=False)
+        E_te_26 = transfer.cached_embeddings(bb_26, X_TEST, size=side_26, subset="test", verbose=False)
+        acc_26 = float(make_pipeline(StandardScaler(), LogisticRegression(C=0.01, max_iter=3000)).fit(E_tr_26, Y_TRAIN[idx_26])
+                       .score(E_te_26, Y_TEST))
+        rows_26[name_26] = {**profile_26(bb_26.model, 224), "side": side_26, "accuracy": acc_26,
+                            "latency_side_ms": latency_ms_26(bb_26.model, torch.randn(1, 3, side_26, side_26))}
+    print(f"{'backbone':<18} {'paramètres':>11} {'Mo':>6} {'latence 224 px':>15} {'images/s (32)':>14} "
+          f"{'latence, côté du probe':>23} {'probe (100 / classe)':>21}")
+    for name_26, r_26 in rows_26.items():
+        side_text_26 = f"{fr(r_26['latency_side_ms'], 1)} ms ({r_26['side']} px)"
+        print(f"{name_26:<18} {format(r_26['params'], ',').replace(',', ' '):>11} {fr(r_26['mb'], 1):>6} "
+              f"{fr(r_26['latency_ms'], 1) + ' ms':>15} {fr(r_26['images_per_s'], 0):>14} {side_text_26:>23} "
+              f"{pct(r_26['accuracy']):>21}")
+    lat_26 = {k: v["latency_ms"] for k, v in rows_26.items()}
+    verdict("B1.26", lat_26["MobileNetV3-small"] * 2 < lat_26["ResNet-18"],
+            "à 224 pixels, MobileNetV3-small répond au moins deux fois plus vite que ResNet-18.",
+            "MobileNetV3-small n'est pas deux fois plus rapide que ResNet-18 : la machine travaillait-elle à autre chose ? "
+            "relance la cellule.")'''
+
+GIVEN_27 = r'''# Where the published model goes: next to your notebook in mon_travail, else in a temporary folder
+import tempfile
+from pathlib import Path
+
+import torchvision
+
+WORK_DIR = Path(tempfile.mkdtemp(prefix="wb_chB1_"))
+PUBLISH_DIR_27 = (Path("resnet18_cifar10_b1") if "mon_travail" in str(Path.cwd()) else WORK_DIR / "resnet18_cifar10_b1")
+BASE_MODEL_27 = "torchvision resnet18 IMAGENET1K_V1"     # the exact name of the starting weights
+CARD_SECTIONS_27 = ["Modèle de base", "Données", "Entraînement", "Résultats", "Limites et biais"]
+print("dossier de publication :", PUBLISH_DIR_27.resolve())'''
+
+TODO_27 = r'''def publish_27(model, folder, test_accuracy):
+    """Write the three files of a derived model into `folder` (created if needed) and return the folder (a Path):
+    - model.safetensors: model.state_dict() (on the CPU, contiguous tensors), with metadata {"base_model":
+      BASE_MODEL_27, "num_classes": "10", ...}: strings only;
+    - config.json: {"architecture": "resnet18", "base_model": BASE_MODEL_27, "num_classes": 10, "class_names": the
+      10 names in the order of the outputs, "image_size": SIZE, "interpolation": "bilinear", "mean": [...], "std":
+      [...], "test_accuracy": test_accuracy, "versions": {"torch": ..., "torchvision": ...}};
+    - README.md: the model card, with the "## " sections CARD_SECTIONS_27, in that order."""
+    raise NotImplementedError("publish_27")
+
+
+def load_published_27(folder):
+    """(model, config): the network rebuilt from config.json (resnet18 without weights, a new head of
+    config["num_classes"] outputs), its weights read from model.safetensors (no pickle), in eval() mode, on the CPU."""
+    raise NotImplementedError("load_published_27")'''
+
+SOLUTION_27 = r'''import json
+
+from safetensors.torch import load_file, save_file
+from torchvision.models import resnet18
+
+CARD_27 = """# ResNet-18 fine-tuné sur CIFAR-10 (chapitre B1)
+
+Un classifieur de 10 classes d'objets et d'animaux pour des images de 32 × 32 pixels, obtenu par fine-tuning complet d'un ResNet-18 pré-entraîné. Modèle d'apprentissage, publié dans un portfolio : pas un produit.
+
+## Modèle de base
+
+ResNet-18 de torchvision, poids `IMAGENET1K_V1` (K. He et coll., 2015, « Deep Residual Learning for Image Recognition »), 11,7 millions de paramètres, 69,8 % de top-1 sur ImageNet ; https://docs.pytorch.org/vision/0.26/models/generated/torchvision.models.resnet18.html. Licence : le code de torchvision est sous BSD-3-Clause, et torchvision prévient qu'il revient à l'utilisateur de vérifier qu'il a le droit de se servir des poids ; ces poids ont été appris sur ImageNet, dont les conditions d'utilisation se limitent à la recherche et à l'enseignement, non commercial. Ce modèle dérivé hérite de ces conditions.
+
+## Données
+
+CIFAR-10 (A. Krizhevsky, 2009, « Learning Multiple Layers of Features from Tiny Images ») : photos de 32 × 32 pixels en 10 classes, sans licence formelle ; les auteurs demandent de citer le rapport technique. Fine-tuning sur {N_TRAIN} images d'entraînement ({PER_CLASS} par classe, un sous-ensemble stratifié à graine fixe), validation sur {N_VAL} autres images du train, test sur {N_TEST} images du split de test, jamais utilisées pour régler.
+
+## Entraînement
+
+Tout le réseau, nouvelle tête de 10 sorties ; images agrandies à {SIZE} × {SIZE} pixels (bilinéaire), normalisées par les statistiques d'ImageNet ; AdamW, learning rates discriminatifs (1e-3 pour la tête, multipliés par 0,2 à chaque bloc vers l'entrée), weight decay 0,01 sur les poids seulement, une epoch de warmup puis un cosinus, batchnorms gelées sur leurs statistiques d'ImageNet, early stopping sur la validation et retour au meilleur checkpoint.
+
+## Résultats
+
+Accuracy sur le test : {ACC} ({N_TEST} images). Les classes de sortie, dans l'ordre : {CLASSES}.
+
+## Limites et biais
+
+Images de 32 × 32 pixels seulement, dix classes : toute autre image reçoit quand même l'une d'elles. Biais hérités d'ImageNet (photos surtout nord-américaines et européennes) et de CIFAR-10 (photos du Web des années 2000, tirées de la base « 80 Million Tiny Images », retirée en 2020) : à mesurer sur les images de l'usage visé avant toute utilisation. Le fine-tuning a fait oublier une partie des prédictions ImageNet du modèle de base (🔬 B1.23).
+"""
+
+
+def publish_27(model, folder, test_accuracy):
+    """Write the three files of a derived model into `folder` (created if needed) and return the folder (a Path):
+    - model.safetensors: model.state_dict() (on the CPU, contiguous tensors), with metadata {"base_model":
+      BASE_MODEL_27, "num_classes": "10", ...}: strings only;
+    - config.json: {"architecture": "resnet18", "base_model": BASE_MODEL_27, "num_classes": 10, "class_names": the
+      10 names in the order of the outputs, "image_size": SIZE, "interpolation": "bilinear", "mean": [...], "std":
+      [...], "test_accuracy": test_accuracy, "versions": {"torch": ..., "torchvision": ...}};
+    - README.md: the model card, with the "## " sections CARD_SECTIONS_27, in that order."""
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    state = {k: v.detach().cpu().contiguous() for k, v in model.state_dict().items()}
+    save_file(state, folder / "model.safetensors",
+              metadata={"base_model": BASE_MODEL_27, "num_classes": str(model.fc.out_features),
+                        "dataset": "CIFAR-10", "license_note": "derived from ImageNet weights: research and teaching"})
+    config = {"architecture": "resnet18", "base_model": BASE_MODEL_27, "num_classes": model.fc.out_features,
+              "class_names": list(CLASSES), "image_size": SIZE, "interpolation": "bilinear",
+              "mean": list(wb.datasets.IMAGENET_MEAN), "std": list(wb.datasets.IMAGENET_STD),
+              "test_accuracy": float(test_accuracy),
+              "versions": {"torch": torch.__version__, "torchvision": torchvision.__version__}}
+    (folder / "config.json").write_text(json.dumps(config, indent=2, ensure_ascii=False), encoding="utf-8")
+    card = CARD_27
+    for key, value in {"{N_TRAIN}": len(XT_B), "{PER_CLASS}": FT_PER_CLASS, "{N_VAL}": len(X_VAL), "{N_TEST}": len(X_TEST),
+                       "{SIZE}": SIZE, "{ACC}": pct(test_accuracy), "{CLASSES}": ", ".join(CLASSES)}.items():
+        card = card.replace(key, str(value))
+    (folder / "README.md").write_text(card, encoding="utf-8")
+    return folder
+
+
+def load_published_27(folder):
+    """(model, config): the network rebuilt from config.json (resnet18 without weights, a new head of
+    config["num_classes"] outputs), its weights read from model.safetensors (no pickle), in eval() mode, on the CPU."""
+    folder = Path(folder)
+    config = json.loads((folder / "config.json").read_text(encoding="utf-8"))
+    model = resnet18(weights=None)
+    model.fc = nn.Linear(model.fc.in_features, config["num_classes"])
+    model.load_state_dict(load_file(folder / "model.safetensors"))
+    return model.eval(), config'''
+
+CHECK_27 = r'''with checked("B1.27"):
+    import json
+
+    from safetensors import safe_open
+    if globals().get("MODEL_19") is None:
+        print("⏳ Ex B1.27 : MODEL_19 n'existe pas encore : fais d'abord Ex B1.19 (sa cellule d'expérience le crée).")
+        raise StopCheck
+    acc_27 = globals().get("test_19")
+    if acc_27 is None:
+        acc_27 = evaluate(MODEL_19, X_TEST, Y_TEST)
+    sd_before_27 = {k: v.detach().cpu().clone() for k, v in MODEL_19.state_dict().items()}
+    out_27 = publish_27(MODEL_19, PUBLISH_DIR_27, acc_27)
+    if not returned("B1.27", "publish_27", out_27):
+        raise StopCheck
+    folder_27 = Path(out_27)
+    names_27 = sorted(p.name for p in folder_27.iterdir())
+    missing_27 = [n for n in ("README.md", "config.json", "model.safetensors") if n not in names_27]
+    if missing_27:
+        print(f"❌ Ex B1.27 : fichiers manquants dans {folder_27} : {missing_27} (présents : {names_27}).")
+        raise StopCheck
+    pickles_27 = [n for n in names_27 if n.endswith((".pt", ".pth", ".bin", ".pkl"))]
+    verdict("B1.27", not pickles_27, "les poids sont publiés en safetensors seulement.",
+            f"fichiers au format pickle publiés ({pickles_27}) : safetensors suffit, et se charge sans exécuter de code.")
+    with safe_open(str(folder_27 / "model.safetensors"), framework="pt") as f_27:
+        meta_27 = f_27.metadata() or {}
+        keys_27 = set(f_27.keys())
+        same_27 = keys_27 == set(sd_before_27) and all(torch.equal(f_27.get_tensor(k), sd_before_27[k]) for k in keys_27)
+    verdict("B1.27", same_27, f"model.safetensors : les {len(keys_27)} tenseurs du state_dict de MODEL_19.",
+            "model.safetensors ne contient pas exactement le state_dict de MODEL_19 (des clés en trop ou en moins, ou d'autres valeurs).")
+    verdict("B1.27", meta_27.get("base_model") == BASE_MODEL_27 and meta_27.get("num_classes") == "10",
+            f"métadonnées : {meta_27}.",
+            f"métadonnées reçues {meta_27} : attendu au moins base_model = {BASE_MODEL_27!r} et num_classes = '10' (des chaînes).")
+    config_27 = json.loads((folder_27 / "config.json").read_text(encoding="utf-8"))
+    want_cfg_27 = {"architecture": "resnet18", "base_model": BASE_MODEL_27, "num_classes": 10, "class_names": list(CLASSES),
+                   "image_size": SIZE, "interpolation": "bilinear"}
+    bad_cfg_27 = [k for k, v in want_cfg_27.items() if config_27.get(k) != v]
+    stats_ok_27 = (np.allclose(config_27.get("mean", []), wb.datasets.IMAGENET_MEAN) and np.allclose(config_27.get("std", []), wb.datasets.IMAGENET_STD)
+                   if len(config_27.get("mean", [])) == 3 and len(config_27.get("std", [])) == 3 else False)
+    versions_ok_27 = isinstance(config_27.get("versions"), dict) and {"torch", "torchvision"} <= set(config_27["versions"])
+    acc_ok_27 = isinstance(config_27.get("test_accuracy"), (int, float)) and abs(config_27["test_accuracy"] - acc_27) < 1e-9
+    verdict("B1.27", not bad_cfg_27 and stats_ok_27 and versions_ok_27 and acc_ok_27,
+            "config.json : architecture, poids de départ, classes dans l'ordre des sorties, prétraitement, accuracy, versions.",
+            "config.json : " + ", ".join([f"{k} = {config_27.get(k)!r} (attendu {v!r})" for k, v in want_cfg_27.items() if k in bad_cfg_27]
+                                        + ([] if stats_ok_27 else ["mean et std d'ImageNet"])
+                                        + ([] if versions_ok_27 else ["versions de torch et torchvision"])
+                                        + ([] if acc_ok_27 else ["test_accuracy"])) + ".")
+    card_27 = (folder_27 / "README.md").read_text(encoding="utf-8")
+    import re
+    heads_27 = [h.strip() for h in re.findall(r"^##\s+(.+?)\s*$", card_27, flags=re.MULTILINE)]
+    order_27 = [h for h in heads_27 if h in CARD_SECTIONS_27]
+    problems_27 = []
+    if order_27 != CARD_SECTIONS_27:
+        problems_27.append(f"sections « ## » attendues dans l'ordre {CARD_SECTIONS_27}, trouvées {heads_27}")
+    low_27 = card_27.lower()
+    for label_27, needles_27 in (("le modèle de base", ["resnet-18", "imagenet1k_v1"]), ("sa licence", ["bsd-3-clause"]),
+                                 ("les conditions d'ImageNet", ["imagenet", "commercial"]), ("le dataset", ["cifar-10", "krizhevsky"]),
+                                 ("l'accuracy de test", [pct(acc_27).lower()])):
+        if not all(n in low_27 for n in needles_27):
+            problems_27.append(f"{label_27} ({' et '.join(needles_27)}) n'apparaît pas")
+    words_27 = len(re.findall(r"\w+", card_27))
+    if words_27 < 150:
+        problems_27.append(f"{words_27} mots : une fiche modèle utile en compte au moins 150")
+    verdict("B1.27", not problems_27, "README.md : la fiche modèle cite le modèle de base, sa licence, les données, les résultats et les limites.",
+            "README.md : " + " ; ".join(problems_27) + ".")
+
+with checked("B1.27"):
+    if globals().get("MODEL_19") is None or globals().get("folder_27") is None:
+        raise StopCheck
+    torch_load_27 = torch.load
+
+    def no_pickle_27(*args, **kwargs):
+        raise RuntimeError("torch.load (pickle) appelé : lis les poids avec safetensors.torch.load_file")
+
+    torch.load = no_pickle_27
+    try:
+        loaded_27 = load_published_27(folder_27)
+    finally:
+        torch.load = torch_load_27
+    if not (isinstance(loaded_27, tuple) and len(loaded_27) == 2):
+        print(f"❌ Ex B1.27 : load_published_27 doit rendre le couple (model, config), reçu {type(loaded_27).__name__}.")
+        raise StopCheck
+    model_27, cfg_27 = loaded_27
+    x_27 = to_input(X_TEST[:8], SIZE)
+    ref_27 = copy.deepcopy(MODEL_19).cpu().eval()
+    with torch.inference_mode():
+        same_out_27 = torch.allclose(model_27.cpu()(x_27), ref_27(x_27), atol=1e-5)
+    verdict("B1.27", not model_27.training and same_out_27, "load_published_27 : le modèle rechargé, en eval(), donne les mêmes logits que MODEL_19.",
+            "le modèle rechargé " + ("est en mode train()" if model_27.training else "ne donne pas les mêmes logits que MODEL_19 sur 8 images") + ".")
+    print("\n" + (folder_27 / "README.md").read_text(encoding="utf-8")[:900] + "…")'''
+
+GIVEN_28 = r'''# The challenge: 100 training images per class, the test revealed once, 10 minutes of CPU
+X_TR_28, Y_TR_28 = X_TRAIN[nested(100)], Y_TRAIN[nested(100)]   # the ONLY labelled images of the challenge
+GOAL_28, GATE_28, LIMIT_28 = 0.90, 0.80, 600.0      # test accuracy to reach; validation needed to reveal; seconds
+
+
+def evaluate_28(method):
+    """Run the challenge: method(X, y) -> predict, predict(images) -> labels (N,).
+    1. a leak control: the method trained on SHUFFLED labels (the global labels shuffled too, then restored) must stay
+       near chance on the validation images;
+    2. the real run, timed (training + predicting the test), the validation accuracy first: the test is revealed only
+       above GATE_28, and only once per session (REVEALED_28)."""
+    global Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B
+    rng = np.random.default_rng(28)
+    saved = (Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B)
+    try:
+        Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = (rng.permutation(v) for v in saved)
+        shuffled = Y_TR_28.copy()
+        fake = method(X_TR_28.copy(), shuffled)
+        leak = float(np.mean(np.asarray(fake(X_VAL.copy())) == saved[1]))
+    finally:
+        Y_TRAIN, Y_VAL, Y_TEST, Y_TR_28, YT_B = saved
+    verdict("B1.28", leak < 0.3, f"contrôle anti-fuite : entraînée sur des labels mélangés, ta méthode fait {pct(leak)} sur la "
+            "validation (le hasard : 10 %).",
+            f"entraînée sur des labels mélangés, ta méthode fait encore {pct(leak)} sur la validation : elle lit des labels "
+            "ailleurs que dans ses arguments (une variable globale ?).")
+    if leak >= 0.3:
+        return None
+    start = time.perf_counter()
+    predict = method(X_TR_28.copy(), Y_TR_28.copy())
+    fit_seconds = time.perf_counter() - start
+    val = float(np.mean(np.asarray(predict(X_VAL.copy())) == Y_VAL))
+    print(f"validation : {pct(val)} ({len(Y_VAL)} images) ; entraînement en {fit_seconds:.0f} s")
+    if val < GATE_28:
+        print(f"❌ Ex B1.28 : moins de {pct(GATE_28, 0)} sur la validation : le test n'est pas révélé (améliore d'abord ta méthode).")
+        return None
+    revealed = globals().get("REVEALED_28")
+    if revealed is None:                              # revealed once per session: the first result is frozen
+        start = time.perf_counter()
+        test = float(np.mean(np.asarray(predict(X_TEST.copy())) == Y_TEST))
+        revealed = {"test": test, "seconds": fit_seconds + time.perf_counter() - start, "val": val}
+        globals()["REVEALED_28"] = revealed
+    else:
+        print("(le test a déjà été révélé dans cette session : résultat de la première révélation)")
+    print(f"test : {pct(revealed['test'])} sur {len(Y_TEST)} images ; entraînement + prédiction du test : {revealed['seconds']:.0f} s")
+    return revealed'''
+
+TODO_28 = r'''def method_28(X, y):
+    """Your method for the challenge: train on the uint8 images X (N, 32, 32, 3) and their labels y ONLY (no other
+    labelled image, no global variable of the test), and return a function predict(images) -> int labels (N,)."""
+    raise NotImplementedError("method_28")'''
+
+SOLUTION_28 = r'''from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+
+def method_28(X, y):
+    """Your method for the challenge: train on the uint8 images X (N, 32, 32, 3) and their labels y ONLY (no other
+    labelled image, no global variable of the test), and return a function predict(images) -> int labels (N,)."""
+    # DINOv2-small, frozen, is the best backbone of B1.26 by far: a linear probe on its embeddings (computed once and
+    # cached: the first computation counts in the 10 minutes, ≈ 30 s for 1 000 images at 140 pixels on 2 cores)
+    E = transfer.cached_embeddings(DINO, X, size=DINO_SIZE, subset="train", verbose=False)
+    probe = make_pipeline(StandardScaler(), LogisticRegression(C={C28}, max_iter=3000)).fit(E, y)
+
+    def predict(images):
+        return probe.predict(transfer.cached_embeddings(DINO, images, size=DINO_SIZE, subset="test", verbose=False))
+
+    return predict'''
+
+CHECK_28 = r'''with checked("B1.28"):
+    need("B1.28", "method_28")
+    if globals().get("DINO") is None:
+        print("ℹ️ Ex B1.28 : DINOv2 n'a pas pu être chargé ici ; une méthode qui s'en sert est à valider sur Colab.")
+    result_28 = evaluate_28(method_28)
+    if result_28 is not None:
+        verdict("B1.28", result_28["seconds"] <= LIMIT_28, f"en {result_28['seconds']:.0f} s, sous les {LIMIT_28 / 60:.0f} minutes.",
+                f"{result_28['seconds']:.0f} s : le défi demande au plus {LIMIT_28 / 60:.0f} minutes (entraînement + prédiction du test).")
+        verdict("B1.28", result_28["test"] >= GOAL_28 and result_28["seconds"] <= LIMIT_28,
+                f"défi réussi : {pct(result_28['test'])} sur le test (objectif {pct(GOAL_28, 0)}).",
+                f"pas encore : {pct(result_28['test'])} sur le test, il faut {pct(GOAL_28, 0)} en moins de {LIMIT_28 / 60:.0f} minutes.")'''

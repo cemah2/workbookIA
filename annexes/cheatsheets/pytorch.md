@@ -198,6 +198,23 @@
 | `torchvision.datasets.FashionMNIST(root, train=True, download=True)` | un dataset de torchvision, téléchargé une fois dans `root` |
 | `h = hashlib.sha256()` ; `for bloc in iter(lambda: f.read(1 << 20), b""): h.update(bloc)` ; `h.hexdigest()` | la somme SHA-256 d'un fichier lu par morceaux, à noter dans la data card |
 
+## Transfer learning et modèles pré-entraînés (bonus B1)
+
+| Code | Effet |
+|---|---|
+| `weights = ResNet18_Weights.IMAGENET1K_V1` ; `resnet18(weights=weights).eval()` ; `weights.transforms()` | un backbone de torchvision en mode évaluation (il se crée en mode `train()`), avec **son** prétraitement |
+| `AutoModel.from_pretrained(nom, revision=sha).eval()` ; `AutoImageProcessor.from_pretrained(nom, revision=sha)` | un modèle du Hugging Face Hub et son processeur d'images, au même commit figé ; `out.pooler_output` : l'embedding (le token CLS de DINOv2) |
+| `model.fc = nn.Identity()` ; `create_feature_extractor(model, return_nodes={"layer3": "l3"})` | la sortie du pooling comme embedding ; les cartes d'un bloc intermédiaire, en une passe (`torchvision.models.feature_extraction`) |
+| `torch.optim.AdamW([{"params": model.fc.parameters(), "lr": 1e-3}, {"params": model.layer4.parameters(), "lr": 1e-4, "weight_decay": 0.0}])` | des groupes de paramètres : un learning rate (et un weight decay) par groupe ; `opt.param_groups[k]["lr"]` les lit |
+| `model.train()` puis `for m in model.modules(): if isinstance(m, nn.modules.batchnorm._BatchNorm): m.eval()` | geler les batchnorms sur leurs statistiques d'ImageNet, **après** chaque `train()` (qui remet tout en mode entraînement) |
+| `LambdaLR(opt, lambda t: warmup_cosine(t, t_warmup, t_total))` ; `sched.step()` après **chaque** `opt.step()` | un warmup puis un cosinus, compté en pas, qui multiplie le learning rate de chaque groupe |
+| `CLIPModel.from_pretrained(nom, revision=sha)` ; `CLIPProcessor.from_pretrained(nom, revision=sha)` | CLIP : un encodeur d'image et un encodeur de texte, et le processeur qui prépare les deux |
+| `model.get_text_features(**processor(text=phrases, return_tensors="pt", padding=True)).pooler_output` | les vecteurs de texte de CLIP (transformers 5 rend un objet : l'embedding projeté est `.pooler_output`) ; `get_image_features(pixel_values=x)` pour les images |
+| `v = v / v.norm(dim=-1, keepdim=True)` ; `probs = (model.logit_scale.exp() * u @ v.T).softmax(dim=-1)` | le zéro-shot : des vecteurs normalisés, l'échelle **apprise** $s$ (100 pour CLIP B/32), une softmax sur les classes |
+| `save_file({k: v.detach().cpu().contiguous() for k, v in model.state_dict().items()}, "model.safetensors", metadata={"num_classes": "10"})` | publier des poids en safetensors : tenseurs contigus sur le CPU, métadonnées en **chaînes** seulement |
+| `with safe_open("model.safetensors", framework="pt") as f: f.metadata(), f.keys()` ; `model.load_state_dict(load_file(path))` | relire les métadonnées et les noms des tenseurs sans tout charger ; recharger sans pickle |
+| `start = time.perf_counter()` ; `model(x)` ; `1000 * (time.perf_counter() - start)` ; `np.median(times)` ; `torch.get_num_threads()` | mesurer une latence en ms après quelques passes de chauffe ; la médiane de plusieurs mesures ; le nombre de cœurs utilisés |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

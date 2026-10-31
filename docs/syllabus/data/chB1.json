@@ -942,7 +942,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B1.21",
@@ -955,7 +955,8 @@
    "file": "03",
    "prereq": [
     "B1.20",
-    "B1.19"
+    "B1.19",
+    "B1.13"
    ],
    "covers": [
     "201.6"
@@ -975,7 +976,10 @@
    "thread": "Fashion-MNIST",
    "file": "03",
    "prereq": [
+    "B1.21",
     "B1.17",
+    "B1.16",
+    "B1.13",
     "21"
    ],
    "covers": [
@@ -996,7 +1000,8 @@
    "thread": "CIFAR-10",
    "file": "03",
    "prereq": [
-    "B1.19"
+    "B1.19",
+    "B1.17"
    ],
    "covers": [
     "201.7"
@@ -1114,7 +1119,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "B1.E1",

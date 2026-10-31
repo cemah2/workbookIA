@@ -11,9 +11,9 @@ B1.1 to B1.5 (02_exercices.md). The derivation ∂ B1.6, the estimate 🧮 B1.7,
 📄 B1.10) and the interview are corrected with 05_solutions.md. The answers of the ✏️ are computed by hand formulas
 and checked against PyTorch, torchvision and scikit-learn in the context cell of the solutions notebook (no download:
 `resnet18(weights=None)`).
-Parts A and B (exercises B1.11 to B1.19, tools/chapters/chB1_parts.py and chB1_code.py; experiments calibrated by
-tools/chapters/history_chB1.py): load and probe, then fine-tune. Parts C and D (B1.20 to B1.28) come next
-(NEXT_SESSION): when transfer helps or fails, foundation models, cost and delivery.
+Parts A to D (exercises B1.11 to B1.28, tools/chapters/chB1_parts.py and chB1_code.py; experiments calibrated by
+tools/chapters/history_chB1.py): load and probe, fine-tune, when transfer helps or fails, then foundation models, cost
+and delivery.
 """
 
 from __future__ import annotations
@@ -470,17 +470,12 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A and B (exercises B1.11 to B1.19); parts C and D (B1.20 to B1.28) at the next step (NEXT_SESSION)
+# Parts A to D (exercises B1.11 to B1.28)
 # ---------------------------------------------------------------------------
 import chB1_code  # noqa: E402
 from chB1_parts import PARTS  # noqa: E402
 
-NEXT_SESSION = [
-    ("C", "B1.20 à B1.23", "quand le transfert aide ou échoue : courbes d'apprentissage, domaine lointain, oubli "
-                           "catastrophique"),
-    ("D", "B1.24 à B1.28", "modèles de fondation, coût et livraison : zéro-shot avec CLIP, few-shot par prototypes, "
-                           "latence sur CPU, publication du modèle dérivé, et le défi"),
-]
+NEXT_SESSION: list = []          # every part of the chapter is written (session 64)
 
 
 def header_cells(kind: str) -> list:
