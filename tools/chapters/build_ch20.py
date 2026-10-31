@@ -760,7 +760,7 @@ RECORD_14 = r'''wb.record("20.14a", "(2, 3, 7, 7)", mistakes={"un zero-padding 2
 wb.record("20.14b", "(2, 3, 3, 3)", mistakes={"avec ceil_mode=True, le bloc incomplet du bord est gardé (arrondi au-dessus)": "(2, 3, 2, 2)",
           "le pooling ne touche ni aux exemples ni aux canaux": "(1, 3, 3, 3)",
           "la forme de sortie garde l'axe 0, celui des exemples": "(3, 3, 3)"})
-wb.record("20.14c", "(2, 3, 4, 4)", mistakes={"un pas de 1 : les blocs se recouvrent, ils ne sont plus disjoints": "(2, 3, 2, 2)",
+wb.record("20.14c", "(2, 3, 4, 4)", mistakes={"un stride de 1 : les blocs se recouvrent, ils ne sont plus disjoints": "(2, 3, 2, 2)",
           "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?": "(2, 3, 5, 5)",
           "la forme de sortie garde l'axe 0, celui des exemples": "(3, 4, 4)"})
 wb.record("20.14d", "(2, 3)", mistakes={"nn.Flatten garde la dimension des exemples : que reste-t-il à aplatir ?": "(6,)"})

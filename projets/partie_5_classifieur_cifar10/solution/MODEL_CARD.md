@@ -12,7 +12,7 @@ Un exercice de portfolio et d'enseignement : classer des photos 32 × 32 dans le
 
 ## Les données
 
-CIFAR-10 (A. Krizhevsky, « Learning Multiple Layers of Features from Tiny Images », rapport technique, 2009) : 60 000 photos couleur 32 × 32, tirées de la base *80 Million Tiny Images* et étiquetées à la main, 6 000 par classe ; pas de licence formelle, les auteurs demandent de citer le rapport. La base d'origine, *80 Million Tiny Images*, a été retirée en 2020 pour des images et des mots offensants ; CIFAR-10 en est un sous-ensemble filtré, mais ses images viennent du web des années 2000. Découpage : 45 000 images d'entraînement et 5 000 de validation (split stratifié, graine 0) dans les 50 000 d'entraînement ; les 10 000 images de test n'ont servi qu'une fois, pour la mesure finale.
+CIFAR-10 (A. Krizhevsky, « Learning Multiple Layers of Features from Tiny Images », rapport technique, 2009) : 60 000 photos couleur 32 × 32, tirées de la base *80 Million Tiny Images* et étiquetées à la main, 6 000 par classe ; pas de licence formelle, les auteurs demandent de citer le rapport. La base d'origine, *80 Million Tiny Images*, a été retirée en 2020 pour des images et des mots offensants ; CIFAR-10 en est un sous-ensemble filtré, mais ses images viennent du web des années 2000. Découpage : 45 000 images d'entraînement et 5 000 de validation (découpage stratifié, graine 0) dans les 50 000 d'entraînement ; les 10 000 images de test n'ont servi qu'une fois, pour la mesure finale.
 
 ## Les performances
 

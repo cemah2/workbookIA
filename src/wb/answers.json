@@ -38185,7 +38185,7 @@
       "kind": "str",
       "mistakes": {
         "3011d8a949f10f30909445cf2424323e5d945cff82e998a9bd81752760fe7027": "la forme de sortie garde l'axe 0, celui des exemples",
-        "b0d0eb67a343969f06f2e6ad6dcc1deff70cdd62029d383cf0a0034f7469af32": "un pas de 1 : les blocs se recouvrent, ils ne sont plus disjoints",
+        "b0d0eb67a343969f06f2e6ad6dcc1deff70cdd62029d383cf0a0034f7469af32": "un stride de 1 : les blocs se recouvrent, ils ne sont plus disjoints",
         "f5f8e5ad235b07736bebc91cac8e56e779989607be5304608491c6f1e6d8243f": "une fenêtre 2 x 2 qui avance d'un pixel : combien de positions sur 5 pixels ?"
       },
       "source": "chapitres/ch20_deep_learning/05_solutions.ipynb"
@@ -40159,7 +40159,7 @@
       "mistakes": {
         "41d50a199dceb701df76ab93fb10ee05caa1f575b940254fe0a1eedd115beb32": "le noyau, ce sont les poids du filtre",
         "5f0879d43d1906821f07a05be4941a0e012876ddc5b7c172ccdfd4c61d109053": "le champ récepteur est tout le carré de pixels lu par le filtre",
-        "c8a01a9eb2046e84816b56103bf90d5891ad6c06ad054c1d2a11bd2478bf3f10": "la carte de caractéristiques est la sortie de la couche"
+        "c8a01a9eb2046e84816b56103bf90d5891ad6c06ad054c1d2a11bd2478bf3f10": "la carte d'activation est la sortie de la couche"
       },
       "source": "chapitres/ch21_cnn/05_solutions.ipynb"
     },
@@ -45773,7 +45773,7 @@
       "magnitude": 2,
       "mistakes": {
         "19ac6cf60b6762487cc373b0a6e4cdb4553a60a946e3dbeccf444a90412b54fd": "chaque convolution a un biais par filtre",
-        "2dea93f059d5ac6f6396b7f2919ccab9c625defbcb0f0a641a3f92645a6240e8": "les sur-échantillonnages n'ont pas de paramètres"
+        "2dea93f059d5ac6f6396b7f2919ccab9c625defbcb0f0a641a3f92645a6240e8": "les suréchantillonnages n'ont pas de paramètres"
       },
       "sign": 1,
       "source": "chapitres/ch25_autoencodeurs/05_solutions.ipynb"
@@ -48254,7 +48254,7 @@
       "magnitude": 1,
       "mistakes": {
         "0ff422ee4c07520d3ce1524a461c6537a48b7848ea8bd65e661af01f58fd5f3b": "relis la formule : le padding compte deux fois (2p), et il y a un + 1",
-        "2e17dd011840fcdd42ff7b118b872708477413cdd03350897e11f3f87ea54e1c": "le pas de 2 divise la taille : (H + 2p − k) / s"
+        "2e17dd011840fcdd42ff7b118b872708477413cdd03350897e11f3f87ea54e1c": "le stride de 2 divise la taille : (H + 2p − k) / s"
       },
       "sign": 1,
       "source": "chapitres/ch27_gan/05_solutions.ipynb"

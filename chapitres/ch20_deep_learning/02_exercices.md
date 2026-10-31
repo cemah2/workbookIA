@@ -72,7 +72,7 @@ d) En mode évaluation, elle normalise avec : (A) la moyenne et la variance du m
 a) Le nombre de paramètres de `nn.Conv2d(1, 2, kernel_size=3)` : deux filtres 3 × 3 sur une image en niveaux de gris, avec un biais par filtre.
 b) Un max pooling 2 × 2 (blocs disjoints) sur une image de 512 × 512 pixels : la largeur de l'image de sortie.
 c) Un pooling 3 × 3 (blocs disjoints) sur une image de 30 × 30 : sa largeur de sortie.
-d) Vrai ou faux : un filtre 3 × 3 (pas de 1) avec un zero-padding de 1 pixel garde à une image de 5 × 4 pixels sa taille de 5 × 4.
+d) Vrai ou faux : un filtre 3 × 3 (stride de 1) avec un zero-padding de 1 pixel garde à une image de 5 × 4 pixels sa taille de 5 × 4.
 
 ### 20.Q8 — Récurrence n'est pas récursion 🧠 ⏱️ 3 min
 *Fiche §20.4.7 · livre §20.4.7*

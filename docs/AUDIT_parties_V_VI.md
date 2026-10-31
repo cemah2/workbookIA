@@ -2,7 +2,7 @@
 
 *Chapitres 21 à 29, checkpoints V et VI, mini-projets MP5 et MP6. Prompt P5 (`docs/METHODE.md` §3), session 62.*
 
-> **Statut : ✅ audit terminé (2026-10-31) ; propositions R1 à R9 à valider (§3).**
+> **Statut : ✅ terminé (2026-10-31) : constats mineurs appliqués (§4), propositions R1 à R9 validées et appliquées (§6).**
 > - Onze relecteurs indépendants ont travaillé en lecture seule sur le commit `b961aa3`. Leurs rapports bruts sont dans `docs/audit_P5_parties_V_VI/`, de A01 à A11.
 > - Sept correcteurs par zone (F1 à F7) ont vérifié puis appliqué les constats mineurs : voir le §4. La vérification finale est au §5.
 
@@ -56,6 +56,8 @@ Les onze rapports bruts sont dans `docs/audit_P5_parties_V_VI/`. Les citations d
 **Un majeur corrigé sans toucher au contrat** (A11 1). Les messages `mistakes` de la partie 0 du ch. 21 posent le calcul juste, à une addition de la réponse. C'est une fuite, qui va contre le §13 et la règle « Toujours valable » des messages. Les messages ne font pas partie du contrat (la bonne réponse ne change pas) : ils sont réécrits directement (§4).
 
 ## 3. Corrections majeures proposées (à valider)
+
+> **Décision (2026-10-31)** : toutes les recommandations sont retenues (R1 A, R2 A, R3 A, R4 A, R5 A et B pour 24.24 et 24.27, R6 A, R7 A, R8 sans 25.25, R9 A). Application : §6.
 
 Ces neuf points changent le contrat (titres, termes retenus, types, étoiles, durées, parcours, énoncés), une convention transversale ou la structure des outils. Ils sont exclus des corrections directes du §4 et attendent ta décision. Pour chacun, la recommandation est donnée en tête.
 
@@ -301,3 +303,43 @@ Les consignes communes reprennent celles des audits précédents (`docs/AUDIT_pa
 - **les citations du livre en anglais**, balisées dans les rapports bruts, sont retirées de la version versionnée.
 
 Le texte complet des consignes est dans `docs/audit_P5_parties_V_VI/00_consignes_communes.md` (relecteurs) et `00_consignes_F.md` (correcteurs). Chaque relecteur a écrit son rapport au fur et à mesure (constat, sévérité, fichier et ligne, extrait exact, problème, correction précise), puis un bilan.
+
+## 6. Application des propositions R1 à R9 (2026-10-31)
+
+> **Décision (2026-10-31)** : l'utilisateur m'a laissé décider. Toutes les recommandations sont retenues, avec ces choix :
+> - **R1** : « carte d'activation » ; *on-policy*, *off-policy* et *transfer learning* gardés en anglais et glosés ; « banc d'essai » garde le titre du MP6 et se glose *benchmark* dans la prose.
+> - **R3** : `wb.exams` sert aussi à CP4.
+> - **R5** : A, plus 24.24 et 24.27 ; les autres énoncés seront repris à la prochaine reconstruction de leur chapitre.
+> - **R6** : les durées restent dans les bornes d'étoiles du §11 ; le MP5 garde 10 h, avec 30 min de plus pour MP5.8.
+> - **R8** : sans 25.25.
+> - **R9** : A pour les trois conventions.
+
+Sept agents (G1 à G7) ont appliqué ces décisions zone par zone, chacun avec ses vérifications dans une copie. Leurs rapports et leurs consignes sont dans `docs/audit_P5_parties_V_VI/` (`G1` à `G7`, `00_consignes_G.md`). Un relecteur de contrôle indépendant (C1) a ensuite tout revu en lecture seule.
+
+| Décision | Ce qui a changé |
+|---|---|
+| **R1** | Douze titres, sur tous les supports et dans les JSON : 23.15, 23.28, 24.8, 24.E2, 25.27, 26.E4, 26.31, 27.R1, 27.Q7, 29.R3, MP5.1 et MP6.7 (et sa grille). Les termes retenus remplacent les formes écartées dans toute la prose, ch. 1, 11 et 20 compris : carte d'activation, stride, suréchantillonnage, mini-batches, fine-tuning, découpage, augmentation de données, mémoire de rejeu, fiche modèle, auto-apprentissage. *on-policy*, *off-policy* et *transfer learning* sont glosés à leur première occurrence. Le glossaire suit. `test_terminology.py` refuse maintenant les formes écartées, avec quatre sens courants de « affiner » en exception. |
+| **R2** | CP6.8 devient un 🔨 ; CP6.4 et CP6.9 passent en ★★ ; CP6.9 prend le titre « Réparer un pas d'entraînement de GAN » ; `cp6.json` reçoit `notes` et un `study_notes` réécrit. |
+| **R3** | `src/wb/exams.py` (sept oracles et les pistes qui donnent une formule), testé par `tests/infra/test_wb_exams.py` : 17 tests, dont un qui refuse toute solution en clair dans les trois notebooks d'examen. La partie B a été rejouée avant et après, à vide, avec la solution et avec 17 variantes fautives : les verdicts sont identiques. Deux fuites ont été trouvées en passant, dans des docstrings d'exemple (« CGJ », « BDFI », la réponse de CP5.4 a) : elles sont neutralisées. |
+| **R4** | Deux exceptions dans `.gitignore`. Le `model.pt` de la solution de MP5 est versionné, et le cahier des charges dit que le modèle livré se commite. |
+| **R5** | `syllabus.py stats` ne compte plus le « Contrat commun » : les 🔨 passent à 215, 200 et 227 mots en parties IV, V et VI, contre 251, 310 et 313. 24.24 garde son contrat, et sa recette passe à l'indice 2 ; 24.27 garde « le sens avant seulement », et les deux expressions passent à l'indice 3. |
+| **R6** | 21.12 ★★ 30, 21.23 ★★ 25, 22.12 ★★ 30, 22.13 ★★ 30, 25.28 ★★★ 35, 26.14 ★★ 30, 26.19 ★★★ 35, 26.20 ★★★ 75, 26.21 ★★★ 90, 26.31 ★★★ 40 ; MP5.8 passe à 90 min, et les étapes du MP5 font 10 h. |
+| **R7** | 23.15, 23.16, 23.18, 23.23, 23.25, 24.23, 27.20 et 27.27 entrent au parcours maths, avec les prérequis de code que `syllabus.py check` exige : 23.12, 23.13, 24.19, 24.20 et 24.22. |
+| **R8** | Huit énoncés précisés (21.Q8 a, 22.20, 24.R1 a, 26.17, 26.35, 29.15, CP6.7, CP6.8), réponses inchangées. |
+| **R9** | Les §14 (📐), §5 (gloses rappelées) et §12 (relances sur une ligne) de la bible ; les relances du ch. 29 ; l'encadré 📐 du ch. 22. Trois tests de format dans `test_syllabus.py` : icône du type dans les en-têtes de 04 et 05, préfixe « Ch. N : » des rappels (à partir du ch. 12), « 🔁 ★ » dans 02. Seul 21.R3 était hors format. |
+
+**Contrôle (C1).**
+- **Ce qui est conforme.** C1 a comparé 2 342 en-têtes au JSON : aucune divergence. Les durées respectent les bornes. Aucune solution ne reste en clair dans les examens. Les `wb.record` ne changent ni de valeur, ni de décimales, ni de tolérance.
+- **Les restes corrigés.** C1 a relevé huit restes, tous corrigés avant le commit :
+  - le « pas » au sens de stride dans quatre phrases des ch. 27 et 28, et au ch. 20 (pooling de 20.14 et un quiz) ;
+  - « on l'affine » au ch. 1 ;
+  - « Data augmentation » dans la synthèse de CP5 ;
+  - les comptes d'énoncés dans la bible ;
+  - les écarts dans PROGRESS ;
+  - `answers.json`.
+- **Laissés pour plus tard.** `help(wb.exams)`, permis pendant l'examen, afficherait encore la formule de la KL et les corrections de CP6.9 dans les docstrings. Il faudra les réduire à une phrase lors de la prochaine reconstruction des examens. Restent aussi le « banc d'essai » sans glose avant le MP6 et le 🚀 dans le tableau de la cellule 0 des ch. 21 à 26.
+
+**Vérification.**
+- **Notebooks de solutions.** Les quatorze notebooks reconstruits ont été réexécutés : ch. 21 à 29, CP4 à CP6, MP5, MP6, puis le ch. 20, dont un message change. Aucun n'a d'erreur. Le conteneur a redémarré en cours de session, et la nouvelle machine est plus lente que celle du §5 (même code : ch. 21 en 299 s sous charge, 222 s ensuite, contre 155 s). Les notebooks qui dépassaient le budget du §4 sous charge ont été relancés sur la machine calme, et tous passent : ch. 21 en 222 s (le défi 21.32 s'entraîne en 132 s, sous sa limite de 150 s, alors qu'il en prenait 179 sous charge), ch. 22 en 217 s, MP5 en 581 s. MP5 reste le plus proche du budget (ligne 35 « À valider sur Colab »). Aucune sortie n'a d'erreur ni de stderr ; les seuls ❌ sont ceux des 🐛 corrigés sur place. Les « Tout exécuter » à vide de quinze notebooks (03 des ch. 20 à 29, trois examens, deux kits) vont au bout sans erreur.
+- **Réponses.** Aucune bonne réponse ne change ; seuls changent des messages (21.Q2 d, 25.3 e, 27.1 c, 20.14 c).
+- **Tests et cohérence.** `answers.json` est à jour (4 590 réponses). Tests : 530 réussis en mode apprenant, 4 489 en `--impl=ref`, et 3 953 échecs attendus en `--impl=stubs`. `syllabus.py build` et `check` (0 problème), flashcards (757 cartes) et `check_env.py` sont au vert. Les en-têtes « Temps total estimé » concordent avec le SYLLABUS (ch. 21 : 29 h, ch. 26 : 32 h). `mon_travail/` est intact.
