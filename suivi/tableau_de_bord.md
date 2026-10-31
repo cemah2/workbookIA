@@ -1368,3 +1368,22 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] 29.E1–E4 💼 Entretien (4 questions, 40 min)
 - [ ] Flashcards importées dans Anki (15 cartes)
 <!-- wb:end 29 -->
+
+<!-- wb:section CP6 -->
+## CP6 — Checkpoint VI — Génératif et apprentissage par renforcement ⏱️ 13 h 30
+
+- [ ] CP6.1 🧠 Questions flash : dix réponses courtes sur la partie VI (valeurs, formes, vrai/faux) ★ 10 min
+- [ ] CP6.2 ✏️ VAE : un tirage reparamétrisé et sa divergence KL ★ 10 min
+- [ ] CP6.3 ✏️ Deux transitions : mise à jour Q-learning puis SARSA ★ 10 min
+- [ ] CP6.4 ∂ Discriminateur optimal et losses à l'équilibre ★ 12 min
+- [ ] CP6.5 ✏️ Matrice de Gram de trois cartes d'activation ★ 5 min
+- [ ] CP6.6 🔮 Prédire : γ → 0 puis ε = 0 pour un agent Q-learning sur Flippers ★ 7 min
+- [ ] CP6.7 📈 Trois courbes, trois diagnostics : VAE, GAN, apprentissage par renforcement ★ 8 min
+- [ ] CP6.8 📦 Écrire la loss d'un VAE en PyTorch et la tester sur un batch fourni ★★ 15 min
+- [ ] CP6.9 🐛 Réparer une boucle d'entraînement de GAN ★ 10 min
+- [ ] CP6.10 🧮 Table Q ou réseau : estimer la mémoire nécessaire ★ 6 min
+- [ ] CP6.11 ⚖️ Un dataset de visages pour un produit commercial ★ 5 min
+- [ ] CP6.12 💼 Comme en entretien : GAN, VAE ou diffusion, la réponse en 60 secondes ★ 6 min
+- [ ] CP6.13 ✏️ Retour sur les parties IV et V : taille de sortie d'une convolution et un pas d'Adam ★ 10 min
+- [ ] Mini-projet MP6 — Banc d'essai génératif : VAE contre GAN sur Fashion-MNIST (≈ 10 h)
+<!-- wb:end CP6 -->
