@@ -998,4 +998,4 @@ else:
                         f"{TRAIN_20['iters']} itérations, {fr(seconds_20 / 60, 1)} min", val_char_20))
         print(f"\n{'modèle':<50} {'paramètres':>10}  {'budget':<38} {'nats/car.':>9} {'perplexité':>10}")
         for name, params, budget, loss in rows_20:
-            print(f"{name:<50} {params:>10_}  {budget:<38} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}".replace("_", " "))'''
+            print(f"{name:<50} {fr(params / 1e6, 2) + ' M':>10}  {budget:<38} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}")'''

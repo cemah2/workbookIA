@@ -4995,7 +4995,7 @@ L'attention permet à chaque position d'une séquence d'aller chercher directeme
 | B3.10 | ⚖️ | Mémorisation : quand un modèle de langue recrache ses données d'entraînement | ★★ | 20 | — | 02 | 29 | – | manual |
 | B3.11 | 📄 | Vaswani et coll. (2017) : « Attention Is All You Need » | ★★★ | 45 | — | 02 | B3.3 | M | manual |
 | B3.12 | 🔨 | causal_mask, padding_mask et scaled_dot_product_attention | ★★ | 30 | — | 03 | B3.2 | RMC | pytest |
-| B3.13 | 🔮 | Prédire la carte d'attention quand une clé copie la requête, puis quand on retire la division par √d_k | ★ | 10 | — | 03 | B3.12, B3.6 | C | manual |
+| B3.13 | 🔮 | Prédire la carte d'attention quand une clé copie la requête, puis quand on retire la division par √d_k | ★ | 10 | — | 03 | B3.12, B3.6 | C | wb.check |
 | B3.14 | 🔨 | split_heads, merge_heads et multi_head_attention | ★★★ | 45 | — | 03 | B3.12, B3.3 | RMC | pytest |
 | B3.15 | 🔨 | positional_encoding et apply_rope | ★★ | 30 | — | 03 | B3.4, B3.7 | RMC | pytest |
 | B3.16 | 🔨 | transformer_block en NumPy, validé contre nn.TransformerEncoderLayer | ★★★★ | 100 | — | 03 | B3.14, 20 | C | pytest |
