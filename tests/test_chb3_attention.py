@@ -39,6 +39,8 @@ from __future__ import annotations
 
 import cmath
 import math
+import traceback
+from pathlib import Path
 from types import MappingProxyType
 
 import numpy as np
@@ -137,13 +139,31 @@ def assert_equal(result, expected, msg):
         _fail(msg, head, data)
 
 
+# Functions of earlier chapters that attention.py imports: where to find them when they are not written yet.
+_EARLIER = {"softmax": ("nn/activations.py", "17"), "gelu": ("nn/activations.py", "17"),
+            "layer_norm": ("nn/regularization.py", "20")}
+
+
+def _pending(exc: NotImplementedError, function) -> NotImplementedError:
+    """The same "⏳" error, with the file and the chapter when it comes from softmax, gelu or layer_norm."""
+    for frame in reversed(traceback.extract_tb(exc.__traceback__)):
+        where = _EARLIER.get(frame.name)
+        if where and Path(frame.filename).as_posix().endswith(where[0]):
+            caller = getattr(function, "__name__", "your function")
+            return NotImplementedError(f"{exc} (mylearn/{where[0]}, chapter {where[1]}, called by {caller})")
+    return exc
+
+
 def assert_raises(error, function, *args, why="", **kwargs):
     """The call must raise `error`; `why` names the case in the failure message."""
     name = getattr(function, "__name__", "the function")
     try:
         function(*args, **kwargs)
-    except NotImplementedError:
-        raise                  # before `except error`: NotImplementedError is a RuntimeError; shown as "⏳"
+    except NotImplementedError as exc:   # before `except error`: a RuntimeError; shown as "⏳"
+        new = _pending(exc, function)
+        if new is exc:
+            raise
+        raise new from None
     except error:
         return
     except Exception as exc:  # noqa: BLE001 - say which error was raised instead
@@ -156,8 +176,11 @@ def call(function, *args, expected="a result", **kwargs):
     """Call the learner's function; an unexpected exception becomes a failure that says what was expected."""
     try:
         return function(*args, **kwargs)
-    except NotImplementedError:
-        raise
+    except NotImplementedError as exc:
+        new = _pending(exc, function)
+        if new is exc:
+            raise
+        raise new from None
     except Exception as exc:  # noqa: BLE001
         name = getattr(function, "__name__", "the function")
         raise AssertionError(f"expected {expected}, but {name} raised {type(exc).__name__}: {exc}") from None
@@ -975,7 +998,12 @@ def test_positional_encoding_matches_the_closed_form(att, T, D, base):
     pe = call(att.positional_encoding, T, D, base=base, expected="the encoding")
     msg = f"positional_encoding({T}, {D}, base={base})"
     assert_array(pe, (T, D), msg)
-    assert_close(pe, pe_oracle(T, D, base), msg=msg + " (PE[p, 2i] = sin(p / base**(2i / d)), "
+    want = pe_oracle(T, D, base)
+    gap = float(np.max(np.abs(np.asarray(pe, dtype=float) - want)))
+    if pe.dtype == np.float32 or ATOL < gap < 1e-4:
+        msg += (" (compute in float64: in float32, the angle p / base**(2i / d) loses about 1e-6 for p near 1000"
+                + (f"; your array is {pe.dtype}" if pe.dtype != np.float64 else "") + ")")
+    assert_close(pe, want, msg=msg + " (PE[p, 2i] = sin(p / base**(2i / d)), "
                  "PE[p, 2i + 1] = cos(p / base**(2i / d)): the same angle for the columns 2i and 2i + 1)")
 
 

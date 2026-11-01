@@ -1,10 +1,12 @@
 # B3 · Notes de rédaction de la fiche (session 67)
 
+> **Relecture V2 de la fiche (session 67)** : aucun nombre de §2 à §4 n'a changé ; seul le compte de mots du §1 est mis à jour. La fiche ne dit plus qu'`EFFICIENT_ATTENTION` n'existe pas sur CPU (le fait reste vrai, §2) et ne nomme plus « le mot précédent » parmi les besoins d'un token (203.4), pour ne pas souffler un motif de 📈 B3.24.
+
 Notes pour le rédacteur des exercices (`02_exercices.md`, indices, solutions, partie 0, notebook). Elles ne sont pas destinées à l'apprenant. Tout ce qui suit a été **exécuté** avec `/root/venv313` (Python 3.13, torch 2.11.0+cpu, NumPy 2.1.3, transformers 5.21.0) ou **lu dans la source citée**, le 2026-11-01.
 
 ## 1. Fichiers produits
 
-- `chapitres/b3_transformers/01_fiche.md` : 15 299 mots (`len(text.split())`), soit **120 min** à 125 mots/min (5 × round(122,4 / 5)). C'est **à la limite** : 14 mots de plus font passer à 125 min. L'en-tête dit « lecture de la fiche ≈ 2,0 h » et « ≈ 22 h » au total (valeurs du SYLLABUS). Les dix sections 203.x sont marquées ⏩ (bonus : tous les parcours lisent toute la fiche).
+- `chapitres/b3_transformers/01_fiche.md` : 14 796 mots après relecture (`len(text.split())`), soit **120 min** à 125 mots/min (5 × round(118,4 / 5)), avec une marge d'environ 520 mots. L'en-tête dit « lecture de la fiche ≈ 2,0 h » et « ≈ 22 h » au total (valeurs du SYLLABUS). Les dix sections 203.x sont marquées ⏩ (bonus : tous les parcours lisent toute la fiche).
 - `tools/chapters/figures_chB3.py` → `figures/` (7 PNG, ≈ 5 s, sans réseau ni entraînement) : `goulot.png`, `qkv.png`, `masques.png`, `tetes.png`, `positions.png`, `bloc.png`, `cout.png`. Rien d'appris ni de mesuré : les poids de `goulot.png` sont marqués « illustratifs » ; `cout.png` est théorique (mémoire $32 T^2 \times 4$ octets ; part de l'attention $T / (T + 12d)$ pour $d$ = 512, 2 048, 8 192).
 - `tests/infra/test_terminology.py` et `tests/infra/test_syllabus.py` passent (48 tests) ; `syllabus.py check` : 0 problème. Tous les blocs de code de la fiche ont été rejoués d'un seul tenant (17 blocs) : les sorties en commentaire sont celles de l'exécution.
 
