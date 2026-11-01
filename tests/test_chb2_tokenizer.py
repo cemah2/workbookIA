@@ -713,7 +713,8 @@ def test_bpe_fit_does_not_modify_its_input(tk):
 @pytest.mark.parametrize("params,why", [
     pytest.param(dict(level="word"), "level='word' is unknown", id="level"),
     pytest.param(dict(pre_tokenizer="bert"), "pre_tokenizer='bert' is unknown", id="pre-tokenizer"),
-    pytest.param(dict(unk_token="<unk>"), "unk_token at byte level (every text can be encoded)", id="unk-at-byte-level"),
+    pytest.param(dict(unk_token="<unk>"), "unk_token at byte level (every text can be encoded)",
+                 id="unk-at-byte-level"),
     pytest.param(dict(vocab_size=256, special_tokens=["<s>"]), "vocab_size=256 < 256 bytes + 1 special token",
                  id="vocab-too-small-bytes"),
     pytest.param(dict(vocab_size=7, level="char"), "vocab_size=7 < the 8 characters of the corpus",
@@ -953,7 +954,7 @@ def test_bpe_decode_refuses_an_unfitted_tokenizer(tk):
 
 
 @needs_tokenizers
-def test_bpe_decode_number_of_tokens_close_to_a_tokenizers_byte_level_bpe(tk):
+def test_bpe_encode_number_of_tokens_close_to_a_tokenizers_byte_level_bpe(tk):
     train, probe, vocab_size = (corpus("holmes")[:30_000],), corpus("holmes")[60_000:80_000], 456
     hf = Tokenizer(models.BPE())
     hf.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)

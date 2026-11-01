@@ -287,7 +287,8 @@ DOC_C = [[0.0, 2.0, 1.0], [2.0, 0.0, 3.0], [1.0, 3.0, 0.0]]
 def test_ppmi_docstring_examples(emb):
     P = call(emb.ppmi, np.array(DOC_C), expected="the PPMI")
     assert_float_array(P, (3, 3), "ppmi(C)")
-    assert_close(P, [[0, 0.47, 0], [0.47, 0, 0.5878], [0, 0.5878, 0]], rtol=0, atol=5e-5, msg="ppmi(C) of the docstring")
+    assert_close(P, [[0, 0.47, 0], [0.47, 0, 0.5878], [0, 0.5878, 0]], rtol=0, atol=5e-5,
+                 msg="ppmi(C) of the docstring")
     P75 = call(emb.ppmi, np.array(DOC_C), alpha=0.75, expected="the PPMI")
     assert_close(P75, [[0, 0.5218, 0], [0.3941, 0, 0.5838], [0, 0.6396, 0]], rtol=0, atol=5e-5,
                  msg="ppmi(C, alpha=0.75) of the docstring (smoothing of the contexts only: the result is not "
@@ -390,7 +391,8 @@ def test_cosine_similarity_matrix_docstring_examples(emb):
                  msg="cosine_similarity_matrix(A) of the docstring (a row of zeros has similarity 0)")
     S2 = call(emb.cosine_similarity_matrix, A.copy(), [[0.0, 2.0], [-3.0, 0.0]], expected="the similarities")
     assert_float_array(S2, (3, 2), "cosine_similarity_matrix(A, B) with A (3, 2) and B (2, 2)")
-    assert_close(S2, [[0, -1], [r, -r], [0, 0]], rtol=0, atol=1e-9, msg="cosine_similarity_matrix(A, B) of the docstring")
+    assert_close(S2, [[0, -1], [r, -r], [0, 0]], rtol=0, atol=1e-9,
+                 msg="cosine_similarity_matrix(A, B) of the docstring")
 
 
 @pytest.mark.parametrize("n,m,d", [pytest.param(5, 7, 3, id="5x3-vs-7x3"), pytest.param(10, 1, 6, id="10x6-vs-1x6"),
@@ -516,7 +518,8 @@ def test_most_similar_ties_go_to_the_smaller_index(emb):
     idx, _ = neighbours(call(emb.most_similar, E.copy(), [1.0, 0.0], k=4, expected="(indices, similarities)"),
                         "most_similar")
     assert_indices(idx, [1, 3, 4, 0], "three identical rows 1, 3, 4 (ties: smaller index first), then row 0")
-    big = np.repeat(np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]]), 40, axis=0)[np.random.default_rng(0).permutation(120)]
+    rows = np.repeat(np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]]), 40, axis=0)
+    big = rows[np.random.default_rng(0).permutation(120)]
     want, _ = topk_oracle(big, [1.0, 0.2], 60)
     idx2, _ = neighbours(call(emb.most_similar, big.copy(), [1.0, 0.2], k=60, expected="(indices, similarities)"),
                          "most_similar")

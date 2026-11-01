@@ -52,12 +52,12 @@ MUTED = wbplot.TEXT_MUTED
 SENTENCE = "Les chatons s'endorment paisiblement."
 SUBWORDS = {
     "GPT-2 (BPE octet, 50 257)": ["Les", "Ġchat", "ons", "Ġs", "'", "endor", "ment", "Ġpa", "isible", "ment", "."],
-    "CamemBERT (Unigram, 32 005)": ["▁Les", "▁chaton", "s", "▁s", "'", "end", "or", "ment", "▁paisible", "ment", "."],
+    "CamemBERT (Unigram, 32 006)": ["▁Les", "▁chaton", "s", "▁s", "'", "end", "or", "ment", "▁paisible", "ment", "."],
 }
 TOKENIZERS = {"GPT-2": "openai-community/gpt2", "gpt-oss (o200k)": "openai/gpt-oss-20b",
               "Qwen3": "Qwen/Qwen3-0.6B", "XLM-R (e5)": "intfloat/multilingual-e5-small"}
 SUBWORD_REPOS = {"GPT-2 (BPE octet, 50 257)": "openai-community/gpt2",
-                 "CamemBERT (Unigram, 32 005)": "almanach/camembert-base"}
+                 "CamemBERT (Unigram, 32 006)": "almanach/camembert-base"}
 # UDHR in XML (github.com/unicode-org/udhr, files udhr_<code>.xml): every <para>, joined by newlines.
 LANGS = {"eng": "anglais", "fra": "français", "deu_1996": "allemand", "spa": "espagnol", "fin": "finnois",
          "tur": "turc", "rus": "russe", "ell_monotonic": "grec", "arb": "arabe", "kor": "coréen",
