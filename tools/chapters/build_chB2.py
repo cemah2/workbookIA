@@ -11,9 +11,10 @@ B2.1 to B2.6 and of the estimate 🧮 B2.9 (02_exercices.md). The derivation ∂
 (🗣️ B2.10, ⚖️ B2.11, 📄 B2.12) and the interview are corrected with 05_solutions.md. The answers are computed by hand
 formulas in the context cell of the solutions notebook, then checked against the reference library (mylearn.tokenizer,
 mylearn.embeddings, mylearn.sequences, mylearn.info), Hugging Face tokenizers and PyTorch (no download).
-Parts A to E (exercises B2.13 to B2.31) come at the second generation session (NEXT_SESSION): real tokenizers and
-their cost, your BPE, experiments on the vocabulary, word vectors (co-occurrences, word2vec), sentence embeddings,
-delivery and the challenge.
+Parts A to C (exercises B2.13 to B2.21, chB2_parts.py and chB2_code.py; long checks in history_chB2.py): real
+tokenizers and their cost, your BPE, a tokenizer to repair, the comparison to tokenizers, experiments on the
+vocabulary size and the language. Parts D and E (B2.22 to B2.31: word vectors, sentence embeddings, delivery and the
+challenge) come at the next generation step (NEXT_SESSION).
 """
 
 from __future__ import annotations
@@ -595,16 +596,12 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "⚖️ B2.11, 📄 B2.12) et l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to E (exercises B2.13 to B2.31): second generation session
+# Parts A to C (exercises B2.13 to B2.21, the tokenization phase: session 66); parts D and E come next
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB2_code  # noqa: E402,F401  (the cells; history_chB2.py reuses them)
+from chB2_parts import PARTS  # noqa: E402
+
 NEXT_SESSION = [
-    ("A", "B2.13 à B2.14", "des tokenizers réels sur Holmes et Verne, et ce que coûtent les langues, les nombres et "
-                           "les emoji"),
-    ("B", "B2.15 à B2.19", "ton BPE : compter et fusionner les paires, apprendre les fusions, encoder et décoder, "
-                           "réparer un tokenizer qui abîme les accents, te comparer à la bibliothèque tokenizers"),
-    ("C", "B2.20 à B2.21", "expériences : compression et entropie selon la taille du vocabulaire, tokenizer d'une "
-                           "langue appliqué à l'autre"),
     ("D", "B2.22 à B2.27", "vecteurs de mots : co-occurrences et PPMI, cosinus et voisins, PPMI + SVD sur Holmes, "
                            "word2vec sur Verne, voisins de « Fogg » et « Passepartout », carte des embeddings"),
     ("E", "B2.28 à B2.31", "embeddings de phrases et recherche sémantique, statique contre contextuel, sauvegarder "
@@ -620,9 +617,7 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine étape de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B2 · Tokenisation et embeddings — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -630,7 +625,10 @@ def header_cells(kind: str) -> list:
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou des tests). « Tout "
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
-               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
+               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Le "
+               "notebook télécharge les fichiers de six tokenizers du Hugging Face Hub (quelques Mo, pas les poids "
+               "des modèles) s'ils ne sont pas déjà là ; sans connexion, leurs cellules affichent ⏳ et le reste "
+               "continue. Tout tourne sur CPU.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b2_tokenisation/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
@@ -663,10 +661,10 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B2.13 à B2.31 (parties A à E : tokenizers réels, ton BPE, expériences, "
-             "vecteurs de mots, embeddings de phrases, livraison et défi) seront ajoutés à la prochaine session de "
-             "génération ; relance alors `python tools/start_chapter.py B2` pour obtenir le notebook complet.*")
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B2.22 à B2.31 (parties D et E : vecteurs de mots, embeddings de phrases, livraison "
+             "et défi) seront ajoutés à la prochaine étape de génération ; relance alors "
+             "`python tools/start_chapter.py B2` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu compter les octets et les points de code d'un texte, et écrire un caractère en UTF-8 ?\n"

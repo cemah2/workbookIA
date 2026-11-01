@@ -1,0 +1,133 @@
+{
+ "bug18": {
+  "versions": [
+   {
+    "fixed": "",
+    "first_failure": 1,
+    "expected": 1,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 1 : decode(encode(texte)) lève UnicodeDecodeError (unexpected end of data) sur « « Phileas Fogg a gagné son pari ! » 🙂 » ; ce texte contient des caractères de plusieurs octets : à quel moment decode transforme-t-il des octets en texte ?"
+   },
+   {
+    "fixed": "3",
+    "first_failure": 1,
+    "expected": 1,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 1 : decode(encode(texte)) lève UnicodeDecodeError (unexpected end of data) sur « « Phileas Fogg a gagné son pari ! » 🙂 » ; ce texte contient des caractères de plusieurs octets : à quel moment decode transforme-t-il des octets en texte ?"
+   },
+   {
+    "fixed": "2",
+    "first_failure": 1,
+    "expected": 1,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 1 : decode(encode(texte)) lève UnicodeDecodeError (unexpected end of data) sur « « Phileas Fogg a gagné son pari ! » 🙂 » ; ce texte contient des caractères de plusieurs octets : à quel moment decode transforme-t-il des octets en texte ?"
+   },
+   {
+    "fixed": "23",
+    "first_failure": 1,
+    "expected": 1,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 1 : decode(encode(texte)) lève UnicodeDecodeError (unexpected end of data) sur « « Phileas Fogg a gagné son pari ! » 🙂 » ; ce texte contient des caractères de plusieurs octets : à quel moment decode transforme-t-il des octets en texte ?"
+   },
+   {
+    "fixed": "1",
+    "first_failure": 2,
+    "expected": 2,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 2 : « é » apparaît 1613 fois dans le texte d'entraînement, mais encode le découpe en 2 tokens [b'\\xc3', b'\\xa9'] ; les fusions apprises pour « é » portent-elles sur les octets que reçoit encode ?"
+   },
+   {
+    "fixed": "13",
+    "first_failure": 2,
+    "expected": 2,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 2 : « é » apparaît 1613 fois dans le texte d'entraînement, mais encode le découpe en 2 tokens [b'\\xc3', b'\\xa9'] ; les fusions apprises pour « é » portent-elles sur les octets que reçoit encode ?"
+   },
+   {
+    "fixed": "12",
+    "first_failure": 3,
+    "expected": 3,
+    "all_pass": false,
+    "message": "❌ Ex B2.18 : point 3 : 675 des 5337 mots distincts du texte d'entraînement ne sont pas découpés par encode comme à la fin de l'entraînement ; par exemple ' les' : [' l', 'es'] à l'entraînement, [' le', 's'] par encode ; compare les deux découpages : laquelle de ses fusions encode a-t-il faite en premier ?"
+   },
+   {
+    "fixed": "123",
+    "first_failure": null,
+    "expected": null,
+    "all_pass": true,
+    "message": ""
+   }
+  ],
+  "e_in_train": 1613
+ },
+ "p14": {
+  "counts": {
+   "gpt2": {
+    "Holmes": 13419,
+    "Verne": 19132,
+    "nombres": 4601,
+    "emoji": 3800
+   },
+   "bert": {
+    "Holmes": 11781,
+    "Verne": 16944,
+    "nombres": 5493,
+    "emoji": 1
+   },
+   "e5": {
+    "Holmes": 12699,
+    "Verne": 14287,
+    "nombres": 4621,
+    "emoji": 1600
+   },
+   "camembert": {
+    "Holmes": 16806,
+    "Verne": 12741,
+    "nombres": 5533,
+    "emoji": 2
+   },
+   "qwen3": {
+    "Holmes": 12151,
+    "Verne": 15458,
+    "nombres": 11768,
+    "emoji": 1600
+   },
+   "smollm2": {
+    "Holmes": 12823,
+    "Verne": 18989,
+    "nombres": 11768,
+    "emoji": 4200
+   }
+  },
+  "bytes": {
+   "Holmes": 50980,
+   "Verne": 51497,
+   "nombres": 11768,
+   "emoji": 6000
+  },
+  "gpt2_bytes_per_token": {
+   "Holmes": 3.799,
+   "Verne": 2.692,
+   "nombres": 2.558,
+   "emoji": 1.579
+  },
+  "ratio": 1.4257,
+  "answers": {
+   "costliest": "D",
+   "ratio": "B",
+   "bert_emoji": "A"
+  }
+ },
+ "timing": {
+  "ref_verne_byte_2000": 0.98,
+  "ref_verne_byte_8000": 1.12,
+  "ref_holmes_byte_2000": 0.69,
+  "ref_holmes_byte_8000": 0.81,
+  "ref_verne_char_2000": 0.64,
+  "tokenizers_verne_char_2000": 0.218,
+  "ref_mixed_byte_2000": 1.9,
+  "naive_verne_byte_2000": 111.1,
+  "naive_verne_byte_4000": 232.5,
+  "train_18": 1.03
+ }
+}
