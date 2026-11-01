@@ -175,19 +175,22 @@ else:
         wb.check("B2.13c", rows_13[("e5", "Holmes")]["fertility"], computed=True)
         wb.check("B2.13d", rows_13[("e5", "Verne")]["bytes_per_token"], computed=True)'''
 
-RECORD_13 = r'''specials_13 = {key: len(REF_13[name](text)["input_ids"])          # the classic mistake: [CLS] and [SEP], <s> and </s>
-               for key, (name, text) in {"bert_v": ("bert", EXCERPT_V), "e5_h": ("e5", EXCERPT_H), "e5_v": ("e5", EXCERPT_V)}.items()}
-wb.record("B2.13a", rows_13[("gpt2", "Holmes")]["tokens"], decimals=4, mistakes={
-    "c'est le nombre de mots de l'extrait : on demande ses tokens": rows_13[("gpt2", "Holmes")]["words"],
-    "c'est le compte de l'extrait de Verne : on demande celui de Holmes": rows_13[("gpt2", "Verne")]["tokens"]})
-wb.record("B2.13b", rows_13[("bert", "Verne")]["tokens"], decimals=4, mistakes={
-    "les tokens spéciaux que BERT ajoute autour du texte sont comptés : on demande les tokens du texte seul": specials_13["bert_v"]})
-wb.record("B2.13c", rows_13[("e5", "Holmes")]["fertility"], decimals=4, mistakes={
-    "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul": specials_13["e5_h"] / rows_13[("e5", "Holmes")]["words"],
-    "la fertilité met les tokens au numérateur et les mots au dénominateur": rows_13[("e5", "Holmes")]["words"] / rows_13[("e5", "Holmes")]["tokens"]})
-wb.record("B2.13d", rows_13[("e5", "Verne")]["bytes_per_token"], decimals=4, mistakes={
-    "tu as compté des caractères : la compression se mesure en octets UTF-8, et une lettre accentuée en prend deux": len(EXCERPT_V) / rows_13[("e5", "Verne")]["tokens"],
-    "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul": n_bytes(EXCERPT_V) / specials_13["e5_v"]})'''
+RECORD_13 = r'''if not rows_13:
+    print("⏳ Ex B2.13 : les réponses s'enregistrent avec les tokenizers de référence (connexion au Hub).")
+else:
+    specials_13 = {key: len(REF_13[name](text)["input_ids"])          # the classic mistake: [CLS] and [SEP], <s> and </s>
+                   for key, (name, text) in {"bert_v": ("bert", EXCERPT_V), "e5_h": ("e5", EXCERPT_H), "e5_v": ("e5", EXCERPT_V)}.items()}
+    wb.record("B2.13a", rows_13[("gpt2", "Holmes")]["tokens"], decimals=4, mistakes={
+        "c'est le nombre de mots de l'extrait : on demande ses tokens": rows_13[("gpt2", "Holmes")]["words"],
+        "c'est le compte de l'extrait de Verne : on demande celui de Holmes": rows_13[("gpt2", "Verne")]["tokens"]})
+    wb.record("B2.13b", rows_13[("bert", "Verne")]["tokens"], decimals=4, mistakes={
+        "les tokens spéciaux que BERT ajoute autour du texte sont comptés : on demande les tokens du texte seul": specials_13["bert_v"]})
+    wb.record("B2.13c", rows_13[("e5", "Holmes")]["fertility"], decimals=4, mistakes={
+        "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul": specials_13["e5_h"] / rows_13[("e5", "Holmes")]["words"],
+        "la fertilité met les tokens au numérateur et les mots au dénominateur": rows_13[("e5", "Holmes")]["words"] / rows_13[("e5", "Holmes")]["tokens"]})
+    wb.record("B2.13d", rows_13[("e5", "Verne")]["bytes_per_token"], decimals=4, mistakes={
+        "tu as compté des caractères : la compression se mesure en octets UTF-8, et une lettre accentuée en prend deux": len(EXCERPT_V) / rows_13[("e5", "Verne")]["tokens"],
+        "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul": n_bytes(EXCERPT_V) / specials_13["e5_v"]})'''
 
 GIVEN_14 = r'''# Two more texts of about 6 000 to 12 000 bytes, next to the two excerpts of B2.13
 NUMBERS_14 = " ".join(str(i * 7919 % 100000) for i in range(2000))    # 2 000 numbers of 1 to 5 digits, spaced

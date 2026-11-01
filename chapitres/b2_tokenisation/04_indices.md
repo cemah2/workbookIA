@@ -1071,7 +1071,7 @@ Relis « Les tokenizers des modèles, lus dans leur `tokenizer.json` » (§202.5
 </details>
 <details><summary>Indice 2</summary>
 
-`deliver_30` : `Path(folder).mkdir(parents=True, exist_ok=True)`, `tok.save(...)`, puis `json.dumps` d'un dictionnaire (le texte, ses ids, et ce que ton test veut comparer d'autre, comme le nombre de tokens), écrit en UTF-8 avec `ensure_ascii=False`. Le test : `BPETokenizer.load(TOKENIZER_PATH)`, `json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))`, puis trois `assert`, chacun avec un message qui dit ce qui était attendu.
+`deliver_30` : `Path(folder).mkdir(parents=True, exist_ok=True)`, `tok.save(...)`, puis `json.dumps` d'un dictionnaire (le texte, ses ids, et ce que ton test veut comparer d'autre, comme la taille du vocabulaire), écrit en UTF-8 avec `ensure_ascii=False`. Le test : `BPETokenizer.load(TOKENIZER_PATH)`, `json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))`, puis trois `assert`, chacun avec un message qui dit ce qui était attendu.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1082,7 +1082,7 @@ def test_tokenizer_regression_30():
     golden = json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))
     ids = tok.encode(golden["text"])
     assert ids == golden["ids"], "expected the frozen ids of the reference text"
-    ...                                            # the number of tokens, then decode(ids) == text
+    ...                                            # len(tok.vocab_) unchanged, then decode(ids) == text
 ```
 
 </details>

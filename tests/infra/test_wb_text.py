@@ -274,6 +274,50 @@ def test_passage_embeddings_are_cached_under_a_full_key(tmp_path):
     assert np.array_equal(first, again) and not np.array_equal(first, other)
 
 
+def test_passage_embeddings_are_computed_again_when_a_part_of_the_key_changes(tmp_path):
+    pytest.importorskip("torch")
+    sm = W.SentenceModel("e5", _FakeTokenizer(), _FakeModel())
+    sm.dim = 2
+    calls = []
+    real = sm.embed
+    sm.embed = lambda texts, kind=None, batch_size=32: calls.append(kind) or real(texts, kind, batch_size)
+    passages = ["a b", "ccc"]
+    W.passage_embeddings(sm, passages, "toy", folder=tmp_path, verbose=False)
+    assert calls == ["passage"]
+    W.passage_embeddings(sm, passages, "toy", kind="query", folder=tmp_path, verbose=False)      # another prefix
+    W.passage_embeddings(sm, passages, "other", folder=tmp_path, verbose=False)                  # another subset
+    sm.max_length = 128                                                                           # another truncation
+    W.passage_embeddings(sm, passages, "toy", folder=tmp_path, verbose=False)
+    sm.revision = "0" * 40                                                                        # another revision
+    W.passage_embeddings(sm, passages, "toy", folder=tmp_path, verbose=False)
+    assert len(calls) == 5, f"expected one computation per key, got {len(calls)} for 5 different keys"
+    W.passage_embeddings(sm, passages, "toy", folder=tmp_path, verbose=False)
+    assert len(calls) == 5, "expected the last key to be read from the cache"
+    assert len(list(tmp_path.glob("*.npz"))) == 5, "expected one cache file per key"
+
+
+def test_sentence_models_are_frozen_at_a_commit():
+    assert set(W.SENTENCE_MODELS) == {"minilm", "e5"}
+    for name, spec in W.SENTENCE_MODELS.items():
+        assert re.fullmatch(r"[0-9a-f]{40}", spec["revision"]), f"expected a full commit hash for {name}"
+        assert spec["license"] in ("MIT", "Apache 2.0") and spec["dim"] == 384
+    assert W.SENTENCE_MODELS["e5"]["revision"] == W.TOKENIZERS["e5"]["revision"], \
+        "expected the tokenizer and the model of e5 read at the same commit"
+
+
+def test_load_sentence_model_wraps_errors(monkeypatch):
+    transformers = pytest.importorskip("transformers")
+
+    def broken(*args, **kwargs):
+        raise OSError("We couldn't connect to 'https://huggingface.co'")
+
+    monkeypatch.setattr(transformers.AutoTokenizer, "from_pretrained", broken)
+    monkeypatch.setattr(W, "_SENTENCE_LOADED", {})
+    with pytest.raises(W.SentenceModelUnavailable, match="OSError"):
+        W.load_sentence_model("minilm")
+    assert W._SENTENCE_LOADED == {}, "expected nothing kept after a failed load"
+
+
 def test_try_sentence_model_falls_back_to_none_with_a_pending_line(monkeypatch, capsys):
     with pytest.raises(ValueError, match="unknown sentence model"):
         W.load_sentence_model("sbert")

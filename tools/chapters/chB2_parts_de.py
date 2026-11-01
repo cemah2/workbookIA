@@ -210,7 +210,7 @@ Lis les cartes et écris :
 
 Une fois tes deux réponses écrites, la cellule de vérification affiche des mesures faites sur les coordonnées : la corrélation de rang entre la fréquence et chaque axe de la carte (1), la part des voisins des mots fréquents qui sont eux aussi fréquents sur la carte (2), et, pour chaque groupe de la carte (3), la part de ses voisins qui sont du même groupe.
 
-Dans tes notes : sur la carte (3), quels groupes se séparent, lesquels se mêlent, et quels mots sont « mal placés » (pense aux contextes qu'ils partagent, comme « minutes » et les nombres dans la fiche) ? Pourquoi la fréquence se voit-elle sur la carte (2) et presque pas le long des axes de la (1) ? Pourquoi ne faut-il pas lire les **distances entre** les groupes d'un UMAP (ch. 12, B1) ?""",
+Dans tes notes : sur la carte (3), quels groupes se séparent, lesquels se mêlent, et quels mots sont « mal placés » (pense aux contextes qu'ils partagent, comme « minutes » et les nombres dans la fiche) ? Ce que tu as lu de la fréquence sur les cartes (1) et (2) : comment l'expliques-tu par ce que garde chaque méthode, les directions de plus grande variance pour la PCA, les voisinages pour UMAP ? Pourquoi ne faut-il pas lire les **distances entre** les groupes d'un UMAP (ch. 12, B1) ?""",
        given=C.GIVEN_27 + "\n\n\n" + C.EXPERIMENT_27, todo=C.TODO_27, check=C.CHECK_27,
        solution=SOLUTION_27, record=RECORD_27, after=[("solution", C.CHECK_27)]),
 ])
@@ -273,7 +273,7 @@ La cellule suivante prépare `TOK_30`, un `BPETokenizer` octet de **ta** librair
 
 **Contrat**
 - `deliver_30(tok, folder, reference_text)` : écrit `folder/tokenizer.json` (par `tok.save`, fourni) et `folder/golden.json`, un dictionnaire JSON qui contient au moins `"text"` (le texte de référence) et `"ids"` (ses identifiants figés), et ce que ton test veut vérifier d'autre ; rend le couple de leurs chemins `(tokenizer.json, golden.json)`.
-- `test_tokenizer_regression_30()` : un test pytest qui recharge le tokenizer par `BPETokenizer.load(TOKENIZER_PATH)`, puis vérifie avec des `assert` que l'encodage du texte de `GOLDEN_PATH` redonne les ids figés, que leur décodage redonne le texte, et que le nombre de tokens n'a pas changé. `BPETokenizer`, `TOKENIZER_PATH`, `GOLDEN_PATH`, `json` et `Path` sont fournis au test, qui tourne dans un fichier à part (`wb.run_pytest`) : il ne doit pas lire d'autre variable du notebook.
+- `test_tokenizer_regression_30()` : un test pytest qui recharge le tokenizer par `BPETokenizer.load(TOKENIZER_PATH)`, puis vérifie avec des `assert` que l'encodage du texte de `GOLDEN_PATH` redonne les ids figés, que leur décodage redonne le texte, et que la taille du vocabulaire (`len(tok.vocab_)`, le nombre de tokens du tokenizer) n'a pas changé. `BPETokenizer`, `TOKENIZER_PATH`, `GOLDEN_PATH`, `json` et `Path` sont fournis au test, qui tourne dans un fichier à part (`wb.run_pytest`) : il ne doit pas lire d'autre variable du notebook.
 
 La cellule de vérification livre `TOK_30`, relit les deux fichiers, puis lance ton test sur le tokenizer livré (il doit passer) et sur trois copies abîmées de `tokenizer.json` (il doit échouer sur chacune).
 
@@ -294,8 +294,8 @@ Dans tes notes : quels fichiers committerais-tu à côté des poids d'un modèle
 Tout est permis : ton `BPETokenizer`, la bibliothèque `tokenizers`, d'autres pré-tokenizers, une autre façon d'appliquer un vocabulaire, une idée à toi. `evaluate_31(method_31)` (cellule suivante) vérifie quatre règles :
 1. **2 000 tokens au plus** dans `vocab_` ;
 2. **sans perte** : les octets des tokens, mis bout à bout, redonnent exactement la validation, et `decode` aussi : un id vaut toujours les mêmes octets, quel que soit son voisinage ;
-3. **rien de la validation** : ta méthode n'apprend que sur le texte qu'elle reçoit. Pendant la course, toutes les variables globales qui contiennent la validation (`VERNE_VAL` et celles des exercices précédents) valent un leurre, et un token de 4 octets ou plus qui serait dans la validation mais nulle part dans `VERNE_TRAIN` est signalé ;
-4. **moins de 2 minutes** pour l'entraînement et l'encodage de la validation, mesurés ensemble.
+3. **rien de la validation** : ta méthode n'apprend que sur le texte qu'elle reçoit. Pendant la course, toutes les variables globales qui contiennent la validation (`VERNE_VAL` et celles des exercices précédents) valent un leurre, `wbtext` ne rend que le texte d'entraînement de Verne, et un token de 4 octets ou plus qui serait dans la validation mais nulle part dans `VERNE_TRAIN` est signalé. Puis un **contrôle** : la même méthode, apprise sur les 8/9 de `VERNE_TRAIN`, est mesurée sur le dernier neuvième ; elle doit y gagner autant sur le BPE de B2.20 que sur la validation (2 points d'écart au plus), et aucun de ses tokens de 4 octets ou plus ne doit venir du neuvième tenu à l'écart ;
+4. **moins de 2 minutes** pour l'entraînement et l'encodage, mesurés ensemble et **à froid** : sur la validation, et aussi sur le contrôle, un texte que ta méthode n'a jamais vu (un entraînement fait d'avance, dans une autre cellule, ne compte pas).
 
 Puis elle affiche ton score : les octets UTF-8 de la validation divisés par son nombre de tokens. Règle d'honneur : la validation sert à mesurer, jamais à apprendre.
 

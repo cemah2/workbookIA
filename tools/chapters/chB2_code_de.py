@@ -781,7 +781,7 @@ TODO_30 = r'''def deliver_30(tok, folder, reference_text):
 
 def test_tokenizer_regression_30():
     """The non-regression test: BPETokenizer.load(TOKENIZER_PATH) must give the frozen ids of GOLDEN_PATH, decode them back
-    to the text, and keep its number of tokens."""
+    to the text, and keep its vocabulary size (len(vocab_))."""
     raise NotImplementedError("test_tokenizer_regression_30")'''
 
 SOLUTION_30 = r'''def deliver_30(tok, folder, reference_text):
@@ -798,7 +798,7 @@ SOLUTION_30 = r'''def deliver_30(tok, folder, reference_text):
 
 def test_tokenizer_regression_30():
     """The non-regression test: BPETokenizer.load(TOKENIZER_PATH) must give the frozen ids of GOLDEN_PATH, decode them back
-    to the text, and keep its number of tokens."""
+    to the text, and keep its vocabulary size (len(vocab_))."""
     tok = BPETokenizer.load(TOKENIZER_PATH)
     golden = json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))
     ids = tok.encode(golden["text"])
@@ -860,22 +860,36 @@ def _make_evaluate_31(validation, train):
 
     def holds(value, markers):
         try:
+            if isinstance(value, (bytes, bytearray)):
+                return any(m.encode("utf-8") in value for m in markers)
             shown = value if isinstance(value, str) else str(value)[:5_000_000]
         except Exception:  # noqa: BLE001 - an object without a readable str
             return False
         return any(m in shown for m in markers)
 
+    def foreign(vocab, measured, learned):
+        """The tokens of 4 bytes or more found in the measured text but nowhere in the text the method received."""
+        measured, learned = measured.encode("utf-8"), learned.encode("utf-8")
+        return sorted({b for b in vocab.values() if isinstance(b, bytes) and len(b) >= 4 and b in measured
+                       and b not in learned}, key=lambda b: (-len(b), b))
+
     def run(method, name):
         """Train the method on the text that goes with `name` and encode the text measured, the global variables that
-        hold a measured text being replaced by the decoy. Returns (tokenizer, ids, seconds), or None."""
+        hold a measured text being replaced by the decoy, and wbtext giving only the text learned on. Returns
+        (tokenizer, ids, seconds), or None."""
         g = globals()
         measured, learned = texts[name]
         markers = [marker(validation)] + ([marker(measured)] if name == "contrôle" else [])
-        hidden = {n: v for n, v in list(g.items()) if not n.startswith("_") and isinstance(v, (str, dict, list, tuple))
-                  and holds(v, markers)}
+        hidden = {n: v for n, v in list(g.items()) if not n.startswith("_")
+                  and isinstance(v, (str, bytes, bytearray, dict, list, tuple)) and holds(v, markers)}
+        load_text, load_verne, cached = wbtext.load_text, wbtext.datasets.load_verne, wbtext._TEXTS.get("verne")
         try:
-            for n in hidden:
-                g[n] = decoy
+            for n, v in hidden.items():
+                g[n] = decoy.encode("utf-8") if isinstance(v, (bytes, bytearray)) else decoy
+            # the other paths to Verne (wbtext, wb.datasets) give only the text learned on during the run
+            wbtext.load_text = lambda text_name, _load=load_text: learned if text_name == "verne" else _load(text_name)
+            wbtext.datasets.load_verne = lambda *args, **kwargs: learned
+            wbtext._TEXTS["verne"] = learned
             start = time.perf_counter()
             tok = method(learned)
             fit_seconds = time.perf_counter() - start
@@ -889,6 +903,11 @@ def _make_evaluate_31(validation, train):
         finally:
             for n, v in hidden.items():
                 g[n] = v
+            wbtext.load_text, wbtext.datasets.load_verne = load_text, load_verne
+            if cached is None:
+                wbtext._TEXTS.pop("verne", None)
+            else:
+                wbtext._TEXTS["verne"] = cached
 
     def evaluate_31(method):
         """method(text) -> tokenizer: the four rules of the statement, then the bytes per token on the validation."""
@@ -910,28 +929,46 @@ def _make_evaluate_31(validation, train):
         verdict("B2.31", lossless and decoded, "sans perte : les octets des tokens redonnent la validation, et decode aussi.",
                 "pas sans perte : " + ("les octets des tokens, mis bout à bout, ne redonnent pas la validation" if not lossless
                                        else "decode(ids) ne redonne pas la validation") + ".")
-        verdict("B2.31", seconds <= LIMIT_31, f"en {fr(seconds, 1)} s, sous les {LIMIT_31:.0f} s.",
-                f"{fr(seconds, 1)} s : le défi en permet {LIMIT_31:.0f} (entraînement + encodage de la validation).")
-        # the control: the same method, learned without the last ninth of VERNE_TRAIN, measured on it
-        honest, control = False, run(method, "contrôle")
+        # rule 3: tokens seen only in the validation, then the control (the same method, learned without the last
+        # ninth of VERNE_TRAIN, measured on it)
+        unseen = foreign(vocab, validation, train)
+        verdict("B2.31", not unseen, "aucun token de 4 octets ou plus n'est dans la validation sans être dans VERNE_TRAIN.",
+                f"{len(unseen)} token(s) de 4 octets ou plus sont dans la validation mais nulle part dans VERNE_TRAIN, le "
+                f"texte que reçoit ta méthode (le plus long : {unseen[0].decode('utf-8', errors='replace')!r}) : d'où "
+                "viennent-ils ?" if unseen else "")
+        honest, c_seconds, control = False, None, run(method, "contrôle")
         if control is not None:
-            measured, (c_tok, c_ids, _) = texts["contrôle"][0], control
+            (measured, learned), (c_tok, c_ids, c_seconds) = texts["contrôle"], control
             if isinstance(c_ids, list) and c_ids and b"".join(c_tok.vocab_.get(i, b"?") for i in c_ids) == measured.encode("utf-8"):
                 gain, c_gain = score / BASELINE_31, len(measured.encode("utf-8")) / len(c_ids) / BASELINE_CONTROL_31
-                honest = gain - c_gain <= 0.02
-                verdict("B2.31", honest, f"contrôle : sur un texte tenu à l'écart, ta méthode gagne autant sur la référence "
-                        f"de B2.20 ({fr(100 * (c_gain - 1), 1)} %) que sur la validation ({fr(100 * (gain - 1), 1)} %).",
-                        f"contrôle : ta méthode gagne {fr(100 * (gain - 1), 1)} % sur la validation, mais seulement "
-                        f"{fr(100 * (c_gain - 1), 1)} % sur un texte tenu à l'écart : apprend-elle autre chose que le texte "
-                        "qu'elle reçoit (la validation, une variable globale) ?")
+                c_unseen = foreign(c_tok.vocab_, measured, learned)
+                honest = gain - c_gain <= 0.02 and not c_unseen
+                if c_unseen:
+                    print(f"❌ Ex B2.31 : contrôle : {len(c_unseen)} token(s) de 4 octets ou plus sont dans le texte tenu à "
+                          "l'écart mais nulle part dans le texte que ta méthode a reçu : apprend-elle sur autre chose que "
+                          "son argument (VERNE_TRAIN lu par une variable globale, un fichier) ?")
+                else:
+                    verdict("B2.31", honest, f"contrôle : sur un texte tenu à l'écart, ta méthode gagne autant sur la "
+                            f"référence de B2.20 ({fr(100 * (c_gain - 1), 1)} %) que sur la validation "
+                            f"({fr(100 * (gain - 1), 1)} %).",
+                            f"contrôle : ta méthode gagne {fr(100 * (gain - 1), 1)} % sur la validation, mais seulement "
+                            f"{fr(100 * (c_gain - 1), 1)} % sur un texte tenu à l'écart : apprend-elle autre chose que le "
+                            "texte qu'elle reçoit (la validation, une variable globale) ?")
             else:
                 print("❌ Ex B2.31 : contrôle : sur le texte tenu à l'écart, ta méthode n'est pas sans perte.")
-        ok = len(vocab) <= MAX_TOKENS_31 and lossless and decoded and seconds <= LIMIT_31 and honest
+        # rule 4, measured cold: the control is a text the method has never seen, so it trains there for real
+        slowest = max(seconds, c_seconds if c_seconds is not None else 0.0)
+        verdict("B2.31", slowest <= LIMIT_31,
+                f"en {fr(seconds, 1)} s sur la validation et {fr(c_seconds or 0.0, 1)} s sur le contrôle, chacun sous les "
+                f"{LIMIT_31:.0f} s.",
+                f"{fr(seconds, 1)} s sur la validation, {fr(c_seconds or 0.0, 1)} s sur le contrôle : le défi en permet "
+                f"{LIMIT_31:.0f} à chacun (entraînement + encodage).")
+        ok = len(vocab) <= MAX_TOKENS_31 and lossless and decoded and not unseen and slowest <= LIMIT_31 and honest
         verdict("B2.31", ok and score >= GOAL_31, f"défi réussi : {fr(score, 3)} octets par token (objectif {fr(GOAL_31, 2)}, "
                 f"référence de B2.20 {fr(BASELINE_31, 3)}).",
                 f"pas encore : {fr(score, 3)} octets par token, il en faut {fr(GOAL_31, 2)} en respectant les quatre règles.")
-        return {"bytes_per_token": score, "seconds": seconds, "tokens": len(vocab), "honest": honest,
-                "ok": ok and score >= GOAL_31}
+        return {"bytes_per_token": score, "seconds": seconds, "control_seconds": c_seconds, "tokens": len(vocab),
+                "honest": honest and not unseen, "ok": ok and score >= GOAL_31}
 
     return evaluate_31
 

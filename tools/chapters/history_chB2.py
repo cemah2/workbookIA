@@ -19,7 +19,7 @@ Writes tools/chapters/history_chB2.json (statistics only), which chB2_parts.py r
   each answer must be the same in every run, with a margin;
 - "c31": 🏆 B2.31, the reference method (no pre-tokenization inside a line, shortest segmentation) and the baseline of
   B2.20 on the frozen split and on 4 other splits of Verne, the goal checked against both with a margin, and the
-  anti-leak rules tried on two methods that read the validation.
+  anti-leak rules tried on five methods that read the validation or VERNE_TRAIN by another path.
 The cells of the notebook are reused as is (tools/chapters/chB2_code.py), executed in one namespace.
 """
 
@@ -300,15 +300,25 @@ def c31(ns) -> dict:
     def captured(text, _val=ns["VERNE_VAL"]):
         return honest(text + "\n" + _val)
 
+    def reads_wbtext(text):                              # another path: the text of Verne read again through wb
+        return honest(text + "\n" + wbtext.load_text("verne")[len(text):])
+
+    def only_validation(text, _val=ns["VERNE_VAL"]):     # learns on the validation alone, but only during the course
+        return honest(_val * 3) if len(text) > len(_val) * 8 else honest(text)
+
+    def global_train(text):                              # ignores its argument: the control learns on its own test
+        return honest(ns["VERNE_TRAIN"])
+
     import contextlib
     import io
     leaks = {}
-    for label, method in (("global", reads_global), ("captured", captured)):
+    for label, method in (("global", reads_global), ("captured", captured), ("wbtext", reads_wbtext),
+                          ("only_validation", only_validation), ("global_train", global_train)):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             result = ns["evaluate_31"](method)
         leaks[label] = {"ok": bool(result and result["ok"]), "score": round(result["bytes_per_token"], 3) if result else None,
-                        "flagged": "❌ Ex B2.31 : contrôle" in buf.getvalue()}
+                        "flagged": [line[:90] for line in buf.getvalue().splitlines() if line.startswith("❌")][:2]}
         print(f"  c31 leak {label}: {leaks[label]}", flush=True)
     honest_run = io.StringIO()
     with contextlib.redirect_stdout(honest_run):
@@ -316,8 +326,10 @@ def c31(ns) -> dict:
     leaks["honest"] = {"ok": honest_result["ok"], "score": round(honest_result["bytes_per_token"], 3),
                        "control": [line for line in honest_run.getvalue().splitlines() if "contrôle" in line]}
     print(f"  c31 honest: {leaks['honest']}", flush=True)
-    # the global variable is a decoy during the run (no gain); the captured validation is caught by the control
-    if leaks["global"]["score"] > leaks["honest"]["score"] + 0.005 or leaks["captured"]["ok"] or not leaks["honest"]["ok"]:
+    # the global variable and wbtext give a decoy during the run (no gain); the captured validation is caught by the
+    # control, the validation learned alone by its tokens unseen in VERNE_TRAIN, VERNE_TRAIN read again by the control
+    if (any(leaks[k]["score"] > leaks["honest"]["score"] + 0.005 for k in ("global", "wbtext"))
+            or any(leaks[k]["ok"] for k in ("captured", "only_validation", "global_train")) or not leaks["honest"]["ok"]):
         raise SystemExit(f"❌ c31: a method that reads the validation is not stopped: {leaks}")
     return {"splits": out, "goal": goal, "leaks": leaks}
 

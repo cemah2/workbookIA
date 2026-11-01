@@ -288,7 +288,8 @@ PART_C = Part("C", "Expériences : la taille du vocabulaire et la langue d'entra
               "- `fast_byte_bpe(texts, vocab_size)` rend un `BPETokenizer` de **ta** librairie dont les fusions sont "
               "apprises par `tokenizers`, en Rust : exactement celles de ton `fit` (B2.19 l'a montré au niveau "
               "caractère, B2.20 le vérifie au niveau octet), en moins d'une seconde pour tout Verne, là où une "
-              "version Python qui recompte toutes les paires à chaque fusion met une à quatre minutes. Ton "
+              "version Python qui recompte toutes les paires à chaque fusion met près de deux minutes pour 2 000 "
+              "tokens, et bien plus pour 8 000. Ton "
               "`encode` fait tout le reste ;\n"
               "- `truncated_bpe(tok, taille)` garde les `taille − 256` premières fusions d'un tokenizer : les "
               "fusions s'apprennent une à une, et les premières sont les mêmes quelle que soit la taille finale.\n",

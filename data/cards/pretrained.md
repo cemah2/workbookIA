@@ -26,7 +26,7 @@ M. Oquab et coll., « DINOv2: Learning Robust Visual Features without Supervisio
 - Bonus B2 : les six tokenizers sur deux extraits de 50 000 caractères de Holmes et de Verne, des nombres et des emoji (📦 B2.13, 🔮 B2.14) ; GPT-2 face aux BPE appris sur chaque roman (🔬 B2.21). Sur deux cœurs, le chargement prend de 0,2 s (BERT) à 2,8 s (e5), et le comptage des tokens de 50 000 caractères moins d'une seconde.
 
 ## Biais et limites
-- Les tokenizers héritent de la langue de leurs données : sur les mêmes 50 000 caractères, GPT-2 produit 1,43 fois plus de tokens pour Verne que pour Holmes, CamemBERT 0,76 fois ; BERT *uncased* met en minuscules et retire les accents (« Ça » devient « ca ») : son décodage ne redonne pas le texte, et une suite d'emoji sans espace devient un seul `[UNK]`.
+- Les tokenizers héritent de la langue de leurs données : sur les mêmes 50 000 caractères, GPT-2 produit 1,43 fois plus de tokens pour Verne que pour Holmes ; BERT *uncased* met en minuscules et retire les accents (« Ça » devient « ca ») : son décodage ne redonne pas le texte.
 - Un réseau entraîné sur ImageNet-1k « rêve » de ce qu'il a vu : beaucoup d'animaux (118 classes de chiens), des objets occidentaux du quotidien.
 - Ses 1 000 classes ne contiennent pas « rien » : il donne une classe à toute image, même hors de sa distribution.
 - Les modules `Fire` de SqueezeNet concatènent deux branches (`expand1x1`, `expand3x3`) : les canaux de leur sortie ne sont pas tous du même genre.

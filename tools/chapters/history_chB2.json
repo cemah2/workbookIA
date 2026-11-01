@@ -136,7 +136,7 @@
   "splits": {
    "frozen": {
     "reference": 3.437,
-    "seconds": 0.8,
+    "seconds": 0.9,
     "baseline": 3.001,
     "baseline_dp": 3.074
    },
@@ -148,7 +148,7 @@
    },
    "tenth_6": {
     "reference": 3.337,
-    "seconds": 0.9,
+    "seconds": 0.8,
     "baseline": 2.887,
     "baseline_dp": 2.945
    },
@@ -170,18 +170,43 @@
    "global": {
     "ok": true,
     "score": 3.415,
-    "flagged": false
+    "flagged": []
    },
    "captured": {
     "ok": false,
     "score": 3.551,
-    "flagged": true
+    "flagged": [
+     "❌ Ex B2.31 : contrôle : ta méthode gagne 18,3 % sur la validation, mais seulement 15,0 % s",
+     "❌ Ex B2.31 : pas encore : 3,551 octets par token, il en faut 3,20 en respectant les quatre"
+    ]
+   },
+   "wbtext": {
+    "ok": true,
+    "score": 3.437,
+    "flagged": []
+   },
+   "only_validation": {
+    "ok": false,
+    "score": 3.999,
+    "flagged": [
+     "❌ Ex B2.31 : 22 token(s) de 4 octets ou plus sont dans la validation mais nulle part dans ",
+     "❌ Ex B2.31 : contrôle : ta méthode gagne 33,3 % sur la validation, mais seulement 14,4 % s"
+    ]
+   },
+   "global_train": {
+    "ok": false,
+    "score": 3.437,
+    "flagged": [
+     "❌ Ex B2.31 : contrôle : 4 token(s) de 4 octets ou plus sont dans le texte tenu à l'écart m",
+     "❌ Ex B2.31 : pas encore : 3,437 octets par token, il en faut 3,20 en respectant les quatre"
+    ]
    },
    "honest": {
     "ok": true,
     "score": 3.437,
     "control": [
-     "✅ Ex B2.31 : contrôle : sur un texte tenu à l'écart, ta méthode gagne autant sur la référence de B2.20 (14,4 %) que sur la validation (14,5 %)."
+     "✅ Ex B2.31 : contrôle : sur un texte tenu à l'écart, ta méthode gagne autant sur la référence de B2.20 (14,4 %) que sur la validation (14,5 %).",
+     "✅ Ex B2.31 : en 0,9 s sur la validation et 0,9 s sur le contrôle, chacun sous les 120 s."
     ]
    }
   }
