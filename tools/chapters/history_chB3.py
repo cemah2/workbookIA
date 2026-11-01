@@ -269,14 +269,15 @@ def lstm(ns) -> dict:
         optimizer = torch.optim.RMSprop(model.parameters(), lr=0.01, alpha=0.9)
         generator = torch.Generator().manual_seed(0)
         X, y = windows(data.train_ids, n_chars)
-        start, curve = time.perf_counter(), []
+        trained, curve = 0.0, []                          # training seconds, the evaluations left out
         for epoch in range(1, epochs + 1):
+            start = time.perf_counter()
             train_loss = train_epoch(model, X, y, optimizer, generator)
+            trained += time.perf_counter() - start
             val = b3_loss(model, data.val_ids) if (mode == "full" or epoch == epochs) else None
-            curve.append({"epoch": epoch, "train_loss": train_loss, "val_char_loss": val,
-                          "seconds": round(time.perf_counter() - start, 1)})
-            print(f"  lstm {mode} epoch {epoch}: train {train_loss:.4f}, validation {val}, "
-                  f"{time.perf_counter() - start:.0f} s", flush=True)
+            curve.append({"epoch": epoch, "train_loss": train_loss, "val_char_loss": val, "seconds": round(trained, 1)})
+            print(f"  lstm {mode} epoch {epoch}: train {train_loss:.4f}, validation {val}, {trained:.0f} s of training",
+                  flush=True)
         params = sum(p.numel() for p in model.parameters())
         if mode == "fast":
             rows.append({"name": "LSTM du ch. 22, mode rapide", "params": params,

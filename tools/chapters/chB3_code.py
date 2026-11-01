@@ -264,7 +264,8 @@ CHECK_15 = r'''with checked("B3.15"):
     same("B3.15", "normes de apply_rope(x (2, 3, 10, 8)), égales à celles de x", np.linalg.norm(A.apply_rope(x_15), axis=-1),
          np.linalg.norm(x_15, axis=-1), rtol=1e-6, atol=1e-6)
     q_15, k_15 = rng_15.normal(size=(1, 8)), rng_15.normal(size=(1, 8))
-    dots_15 = [float(np.asarray(A.apply_rope(q_15, [m])) @ np.asarray(A.apply_rope(k_15, [n])).T) for m, n in ((3, 1), (12, 10), (102, 100))]
+    dots_15 = [(np.asarray(A.apply_rope(q_15, [m])) @ np.asarray(A.apply_rope(k_15, [n])).T).item()
+               for m, n in ((3, 1), (12, 10), (102, 100))]
     verdict("B3.15", np.allclose(dots_15, dots_15[0], rtol=1e-6, atol=1e-6),
             "⟨RoPE(q, m), RoPE(k, n)⟩ ne dépend que de m − n : " + ", ".join(fr(d, 4) for d in dots_15) + " pour (3, 1), (12, 10), (102, 100).",
             "⟨RoPE(q, m), RoPE(k, n)⟩ doit être le même pour (3, 1), (12, 10) et (102, 100) (m − n = 2) ; reçu "
@@ -536,7 +537,7 @@ try:                                                   # the vocabulary: the rul
           "⚠️ ton build_vocab (ch. 22) ne donne pas le vocabulaire de DATA (décroissance de la fréquence, ex aequo dans "
           "l'ordre de sorted) : le notebook garde celui de DATA, relance les tests du ch. 22 ;",
           f"{len(DATA.itos)} caractères, les plus fréquents {DATA.itos[:6]}.")
-except (NotImplementedError, ImportError, AttributeError):
+except Exception:                                     # not written yet (NotImplementedError), or no module at all
     print(f"ℹ️ ton build_vocab (ch. 22, 22.12) n'est pas écrit : le notebook prend le vocabulaire de DATA, construit par "
           f"la même règle ({len(DATA.itos)} caractères).")'''
 
@@ -607,14 +608,27 @@ with checked("B3.18"):
             f"ton module s'écarte de {gap_torch_18:.2g} de nn.MultiheadAttention aux mêmes poids (masque causal) : vérifie "
             "l'ordre q, k, v dans qkv, le découpage en têtes (view puis transpose), le masque causal et le recollage des têtes.")
     # your NumPy version (Ex B3.14) with the same weights, in float64
-    out_np_18, _ = mylearn.attention.multi_head_attention(x_18.double().numpy(), x_18.double().numpy(), x_18.double().numpy(),
-                                                          params_18, 4, mask=causal_np(10))
-    gap_18 = float(np.abs(y_18.double().numpy() - np.asarray(out_np_18)).max())
-    print(f"écart maximal entre ton module PyTorch (float32) et ta multi_head_attention NumPy (float64) : {gap_18:.1e}")
-    if gap_18 >= 1e-5 and gap_torch_18 < 1e-5:
-        print("❌ Ex B3.18 : ton module est d'accord avec nn.MultiheadAttention : c'est ta multi_head_attention (B3.14) "
-              "qui s'en écarte ; relance ses tests.")
-    wb.check("B3.18", bool(gap_18 < 1e-5), computed=True)
+    x64_18 = x_18.double().numpy()
+    try:
+        out_np_18 = np.asarray(mylearn.attention.multi_head_attention(x64_18, x64_18, x64_18, params_18, 4,
+                                                                      mask=causal_np(10))[0], dtype=float)
+    except (NotImplementedError, ImportError, AttributeError):      # not written yet, or no attention.py at all
+        out_np_18 = None
+        print("⏳ Ex B3.18 : l'écart à ta version NumPy attend ta multi_head_attention (B3.14).")
+    except Exception as exc:                                         # noqa: BLE001 - a bug of B3.14: say it, go on
+        out_np_18 = None
+        print(f"❌ Ex B3.18 : ta multi_head_attention (B3.14) lève {type(exc).__name__} : {str(exc)[:160]} ; relance ses tests.")
+    if out_np_18 is not None and out_np_18.shape != (3, 10, 32):
+        print(f"❌ Ex B3.18 : ta multi_head_attention (B3.14) rend une sortie {out_np_18.shape} au lieu de (3, 10, 32) ; "
+              "relance ses tests.")
+        out_np_18 = None
+    if out_np_18 is not None:
+        gap_18 = float(np.abs(y_18.double().numpy() - out_np_18).max())
+        print(f"écart maximal entre ton module PyTorch (float32) et ta multi_head_attention NumPy (float64) : {gap_18:.1e}")
+        if gap_18 >= 1e-5 and gap_torch_18 < 1e-5:
+            print("❌ Ex B3.18 : ton module est d'accord avec nn.MultiheadAttention : c'est ta multi_head_attention (B3.14) "
+                  "qui s'en écarte ; relance ses tests.")
+        wb.check("B3.18", bool(gap_18 < 1e-5), computed=True)
     # causality, then dropout only in training
     x2_18 = x_18.clone()
     x2_18[:, 6] += 1.0
@@ -739,6 +753,13 @@ with checked("B3.19"):
     verdict("B3.19", kinds_19 == {"Block_19", "CausalSelfAttention_18"},
             "4 blocs Block_19, chacun avec ton CausalSelfAttention_18.",
             f"blocks doit contenir des Block_19, dont attn est un CausalSelfAttention_18 (B3.18) ; reçu {sorted(kinds_19)}.")
+    blk_19 = gpt_19.blocks[0].eval()
+    xb_19 = torch.randn(2, 5, MINI_CONFIG["d_model"])
+    with torch.no_grad():
+        h_19 = xb_19 + blk_19.attn(blk_19.ln1(xb_19))
+        pre_ln_19 = torch.allclose(blk_19(xb_19), h_19 + blk_19.mlp(blk_19.ln2(h_19)), atol=1e-6)
+    verdict("B3.19", pre_ln_19, "Block_19 est pré-LN : h = x + attn(ln1(x)), puis h + mlp(ln2(h)).",
+            "Block_19(x) ne vaut pas h + mlp(ln2(h)) avec h = x + attn(ln1(x)) : relis le bloc pré-LN du contrat (§203.6).")
     std_19 = {"tok_emb": gpt_19.tok_emb.weight.std().item(), "attn.qkv": gpt_19.blocks[0].attn.qkv.weight.std().item(),
               "attn.proj": gpt_19.blocks[0].attn.proj.weight.std().item(), "mlp.2": gpt_19.blocks[0].mlp[2].weight.std().item()}
     want_std_19 = {"tok_emb": 0.02, "attn.qkv": 0.02, "attn.proj": 0.02 / math.sqrt(8), "mlp.2": 0.02 / math.sqrt(8)}
@@ -761,14 +782,22 @@ with checked("B3.19"):
                 "à l'initialisation, la loss est celle d'une prédiction presque uniforme (le contrôle de départ, §203.8).",
                 f"à l'initialisation, la loss d'un batch vaut {fr(loss0_19, 2)} : loin d'une prédiction presque uniforme ; "
                 "relis le contrôle de départ (§203.8) et l'initialisation du contrat.")
+        repeated_19 = gpt_19(torch.zeros(1, 16, dtype=torch.long))[0]
+        positions_19 = (repeated_19[1:] - repeated_19[:1]).abs().max().item() > 1e-6
+        verdict("B3.19", positions_19,
+                "les positions apprises servent : un même caractère répété 16 fois donne des logits qui changent d'une "
+                "position à l'autre.",
+                "un même caractère répété 16 fois donne les mêmes logits à chaque position : les positions apprises "
+                "sont-elles ajoutées aux embeddings des tokens ?")
         changed_19 = x_19.clone()
         changed_19[:, 100] = (changed_19[:, 100] + 1) % 88
         future_19 = (gpt_19(changed_19)[:, :100] - logits_19[:, :100]).abs().max().item()
     verdict("B3.19", future_19 == 0, "changer le caractère 100 ne change aucun logit des positions 0 à 99 : le modèle est causal.",
             f"changer le caractère 100 change les logits des positions 0 à 99 (écart {future_19:.2g}) : le modèle voit le futur.")
     refuses("B3.19", "129 caractères pour un contexte de 128", lambda: gpt_19(torch.zeros(1, 129, dtype=torch.long)))
-    model_ok_19 = all([tied_19, n_params(gpt_19) == wbgpt.count_params(MINI_CONFIG), kinds_19 == {"Block_19", "CausalSelfAttention_18"},
-                       abs(loss0_19 - math.log(88)) < 0.1, future_19 == 0])'''
+    model_ok_19 = all([tied_19, n_params(gpt_19) == wbgpt.count_params(MINI_CONFIG), pre_ln_19, positions_19,
+                       kinds_19 == {"Block_19", "CausalSelfAttention_18"}, abs(loss0_19 - math.log(88)) < 0.1,
+                       future_19 == 0])'''
 
 # --- 📦 B3.20 ----------------------------------------------------------------------------------------------------------
 GIVEN_20 = r'''CONFIG_20 = dict(MINI_CONFIG)                       # the model of B3.19
