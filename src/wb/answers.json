@@ -52968,6 +52968,113 @@
       },
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
+    "B2.13a": {
+      "hash": "0c8447ea1d4add77812f93de8e8ef50fcf72738df54d969535b76cd18b6093dd",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "8b3995afc19a259d679209d81cabd2fe49b306856dceb7951c76efb27014d698": "c'est le compte de l'extrait de Verne : on demande celui de Holmes",
+        "cade145f5c14cb66d645269f8d2e34cccb9ad7f8b5fc6abfcd74391b9ace7e74": "c'est le nombre de mots de l'extrait : on demande ses tokens"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.13b": {
+      "hash": "57c049f9cf53d668e120943a2b2acb46743a22f135007e647d5b822a1feb32e8",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "da15d8036ea7cf0f1c8dc4a5682dce70cb03e85cfc42179f90e839d7190a05bf": "les tokens spéciaux que BERT ajoute autour du texte sont comptés : on demande les tokens du texte seul"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.13c": {
+      "decimals": 4,
+      "hash": "6130d90406332f1d1a6a0d86e3566cdb896ddaac31feee1229135b27f2e7e481",
+      "hash_coarse": "903cb39404576bd1baaf87e543e102a71fd59de3785b703b3f0bc609b8c3473e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0060e6612332f39cefae7e125afa164dcd7bebd7503db0926c34059e4539b5be": "la fertilité met les tokens au numérateur et les mots au dénominateur",
+        "91c25768848d49f833859598de64062b760112abebac7c78e89a05753689d76e": "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.13d": {
+      "decimals": 4,
+      "hash": "b917a6baf0a75d0df0d23ecd5c310808891ac9e278a516b4290ee91d80d0ce8f",
+      "hash_coarse": "147d8e3125c7e5f1b54e8f1e11c36aff239aa819de40e2d766e143ebcb3e19dd",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0f9a1e0d6989d2a537285b759cbb3ca9880485a5659724a99c1213283c6d86f6": "les tokens spéciaux que e5 ajoute autour du texte sont comptés : on demande les tokens du texte seul",
+        "50ea82e2fd5fcc430638be98134d11164d466d81237de4d8a511118a85844ccd": "tu as compté des caractères : la compression se mesure en octets UTF-8, et une lettre accentuée en prend deux"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.14a": {
+      "hash": "a0c6154590bf7198e8167d679e89f2e9ff356597e0a7ec8d5c254efa9f71e73f",
+      "kind": "str",
+      "mistakes": {
+        "67bab3250decdb59ad70b9069fbfd28f015c6a42c834a27f9db62170cb6ea461": "regarde la colonne de Holmes dans le tableau des octets par token de GPT-2 : est-ce la plus petite valeur ?",
+        "6bb2d71467b4c54cbef100c8dae8c307a7a44afb058a99535dc5be9b745908c2": "regarde la colonne des nombres dans le tableau des octets par token de GPT-2 : est-ce la plus petite valeur ?",
+        "d5557d87da02ae648be1b26be70402571fda65ddc5c19303f81f71220a2b64e8": "regarde la colonne de Verne dans le tableau des octets par token de GPT-2 : est-ce la plus petite valeur ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.14b": {
+      "hash": "29e6d1e571755fba6c11979397f916cd6cfc534eea548ed1fda03fc17701f571",
+      "kind": "str",
+      "mistakes": {
+        "5473a8307f951368621897dc3ba6f34e6322744bc36f731cb0788da4acdb0708": "relis le rapport de CamemBERT affiché sous les tableaux : dépasse-t-il 1,1 ? Sur quels textes CamemBERT a-t-il appris ses tokens ?",
+        "f9ff881522b460ed8afa243dd18ff42392be5d7be7be4627b370cd640ca946f3": "relis le rapport de CamemBERT affiché sous les tableaux : est-il entre 0,9 et 1,1 ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.14c": {
+      "hash": "0725e5d8d63e9812ed8124dba4b195ac47461544ec3e0c5b4da6e6a5300c62e7",
+      "kind": "str",
+      "mistakes": {
+        "3493f50f4b751f9982ea242181154337c34002a1acb1eb9dbf9858454b1019b3": "regarde la ligne de BERT, colonne des emoji : combien de tokens, et lesquels (la dernière ligne affichée) ? Relis aussi ce que fait WordPiece d'un mot qu'il ne sait pas découper (§202.5)",
+        "6a8a116ae9e9148c1f2ee9aa17f27fd16aaa1c25002c642901d055f2fe503c61": "regarde la ligne de BERT, colonne des emoji : combien de tokens, et lesquels (la dernière ligne affichée) ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.19a": {
+      "hash": "750ac3d5973c31264beeadaeff8f04840a663d35a57151c446e9deb8e075ddc9",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "a87cf5d27a0272650900fd9842c7830f9c26da2cd4f9467af4c49725373024b7": "c'est le nombre de fusions : on demande la taille de l'alphabet de base",
+        "d741636a3fa7054085075ca341913679459edbf69242021523ce65cd8bada625": "c'est la taille totale du vocabulaire : retire les fusions"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.19b": {
+      "hash": "5b4cdf189ce4c85bf4bf6e31107a760f19511e06f043f864f1afe408aba34d85",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "0fd929c99ee369583a3b3f406f1ae46fd928890a1a4c3b80c3e25c8a2eb996da": "les rangs commencent à 0",
+        "bf7bcb3b4e2270af94c0e43d96a1ae3fa00796873829f67ec90150a686bece3f": "c'est l'identifiant du token : le rang d'une fusion part de 0, après l'alphabet"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.19c": {
+      "hash": "70ed1ea69359404674159163088d01f9aa6cafbb16eb708f0b0596235106a1e9",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "1d49d1ce43f4501cfaf93ed16c79e399f569293d024313db24f8077c7f023cc9": "c'est le nombre de mots de la validation : on demande ses tokens"
+      },
+      "sign": 1,
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
     "B2.Q1a": {
       "hash": "e409042f12dbb0a0c98cc8712cac692ca9359e061d70b21ec5017d3fc60d7a53",
       "kind": "str",

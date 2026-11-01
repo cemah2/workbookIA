@@ -197,8 +197,8 @@ print({name: f"{len(text):_} points de code, {n_bytes(text):_} octets".replace("
 
 TODO_14 = r'''costliest_14 = ...    # a) with GPT-2, the text with the FEWEST bytes per token:
                       #    "A" Holmes, "B" Verne, "C" the numbers, "D" the emoji
-ratio_14 = ...        # b) with GPT-2, tokens of EXCERPT_V / tokens of EXCERPT_H (the same 50 000 characters):
-                      #    "A" under 1.2, "B" from 1.2 to 1.7, "C" over 1.7
+ratio_14 = ...        # b) with CamemBERT, tokens of EXCERPT_V / tokens of EXCERPT_H (the same 50 000 characters):
+                      #    "A" under 0.9, "B" from 0.9 to 1.1, "C" over 1.1
 bert_emoji_14 = ...   # c) the number of tokens of BERT (bert-base-uncased) for EMOJI_14, special tokens left out:
                       #    "A" from 1 to 10, "B" from 11 to 2 000, "C" over 2 000'''
 
@@ -206,8 +206,8 @@ EXPERIMENT_14 = r'''names_14 = ("gpt2", "bert", "e5", "camembert", "qwen3", "smo
 toks_14 = {name: wbtext.try_tokenizer(name, "B2.14") for name in names_14}
 counts_14 = {name: {label: wbtext.count_tokens(tok, text) for label, text in TEXTS_14.items()}
              for name, tok in toks_14.items() if tok is not None}
-if "gpt2" not in counts_14 or "bert" not in counts_14:
-    print("⏳ Ex B2.14 : l'expérience attend les tokenizers de GPT-2 et de BERT (connexion au Hub, ou Colab).")
+if any(name not in counts_14 for name in ("gpt2", "bert", "camembert")):
+    print("⏳ Ex B2.14 : l'expérience attend les tokenizers de GPT-2, de BERT et de CamemBERT (connexion au Hub, ou Colab).")
 else:
     tokens_14 = pd.DataFrame(counts_14).T
     per_token_14 = pd.DataFrame({name: {label: n_bytes(TEXTS_14[label]) / n for label, n in row.items()}
@@ -216,7 +216,8 @@ else:
     print(tokens_14.to_string())
     print("\nOctets par token :")
     print(per_token_14.to_string(float_format=lambda x: f"{x:.2f}"))
-    print(f"\nGPT-2, tokens de Verne / tokens de Holmes : {fr(counts_14['gpt2']['Verne'] / counts_14['gpt2']['Holmes'], 2)}")
+    print("\nTokens de Verne / tokens de Holmes :", ", ".join(f"{name} {fr(row['Verne'] / row['Holmes'], 2)}"
+                                                         for name, row in counts_14.items()))
     print("BERT sur les emoji :", toks_14["bert"].convert_ids_to_tokens(toks_14["bert"](EMOJI_14, add_special_tokens=False)["input_ids"])[:5])
     for id_14, value_14 in (("B2.14a", costliest_14), ("B2.14b", ratio_14), ("B2.14c", bert_emoji_14)):
         wb.check(id_14, value_14)'''
@@ -331,14 +332,25 @@ CHECK_17 = r'''with checked("B2.17"):
             f"écrit tel quel) ; reçu {got_unk_17!r}.")
     byte_17 = T.BPETokenizer(vocab_size=600, pre_tokenizer="gpt2").fit(EXCERPT_V)
     text_17 = VERNE_VAL[:3000] + " 🙂 漢字, é !"
-    back_17 = byte_17.decode(byte_17.encode(text_17))
-    verdict("B2.17", back_17 == text_17,
-            "niveau octet, pré-tokenizer 'gpt2' : decode(encode(texte)) redonne le texte exact (emoji et idéogrammes compris).",
-            "niveau octet avec 'gpt2', decode(encode(texte)) doit redonner le texte exact ; il diffère dès le caractère "
-            f"{next((i for i, (a, b) in enumerate(zip(back_17, text_17)) if a != b), min(len(back_17), len(text_17)))}.")
-    lone_17 = byte_17.decode([0xC3])
-    verdict("B2.17", lone_17 == "�", "decode([0xC3]) (un octet seul) = '�'.",
-            f"decode([0xC3]), le premier octet de « é » seul, doit rendre '�' ; reçu {lone_17!r}.")
+    try:
+        back_17 = byte_17.decode(byte_17.encode(text_17))
+    except UnicodeDecodeError as exc:
+        back_17 = None
+        print(f"❌ Ex B2.17 : decode(encode(texte)) lève UnicodeDecodeError ({exc.reason}) : decode doit recoller les "
+              "octets de tous les tokens, puis décoder l'UTF-8 avec errors='replace'.")
+    if back_17 is not None:
+        at_17 = next((i for i, (a, b) in enumerate(zip(back_17, text_17)) if a != b), min(len(back_17), len(text_17)))
+        verdict("B2.17", back_17 == text_17,
+                "niveau octet, pré-tokenizer 'gpt2' : decode(encode(texte)) redonne le texte exact (emoji et idéogrammes compris).",
+                "niveau octet avec 'gpt2', decode(encode(texte)) doit redonner le texte exact ; à partir du caractère "
+                f"{at_17}, attendu {text_17[at_17:at_17 + 12]!r}, reçu {back_17[at_17:at_17 + 12]!r}.")
+    try:
+        lone_17 = byte_17.decode([0xC3])
+        verdict("B2.17", lone_17 == "�", "decode([0xC3]) (un octet seul) = '�'.",
+                f"decode([0xC3]), le premier octet de « é » seul, doit rendre '�' ; reçu {lone_17!r}.")
+    except UnicodeDecodeError as exc:
+        print(f"❌ Ex B2.17 : decode([0xC3]), le premier octet de « é » seul, lève UnicodeDecodeError ({exc.reason}) au "
+              "lieu de rendre '�' (errors='replace').")
     pieces_17 = byte_17.tokenize("été")
     verdict("B2.17", isinstance(pieces_17, list) and all(isinstance(p, str) for p in pieces_17) and "".join(pieces_17) == "été",
             f"tokenize('été') = {pieces_17!r}.", f"tokenize doit rendre une liste de str ; reçu {pieces_17!r}.")
@@ -600,6 +612,7 @@ def hf_merges_19(hf_tok):
     return [(vocab[a], vocab[b]) for a, b in pairs]'''
 
 CHECK_19 = r'''VOCAB_19 = 2000
+ok_hf_19 = False
 with checked("B2.19"):
     start_19 = time.perf_counter()
     hf_19 = train_hf_19(VERNE_TRAIN, VOCAB_19)
@@ -620,10 +633,13 @@ with checked("B2.19"):
     wb.check("B2.19a", n_base_19, computed=True)
     wb.check("B2.19b", rank_19, computed=True)
     wb.check("B2.19c", len(val_ids_19), computed=True)
+    ok_hf_19 = True
 
 if not bpe_written():
     print("⏳ Ex B2.19 : la comparaison à ton BPE attend BPETokenizer.fit et encode (B2.16 et B2.17).")
-elif globals().get("merges_hf_19") is not None:
+elif not ok_hf_19:
+    print("⏳ Ex B2.19 : la comparaison à ton BPE attend train_hf_19 et hf_merges_19 (cellule précédente).")
+else:
     with checked("B2.19"):
         start_19 = time.perf_counter()
         mine_19 = mylearn.tokenizer.BPETokenizer(vocab_size=VOCAB_19, level="char", pre_tokenizer="whitespace").fit(VERNE_TRAIN)
@@ -700,6 +716,7 @@ CHECK_20 = r'''class ListTokenizer_20:
         return list(self.ids)
 
 
+ok_20 = False
 with checked("B2.20"):
     c_20 = compression_20(ListTokenizer_20([7, 8]), "été")
     if returned("B2.20", "compression_20", c_20):
@@ -711,12 +728,17 @@ with checked("B2.20"):
         verdict("B2.20", isinstance(h_20, (int, float)) and math.isclose(h_20, 1.5),
                 "token_entropy_20 : les ids [4, 4, 9, 2] ont une entropie de 1,5 bit.",
                 f"les ids [4, 4, 9, 2] (fréquences 1/2, 1/4, 1/4) : attendu 1,5 bit (logarithme de base 2) ; reçu {h_20!r}.")
-    verdict("B2.20", math.isclose(token_entropy_20(ListTokenizer_20([3, 3, 3]), "x"), 0.0, abs_tol=1e-12),
-            "un seul id répété : entropie nulle.", "un seul id répété doit donner une entropie nulle.")'''
+    h0_20 = token_entropy_20(ListTokenizer_20([3, 3, 3]), "x")
+    verdict("B2.20", isinstance(h0_20, (int, float)) and math.isclose(h0_20, 0.0, abs_tol=1e-12),
+            "un seul id répété : entropie nulle.", f"un seul id répété doit donner une entropie nulle ; reçu {h0_20!r}.")
+    ok_20 = (isinstance(c_20, (int, float)) and math.isclose(c_20, 2.5) and isinstance(h_20, (int, float))
+             and math.isclose(h_20, 1.5) and math.isclose(h0_20, 0.0, abs_tol=1e-12))'''
 
 EXPERIMENT_20 = r'''SIZES_20 = (300, 500, 1000, 2000, 4000, 8000)
 if not bpe_written():
     print("⏳ Ex B2.20 : l'expérience attend BPETokenizer.fit et encode (B2.16 et B2.17).")
+elif not globals().get("ok_20"):
+    print("⏳ Ex B2.20 : l'expérience attend que compression_20 et token_entropy_20 passent la cellule précédente.")
 else:
     with checked("B2.20"):
         start_20 = time.perf_counter()
@@ -744,6 +766,16 @@ else:
         if list(table_20.get("vocab_size", [])) != list(SIZES_20) or any(c not in table_20 for c in need_20):
             print(f"❌ Ex B2.20 : sweep_20 doit rendre une ligne par taille de {SIZES_20}, dans cet ordre, avec les clés {need_20}.")
             raise StopCheck
+        row_20 = rows_20[SIZES_20.index(1000)]
+        tok1000_20 = truncated_bpe(BIG_20, 1000)
+        ids1000_20 = tok1000_20.encode(VERNE_VAL)
+        verdict("B2.20", math.isclose(row_20["bytes_per_token"], compression_20(tok1000_20, VERNE_VAL))
+                and math.isclose(row_20["bits_per_token"], token_entropy_20(tok1000_20, VERNE_VAL))
+                and math.isclose(row_20["bits_per_byte"], row_20["bits_per_token"] / row_20["bytes_per_token"])
+                and row_20["used"] == len(set(ids1000_20)),
+                "à 1 000 tokens, la ligne de sweep_20 reprend tes deux mesures, leur quotient et le nombre d'ids distincts.",
+                "à 1 000 tokens, la ligne de sweep_20 doit reprendre compression_20, token_entropy_20 (sur "
+                "truncated_bpe(big_tok, 1000)), leur quotient et le nombre d'identifiants distincts du texte encodé.")
         print(table_20[need_20].to_string(index=False, float_format=lambda x: f"{x:.3f}"))
         fig_20, axes_20 = plt.subplots(1, 3, figsize=(13, 3.6))
         for ax, col, label in zip(axes_20, ("bytes_per_token", "bits_per_token", "bits_per_byte"),

@@ -604,4 +604,254 @@ Commence par : « Je commence par un jeu d'évaluation : une centaine de vraies 
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B2.13 à B2.31) seront ajoutés à la prochaine session de génération, avec les parties A à E du notebook.
+### Ex B2.13 — Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Utiliser un tokenizer avec `transformers` » (§202.5) : `AutoTokenizer.from_pretrained` et l'appel `tok(texte)`. Pour les deux rapports, « Deux rapports » (§202.6) : la fertilité compte des tokens par mot, la compression des octets par token.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque nom, `TOKENIZER_REPOS[nom]` donne le couple (dépôt, révision) ; la révision se passe par le mot-clé `revision=`. Pour les mesures : `tok(text, add_special_tokens=False)["input_ids"]` donne les identifiants du texte seul (sans ce réglage, BERT ajoute `[CLS]` et `[SEP]`, e5 ajoute `<s>` et `</s>`) ; les mots viennent de `text.split()` ; les octets, de `text.encode("utf-8")`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def load_tokenizers_13():
+    out = {}
+    for name in ("gpt2", "bert", "e5"):
+        repo, revision = TOKENIZER_REPOS[name]
+        out[name] = ...                                  # AutoTokenizer, with revision=revision
+    return out
+
+
+def measure_13(tok, text):
+    n_tokens = len(tok(text, add_special_tokens=False)["input_ids"])
+    ...                                                  # words, then the two ratios
+```
+
+</details>
+
+### Ex B2.14 — Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis le §202.2 (combien d'octets prend un emoji en UTF-8), le §202.5 (ce que fait WordPiece d'un mot qu'il ne sait pas découper, et l'exemple « café☕ ») et le §202.6 (« Les chiffres et les lettres »).
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Pour chaque texte, demande-toi si ses suites d'octets fréquentes ont pu devenir des tokens de GPT-2, appris sur un Web surtout anglais de 2019 : des mots anglais courants, des mots français, des groupes de chiffres, des emoji. Le pire cas est un token d'un seul octet. b) En B2.13, GPT-2 a coûté plus cher sur Verne que sur Holmes. CamemBERT a appris son vocabulaire sur du français (tableau du §202.5) : que deviennent pour lui les mots anglais courants, et les mots français ? c) Le texte des emoji ne contient aucune espace : combien de « mots » y voit le pré-tokenizer de BERT, et que fait WordPiece d'un mot qui contient un caractère hors de son vocabulaire ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Estime les octets par token de chaque texte : pour Holmes, un token couvre souvent un mot entier et son espace ; pour un emoji de 4 octets absent du vocabulaire, combien de tokens au pire, et au mieux ? Range les quatre textes avant de choisir. b) Pars du rapport de GPT-2 en B2.13 (19 132 / 13 419) et demande-toi d'où vient cet écart : de la langue elle-même, ou des textes sur lesquels le tokenizer a appris ses fusions ? Ta réponse dit ce que tu attends de CamemBERT ; place ton estimation par rapport à 0,9 et 1,1. c) Compte les mots que voit le pré-tokenizer de BERT dans `EMOJI_14`, puis applique à chacun la règle de WordPiece.
+
+</details>
+
+### Ex B2.15 — get_pair_counts et merge_pair 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis le pseudo-code de « L'entraînement » (§202.3) : la ligne `counts`, puis la ligne « replace (a, b) by new_id ». Tu as fait les deux à la main au ✏️ B2.3.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`get_pair_counts` : un dictionnaire vide ; pour chaque couple (mot, fréquence), refuse une fréquence négative, puis parcours les paires voisines du mot avec `zip(mot, mot[1:])` et ajoute la fréquence à chacune ; `zip` donne d'elle-même les paires qui se chevauchent. `merge_pair` : vérifie d'abord que `pair` a deux éléments ; puis un indice `i` et une liste de sortie ; si la paire commence en `i`, écris `new_id` et avance de 2, sinon recopie `ids[i]` et avance de 1 : c'est le saut de 2 qui empêche le chevauchement.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def get_pair_counts(words):
+    counts = {}
+    for word, freq in words.items():
+        ...                                   # a negative freq: ValueError
+        for pair in zip(word, word[1:]):
+            ...                               # add freq to the count of pair
+    return counts
+
+
+def merge_pair(ids, pair, new_id):
+    ...                                       # len(pair) != 2: ValueError
+    out, i = [], 0
+    while i < len(ids):
+        if i + 1 < len(ids) and (ids[i], ids[i + 1]) == tuple(pair):
+            ...                               # new_id, then skip the two ids
+        ...
+    return out
+```
+
+</details>
+
+### Ex B2.16 — BPETokenizer.fit : apprendre les fusions, au niveau caractère puis octet 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis le pseudo-code de « L'entraînement » (§202.3), l'encadré 🕰️ sur le départage, et « Ta librairie : `tokenizer.py` » ; pour les tokens spéciaux, le §202.4. Tes deux fonctions de B2.15 font l'essentiel du travail.
+
+</details>
+<details><summary>Indice 2</summary>
+
+1. Valide les hyperparamètres (`level`, `pre_tokenizer`, `unk_token` au niveau octet) et fais la liste des spéciaux : `special_tokens`, puis `unk_token` s'il n'y est pas.
+2. Compte les pré-tokens avec un `Counter` : les morceaux de `pre_tokenize(texte, self.pre_tokenizer, spéciaux)` qui ne sont pas des spéciaux, pour chaque texte (une `str` seule devient `[texte]`).
+3. L'alphabet : `range(256)`, ou `sorted` des caractères des pré-tokens. Chaque mot devient un tuple d'identifiants, avec sa fréquence. Vérifie alors `vocab_size >= n_base + spéciaux`.
+4. La boucle : tant que `n_base + fusions + spéciaux < vocab_size`, compte les paires et prends `min(counts, key=lambda p: (-counts[p], p))` (le plus grand compte, puis la plus petite paire) ; arrête-toi s'il n'y a plus de paire ou si son compte est sous `min_frequency` ; sinon, fusionne-la dans chaque mot avec l'identifiant `n_base + len(merges)`.
+5. Les attributs : `vocab_` reçoit les octets de chaque fusion (`vocab_[a] + vocab_[b]`), puis ceux des spéciaux ; `special_ids_` les numérote à la suite ; `return self`.
+
+Pour aller vite sur un roman entier : ne recompte pas toutes les paires à chaque fusion. Garde, pour chaque paire, l'ensemble des mots qui la contiennent : à chaque fusion, seuls ces mots changent ; retire leurs anciennes paires des comptes, fusionne, ajoute les nouvelles. La référence garde aussi un tas `(-compte, paire)` (`heapq`) pour trouver la meilleure paire sans tout parcourir.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fit(self, texts):
+    ...                                        # check level, pre_tokenizer, unk_token; specials = [...]
+    texts = [texts] if isinstance(texts, str) else texts
+    freqs = Counter(piece for text in texts
+                    for piece in pre_tokenize(text, self.pre_tokenizer, specials) if piece not in specials)
+    ...                                        # alphabet, vocab {id: bytes}, words {tuple of ids: freq}; vocab_size check
+    merges = []
+    while n_base + len(merges) + len(specials) < self.vocab_size:
+        counts = get_pair_counts(words)
+        ...                                    # no pair left: stop
+        best = min(counts, key=lambda p: (-counts[p], p))
+        ...                                    # min_frequency; merge best in every word; vocab and merges
+    ...                                        # special_ids_ and the four attributes
+    return self
+```
+
+</details>
+
+### Ex B2.17 — encode et decode : fusions appliquées par rang, aller-retour sans perte 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Encoder un mot nouveau : les fusions par rang » (§202.3) et ton ✏️ B2.4 ; pour le décodage, « Plus jamais de token inconnu » (§202.4) et le ✏️ B2.1 g).
+
+</details>
+<details><summary>Indice 2</summary>
+
+`encode` : vérifie que les quatre attributs existent ; construis `rank = {paire: r}` à partir de `merges_` ; découpe le texte par `pre_tokenize(text, self.pre_tokenizer, list(self.special_ids_))`. Pour chaque morceau : un spécial donne son identifiant ; sinon, pars de ses octets (`list(morceau.encode("utf-8"))`) ou de ses caractères (leur identifiant dans l'alphabet, celui de `unk_token`, ou `ValueError`). Puis répète : parmi les paires voisines, prends celle de plus petit rang ; s'il n'y en a aucune dans `rank`, arrête ; sinon, `merge_pair` avec l'identifiant `n_base_ + rang`. `decode` : les octets de chaque identifiant (`vocab_`, dans un `try` qui change `KeyError` en `ValueError` ; −1 n'est pas une clé), recollés par `b"".join`, puis **un seul** `decode("utf-8", errors="replace")`. `tokenize` : `encode`, puis le décodage de chaque token seul.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def encode(self, text):
+    ...                                                    # not fitted: ValueError
+    rank = {tuple(pair): r for r, pair in enumerate(self.merges_)}
+    out = []
+    for piece in pre_tokenize(text, self.pre_tokenizer, list(self.special_ids_)):
+        ...                                                # a special token: its id; else the base ids
+        while len(ids) > 1:
+            best = min(zip(ids, ids[1:]), key=lambda p: rank.get(p, float("inf")))
+            ...                                            # best not in rank: stop; else merge it, id n_base_ + rank
+        out += ids
+    return out
+```
+Et la dernière ligne de `decode` : `return b"".join(parts).decode("utf-8", errors="replace")`.
+
+</details>
+
+### Ex B2.18 — Le tokenizer qui abîme les accents : trois bugs d'Unicode et de fusions 🐛
+
+<details><summary>Indice 1</summary>
+
+Les trois erreurs sont des pièges du tableau ⚠️ de la fiche. Relis le §202.2 (NFC et NFD), « Encoder un mot nouveau » (§202.3) et « Plus jamais de token inconnu » (§202.4). Les diagnostics s'enchaînent : corrige d'abord le premier point en échec.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Point 1 : où `decode_18` transforme-t-il des octets en texte, et un token contient-il toujours des caractères entiers ? Point 2 : sous quelle forme `train_18` voit-il « é » (affiche `clean_18("é").encode("utf-8")`), et sous quelle forme `encode_18` le reçoit-il ? Point 3 : déroule `encode_18` à la main sur le mot affiché, comme au ✏️ B2.4 c) : quelle fusion fait-il en premier, et laquelle l'entraînement a-t-il faite en premier ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Point 1 : compare `"".join(b.decode("utf-8") for b in [b"\xc3", b"\xa9"])` et `b"".join([b"\xc3", b"\xa9"]).decode("utf-8")` ; la docstring dit ce que doit devenir un octet seul. Point 2 : `unicodedata.normalize` a plusieurs formes ; laquelle laisse « é » tel qu'il est écrit dans les fichiers de Verne ? Point 3 : la boucle de `encode_18` doit chercher, parmi **toutes** les paires voisines, celle de plus petit rang :
+```python
+best = min(zip(ids, ids[1:]), key=lambda p: rank.get(p, math.inf))
+```
+
+</details>
+
+### Ex B2.19 — Ton BPE contre la bibliothèque tokenizers : mêmes fusions, autre vitesse 📦
+
+<details><summary>Indice 1</summary>
+
+Relis l'exemple de code du §202.3 (le corpus des chats et des rats), « Entraîner son propre tokenizer avec `tokenizers` » (§202.5) et, pour les fusions, « Les tokenizers des modèles, lus dans leur `tokenizer.json` ».
+
+</details>
+<details><summary>Indice 2</summary>
+
+`train_hf_19` : `Tokenizer(models.BPE())`, son attribut `pre_tokenizer`, un `BpeTrainer(vocab_size=..., min_frequency=..., show_progress=False)`, puis `train_from_iterator([text], trainer)`. `hf_merges_19` : `json.loads(hf_tok.to_str())` est un dictionnaire ; ses fusions sont sous `["model"]["merges"]`, chacune une paire de chaînes (une liste `["a", "b"]`, ou `"a b"` dans les versions plus anciennes de la bibliothèque) ; `get_vocab()` donne l'identifiant de chaque chaîne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def hf_merges_19(hf_tok):
+    state = json.loads(hf_tok.to_str())
+    vocab = hf_tok.get_vocab()                 # {token string: id}
+    ...                                        # each merge of state["model"]["merges"] -> (vocab[left], vocab[right])
+```
+
+</details>
+
+### Ex B2.20 — Taille du vocabulaire : compression et entropie par token, de 300 à 8 000 tokens 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis l'entropie et le code de Huffman du ch. 6 (🔁 R3) et « Deux rapports » (§202.6). Une entropie se calcule sur des fréquences : ici, celles des identifiants du texte encodé.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`compression_20` : deux longueurs, les octets UTF-8 et les identifiants. `token_entropy_20` : un `Counter` des identifiants, les fréquences `p = comptes / total`, puis $-\sum p \log_2 p$. `sweep_20` : pour chaque taille, `truncated_bpe(big_tok, taille)`, puis tes deux mesures ; `bits_per_byte` est le quotient des deux, `used` le nombre d'identifiants distincts. Pour lire les courbes : compare les gains entre deux tailles voisines (chacune double à peu près la précédente), et souviens-toi que bits par token = compression × bits par octet.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def token_entropy_20(tok, text):
+    counts = np.array(list(Counter(tok.encode(text)).values()), dtype=float)
+    ...                                       # p = counts / counts.sum(), then the entropy in bits
+
+
+def sweep_20(big_tok, text, sizes):
+    rows = []
+    for size in sizes:
+        tok = truncated_bpe(big_tok, size)
+        ...                                   # rows.append({"vocab_size": size, "bytes_per_token": ..., ...})
+    return rows
+```
+
+</details>
+
+### Ex B2.21 — Tokenizer entraîné sur Holmes, appliqué à Verne (et l'inverse) : le coût de la langue 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Le même texte, un autre prix selon la langue » (§202.6) et tes mesures de B2.13 : GPT-2 a appris ses fusions sur un Web surtout anglais.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`train_tokenizers_21` : trois appels de `fast_byte_bpe` ; pour le mixte, une liste de deux textes. `cross_table_21` : un dictionnaire de dictionnaires `{texte: {tokenizer: compression}}` donne directement un `DataFrame`, une colonne par clé extérieure et une ligne par clé intérieure. Pour lire le tableau : compare chaque case à celle du tokenizer « maison » du même texte, en pourcentage.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def cross_table_21(tokenizers, texts):
+    return pd.DataFrame({text_name: {tok_name: ... for tok_name, tok in tokenizers.items()}
+                         for text_name, text in texts.items()})
+```
+
+</details>
+
+Les indices des exercices B2.22 à B2.31 (parties D et E du notebook) seront ajoutés à la prochaine étape de génération.

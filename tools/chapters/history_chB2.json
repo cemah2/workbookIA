@@ -111,23 +111,25 @@
    "nombres": 2.558,
    "emoji": 1.579
   },
-  "ratio": 1.4257,
+  "ratio": 0.7581,
   "answers": {
    "costliest": "D",
-   "ratio": "B",
+   "ratio": "A",
    "bert_emoji": "A"
   }
  },
  "timing": {
-  "ref_verne_byte_2000": 0.98,
-  "ref_verne_byte_8000": 1.12,
+  "ref_verne_byte_2000": 1.0,
+  "ref_verne_byte_8000": 1.22,
   "ref_holmes_byte_2000": 0.69,
-  "ref_holmes_byte_8000": 0.81,
-  "ref_verne_char_2000": 0.64,
-  "tokenizers_verne_char_2000": 0.218,
-  "ref_mixed_byte_2000": 1.9,
-  "naive_verne_byte_2000": 111.1,
-  "naive_verne_byte_4000": 232.5,
-  "train_18": 1.03
+  "ref_holmes_byte_8000": 0.95,
+  "ref_verne_char_2000": 0.75,
+  "tokenizers_verne_char_2000": 0.17,
+  "ref_mixed_byte_2000": 1.82,
+  "tokenizers_verne_byte_8000": 0.52,
+  "naive_verne_byte_2000": 103.4,
+  "naive_verne_char_2000": 79.8,
+  "naive_part_byte_400": 2.5,
+  "train_18": 1.04
  }
 }

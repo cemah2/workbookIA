@@ -35,10 +35,10 @@ RECORD_14 = (
         "D": "regarde la colonne des emoji dans le tableau des octets par token de GPT-2 : est-ce la plus petite valeur ?"})
     + ")\n"
     f'wb.record("B2.14b", "{P14["ratio"]}", mistakes=' + _letters(P14["ratio"], {
-        "A": "relis le rapport affiché sous les tableaux : est-il sous 1,2 ?",
-        "B": "relis le rapport affiché sous les tableaux : est-il entre 1,2 et 1,7 ?",
-        "C": "relis le rapport affiché sous les tableaux : dépasse-t-il 1,7 ? La fiche compare des mots, ici on compare "
-             "des textes de même longueur en caractères"})
+        "A": "relis le rapport de CamemBERT affiché sous les tableaux : est-il sous 0,9 ?",
+        "B": "relis le rapport de CamemBERT affiché sous les tableaux : est-il entre 0,9 et 1,1 ?",
+        "C": "relis le rapport de CamemBERT affiché sous les tableaux : dépasse-t-il 1,1 ? Sur quels textes CamemBERT "
+             "a-t-il appris ses tokens ?"})
     + ")\n"
     f'wb.record("B2.14c", "{P14["bert_emoji"]}", mistakes=' + _letters(P14["bert_emoji"], {
         "A": "regarde la ligne de BERT dans le tableau des tokens, colonne des emoji",
@@ -138,7 +138,7 @@ Dans tes notes : quel tokenizer est le plus économe sur Holmes, et sur Verne ? 
 
 L'expérience compte les tokens des quatre textes, tokens spéciaux exclus, avec six tokenizers : GPT-2, BERT, e5, CamemBERT, Qwen3 et SmolLM2. **Avant d'exécuter**, écris tes trois prédictions :
 - a) `costliest_14` : avec GPT-2, le texte qui a le **moins** d'octets par token (celui qui coûte le plus cher pour sa taille) : `"A"` Holmes, `"B"` Verne, `"C"` les nombres, `"D"` les emoji ;
-- b) `ratio_14` : avec GPT-2, le rapport entre les tokens de `EXCERPT_V` et ceux de `EXCERPT_H`, deux textes de 50 000 caractères : `"A"` moins de 1,2, `"B"` de 1,2 à 1,7, `"C"` plus de 1,7 ;
+- b) `ratio_14` : avec CamemBERT, le rapport entre les tokens de `EXCERPT_V` et ceux de `EXCERPT_H`, deux textes de 50 000 caractères : `"A"` moins de 0,9, `"B"` de 0,9 à 1,1, `"C"` plus de 1,1 ;
 - c) `bert_emoji_14` : le nombre de tokens de BERT (`bert-base-uncased`) pour `EMOJI_14` : `"A"` de 1 à 10, `"B"` de 11 à 2 000, `"C"` plus de 2 000.
 
 La cellule d'expérience n'affiche rien tant que tes trois prédictions ne sont pas écrites ; elle les vérifie à la fin.""",
@@ -199,7 +199,7 @@ Dans tes notes : l'extrait de Verne a 7 948 mots, mais combien de mots distincts
 - **Tokens spéciaux** : `special_ids_` les place après les fusions, dans l'ordre donné, puis `unk_token` s'il n'y est pas déjà (une seule fois). `vocab_` contient aussi leurs octets UTF-8, donc `len(vocab_) = n_base_ + fusions + spéciaux`. Un token spécial donné deux fois n'est pas testé.
 - **Erreurs** : `ValueError` pour un `level` ou un `pre_tokenizer` inconnu, un `unk_token` au niveau octet, et `vocab_size < n_base_ +` spéciaux (au niveau caractère, une fois le corpus lu).
 
-Les tests comparent tes fusions à celles de `tokenizers` aux deux niveaux, sur des extraits de Holmes et de Verne. Une version qui recompte toutes les paires à chaque fusion les passe en quelques secondes ; sur un roman entier, elle met une à deux minutes pour 2 000 tokens, que tu sentiras en B2.19 (l'indice 2 dit comment aller plus vite).
+Les tests comparent tes fusions à celles de `tokenizers` aux deux niveaux, sur des extraits de Holmes et de Verne. Une version qui recompte toutes les paires à chaque fusion les passe en quelques secondes ; sur un roman entier, elle met de 30 s à 2 min pour 2 000 tokens, que tu sentiras en B2.19 (l'indice 2 dit comment aller plus vite).
 
 La première cellule de vérification essaie `fit` sur trois petites phrases, puis compare tes 400 tokens de l'extrait de Verne à ceux de `BpeTrainer`, essaie le niveau octet avec deux tokens spéciaux, et trois refus. La seconde lance les 49 tests de l'exercice (`-k "test_pre_tokenize_ or test_bpe_fit_"`, dont les 5 de `pre_tokenize`, fourni).
 

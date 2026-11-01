@@ -54,7 +54,7 @@ EDITS_18 = {
 }
 
 # 🔮 B2.14: the categories of the statement (chB2_code.TODO_14) and the margin each measure must keep from their bounds
-P14_BOUNDS = {"ratio": (1.2, 1.7), "bert_emoji": (10, 2000)}
+P14_BOUNDS = {"ratio": (0.9, 1.1), "bert_emoji": (10, 2000)}
 
 
 def namespace(blocks=()) -> dict:
@@ -90,14 +90,14 @@ def p14(ns) -> dict:
     order = sorted(per_token, key=per_token.get)
     if per_token[order[1]] - per_token[order[0]] < 0.5:
         raise SystemExit(f"❌ p14 a): the two cheapest texts are too close: {per_token}")
-    ratio = counts["gpt2"]["Verne"] / counts["gpt2"]["Holmes"]
+    ratio = counts["camembert"]["Verne"] / counts["camembert"]["Holmes"]
     bert = counts["bert"]["emoji"]
     for value, (low, high) in ((ratio, P14_BOUNDS["ratio"]), (bert, P14_BOUNDS["bert_emoji"])):
-        if min(abs(value - low) / low, abs(value - high) / high) < 0.1:
-            raise SystemExit(f"❌ p14: {value} is within 10 % of a bound of its categories {low, high}")
+        if min(abs(value - low) / low, abs(value - high) / high) < 0.15:
+            raise SystemExit(f"❌ p14: {value} is within 15 % of a bound of its categories {low, high}")
     answers = {"costliest": "ABCD"[["Holmes", "Verne", "nombres", "emoji"].index(order[0])],
                "ratio": _letter(ratio, P14_BOUNDS["ratio"]), "bert_emoji": _letter(bert, P14_BOUNDS["bert_emoji"])}
-    print(f"  p14 bytes per GPT-2 token {per_token}, ratio {ratio:.3f}, BERT emoji {bert}: {answers}", flush=True)
+    print(f"  p14 bytes per GPT-2 token {per_token}, CamemBERT Verne/Holmes {ratio:.3f}, BERT emoji {bert}: {answers}", flush=True)
     return {"counts": counts, "bytes": sizes, "gpt2_bytes_per_token": {k: round(v, 3) for k, v in per_token.items()},
             "ratio": round(ratio, 4), "answers": answers}
 
