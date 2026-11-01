@@ -52306,7 +52306,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "304071f005487a7325d1c6f2e5c4e4d03b3f2d22cdece8430e63e95d5c189518": "« ë » et « à » sont sous U+0800 : relis les plages du tableau d'UTF-8",
+        "304071f005487a7325d1c6f2e5c4e4d03b3f2d22cdece8430e63e95d5c189518": "relis les plages du tableau d'UTF-8 : dans laquelle tombent « ë » et « à » ?",
         "3c99fd46c7b76f59b2ed613e3b0cde239a69fa56131895f696dd6e39b0d78d5d": "relis la question : on demande des octets, et une lettre accentuée en prend plus d'un",
         "7412a83946d0eb5d0b166dc1bd60971074109703539c9b0c905c9d4af54e6ba2": "relis la question : on demande le texte tel qu'il est écrit, en NFC"
       },
@@ -52340,7 +52340,7 @@
       "mistakes": {
         "23ad42620e8350d916c560a954baa5d9ffa90c057cdeb9baf89ccff650c09940": "les octets sont numérotés à partir de 0",
         "318a668c41c86e1ee82c3f824b89ebe97cdadf717b514dd3e4ba203bc24ebdaa": "c'est le point de code de « ë » : on demande un octet de son écriture UTF-8",
-        "ceab23ff750a9a9f9320a0576965117ee6b928a70b08f98f82af2acfd4ccf3e3": "les indices d'un bytes comptent les octets, pas les caractères : « ë » occupe deux positions"
+        "ceab23ff750a9a9f9320a0576965117ee6b928a70b08f98f82af2acfd4ccf3e3": "les indices d'un bytes comptent les octets, pas les caractères : combien de positions occupe « ë » ?"
       },
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -52351,7 +52351,7 @@
       "magnitude": 1,
       "mistakes": {
         "1359c28b54e705121df1c6f5a79d2e06921910a907411bd6681b05b85ccaa950": "en NFD, chaque lettre accentuée devient deux points de code : compte les octets des deux",
-        "232ae09f5d41c14b772dffd4dc4149d012f2a564c740c41353b262634d4084ea": "U+0300 et U+0308 sont sous U+0800 : deux octets chacun",
+        "232ae09f5d41c14b772dffd4dc4149d012f2a564c740c41353b262634d4084ea": "relis les plages du tableau d'UTF-8 : dans laquelle tombent U+0300 et U+0308 ?",
         "457e5fa4ac9da3cfd57fcba2abaa8fc5e050be316330e8e559839445f35a50e9": "relis la question : on demande les octets du texte décomposé (NFD)"
       },
       "sign": 1,
@@ -52440,7 +52440,7 @@
       "hash": "865fff0496a3479b0874a69f10f2dd7843c5ea495e97c12b709a361e3e6bdf81",
       "kind": "str",
       "mistakes": {
-        "234ee2bb6156cb1b696171461ec401c1df82017a0185c621bed58100c84196a0": "compare les cosinus de reine et de princesse, à 3 décimales",
+        "234ee2bb6156cb1b696171461ec401c1df82017a0185c621bed58100c84196a0": "recalcule les cosinus des mots restants, à 3 décimales",
         "4a11861e57f51782204aae642fad0dfda16f417161476dbe52c3ebbbf271bebf": "on exclut les trois mots de la question, femme comprise",
         "8c6c3a0b4b0679f774b5324f6a0f9e3bb37efb09b88583bdc4dfbb092c0bb83d": "relis la question : on compare des cosinus, qui divisent par les normes"
       },
@@ -52510,7 +52510,7 @@
       "magnitude": 0,
       "mistakes": {
         "a0a5f8d543f5ac0192cca2f8f82b4508c784dbaa6565ae5af7e39f850acc73dd": "multiplie par la fréquence de chaque mot",
-        "bd7125788e9ab79fb44bb558375df910180d5528d9449b5a98ae5d09887bae15": "on compte une seule paire, pas les deux paires à égalité"
+        "bd7125788e9ab79fb44bb558375df910180d5528d9449b5a98ae5d09887bae15": "on demande le compte de la seule paire fusionnée"
       },
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -52666,8 +52666,8 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "69ed1bbaa8fac63bcc41484d1125152412e6f285fe83e8cd30583a609dcce4ef": "au niveau octet, « é » s'écrit avec deux octets",
-        "df89046775a57fbc3dcec6ce815e11aeb8d6c790a322786e5928fd3a17283ed2": "« t » est un caractère ASCII : un seul octet"
+        "69ed1bbaa8fac63bcc41484d1125152412e6f285fe83e8cd30583a609dcce4ef": "au niveau octet, on compte des octets : combien en prend « é » ?",
+        "df89046775a57fbc3dcec6ce815e11aeb8d6c790a322786e5928fd3a17283ed2": "recompte les octets de « t » : dans quelle plage du tableau d'UTF-8 tombe-t-il ?"
       },
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -52700,7 +52700,7 @@
       "integer": true,
       "kind": "array",
       "mistakes": {
-        "58b6830e41f7b0734b99c49649d24dd1127c1d2bbfd119f2be4c29f33103fb5a": "le token lu à la position t = 1 est 0 : relis sa ligne de la table",
+        "58b6830e41f7b0734b99c49649d24dd1127c1d2bbfd119f2be4c29f33103fb5a": "tu as pris la ligne 1 de la table : quel token est lu à la position t = 1 ?",
         "6106a694be33566fd0f1a29569760f79ae547d91022c7f1331241aaa46f9cb90": "les positions sont numérotées à partir de 0 : t = 1 est la deuxième"
       },
       "shape": [
@@ -52917,9 +52917,9 @@
       "kind": "float",
       "magnitude": 2,
       "mistakes": {
-        "64512d4f78749fe146bec9288dc0227971b20a3eaa1914af0b04e5bfa0bf526e": "un float32, c'est 32 bits, soit 4 octets : compte en octets",
+        "64512d4f78749fe146bec9288dc0227971b20a3eaa1914af0b04e5bfa0bf526e": "tu as compté des bits : on demande des octets",
         "a9a9ed3fa0dc31f7b442d2bdfc153222c52b0e0e70765b49ad25807103799c2a": "1 Mo vaut ici 10⁶ octets, pas 2²⁰",
-        "ea2bc314b37b763ac8d96bc79fa11dbc26385fb2c1d3075fa456bc90f4c64c6a": "un float32 occupe 4 octets"
+        "ea2bc314b37b763ac8d96bc79fa11dbc26385fb2c1d3075fa456bc90f4c64c6a": "tu as compté des nombres : combien d'octets occupe chacun en float32 ?"
       },
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -52964,7 +52964,7 @@
       "hash": "395cd2e51de393b707d70bf1312b8bf61e2a3236ad02c9b104bdff2d74d8a559",
       "kind": "bool",
       "mistakes": {
-        "b4781cb27d7026b2b32fe734a4bf106b416cd9e5df1440ab38956958b6d4a588": "un bfloat16 occupe 2 octets : multiplie le nombre de paramètres par 2"
+        "b4781cb27d7026b2b32fe734a4bf106b416cd9e5df1440ab38956958b6d4a588": "relis l'énoncé : combien d'octets par nombre en bfloat16, et combien de paramètres dans la table ?"
       },
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
@@ -52990,7 +52990,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "36201ba999407ce8330ad80f2c00d65f8c6d090887ffe83b28bc01edbc2fe2bf": "le carré de 3, pas son double",
+        "36201ba999407ce8330ad80f2c00d65f8c6d090887ffe83b28bc01edbc2fe2bf": "tu as doublé au lieu d'élever au carré",
         "858afb6a80022a6cbe247a4621def4b4a71e4a7b583179dd5a24b4a7acdf1826": "le coût croît comme le carré de la longueur, pas comme la longueur",
         "f9f05da5d9e3b80472ba8a3dc68c002c1cb8d496dd51f963d1a08ef1b198b80f": "le carré de la longueur, pas son cube"
       },
@@ -53019,7 +53019,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "65cee967f07554e15555e0f5b2d61394c2074e8201ee52b988a3022f0d91fb2d": "U+00E9 est sous U+0800 : relis les plages du tableau d'UTF-8",
+        "65cee967f07554e15555e0f5b2d61394c2074e8201ee52b988a3022f0d91fb2d": "relis les plages du tableau d'UTF-8 : dans laquelle tombe U+00E9 ?",
         "8c8b41dab8264873dde739499bb8caf01ff632c65df98c5e38b5e0ca7dac8e88": "« é » n'est pas un caractère ASCII : relis le tableau d'UTF-8"
       },
       "sign": 1,
@@ -53042,7 +53042,7 @@
       "magnitude": 0,
       "mistakes": {
         "7f80f9031f866e9b0d93ec911a41f7751ad3ed43fedc9300290d2dac1c92fd24": "compte les octets de chacun des deux points de code",
-        "e088ef3771c44d13ea4eaf6d348ccae6a35822e273fce17d641dfd092b5a4784": "« e » est un caractère ASCII : un seul octet"
+        "e088ef3771c44d13ea4eaf6d348ccae6a35822e273fce17d641dfd092b5a4784": "recompte les octets de « e » : dans quelle plage du tableau tombe-t-il ?"
       },
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -53184,7 +53184,7 @@
       "hash": "8a86346ce751606595a55e0444c38fc3ea832d887b7231be68a51e690946e625",
       "kind": "str",
       "mistakes": {
-        "8d118cc99c4e058ddf53365ec90a0a5d1aeded2dafc0cb46970dd37b7333c2fc": "GPT-2 n'a que 50 257 tokens, et aucun inconnu",
+        "8d118cc99c4e058ddf53365ec90a0a5d1aeded2dafc0cb46970dd37b7333c2fc": "relis la taille du vocabulaire de GPT-2 (§202.4)",
         "e2fdba37ba39a03efc0d666d262bdec4fccce0f9a58c94a697fa49af54545e7d": "décoder la liste entière des identifiants redonne le texte exact"
       },
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -53210,7 +53210,7 @@
       "kind": "str",
       "mistakes": {
         "2a96b91c33d94388c7eae880fcb81e2d6e4e12de9cba98a4fabec18e082561dd": "relis la table octet → caractère de GPT-2",
-        "4bdfe784ece13962f4e0b73ae7f8abf6e655e205546a9e3958377e8264cd4b33": "GPT-2 n'a qu'un token spécial, et il ne s'écrit pas ainsi"
+        "4bdfe784ece13962f4e0b73ae7f8abf6e655e205546a9e3958377e8264cd4b33": "« Ġ » fait partie de tokens ordinaires comme « Ġthe » : relis la table octet → caractère"
       },
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
@@ -53526,7 +53526,7 @@
       "magnitude": 0,
       "mistakes": {
         "04301742641a33299dc2fe3e271a82adeb6d08039644c73d5d8fd68250f4bfb0": "le cosinus divise le produit scalaire par les deux normes",
-        "51d5a1aab2072273f1c10405f0c0a415d38787f2c7e8c4dc2c0e6c843bc4ebd1": "(−6, −8) va dans le sens opposé : le signe compte"
+        "51d5a1aab2072273f1c10405f0c0a415d38787f2c7e8c4dc2c0e6c843bc4ebd1": "vérifie le signe du produit scalaire"
       },
       "sign": -1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
@@ -53632,8 +53632,8 @@
       "kind": "int",
       "magnitude": null,
       "mistakes": {
-        "9475d1623b55ad0d65e0a9645229039f0403f018f6edac0511b66f1e1b1021e2": "max_size compte aussi le token inconnu : « chat » est-il resté dans le vocabulaire ?",
-        "e9285700aa935e22056aefcb4750358c51ba607466247b3f5ccbffaefa4c2ddc": "relis l'ordre des ids : le token inconnu vient d'abord, puis le mot le plus fréquent"
+        "9475d1623b55ad0d65e0a9645229039f0403f018f6edac0511b66f1e1b1021e2": "max_size compte aussi le token inconnu : combien de mots gardent leur propre identifiant ?",
+        "e9285700aa935e22056aefcb4750358c51ba607466247b3f5ccbffaefa4c2ddc": "relis ce que compte max_size : « chat » a-t-il gardé un identifiant à lui ?"
       },
       "sign": 0,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"

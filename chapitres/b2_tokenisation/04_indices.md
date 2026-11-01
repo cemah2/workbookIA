@@ -202,7 +202,7 @@ Un embedding statique est une ligne de table : un mot, un vecteur. Un Transforme
 </details>
 <details><summary>Indice 3</summary>
 
-a) **A** : le même vecteur, la ligne de la table. Pour b), d'où sort le vecteur de chaque token à la fin du dernier bloc ? Pour c), un seul vecteur doit servir aux deux sens : lequel pèse le plus dans l'entraînement ? Pour d), relis la formule de $\mathbf{s}$ et ce que fait $m_t$. Pour e), calcule $\frac{1 + 3 + 2 + 0 \times 0}{1 + 1 + 1 + 0}$.
+a) **A** : le même vecteur, la ligne de la table. Pour b), d'où sort le vecteur de chaque token à la fin du dernier bloc ? Pour c), dans un corpus juridique, quels emplois d'« avocat » son vecteur unique résume-t-il, et quels contextes partage-t-il alors ? Pour d), relis la formule de $\mathbf{s}$ et ce que fait $m_t$. Pour e), calcule $\frac{1 + 3 + 2 + 0 \times 0}{1 + 1 + 1 + 0}$.
 
 </details>
 
@@ -408,7 +408,7 @@ Pour 1, dérive $\sigma(s) = (1 + e^{-s})^{-1}$, puis écris $1 - \sigma(s)$ ave
 </details>
 <details><summary>Indice 3</summary>
 
-1. $\sigma'(s) = \frac{e^{-s}}{(1 + e^{-s})^2} = \sigma(s)\,\frac{e^{-s}}{1 + e^{-s}} = \sigma(s)(1 - \sigma(s))$, et $1 - \sigma(s) = \frac{e^{-s}}{1 + e^{-s}} = \frac{1}{e^{s} + 1} = \sigma(-s)$ ; dérive ensuite $-\log \sigma(s)$ en $-\frac{\sigma'(s)}{\sigma(s)}$. Pour 2, multiplie chacune de ces dérivées par $\mathbf{v}_w$ (pour les contextes) ou par le vecteur de contexte (pour $\mathbf{v}_w$), et additionne pour $\mathbf{v}_w$. Pour 4, calcule les scores $\mathbf{u}^\top \mathbf{v}_w$, puis $\sigma$ de chacun. Pour 6, écris $\ell'(x) = -\#(w, c)(1 - \sigma(x)) + \frac{K\,\#(w)\,\#(c)}{N}\,\sigma(x)$, annule-le, et isole $e^x$.
+1. $\sigma'(s) = \frac{e^{-s}}{(1 + e^{-s})^2} = \sigma(s)\,\frac{e^{-s}}{1 + e^{-s}} = \sigma(s)(1 - \sigma(s))$, et $1 - \sigma(s) = \frac{e^{-s}}{1 + e^{-s}} = \frac{1}{e^{s} + 1} = \sigma(-s)$ ; dérive ensuite $-\log \sigma(s)$ en $-\frac{\sigma'(s)}{\sigma(s)}$. Pour 2, multiplie chacune de ces dérivées par $\mathbf{v}_w$ (pour les contextes) ou par le vecteur de contexte (pour $\mathbf{v}_w$), et additionne pour $\mathbf{v}_w$. Pour 4, calcule les scores $\mathbf{u}^\top \mathbf{v}_w$, puis $\sigma$ de chacun, et garde-les sans arrondir jusqu'à $L$. Pour 6, écris $\ell'(x) = -\#(w, c)(1 - \sigma(x)) + \frac{K\,\#(w)\,\#(c)}{N}\,\sigma(x)$, annule-le, et isole $e^x$.
 
 </details>
 

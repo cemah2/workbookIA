@@ -273,6 +273,8 @@ def _parse_elements(value):
 def _as_array(value):
     import numpy as np
 
+    if isinstance(value, (bytes, bytearray, memoryview)):  # "ë".encode() for a list of byte values: its integers
+        value = list(bytes(value))
     value = _deep_to_python(value)
     if isinstance(value, (str, bytes)) or isinstance(value, numbers.Number):
         raise NormalizationError("un tableau (liste, array NumPy ou tenseur)")

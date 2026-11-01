@@ -939,6 +939,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | offsets | décalages | position (début, fin) de chaque token ou pré-token dans le texte d'origine | B2 |
 | WordPiece | WordPiece | méthode de BERT : fusionne la paire au meilleur score $\frac{\operatorname{count}(a, b)}{\operatorname{count}(a)\operatorname{count}(b)}$, marque les suites de mot par `##`, encode de façon gloutonne (M. Schuster et K. Nakajima, 2012) | B2 |
 | Unigram (tokenizer) | unigram language model | part d'un grand vocabulaire et l'élague selon la vraisemblance du corpus ; encode par le découpage le plus probable, algorithme de Viterbi (T. Kudo, 2018) | B2 |
+| algorithme EM | expectation-maximization | alterne deux étapes jusqu'à la convergence : calculer les quantités cachées avec les paramètres du moment (pour Unigram, découper le corpus), puis réestimer les paramètres (recompter les probabilités des tokens) | B2 |
+| algorithme de Viterbi | Viterbi algorithm | programmation dynamique qui trouve le chemin le plus probable (pour Unigram, le découpage d'un mot de plus grande probabilité) sans énumérer tous les chemins | B2 |
 | SentencePiece | SentencePiece | bibliothèque qui entraîne BPE ou Unigram sur le texte brut, sans pré-tokenisation, l'espace devenant « ▁ » (T. Kudo et J. Richardson, 2018) | B2 |
 | repli sur les octets | byte fallback | un caractère absent du vocabulaire s'écrit avec les tokens de ses octets (Mistral 7B) | B2 |
 | fertilité | fertility | nombre moyen de tokens par mot d'un texte, pour un tokenizer donné | B2 |
@@ -946,7 +948,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | surcoût de tokenisation | tokenization premium | rapport du nombre de tokens d'un texte à celui de sa traduction anglaise, avec le même tokenizer (A. Petrov et coll., 2023) | B2 |
 | masque d'attention | attention mask | tenseur de 1 (vrais tokens) et de 0 (padding) que rend le tokenizer avec `padding=True` ; sert au mean pooling et à l'attention | B2 |
 | poids liés | weight tying | la couche de sortie d'un modèle de langue réutilise la table d'embedding, $\mathbf{W}_{\text{out}} = \mathbf{E}$ : $V \times d$ paramètres de moins (O. Press et L. Wolf, 2017) | B2 |
-| accès contrôlé (dépôt) | gated repository | dépôt du Hugging Face Hub dont les fichiers ne se téléchargent qu'après avoir accepté une licence (Llama, Gemma) | B2 |
+| accès contrôlé (dépôt) | gated, gated repository | dépôt du Hugging Face Hub dont les fichiers ne se téléchargent qu'après avoir accepté une licence (Llama, Gemma) | B2 |
 | hypothèse distributionnelle | distributional hypothesis | des mots aux contextes semblables ont des sens semblables (Z. Harris, 1954 ; J. R. Firth, 1957) | B2 |
 | matrice de co-occurrences | co-occurrence matrix | $\mathbf{C}[w, c]$, le nombre de fois où le contexte $c$ apparaît dans la fenêtre du mot $w$ ; une ligne par mot, une colonne par contexte | B2 |
 | PMI, PPMI | pointwise mutual information, positive PMI | information mutuelle ponctuelle, $\log \frac{p(w, c)}{p(w)\,p(c)}$, et sa partie positive $\max(0, \operatorname{PMI})$, nulle quand le compte est nul | B2 |

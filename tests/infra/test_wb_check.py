@@ -121,6 +121,15 @@ def test_integer_arrays_accept_integers_computed_in_floating_point():
     ok, status, text = C.check_entry("d.4e", e, [-0.9, 3.2])
     assert not ok and "entières" in text and "round" in text
 
+def test_integer_arrays_accept_bytes_and_bytearray():
+    e = entry("d.4f", [0xC3, 0xAB], mistakes={"le premier octet commence par 110": [0x03, 0xAB]})
+    for v in ("ë".encode("utf-8"), b"\xc3\xab", bytearray(b"\xc3\xab"), memoryview(b"\xc3\xab")):
+        assert passes("d.4f", e, v), v
+    assert not passes("d.4f", e, b"\xab\xc3")
+    assert "110" in message("d.4f", e, b"\x03\xab")      # a classic mistake typed as bytes is still recognised
+    assert not passes("d.4f", e, "ë")              # a str is not its bytes
+
+
 def test_common_mistakes_are_reported():
     e = entry("d.5", 10.0, decimals=1, mistakes={"somme au lieu de moyenne": 50.0})
     assert "somme au lieu de moyenne" in message("d.5", e, 50.0)

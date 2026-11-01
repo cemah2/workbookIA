@@ -19,9 +19,9 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 *Fiche §202.1 · parcours R*
 
 a) Quelle granularité donne les séquences les plus longues pour un même texte ? (A) les caractères ; (B) les mots ; (C) les sous-mots.
-b) Vrai ou faux : avec un vocabulaire limité aux $V$ mots les plus fréquents, un mot rare devient le token inconnu, que le modèle ne peut ni comprendre ni écrire.
+b) Vrai ou faux : avec un vocabulaire limité aux $V$ mots les plus fréquents, tous les mots rares reçoivent le même identifiant, et le modèle ne peut en produire aucun dans sa réponse.
 c) Le coût de l'attention d'un Transformer croît comme le carré de la longueur de la séquence. Une séquence 3 fois plus longue coûte combien de fois plus d'attention ?
-d) Le découpage en sous-mots d'un tokenizer moderne : (A) un linguiste choisit les racines, les préfixes et les suffixes, une langue après l'autre ; (B) un algorithme de compression l'apprend sur un corpus ; (C) chaque mot est coupé en morceaux de trois lettres.
+d) Le découpage en sous-mots d'un tokenizer moderne : (A) un linguiste choisit les racines, les préfixes et les suffixes, une langue après l'autre ; (B) on l'apprend sur un corpus, en regroupant les suites fréquentes ; (C) chaque mot est coupé en morceaux de trois lettres.
 e) Vrai ou faux : au niveau des caractères, Holmes a plus de symboles distincts qu'au niveau des mots.
 
 ### B2.Q2 — Octets, points de code, caractères affichés : combien « é » compte-t-il ? 🧠 ⏱️ 3 min
@@ -39,7 +39,7 @@ e) Vrai ou faux : l'apostrophe typographique « ’ » (U+2019) prend 2 octets e
 a) Vrai ou faux : `s == unicodedata.normalize("NFD", s)` vaut `True` pour `s = "café"` écrite en NFC.
 b) Pour retirer les accents d'un texte : (A) `casefold()` ; (B) le passer en NFC, puis supprimer les caractères dont le point de code dépasse 127 ; (C) le passer en NFD, puis supprimer les caractères combinants.
 c) Vrai ou faux : NFKC est sans perte : on peut toujours retrouver le texte d'origine à partir du texte normalisé.
-d) Un tokenizer est entraîné sur un corpus en NFD, puis utilisé sur des textes en NFC : (A) les fusions apprises sur les lettres décomposées ne s'appliquent pas aux lettres composées, et les mots accentués se découpent autrement ; (B) rien ne change, car un BPE compare les caractères tels qu'ils s'affichent à l'écran, quelle que soit leur écriture en mémoire ; (C) le tokenizer lève une erreur dès le premier accent.
+d) Un tokenizer BPE **sans normaliseur** est entraîné sur un corpus en NFD, puis utilisé sur des textes en NFC : (A) les fusions apprises sur les lettres décomposées ne s'appliquent pas aux lettres composées ; (B) rien ne change, car un BPE compare les caractères tels qu'ils s'affichent à l'écran, quelle que soit leur écriture en mémoire ; (C) le tokenizer lève une erreur dès le premier accent.
 e) Vrai ou faux : pour une chaîne `s` écrite en NFC, `unicodedata.normalize("NFC", unicodedata.normalize("NFD", s)) == s`.
 
 ### B2.Q4 — Fusions BPE : pourquoi la liste ordonnée des fusions est le modèle 🧠 ⏱️ 3 min
@@ -49,7 +49,7 @@ a) Pour encoder un texte nouveau exactement comme l'aurait fait le tokenizer ent
 b) Vrai ou faux : une fusion peut réunir la fin d'un mot et le début du mot suivant si la paire est très fréquente.
 c) Avant toute fusion, un corpus contient le mot « banane » 3 fois (et rien d'autre). Que vaut le compte de la paire « a n » ?
 d) À chaque fusion apprise, la taille du vocabulaire : (A) augmente de 1 ; (B) augmente de 2 ; (C) diminue de 1.
-e) Vrai ou faux : à égalité de compte, `BpeTrainer` choisit la paire dont le premier identifiant est le plus petit.
+e) Vrai ou faux : à égalité de compte, `BpeTrainer` choisit la paire au plus petit premier identifiant, puis, à premier identifiant égal, au plus petit second.
 
 ### B2.Q5 — BPE au niveau octet : jamais de token inconnu, vrai ou faux ? 🧠 ⏱️ 3 min
 *Fiche §202.4 · parcours R*
@@ -57,8 +57,8 @@ e) Vrai ou faux : à égalité de compte, `BpeTrainer` choisit la paire dont le 
 a) Vrai ou faux : un BPE au niveau octet encode un texte en birman, sans token inconnu, même s'il n'a vu aucun texte birman à l'entraînement.
 b) Un caractère chinois s'écrit sur 3 octets en UTF-8. Combien de tokens donne-t-il avec un BPE au niveau octet qui n'a appris aucune fusion sur ces octets ?
 c) Vrai ou faux : avec `tokenizers`, un BPE au niveau caractère sans `unk_token` signale par une erreur les caractères qu'il n'a jamais vus.
-d) Le revers du BPE au niveau octet : (A) son vocabulaire doit compter plus d'un million de tokens ; (B) le décodage perd les accents ; (C) un caractère rare coûte un token par octet, et ces tokens ne veulent rien dire seuls.
-e) Vrai ou faux : pour afficher un texte au fil de la génération, il faut garder en attente les octets d'un caractère incomplet.
+d) Le revers du BPE au niveau octet : (A) son vocabulaire doit compter plus d'un million de tokens pour couvrir toutes les écritures ; (B) le décodage perd les accents ; (C) une lettre d'une écriture rare se paie en plusieurs tokens sans sens.
+e) Vrai ou faux : un programme qui affiche le texte au fil de la génération ne peut pas toujours décoder chaque token dès qu'il le reçoit.
 
 ### B2.Q6 — Tokens spéciaux et espace initial : « Ġthe » n'est pas « the » 🧠 ⏱️ 3 min
 *Fiche §202.4 · parcours R*
@@ -66,7 +66,7 @@ e) Vrai ou faux : pour afficher un texte au fil de la génération, il faut gard
 a) Vrai ou faux : pour GPT-2, le mot « the » a le même identifiant au début d'un texte et après une espace.
 b) Dans un token de GPT-2, « Ġ » représente : (A) un token spécial de début de mot ; (B) l'octet de l'espace, remplacé par un caractère imprimable ; (C) une lettre grecque ajoutée par le normaliseur.
 c) À l'encodage, un token spécial comme `<|endoftext|>` : (A) se découpe en sous-mots comme le reste du texte ; (B) est supprimé du texte avant l'encodage ; (C) reste entier, avec son propre identifiant.
-d) Vrai ou faux : un pré-tokenizer qui garde l'espace collée au mot suivant, sans jeter aucun caractère, permet `decode(encode(s)) == s`.
+d) Vrai ou faux : avec le pré-tokenizer de GPT-2 et un BPE au niveau octet, sans normaliseur, `decode(encode(s)) == s` pour toute chaîne `s`.
 e) Combien de tokens spéciaux le tokenizer de GPT-2 compte-t-il ?
 
 ### B2.Q7 — WordPiece, Unigram, SentencePiece : quel critère pour quelle méthode ? 🧠 ★★ ⏱️ 3 min
@@ -79,16 +79,16 @@ Pour b) et c), deux paires candidates : (A) la paire « a b », avec count(a, b)
 b) Laquelle WordPiece fusionne-t-il en premier, avec le score de la fiche ?
 c) Laquelle BPE fusionne-t-il en premier ?
 d) Vrai ou faux : SentencePiece a besoin d'un texte déjà découpé en mots par ses espaces.
-e) Le préfixe `##` de WordPiece signale : (A) un morceau qui continue un mot ; (B) un token spécial ; (C) un nombre.
+e) Le préfixe `##` de WordPiece signale : (A) un morceau qui continue un mot ; (B) un token spécial, comme le début de phrase ; (C) un nombre.
 
 ### B2.Q8 — Pourquoi un LLM compte mal les lettres d'un mot et calcule mal avec les chiffres 🧠 ⏱️ 3 min
 *Fiche §202.6 · parcours R*
 
-a) Pour compter les « r » de « strawberry », un modèle de langue voit : (A) les dix lettres, une à une ; (B) les octets UTF-8 de chaque lettre ; (C) quelques identifiants de tokens, dont il doit avoir appris de quelles lettres ils sont faits.
+a) Pour compter les « r » de « strawberry », un modèle de langue voit : (A) les dix lettres, une à une, chacune avec son identifiant ; (B) les octets UTF-8 de chaque lettre, puisque son tokenizer travaille au niveau octet ; (C) quelques identifiants de tokens, dont il a dû apprendre les lettres.
 b) Vrai ou faux : avec GPT-2, deux nombres de 7 chiffres sont toujours découpés aux mêmes positions.
 c) Avec Qwen3, qui isole chaque chiffre, combien de tokens pour « 2026 », écrit sans espace devant ?
 d) Avec la règle de Llama 3 (des groupes de 1 à 3 chiffres, depuis la gauche), combien de tokens pour « 12345678 » ?
-e) Vrai ou faux : un découpage régulier des chiffres allonge les nombres en tokens, mais donne toujours les mêmes identifiants aux mêmes chiffres.
+e) Vrai ou faux : découpés chiffre par chiffre, comme chez Qwen3, le « 7 » de « 1789 » et celui de « 2027 » ont le même identifiant, au prix de plus de tokens par nombre.
 
 ### B2.Q9 — nn.Embedding : une table de consultation entraînable, pas une couche magique 🧠 ⏱️ 3 min
 *Fiche §202.7 · parcours R*
@@ -97,12 +97,12 @@ a) `nn.Embedding(1000, 64)` reçoit des identifiants de forme $(8, 20)$. Quelle 
 b) Combien de paramètres a `nn.Embedding(5000, 32)` ?
 c) Vrai ou faux : `emb(ids)` donne le même résultat que `F.one_hot(ids, V).float() @ emb.weight`.
 d) Dans un batch, le token 7 apparaît 3 fois. La ligne 7 de la table reçoit : (A) la somme des trois gradients ; (B) leur moyenne ; (C) le gradient de la dernière occurrence seulement.
-e) Vrai ou faux : entraîné par SGD sans momentum ni weight decay, un token qui n'apparaît dans aucun batch garde sa ligne de départ, aléatoire.
+e) Vrai ou faux : dans une table d'entrée sans poids liés, entraînée par SGD sans momentum ni weight decay, un token qui n'apparaît dans aucun batch garde sa ligne de départ, aléatoire.
 
 ### B2.Q10 — L'hypothèse distributionnelle : un mot se définit par ses voisins 🧠 ⏱️ 3 min
 *Fiche §202.8 · parcours R*
 
-a) D'après l'hypothèse distributionnelle, deux mots ont des sens proches quand : (A) ils s'écrivent avec les mêmes lettres ; (B) ils apparaissent dans des contextes semblables ; (C) ils apparaissent souvent l'un à côté de l'autre.
+a) D'après l'hypothèse distributionnelle, deux mots ont des sens proches quand : (A) ils s'écrivent avec les mêmes lettres ; (B) ils apparaissent dans des contextes semblables ; (C) l'un apparaît souvent juste à côté de l'autre, comme « boire » et « café ».
 b) Vrai ou faux : une PMI négative signifie que $w$ et $c$ apparaissent ensemble moins souvent que s'ils étaient indépendants.
 c) Sur $N = 1\,000$ paires (mot, contexte), $\#(w, c) = 6$, le mot $w$ a 30 paires et le contexte $c$ en a 200. Que vaut $\operatorname{PMI}(w, c)$, à 2 décimales ?
 d) CBOW, l'autre version de word2vec, prédit : (A) les mots du contexte à partir du mot central ; (B) un mot tiré au hasard ; (C) le mot central à partir de la moyenne de ses contextes.
@@ -113,8 +113,8 @@ e) Vrai ou faux : le sous-échantillonnage de word2vec jette plus souvent les oc
 
 a) Avec des embeddings word2vec, « avocat » dans « l'avocat plaide » et dans « l'avocat est mûr » a : (A) le même vecteur ; (B) deux vecteurs différents ; (C) un vecteur nul.
 b) À la sortie du dernier bloc d'un encodeur comme BERT, les deux « avocat » ont : (A) le même vecteur, celui de la ligne de la table ; (B) deux vecteurs différents, qui dépendent de la phrase ; (C) aucun vecteur.
-c) Vrai ou faux : le vecteur statique d'un mot à deux sens est une sorte de moyenne de ses emplois, où pèse surtout le sens le plus fréquent du corpus.
-d) L'embedding d'une phrase par mean pooling est : (A) le vecteur du premier token ; (B) la moyenne des lignes de la table d'embedding de ses tokens ; (C) la moyenne des vecteurs de sortie de ses vrais tokens, sans le padding.
+c) Vrai ou faux : appris sur un corpus juridique, le vecteur statique d'« avocat » est plus proche de celui de « tribunal » que de celui de « mangue ».
+d) L'embedding d'une phrase par mean pooling est : (A) le vecteur du premier token ; (B) la moyenne des lignes de la table d'embedding de ses tokens, avant tout bloc du Transformer ; (C) la moyenne des vecteurs de sortie de ses vrais tokens, sans le padding.
 e) Une phrase de trois vrais tokens, complétée par un `[PAD]` : $\mathbf{h}_0 = (1, 2)$, $\mathbf{h}_1 = (3, 0)$, $\mathbf{h}_2 = (2, 4)$, $\mathbf{h}_3 = (0, 0)$ pour le `[PAD]`, masque $(1, 1, 1, 0)$. Que vaut la première composante de $\mathbf{s}$, à 1 décimale ?
 
 ### B2.Q12 — Cosinus ou distance euclidienne pour des embeddings normalisés ? 🧠 ★★ ⏱️ 3 min
@@ -135,9 +135,9 @@ e) Que vaut $\cos\big((3, 4), (-6, -8)\big)$, à 1 décimale ?
 
 a) Vrai ou faux : l'embedding figé d'une image se calcule une fois, puis sert à entraîner plusieurs classifieurs.
 b) Quelle est la dimension $d$ de l'embedding d'un ResNet-18 de torchvision, à l'entrée de sa couche `fc` ?
-c) Le linear probe de B1, c'est : (A) une régression logistique entraînée sur les embeddings figés ; (B) un fine-tuning complet avec un petit learning rate ; (C) un k plus proches voisins.
+c) Le linear probe de B1, c'est : (A) une régression logistique entraînée sur les embeddings figés ; (B) un fine-tuning complet du réseau, avec un petit learning rate et peu d'epochs ; (C) un k plus proches voisins.
 d) Vrai ou faux : pour comparer deux embeddings d'images, la distance euclidienne entre vecteurs bruts suffit, car leur norme ne porte aucune information étrangère à la classe.
-e) L'embedding d'une phrase par MiniLM, dans ce chapitre, joue le même rôle que, dans B1 : (A) les pixels bruts de l'image ; (B) l'embedding $\phi(\mathbf{x})$ d'un backbone gelé ; (C) la tête de classification.
+e) L'embedding d'une phrase par MiniLM, dans ce chapitre, joue le même rôle que, dans B1 : (A) les pixels bruts de l'image ; (B) l'embedding $\phi(\mathbf{x})$ d'un backbone gelé ; (C) la tête de classification, entraînée sur la tâche source.
 
 ### B2.R2 — Ch. 22 : build_vocab, encode, decode et le token inconnu 🔁 ★ ⏱️ 5 min
 *Ch. 22 (`build_vocab`, `encode`, `decode` de ta librairie `sequences.py`) · fiche §202.1 · parcours R*
@@ -147,7 +147,7 @@ Rappel du ch. 22 : `build_vocab` numérote les tokens par fréquence décroissan
 a) Avec `stoi, itos = build_vocab("banana")`, que vaut `stoi["b"]` ?
 b) Avec `stoi, itos = build_vocab("banana", unk_token="<unk>")`, que rend `encode("bandana", stoi, unk_token="<unk>")` ? Donne la liste.
 c) Vrai ou faux : avec ce vocabulaire, `decode(encode("bandana", stoi, unk_token="<unk>"), itos)` redonne « bandana ».
-d) Au niveau des mots, avec `max_size=2000`, un mot qui n'est pas dans le vocabulaire : (A) lève toujours une erreur ; (B) est découpé en sous-mots connus ; (C) devient le token inconnu, si l'on en a déclaré un.
+d) Au niveau des mots, avec `max_size=2000`, un mot qui n'est pas dans le vocabulaire : (A) lève toujours une erreur ; (B) est découpé en sous-mots connus, comme le ferait un BPE ; (C) devient le token inconnu, si l'on en a déclaré un.
 e) Avec `stoi, itos = build_vocab(["le", "chat", "le", "rat"], max_size=2, unk_token="<unk>")`, `encode(["chat"], stoi, unk_token="<unk>")` rend un seul identifiant : lequel ?
 
 ### B2.R3 — Ch. 6 : entropie, Huffman et ce que l'on compresse vraiment 🔁 ★ ⏱️ 5 min
@@ -243,7 +243,7 @@ Un BPE au niveau caractère, entraîné sur des formes du verbe « chanter », a
 | 6 | on + s | ons | 15 |
 | 7 | chant + er | chanter | 16 |
 
-Le token spécial `<unk>` vient après les fusions, avec l'identifiant 17 ; chaque caractère hors de l'alphabet devient `<unk>`. Pour encoder un mot, on part de ses caractères et, tant qu'une paire voisine est une fusion de la table, on fusionne celle de **plus petit rang**. Donne les identifiants.
+Le token spécial `<unk>` vient après les fusions, avec l'identifiant 17 ; chaque caractère hors de l'alphabet devient `<unk>`. Pour encoder un mot, on part de ses caractères et, tant qu'une paire voisine est une fusion de la table, on fusionne celle de **plus petit rang**. Au décodage, on recolle les chaînes des tokens, et `<unk>` redonne la chaîne « <unk> ». Donne les identifiants.
 
 a) L'encodage de « chantons ».
 b) L'encodage de « ont ».
@@ -303,8 +303,8 @@ avec $\sigma(s) = 1/(1 + e^{-s})$. Réponds dans ta copie.
 
 1. Montre que $\sigma'(s) = \sigma(s)\,(1 - \sigma(s))$ et que $\sigma(-s) = 1 - \sigma(s)$. En déduire $\frac{d}{ds}\big[-\log \sigma(s)\big] = \sigma(s) - 1$ et $\frac{d}{ds}\big[-\log \sigma(-s)\big] = \sigma(s)$.
 2. Calcule $\partial L / \partial \mathbf{u}_c$, $\partial L / \partial \mathbf{u}_{n_k}$ et $\partial L / \partial \mathbf{v}_w$ (pense au gradient de $\mathbf{u}^\top \mathbf{v}$ par rapport à chacun des deux vecteurs).
-3. Interprète : que vaut le gradient de $\mathbf{u}_c$ quand $s_c$ est déjà très grand ? Celui d'un négatif de score très négatif ? Combien de lignes des tables $\mathbf{E}$ et $\mathbf{E}'$ un pas de SGD modifie-t-il ?
-4. Application : $d = 2$, $K = 2$, $\mathbf{v}_w = (2 ;\ -1)$, $\mathbf{u}_c = (1 ;\ 1)$, $\mathbf{u}_{n_1} = (0{,}5 ;\ 0{,}5)$, $\mathbf{u}_{n_2} = (-1 ;\ 2)$. Calcule les trois scores, $L$ à 3 décimales, puis les quatre gradients. Après un pas de SGD de learning rate $\eta = 0{,}5$ sur $\mathbf{u}_{n_1}$ seul, que devient son score $s_1$ ?
+3. Interprète : que vaut le gradient de $\mathbf{u}_c$ quand $s_c$ est déjà très grand ? Celui d'un négatif de score très négatif ? Compte, sur tes gradients de la question 2, les lignes des tables $\mathbf{E}$ et $\mathbf{E}'$ qu'un pas de SGD modifie.
+4. Application : $d = 2$, $K = 2$, $\mathbf{v}_w = (2 ;\ -1)$, $\mathbf{u}_c = (1 ;\ 1)$, $\mathbf{u}_{n_1} = (0{,}5 ;\ 0{,}5)$, $\mathbf{u}_{n_2} = (-1 ;\ 2)$. Calcule les trois scores, $L$ à 4 décimales, puis les quatre gradients. Après un pas de SGD de learning rate $\eta = 0{,}5$ sur $\mathbf{u}_{n_1}$ seul, que devient son score $s_1$ ?
 5. Un négatif tiré au hasard tombe sur le vrai contexte : $n_1 = c$. Écris le gradient total reçu par $\mathbf{u}_c$. Pour quelle valeur de $s_c$ s'annule-t-il ? Pourquoi word2vec accepte-t-il ces collisions ?
 6. L'optimum (Levy et Goldberg, 2014). Sur tout le corpus, la paire $(w, c)$ apparaît $\#(w, c)$ fois comme vraie paire, et, si les négatifs sont tirés selon la loi des contextes $p(c) = \#(c)/N$, $K\,\#(w)\,\#(c)/N$ fois en moyenne comme paire négative. En supposant que le score $x = \mathbf{u}_c^\top \mathbf{v}_w$ de chaque paire peut être choisi librement, la loss totale de la paire est $\ell(x) = -\#(w, c)\log \sigma(x) - \frac{K\,\#(w)\,\#(c)}{N}\log \sigma(-x)$. Annule $\ell'(x)$, puis montre que $x^* = \operatorname{PMI}(w, c) - \log K$.
 7. Le lien avec la régression logistique (ch. 13) : pour un mot $w$ fixé, quelles sont les « entrées », les « labels » et les « poids » de la régression que résout chaque terme de $L$ ?
@@ -317,10 +317,10 @@ Hypothèses de calcul (des ordres de grandeur, pas des mesures) : un roman angla
 
 1. Combien de pages de roman tiennent dans 8 192 tokens, en anglais, puis en français ?
 2. Combien de tokens d'entrée (le roman anglais) et de sortie (la traduction française) demande la traduction complète, sans les instructions ?
-3. Un appel doit contenir les instructions, le passage anglais et sa traduction. Quelle longueur de passage, en tokens puis en pages, tient au plus dans un appel ? Combien d'appels faut-il, et combien de tokens d'instructions ajoutent-ils en tout ?
-4. Le prix de la traduction avec chacun des deux modèles. Quelle part vient de la sortie ?
+3. Un appel doit contenir les instructions, le passage anglais et sa traduction. Quelle longueur de passage anglais, en tokens puis en pages, tient au plus dans un appel ? Combien d'appels faut-il, et combien de tokens d'instructions ajoutent-ils en tout ?
+4. Le prix de la traduction, instructions comprises, avec chacun des deux modèles. Quelle part vient de la sortie ?
 5. Le même roman, écrit en français (103 500 mots), traduit vers l'anglais (90 000 mots) avec le modèle haut de gamme : combien coûte-t-il ? Pourquoi le sens de la traduction change-t-il la facture ?
-6. Avec un tokenizer plus ancien, appris surtout sur de l'anglais, la fertilité française passerait à 2,2. De combien augmentent les tokens de sortie et le prix du modèle haut de gamme ? Et le temps de génération, à 40 tokens par seconde ?
+6. Avec un tokenizer plus ancien, appris surtout sur de l'anglais, la fertilité française passerait à 2,2. De combien augmentent les tokens de sortie et le prix du modèle haut de gamme (recalcule le nombre d'appels) ? Et le temps de génération, à 40 tokens par seconde ?
 7. Cite trois coûts ou effets que ton estimation ne compte pas.
 
 ### Ex B2.9 — Fermi : poids de la table d'embedding de GPT-2 et d'un LLM à 128 000 tokens 🧮 ★ ⏱️ 10 min
@@ -340,7 +340,7 @@ e) La part de la table d'entrée **et** de la matrice de sortie dans les paramè
 f) La part de la table de Llama 3.2 1B dans ses paramètres, en pourcentage arrondi à l'entier.
 g) Vrai ou faux : en `bfloat16` (2 octets par nombre), la table d'entrée de Llama 3.1 8B pèse plus de 1 Go ($10^9$ octets).
 
-Dans ta copie : pourquoi la part de la table baisse-t-elle quand le modèle grandit à vocabulaire égal ? Un texte français de 10 000 tokens lit au plus 10 000 lignes distinctes de la table de Llama : quelle part au plus des 128 256 lignes reçoit un gradient sur ce texte ?
+Dans ta copie : pourquoi la part de la table baisse-t-elle quand le modèle grandit à vocabulaire égal ? Un texte français de 10 000 tokens lit au plus 10 000 lignes distinctes de la table d'entrée de Llama 3.1 8B (poids non liés) : quelle part au plus de ses 128 256 lignes reçoit un gradient sur ce texte ? Et pour Llama 3.2 1B, dont les poids sont liés ?
 
 <a id="reflexion"></a>
 
