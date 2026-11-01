@@ -254,7 +254,7 @@
 | `F.cross_entropy(logits.reshape(-1, V), y.reshape(-1), ignore_index=-100)` | la loss d'un modèle de langue, logits `(N, T, V)` aplatis ; les cibles à `-100` (padding) sont ignorées |
 | `x, y = data[i:i + T], data[i + 1:i + 1 + T]` | une fenêtre et ses cibles décalées d'un token (teacher forcing) |
 | `K_cache = torch.cat([K_cache, k_new], dim=2)` ; `F.scaled_dot_product_attention(q_new, K_cache, V_cache)` | un pas de génération avec KV cache : une requête face à toutes les clés gardées, sans masque |
-| `nn.Conv2d(C, d, kernel_size=P, stride=P)(img).flatten(2).transpose(1, 2)` | les patchs d'un ViT : `(N, C, H, W)` → `(N, (H/P)(W/P), d)` |
+| `nn.Conv2d(C, d, kernel_size=P, stride=P)(img).flatten(2).transpose(1, 2)` | les patchs d'un ViT : une image `(N, C, h, w)` → `(N, hw/P², d)`, un token par patch ($h \times w$ pixels) |
 
 ## Dataset et DataLoader
 

@@ -217,7 +217,7 @@ for _module in ("attention", "nn.regularization"):
 exec(PAPER_CONTEXT)
 
 TF = "True or False"
-LETTER = 'the letter of your choice, e.g. "B"'
+LETTER = 'the letter of your choice, e.g. "E"'
 WHOLE = "a whole number"
 DEC1 = "a number, 1 decimal"
 DEC2 = "a number, 2 decimals"
@@ -539,7 +539,7 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "copie de `06_mes_reponses.md`. Reporte ensuite chaque réponse courte ici : **la valeur** que tu as "
                "trouvée, pas l'expression Python, sinon tu ne vérifies rien. Un nombre : `42` ou `0.3` (en Python, "
                "le séparateur décimal est un **point** ; `0,3` sans guillemets serait un couple de deux nombres) ; "
-               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"B\"`) ; "
+               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"E\"`) ; "
                "une forme de tableau : entre guillemets (`\"(2, 3)\"`) ; un vecteur ou une ligne de matrice : une "
                "liste (`[0.5, -1, 3]`). Arrondis comme l'énoncé le demande, et seulement à la fin du calcul. Les "
                "réponses pas encore remplies affichent ⏳. Les questions « dans ta copie », les dérivations ∂ B3.6 "
