@@ -9,7 +9,7 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
 | `04_indices.md`, `05_solutions.md` | quiz, rappels, papier, réflexion et entretien (session 65) ; notebook B2.13 à B2.31 à la session 66 |
 | `flashcards.csv` | complet (26 cartes, session 65) |
 | `03_notebook.ipynb`, `05_solutions.ipynb` | partie 0 (session 65 : 127 vérifications `wb.check` sur 22 exercices, réponses recalculées contre `mylearn` (référence), `tokenizers` et PyTorch, sans téléchargement ; 234 messages `mistakes`, tous vérifiés) ; parties A à E (B2.13 à B2.31) à la session 66 |
-| `mylearn` | `tokenizer.py` et `embeddings.py` : référence et tests (session 65 : `tests/test_chb2_tokenizer.py`, 126 tests ; `tests/test_chb2_embeddings.py`, 62 tests ; 82 mutants, tous tués) |
+| `mylearn` | `tokenizer.py` et `embeddings.py` : référence et tests (session 65 : `tests/test_chb2_tokenizer.py`, 127 tests ; `tests/test_chb2_embeddings.py`, 62 tests ; 84 mutants, tous tués) |
 | contrat | `chB2.json` : seul le champ `check` des quiz Q1 à Q12 et des rappels R1 à R3 change (`manual` → `wb.check`, comme en B1) ; `syllabus.py build` reste à lancer |
 | annexes | glossaire (37 termes, ch. B2), formulaire (section B2, 12 lignes), erreurs fréquentes (13 lignes : 3 en Python, 4 en PyTorch, 6 de raisonnement), auto-évaluation (section B2), aide-mémoire PyTorch (section « Tokenisation et embeddings (bonus B2) », `padding_idx` compris) : session 65 |
 
@@ -37,7 +37,7 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
   TEST_TOK = "tests/test_chb2_tokenizer.py"
   TEST_EMB = "tests/test_chb2_embeddings.py"
   run_pytest_group(TEST_TOK, "test_get_pair_counts_ or test_merge_pair_")                                   # B2.15 : 42 tests
-  run_pytest_group(TEST_TOK, "test_pre_tokenize_ or test_bpe_fit_")                                         # B2.16 : 48 tests
+  run_pytest_group(TEST_TOK, "test_pre_tokenize_ or test_bpe_fit_")                                         # B2.16 : 49 tests
   run_pytest_group(TEST_TOK, "test_bpe_encode_ or test_bpe_decode_ or test_bpe_tokenize_ or test_bpe_save_load_")  # B2.17 : 36 tests
   run_pytest_group(TEST_EMB, "test_cooccurrence_matrix_ or test_ppmi_")                                     # B2.22 : 36 tests
   run_pytest_group(TEST_EMB, "test_cosine_similarity_matrix_ or test_most_similar_")                        # B2.23 : 26 tests
@@ -48,6 +48,55 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
   - **B2.17** : `encode` rend une `list` d'`int` (`[]` pour un texte vide) ; un token spécial, même un `unk_token` écrit dans le texte, devient un seul identifiant ; au niveau caractère, un identifiant `unk` par caractère inconnu, `ValueError` sans `unk_token` ; `ValueError` avant `fit` ; les fusions par **rang**, dans chaque pré-token (`"'sa"` en GPT-2 ne fusionne pas `s` et `a`). `decode` recolle les octets **puis** décode avec `errors="replace"` (`[0xC3, 0xA9]` → « é », `[195]` → « � ») ; un identifiant inconnu (−1, `len(vocab_)`) lève `ValueError`, pas `KeyError` ; `ValueError` avant `fit` ; avec `'whitespace'`, les espaces disparaissent. `tokenize` rend des `str`, « � » pour un octet isolé. `encode` et `decode` ne lisent que les hyperparamètres et les quatre attributs appris (un cache privé posé par `fit` casse le tokenizer rechargé par `load`). Identifiants identiques à `tokenizers` ; aller-retour sans perte sur ≈ 300 chaînes Unicode aléatoires ; nombre de tokens à moins de 2 % d'un BPE `ByteLevel` de même taille.
   - **B2.22** : `cooccurrence_matrix` rend une matrice **float** `(V, V)`, même en `'uniform'` ; accepte une liste, des `int32` ou des `uint8`, sans modifier l'entrée ; compte un mot voisin de lui-même (`[0, 0, 0, 1]` → `C[0, 0] = 4` : `np.add.at`, pas `C[r, c] += w`) ; une séquence plus courte que la fenêtre donne une matrice nulle ; `symmetric=False` : `C[ids[i], ids[i + d]]` seulement ; `ValueError` pour des ids 2-D, `window = 0`, une pondération inconnue, un id égal à `vocab_size` ou à −1. `ppmi` : logarithme naturel, `alpha` sur les colonnes seulement, renormalisé ; une ligne ou une colonne nulle donne 0, jamais NaN ; accepte des entiers et des listes, sans modifier l'entrée ; `ValueError` pour C 1-D, une entrée négative, une somme nulle ; tolérance rtol 1e-9, atol 1e-12.
   - **B2.23** : `cosine_similarity_matrix` ajoute eps à **chaque** norme (testé avec eps = 0,5 et 2), forme `(n, m)`, `B = None` vaut `B = A`, accepte listes et entiers sans les modifier, `ValueError` pour A ou B 1-D et des nombres de colonnes différents. `most_similar` rend un tuple de **deux tableaux NumPy** 1-D (indices entiers, similarités float) ; égalités vers le plus petit indice, par un tri stable (testé sur 120 lignes, dont 40 copies de trois lignes : `argsort` par défaut et `argpartition` échouent) ; `exclude` retiré **avant** le top-k ; moins de `k` lignes restantes : toutes ; tout exclu : deux tableaux de forme `(0,)` ; requête nulle : similarités nulles et les `k` premiers indices ; `ValueError` pour `k = 0`, une requête de mauvaise longueur et une requête `(1, d)`.
+- **Précisions pour les énoncés des 🔨 B2.15 à B2.23** (agent M : rapport §4 et §5 ; apprenant simulé V6 : ses textes proposés, 188 tests sur 188 au premier essai). Le contrat de chaque énoncé doit dire ce qui suit, car les tests l'exigent.
+  - **B2.15**
+    - Les comptes de paires sont pondérés par la fréquence du mot. Ils incluent les paires qui se chevauchent : `(1, 1, 1)` contient deux fois `(1, 1)`.
+    - `get_pair_counts` accepte tout mapping, en lecture seule (testé avec `MappingProxyType` et `Counter`). Il rend un `dict` de clés `(gauche, droite)`. Une fréquence négative lève `ValueError`.
+    - `merge_pair` remplace sans chevauchement, de gauche à droite (comparé à `str.replace`). Il rend toujours une **liste neuve** : jamais l'entrée elle-même, jamais un tuple. Il accepte un tuple sans le modifier.
+    - Une paire qui n'a pas exactement deux ids lève `ValueError`.
+    - Non testé, libre : un mot de fréquence 0. La lecture la plus naturelle de « only for pairs that occur » est qu'il ne produit aucune paire.
+  - **B2.16**
+    - Les tokens spéciaux, `unk_token` compris, sont retirés du corpus avant tout comptage (« special tokens are left out », docstring de `fit`).
+      - Leurs caractères n'entrent donc pas dans l'alphabet du niveau caractère. Cet alphabet contient les caractères distincts des pré-tokens, triés par point de code, sans l'espace avec `'whitespace'`.
+      - Le message du test cite la phrase, mais l'énoncé doit le dire explicitement : « les caractères vus pendant `fit` » peut se lire autrement.
+    - `vocab_size` compte l'alphabet, les fusions et **tous** les tokens spéciaux, y compris `unk_token` quand il est ajouté. C'est testé par `test_bpe_fit_vocab_size_counts_the_added_unk_token`, ajouté après V6.
+    - `special_ids_` vient après les fusions, dans l'ordre donné ; `unk_token` est ajouté ensuite, une seule fois s'il est déjà listé.
+    - Une seule `str` est un seul texte. `fit` accepte un générateur, rend `self` et ne modifie pas la liste des textes.
+    - Niveau octet : `n_base_ = 256` et `vocab_[i] = bytes([i])`.
+    - `merges_` est une liste de **tuples**. `vocab_` contient les fusions et les tokens spéciaux en UTF-8.
+    - `min_frequency = 0` est permis.
+    - `fit` lève `ValueError` pour : un `level` ou un `pre_tokenizer` inconnu ; `unk_token` au niveau octet ; `vocab_size` < alphabet + spéciaux (au niveau caractère, une fois le corpus lu).
+    - Les fusions sont comparées à `tokenizers` aux deux niveaux. Une version naïve, qui recompte toutes les paires à chaque fusion, tient dans les temps (≈ 7 s pour le fichier).
+    - Non testé, libre : un token spécial donné deux fois (la référence le garde à sa première position).
+  - **B2.17**
+    - `encode` reconnaît comme spéciale toute clé de `special_ids_`, `unk_token` compris : « <unk> » tapé dans le texte devient son id. Le message cite « Special tokens (the keys of special_ids_) become their id » et « Id of each special token (unk_token included) » ; l'énoncé doit le dire en clair.
+    - `encode` rend une `list` d'`int` (`[]` pour un texte vide).
+    - Au niveau caractère, chaque caractère inconnu donne un id `unk`.
+    - Les fusions s'appliquent par **rang**, à l'intérieur de chaque pré-token.
+    - `ValueError`, jamais `AttributeError` ni `KeyError`, pour :
+      - un tokenizer non entraîné ;
+      - un caractère inconnu sans `unk_token` ;
+      - un id inconnu passé à `decode`, −1 compris (ce n'est pas un indice Python).
+    - `decode` recolle les octets **puis** décode avec `errors='replace'`. Il accepte tout entier, Python ou NumPy, qui est une clé de `vocab_`. Avec `'whitespace'`, les espaces disparaissent.
+    - `tokenize` rend des `str` (« � » pour un octet isolé).
+    - `encode` et `decode` ne lisent que les hyperparamètres et les quatre attributs appris : un cache privé posé par `fit` casse le tokenizer rechargé par `load`.
+  - **B2.22**
+    - Les ids sont des entiers. Un id hors de `[0, vocab_size)`, −1 compris, lève `ValueError` (pas d'`IndexError`, pas d'indice négatif à la Python).
+    - Les répétitions d'une même paire s'additionnent : `C[l, r] += w` avec des tableaux d'indices en perd. Il faut `np.add.at` ou une boucle.
+    - `cooccurrence_matrix` rend une matrice **float** `(V, V)`, même en `'uniform'`. Une séquence plus courte que la fenêtre est permise.
+    - `ppmi` utilise le logarithme naturel. Le lissage `alpha` ne porte que sur les colonnes (contextes), renormalisé. Une ligne ou une colonne nulle donne 0, jamais NaN.
+    - Les entrées ne sont pas modifiées ; les entiers et les listes sont acceptés.
+    - Les tests comparent à rtol 1e-6 et atol 1e-6 près : un calcul en float32 passe, et la tolérance s'affiche dans le message (changé après V6).
+  - **B2.23**
+    - `eps` s'ajoute à **chaque** norme, pas sous la racine ni au produit (testé avec eps = 0,5 et 2).
+    - Les égalités de cosinus vont au plus petit indice : un tri stable sur `-sim` le garantit ; `argsort` par défaut et `argpartition` échouent.
+    - `most_similar` :
+      - rend un tuple de deux tableaux NumPy (indices entiers, similarités float) ;
+      - retire `exclude` **avant** le top-k ;
+      - s'il reste moins de `k` lignes, les rend toutes ;
+      - si tout est exclu, rend deux tableaux de forme `(0,)` ;
+      - lève `ValueError` pour `k = 0`, une requête de mauvaise longueur ou de forme `(1, d)`.
+    - Non testé, libre : un indice de `exclude` hors de `[0, E.shape[0])` (la référence le refuse). L'énoncé peut dire « des indices de lignes valides ».
 - **🐛 B2.18** (contrat : décodage token par token avec `errors='strict'`, octets UTF-8 coupés ; texte en NFD à l'entraînement et en NFC à l'usage ; fusions appliquées dans l'ordre de découverte du texte au lieu du rang) : les trois bugs sont des lignes du tableau des pièges de la fiche et de ses paragraphes (202.2, 202.3, 202.4), deux sont dans `annexes/erreurs_frequentes.md` (`UnicodeDecodeError` ; NFD/NFC), et ✏️ B2.4 c) fait calculer l'effet de l'ordre de lecture. Le 🐛 les fait **trouver dans le code** par des diagnostics enchaînés, dans l'ordre où ils se masquent (le plantage du décodage cache les deux autres), rejoués sur les $2^3$ versions partiellement corrigées ; chaque point se limite au symptôme de son bug ; les messages ne recopient ni ces lignes ni le correctif, et ne nomment pas le correctif. Le texte de Verne fournit des accents ; un mot qui démasque l'ordre de lecture se cherche (comme « ont » en ✏️ B2.4).
 - **📦 B2.19** (`wb.check`) : fusions identiques à `BpeTrainer` (niveau caractère, `Whitespace`, sans token spécial) ; la vitesse (Rust contre Python) est une **mesure de temps** : jamais une réponse enregistrée, un `verdict` à seuil ou une fourchette (référence : 0,7 s pour 1 900 fusions sur tout Verne ; une version naïve est bien plus lente, à mesurer sur une machine calme).
 - **🔬 B2.20 et B2.21** : la fiche ne donne aucune courbe compression / taille du vocabulaire ni d'entropie par token, ni aucun tokenizer d'une langue appliqué à l'autre. Repères mesurés avec la référence (BPE octet, pré-tokenizer `'gpt2'`, entraîné sur les 90 premiers pour cent de Verne, compression sur les 10 derniers) : 1,42 octet par token à 300 tokens, 2,56 à 1 000, 3,00 à 2 000 (entraînement 0,5 à 0,9 s) ; avec `'whitespace'`, 1,69, 2,95 et 3,47, mais le décodage perd les espaces. Une affirmation de forme (« la compression croît de moins en moins vite ») se vérifie sur les sorties.

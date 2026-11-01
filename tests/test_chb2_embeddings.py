@@ -20,7 +20,7 @@ and may be lists (integer arrays too); ``cooccurrence_matrix`` returns a float a
 ``(vocab_size, vocab_size)``, counts a word next to itself (``C[w, w]``) and accepts a sequence shorter than the
 window; ``ppmi`` gives 0 (never NaN) in a row or a column of zeros; ``most_similar`` returns NumPy arrays
 (integer indices, float similarities), an empty pair when every row is excluded, and refuses a query of shape
-``(1, d)``.
+``(1, d)``. The values are compared with rtol=1e-6, atol=1e-6 (a computation in float32 passes).
 The first line of every failure message says what was expected (it is the line that ``pytest -rf`` shows).
 """
 
@@ -63,7 +63,11 @@ def _fail(msg: str, head: str, data: str = ""):
     raise AssertionError("\n".join(lines)) from None
 
 
-def assert_close(result, expected, rtol=1e-9, atol=1e-12, msg=""):
+# Tolerance of the comparisons: a computation in float32 (errors up to about 3e-7) passes, a wrong formula does not.
+RTOL, ATOL = 1e-6, 1e-6
+
+
+def assert_close(result, expected, rtol=RTOL, atol=ATOL, msg=""):
     if result is None:
         _fail(msg, "expected a number or an array, got None (did you forget the return?)")
     try:
@@ -80,7 +84,7 @@ def assert_close(result, expected, rtol=1e-9, atol=1e-12, msg=""):
         index = np.unravel_index(i, want.shape) if want.ndim > 1 else (i,)
         where = f" at index {tuple(int(k) for k in index)}" if want.ndim else ""
         head = (f"expected {want.ravel()[i] + 0.0:.12g}{where}, got {got.ravel()[i] + 0.0:.12g} "
-                f"({bad.size} wrong value(s) out of {want.size})")
+                f"({bad.size} wrong value(s) out of {want.size}; tolerance rtol={rtol:g}, atol={atol:g})")
         data = f"expected {_short(want, 10)}\n     got {_short(got, 10)}" if want.size <= 16 else ""
         _fail(msg, head, data)
 
@@ -352,7 +356,7 @@ def test_ppmi_of_an_independent_matrix_is_zero(emb, seed):
     rng = np.random.default_rng(seed)
     C = np.outer(rng.integers(1, 10, size=6), rng.integers(1, 10, size=5)).astype(float)
     P = call(emb.ppmi, C.copy(), expected="the PPMI")
-    assert_close(P, np.zeros_like(C), rtol=0, atol=1e-12,
+    assert_close(P, np.zeros_like(C), rtol=0, atol=1e-6,
                  msg="ppmi(np.outer(u, v)): p(w, c) = p(w) p(c), so PMI = 0 everywhere (up to rounding)")
 
 
@@ -387,11 +391,11 @@ def test_cosine_similarity_matrix_docstring_examples(emb):
     S = call(emb.cosine_similarity_matrix, A.copy(), expected="the similarities")
     assert_float_array(S, (3, 3), "cosine_similarity_matrix(A)")
     r = 1 / np.sqrt(2)
-    assert_close(S, [[1, r, 0], [r, 1, 0], [0, 0, 0]], rtol=0, atol=1e-9,
+    assert_close(S, [[1, r, 0], [r, 1, 0], [0, 0, 0]], rtol=0, atol=ATOL,
                  msg="cosine_similarity_matrix(A) of the docstring (a row of zeros has similarity 0)")
     S2 = call(emb.cosine_similarity_matrix, A.copy(), [[0.0, 2.0], [-3.0, 0.0]], expected="the similarities")
     assert_float_array(S2, (3, 2), "cosine_similarity_matrix(A, B) with A (3, 2) and B (2, 2)")
-    assert_close(S2, [[0, -1], [r, -r], [0, 0]], rtol=0, atol=1e-9,
+    assert_close(S2, [[0, -1], [r, -r], [0, 0]], rtol=0, atol=ATOL,
                  msg="cosine_similarity_matrix(A, B) of the docstring")
 
 
@@ -405,14 +409,14 @@ def test_cosine_similarity_matrix_matches_sklearn(emb, n, m, d):
     S = call(emb.cosine_similarity_matrix, A.copy(), B.copy(), expected="the similarities")
     msg = f"cosine_similarity_matrix of A {A.shape} and B {B.shape}"
     assert_float_array(S, (n, m), msg + ": shape (n, m)")
-    assert_close(S, want, rtol=1e-9, atol=1e-12, msg=msg + " (as sklearn cosine_similarity)")
+    assert_close(S, want, msg=msg + " (as sklearn cosine_similarity)")
 
 
 def test_cosine_similarity_matrix_b_none_is_a(emb):
     A = np.random.default_rng(1).normal(size=(6, 4))
     A[2] = 0.0
     S = call(emb.cosine_similarity_matrix, A.copy(), expected="the similarities")
-    assert_close(S, cosine_similarity(A), rtol=1e-9, atol=1e-12, msg="cosine_similarity_matrix(A) = (A, A), "
+    assert_close(S, cosine_similarity(A), msg="cosine_similarity_matrix(A) = (A, A), "
                  "zero row included")
 
 
@@ -428,18 +432,18 @@ def test_cosine_similarity_matrix_stays_in_minus_one_one(emb):
     rng = np.random.default_rng(5)
     A = np.vstack([rng.normal(size=(20, 8)), rng.normal(size=(1, 8)) * 1e-8, np.full((1, 8), 1e8)])
     S = call(emb.cosine_similarity_matrix, A.copy(), -A[:5].copy(), expected="the similarities")
-    if not (np.abs(S) <= 1 + 1e-12).all():
+    if not (np.abs(S) <= 1 + 1e-6).all():
         _fail("", f"expected similarities in [-1, 1], got {np.abs(S).max():.17g}")
 
 
 def test_cosine_similarity_matrix_accepts_lists_and_integers(emb):
     A = [[1, 2], [3, 4], [0, 5]]
     S = call(emb.cosine_similarity_matrix, A, [[2, 1]], expected="the similarities")
-    assert_close(S, cosine_similarity(np.array(A, float), [[2.0, 1.0]]), rtol=1e-9, atol=1e-12,
+    assert_close(S, cosine_similarity(np.array(A, float), [[2.0, 1.0]]),
                  msg="cosine_similarity_matrix of lists of int")
     Ai = np.array(A, dtype=np.int64)
     S2 = call(emb.cosine_similarity_matrix, Ai, expected="the similarities of an int64 array")
-    assert_close(S2, cosine_similarity(Ai.astype(float)), rtol=1e-9, atol=1e-12,
+    assert_close(S2, cosine_similarity(Ai.astype(float)),
                  msg="cosine_similarity_matrix of an int64 array (normalise in float)")
 
 

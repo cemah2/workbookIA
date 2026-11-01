@@ -26,7 +26,8 @@ Contract precisions written in the statements of these exercises and checked her
 any mapping (read only) and returns a dict of ``(left, right)`` tuples; ``merge_pair`` returns a new ``list`` and
 accepts a tuple; ``fit`` returns self, takes a single ``str`` as one text or any iterable of str (a generator
 too), and leaves the list of texts unchanged; with special tokens, the merges are those of the texts with the
-special tokens taken out; ``unk_token`` gets one id even when it is also in ``special_tokens``; ``encode`` returns
+special tokens taken out; ``unk_token`` gets one id even when it is also in
+``special_tokens``, and counts in ``vocab_size`` like the other special tokens; ``encode`` returns
 a list of int (``[]`` for an empty text) and encodes a literal ``unk_token`` in the text as its id; ``decode``
 raises ``ValueError`` (not ``KeyError``) for an unknown id, -1 included; ``encode`` and ``decode`` work on a
 tokenizer rebuilt by ``load`` (they use only the hyperparameters and the four learned attributes).
@@ -150,16 +151,38 @@ def fit_cached(tk, texts: tuple, **params):
     return _FITTED[key]
 
 
-def merges_as_text(tok):
-    """The merges of the learner as pairs of strings (through its vocab_), for the messages."""
+def special_id(tok, token, why):
+    """``tok.special_ids_[token]``, or a failure that says the token was expected there."""
+    special_ids = getattr(tok, "special_ids_", None)
+    if not isinstance(special_ids, dict) or token not in special_ids:
+        _fail("", f"expected {token!r} in special_ids_ ({why}), got special_ids_ = {special_ids!r}")
+    return special_ids[token]
+
+
+UNK_ADDED = ("docstring of unk_token: 'If it is not already in special_tokens, it is added after them'; "
+             "special_ids_: 'Id of each special token (unk_token included)'")
+
+
+def merges_as_text(tok, as_bytes=False):
+    """The merges of the learner as pairs of strings (or of bytes, at byte level), through its vocab_."""
     out = []
     for pair in tok.merges_:
         try:
             a, b = pair
-            out.append((tok.vocab_[a].decode("utf-8", "replace"), tok.vocab_[b].decode("utf-8", "replace")))
+            left, right = tok.vocab_[a], tok.vocab_[b]
+            out.append((left, right) if as_bytes else (left.decode("utf-8", "replace"),
+                                                       right.decode("utf-8", "replace")))
         except Exception:  # noqa: BLE001
             out.append(pair)
     return out
+
+
+def _merge_at(ids, texts, i):
+    """Merge i as "(a, b) 'x' + 'y'", or "no merge" past the end of the list."""
+    if i >= len(ids):
+        return "no merge"
+    a, b = texts[i] if i < len(texts) and isinstance(texts[i], tuple) else (None, None)
+    return f"{tuple(ids[i])} {a!r} + {b!r}" if a is not None else f"{ids[i]}"
 
 
 def assert_merges(tok, want_ids, want_text, msg):
@@ -170,9 +193,9 @@ def assert_merges(tok, want_ids, want_text, msg):
     got_pairs = [tuple(p) if isinstance(p, (tuple, list)) else p for p in got]
     if got_pairs != [tuple(p) for p in want_ids]:
         i = _first_diff(got_pairs, want_ids)
-        mine = merges_as_text(tok)
-        _fail(msg, f"expected merge {i} = {_at(want_ids, i)} {_at(want_text, i)!r}, got {_at(got_pairs, i)} "
-                   f"{_at(mine, i)!r} ({len(want_ids)} merges expected, {len(got_pairs)} learned)",
+        mine = merges_as_text(tok, as_bytes=bool(want_text) and isinstance(want_text[0][0], bytes))
+        _fail(msg, f"expected merge {i} = {_merge_at(want_ids, want_text, i)}, got "
+                   f"{_merge_at(got_pairs, mine, i)} ({len(want_ids)} merges expected, {len(got_pairs)} learned)",
               f"expected the first merges {want_text[:max(i + 1, 4)]}\n     got {mine[:max(i + 1, 4)]}")
     bad = [p for p in got if not isinstance(p, tuple)]
     if bad:
@@ -658,7 +681,9 @@ def test_bpe_fit_special_tokens_get_the_last_ids_and_no_merge(tk):
     want_alpha = sorted(set("".join(whitespace_words(plain))))
     want_text = SMALL_CASES[0].values[4]                     # the docstring corpus: the same words
     tok = fit(tk, text, vocab_size=18, level="char", special_tokens=specials)
-    check_base(tok, want_alpha, "special tokens are taken out of the training texts")
+    check_base(tok, want_alpha, "docstring of fit: 'The texts are cut into pre-tokens by pre_tokenize (special "
+                                "tokens are left out)', so the characters of '<|endoftext|>' and '<sep>' are not "
+                                "seen during fit")
     assert_merges(tok, ids_of_text_merges("".join(want_alpha), want_text), want_text,
                   "with the special tokens taken out, the words are those of the docstring corpus")
     n = tok.n_base_ + len(tok.merges_)
@@ -670,7 +695,8 @@ def test_bpe_fit_special_tokens_get_the_last_ids_and_no_merge(tk):
 def test_bpe_fit_unk_token_comes_after_the_special_tokens(tk):
     tok = fit(tk, DOC_CORPUS, vocab_size=16, level="char", unk_token="<unk>")
     if tok.special_ids_ != {"<unk>": 14}:
-        _fail("", f"expected special_ids_ = {{'<unk>': 14}} (docstring of encode), got {tok.special_ids_!r}")
+        _fail("", f"expected special_ids_ = {{'<unk>': 14}} (docstring of encode; {UNK_ADDED}), "
+                  f"got {tok.special_ids_!r}")
     tok = fit(tk, DOC_CORPUS, vocab_size=30, level="char", special_tokens=["<s>"], unk_token="<unk>",
               min_frequency=2)
     n = tok.n_base_ + len(tok.merges_)
@@ -682,6 +708,18 @@ def test_bpe_fit_unk_token_comes_after_the_special_tokens(tk):
     if tok.special_ids_ != {"<unk>": n, "<s>": n + 1}:
         _fail("", f"expected special_ids_ = {{'<unk>': {n}, '<s>': {n + 1}}} (unk_token already in special_tokens: "
                   f"one id only), got {tok.special_ids_!r}")
+
+
+def test_bpe_fit_vocab_size_counts_the_added_unk_token(tk):
+    text = corpus("holmes")[:3_000]
+    for specials, n_special in ([], 1), (["<s>"], 2), (["<unk>", "<s>"], 2):
+        tok = fit(tk, text, vocab_size=60, level="char", special_tokens=specials, unk_token="<unk>",
+                  min_frequency=1)
+        want = 60 - tok.n_base_ - n_special
+        if len(tok.merges_) != want:
+            _fail("", f"expected {want} merges with vocab_size=60, n_base_={tok.n_base_} and {n_special} special "
+                      f"token(s) (special_tokens={specials} plus unk_token: {UNK_ADDED}; vocab_size = 'base alphabet "
+                      f"+ merges + special tokens'), got {len(tok.merges_)}")
 
 
 def test_bpe_fit_one_str_is_one_text(tk):
@@ -831,7 +869,8 @@ def test_bpe_encode_unknown_characters(tk):
     assert_id_list(call(tok.encode, "lozzw", expected="the ids"), [9, 14, 14, 7],
                    "encode('lozzw'): one '<unk>' id per unseen character")
     assert_id_list(call(tok.encode, "<unk> low", expected="the ids"), [14, 9, 7],
-                   "encode('<unk> low'): '<unk>' written in the text is a special token (key of special_ids_)")
+                   "encode('<unk> low'): docstring of encode, 'Special tokens (the keys of special_ids_) become "
+                   "their id', and special_ids_ holds 'Id of each special token (unk_token included)'")
     no_unk = fit(tk, DOC_CORPUS, vocab_size=16, level="char")
     assert_raises(ValueError, no_unk.encode, "lowly", why="'y' was not seen during fit and unk_token is None")
 
@@ -839,7 +878,8 @@ def test_bpe_encode_unknown_characters(tk):
 def test_bpe_encode_special_tokens_are_never_split(tk):
     specials = ["<|endoftext|>", "<sep>"]
     tok = fit(tk, "low lower lowest", vocab_size=300, pre_tokenizer="gpt2", special_tokens=specials, min_frequency=1)
-    eot, sep = tok.special_ids_["<|endoftext|>"], tok.special_ids_["<sep>"]
+    eot = special_id(tok, "<|endoftext|>", "special_tokens=['<|endoftext|>', '<sep>']")
+    sep = special_id(tok, "<sep>", "special_tokens=['<|endoftext|>', '<sep>']")
     ids = call(tok.encode, "<sep>low<|endoftext|><|endoftext|> lower<sep>", expected="the ids")
     if not isinstance(ids, list) or ids[:1] != [sep] or ids.count(eot) != 2 or ids[-1:] != [sep]:
         _fail("", f"expected the ids of '<sep>low<|endoftext|><|endoftext|> lower<sep>' to start and end with "
@@ -847,7 +887,7 @@ def test_bpe_encode_special_tokens_are_never_split(tk):
     want = [sep] + call(tok.encode, "low") + [eot, eot] + call(tok.encode, " lower") + [sep]
     assert_id_list(ids, want, "a special token is one id, and the text around it is encoded on its own")
     char = fit(tk, "low lower", vocab_size=20, level="char", special_tokens=["<s>"])
-    s = char.special_ids_["<s>"]
+    s = special_id(char, "<s>", "special_tokens=['<s>']")
     got = call(char.encode, "low<s>low", expected="the ids (the characters '<', 's', '>' are unseen, but '<s>' is "
                                                   "a special token)")
     if not isinstance(got, list) or got.count(s) != 1 or len(got) != 2 * len(call(char.encode, "low")) + 1:
@@ -933,7 +973,8 @@ def test_bpe_decode_whitespace_drops_the_spaces(tk):
 
 def test_bpe_decode_special_tokens_and_char_level(tk):
     tok = fit(tk, "élève été", vocab_size=20, level="char", special_tokens=["<|endoftext|>"], unk_token="<unk>")
-    ids = [tok.special_ids_["<|endoftext|>"], 0, tok.special_ids_["<unk>"]]
+    ids = [special_id(tok, "<|endoftext|>", "special_tokens=['<|endoftext|>']"), 0,
+           special_id(tok, "<unk>", "unk_token='<unk>': " + UNK_ADDED)]
     want = "<|endoftext|>e<unk>"                                     # id 0: 'e', the smallest code point
     check_text(call(tok.decode, ids, expected="the text"), want, f"decode({ids}): special tokens give back their text")
 
