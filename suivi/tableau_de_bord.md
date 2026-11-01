@@ -1424,3 +1424,43 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B1.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (24 cartes)
 <!-- wb:end B1 -->
+
+<!-- wb:section B2 -->
+## B2 — Tokenisation et embeddings ⏱️ 18 h
+
+- [ ] B2.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] B2.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B2.1 ✏️ « Noël à Paris » en UTF-8 : octets, points de code, longueur ★ 10 min
+- [ ] B2.2 ✏️ Analogie à la main : roi − homme + femme sur des vecteurs de dimension 3 ★ 10 min
+- [ ] B2.3 ✏️ Trois fusions BPE à la main sur un mini-corpus ★★ 20 min
+- [ ] B2.4 ✏️ Encoder un mot jamais vu avec des fusions déjà apprises ★ 10 min
+- [ ] B2.5 ✏️ One-hot fois matrice : nn.Embedding à la main, et quelles lignes reçoivent un gradient ★★ 15 min
+- [ ] B2.6 ✏️ Co-occurrences et PPMI à la main (fenêtre de 1, quatre mots) ★★ 25 min
+- [ ] B2.7 ∂ Skip-gram avec échantillonnage négatif : gradients par rapport au mot et au contexte ★★★ 35 min
+- [ ] B2.8 🧮 Fermi : fertilité française et anglaise, pages dans 8 192 tokens, prix d'un roman traduit par API ★★ 15 min
+- [ ] B2.9 🧮 Fermi : poids de la table d'embedding de GPT-2 et d'un LLM à 128 000 tokens ★ 10 min
+- [ ] B2.10 🗣️ BPE en cinq lignes, sans jargon ★ 10 min
+- [ ] B2.11 ⚖️ Une taxe cachée sur certaines langues, des stéréotypes dans les vecteurs : tokenisation et biais ★★ 25 min
+- [ ] B2.12 📄 Sennrich, Haddow et Birch (2016) : les sous-mots pour traduire les mots rares ★★★ 45 min
+- [ ] B2.13 📦 Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne ★★ 20 min
+- [ ] B2.14 🔮 Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ? ★ 10 min
+- [ ] B2.15 🔨 get_pair_counts et merge_pair ★★ 20 min
+- [ ] B2.16 🔨 BPETokenizer.fit : apprendre les fusions, au niveau caractère puis octet ★★★ 50 min
+- [ ] B2.17 🔨 encode et decode : fusions appliquées par rang, aller-retour sans perte ★★★ 40 min
+- [ ] B2.18 🐛 Le tokenizer qui abîme les accents : trois bugs d'Unicode et de fusions ★★ 25 min
+- [ ] B2.19 📦 Ton BPE contre la bibliothèque tokenizers : mêmes fusions, autre vitesse ★★ 25 min
+- [ ] B2.20 🔬 Taille du vocabulaire : compression et entropie par token, de 300 à 8 000 tokens ★★★ 40 min
+- [ ] B2.21 🔬 Tokenizer entraîné sur Holmes, appliqué à Verne (et l'inverse) : le coût de la langue ★★ 25 min
+- [ ] B2.22 🔨 cooccurrence_matrix et ppmi ★★ 30 min
+- [ ] B2.23 🔨 cosine_similarity_matrix et most_similar ★★ 20 min
+- [ ] B2.24 📦 Embeddings PPMI + SVD sur Holmes : les voisins de « Holmes », « Watson » et « letter » ★★ 30 min
+- [ ] B2.25 📦 word2vec (skip-gram, échantillonnage négatif) en PyTorch sur Verne ★★★ 60 min
+- [ ] B2.26 🔮 Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer ★ 10 min
+- [ ] B2.27 📈 Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence ★★ 20 min
+- [ ] B2.28 📦 Embeddings de phrases (MiniLM, mean pooling) et recherche sémantique dans Holmes ★★ 30 min
+- [ ] B2.29 🔬 Statique contre contextuel : le même mot dans deux phrases ★★ 25 min
+- [ ] B2.30 🛠️ Sauvegarder un tokenizer en JSON et écrire son test de non-régression ★★ 20 min
+- [ ] B2.31 🏆 Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU ★★★★ 90 min
+- [ ] B2.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (26 cartes)
+<!-- wb:end B2 -->

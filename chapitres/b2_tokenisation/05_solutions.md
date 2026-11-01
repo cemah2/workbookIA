@@ -213,7 +213,7 @@ de sommes de lignes (et de colonnes) 4, 3, 5 et 2. a) (le, chat) deux fois et (c
 
 ## Exercices du notebook
 
-Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB2.py` (comptes des six tokenizers, rejeu du 🐛, temps) ; les extraits, les découpages et les révisions des tokenizers sont figés, donc tes chiffres sont les mêmes, sauf les durées, qui dépendent de la machine et sont données en fourchette.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB2.py` (comptes des six tokenizers, rejeu du 🐛, temps, calibrage du 🔮 B2.26, du 📈 B2.27 et du défi) ; les extraits, les découpages et les révisions des tokenizers sont figés, donc tes chiffres sont les mêmes, sauf les durées, qui dépendent de la machine et sont données en fourchette.
 
 ### Ex B2.13 — Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne 📦
 **Réponse** : a) **13 419** tokens de GPT-2 pour l'extrait de Holmes ; b) **16 944** tokens de BERT pour celui de Verne ; c) une fertilité de **1,3749** pour e5 sur Holmes ; d) **3,6045** octets par token pour e5 sur Verne. Le tableau complet (fertilité ; octets par token) : GPT-2 1,453 et 3,80 sur Holmes, 2,407 et 2,69 sur Verne ; BERT 1,276 et 4,33, puis 2,132 et 3,04 ; e5 1,375 et 4,01, puis 1,798 et 3,60. Sur Holmes, BERT est le plus économe ; sur Verne, e5.
@@ -422,4 +422,291 @@ La description JSON est le `tokenizer.json` de la fiche : son modèle contient l
 **Erreurs fréquentes** : mesurer sur le texte d'entraînement ; comparer des tokenizers de tailles différentes sans le dire (GPT-2) ; lire le tableau transposé ; conclure que le français « coûte plus » en général.
 **Variante** : à 8 000 tokens, l'écart demeure : le tokenizer de Holmes fait 2,08 octets par token sur Verne (3,64 pour celui de Verne), celui de Verne 1,99 sur Holmes (3,73 pour celui de Holmes).
 
-Les solutions des exercices B2.22 à B2.31 (parties D et E du notebook) seront ajoutées à la prochaine étape de génération.
+### Ex B2.22 — cooccurrence_matrix et ppmi 🔨
+**Réponse** : les 36 tests de l'exercice passent ; sur 27 154 mots de Holmes (les 2 000 formes les plus fréquentes), ta matrice est celle d'un comptage par `scipy.sparse`, et la matrice chien / chat / os redonne les PPMI de la fiche (0,807 ; 0 ; 0,560 ; 0,823 avec $\alpha = 0{,}75$).
+**Démarche** :
+```python
+def cooccurrence_matrix(ids, vocab_size, window=2, weighting="uniform", symmetric=True):
+    ids = np.asarray(ids)
+    if ids.ndim != 1:
+        raise ValueError(f"ids must be 1-D, got {ids.ndim}-D of shape {ids.shape}")
+    if ids.size and not np.issubdtype(ids.dtype, np.integer):
+        raise ValueError(f"ids must be integers, got {ids.dtype}")
+    if window < 1:
+        raise ValueError(f"window must be >= 1, got {window}")
+    if weighting not in ("uniform", "harmonic"):
+        raise ValueError(f"weighting must be 'uniform' or 'harmonic', not {weighting!r}")
+    if ids.size and (ids.min() < 0 or ids.max() >= vocab_size):
+        raise ValueError(f"every id must be in [0, {vocab_size}), got ids from {ids.min()} to {ids.max()}")
+    C = np.zeros((vocab_size, vocab_size))
+    for d in range(1, window + 1):
+        w = 1.0 if weighting == "uniform" else 1.0 / d
+        np.add.at(C, (ids[:-d], ids[d:]), w)        # the word and its context d positions to the right
+        if symmetric:
+            np.add.at(C, (ids[d:], ids[:-d]), w)    # ... and to the left
+    return C
+
+
+def ppmi(C, alpha=1.0):
+    C = np.array(C, dtype=float)                    # a float copy: the input is never modified
+    if C.ndim != 2:
+        raise ValueError(f"C must be 2-D, got {C.ndim}-D of shape {C.shape}")
+    if (C < 0).any():
+        raise ValueError("C must not contain negative counts")
+    total = C.sum()
+    if total == 0:
+        raise ValueError("C sums to 0: there is no co-occurrence to measure")
+    p_w = C.sum(axis=1) / total
+    c_alpha = C.sum(axis=0) ** alpha
+    p_c = c_alpha / c_alpha.sum()                   # the smoothing is on the contexts (columns) only
+    out = np.zeros_like(C)
+    r, c = np.nonzero(C)                            # log only where C > 0: no log(0), no 0 / 0
+    out[r, c] = np.maximum(0.0, np.log(C[r, c] / total / (p_w[r] * p_c[c])))
+    return out
+```
+Les deux tableaux décalés `ids[:-d]` et `ids[d:]` donnent d'un coup toutes les paires à la distance `d` ; `np.add.at` ajoute le poids **autant de fois** qu'une paire apparaît, alors que `C[a, b] += w` avec des tableaux d'indices n'écrit qu'une fois chaque case (c'est un `C[a, b] = C[a, b] + w` en une passe). La PPMI ne calcule le logarithme que là où `C > 0` : une ligne nulle (un mot jamais vu) donne des zéros sans avertissement ni NaN. Sur les 4 000 mots de Holmes (fenêtre 2), 0,96 % seulement des cases de $\mathbf{C}$ sont non nulles : une matrice creuse. « the » porte à lui seul 5,4 % de tous les comptes, mais seulement 1 053 de ses 2 816 contextes ont une PPMI positive : la PPMI juge un contexte par rapport à ce que la fréquence de « the » laissait attendre.
+**Erreurs fréquentes** : `C[a, b] += w` (3 au lieu de 4 pour `[0, 0, 0, 1]`, et des comptes de Holmes jusqu'à deux fois trop petits) ; une matrice d'entiers en `'uniform'` ; le lissage `alpha` aussi sur les lignes (0,839 au lieu de 0,823) ; `np.log2` (1,163 au lieu de 0,807) ; `np.log(C / ...)` sur toute la matrice, qui donne NaN pour une ligne nulle ; un id −1 accepté, qui lit silencieusement la dernière ligne.
+**Variante** : « sherlock » et « holmes » se rencontrent 97 fois dans une fenêtre de 2 ; leur PPMI vaut 4,051 sans lissage et 4,397 avec $\alpha = 0{,}75$. Le lissage augmente la probabilité des contextes rares et baisse celle des contextes fréquents comme « holmes », dont la PPMI monte ; la plus grande PPMI de la matrice, celle d'un contexte rare, passe de 10,06 à 9,11.
+
+### Ex B2.23 — cosine_similarity_matrix et most_similar 🔨
+**Réponse** : les 26 tests de l'exercice passent ; sur 120 lignes dont 40 égales à la requête, `most_similar` rend les 5 plus petits indices des copies.
+**Démarche** :
+```python
+def cosine_similarity_matrix(A, B=None, eps=1e-12):
+    A = np.asarray(A, dtype=float)
+    B = A if B is None else np.asarray(B, dtype=float)
+    if A.ndim != 2 or B.ndim != 2:
+        raise ValueError(f"A and B must be 2-D, got shapes {A.shape} and {B.shape}")
+    if A.shape[1] != B.shape[1]:
+        raise ValueError(f"A and B must have the same number of columns, got {A.shape[1]} and {B.shape[1]}")
+    An = A / (np.linalg.norm(A, axis=1, keepdims=True) + eps)
+    Bn = B / (np.linalg.norm(B, axis=1, keepdims=True) + eps)
+    return An @ Bn.T                                # every cosine in one matrix product
+
+
+def most_similar(E, query, k=10, exclude=()):
+    E, q = np.asarray(E, dtype=float), np.asarray(query, dtype=float)
+    if not isinstance(k, (int, np.integer)) or k < 1:
+        raise ValueError(f"k must be an int >= 1, got {k!r}")
+    if q.ndim != 1 or q.shape[0] != E.shape[1]:
+        raise ValueError(f"query must be a vector of length {E.shape[1]}, got shape {q.shape}")
+    sims = cosine_similarity_matrix(E, q[None, :])[:, 0]
+    keep = np.setdiff1d(np.arange(len(E)), np.asarray(list(exclude), dtype=int))   # removed BEFORE the top-k
+    order = keep[np.argsort(-sims[keep], kind="stable")][:k]                       # ties: the smaller index
+    return order, sims[order]
+```
+Normaliser chaque ligne une fois coûte $O(nd)$, puis un seul produit matriciel donne les $n \times m$ cosinus ; `eps` ajouté à la norme laisse une ligne nulle à 0 au lieu d'une division par zéro. Le tri **stable** garde, à égalité, l'ordre des indices ; le tri par défaut de NumPy (un tri rapide) ne le garantit pas : sur les 120 lignes de la vérification, il rend des copies dans le désordre. Retirer `exclude` avant de couper à `k` est ce qui rend l'analogie du ✏️ B2.2 juste : sans cela, les mots de la question prennent les premières places et il reste moins de `k` réponses.
+**Erreurs fréquentes** : `eps` sous la racine (0,943 au lieu de 0,866 pour `[[3, 4]]` contre `[[6, 8]]` avec `eps = 0,5`) ; `np.argsort` ou `np.argpartition` sans tri stable ; `exclude` retiré après le top-k ; une liste au lieu de deux tableaux NumPy ; une requête `(1, d)` acceptée par diffusion.
+**Variante** : les analogies sur les vecteurs PPMI + SVD de Holmes (la fonction de B2.24) : « he est à his ce que she est à ? » donne « her » (0,765), devant « and » et « my » ; sans exclusion, le premier mot rendu est « his », un mot de la question. « one est à two ce que three est à ? » donne « four » (0,604), et « three » sans exclusion. « mr est à sir ce que mrs est à ? » échoue (« yes », 0,432) : sur 106 000 mots, peu de relations sont assez régulières.
+
+### Ex B2.24 — Embeddings PPMI + SVD sur Holmes : les voisins de « Holmes », « Watson » et « letter » 📦
+**Réponse** (4 000 mots, fenêtre 2, $\alpha = 0{,}75$, $d = 100$, 8 voisins) :
+- « holmes » : sherlock 0,80, said 0,73, he 0,61, mr 0,49, sir 0,48, then 0,47, yes 0,46, she 0,44 ;
+- « watson » : doctor 0,50, now 0,45, laughing 0,43, you 0,42, dr 0,41, see 0,41, i 0,40, mister 0,40 ;
+- « letter » : battered 0,46, hat 0,45, ceiling 0,44, bonnet 0,43, waistcoat 0,42, bag 0,41, mask 0,40, cooee 0,38.
+
+**Démarche** : le code est celui de l'indice 3, complété :
+```python
+def ppmi_svd_24(words, n_words=4000, window=2, dim=100, alpha=0.75):
+    stoi, itos = wbtext.top_vocab(words, n_words)
+    v = len(itos)
+    ids = wbtext.word_ids(words, stoi)                        # -1 for a word outside the vocabulary
+    ids = np.where(ids < 0, v, ids)                           # one extra id for all of them: they keep their place...
+    C = mylearn.embeddings.cooccurrence_matrix(ids, v + 1, window=window)[:v, :v]   # ...and their row and column go
+    M = mylearn.embeddings.ppmi(C, alpha=alpha)
+    svd = TruncatedSVD(n_components=dim, algorithm="arpack", random_state=0)
+    E = svd.fit_transform(M) / np.sqrt(svd.singular_values_)  # U_d S_d / S_d^(1/2) = U_d S_d^(1/2)
+    return E / np.linalg.norm(E, axis=1, keepdims=True), stoi, itos
+
+
+def neighbours_24(E, stoi, itos, word, k=8):
+    idx, sims = mylearn.embeddings.most_similar(E, E[stoi[word]], k=k, exclude=(stoi[word],))
+    return [(itos[i], float(s)) for i, s in zip(idx, sims)]
+```
+L'id de plus pour les mots inconnus est le cœur de l'exercice : leurs paires tombent dans la ligne et la colonne `V`, qu'on jette, et deux mots qui les entourent restent à leur vraie distance. Les retirer du texte en ferait des voisins (le contrôle de la cellule s'écarte alors de 0,20). La SVD dense de la matrice 4 000 × 4 000 prend 5 à 10 s ; `scipy.sparse` et une matrice creuse (la référence) la ramènent à une seconde. Les voisins disent ce que mesure ce cosinus : des mots qui ont les **mêmes contextes**. « sherlock » précède « holmes » et partage avec lui « mr », « said », « he » ; « holmes » est un sujet de verbe de parole (« said Holmes », « Holmes said »), d'où « said », « he », « she ». « watson » est surtout appelé (« my dear Watson », « Doctor Watson ») : « doctor », « dr », « mister », et des mots de dialogue. « letter » (30 occurrences) a des voisins d'objets (« hat », « bonnet », « bag ») : des noms concrets précédés de « the », « a », « his » et suivis de « which », « of » ; avec si peu d'occurrences, le comptage ne sépare pas encore une lettre d'un chapeau. Un mot rare n'a pas assez de contextes pour un vecteur précis : les voisins de « holmes » (462 occurrences) sont les plus nets.
+**Erreurs fréquentes** : retirer les mots inconnus du texte ; garder $\mathbf{U}_d\mathbf{S}_d$ (`fit_transform` seul) ; ne pas normaliser les lignes ; l'algorithme `'randomized'` (par défaut), qui donne une autre approximation (cosinus jusqu'à 0,17 de différence) ; oublier d'exclure le mot de ses propres voisins.
+**Variante** : sans lissage ($\alpha = 1$), les voisins de « letter » deviennent bag 0,49, telegram 0,49, hat 0,48, issue 0,47, top 0,46 ; avec une fenêtre de 5, ils deviennent post 0,62, mail 0,62, boat 0,58, sailing 0,49, brought 0,44, et ceux de « holmes » said 0,79, sherlock 0,73, mr 0,52, very 0,50, friend 0,50 : une fenêtre plus large capte le **thème** (le courrier, le voyage), une fenêtre étroite la **fonction** grammaticale.
+
+### Ex B2.25 — word2vec (skip-gram, échantillonnage négatif) en PyTorch sur Verne 📦
+**Réponse** : 1 590 mots de vocabulaire, 60 979 mots dans le texte d'entraînement ; 10 epochs en 9 à 13 s sur deux cœurs, la loss moyenne passe de 2,774 à 2,084. Rang du second mot parmi les 1 589 voisins du premier : deux → trois 19, quatre → cinq 7, vingt → cent 11, heures → minutes 2, jours → heures 2, bombay → calcutta 1, yokohama → hong 9, train → wagon 71, paquebot → steamer 10, main → mains 59, tête → yeux 1 018, dit → répondit 1 ; rang médian 9,5 (au hasard : environ 795). Ces rangs dépendent de la graine et de l'ordre des calculs : les tiens seront différents, du même ordre.
+**Démarche** :
+```python
+def keep_probability_25(counts, t=1e-3):
+    counts = np.asarray(counts, dtype=float)
+    f = counts / counts.sum()
+    with np.errstate(divide="ignore"):                       # a count of 0: f = 0, kept with probability 1
+        return np.minimum(1.0, np.sqrt(t / f))
+
+
+def noise_distribution_25(counts, power=0.75):
+    p = np.asarray(counts, dtype=float) ** power
+    return p / p.sum()
+
+
+def skipgram_pairs_25(ids, window=2):
+    ids = np.asarray(ids, dtype=np.int64)
+    centers, contexts = [], []
+    for d in range(1, window + 1):                           # the context d positions to the right, then to the left
+        centers += [ids[:-d], ids[d:]]
+        contexts += [ids[d:], ids[:-d]]
+    return np.concatenate(centers), np.concatenate(contexts)
+
+
+class SkipGram25(nn.Module):
+    def __init__(self, vocab_size, dim):
+        super().__init__()
+        self.center = nn.Embedding(vocab_size, dim)
+        self.context = nn.Embedding(vocab_size, dim)
+        nn.init.uniform_(self.center.weight, -0.5 / dim, 0.5 / dim)   # as word2vec: small v_w,
+        nn.init.zeros_(self.context.weight)                            # u_c = 0 at the start
+
+    def forward(self, centers, contexts, negatives):
+        v = self.center(centers)                                       # (B, d)
+        pos = (self.context(contexts) * v).sum(dim=-1)                 # (B,): u_c . v_w
+        neg = torch.bmm(self.context(negatives), v.unsqueeze(-1)).squeeze(-1)   # (B, K): u_n . v_w
+        return -(F.logsigmoid(pos) + F.logsigmoid(-neg).sum(dim=-1)).mean()
+
+
+def train_word2vec_25(ids, counts, dim=100, window=2, negatives=5, t=1e-3, epochs=EPOCHS_25, batch_size=512, lr=0.01,
+                      seed=0):
+    ids = np.asarray(ids, dtype=np.int64)
+    rng = np.random.default_rng(seed)
+    torch.manual_seed(seed)
+    model = SkipGram25(len(counts), dim)
+    keep = keep_probability_25(counts, t)
+    noise = torch.as_tensor(noise_distribution_25(counts), dtype=torch.float)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    losses = []
+    for _ in range(epochs):
+        kept = ids[rng.random(len(ids)) < keep[ids]]                   # a new subsampling at each epoch
+        centers, contexts = skipgram_pairs_25(kept, window)
+        order = rng.permutation(len(centers))
+        centers, contexts = torch.from_numpy(centers[order]), torch.from_numpy(contexts[order])
+        total = 0.0
+        for start in range(0, len(centers), batch_size):
+            c, x = centers[start:start + batch_size], contexts[start:start + batch_size]
+            neg = torch.multinomial(noise, len(c) * negatives, replacement=True).view(len(c), negatives)
+            loss = model(c, x, neg)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            total += loss.item() * len(c)
+        losses.append(total / len(centers))
+    return model, losses
+```
+Au premier pas, `context` est nul : tous les scores valent 0, $\sigma(0) = 0{,}5$, et la loss d'une paire vaut $6 \log 2 \approx 4{,}159$ (un positif et cinq négatifs) ; la moyenne de la première epoch, 2,77, est déjà plus basse, car le modèle apprend dès les premiers mini-batches. Partir de zéro pour $\mathbf{u}$ et de petits $\mathbf{v}$ évite des scores énormes au départ : avec l'initialisation par défaut de `nn.Embedding` (une loi normale de variance 1), un produit scalaire de 100 termes vaut environ ±10 et la sigmoïde sature. Avec $t = 10^{-3}$, « fogg » est gardé une fois sur trois et « de » une fois sur sept : c'est ce qui laisse les mots moins fréquents peser. On garde la table `center`, celle que la fiche note $\mathbf{E}$ ; `context` sert à prédire. Sur tout le texte, 35 692 mots sont gardés à chaque epoch, sur 60 979.
+**Erreurs fréquentes** : le signe des négatifs ($\log \sigma(s)$ au lieu de $\log \sigma(-s)$ : le modèle rapproche les mots tirés au hasard, rang médian vers 580) ; la somme au lieu de la moyenne sur le batch (le learning rate effectif est multiplié par 512) ; l'initialisation par défaut ; les contextes d'un seul côté ; une probabilité de garder supérieure à 1, qui ne change rien au tirage mais trahit la formule ; le même sous-échantillonnage à toutes les epochs.
+**Variante** : avec $t = 10^{-5}$ (le réglage de l'article pour un milliard de mots), « fogg » n'est plus gardé que 3 fois sur 100 et chaque epoch ne voit que 5 504 mots : le rang médian monte à 108,5. Avec $d = 50$, il vaut 6,5 (en 8 s) ; avec $K = 15$ négatifs, 15,5 (en 19 s, la loss de départ plus haute, 4,20, puisqu'elle somme 15 termes de plus) : sur un si petit texte, ces réglages comptent moins que le sous-échantillonnage.
+
+### Ex B2.26 — Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer 🔮
+**Réponse** : a) **B** : les deux premiers voisins de « fogg » sont « mr » (0,76) et « phileas » (0,67) ; b) **False** : 3 noms de personnages seulement parmi les 10 voisins de « passepartout » (fix, fogg, phileas). Sur dix entraînements (quatre graines, trois autres réglages de la taille de batch et du learning rate, `history_chB2.py`), les deux premiers voisins de « fogg » sont toujours « phileas » et « mr », et « passepartout » n'a jamais plus de 4 personnages parmi ses 10 voisins.
+**Démarche** : le cosinus de word2vec rapproche des mots qui ont les **mêmes contextes** (§202.8). « Mr. Phileas Fogg » revient sans cesse : « mr », « phileas » et « fogg » partagent leurs voisins de gauche (« dit », « répondit », « que ») et se servent de contexte les uns aux autres, si bien que leurs vecteurs s'alignent ; les autres personnages ne viennent qu'ensuite (fix 0,48, passepartout 0,46). « passepartout » est surtout un **sujet** (« Passepartout répondit », « … dit Passepartout ») : ses voisins sont des mots qui occupent les mêmes places grammaticales, « lui » (0,54), « il » (0,49), « son », « s », « un », « qui », presque tous parmi les 40 mots les plus fréquents du roman (rangs 5 à 41). Sur 72 000 mots, les mots-outils fréquents ont des contextes très variés et des vecteurs bien estimés ; un nom propre partage avec eux sa position dans la phrase plus que son sens. C'est le biais de fréquence des petits corpus : avec des milliards de mots, les voisins d'un nom seraient plus « sémantiques ».
+**Erreurs fréquentes** : confondre « apparaître ensemble » (« Phileas » et « Passepartout » dans la même scène) et « avoir les mêmes contextes » ; croire que les embeddings d'un roman captent des rôles (héros, détective) ; juger sur une seule graine sans regarder la stabilité.
+**Variante** : avec les mêmes vecteurs, les voisins de « aouda » sont mrs 0,88 (« Mrs. Aouda »), puis achever, soins, usage ; ceux de « fix » passepartout 0,55, fogg 0,48, son, attentivement, inspecteur, passeport : « Fix » et « Passepartout » sont souvent sujets des mêmes verbes, et « l'inspecteur Fix » a, lui, un titre de métier.
+
+### Ex B2.27 — Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence 📈
+**Réponse** : a) **False** : sur la carte (1), les mots fréquents sont dispersés dans le nuage ; la corrélation de rang entre la fréquence et l'axe horizontal vaut 0,14 (l'axe vertical : −0,23). b) **True** : sur la carte (2), les mots fréquents forment une tache en bas à gauche ; les 10 voisins sur la carte des 100 mots les plus fréquents sont eux aussi parmi les 100 plus fréquents 48 fois sur 100, contre 6 au hasard. Sur les dix entraînements de B2.26, la corrélation avec le premier axe ne dépasse jamais 0,19 en valeur absolue, et cette part va de 21 à 56 sur 100.
+**Démarche** : la PCA garde les deux directions de plus grande variance de 1 590 vecteurs de dimension 100 : elles mêlent beaucoup de facteurs, et la fréquence n'est que l'un d'eux, d'où une couleur sans gradient. UMAP, lui, préserve les **voisinages** (ch. 12) : comme les mots fréquents ont surtout des voisins fréquents (B2.26), ils se retrouvent ensemble sur la carte. Sur la carte (3), les nombres (part des 3 voisins du même groupe : 0,86), les lieux (0,77) et les parties du corps (0,71) se regroupent ; le temps (0,27) et les transports (0,29) se mêlent aux autres : « heures » et « jours » suivent des nombres (« vingt heures »), comme « minutes » dans la carte de la fiche, et « train » ou « mer » partagent des contextes de lieux (« à bord du », « le train de Calcutta »). Les distances **entre** les groupes d'un UMAP ne se lisent pas : l'algorithme ne les préserve pas.
+**Erreurs fréquentes** : lire un gradient dans quelques points jaunes isolés ; conclure d'une tache sur l'UMAP que la fréquence est un axe de l'espace ; lire la distance entre deux taches d'un UMAP ; oublier que ces cartes dépendent de la graine (les tiennes sont différentes, pas leurs tendances).
+**Variante** : avec `n_neighbors=5` ou 50 au lieu de 15, la part des voisins fréquents des mots fréquents reste de 50 et 49 sur 100 : l'effet de la fréquence n'est pas un artefact du réglage d'UMAP.
+
+### Ex B2.28 — Embeddings de phrases (MiniLM, mean pooling) et recherche sémantique dans Holmes 📦
+**Réponse** : `embed_28` redonne l'embedding de référence (écart au plus de l'ordre de $10^{-6}$), et les six requêtes trouvent toutes un premier passage du bon conte : la fiancée disparue → *The Noble Bachelor* (0,646), le serpent du ventilateur → *The Speckled Band* (0,649), les hommes roux → *The Red-Headed League* (0,468), la pierre bleue dans l'oie → *The Blue Carbuncle* (0,496), le mendiant → *The Man with the Twisted Lip* (0,570), la gouvernante aux cheveux coupés → *The Copper Beeches* (0,514). L'index des 1 055 passages se calcule en 20 à 30 s la première fois.
+**Démarche** :
+```python
+def embed_28(texts, tok, model, batch_size=32, max_length=256):
+    out = []
+    for start in range(0, len(texts), batch_size):
+        batch = tok(list(texts[start:start + batch_size]), padding=True, truncation=True, max_length=max_length,
+                    return_tensors="pt")
+        with torch.inference_mode():
+            h = model(**batch).last_hidden_state                    # (B, T, 384)
+        m = batch["attention_mask"].unsqueeze(-1).float()           # (B, T, 1)
+        out.append(F.normalize((h * m).sum(dim=1) / m.sum(dim=1), dim=1))
+    return torch.cat(out).numpy()
+
+
+def search_28(query, index, k=5):
+    q = embed_28([query], SM_28.tokenizer, SM_28.model)[0]
+    return mylearn.embeddings.most_similar(index, q, k=k)
+```
+Le masque retire le padding de la moyenne : sans lui, « Holmes smiled. » aurait un autre vecteur seul et au milieu de textes longs. Les premiers passages ne reprennent presque aucun mot de la requête (« ventilator » mis à part) : « vanished on the morning of the wedding » trouve « When did she vanish, then? At the wedding breakfast. », « a precious blue stone in the crop of a Christmas goose » trouve un dialogue sur « your hat » et « your bird ». Les cosinus de 0,47 à 0,65 n'ont pas d'échelle absolue : un seuil « pertinent au-dessus de 0,5 » rejetterait ici les bons passages des hommes roux et de l'oie, et e5 donne des cosinus tous au-dessus de 0,76 (§202.10). Seul le classement compte, et il s'évalue sur un jeu de requêtes.
+**Erreurs fréquentes** : la moyenne sans le masque ; `max_length=512` (le modèle lit alors ce que sa fiche tronque) ; oublier la normalisation (le produit scalaire n'est plus un cosinus) ; `model.train()` ou un calcul avec gradient (plus lent, et du dropout) ; chercher avec `index @ q` puis `argsort` sans tri stable.
+**Variante** : trois requêtes de plus : « a king afraid that a photograph will be used against him » trouve *A Scandal in Bohemia* (0,527), « a thumb cut off by a hydraulic press » *The Engineer’s Thumb* (0,423, le troisième passage vient d'un autre conte), « a coronet broken in the banker's house at night » *The Beryl Coronet* (0,600). Pour Verne, `wbtext.try_sentence_model("e5")` et `embed(textes, kind="passage")`, `kind="query"` : les mêmes fonctions, avec les préfixes de e5.
+
+### Ex B2.29 — Statique contre contextuel : le même mot dans deux phrases 🔬
+**Réponse** :
+
+| mot | contextuel, même sens | contextuel, sens différents | statique |
+|---|---|---|---|
+| bank | 0,847 | 0,749 | 1 |
+| match | 0,824 | 0,803 | 1 |
+| ring | 0,885 | 0,838 | 1 |
+
+**Démarche** :
+```python
+def contextual_vector_29(sentence, word, tok, model):
+    start = re.search(rf"\b{re.escape(word)}\b", sentence).start()
+    end = start + len(word)
+    batch = tok(sentence, return_tensors="pt", return_offsets_mapping=True)
+    offsets = batch.pop("offset_mapping")[0].tolist()                 # (start, end) of each token in the sentence
+    keep = [k for k, (a, b) in enumerate(offsets) if b > a and a < end and b > start]   # special tokens: (0, 0)
+    with torch.inference_mode():
+        h = model(**batch).last_hidden_state[0]                       # (T, 384)
+    return h[keep].mean(dim=0).numpy()
+
+
+def static_vector_29(word, tok, model):
+    ids = tok(word, add_special_tokens=False)["input_ids"]
+    return model.get_input_embeddings().weight[ids].mean(dim=0).detach().numpy()
+
+
+def sense_means_29(vectors, senses):
+    V = np.asarray(vectors, dtype=float)
+    V = V / np.linalg.norm(V, axis=1, keepdims=True)
+    S = V @ V.T
+    i, j = np.triu_indices(len(senses), k=1)                          # each pair of uses once
+    same_sense = np.array(senses)[i] == np.array(senses)[j]
+    return float(S[i, j][same_sense].mean()), float(S[i, j][~same_sense].mean())
+```
+Le vecteur statique est la même ligne de la table dans les six phrases : son cosinus vaut 1, quelle que soit la phrase, et ne mesure rien. Le vecteur contextuel change d'une phrase à l'autre, et pour les trois mots deux emplois du même sens sont en moyenne plus proches que deux emplois de sens différents : de 0,098 pour « bank », 0,047 pour « ring », mais seulement 0,021 pour « match ». Tous les cosinus restent élevés (au-dessus de 0,65) : la sortie de MiniLM garde beaucoup du mot lui-même et de la phrase entière, car il a été entraîné à résumer des phrases (§202.10), pas à distinguer les sens d'un mot ; un encodeur entraîné sur des tokens masqués (BERT) sépare d'ordinaire mieux les sens dans ses couches intermédiaires.
+**Erreurs fréquentes** : prendre le token `[CLS]` ou le premier sous-mot seul (« Merryweather » en a plusieurs) ; le vecteur statique pris à la sortie de `model.embeddings` (positions et normalisation ajoutées : il change alors d'une phrase à l'autre) ; compter la diagonale ou chaque paire deux fois dans les moyennes ; conclure sur un seul couple de phrases.
+**Variante** : la sortie du 4ᵉ bloc (`output_hidden_states=True`, `hidden_states[4]`) sépare un peu mieux « match » : 0,878 contre 0,849, et donne 0,892 contre 0,827 pour « bank », 0,945 contre 0,909 pour « ring ».
+
+### Ex B2.30 — Sauvegarder un tokenizer en JSON et écrire son test de non-régression 🛠️
+**Réponse** : `tokenizer.json` se recharge à l'identique, `golden.json` fige les 640 ids du texte de référence ; le test passe sur le tokenizer livré et échoue sur les trois copies abîmées.
+**Démarche** :
+```python
+def deliver_30(tok, folder, reference_text):
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    tok_path, golden_path = folder / "tokenizer.json", folder / "golden.json"
+    tok.save(tok_path)
+    golden = {"text": reference_text, "ids": tok.encode(reference_text), "vocab_size": len(tok.vocab_)}
+    golden_path.write_text(json.dumps(golden, ensure_ascii=False), encoding="utf-8")
+    return tok_path, golden_path
+
+
+def test_tokenizer_regression_30():
+    tok = BPETokenizer.load(TOKENIZER_PATH)
+    golden = json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))
+    ids = tok.encode(golden["text"])
+    assert len(tok.vocab_) == golden["vocab_size"], f"expected {golden['vocab_size']} tokens, got {len(tok.vocab_)}"
+    first = next((k for k, (a, b) in enumerate(zip(ids, golden["ids"])) if a != b), None)
+    assert ids == golden["ids"], f"expected the frozen ids; first difference at position {first}"
+    assert tok.decode(ids) == golden["text"], "expected decode(encode(text)) == text"
+```
+À côté des poids, on committe `tokenizer.json` **et** `golden.json` : le test protège le couple modèle-tokenizer. Le texte de référence contient des accents, « € », un emoji et des idéogrammes pour exercer tous les chemins (octets de 2, 3 et 4, fusions et octets seuls). La copie sans la dernière fusion donne les mêmes ids pour presque tout texte (la 1 000ᵉ fusion est rare) : seul le nombre de tokens la trahit, d'où ce troisième `assert`. On régénère `golden.json` seulement quand on **veut** changer de tokenizer, avec un nouveau modèle entraîné dessus : c'est une décision d'équipe, consignée dans le commit, jamais un correctif pour faire passer le test.
+**Erreurs fréquentes** : un test qui relit le tokenizer **en mémoire** au lieu du fichier ; un test qui recalcule les ids attendus avec le même tokenizer (il passe toujours) ; oublier le nombre de tokens ; `json.dumps` sans `ensure_ascii=False` (correct, mais illisible dans une revue de code) ; un chemin relatif, que le test, lancé ailleurs, ne trouve pas.
+**Variante** : figer aussi l'empreinte SHA-256 de `tokenizer.json` (`hashlib.sha256(path.read_bytes()).hexdigest()`) : le test attrape alors toute modification du fichier, mais échoue aussi pour un simple changement d'indentation qui ne change aucun id. On garde les deux : l'empreinte dit « le fichier a changé », les ids disent si cela compte.
+
+### Ex B2.31 — Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU 🏆
+**Réponse** (référence) : **3,437 octets par token** sur `VERNE_VAL` (12 602 tokens pour 43 315 octets), en 1 s environ, entraînement et encodage compris : 14,5 % de mieux que le BPE de B2.20 (3,001), et autant sur le texte tenu à l'écart du contrôle (14,4 %).
+**Démarche** : deux idées, chacune mesurée seule.
+1. **Pas de pré-tokenisation à l'intérieur d'une ligne.** Le pré-tokenizer `'gpt2'` interdit à un token de contenir deux mots ; sans lui, BPE apprend des tokens à cheval sur les espaces, qui sont les suites les plus fréquentes d'un roman. `tokenizers` le fait en une seconde : `pre_tokenizers.ByteLevel(add_prefix_space=False, use_regex=False)` ne découpe rien et code les octets comme GPT-2, et chaque ligne du texte est un « mot » de l'entraîneur. Seule, cette idée donne 3,376 octets par token avec les fusions appliquées par rang (+12,5 %). Les plus longs tokens appris : « Sir Francis Cromart », « brigadier génér », « », répondit », « Phileas Fogg, » ; 199 tokens contiennent une espace intérieure, et 1 535 des 2 000 servent sur la validation. Ton `BPETokenizer` fait la même chose en Python : `pre_tokenizer=None`, entraîné sur la liste des lignes (`text.splitlines(keepends=True)`), puis chaque ligne encodée à part : 14 s pour l'entraînement de la référence, 3,376 octets par token.
+2. **La segmentation la plus courte.** À vocabulaire fixé, appliquer les fusions par rang ne donne pas forcément le moins de tokens ; une programmation dynamique sur les octets le garantit (`best[j] = min(best[i] + 1)` sur les tokens `data[i:j]`), en $O(n \times L)$ pour $n$ octets et des tokens d'au plus $L$ octets, moins d'une seconde ici. Seule, elle fait passer le BPE de B2.20 de 3,001 à 3,074 (+2,4 %).
+
+Le code complet est dans `05_solutions.ipynb` (`gpt2_byte_table`, `LinesTokenizer31`, `method_31`). Sur quatre autres découpages de Verne (un dixième du texte en validation, le reste en entraînement), la méthode fait 3,288 à 3,399 octets par token, 14 à 16 % de mieux que le BPE de B2.20 sur chacun, et le BPE avec la seule segmentation la plus courte reste 2 à 3 % au-dessus : l'objectif de 3,20 demande une vraie idée sur ce que contiennent les tokens.
+Ce qui gagne ici coûte ailleurs : des tokens de plusieurs mots rendent les séquences plus courtes, mais plus rares (une suite comme « de la » n'est plus apprise comme « de » puis « la ») ; un modèle de langue verrait des tokens peu fréquents, et la segmentation la plus courte peut changer brutalement quand une phrase change d'un caractère. C'est pourquoi les tokenizers des modèles gardent une pré-tokenisation : une bonne compression n'est qu'un critère parmi d'autres.
+**Erreurs fréquentes** : plus de 2 000 tokens (256 octets **plus** 2 000 fusions) ; un pré-tokenizer `'whitespace'`, qui perd les espaces ; un vocabulaire sans les 256 octets, qui ne sait plus coder un caractère absent de l'entraînement ; un token qui dépend de ses voisins (un code « avec contexte » n'est plus un tokenizer) ; apprendre sur la validation, ce que le contrôle voit : la référence qui ajouterait `VERNE_VAL` à son texte d'entraînement passerait de 3,437 à 3,551 octets par token, sans gagner autant sur le texte tenu à l'écart, et le contrôle la refuse.
+**Variante** : la même méthode à 1 000 tokens fait 2,777 octets par token (2,560 pour le BPE de B2.20), à 4 000 tokens 4,198 (3,382) : le gain grandit avec la taille, car un vocabulaire plus grand a la place d'apprendre plus de suites de mots.

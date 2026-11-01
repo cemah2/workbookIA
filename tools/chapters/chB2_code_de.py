@@ -58,7 +58,7 @@ CHECK_22 = r'''with checked("B2.22"):
         verdict("B2.22", ok_22, "[0, 0, 0, 1], fenêtre 1 : C[0, 0] = 4, chaque répétition d'une paire compte ; une matrice "
                 "float (2, 2).",
                 f"cooccurrence_matrix([0, 0, 0, 1], 2, window=1) doit rendre la matrice float [[4, 1], [1, 0]] (une paire "
-                f"répétée s'ajoute à chaque fois) ; reçu {C_22!r}.")
+                f"répétée s'ajoute à chaque fois) ; reçu {np.asarray(C_22).tolist()} de type {getattr(C_22, 'dtype', type(C_22).__name__)}.")
         verdict("B2.22", np.array_equal(arg_22, ids_22), "les ids reçus n'ont pas changé.", "cooccurrence_matrix a modifié les ids reçus.")
     right_22 = Em.cooccurrence_matrix([2, 0, 1], 3, window=2, weighting="harmonic", symmetric=False)
     same("B2.22", "[2, 0, 1], fenêtre 2, harmonique, contextes de droite seulement", right_22,
@@ -134,29 +134,35 @@ CHECK_23 = r'''with checked("B2.23"):
     refuses("B2.23", "A 1-D", lambda: Em.cosine_similarity_matrix([1.0, 2.0]))
     refuses("B2.23", "A et B de 3 et 2 colonnes", lambda: Em.cosine_similarity_matrix(A_23, B_23[:, :2]))
 
-    E_23 = np.tile(np.eye(3), (20, 1))                              # 60 rows: 20 copies of three directions
+    E_23 = rng_23.normal(size=(120, 3))                             # 120 rows, 40 of them equal to the query
+    copies_23 = np.sort(rng_23.choice(120, 40, replace=False))
+    E_23[copies_23] = [1.0, 0.0, 0.0]
     out_23 = Em.most_similar(E_23, [1.0, 0.0, 0.0], k=5)
     if returned("B2.23", "most_similar", out_23):
         idx_23, sims_23 = pair("B2.23", "most_similar", out_23, names=("indices", "similarities"))
+        got_23 = np.asarray(idx_23).tolist()
         verdict("B2.23", isinstance(idx_23, np.ndarray) and isinstance(sims_23, np.ndarray)
-                and np.issubdtype(idx_23.dtype, np.integer) and idx_23.tolist() == [0, 3, 6, 9, 12]
+                and np.issubdtype(idx_23.dtype, np.integer) and got_23 == copies_23[:5].tolist()
                 and np.allclose(sims_23, 1),
-                "20 lignes à égalité : les 5 plus petits indices, [0, 3, 6, 9, 12] (un tri stable), en tableaux NumPy.",
-                f"20 lignes égales à la requête : attendu les indices [0, 3, 6, 9, 12] (égalités : le plus petit indice), "
-                f"deux tableaux NumPy ; reçu {idx_23!r}.")
-    idx_23, _ = Em.most_similar(E_23, [1.0, 0.0, 0.0], k=3, exclude=(0, 3))
-    verdict("B2.23", list(idx_23) == [6, 9, 12], "exclude retiré avant le top-k : [6, 9, 12].",
-            f"avec exclude=(0, 3), attendu [6, 9, 12] (on retire avant de garder les k premiers) ; reçu {list(idx_23)}.")
+                f"40 lignes à égalité parmi 120 : les 5 plus petits indices, {copies_23[:5].tolist()} (un tri stable), en "
+                "tableaux NumPy.",
+                f"40 lignes égales à la requête parmi 120 : attendu les indices {copies_23[:5].tolist()} (égalités : le plus "
+                f"petit indice, un tri stable), deux tableaux NumPy ; reçu {got_23}.")
+    idx_23, _ = Em.most_similar(E_23, [1.0, 0.0, 0.0], k=3, exclude=tuple(copies_23[:2].tolist()))
+    want_23 = copies_23[2:5].tolist()
+    verdict("B2.23", np.asarray(idx_23).tolist() == want_23, f"exclude retiré avant le top-k : {want_23}.",
+            f"avec exclude={tuple(copies_23[:2].tolist())}, attendu {want_23} (on retire avant de garder les k premiers, "
+            f"égalités au plus petit indice) ; reçu {np.asarray(idx_23).tolist()}.")
     few_23 = Em.most_similar(np.eye(3), [1.0, 1.0, 0.0], k=10, exclude=(1,))
-    verdict("B2.23", list(few_23[0]) == [0, 2], "moins de k lignes restantes : toutes, ici [0, 2].",
-            f"3 lignes, une exclue, k = 10 : attendu les deux restantes [0, 2] ; reçu {list(few_23[0])}.")
+    verdict("B2.23", np.asarray(few_23[0]).tolist() == [0, 2], "moins de k lignes restantes : toutes, ici [0, 2].",
+            f"3 lignes, une exclue, k = 10 : attendu les deux restantes [0, 2] ; reçu {np.asarray(few_23[0]).tolist()}.")
     none_23 = Em.most_similar(np.eye(2), [1.0, 0.0], k=2, exclude=(0, 1))
     verdict("B2.23", none_23[0].shape == (0,) and none_23[1].shape == (0,), "tout exclu : deux tableaux de forme (0,).",
             f"tout exclu : attendu deux tableaux vides de forme (0,) ; reçu {none_23!r}.")
     zero_23 = Em.most_similar(np.eye(3), [0.0, 0.0, 0.0], k=2)
-    verdict("B2.23", list(zero_23[0]) == [0, 1] and np.allclose(zero_23[1], 0),
+    verdict("B2.23", np.asarray(zero_23[0]).tolist() == [0, 1] and np.allclose(zero_23[1], 0),
             "une requête nulle : des similarités nulles et les k premiers indices.",
-            f"une requête nulle doit donner des similarités nulles et les indices [0, 1] ; reçu {zero_23!r}.")
+            f"une requête nulle doit donner des similarités nulles et les indices [0, 1] ; reçu {np.asarray(zero_23[0]).tolist()}.")
     refuses("B2.23", "k = 0", lambda: Em.most_similar(np.eye(3), [1.0, 0, 0], k=0))
     refuses("B2.23", "une requête de longueur 2 pour des lignes de 3", lambda: Em.most_similar(np.eye(3), [1.0, 0], k=1))
     refuses("B2.23", "une requête de forme (1, 3)", lambda: Em.most_similar(np.eye(3), [[1.0, 0, 0]], k=1))'''
@@ -389,11 +395,31 @@ with checked("B2.25"):
             f"forward : la moyenne sur le batch de la loss de la fiche ({fr(want_25)} sur trois paires et K = 2 négatifs).",
             f"forward doit rendre un tenseur scalaire, la moyenne sur le batch de -log σ(u_c·v_w) - Σ log σ(-u_n·v_w) : "
             f"attendu {fr(want_25)} ; reçu {loss_25!r}.")
-    small_25 = train_word2vec_25(IDS_25[:3000], COUNTS_25, dim=8, epochs=2, seed=1)
+    received_25, real_pairs_25 = [], skipgram_pairs_25          # a spy: the length of the text that gives the pairs
+
+    def spy_pairs_25(ids, window=2):
+        received_25.append(len(ids))
+        return real_pairs_25(ids, window)
+
+    try:
+        globals()["skipgram_pairs_25"] = spy_pairs_25
+        small_25 = train_word2vec_25(IDS_25[:3000], COUNTS_25, dim=8, epochs=2, seed=1)
+    finally:
+        globals()["skipgram_pairs_25"] = real_pairs_25
     model_s25, losses_s25 = pair("B2.25", "train_word2vec_25", small_25, names=("model", "losses"))
     verdict("B2.25", isinstance(model_s25, SkipGram25) and len(losses_s25) == 2 and all(isinstance(v, float) for v in losses_s25),
             "train_word2vec_25 rend (le modèle SkipGram25, la loss moyenne de chaque epoch, des float).",
             "train_word2vec_25 doit rendre le couple (un SkipGram25, une liste d'une loss float par epoch).")
+    kept_25 = float(np.minimum(1, np.sqrt(1e-3 / (COUNTS_25 / COUNTS_25.sum())))[IDS_25[:3000]].sum())
+    if len(received_25) == 2:
+        verdict("B2.25", all(0.8 * kept_25 < n < 1.2 * kept_25 for n in received_25) and received_25[0] != received_25[1],
+                f"sous-échantillonnage : sur 3 000 mots, tes paires viennent de {received_25[0]} puis {received_25[1]} mots "
+                f"gardés (≈ {kept_25:.0f} attendus), un nouveau tirage à chaque epoch.",
+                f"sur 3 000 mots, tes paires viennent de {received_25} mots, alors que le sous-échantillonnage en garde ≈ "
+                f"{kept_25:.0f} par epoch, tirés à nouveau à chaque epoch : relis le contrat de train_word2vec_25.")
+    else:
+        print("💡 Ex B2.25 : train_word2vec_25 n'appelle pas skipgram_pairs_25 une fois par epoch : la cellule ne peut pas "
+              "vérifier ton sous-échantillonnage.")
     ok_25 = True'''
 
 EXPERIMENT_25 = r'''if not globals().get("ok_25"):
@@ -594,8 +620,8 @@ else:
             raise StopCheck
         idx_28, sims_28 = pair("B2.28", "search_28", found_28, names=("indices", "cosines"))
         ref_28 = np.argsort(-(INDEX_28 @ SM_28.embed(QUERIES_28[0])[0]), kind="stable")[:5]
-        verdict("B2.28", list(np.asarray(idx_28)) == list(ref_28), "search_28 : les 5 passages de la référence, dans l'ordre.",
-                f"search_28 : attendu les passages {list(ref_28)}, reçu {list(np.asarray(idx_28))}.")
+        verdict("B2.28", np.asarray(idx_28).tolist() == ref_28.tolist(), "search_28 : les 5 passages de la référence, dans l'ordre.",
+                f"search_28 : attendu les passages {ref_28.tolist()}, reçu {np.asarray(idx_28).tolist()}.")
         for q in QUERIES_28:
             idx, sims = search_28(q, INDEX_28, k=3)
             print(f"\n« {q} »")

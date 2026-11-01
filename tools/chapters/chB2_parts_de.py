@@ -125,7 +125,7 @@ Dans tes notes : pourquoi la ligne d'un mot très fréquent (« the ») domine-t
   - une requête nulle donne des cosinus nuls, donc les `k` premiers indices ;
   - `ValueError` pour `k < 1`, une requête qui n'a pas la longueur `E.shape[1]`, ou de forme `(1, d)`.
 
-La première cellule de vérification compare ta matrice à `sklearn.metrics.pairwise.cosine_similarity`, essaie `eps`, puis `most_similar` sur 60 lignes faites de 20 copies de trois directions (égalités), avec des exclusions, trop peu de lignes, une requête nulle et trois refus. La seconde lance les 26 tests de l'exercice (`-k "test_cosine_similarity_matrix_ or test_most_similar_"`).
+La première cellule de vérification compare ta matrice à `sklearn.metrics.pairwise.cosine_similarity`, essaie `eps`, puis `most_similar` sur 120 lignes dont 40 égales à la requête (des égalités), avec des exclusions, trop peu de lignes, une requête nulle et trois refus. La seconde lance les 26 tests de l'exercice (`-k "test_cosine_similarity_matrix_ or test_most_similar_"`).
 
 Dans tes notes : pourquoi normaliser les lignes **une fois**, puis faire un seul produit matriciel, plutôt que de calculer chaque cosinus séparément ? Pour l'analogie du ✏️ B2.2, quels indices passes-tu à `exclude`, et que se passerait-il sans eux ?""",
        check=RELOAD + C.CHECK_23, solution=C.CHECK_23,
@@ -171,7 +171,7 @@ Dans tes notes :
   - `forward(centers, contexts, negatives)`, avec des ids `(B,)`, `(B,)` et `(B, K)`, rend la **moyenne sur le batch** de la loss de la fiche, $-\log \sigma(\mathbf{u}_c^\top \mathbf{v}_w) - \sum_k \log \sigma(-\mathbf{u}_{n_k}^\top \mathbf{v}_w)$, un tenseur scalaire, calculée avec `F.logsigmoid` ;
 - `train_word2vec_25(ids, counts, dim=100, window=2, negatives=5, t=1e-3, epochs=EPOCHS_25, batch_size=512, lr=0.01, seed=0)` rend `(model, losses)` : un `SkipGram25` entraîné par `torch.optim.Adam(lr)`, et la loss moyenne de chaque epoch (une liste de `float`). À chaque epoch : un **nouveau** sous-échantillonnage (`np.random.default_rng(seed)`, une fois au départ, avec `torch.manual_seed(seed)`), les paires du texte gardé, mélangées, des mini-batches de `batch_size` paires, et pour chaque paire `negatives` négatifs tirés selon `noise_distribution_25` (`torch.multinomial`, avec remise).
 
-La première cellule de vérification essaie tes fonctions sur des cas visibles, compare `forward` à la formule sur des poids fixés, et lance un mini-entraînement. La suivante entraîne ton word2vec sur tout le texte (`EPOCHS_25` = 10 epochs en mode rapide, ≈ 10 s sur deux cœurs ; 30 en mode complet), garde les vecteurs `E_25` (les lignes de `center`, de norme 1) et mesure leur qualité : pour douze paires de mots liés (« deux » et « trois », « bombay » et « calcutta »…), le rang du second parmi les voisins du premier.
+La première cellule de vérification essaie tes fonctions sur des cas visibles, compare `forward` à la formule sur des poids fixés, et lance un mini-entraînement sur 3 000 mots, dont elle compte les mots gardés à chaque epoch. La suivante entraîne ton word2vec sur tout le texte (`EPOCHS_25` = 10 epochs en mode rapide, ≈ 10 s sur deux cœurs ; 30 en mode complet), garde les vecteurs `E_25` (les lignes de `center`, de norme 1) et mesure leur qualité : pour douze paires de mots liés (« deux » et « trois », « bombay » et « calcutta »…), le rang du second parmi les voisins du premier.
 
 Dans tes notes : au premier pas, `context` est nul : que valent alors tous les scores, et la loss d'une paire avec 5 négatifs (calcule-la, puis compare à ta loss de la première epoch) ? Que changerait un sous-échantillonnage avec $t = 10^{-5}$ sur ce petit roman (calcule la probabilité de garder « fogg ») ? Pourquoi garde-t-on la table `center`, et pas `context` ?""",
        given=C.GIVEN_25, todo=C.TODO_25, check=C.CHECK_25, solution=C.SOLUTION_25 + "\n\n\n" + C.CHECK_25,
@@ -277,7 +277,7 @@ La cellule suivante prépare `TOK_30`, un `BPETokenizer` octet de **ta** librair
 
 La cellule de vérification livre `TOK_30`, relit les deux fichiers, puis lance ton test sur le tokenizer livré (il doit passer) et sur trois copies abîmées de `tokenizer.json` (il doit échouer sur chacune).
 
-Dans tes notes : quels fichiers committerais-tu à côté des poids d'un modèle, et pourquoi le texte de référence contient-il des accents, un emoji et des idéogrammes ? Une des trois copies abîmées garde les mêmes ids pour la plupart des textes anglais : laquelle, et pourquoi ton test la voit-il quand même ? Quand faut-il **régénérer** `golden.json`, et qui doit le décider ?""",
+Dans tes notes : quels fichiers committerais-tu à côté des poids d'un modèle, et pourquoi le texte de référence contient-il des accents, un emoji et des idéogrammes ? Une des trois copies abîmées donne les mêmes ids pour presque tous les textes : laquelle, et qu'est-ce qui, dans ton test, la trahit ? Quand faut-il **régénérer** `golden.json`, et qui doit le décider ?""",
        given=C.GIVEN_30, todo=C.TODO_30, check=C.CHECK_30, solution=C.SOLUTION_30 + "\n\n\n" + C.CHECK_30),
 
     Ex("B2.31", "🏆", 4, 90, "Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU",

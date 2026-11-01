@@ -966,6 +966,11 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | siamois (réseau) | siamese network | le même réseau encode deux entrées, et la loss rapproche celles de même sens (Sentence-BERT, N. Reimers et I. Gurevych, 2019) | B2 |
 | recherche sémantique | semantic search | retrouver des documents par le sens : indexer leurs embeddings normalisés, puis les classer par cosinus avec celui de la requête | B2 |
 | cross-encoder | cross-encoder | modèle qui lit la requête et le document ensemble pour noter leur pertinence : plus précis, trop lent pour tout un corpus, il reclasse les premiers résultats | B2 |
+| index (recherche sémantique) | index | les embeddings des documents, calculés une fois et rangés, que chaque requête compare par cosinus (une matrice, ou une base vectorielle) | B2 |
+| fichier de référence figé | golden file | sortie attendue enregistrée une fois (les ids d'un texte de référence) qu'un test de non-régression compare à la sortie du jour | B2 |
+| programmation dynamique | dynamic programming | résoudre un problème en combinant les solutions de ses sous-problèmes, chacune calculée une fois (la segmentation d'un texte en le moins de tokens, Viterbi) | B2 |
+| segmentation la plus courte | shortest (optimal) tokenization | à vocabulaire fixé, le découpage d'un texte en le moins de tokens possible, trouvé par programmation dynamique ; les fusions par rang ne le donnent pas toujours | B2 |
+| biais de fréquence (embeddings) | frequency bias | sur un petit corpus, les voisins d'un mot sont souvent des mots de fréquence voisine, en particulier des mots-outils, plutôt que des mots de même sens | B2 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

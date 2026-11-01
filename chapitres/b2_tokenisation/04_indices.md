@@ -854,4 +854,262 @@ def cross_table_21(tokenizers, texts):
 
 </details>
 
-Les indices des exercices B2.22 à B2.31 (parties D et E du notebook) seront ajoutés à la prochaine étape de génération.
+### Ex B2.22 — cooccurrence_matrix et ppmi 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « La matrice de co-occurrences » et l'encadré 🧮 sur la PMI (§202.8), puis le lissage $p_\alpha$ juste après. Tu as fait les deux calculs à la main au ✏️ B2.6.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`cooccurrence_matrix` : valide d'abord (`np.asarray`, `ndim`, `window`, `weighting`, le min et le max des ids). Puis, pour chaque distance `d` de 1 à `window`, les deux tableaux décalés `ids[:-d]` (les mots) et `ids[d:]` (leurs contextes de droite) donnent toutes les paires à la distance `d` d'un coup ; l'autre sens s'obtient en échangeant les deux tableaux. `C[a, b] += w` avec des tableaux d'indices n'ajoute qu'une fois une paire répétée : `np.add.at(C, (a, b), w)` les ajoute toutes. `ppmi` : le total $N$, les sommes des lignes (divisées par $N$), celles des colonnes à la puissance `alpha` (divisées par leur somme), puis le logarithme du rapport **sur les seules cases non nulles** (`np.nonzero`, ou un masque), le reste à 0.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def cooccurrence_matrix(ids, vocab_size, window=2, weighting="uniform", symmetric=True):
+    ids = np.asarray(ids)
+    ...                                            # the four ValueError
+    C = np.zeros((vocab_size, vocab_size))
+    for d in range(1, window + 1):
+        w = 1.0 if weighting == "uniform" else 1.0 / d
+        np.add.at(C, (ids[:-d], ids[d:]), w)       # right contexts at distance d
+        ...                                        # left contexts when symmetric
+    return C
+
+
+def ppmi(C, alpha=1.0):
+    ...                                            # float64 copy, the three ValueError, N, p_w, p_alpha
+    rows, cols = np.nonzero(C)
+    ...                                            # log of the ratio on these cells only, max(0, .), zeros elsewhere
+```
+
+</details>
+
+### Ex B2.23 — cosine_similarity_matrix et most_similar 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Le cosinus » et « Les plus proches voisins » (§202.9) : normaliser les lignes une fois, puis un seul produit matriciel. Pour l'analogie, ✏️ B2.2.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`cosine_similarity_matrix` : les normes des lignes par `np.linalg.norm(A, axis=1, keepdims=True)`, à qui l'on **ajoute** `eps`, puis `A_n @ B_n.T`. `most_similar` : les cosinus de la requête avec toutes les lignes (la même formule, la requête vue comme une matrice d'une ligne) ; les indices restants après `exclude` (`np.setdiff1d`, ou un masque booléen) ; un tri **stable** par cosinus décroissant (`np.argsort(-sims, kind="stable")`, ou `np.lexsort`), puis les `k` premiers. Vérifie la forme de la requête avant tout calcul.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def most_similar(E, query, k=10, exclude=()):
+    E, q = np.asarray(E, dtype=float), np.asarray(query, dtype=float)
+    ...                                            # ValueError: k < 1, q not 1-D of length E.shape[1]
+    sims = cosine_similarity_matrix(E, q[None, :])[:, 0]
+    keep = np.setdiff1d(np.arange(len(E)), np.asarray(exclude, dtype=int))
+    order = keep[np.argsort(-sims[keep], kind="stable")][:k]
+    ...                                            # return the two arrays
+```
+
+</details>
+
+### Ex B2.24 — Embeddings PPMI + SVD sur Holmes : les voisins de « Holmes », « Watson » et « letter » 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Réduire : la SVD tronquée » (§202.8) : son extrait de code donne la SVD et la pondération $\mathbf{S}^{1/2}$. Ta librairie fait le reste (B2.22, B2.23).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les mots hors du vocabulaire ont l'id −1, que `cooccurrence_matrix` refuse. Donne-leur à tous un **id de plus**, `V` (avec `np.where`), compte avec `vocab_size = V + 1`, puis garde le bloc `C[:V, :V]` : leurs paires sont comptées dans la ligne et la colonne `V`, que tu jettes, et les autres mots gardent leurs distances. Puis `ppmi(C, alpha)`, `TruncatedSVD`, et `fit_transform` divisé par la racine des valeurs singulières, ligne par ligne normalisée. `neighbours_24` : `most_similar(E, E[stoi[word]], k, exclude=(stoi[word],))`, puis les mots de `itos`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def ppmi_svd_24(words, n_words=4000, window=2, dim=100, alpha=0.75):
+    stoi, itos = wbtext.top_vocab(words, n_words)
+    v = len(itos)
+    ids = np.where(wbtext.word_ids(words, stoi) < 0, v, wbtext.word_ids(words, stoi))
+    C = mylearn.embeddings.cooccurrence_matrix(ids, v + 1, window=window)[:v, :v]
+    ...                                            # ppmi, TruncatedSVD(..., algorithm="arpack", random_state=0)
+    ...                                            # U S / sqrt(S), rows of norm 1, return (E, stoi, itos)
+```
+
+</details>
+
+### Ex B2.25 — word2vec (skip-gram, échantillonnage négatif) en PyTorch sur Verne 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « word2vec : prédire plutôt que compter » (§202.8) : la loss d'une paire, l'extrait avec `F.logsigmoid`, et les trois réglages de l'article. Tu as calculé ses gradients au ∂ B2.7 ; la boucle d'entraînement est celle du ch. 20.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `keep_probability_25` : les fréquences $f$, puis `np.minimum(1, np.sqrt(t / f))`.
+- `noise_distribution_25` : une puissance, puis une division par la somme.
+- `skipgram_pairs_25` : comme en B2.22, les tableaux décalés `ids[:-d]` et `ids[d:]`, dans les deux sens, pour chaque `d`, puis `np.concatenate`.
+- `SkipGram25` : `forward` lit trois tables, `v = self.center(centers)` `(B, d)`, `self.context(contexts)` `(B, d)` et `self.context(negatives)` `(B, K, d)` ; le score positif est un produit scalaire ligne à ligne (`(u * v).sum(-1)`), les scores négatifs un produit de matrices par mini-batch (`torch.bmm` avec `v.unsqueeze(-1)`, ou `torch.einsum("bkd,bd->bk", ...)`). Attention au signe : $\log \sigma(-s)$ pour les négatifs.
+- `train_word2vec_25` : avant la boucle, le modèle, Adam, `keep` et la loi des négatifs en tenseur ; à chaque epoch, un tirage `rng.random(len(ids)) < keep[ids]`, les paires, une permutation, puis des mini-batches ; les négatifs par `torch.multinomial(noise, B * K, replacement=True).view(B, K)`. La loss d'une epoch est la moyenne des losses des mini-batches, pondérée par leur taille.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class SkipGram25(nn.Module):
+    def __init__(self, vocab_size, dim):
+        super().__init__()
+        ...                                        # two nn.Embedding, then nn.init.uniform_ and nn.init.zeros_
+
+    def forward(self, centers, contexts, negatives):
+        v = self.center(centers)                                              # (B, d)
+        pos = (self.context(contexts) * v).sum(dim=-1)                        # (B,)
+        neg = torch.bmm(self.context(negatives), v.unsqueeze(-1)).squeeze(-1)  # (B, K)
+        ...                                        # the mean over the batch of -logsigmoid(pos) - sum of logsigmoid(-neg)
+```
+
+</details>
+
+### Ex B2.26 — Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis l'hypothèse distributionnelle (§202.8) : deux mots sont proches s'ils ont des **contextes** semblables, pas s'ils se suivent. Pense aussi au sous-échantillonnage et à la fréquence des mots.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Dans le roman, quels mots entourent « fogg » à une ou deux positions près ? Et quels mots entourent ses voisins possibles (« phileas », « mr », « passepartout ») ? b) Passepartout est sujet de nombreuses phrases (« Passepartout dit… », « … répondit Passepartout ») : quels autres mots, dans un texte de 72 000 mots, occupent ces places ? Les autres personnages y sont-ils assez souvent ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Écris, pour chaque choix, deux contextes typiques de « fogg » et deux du mot proposé, puis compte ceux qu'ils partagent ; le choix qui en partage le plus est ta prédiction. b) Compte combien de fois chaque personnage de `CHARACTERS_26` apparaît (`COUNTS_25[STOI_25[nom]]`), puis demande-toi combien de places, parmi dix, ils peuvent prendre face aux mots qui jouent le même rôle grammatical et sont bien plus fréquents.
+
+</details>
+
+### Ex B2.27 — Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « Visualiser » (§202.9) et ce que le ch. 12 disait de la PCA (les directions de plus grande variance) et d'UMAP (les voisinages). La couleur de chaque point est la fréquence du mot.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Balaye la carte (1) de gauche à droite : à chaque abscisse, la couleur dominante change-t-elle ? b) Sur la carte (2), repère les points jaunes et verts : où sont-ils, par rapport aux violets ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Sur la carte (1), les points jaunes, peu nombreux, se trouvent aussi bien à gauche qu'au centre et à droite, et chaque bande verticale est surtout violette : la couleur ne change pas régulièrement le long de l'axe horizontal, donc `False`. b) Même critère sur la carte (2) : les points jaunes forment-ils une tache ou deux, ou sont-ils semés sur toute la carte ?
+
+</details>
+
+### Ex B2.28 — Embeddings de phrases (MiniLM, mean pooling) et recherche sémantique dans Holmes 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « D'une suite de vecteurs à un vecteur de phrase » et l'extrait « Une recherche sémantique en vingt lignes » (§202.10), puis le piège classique sur la longueur maximale.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`embed_28` : une boucle sur les mini-batches ; le tokenizer avec `padding=True`, `truncation=True`, `max_length=max_length`, `return_tensors="pt"` ; le modèle sous `torch.inference_mode()` ; le masque `batch["attention_mask"]`, mis à la forme `(B, T, 1)` et en `float`, multiplie `last_hidden_state` ; la somme sur l'axe des tokens divisée par la somme du masque ; `F.normalize(..., dim=1)` ; enfin `torch.cat` et `.numpy()`. `search_28` : l'embedding de la requête (une liste d'un texte), puis `most_similar(index, q, k)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def embed_28(texts, tok, model, batch_size=32, max_length=256):
+    out = []
+    for start in range(0, len(texts), batch_size):
+        batch = tok(list(texts[start:start + batch_size]), padding=True, truncation=True,
+                    max_length=max_length, return_tensors="pt")
+        ...                                        # last_hidden_state without gradient
+        m = batch["attention_mask"].unsqueeze(-1).float()
+        ...                                        # masked mean, norm 1, append
+    return torch.cat(out).numpy()
+```
+
+</details>
+
+### Ex B2.29 — Statique contre contextuel : le même mot dans deux phrases 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Un mot, plusieurs sens » (§202.10) et la ligne d'une table d'embedding (§202.7) : la table d'entrée ne voit pas la phrase, la sortie du dernier bloc la voit tout entière.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`contextual_vector_29` : la position du mot par `re.search(rf"\b{re.escape(word)}\b", sentence)` ; le tokenizer avec `return_offsets_mapping=True` rend, pour chaque token, ses positions `(début, fin)` dans la phrase (`(0, 0)` pour un token spécial) : garde ceux qui chevauchent le mot, retire `offset_mapping` du batch avant de le donner au modèle, puis la moyenne des lignes gardées de `last_hidden_state[0]`. `static_vector_29` : les ids de `tok(word, add_special_tokens=False)`, puis les lignes de `model.get_input_embeddings().weight`. `sense_means_29` : normalise les vecteurs, la matrice des cosinus, puis les paires $i < j$ (`np.triu_indices(n, k=1)`), séparées par l'égalité des sens.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def contextual_vector_29(sentence, word, tok, model):
+    m = re.search(rf"\b{re.escape(word)}\b", sentence)
+    batch = tok(sentence, return_tensors="pt", return_offsets_mapping=True)
+    offsets = batch.pop("offset_mapping")[0].tolist()
+    keep = [k for k, (a, b) in enumerate(offsets) if b > a and a < m.end() and b > m.start()]
+    ...                                            # last_hidden_state[0][keep], mean over the tokens, NumPy
+```
+
+</details>
+
+### Ex B2.30 — Sauvegarder un tokenizer en JSON et écrire son test de non-régression 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis « Les tokenizers des modèles, lus dans leur `tokenizer.json` » (§202.5) et tes tests pytest du ch. 0A : un test compare ce que rend le code à une valeur attendue, figée d'avance.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`deliver_30` : `Path(folder).mkdir(parents=True, exist_ok=True)`, `tok.save(...)`, puis `json.dumps` d'un dictionnaire (le texte, ses ids, et ce que ton test veut comparer d'autre, comme le nombre de tokens), écrit en UTF-8 avec `ensure_ascii=False`. Le test : `BPETokenizer.load(TOKENIZER_PATH)`, `json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))`, puis trois `assert`, chacun avec un message qui dit ce qui était attendu.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def test_tokenizer_regression_30():
+    tok = BPETokenizer.load(TOKENIZER_PATH)
+    golden = json.loads(Path(GOLDEN_PATH).read_text(encoding="utf-8"))
+    ids = tok.encode(golden["text"])
+    assert ids == golden["ids"], "expected the frozen ids of the reference text"
+    ...                                            # the number of tokens, then decode(ids) == text
+```
+
+</details>
+
+### Ex B2.31 — Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU 🏆
+
+<details><summary>Indice 1</summary>
+
+Deux choses fixent la compression d'un BPE de taille donnée : **ce que ses tokens peuvent contenir** (la pré-tokenisation interdit à un token de franchir certaines frontières, §202.4) et **la façon d'appliquer le vocabulaire** à un texte (les fusions par rang, §202.3, ne donnent pas forcément le moins de tokens). Regarde aussi ce que dit le §202.5 de SentencePiece.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Avec `'gpt2'`, un token ne contient jamais deux mots : « de la », « Phileas Fogg » ou « , dit » coûtent au moins deux tokens. Essaie une pré-tokenisation plus large (par lignes, par exemple), avec la bibliothèque `tokenizers` pour rester sous les deux minutes : `pre_tokenizers.ByteLevel(add_prefix_space=False, use_regex=False)` ne découpe rien et code les octets comme GPT-2 (§202.4), et `BpeTrainer(initial_alphabet=pre_tokenizers.ByteLevel.alphabet())` garde les 256 octets.
+- Un vocabulaire fixé, la suite de tokens **la plus courte** se trouve par programmation dynamique : `best[j]`, le plus petit nombre de tokens pour les `j` premiers octets, vaut `min(best[i] + 1)` sur les tokens `data[i:j]` du vocabulaire.
+- Mesure chaque idée seule sur la validation, puis ensemble, avec son temps.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def shortest_ids(data, index, longest):           # data: bytes, index: {bytes: id}
+    best, back = [0] + [math.inf] * len(data), [None] * (len(data) + 1)
+    for i in range(len(data)):
+        for j in range(i + 1, min(len(data), i + longest) + 1):
+            ...                                    # if data[i:j] is a token and best[i] + 1 < best[j]: update
+    ...                                            # walk back from len(data) to 0, then reverse
+```
+
+</details>

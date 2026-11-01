@@ -184,6 +184,9 @@ H_R3 = float(-(P_R3 * np.log2(P_R3)).sum())
 
 LIBRARY_CHECKS = '''
 # The same answers from the libraries (no download): mylearn (reference), tokenizers, PyTorch
+import warnings
+
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers)
 import torch
 from tokenizers import Tokenizer, models, pre_tokenizers, trainers
 from torch import nn
@@ -624,7 +627,7 @@ def header_cells(kind: str) -> list:
                "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Le "
                "notebook télécharge du Hugging Face Hub, s'ils ne sont pas déjà là, les fichiers de six tokenizers "
                "(quelques Mo, pas les poids des modèles), puis le modèle all-MiniLM-L6-v2 (≈ 90 Mo) pour B2.28 et "
-               "B2.29 ; sans connexion, leurs cellules affichent ⏳ et le reste continue. Tout tourne sur CPU (≈ 5 min "
+               "B2.29 ; sans connexion, leurs cellules affichent ⏳ et le reste continue. Tout tourne sur CPU (≈ 2 min "
                "pour les solutions en mode rapide).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b2_tokenisation/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "

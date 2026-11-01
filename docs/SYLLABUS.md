@@ -4861,7 +4861,7 @@ Avant qu'un modèle de langue lise un texte, il faut le découper en tokens puis
 | B2.11 | ⚖️ | Une taxe cachée sur certaines langues, des stéréotypes dans les vecteurs : tokenisation et biais | ★★ | 25 | — | 02 | B2.8 | R | manual |
 | B2.12 | 📄 | Sennrich, Haddow et Birch (2016) : les sous-mots pour traduire les mots rares | ★★★ | 45 | — | 02 | B2.3 | M | manual |
 | B2.13 | 📦 | Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne | ★★ | 20 | Holmes/Verne | 03 | 22 | RC | wb.check |
-| B2.14 | 🔮 | Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ? | ★ | 10 | Holmes/Verne | 03 | B2.13 | RC | manual |
+| B2.14 | 🔮 | Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ? | ★ | 10 | Holmes/Verne | 03 | B2.13 | RC | wb.check |
 | B2.15 | 🔨 | get_pair_counts et merge_pair | ★★ | 20 | Holmes/Verne | 03 | B2.3 | RMC | pytest |
 | B2.16 | 🔨 | BPETokenizer.fit : apprendre les fusions, au niveau caractère puis octet | ★★★ | 50 | Holmes/Verne | 03 | B2.15 | RMC | pytest |
 | B2.17 | 🔨 | encode et decode : fusions appliquées par rang, aller-retour sans perte | ★★★ | 40 | Holmes/Verne | 03 | B2.16, B2.4 | RMC | pytest |
@@ -4873,12 +4873,12 @@ Avant qu'un modèle de langue lise un texte, il faut le découper en tokens puis
 | B2.23 | 🔨 | cosine_similarity_matrix et most_similar | ★★ | 20 | Holmes | 03 | B2.2 | RC | pytest |
 | B2.24 | 📦 | Embeddings PPMI + SVD sur Holmes : les voisins de « Holmes », « Watson » et « letter » | ★★ | 30 | Holmes | 03 | B2.22, B2.23, 12 | C | manual |
 | B2.25 | 📦 | word2vec (skip-gram, échantillonnage négatif) en PyTorch sur Verne | ★★★ | 60 | Verne | 03 | B2.7, B2.24, 20 | C | manual |
-| B2.26 | 🔮 | Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer | ★ | 10 | Verne | 03 | B2.25 | C | manual |
-| B2.27 | 📈 | Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence | ★★ | 20 | Verne | 03 | B2.25, 12 | C | manual |
+| B2.26 | 🔮 | Prédire les voisins de « Fogg » et de « Passepartout » avant de les calculer | ★ | 10 | Verne | 03 | B2.25 | C | wb.check |
+| B2.27 | 📈 | Lire une carte PCA/UMAP d'embeddings : groupes, axes et effet de la fréquence | ★★ | 20 | Verne | 03 | B2.25, 12 | C | wb.check |
 | B2.28 | 📦 | Embeddings de phrases (MiniLM, mean pooling) et recherche sémantique dans Holmes | ★★ | 30 | Holmes | 03 | B2.23 | RC | manual |
 | B2.29 | 🔬 | Statique contre contextuel : le même mot dans deux phrases | ★★ | 25 | Holmes/Verne | 03 | B2.28 | C | manual |
 | B2.30 | 🛠️ | Sauvegarder un tokenizer en JSON et écrire son test de non-régression | ★★ | 20 | Holmes/Verne | 03 | B2.17 | RC | manual |
-| B2.31 | 🏆 | Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU | ★★★★ | 90 | Verne | 03 | B2.20 | C | wb.check |
+| B2.31 | 🏆 | Défi : la meilleure compression sans perte de Verne avec 2 000 tokens, en moins de 2 min de CPU | ★★★★ | 90 | Verne | 03 | B2.20 | C | manual |
 | B2.E1 | 💼 | Pourquoi les LLM découpent-ils le texte en sous-mots plutôt qu'en mots ou en caractères ? | ★★ | 10 | — | 02 | — | R | manual |
 | B2.E2 | 💼 | Explique BPE, puis ce qui le distingue de WordPiece | ★★ | 10 | — | 02 | — | R | manual |
 | B2.E3 | 💼 | Que se passe-t-il si l'on change de tokenizer sans ré-entraîner le modèle ? | ★★ | 10 | — | 02 | — | R | manual |

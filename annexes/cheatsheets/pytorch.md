@@ -230,6 +230,11 @@
 | `model.resize_token_embeddings(len(tok))` | agrandir la table après `tok.add_tokens([...])` (les nouvelles lignes restent à apprendre) |
 | `loss = -F.logsigmoid(u_c @ v) - F.logsigmoid(-(u_neg @ v)).sum()` | la loss du skip-gram à échantillonnage négatif, sans débordement |
 | `m = batch["attention_mask"].unsqueeze(-1).float()` ; `s = (h * m).sum(1) / m.sum(1)` ; `F.normalize(s, dim=1)` | mean pooling avec masque, puis norme 1 : le cosinus devient un produit scalaire (`q @ D.T`) |
+| `neg = torch.multinomial(p, B * K, replacement=True).view(B, K)` ; `torch.bmm(emb_ctx(neg), v.unsqueeze(-1)).squeeze(-1)` | tirer $K$ négatifs par paire selon une loi `p` (la fréquence à la puissance 3/4), puis leurs $K$ scores d'un coup, `(B, K)` (B2.25) |
+| `nn.init.uniform_(emb.weight, -0.5 / d, 0.5 / d)` ; `nn.init.zeros_(ctx.weight)` | l'initialisation de word2vec : de petits vecteurs de mots, des vecteurs de contexte nuls (B2.25) |
+| `tok(phrase, return_offsets_mapping=True)` ; `batch.pop("offset_mapping")` | les positions `(début, fin)` de chaque token dans la phrase, `(0, 0)` pour un token spécial ; à retirer avant d'appeler le modèle (B2.29) |
+| `model.get_input_embeddings().weight[ids]` ; `model(**batch).last_hidden_state` | le vecteur **statique** d'un token (la table d'entrée) et ses vecteurs **contextuels** (la sortie du dernier bloc) (B2.29) |
+| `pre_tokenizers.ByteLevel(add_prefix_space=False, use_regex=False)` ; `BpeTrainer(initial_alphabet=pre_tokenizers.ByteLevel.alphabet())` | un BPE octet sans pré-tokenisation par mots : des tokens qui franchissent les espaces (B2.31) |
 
 ## Dataset et DataLoader
 
