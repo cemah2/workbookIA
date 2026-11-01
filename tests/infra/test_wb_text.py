@@ -174,3 +174,143 @@ def test_byte_bpe_merges_docstring_example_and_a_small_corpus():
         assert W.byte_bpe_merges(texts, vocab_size, min_frequency) == _naive_byte_merges(texts, vocab_size, min_frequency), \
             f"expected the merges of a naive byte-level BPE (vocab_size={vocab_size}, min_frequency={min_frequency})"
     assert W.byte_bpe_merges(texts[0], 300) == W.byte_bpe_merges([texts[0]], 300), "expected a str to be one text"
+
+
+# ---------------------------------------------------------------------------
+# Embeddings of the phase « embeddings » (B2.24, B2.28, B2.29)
+# ---------------------------------------------------------------------------
+def test_reference_ppmi_svd_matches_the_dense_formula_on_a_small_vocabulary():
+    import importlib
+
+    from sklearn.decomposition import TruncatedSVD
+
+    Em = importlib.import_module("mylearn_ref.embeddings")
+    words = W.words("holmes")[:30_000]
+    E, stoi, itos = W.reference_ppmi_svd(words, n_words=300, window=2, dim=20)
+    assert E.shape == (300, 20) and np.allclose(np.linalg.norm(E, axis=1), 1), "expected 300 unit rows of 20 values"
+    assert itos == W.top_vocab(words, 300)[1], "expected the vocabulary of top_vocab"
+    ids = W.word_ids(words, stoi)
+    ids = np.where(ids < 0, 300, ids)                       # an extra id for the unknown words, then dropped
+    M = Em.ppmi(Em.cooccurrence_matrix(ids, 301, window=2)[:300, :300], alpha=0.75)
+    svd = TruncatedSVD(20, algorithm="arpack", random_state=0)
+    D = svd.fit_transform(M) / np.sqrt(svd.singular_values_)
+    D /= np.linalg.norm(D, axis=1, keepdims=True)
+    assert np.allclose(E @ E.T, D @ D.T, atol=1e-6), "expected the same cosines as the dense computation of mylearn"
+
+
+def test_reference_ppmi_svd_of_holmes_has_the_neighbours_of_the_fiche():
+    E, stoi, itos = W.reference_ppmi_svd(W.words("holmes"))
+    sims = E @ E[stoi["father"]]
+    order = [itos[i] for i in np.argsort(-sims, kind="stable") if itos[i] != "father"]
+    assert order[0] == "sister" and {"son", "wife"} <= set(order[:5]), f"expected the neighbours of the fiche, got {order[:5]}"
+
+
+def test_holmes_stories_and_passages_are_frozen_and_lose_no_word():
+    stories = W.holmes_stories()
+    assert [t for t, _ in stories][:2] == ["A Scandal in Bohemia", "The Red-Headed League"] and len(stories) == 12
+    assert stories[6][0] == "The Blue Carbuncle" and stories[8][0] == "The Engineer’s Thumb"
+    passages, story = W.holmes_passages()
+    assert len(passages) == 1055 and story.dtype == np.int64 and story.shape == (1055,)
+    assert max(len(p.split()) for p in passages) <= 120 and "\n" not in "".join(passages)
+    assert np.all(np.diff(story) >= 0) and set(story.tolist()) == set(range(12)), "expected the stories in order"
+    for s, (_, body) in enumerate(stories):
+        got = " ".join(p for p, k in zip(passages, story) if k == s).split()
+        paragraphs = [p for p in re.split(r"\n\s*\n", body) if not re.fullmatch(r"[IVX]+\.", p.strip())]
+        want = " ".join(paragraphs).split()                             # without the chapter numbers (« II. »)
+        assert got == want, f"expected every word of story {s} once, in order"
+
+
+class _FakeTokenizer:
+    """Whitespace « tokens »: id = length of the word; padding with 0; truncation at max_length."""
+
+    def __call__(self, texts, padding=True, truncation=True, max_length=512, return_tensors="pt"):
+        import torch
+
+        rows = [[len(w) for w in t.split()][:max_length] for t in texts]
+        width = max(len(r) for r in rows)
+        ids = torch.tensor([r + [0] * (width - len(r)) for r in rows])
+        mask = torch.tensor([[1] * len(r) + [0] * (width - len(r)) for r in rows])
+        return {"input_ids": ids, "attention_mask": mask}
+
+
+class _FakeModel:
+    """last_hidden_state: (id, 1) for a real token, (100, 100) for padding (the mask must remove it)."""
+
+    def __call__(self, input_ids, attention_mask):
+        import torch
+        from types import SimpleNamespace
+
+        h = torch.stack([input_ids.float(), torch.ones_like(input_ids, dtype=torch.float)], dim=-1)
+        h[attention_mask == 0] = 100.0
+        return SimpleNamespace(last_hidden_state=h)
+
+
+def test_sentence_model_embed_is_a_masked_mean_then_norm_1_in_the_order_of_the_texts():
+    pytest.importorskip("torch")
+    sm = W.SentenceModel("minilm", _FakeTokenizer(), _FakeModel())
+    sm.dim = 2
+    out = sm.embed(["aaa b", "cc", "dddd dddd dddd"], batch_size=2)
+    want = np.array([[2.0, 1.0], [2.0, 1.0], [4.0, 1.0]])
+    want /= np.linalg.norm(want, axis=1, keepdims=True)
+    assert out.dtype == np.float32 and np.allclose(out, want, atol=1e-6), "expected the masked mean, normalised"
+    sm.prefixes["query"] = "zzzzzz "
+    assert np.allclose(sm.embed(["b"], kind="query")[0], np.array([3.5, 1.0]) / np.linalg.norm([3.5, 1.0]), atol=1e-6)
+    assert sm.embed([]).shape == (0, 2)
+    with pytest.raises(ValueError, match="kind"):
+        sm.embed(["x"], kind="document")
+
+
+def test_passage_embeddings_are_cached_under_a_full_key(tmp_path):
+    pytest.importorskip("torch")
+    sm = W.SentenceModel("minilm", _FakeTokenizer(), _FakeModel())
+    sm.dim = 2
+    calls = []
+    real = sm.embed
+    sm.embed = lambda texts, kind=None, batch_size=32: calls.append(len(texts)) or real(texts, kind, batch_size)
+    first = W.passage_embeddings(sm, ["a b", "ccc"], "toy", folder=tmp_path, verbose=False)
+    again = W.passage_embeddings(sm, ["a b", "ccc"], "toy", folder=tmp_path, verbose=False)
+    other = W.passage_embeddings(sm, ["a b", "cccc"], "toy", folder=tmp_path, verbose=False)
+    assert calls == [2, 2], "expected one computation per set of passages, then the cache"
+    assert np.array_equal(first, again) and not np.array_equal(first, other)
+
+
+def test_try_sentence_model_falls_back_to_none_with_a_pending_line(monkeypatch, capsys):
+    with pytest.raises(ValueError, match="unknown sentence model"):
+        W.load_sentence_model("sbert")
+
+    def no_network(name="minilm", *, reuse=True):
+        raise W.SentenceModelUnavailable(f"modèle {name} impossible à charger : OSError : no network")
+
+    monkeypatch.setattr(W, "load_sentence_model", no_network)
+    assert W.try_sentence_model("minilm", "B2.28") is None
+    assert capsys.readouterr().out.startswith("⏳ Ex B2.28 : modèle minilm impossible à charger")
+
+
+@pytest.mark.network
+def test_minilm_gives_the_cosines_of_the_fiche_and_reads_every_passage_whole():
+    sm = W.load_sentence_model("minilm")
+    assert sm.revision == "1110a243fdf4706b3f48f1d95db1a4f5529b4d41" and not sm.model.training
+    docs = ["The train to Lyon leaves at nine.", "My laptop will not start after the update.",
+            "Our cat sleeps all day on the sofa.", "How do I reset a forgotten password?",
+            "The bakery sells fresh bread every morning."]
+    sims = sm.embed(["I can't log in to my account"]) @ sm.embed(docs).T
+    assert np.round(np.sort(sims[0].astype(float))[::-1][:3], 3).tolist() == [0.502, 0.293, 0.042], "expected the cosines of the fiche"
+    passages, _ = W.holmes_passages()
+    assert max(len(sm.tokenizer(p)["input_ids"]) for p in passages) <= sm.max_length, "expected no passage truncated"
+
+
+@pytest.mark.network
+def test_minilm_word_vectors_contextual_and_static():
+    sm = W.load_sentence_model("minilm")
+    a = sm.word_vector("He sat on the bank of the river.", "bank")
+    b = sm.word_vector("He works at the bank in the City.", "bank")
+    assert a.shape == (384,) and a.dtype == np.float32 and not np.allclose(a, b), "expected one vector per use"
+    batch = sm.tokenizer("He sat on the bank of the river.", return_tensors="pt")
+    k = batch["input_ids"][0].tolist().index(sm.tokenizer.convert_tokens_to_ids("bank"))
+    import torch
+    with torch.inference_mode():
+        want = sm.model(**batch).last_hidden_state[0, k].numpy()
+    assert np.allclose(a, want, atol=1e-6), "expected the output of the last block at the token of the word"
+    assert np.allclose(sm.static_vector("bank"), sm.model.embeddings.word_embeddings.weight[k and batch["input_ids"][0, k]].numpy())
+    with pytest.raises(ValueError, match="not a word"):
+        sm.word_vector("A banker.", "bank")
