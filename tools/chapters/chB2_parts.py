@@ -225,11 +225,11 @@ Dans tes notes : pourquoi l'alphabet est-il trié par point de code, et que devi
   - un tokenizer non entraîné, dans `encode` comme dans `decode` ;
   - un caractère inconnu sans `unk_token` ;
   - un identifiant inconnu passé à `decode`, −1 compris (ce n'est pas un indice Python).
-- `encode` et `decode` ne lisent que les hyperparamètres et les quatre attributs appris : un cache privé posé par `fit` casse le tokenizer rechargé par `load` (testé).
+- `encode` et `decode` ne lisent que les hyperparamètres et les quatre attributs appris (`n_base_`, `merges_`, `vocab_`, `special_ids_`) : aucun état privé posé par `fit`. Un cache privé casse le tokenizer rechargé par `load` (testé) et ceux que la partie C construit sans `fit` (`fast_byte_bpe`, `truncated_bpe`) ; les cellules de B2.17, B2.20, B2.21 et B2.30 le vérifient en reconstruisant un tokenizer à la main.
 
 Les tests comparent tes identifiants à ceux de `tokenizers`, vérifient l'aller-retour sans perte sur environ 300 chaînes Unicode tirées au hasard (emoji, idéogrammes, accents combinants, espaces multiples), et que ton nombre de tokens reste à moins de 2 % de celui d'un BPE `ByteLevel` de même taille.
 
-La première cellule de vérification compare ton encodage d'un passage de Verne à celui de `tokenizers`, essaie `<unk>`, l'aller-retour d'un texte accentué avec un emoji et des idéogrammes, un octet seul, `tokenize`, et quatre refus. La seconde lance les 36 tests de l'exercice (`-k "test_bpe_encode_ or test_bpe_decode_ or test_bpe_tokenize_ or test_bpe_save_load_"`).
+La première cellule de vérification compare ton encodage d'un passage de Verne à celui de `tokenizers`, essaie `<unk>`, l'aller-retour d'un texte accentué avec un emoji et des idéogrammes, un octet seul, `tokenize`, quatre refus, puis `save` et `load`. La seconde lance les 36 tests de l'exercice (`-k "test_bpe_encode_ or test_bpe_decode_ or test_bpe_tokenize_ or test_bpe_save_load_"`).
 
 Dans tes notes : avec `'whitespace'`, que redonne `decode(encode("le chat dort"))`, et pourquoi le pré-tokenizer `'gpt2'` règle-t-il ce problème ? Que rend `tokenize("été")` au niveau octet avec seulement 256 tokens, et pourquoi ?""",
        check=RELOAD + C.CHECK_17, solution=C.CHECK_17,

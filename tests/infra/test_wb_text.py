@@ -184,6 +184,12 @@ def test_reference_ppmi_svd_matches_the_dense_formula_on_a_small_vocabulary():
 
     from sklearn.decomposition import TruncatedSVD
 
+    import sys
+    from pathlib import Path
+
+    solutions = str(Path(__file__).resolve().parents[2] / "solutions")
+    if solutions not in sys.path:  # the reference is the oracle of this infrastructure test
+        sys.path.insert(0, solutions)
     Em = importlib.import_module("mylearn_ref.embeddings")
     words = W.words("holmes")[:30_000]
     E, stoi, itos = W.reference_ppmi_svd(words, n_words=300, window=2, dim=20)
@@ -196,6 +202,10 @@ def test_reference_ppmi_svd_matches_the_dense_formula_on_a_small_vocabulary():
     D = svd.fit_transform(M) / np.sqrt(svd.singular_values_)
     D /= np.linalg.norm(D, axis=1, keepdims=True)
     assert np.allclose(E @ E.T, D @ D.T, atol=1e-6), "expected the same cosines as the dense computation of mylearn"
+    US = svd.fit_transform(M)
+    US /= np.linalg.norm(US, axis=1, keepdims=True)
+    E1, _, _ = W.reference_ppmi_svd(words, n_words=300, window=2, dim=20, power=1.0)
+    assert np.allclose(E1 @ E1.T, US @ US.T, atol=1e-6), "expected U S with power=1"
 
 
 def test_reference_ppmi_svd_of_holmes_has_the_neighbours_of_the_fiche():

@@ -55,6 +55,37 @@ def bpe_written():
     return written(lambda: mylearn.tokenizer.BPETokenizer(vocab_size=258, level="byte").fit("aa aa").encode("aa"))
 
 
+REBUILD_TEXT = "le chat et le rat, les chats et les rats ; l'été, été, étés."
+
+
+def rebuilt(tok):
+    """A new BPETokenizer with the hyperparameters and the four learned attributes of tok, set by hand (as
+    fast_byte_bpe, truncated_bpe and load do), without fit."""
+    copy = type(tok)(vocab_size=tok.vocab_size, level=tok.level, pre_tokenizer=tok.pre_tokenizer,
+                     min_frequency=tok.min_frequency, special_tokens=tok.special_tokens, unk_token=tok.unk_token)
+    copy.n_base_, copy.merges_ = tok.n_base_, list(tok.merges_)
+    copy.vocab_, copy.special_ids_ = dict(tok.vocab_), dict(tok.special_ids_)
+    return copy
+
+
+def bpe_rebuild_ok(ex_id):
+    """True when the encode of your library gives the same ids for a fitted tokenizer and for the same tokenizer
+    rebuilt by hand without fit; otherwise a ❌ line that points to the contract of B2.16 and B2.17, and False."""
+    try:
+        tok = mylearn.tokenizer.BPETokenizer(vocab_size=290, pre_tokenizer="gpt2", min_frequency=1).fit(REBUILD_TEXT)
+        same_ids = rebuilt(tok).encode(REBUILD_TEXT) == tok.encode(REBUILD_TEXT)
+    except Exception as exc:  # noqa: BLE001 - any error of the learner's code: the same diagnosis
+        same_ids = False
+        print(f"   (ton code lève {type(exc).__name__} : {str(exc)[:160]})")
+    if not same_ids:
+        print(f"❌ Ex {ex_id} : un tokenizer reconstruit sans fit (ses quatre attributs n_base_, merges_, vocab_ et "
+              "special_ids_ copiés à la main, comme le font fast_byte_bpe, truncated_bpe et load) n'encode pas comme "
+              "l'original : ton encode lit un autre état, posé par fit. Relis le contrat de B2.16 et B2.17 : encode et "
+              "decode ne lisent que les hyperparamètres et ces quatre attributs. Les mesures de cet exercice attendent "
+              "cette correction.")
+    return same_ids
+
+
 def reference_char_bpe(text, vocab_size, min_frequency=2):
     """The BPE of the library tokenizers trained like BPETokenizer(level="char", pre_tokenizer="whitespace") (fiche
     §202.3): models.BPE, pre_tokenizers.Whitespace, BpeTrainer. For the checks."""
@@ -360,7 +391,16 @@ CHECK_17 = r'''with checked("B2.17"):
     refuses("B2.17", "encode avant fit", lambda: T.BPETokenizer().encode("abc"))
     refuses("B2.17", "decode([-1])", lambda: byte_17.decode([-1]))
     refuses("B2.17", "decode([len(vocab_)])", lambda: byte_17.decode([len(byte_17.vocab_)]))
-    refuses("B2.17", "niveau caractère sans unk_token : encode('🙂')", lambda: char_17.encode("🙂"))'''
+    refuses("B2.17", "niveau caractère sans unk_token : encode('🙂')", lambda: char_17.encode("🙂"))
+    import tempfile
+    path_17 = os.path.join(tempfile.mkdtemp(prefix="wb_b2_17_"), "bpe.json")
+    byte_17.save(path_17)                                  # save and load are provided: they keep the four attributes
+    loaded_17 = type(byte_17).load(path_17)
+    verdict("B2.17", loaded_17.encode(text_17) == byte_17.encode(text_17),
+            "save puis load : le tokenizer rechargé encode exactement comme l'original.",
+            "save puis load : le tokenizer rechargé n'encode pas comme l'original. load ne rend que les hyperparamètres "
+            "et les quatre attributs n_base_, merges_, vocab_ et special_ids_ : ton encode lit-il un autre état, posé par "
+            "fit (un cache privé) ? Relis le contrat.")'''
 
 # 🐛 B2.18: the tokenizer to repair, its fixed version and the diagnostics
 TODO_18 = r'''# The tokenizer to repair IN PLACE (same names, same signatures, same returns): the diagnostics of the next cell start
@@ -740,6 +780,8 @@ with checked("B2.20"):
 EXPERIMENT_20 = r'''SIZES_20 = (300, 500, 1000, 2000, 4000, 8000)
 if not bpe_written():
     print("⏳ Ex B2.20 : l'expérience attend BPETokenizer.fit et encode (B2.16 et B2.17).")
+elif not bpe_rebuild_ok("B2.20"):
+    pass
 elif not globals().get("ok_20"):
     print("⏳ Ex B2.20 : l'expérience attend que compression_20 et token_entropy_20 passent la cellule précédente.")
 else:
@@ -820,7 +862,7 @@ def cross_table_21(tokenizers, texts):
 
 CHECK_21 = r'''if not bpe_written():
     print("⏳ Ex B2.21 : l'expérience attend BPETokenizer.fit et encode (B2.16 et B2.17).")
-else:
+elif bpe_rebuild_ok("B2.21"):
     with checked("B2.21"):
         need("B2.21", "compression_20")
         start_21 = time.perf_counter()

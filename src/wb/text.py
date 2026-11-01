@@ -244,14 +244,16 @@ def byte_bpe_merges(texts: str | Iterable[str], vocab_size: int, min_frequency: 
 # Word vectors by counting (📦 B2.24): the reference of the check cell, computed with scipy.sparse
 # ---------------------------------------------------------------------------
 def reference_ppmi_svd(tokens: list[str], n_words: int = 4000, window: int = 2, dim: int = 100,
-                       alpha: float = 0.75) -> tuple[np.ndarray, dict[str, int], list[str]]:
+                       alpha: float = 0.75, power: float = 0.5,
+                       algorithm: str = "arpack") -> tuple[np.ndarray, dict[str, int], list[str]]:
     """``(E, stoi, itos)``: the PPMI + SVD word vectors of the fiche (§202.8), the reference of 📦 B2.24.
 
     The vocabulary is ``top_vocab(tokens, n_words)``; a word outside it keeps its place in the text but its pairs are
     not counted (skipped, never merged: two words far apart never become neighbours). Counts in a symmetric window
     with the uniform weighting, PPMI with the natural log and the context smoothing ``alpha``, then
     ``TruncatedSVD(dim, algorithm="arpack", random_state=0)``; the rows of ``U_d S_d^(1/2)``, normalised to norm 1,
-    are the vectors (``float64``, shape ``(len(itos), dim)``)."""
+    are the vectors (``float64``, shape ``(len(itos), dim)``). ``power`` (``U_d S_d^power``) and ``algorithm``
+    (``"randomized"``) give the classic variants, for the messages of the check cell."""
     import scipy.sparse as sp
     from sklearn.decomposition import TruncatedSVD
 
@@ -273,8 +275,8 @@ def reference_ppmi_svd(tokens: list[str], n_words: int = 4000, window: int = 2, 
     pmi = np.log((counts.data / total) / (p_w[counts.row] * p_c[counts.col]))
     keep = pmi > 0
     M = sp.csr_matrix((pmi[keep], (counts.row[keep], counts.col[keep])), shape=(v, v))
-    svd = TruncatedSVD(dim, algorithm="arpack", random_state=0)
-    E = svd.fit_transform(M) / np.sqrt(svd.singular_values_)
+    svd = TruncatedSVD(dim, algorithm=algorithm, random_state=0)
+    E = svd.fit_transform(M) * svd.singular_values_ ** (power - 1)    # U_d S_d^power (power = 1/2 by default)
     return E / np.linalg.norm(E, axis=1, keepdims=True), stoi, itos
 
 

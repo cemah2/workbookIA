@@ -221,9 +221,25 @@ with checked("B2.24"):
     gap_24 = float(np.abs(E_24[rows_24] @ E_24.T - R_24[rows_24] @ R_24.T).max())
     verdict("B2.24", gap_24 < 1e-3, "les cosinus de « holmes », « watson » et « letter » avec les 4 000 mots sont ceux de "
             f"la référence (écart maximal {gap_24:.1e}).",
-            f"les cosinus de « holmes », « watson » et « letter » s'écartent de la référence jusqu'à {gap_24:.2f} : as-tu "
-            "gardé la place des mots hors vocabulaire (sans les retirer du texte), lissé les seules colonnes (alpha), pris "
-            "U S^(1/2) (pas U S), normalisé les lignes, et algorithm='arpack' ?")
+            f"les cosinus de « holmes », « watson » et « letter » s'écartent de la référence jusqu'à {gap_24:.2f}.")
+    if gap_24 >= 1e-3:                                           # which classic variant does your E match?
+        known_24 = wbtext.top_vocab(WORDS_H, 4000)[0]
+        causes_24 = {
+            "les mots hors vocabulaire sont retirés du texte, ce qui rapproche leurs voisins : garde-leur une place":
+                dict(tokens=[w for w in WORDS_H if w in known_24]),
+            "E vaut U S (la sortie de fit_transform) : la fiche prend U S^(1/2)": dict(power=1.0),
+            "la SVD est celle de l'algorithme 'randomized' (par défaut) : prends algorithm='arpack', random_state=0":
+                dict(algorithm="randomized"),
+            "la PPMI n'est pas lissée : passe alpha à ppmi": dict(alpha=1.0)}
+        found_24 = None
+        for why_24, kwargs_24 in causes_24.items():
+            V_24 = wbtext.reference_ppmi_svd(kwargs_24.pop("tokens", WORDS_H), **kwargs_24)[0]
+            if float(np.abs(E_24[rows_24] @ E_24.T - V_24[rows_24] @ V_24.T).max()) < 1e-3:
+                found_24 = why_24
+                break
+        print(f"💡 Ex B2.24 : {found_24}." if found_24 else "💡 Ex B2.24 : ce n'est aucune des erreurs classiques (mots "
+              "inconnus retirés, U S, SVD 'randomized', PPMI sans lissage) : compare ta matrice C, puis ta PPMI, à celles "
+              "d'un petit texte calculées à la main.")
     nb_24 = {w: neighbours_24(E_24, stoi_24, itos_24, w) for w in WORDS_24}
     if not returned("B2.24", "neighbours_24", nb_24["holmes"]):
         raise StopCheck
@@ -434,10 +450,15 @@ else:
         E_25 = E_25 / np.linalg.norm(E_25, axis=1, keepdims=True)      # the word vectors: rows of norm 1
         print(f"{EPOCHS_25} epochs en {fr(seconds_25, 1)} s ; loss moyenne par epoch : "
               + ", ".join(fr(v, 3) for v in LOSSES_25))
-        verdict("B2.25", len(LOSSES_25) == EPOCHS_25 and LOSSES_25[-1] < LOSSES_25[0] - 0.3,
-                f"la loss baisse de {fr(LOSSES_25[0], 2)} à {fr(LOSSES_25[-1], 2)}.",
-                f"la loss devrait baisser nettement d'une epoch à l'autre ({fr(LOSSES_25[0], 2)} → {fr(LOSSES_25[-1], 2)}) : "
-                "relis les signes de forward, l'ordre zero_grad / backward / step, et le learning rate.")
+        if LOSSES_25[-1] < 1.0:                    # 5 random negatives: some always look like true contexts
+            print(f"❌ Ex B2.25 : la loss tombe à {fr(LOSSES_25[-1], 3)} : avec 5 négatifs tirés au hasard, dont des mots "
+                  "fréquents qui sont aussi de vrais contextes, une loss presque nulle veut dire que forward ne calcule pas "
+                  "la loss de la fiche (relis le signe des scores des négatifs).")
+        else:
+            verdict("B2.25", len(LOSSES_25) == EPOCHS_25 and LOSSES_25[-1] < LOSSES_25[0] - 0.3,
+                    f"la loss baisse de {fr(LOSSES_25[0], 2)} à {fr(LOSSES_25[-1], 2)}, sans tomber à 0.",
+                    f"la loss devrait baisser nettement d'une epoch à l'autre ({fr(LOSSES_25[0], 2)} → {fr(LOSSES_25[-1], 2)}) : "
+                    "relis les signes de forward, l'ordre zero_grad / backward / step, et le learning rate.")
         ranks_25 = []
         for a, b in PAIRS_25:
             order = [w for w, _ in nearest_words(E_25, ITOS_25, a, len(ITOS_25) - 1, STOI_25)]
@@ -707,9 +728,15 @@ else:
         same("B2.29", "contextual_vector_29 d'un mot de plusieurs tokens (« Merryweather »)",
              contextual_vector_29(SENTENCES_29["bank"][0][1], "Merryweather", tok_29, model_29),
              SM_29.word_vector(SENTENCES_29["bank"][0][1], "Merryweather"), rtol=1e-4, atol=1e-5)
-        same("B2.29", "static_vector_29 de « bank » et de « Merryweather »",
-             np.stack([static_vector_29(w, tok_29, model_29) for w in ("bank", "Merryweather")]),
-             np.stack([SM_29.static_vector(w) for w in ("bank", "Merryweather")]), rtol=1e-5, atol=1e-6)
+        got_st_29 = np.stack([np.asarray(static_vector_29(w, tok_29, model_29), dtype=float) for w in ("bank", "Merryweather")])
+        if not same("B2.29", "static_vector_29 de « bank » et de « Merryweather »", got_st_29,
+                    np.stack([SM_29.static_vector(w) for w in ("bank", "Merryweather")]), rtol=1e-5, atol=1e-6):
+            table_29 = model_29.get_input_embeddings().weight.detach().numpy()
+            with_specials_29 = np.stack([table_29[tok_29(w)["input_ids"]].mean(axis=0) for w in ("bank", "Merryweather")])
+            print("💡 Ex B2.29 : " + ("ton vecteur moyenne aussi les lignes de [CLS] et [SEP] : prends les ids du mot sans "
+                                     "tokens spéciaux." if np.allclose(got_st_29, with_specials_29, atol=1e-5) else
+                                     "le vecteur statique est la moyenne des lignes de la table d'entrée "
+                                     "(get_input_embeddings) pour les seuls tokens du mot, pas une sortie du modèle."))
         means_29 = sense_means_29(np.array([[1.0, 0.0], [1.0, 1.0], [0.0, 1.0], [-1.0, 0.0]]), ["a", "a", "b", "b"])
         if returned("B2.29", "sense_means_29", means_29):
             want_29 = (np.mean([math.sqrt(0.5), 0.0]), np.mean([math.sqrt(0.5), -math.sqrt(0.5), 0.0, -1.0]))
@@ -750,7 +777,7 @@ from pathlib import Path
 REFERENCE_TEXT_30 = VERNE_VAL[:1500] + "\n« Ça coûte 15 € », dit-il 🙂 漢字.\n"
 _here_30 = Path.cwd().resolve()
 DELIVERY_30 = (_here_30 / "livraison_b2_30") if "mon_travail" in _here_30.parts else Path(tempfile.mkdtemp(prefix="wb_b2_30_"))
-TOK_30 = fast_byte_bpe(VERNE_TRAIN, 1000) if bpe_written() else None
+TOK_30 = fast_byte_bpe(VERNE_TRAIN, 1000) if bpe_written() and bpe_rebuild_ok("B2.30") else None
 LIBRARY_30 = None
 if TOK_30 is not None:                       # where the test file imports BPETokenizer from: your library
     _package_30 = Path(mylearn.tokenizer.__file__).resolve().parent    # mon_travail/mylearn (or the reference)
@@ -810,7 +837,8 @@ def test_tokenizer_regression_30():
 CHECK_30 = r'''import inspect
 
 if TOK_30 is None:
-    print("⏳ Ex B2.30 : la livraison attend ton BPETokenizer (B2.16 et B2.17).")
+    print("⏳ Ex B2.30 : la livraison attend ton BPETokenizer (B2.16 et B2.17), sans état privé posé par fit "
+          "(la ligne ❌ de la cellule précédente, s'il y en a une).")
 else:
     with checked("B2.30"):
         paths_30 = deliver_30(TOK_30, DELIVERY_30, REFERENCE_TEXT_30)

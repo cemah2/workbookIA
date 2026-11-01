@@ -243,7 +243,8 @@ def test_cooccurrence_matrix_matches_a_double_loop(emb, n, vocab_size, window, w
 def test_cooccurrence_matrix_counts_a_word_next_to_itself(emb):
     C = call(emb.cooccurrence_matrix, [0, 0, 0, 1], 2, window=1, expected="the matrix")
     assert_close(C, cooc_oracle([0, 0, 0, 1], 2, 1), msg="cooccurrence_matrix([0, 0, 0, 1], 2, window=1): "
-                 "C[0, 0] = 4 (the repeated pairs add up: np.add.at, not C[rows, cols] += 1)")
+                 "C[0, 0] = 4 (the repeated pairs add up: an indexed assignment C[rows, cols] += w counts a repeated "
+                 "(row, col) only once)")
 
 
 @pytest.mark.parametrize("n,window", [pytest.param(20, 1, id="n20-w1"), pytest.param(57, 3, id="n57-w3"),
