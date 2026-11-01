@@ -763,5 +763,25 @@ Notations : $V$ la taille du vocabulaire, identifiants de $0$ à $V - 1$ ; $\mat
 | cosinus et analogie (3CosAdd) | $\cos(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert\mathbf{a}\rVert\,\lVert\mathbf{b}\rVert}$ ; $x^* = \arg\max_{x \notin \{a, b, c\}} \cos(\mathbf{x}, \mathbf{b} - \mathbf{a} + \mathbf{c})$ ; pour des vecteurs de norme 1, $\lVert\mathbf{a} - \mathbf{b}\rVert^2 = 2 - 2\cos(\mathbf{a}, \mathbf{b})$ | `most_similar(E, E[b] - E[a] + E[c], k, exclude=(a, b, c))` (✏️ B2.2, 🔨 B2.23) |
 | mean pooling | $\mathbf{s} = \frac{\sum_t m_t \mathbf{h}_t}{\sum_t m_t}$ | `(h * m).sum(1) / m.sum(1)` avec `m = attention_mask.unsqueeze(-1)` (📦 B2.28) |
 
-### B3 à B8
+### B3 · Attention et Transformers
+
+Notations : $N$ séquences de $T$ tokens ; dans une attention, $L$ requêtes et $S$ clés ; $d$ la dimension du modèle, $H$ le nombre de têtes, $d_h = d/H$, $d_k$ et $d_v$ les tailles des clés et des valeurs, $F$ la largeur du MLP, $V$ la taille du vocabulaire ; couches denses $\mathbf{z} = \mathbf{x}\mathbf{W} + \mathbf{b}$ ; un masque booléen vaut `True` là où la requête peut regarder la clé. Dans les formules de coût, $L$ est le nombre de couches ; dans $6ND$, $N$ compte des paramètres et $D$ des tokens.
+
+| Notion | Formule | En code |
+|---|---|---|
+| attention par produit scalaire mis à l'échelle | $\operatorname{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \operatorname{softmax}\big(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}} + \mathbf{M}\big)\mathbf{V}$, $M_{ij} = -\infty$ si la paire est masquée, 0 sinon ; softmax sur les clés | `F.scaled_dot_product_attention(q, k, v, attn_mask=mask)` ; `scaled_dot_product_attention(q, k, v, mask)` (✏️ B3.1, 🔨 B3.12) |
+| variance des scores | $\operatorname{Var}(\mathbf{q} \cdot \mathbf{k}) = d_k$ pour des composantes indépendantes, centrées, de variance 1 ; $\operatorname{Var}(XY) = \operatorname{Var}X \operatorname{Var}Y$ pour $X$, $Y$ indépendantes centrées | (∂ B3.6) |
+| masque causal | autorisé$(i, j) = (j \le i + S - L)$ ; pour $L = S$, le triangle inférieur, diagonale comprise | `torch.tril(torch.ones(L, S, dtype=torch.bool), diagonal=S - L)` ; `causal_mask(L, S)` (✏️ B3.2) |
+| masque de padding | $m_{n, j} = (j < \text{longueur}_n)$, de forme $(N, S)$, remis en $(N, 1, 1, S)$ | `torch.arange(S) < lengths[:, None]` ; `padding_mask(lengths, S)` ; `~mask` pour `nn.MultiheadAttention` |
+| attention multi-têtes | $\operatorname{MHA}(\mathbf{X}) = \operatorname{concat}(\text{tête}_1, \dots, \text{tête}_H)\,\mathbf{W}_O$, $\text{tête}_h = \operatorname{Attention}(\mathbf{X}\mathbf{W}_Q^h, \mathbf{X}\mathbf{W}_K^h, \mathbf{X}\mathbf{W}_V^h)$ ; $4d^2 + 4d$ paramètres, quel que soit $H$ | `x.view(N, T, H, d_h).transpose(1, 2)` ; `split_heads`, `merge_heads`, `multi_head_attention` (✏️ B3.3, 🔨 B3.14) |
+| encodage sinusoïdal | $PE_{p, 2i} = \sin(p\,\omega_i)$, $PE_{p, 2i+1} = \cos(p\,\omega_i)$, $\omega_i = 10000^{-2i/d}$ ; un décalage de $k$ tourne chaque paire d'un angle $k\,\omega_i$ ; $PE_p \cdot PE_{p'} = \sum_i \cos\big((p - p')\,\omega_i\big)$ | `positional_encoding(T, d)` (✏️ B3.4, 🔨 B3.15) |
+| RoPE | la paire $i$ tournée d'un angle $p\,\theta_i$, $\theta_i = \text{base}^{-2i/d_h}$ ; $\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle = \langle \mathbf{q}, R_{n-m} \mathbf{k} \rangle$ ; $\langle \mathbf{q}, R_\varphi \mathbf{k}\rangle = (\mathbf{q} \cdot \mathbf{k})\cos\varphi + (q_2 k_1 - q_1 k_2)\sin\varphi$ en dimension 2 | `q * cos + rotate_half(q) * sin` ; `apply_rope(x, positions)` (∂ B3.7, 🔨 B3.15) |
+| bloc pré-LN et post-LN | pré-LN : $\mathbf{h} = \mathbf{x} + \operatorname{MHA}(\operatorname{LN}_1(\mathbf{x}))$, $\mathbf{y} = \mathbf{h} + \operatorname{MLP}(\operatorname{LN}_2(\mathbf{h}))$ ; post-LN : $\mathbf{h} = \operatorname{LN}_1(\mathbf{x} + \operatorname{MHA}(\mathbf{x}))$, $\mathbf{y} = \operatorname{LN}_2(\mathbf{h} + \operatorname{MLP}(\mathbf{h}))$ ; $\operatorname{MLP}(\mathbf{x}) = \operatorname{GELU}(\mathbf{x}\mathbf{W}_1 + \mathbf{b}_1)\mathbf{W}_2 + \mathbf{b}_2$ | `nn.TransformerEncoderLayer(d, H, F, norm_first=True)` ; `transformer_block(x, params, H, mask)` (🔨 B3.16) |
+| paramètres d'un bloc et d'un GPT | bloc : $12d^2 + 13d$ avec biais et $F = 4d$ (attention $4d^2 + 4d$, MLP $8d^2 + 5d$, layer norms $4d$) ; GPT à poids liés : $n_{\text{blocs}}(12d^2 + 13d) + Vd + T_{\max} d + 2d$ | `sum(p.numel() for p in model.parameters())` (✏️ B3.5) |
+| loss et perplexité | $L = -\frac{1}{T}\sum_t \log p(x_{t+1} \mid x_{\le t})$, perplexité $= e^{L}$ ; au départ $L \approx \log V$ ; loss par caractère $=$ loss par token $\times \frac{\text{tokens}}{\text{caractères}}$ | `F.cross_entropy(logits.reshape(-1, V), y.reshape(-1))` |
+| coût d'une couche | par token : $24d^2$ FLOPs dans les couches denses, environ $2Td$ dans l'attention causale ; l'attention domine au-delà de $T = 12d$ ; mémoire des poids d'attention $\propto H T^2$ | (🧠 B3.Q12, 🔬 B3.27) |
+| calcul d'entraînement | FLOPs $\approx 6ND$ ($N$ paramètres, $D$ tokens) ; Chinchilla : $D \approx 20N$ | (🧮 B3.8) |
+| KV cache | $2 \times L \times T \times n_{kv} d_h \times$ octets par valeur, par séquence ($L$ couches, $n_{kv} d_h = d$ sans GQA) | `torch.cat([K_cache, k_new], dim=2)` (🧮 B3.8, 📦 B3.23) |
+
+### B4 à B8
 *(à compléter)*

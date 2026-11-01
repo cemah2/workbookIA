@@ -92,6 +92,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 ... unexpected end of data` | des octets coupés au milieu d'un caractère : un `bytes` tronqué, ou les tokens d'un BPE octet décodés un par un | décoder la liste entière des octets ; `errors="replace"` pour afficher ; en génération, garder en attente les octets d'un caractère incomplet (fiche B2, §202.4) |
 | deux chaînes identiques à l'écran que `==` dit différentes, ou de longueurs différentes | l'une est en NFC (« é » en un point de code), l'autre en NFD (« e » + accent combinant) | `unicodedata.normalize("NFC", s)` des deux côtés, avant de comparer ou de tokeniser (fiche B2, §202.2) |
 | `len(texte)` ne donne ni la taille du fichier ni le nombre de tokens | `len` d'un `str` compte des points de code, pas des octets ni des tokens | `len(texte.encode("utf-8"))` pour les octets, `len(tok.encode(texte))` pour les tokens (✏️ B2.1) |
+| des poids d'attention dont les lignes ne font pas 1 | softmax sur l'axe des requêtes (`axis=0`) au lieu de celui des clés | softmax sur `axis=-1` ; vérifier `w.sum(axis=-1)` (fiche B3, §203.2) |
+| `q @ k.T` sur des tableaux à 4 axes : une forme absurde ou une erreur de forme | `.T` inverse **tous** les axes, pas seulement les deux derniers | `k.swapaxes(-1, -2)`, ou `np.einsum("nhld,nhsd->nhls", q, k)` (fiche B3, §203.2) |
+| des têtes de la bonne forme, une attention qui ne vaut rien, aucune erreur | `x.reshape(N, H, T, d_h)` direct : une tête reçoit des morceaux de tokens | `x.reshape(N, T, H, d_h).swapaxes(1, 2)` ; vérifier qu'une tête contient les features $h\,d_h$ à $(h+1)\,d_h - 1$ (fiche B3, §203.4) |
 
 ## Maths et algèbre linéaire
 
@@ -323,6 +326,12 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | l'embedding d'une phrase change selon les autres phrases du batch | mean pooling sans le masque d'attention : les `[PAD]` entrent dans la moyenne | `(h * m).sum(1) / m.sum(1)` avec `m = attention_mask.unsqueeze(-1).float()` (fiche B2, §202.10) |
 | une recherche sémantique avec e5 décevante, sans aucun message | préfixes « query: » et « passage: » oubliés | lire la fiche modèle : préfixes, pooling, longueur maximale (fiche B2, §202.10) |
 | la fin des longs documents ne compte jamais dans la recherche | troncature silencieuse à la longueur maximale du modèle (256 tokens pour all-MiniLM-L6-v2) | découper les documents en passages avant de les indexer (fiche B2, §202.10) |
+| `RuntimeError: view size is not compatible with input tensor's size and stride` | `view` après `transpose` : le tenseur n'est plus contigu en mémoire | `reshape`, ou `.contiguous().view(...)` (fiche B3, §203.4) |
+| `nan` dans la dernière ligne des poids de `nn.MultiheadAttention`, ou un modèle qui apprend sur le padding | un masque `True` = autorisé (celui de SDPA) passé sans inversion : pour `nn.MultiheadAttention`, `True` = masqué | `attn_mask=~mask`, `key_padding_mask=~pad` (fiche B3, §203.3) |
+| une génération avec KV cache qui diffère du calcul complet, sans erreur | `is_causal=True` avec moins de requêtes que de clés : le triangle s'aligne en haut à gauche | un masque aligné en bas à droite : `causal_lower_right(L, S)` ou `causal_mask(L, S)` (fiche B3, §203.3) |
+| `RuntimeError: ... Explicit attn_mask should not be set when is_causal=True` (ou, avec un autre noyau, aucune erreur) | `attn_mask` et `is_causal=True` passés ensemble à `F.scaled_dot_product_attention` | n'en passer qu'un : le masque complet, ou `is_causal=True` seul (fiche B3, §203.3) |
+| un bloc qui diffère de GPT-2 d'environ $10^{-3}$, alors que tout le reste est juste | GELU exacte d'un côté, approximation par tanh (`gelu_new`) de l'autre | `nn.GELU(approximate="tanh")` pour reproduire GPT-2 (fiche B3, §203.6) |
+| une évaluation qui change d'une exécution à l'autre | `dropout_p` de `F.scaled_dot_product_attention` s'applique même en `eval()` | `dropout_p=self.dropout if self.training else 0.0` (fiche B3, §203.3) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -470,3 +479,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des vecteurs PPMI + SVD dont les voisins changent quand on change le vocabulaire | mots hors vocabulaire **retirés** du texte : leurs voisins deviennent voisins entre eux | leur donner un id de plus, compter, puis jeter sa ligne et sa colonne (B2.24) |
 | un word2vec dont la loss baisse mais dont les voisins sont au hasard | signe des négatifs inversé ($\log \sigma(s)$ au lieu de $\log \sigma(-s)$) ou somme au lieu de moyenne sur le batch | comparer `forward` à la formule de la fiche sur des poids fixés (B2.25) |
 | un test de non-régression qui passe toujours | les ids attendus recalculés par le même tokenizer dans le test | figer les ids une fois dans un fichier, et ne le régénérer que par décision (B2.30) |
+| une loss d'entraînement anormalement basse, et un modèle qui ne sait pas générer | le futur visible : masque causal transposé (`triu` au lieu de `tril`), ou cibles non décalées ($y = x$) | tester l'invariant : changer un token futur ne change aucun logit passé ; vérifier `y[:, :-1] == x[:, 1:]` (fiche B3, §203.3 et §203.8) |
+| une loss qui baisse sur des séquences de longueurs différentes, sans que le modèle progresse | les positions de padding comptées dans la cross-entropy : le modèle apprend à prédire du padding | cibles de padding à `-100` (`ignore_index`) (fiche B3, §203.8) |
+| une loss initiale très au-dessus de $\log V$ | initialisation trop forte : des logits déjà grands et confiants | poids en $\mathcal{N}(0 ;\ 0{,}02^2)$, projections résiduelles réduites de $1/\sqrt{2 n_{\text{blocs}}}$ (fiche B3, §203.8) |
+| un modèle BPE « bien meilleur » qu'un modèle de caractères, d'après la perplexité | perplexités par token de deux tokenizers : elles ne mesurent pas la même chose | ramener la loss au caractère sur le même texte (fiche B3, §203.8) |
+| « 16 Go de poids, ça tient sur un GPU de 24 Go », puis un manque de mémoire en production | le KV cache oublié : il grandit avec le contexte et le nombre de conversations | ajouter $2 \times L \times T \times n_{kv} d_h \times$ octets par séquence servie (fiche B3, §203.9) |
+| un compte de paramètres de GPT-2 small à 117 millions | le chiffre du tableau 2 de l'article de GPT-2, faux (le dépôt `openai/gpt-2` le reconnaît) | compter sur le modèle : `sum(p.numel() for p in model.parameters())` (✏️ B3.5) |

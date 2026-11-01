@@ -53835,6 +53835,1289 @@
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
+    "B3.1a": {
+      "decimals": 0,
+      "element_hashes": [
+        "5886e1852c91bb1856617fd8444c33a84861c5a5127657519ef9138f88a59514",
+        "649c94e2800cacd17adfecfc9359a292d4e6ae5fcaf6f8abd9de98d9c450bce6"
+      ],
+      "hash": "0f77249c0b243fdfc63a6783c60d68399ccc67071fcac8e24b52e13ce8228564",
+      "integer": true,
+      "kind": "array",
+      "mistakes": {
+        "1fcbe6882b2758a914ee3d66cab7a06c125184a21af620c5692b4375c4ca7899": "les tokens sont numérotés à partir de 0 : quelle ligne de X est x_2 ?",
+        "f5a79ac11079606dd3774f89c436eae443aa690bb69f133e60f8aa47ce1476d3": "relis la question : on demande la requête, avec W_Q"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1b": {
+      "decimals": 3,
+      "hash": "c7b5bf59877aacb16dfa0b24779ac800029812e6bcb7d7b7689de9471bb2ddf0",
+      "hash_coarse": "5abf9eb253a5328d30fbe2958119a0092faf43ce14e917250f132aecb519f21e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1f20f7d5d4f4ec70e4dfe2d0f416e3a8a5ed6fb3d234d65bf0c2d9a1ae75580d": "on divise par la racine de d_k, pas par d_k",
+        "7567665f22cfe2c48e0a35830fc5d7615e01548bf59471663061a8299d185a43": "relis la définition de s_ij dans l'énoncé : le score est mis à l'échelle",
+        "780d3ae333c0a45dca3fc477e3593e516dd18ccac7192293ae4ef3561d7ca6d3": "vérifie la clé : les tokens sont numérotés à partir de 0",
+        "8548bb98adec11be7234017bef6bcf875da2c466733ed6b13b1b6af9eb841e18": "c'est le score de la requête 1 pour la clé 2 : relis l'ordre des indices"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1c": {
+      "decimals": 3,
+      "hash": "9a216befd0b850fc60ef96c6e813565d2f192bec84c68a1296a43c2a4a3fefed",
+      "hash_coarse": "43b58f4d61a5f918b96d614d7d4ff7650fcc2c09224258acf0a9de29d75f0199",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "361552f320ebd1e28a91cdf5d393126d2419589076ad9bb7b9e3994be67ad697": "vérifie la clé : les tokens sont numérotés à partir de 0",
+        "81543c354fb33a1159807b33246b29ae3c987816ce2d54d51048e42e857e9d3c": "relis la définition de s_ij : la division par √d_k",
+        "e698b05f397a92a8d396ebbed49c3f1841ea6c9e716baf09b71c72c2304a2a2b": "c'est le poids de la requête 1 pour la clé 2 : relis l'ordre des indices",
+        "ec6cfacb415aef3e1540907cc23699d09bd80a8170186374115efbd3542adfab": "la softmax porte sur les clés (chaque ligne), pas sur les requêtes"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "c940e5239039e9c42ef34880d611a9669397649ca5dc4ce48291aa02c756c4f1"
+        ],
+        [
+          "90a9a08db03a6fa9a203db2305a34a5cc50f06ecd220c177d1885f5c0230af48"
+        ]
+      ],
+      "element_hashes": [
+        "5bcb23973196adba9317b35a338fe62c99406e841829bf64eb92b7d95ffaa2b4",
+        "de91c979329a10ba21a43bbda529995cb1bcf69e9a6e73fb32752871145b324c"
+      ],
+      "hash": "624014116ea918bef2aa0c96bcbe90f764a17ec3da81c8ac2eb77d55e7e0fcfe",
+      "kind": "array",
+      "mistakes": {
+        "61adf6ed1ef625d4e7572a5bcedf66fb827b3935b73894298d8561e13331a366": "la sortie moyenne les valeurs, pas les clés",
+        "916d2e4601c48614dab1d87d4af1d2a42a5954d81f37eaa1b5ea4574096ff0c8": "relis la définition de s_ij : la division par √d_k",
+        "a8e32d130937c42791fc07fe59a9306ca626cef506410cf3a5575ed8fe07a989": "la softmax porte sur les clés (chaque ligne), pas sur les requêtes"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1e": {
+      "decimals": 3,
+      "hash": "65303654f6a58014aa0c9e1bafd8b2e43a76ea378f2a87422c0858b2456b96b1",
+      "hash_coarse": "2d57bd362e1762805e88b41a01e7d27d2651cc82c7b4c578d026b3c4a7136dbe",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "592455ff439fb8b052bb748932883bfd85401b36ff7cfcc570007404e0f87e97": "la softmax porte sur les clés (chaque ligne), pas sur les requêtes",
+        "8e7ad6d363bc46ec7dd9ec360123ed2ecefe738c6af0c83bb42ed8b7f7d17857": "relis la question : ici, sans la division par √d_k"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1f": {
+      "hash": "fa10c6936b33a99d1730fc7af22d74ab69f222ae478bc9bf5a18274b7a59675e",
+      "kind": "bool",
+      "mistakes": {
+        "c52a30d70a755133613643ecb52200865a9206ddbcfe5b8e9284da352d452526": "compare les scores des clés 1 et 2 pour la requête 0"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.1g": {
+      "decimals": 3,
+      "hash": "ef38ea4b333a99e1e595e7d5d5078159b4d253b75d4f1ad44f2d7747642985c2",
+      "hash_coarse": "c566c43296a89cdf36552d68ed7266b4b158ff0b6bb1d67ce6c94556dc8a3742",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2fb41c18cccc41e8df93741856e9b9fa2e26bf9a38ebe7f3f4e8f0ee4a0cc9dd": "relis la question : on additionne la colonne 0, sur les trois requêtes",
+        "6162e1982c36886f07b04da3a185876d02b2daba9129d9b67eb551d676a5d64e": "relis la définition de s_ij : la division par √d_k"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2a": {
+      "hash": "8acb045378c547c511749b8941024115c3267d0484dcff390f5c22fd10572eeb",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "34e38ced06107f4213a54c475143fa8d5f631e4746985de16faa99d36c5ed626": "le masque causal interdit des cases : lesquelles ?",
+        "67f8954a8f233ba900aaf9a28fd3b5d9bb2fee2732cd2b551926803d2b151074": "la diagonale est-elle autorisée ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2b": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "6970041dc177d7f52cb880452d09e8eabf2e1a5fec378192281a39857bb023dd"
+        ],
+        [
+          "a37c54a22feda159f24ded31a0527550bb1c8dca5c9b6cdbfbfd9f899e38cef4"
+        ],
+        [
+          "523771d7d4bf75dd582869275392a3aa228412d1685636c9c6f954ff2f10ca6b"
+        ]
+      ],
+      "element_hashes": [
+        "ec362a3818d2208f9fb2ef714759f5b73f6bc9a95518bd59d537e3f91d443bc0",
+        "c1bb86cb5b9d8efbb3f65ede5460d5821e333de225166211654975ef029e845c",
+        "bee2a0bc1d96fe088cbb5e9787f813146b049cb3ad5f38aa14d4ea2cf0780b53"
+      ],
+      "hash": "55d05e7e84fff6f010f9898142ab94236c7232150179ea2fbcb13aff470fc154",
+      "kind": "array",
+      "mistakes": {
+        "54fd1974f7c1b392004b6a3a942ad50780ff54a48494abd1662e2e419a341ad8": "relis la ligne 1 du masque causal : quelles clés sont autorisées ?",
+        "5549a7b344655fde040c23322e5aa1f92c6f865e2d38d797bc84cb9d93924700": "un masque ne se contente pas de mettre des poids à 0 : relis l'exemple chiffré du §203.3",
+        "75d0b2d9787b53440afc3692a85f828ac9e15b6c2f68660cfb9f41e3690c7f5c": "relis la question : avec le masque",
+        "f8ebcb11b37aba7339646d201cfa844d43524f87a31b27f18332c432efc8c8c0": "relis la définition de s_ij : la division par √d_k"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2c": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "6bddc3c59167f93c9e2d27f0beb4e74b26beb43de609015b507c4473cd735539"
+        ],
+        [
+          "afb6606af696778430e973fafd827c507124af13a56b14b6ee06df4b1595d2ed"
+        ]
+      ],
+      "element_hashes": [
+        "a8cabafbbb57db2f5ea21109ec156043a2bfaabd68147138e3d777dea83be127",
+        "a7602b439b06ec2b161c338ef882d10f338413750194baa5ae2096de145b8ceb"
+      ],
+      "hash": "8d0d0afcc0decb9236b529adfb5ca17358de51566d5676071a2df72b6587035a",
+      "kind": "array",
+      "mistakes": {
+        "40f94e344f17c8eb2ce3a609fede09a471ed81e557f50783a88c07ada8dce88c": "relis la question : avec le masque",
+        "61784a73bd41ec2865e23dc2a9da422eac3fd861452c4a73baeead14c20e1a93": "les poids de la ligne masquée font-ils 1 ? Relis l'exemple chiffré du §203.3",
+        "6251ccfc1260f110a5ede1255b7f14bded695b7562245d6a586c7cd9f6b01ee4": "relis la ligne 1 du masque causal : quelles clés sont autorisées ?"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2d": {
+      "decimals": 3,
+      "element_coarse": [
+        [
+          "e67ef5030311f8bf47a9799213da9c9942f46f2d3b65ee741f0fbe5b80e127e2"
+        ],
+        [
+          "1a52cb1328aaa5d9d3a997d7e9362410a3e1c05bf329e71a91953dfe838c9529"
+        ]
+      ],
+      "element_hashes": [
+        "35d069cfcced50c532032fb0e8bfca0c6d88e3af429d2e59b8e4baf6073a79e9",
+        "a5007a61d4b79efc4ac8be3aeb12780b6cdf1ccec65d48879239c414c856a3bb"
+      ],
+      "hash": "d6a7995a2d863999335b531f4f547a9b83651bba5cb4c2d96ca33e2123e8df46",
+      "kind": "array",
+      "mistakes": {
+        "7123e4fd6424a7a0e71bfc9d1ba7d48208893a4e53e3e5c1e47469d2fafe6565": "un masque ne se contente pas de mettre des poids à 0 : relis l'exemple chiffré du §203.3",
+        "e32fc9b562fb13802b9b2ab0ed06bb7fa72a0650e4aab38b4e553fbd8d98c5a2": "relis la question : avec le masque"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2e": {
+      "hash": "bc3ac02dece1075385d7e91731bf018363612aa089858f298ca8ef684878fef7",
+      "kind": "bool",
+      "mistakes": {
+        "ac2b3c9dfdaae05b543cdb4e91c661f9e0bd0577f15f18bab3de5aa13579f76e": "quelles clés le masque causal retire-t-il à la dernière requête ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2f": {
+      "hash": "e919a0feeeb81730a7091528a7c0ec78f2af195ed7bc2c2f949698f2a362a90c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5d977215076d006c6ba3906526a61485f59bcdbd574853188e485c316d123139": "relis la question : on demande le masque de ta librairie, aligné en bas à droite",
+        "be428a5d79290ee2e90e385f32b8e8067689f694f944ec2b7ea80c6e369432a0": "relis la docstring de causal_mask : la requête 0 est le token de quelle position ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2g": {
+      "hash": "289a6930f65e8b00e99938d47efbe4bf6d9a5e486e6d4e3a4cdef3175c22478c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5f8bf14554cac3609e33e1f3db87152dbf44cabf6a41e5a32ae38489523985d1": "relis la question : on demande l'alignement de is_causal=True quand L ≠ S",
+        "afa0372e8d14e79781585d14b290f99053152483b767928367da0af907834fbd": "relis l'encadré 🕰️ sur F.scaled_dot_product_attention : où s'aligne le triangle ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.2h": {
+      "hash": "de1b5761782e71a672b0d6c4cb12ff77ddf919b801363e3fce00ea4d6931fcdb",
+      "kind": "bool",
+      "mistakes": {
+        "016ad6c6393ab51f7b0a651426184775eb07cf5252892f49f3cedefe0b262938": "écris la ligne 2 du masque transposé : quelles clés autorise-t-elle ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3a": {
+      "hash": "be01e495be81c186e20934721bd880466bd30e633da08d8dad22b7bee4a0039f",
+      "kind": "str",
+      "mistakes": {
+        "9e4abd968fb54e56976535ffab34b378214880f7e47126dd8cae93445d05738d": "une seule matrice W_Q pour toutes les têtes : relis « Une seule matrice pour toutes les têtes »",
+        "a1952dad9b9bd4a72aa5d648d13261dd4f4bd77730f86ed74960552a4143f2a2": "n'oublie pas l'axe des séquences du batch",
+        "b100a5f3ec6b5157e356f2c3b3bff0179a0834dda57567f8f2653cbc8d09a3c7": "relis la question : avant split_heads"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3b": {
+      "hash": "a18f754c306717c3ece366ff39a02c42494e4e137f2cf5e4afd6a860b13835be",
+      "kind": "str",
+      "mistakes": {
+        "1e899e1e9748d707f859978a8a92a1e83bc75432e3f1dbaeec0398ae0da0a7c3": "relis la docstring de split_heads : quel axe vient en premier ?",
+        "6a608a5bcce6b9837ad198312f185f40fe24085716368042beeb98c47c437acf": "relis : une tête a-t-elle toutes les features ?",
+        "f8c1d934e39909856e191af389b80d4d8a3797afad9beebb1adbd9693a613192": "relis la docstring de split_heads : quel axe vient juste après N ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3c": {
+      "hash": "195a47a50f40ea0f477f57fa5dbe282f579f3866125bc8d178358088bca04a36",
+      "kind": "str",
+      "mistakes": {
+        "58645bbb5ff5483a5477dbaec59db2da6aa62fbc16340fafbd00cca3050a3ceb": "les poids ont une colonne par clé : relis l'ordre des axes de Q Kᵀ",
+        "b28d51e706e7d3c8f246ee2edac7d89c71633c69bc65f4549dd3421033764abb": "relis la docstring de multi_head_attention : une carte par tête ?",
+        "eb03ebd586b5e3e481886a50346d9ea6c736c549e1f6113331638d18a528adbb": "c'est la forme de la sortie : on demande les poids"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3d": {
+      "hash": "d52fef1e8af6a2eaee21a0a6bd5389868d849ae20f892ee69b3e8a36889c9240",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "58a278e0ce8742ad42161d6d2587588941670b9d99093754b2f686f620d1fd95": "compte toutes les séquences du batch",
+        "5b61ba19c2a87fc1427c4fb60b1f4101eed0ee896975d75cef679730a2715a8a": "relis : combien de scores pour une requête ?",
+        "64020b3f96593864e365d5371f38e6febe578050b6398ecd3f1d2e49577b5898": "compte toutes les têtes"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3e": {
+      "hash": "2cba7445076a6a83c9c9dc70d1380ea714fffd6601aa15f9cc87c7a8bd6f7222",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "3835481c4e4cb841da6b26df00a2798a88bfa7cfcba817fa20a3ca4bcfec14bc": "relis la forme de W_Q dans l'énoncé : (d, d)",
+        "450ac79378e3bc866824044a69f9343ccee9413f5414b6d53dde3c230cd700f3": "n'oublie pas les quatre biais",
+        "bd623640cc59f047ed70f918a3bfca2bb36b6ac1e7eec6c01cd41410f6b218dc": "n'oublie pas la projection de sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3f": {
+      "hash": "e8e2a3c504a87c1e26cb7d2a629670eb1384e4aaa604f64f45042f715ce9263d",
+      "kind": "bool",
+      "mistakes": {
+        "b68e6f1e21c6bb4633c1939ef42682661f5718cd674e16298cf47e851bf403b6": "relis « Compter les paramètres » (§203.4)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3g": {
+      "hash": "0361300ad0f64b16ff77bcd0ef30b417b71751f608b630625f9a5a5743b89cdb",
+      "kind": "str",
+      "mistakes": {
+        "802d3c9777c8e0bb581673c7e2495a7d5b7d0d33e713516865d9f39e4bfe97fe": "relis : combien de matrices dans in_proj_weight ?",
+        "9c8eff56f61aadf9237f824881e300580cf6092a197e74a87a2399d9941772e5": "relis : où est rangée W_O ?",
+        "da948359897f169f6f99ebf09f4979c9c7b1239becf8d5849af0027d05c891b3": "relis l'exemple de nn.MultiheadAttention(8, 2) (§203.4) : dans quel sens les matrices sont-elles rangées ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3h": {
+      "hash": "eae2256d9addd0a1e19a3efc94698c4ce752a79615962de608992944ab143815",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "4179477801a5082177e8a98d92a80292412889e3db51f076da58e3bbbdb9aef9": "relis la question : les clés et les valeurs n'ont que 2 têtes",
+        "534566006a1fe21ebf88f1e65c95776f8e4afb5cf7d96fe59fdb7883accc1793": "relis la forme de W_K et de W_V : (384, 128)",
+        "70f5f936be50d7753d3fc3dbedffc257c4de4f4c9067f46f8143a9429fbd47d0": "relis la question : W_Q et W_O sont comprises",
+        "bc420ee42fc0b62fd99f439f79b99281ecbe07b33922bc17e0324fb8f04f908f": "n'oublie pas les biais"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.3i": {
+      "hash": "d70b7139958128e5acd900fe1af03481bd58442ec1b3c558de695955bd105348",
+      "kind": "str",
+      "mistakes": {
+        "60f81027bec442a51a87a9caa006c6f26d1b3629290f87756807f9d2b9a19014": "relis la docstring de multi_head_attention : une carte par tête ?",
+        "967bccf4ffb4d031eb6e61963145c4710c52b3036354a6ccce1e7581861d61ef": "relis la question : les clés viennent des 25 tokens de l'encodeur",
+        "d42bd25595cd7d41cea29abe011d0636549cbe121f41146b597bd93b5066dbc4": "relis l'ordre des axes de Q Kᵀ : les lignes sont-elles les requêtes ou les clés ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4a": {
+      "fractional": "arrondis la période à l'entier le plus proche",
+      "hash": "4160a4d49faaea1c1b32ecbcb46800421eee53039081fbcee2d7bde2a8c8d08e",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "1e3c744a84283e6e28f87b8baeaf86ac9338be78811a17975e970a1ba74b1dbf": "vérifie ω_2 : l'exposant 2i/d avec i = 2",
+        "74c5064c9453be934d7511e3ead6614a7f8ee6380ff1c846fb8e27d094dfcf9c": "relis la question : la paire i = 2 (colonnes 4 et 5)",
+        "83df17e6f1785f41ec2046d8590b6987164da375ff1ed7caca83cd3c44ae4886": "relis la période d'une horloge de fréquence angulaire ω (§203.5)"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4b": {
+      "decimals": 3,
+      "hash": "18ab348e21ee46bb19d5a5ca36ad097cb070b41f792dab086afcfc5e74a98fe2",
+      "hash_coarse": "3e7e0a6ac18785fdcc4f32122e0c6f445fbcff7d2979f2a1f5a19be1c9886745",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "53343077c0634694b5a89dfcaa89db824b0dfc2d1677ef9454b8782fde77fca4": "la colonne 0 est un sinus",
+        "60f8082c28cefa96f2efdcf5bce9e1422db037a6a9b5e98aecb2808fb643f097": "vérifie le signe",
+        "6ae842c3b2e0f9f892295a39791df7b249703de95c58cfdfaf31571e5f1667bf": "les angles sont en radians"
+      },
+      "sign": -1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4c": {
+      "decimals": 4,
+      "hash": "c9c75cef9e9e66241143c8466feca79ab120891467d9918d699afecab1741fe9",
+      "hash_coarse": "ed6f5e752beea42795e0fbf2c3818a18b0638b7583db1b6d0a2c0321f62688dc",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "28c867e0ee8d0cf9821ed5d0d50999b8d2e889e9e93d20b28cf74baf306f2196": "vérifie la paire : la colonne 2 est le sinus de la paire i = 1",
+        "684a91d4d2b76eeb8c22315ff3fd3c22b35f2ec895779b5b65e83587b7536737": "relis la question : les colonnes paires sont des sinus",
+        "ca9780494c641f32532546c82e9fbfb2d0151d8152a65f61f8ce1b18daed1644": "les angles sont en radians"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4d": {
+      "decimals": 4,
+      "hash": "23988c3dbf32a9e7b616a20513b1eaea47e4f5fdc470e1810058962f33bdd4f1",
+      "hash_coarse": "23d7606aa0ccac66d45a5899663b479120cd891e32433cca685b625a54a027b4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1354d7d700ac242c747d2e56340ba08e494861baedd64dcea867130b195461dd": "vérifie le signe",
+        "b0764dba087d541f2a6d912aff75edc56bc2e938f36814f501d910805da8c6bb": "relis la question : les colonnes impaires sont des cosinus",
+        "c741822e8e523f71c5e5caee6d8808d7de862fbf98fd027376712d3192eb946f": "les angles sont en radians",
+        "db58968ffc28ab421a603a916828cb65fabf25f3967246b3d4e82fb018d977ce": "vérifie la paire : la colonne 3 est le cosinus de la paire i = 1"
+      },
+      "sign": -1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4e": {
+      "decimals": 4,
+      "hash": "aeeb931e28e29c2746fec902f0b11f802838515f79a94fa4448c47afc4f14acc",
+      "hash_coarse": "72f9d2626dfc0f637f7e37df4e4a24c3d3dbf85b535a03a6b32d9cc5b5b2b8c7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "865bfd58a9dab53c8017eb2d49588a12968f450e30915e4c53c00fd3de518647": "relis la question : on demande la colonne 2, le sinus",
+        "8b6d0ceb5653d5ff4e11c1fa0233fc40dfde70a804429111196b61189698c404": "le décalage de la paire 1 se fait à sa propre fréquence, ω_1",
+        "f84e2207fc787d8bb04906a2183a467eadc55350495c136d1487d3213259d5e9": "relis la matrice du décalage de la fiche : vérifie le signe de chaque terme"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4f": {
+      "decimals": 4,
+      "hash": "211fccee76bf54a5037b4fb3f5b683916a917a0ec5eb7ea883714c14a93a8980",
+      "hash_coarse": "cfe263a65c70dec66fc8eee67792fdd4082a471de6fa2bf53bff6592aeb0cb42",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "2f54954392db81d4c8e471a8c421250ac9a148edc2400c06a5fbec9d723d2b96": "relis la question : on demande la colonne 3, le cosinus",
+        "3dd9a2ccf53cffe5743ade5cee15fcf68c6a165b5bad33529515c22fa347e99c": "le décalage de la paire 1 se fait à sa propre fréquence, ω_1",
+        "6c01129a7deff68faf3c62eda084d3ee4904956078b72f0132d5d2b0cb5815a9": "relis la matrice du décalage de la fiche : vérifie le signe de chaque terme"
+      },
+      "sign": -1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4g": {
+      "decimals": 4,
+      "hash": "564655f292425f98c4aa100181c3f8966d28805364c0142bf687ce80a200e29a",
+      "hash_coarse": "a3e175be5466d00e463b3deb62933b2a8b30a42f7098f5f0daf63ce6c91028c3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4c40456a0d8c53755b1bd518cc57b9b9788b54ae7c4382e23365a9bf8f56a45c": "les angles sont en radians",
+        "696716540302a331a0051492c7a22eadd1c38cea73fb8193d15b4e9140f18add": "relis la question : les deux positions sont différentes",
+        "b003fd8b28ee487d685eb59e3529d1e7a20b04faef27f07f02c3aba43f7ef92f": "vérifie les fréquences : l'exposant est 2i/d"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.4h": {
+      "hash": "7bfc5262a447c3d484df60bcba7863252605559a84105bb57479f570550ab1c6",
+      "kind": "bool",
+      "mistakes": {
+        "e512560dafab95210eba9cdb043c1a0312f18df02035c4fa4f2a4822f513777f": "relis la propriété du produit scalaire de deux encodages (§203.5)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5a": {
+      "hash": "46314762ad70ec6fd45e63396289ad269811f24c5ca3baab4d9339e17516398c",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "137736b1041967a4d81014dc4ef19329b10bd91dfa1f49f2b4d04518595df5b9": "n'oublie pas les quatre biais",
+        "9e8df5f7076aa76b61af73b8bb9b2e32d35c5548cd46b2c3fecf11ffa963c3b9": "n'oublie pas la projection de sortie"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5b": {
+      "hash": "0fa8e627082e595fc518fada5a88c2cc849fd7bf0624b2cc4e45c57de9db4ecb",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "33d90e546bef576dc79bc37e38debde00fe1f6725bb1fe3e2cec44f973094948": "relis la largeur du MLP : F = 4d",
+        "97c30558501e90e3e5f7c7ea021464058b3f456841be2c5b47d664d6137bb363": "vérifie la taille du biais de la seconde couche",
+        "b1bca395183ab357605208ffa40dc39b6253dc54051c76857c43187e587b7a7e": "n'oublie pas les biais des deux couches denses",
+        "baa9289e821ad313117fc74ce73f9d7b291e3fa102602a02f7eb00d1017899bb": "vérifie la taille du biais de la première couche"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5c": {
+      "hash": "2f22691f2a5a4147afea6154312abba12237eb963b7ed00f9aac0ccb70bda88c",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "26dab863aedbd4a33279eee611df9b7a8f756839384052aa2a0957d1d7940361": "on demande le compte exact, pas l'approximation 12d²",
+        "d64540fb886d63773a94e86e7b3580024a20f373ea0c15e4785b762e9fffd2fa": "n'oublie pas les deux layer norms",
+        "dc75f177122e703dbf8f1a45d211dbd85090c38898d86199dc4eae9b778c7929": "relis le ch. 20 : combien de vecteurs de paramètres par layer norm ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5d": {
+      "hash": "0f5bc4ae9ec3fdf0a41f051db77f9be87858df8c3c4167ce30e49391853a4498",
+      "kind": "int",
+      "magnitude": 7,
+      "mistakes": {
+        "4c80b100deeaadce63785ddbd6d6805c766fbfb10dd960071526df4d396a1e37": "relis la question : les 12 blocs seuls",
+        "c5d37a5064b237cc2c3b26eca9e0773992b342a89f9a79838b991181473397ce": "on demande le compte exact, pas l'approximation 12d²"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5e": {
+      "hash": "af86bd56e1e921fb1156c19014e45c2ab4d4e796d0f4b983574a7a2b108d4b88",
+      "kind": "int",
+      "magnitude": 7,
+      "mistakes": {
+        "41fdfb846bb435e90d9e88d1cad9ef9867836501f921ca0474d0d053a5311506": "relis la question : la table des tokens aussi",
+        "66f8f62ef15d4a6be1cc056af6c4b13da2ed152200d399c54707e44ec42b6cdc": "relis la question : la table des positions aussi",
+        "d92da942c55708745eaf8685e3fac30507154d5f691002da079142d10eeca7c2": "la couche de sortie est liée : elle ne compte pas une seconde fois"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5f": {
+      "hash": "1680b7978aabca6294c2ece4a61c2f1d1c81eb82bcf4abff5a57f03f25d7235d",
+      "kind": "int",
+      "magnitude": 8,
+      "mistakes": {
+        "2a60ec6341c8921d630940702c09c232b28aa4ba8dc05e45794a8be1ce922973": "n'oublie pas la table des positions",
+        "5d9a2df286d3113bf29e44b06ee579ae3818cf3ddff7ae78629c5b07d5786154": "c'est le nombre de l'article, que le dépôt dit faux : compte les paramètres",
+        "78c785a8e90e2aaa771cc15f5eaa0ed7ecaf5f7ffbefd26583896acb1b398638": "n'oublie pas la layer norm finale",
+        "9ffa56a8fa7cafae27116bddf12570e46685f314426952485d7c2da1edbcd8d6": "relis l'énoncé : la couche de sortie réutilise la table des tokens"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5g": {
+      "hash": "3cd13e7f72f9f592bf372011f5211ac6319a1a2a07a7daae7a61ee5043fe6367",
+      "kind": "int",
+      "magnitude": 7,
+      "mistakes": {
+        "5be63dad227e0e3ff646ee9b1383949a37dadec479e0874913df2c0284f68232": "relis la question : sans les tables d'embedding",
+        "5ce39a096ac3318caabe25324832ba065c3ff9b83432f1b678f5aac2fe9f44c4": "relis la question : la layer norm finale comprise",
+        "fca7a7bb025e78f6722685d3323062e95b30c52a32a65aa5a2e642a98f014f5d": "relis la question : sans la table des positions"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5h": {
+      "decimals": 1,
+      "hash": "5af8a66dbbbf5c9fcc2d101327d101aec62e57d9cd93705fd7e5dc0d2a454c11",
+      "hash_coarse": "f472d309a6c41c4dd0e4b1e36a856cc4460eb4886d2f9b813f9fd105db27d6a1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "78f4d3a6e0c35b3114bc8e7802afbbcebe1773eb446981cde38b39f6eba73ea6": "c'est l'écart en millions : on demande un pourcentage",
+        "ab4095ad7ea8b0c9978cae346aa9bd7ec772629f11e84a29af14693a16fe44a5": "on demande un pourcentage, pas une proportion",
+        "ccafe74fceff735370ea0d00ef0dbff5f5664223cb3ed65b5fa1f274a403c00e": "rapporte l'écart aux 117 millions de l'article"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5i": {
+      "hash": "6c03413853aa865b1e8273968a8629fd630a73020ef67740aad828cbd073e0a2",
+      "kind": "bool",
+      "mistakes": {
+        "be135e908a4a683877b01518c30b23382a50a78e5bcd28b2dae56d838192ea4f": "relis ce que les poids liés économisent (B2, §202.7)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.5j": {
+      "hash": "ec48ef3201889f62686f0e903cc6a28cca143e21259f6b8a458015d8ee0254dc",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "25e93709364c9449823e7bfc6da4436750d9a43bad3ef178cd8d304a7cbf605e": "relis l'énoncé : la couche de sortie est liée",
+        "7506d3e5a723f5713d56cbb13d9bf8353bfd2f82c6753a01fb4fac77da2a20f0": "n'oublie pas la table des positions",
+        "a9d540f82e2589000decbe83cd3c59b4a8a79a4e4764a83c1d80fa6b165d1c8f": "relis la question : on demande tous les paramètres, tables comprises",
+        "ee2c5d523f82e036f2ab869ba2a0ab43ec6d768beb1fca56e17401c1f1c936c6": "relis la question : le compte exact, tables comprises"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q1a": {
+      "hash": "365b1b487e54aca5cf2c3ec7bc0fae05ebf0de2f731ec8c9b5277f1b687ee8fd",
+      "kind": "str",
+      "mistakes": {
+        "73a1c1f10cea604ed92b2ccd475ccb2920f1c345de1ff61e3900ffe211589bd2": "relis « Traduire avec deux RNN » (§203.1) : le décodeur de 2014 relit-il la source ?",
+        "ab54e0550ba97f4b41c5c3ad3ba98e018daeee768648ee2c171e8e800ab88fa6": "relis « Traduire avec deux RNN » : par où passent les mots source ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q1b": {
+      "hash": "3ddb75edcdb8230c49075e913c00f55d67248a78f57785530bd2516bfe551721",
+      "kind": "bool",
+      "mistakes": {
+        "e119f29c4617b276bfc9116f17be9860ace156ddb4b5bebc18d1af1fe6641f51": "relis « Le goulot » (§203.1) : la taille de c dépend-elle de la phrase ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q1c": {
+      "hash": "d7abf0f2beea0c6bdbd61d5d335d6e932817b6f0c74b0231d587c0069aa4ed42",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "3520c9151bbc2628edb0ab185bd321076e616a8db8a4b8b76659192240a92d8e": "relis la question : on demande les poids de tous les pas de la traduction",
+        "3f2b4a67765454574c3a856d54544880f1820e158ee16ab363e3569f23aa0a93": "relis la question : on demande les poids de tous les mots source, à chaque pas",
+        "a1de6c21214f8ee42de08dc5a8e00b80d833eb40b6204302858822dfed286848": "tu as additionné : combien de poids à chaque pas, et combien de pas ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q1d": {
+      "hash": "68439ae7a68e6911d3faace0c6c4b16aa75805d963354be033e946042cbe2fbc",
+      "kind": "str",
+      "mistakes": {
+        "4a0fb0cb15788131e215e6026ea2fdad45e0c1808642efaa2851018b36aa6bba": "relis le paragraphe qui suit les quatre étapes : l'alignement est-il un choix d'un seul mot ?",
+        "edf2cdfbd8d1c3c9ee988e83140302cfd4c06479cd9a4af53612c61ac9a13449": "relis l'étape 2 de l'idée de Bahdanau : sur quoi porte la softmax ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q1e": {
+      "hash": "432fbb0e5c822ebce1c88e52c3982b6deff0d5a54a22bddbc5992bbc0b98abe6",
+      "kind": "bool",
+      "mistakes": {
+        "05ef74a60225b8a1f147e4b9e1d4d9e45194f6eaa55d7d63bd70a11e5971a20f": "relis le paragraphe sur l'alignement souple (§203.1) : d'où viennent les poids ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q2a": {
+      "hash": "0c500beff3803fa26539287e6c1e91c08d5f9ab6ea877d80e92538792eb0a92e",
+      "kind": "str",
+      "mistakes": {
+        "0c7dcacc226a8306ec9ddc885687313b2fc4cb7b058fc393bf2e3310eb616f6c": "relis le rôle de chaque vecteur : qu'est-ce que l'attention rend ?",
+        "f1abd6fb46cae9266e705c0b27fb12e566f01efad966569ed890ed12cc923977": "relis « Un dictionnaire où l'on cherche à peu près » : rend-on une seule valeur ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q2b": {
+      "hash": "9051f17cd9b1015c4874125fa0ee1c4764ba6e65241f1bc07f117d69be112246",
+      "kind": "bool",
+      "mistakes": {
+        "e5f4dc3f52a51f62c09dbb8b6e946a92137a30742b93fb03d059872fe970021a": "relis « D'où viennent les requêtes, les clés et les valeurs » : combien de projections ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q2c": {
+      "decimals": 2,
+      "hash": "f26ae514c28003ce5ab7eefb4873784df5350367135e8bfda01369fc153dadd6",
+      "hash_coarse": "fddf848b8542f0dc54759a104ed9de7ff76234fe782cb0eecca001881399c872",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1f1ad0047175eec1be2f49f7c74e1f35b696bcdd682dad129e139599f6cf038b": "relis la question : le score est mis à l'échelle",
+        "4ff7f892bb990b3b2f761cb27d2bc822f0363a7c9d1060c36249d36bd032ef6d": "on divise par la racine de d_k, pas par d_k"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q2d": {
+      "decimals": 1,
+      "hash": "0aa063e728e404a93b8569b7cfe03758e979b224ac3518d213212f0a3fb28023",
+      "hash_coarse": "db494b1afed4826eafe483bd552a2d977d493a568f790d4bfbc2eb7cead04de8",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "79b4aa5902097fb780a72badae89fcdf9aa43790cdf4b0079059b22f7c908341": "compare les exponentielles des trois scores : sont-elles égales ?",
+        "913676ecebe62d37c4259cfeead1d4a6e441477e7701e728651d02f1b720360d": "les scores passent par l'exponentielle avant d'être normalisés"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q2e": {
+      "hash": "3263144724ae0ebc6f94a395135cb891726533167684d840a5b9e1821a3ccc64",
+      "kind": "str",
+      "mistakes": {
+        "5d3ccd0622eb9ebf2e8517da77b66321ace53d98aed04f373f1461b060469cac": "relis l'étape 5 de « La formule » : que devient la somme pondérée ?",
+        "7f4c22c27d28659714b2eb72e6ded3fa7e5d0fcb8108402fcc4b072568498dde": "c'est la forme des poids de la requête : on demande sa sortie"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q3a": {
+      "hash": "6c07c88d0007fa223235aa6b22cd53da8d94c8d109eae2ffa324494aa5ae5f86",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "9b3df75729c4f5d12a65ac1d8f2c6e0a45d199a0e7053b55b65615c4133a79b7": "c'est la variance : on demande l'écart-type",
+        "a505cbfc6f6ee5372ac36e5bcaece471babc939fce04680c884d4daf4146ddf0": "relis la question : d_k = 256"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q3b": {
+      "hash": "97581c1b33d227f0e9dff24b0710a1c0fc68cc3f08ebb7b4ef6cd82aa12b2abd",
+      "kind": "bool",
+      "mistakes": {
+        "eba65c48755501f1709c0051506a3c676e12fdfbd77cc04f7f38d443badccf75": "relis « Pourquoi diviser par √d_k » : que vaut Var(aX) avec a = 1/√d_k ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q3c": {
+      "hash": "eb84077f9b5e6608b379967715ce57e59c1f8816a13abc76db6b4b7776a3247e",
+      "kind": "str",
+      "mistakes": {
+        "56c793590693963ba77efd1ad305753c560b374ae1fa5add32abcffbb0973ee1": "relis le paragraphe sur la softmax saturée : quel poids prend le plus grand score ?",
+        "f7e28f7383c4940afa5f5a30caa9a7819e14c93462d891726d6b166a8dc4d14c": "une softmax peut-elle donner un poids négatif ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q3d": {
+      "hash": "d9f56896bde9e5d311e33c3211a8b27862657332d361dcbda47166a7b4ca3622",
+      "kind": "str",
+      "mistakes": {
+        "12180d5f6cd6c713e16dabb1e0838641d51e8dba3db674d2602b800b6aa58612": "l'échelle des scores compte avant l'exponentielle : relis l'effet de la variance des scores sur la softmax",
+        "6b62b5ad550c464979555007bdee5db3bd5c86b15e74182709b3b382d198f34e": "diviser par plus que √d_k rend-il les scores plus grands ou plus petits ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q3e": {
+      "hash": "7dccfd3c429fdba19c4753d4feb1fb6dd7b1b31a6db57ef06bc01bd74271ae92",
+      "kind": "bool",
+      "mistakes": {
+        "d7b836e32c074f8229fde70055f6b1600fd79507cfec29a1c0c95ef50701acb8": "relis l'argument de la variance : de quels vecteurs le score est-il fait ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q4a": {
+      "hash": "9839be5b6a783fdfda4cce2b4bbb6d4b922ef80bcb067f81d845060b8e1cda6a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3132e5ebc19f1e886f799451824770cd8835f11da34f9a0611eceef7fe927950": "compte toutes les cases vraies, pas seulement la diagonale",
+        "60a96eed531c481cbe67659c148668f1ed19b73ab9f2c0cc744e55d1194e033d": "compte à nouveau : la diagonale est-elle autorisée ?",
+        "9689744674a37c1e5f9a3281aa00e3729eb459592225f6971fd8f6d37532a12c": "le masque causal interdit des cases : lesquelles ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q4b": {
+      "hash": "666cd8f9db6676a3965e4431926db963468fb9b72d2ca40aff154b85b85583e4",
+      "kind": "str",
+      "mistakes": {
+        "ad1f60da5fe4aa189a33b9591b9ffa0fadaef1601dda2c62fef683f006347832": "le masque causal cache-t-il le futur ou le passé ?",
+        "c8cf0d076c34609364dc3000efacaf238350cb5a46166fdc0c022d1f6eea9a16": "relis la phrase sous la formule du masque causal : combien de cases vraies a la ligne i ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q4c": {
+      "hash": "2799c21663a1cd58fd83d27758bb1d87512f69a584c95a51993fdb7f6cd29a69",
+      "kind": "bool",
+      "mistakes": {
+        "ec04334f0e4783b3510ea1e0b30077eec3319a3fc6fe0fe0afcc9fb10152a021": "relis la conséquence utile du masque causal (§203.3)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q4d": {
+      "hash": "5f610af63ad390b36fb2b2fc1afd28dba10472ee7dd95f754afa2d54dd2aab6c",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "12e12710a19438f8fdb01d600cd97988255a898bc23d6680e7d54b4eb351f0e0": "c'est l'alignement en haut à gauche de is_causal=True : relis celui de causal_mask",
+        "51fc3664566819a545bfcb3b20b32e0ba51cbb7f7c7122f9eca127fa36890618": "la dernière requête voit-elle sa propre clé ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q4e": {
+      "hash": "17490fd487b2ef65379e96b0313e586617bb37d15973f2d0fffe3e22c25ff06c",
+      "kind": "str",
+      "mistakes": {
+        "133c90b6c7b2dc67897c41aa81442caa36c889198cb028225c846a1d6085a85b": "relis le rôle du masque : change-t-il le nombre de scores calculés ?",
+        "2a6e706643572e961e577120b1819dac72b379a031740626ca1e606c9cb400b9": "c'est le rôle d'un autre masque : relis « Le masque de padding »"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q5a": {
+      "hash": "440d71bb2da4e81d2c7e5528f0c5044a0048deff4a2626128415941f2f00ce1a",
+      "kind": "str",
+      "mistakes": {
+        "44ca82a3c672efec6fc3ee954fe600944f01f6e81a14b980460ed8d6063e8ca2": "relis la formule de l'attention croisée (§203.3) : d'où vient Q ?",
+        "e4551531ecc70971092580185f905aba096d1298034acd012d97110e46ef6c4b": "relis « Auto-attention et attention croisée » : les clés et les requêtes viennent-elles de la même séquence ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q5b": {
+      "hash": "c914bea10f90373a4066bc7124c71826035e7ade23fe52dc8c50795f3aab9ea8",
+      "kind": "str",
+      "mistakes": {
+        "1818a5b05f9916ad76df432839fdc340ded42e06848eceb33b639925d6fdf5c4": "les clés viennent de la source : combien de colonnes ?",
+        "481632a6d89e4d618fffa66d61df9a35455d8e65bcd6650c8f03b2d40a156b24": "relis l'ordre des axes de Q Kᵀ : les lignes sont-elles les requêtes ou les clés ?",
+        "b41a95a606f4efe97e504da65547154c1c1d193c12182e66975daba6755cc7b8": "les requêtes viennent de la traduction : combien de lignes ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q5c": {
+      "hash": "e3aaaf5e8ab29398f1d0f800fc2294277808f9f57688e4549210bef1b6aba24e",
+      "kind": "bool",
+      "mistakes": {
+        "77e363fc4fbcb205a87fc81421ab40b8366de1543e642af1f6d8d99baf8e8397": "relis le tableau des familles (§203.7) : quel masque dans l'attention croisée ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q5d": {
+      "hash": "619f48e4417caa5fe6c6f0d69df449da4484d2337a07c8ff8dfb38e25b752680",
+      "kind": "str",
+      "mistakes": {
+        "642ce6773cdd54bd1f7dc69a0c836e5ea7759aa2b52573ecc955ca6f52e2de70": "le premier argument fournit les requêtes : qui regarde qui ?",
+        "dc6fac9cf71985b9f527ee7c7570bab54da316835af2010dbd26733d94fc77e4": "les trois arguments ne sont pas les mêmes : relis l'ordre query, key, value"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q5e": {
+      "hash": "c098fae16f2a9e68f21a7464c476be809de22058a1fc4c2b6d18b48665c73d4c",
+      "kind": "bool",
+      "mistakes": {
+        "c6130b73faead8f2a1f731cd89ab9b28559abc60900097f6ad1761836681f4de": "relis la définition de l'auto-attention (§203.3)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q6a": {
+      "hash": "e4ed72b7f58fa2743f617ec39a1ed0783ef3c3091ac8fb7e6f32bf7e603d3ce5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "c2957c0ba0bb9350221b537703d8fbcaa63fb277017e37ee08465487b8e27964": "tu as multiplié : relis la définition de d_h",
+        "d061fe56da40a9e284464b94cff329cc03755d204e87a3715bfaadb3de9f7158": "recompte avec H = 16"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q6b": {
+      "hash": "d2fdd9346b278420f6e8ec6c8d2ee46c010b799c0f138ad5ff1b253838a2f308",
+      "kind": "bool",
+      "mistakes": {
+        "9518d6e5e731728c0b299e5daa5f5b8f1cb17036cc36e128a20fa97b834b682e": "relis « Compter les paramètres » (§203.4)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q6c": {
+      "hash": "0056816709584d98862e499677824a6d63aed536c242aa3146ece728c81d6d06",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "009c83cc2be8d0241958e747a9e18d39a315264f2f189afbffd0a784e65c78af": "on demande un rapport, pas une différence",
+        "1b633a9f60ee41d34a8b5d299ec89a0f1a1762779aecc94e6c236763fde4ec89": "on demande un rapport, pas un produit",
+        "be5bf1ffc9c584ea3b0005fa6e189c7f5517c16fcabfdae2b13083be573d8f01": "c'est le nombre de têtes de clés : on demande un rapport"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q6d": {
+      "hash": "de6a5588559a73d99995f53ed6557eb5aff6d97d76ddfb56b283ca4fbf4163b1",
+      "kind": "str",
+      "mistakes": {
+        "58f33dfb034ecf02aa99f288431e12dc671a0deb51097bcc8e3a604ef7464488": "relis le piège classique « un reshape direct » : y a-t-il une erreur ?",
+        "722a92c4f507cc68882a69aa77212cf4ac2a574acbd6cae5c62f149f70cd7ec3": "relis le piège classique « un reshape direct » : quelle tête reçoit quelles features ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q6e": {
+      "hash": "2e7d47e98c69473f4db4d8e4125ef1ecda1d9ba394a5cfe5d7912b85347ef4db",
+      "kind": "bool",
+      "mistakes": {
+        "f09e2c2fd41d58c567e6f967e4696d23f44fffce0bdb812e58882bffc5c44add": "relis le paragraphe sur repeat_interleave (§203.4), et écris les deux ordres de têtes"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q7a": {
+      "hash": "0182f00325cca3fdf5a6f5fce5c8b5f550b49e90548e713bcabed6c729c3394a",
+      "kind": "bool",
+      "mistakes": {
+        "3c65f6e11e3bb55e6464779c0ba82458e517bcfb45e05d9adb3fa88080688c42": "relis « L'attention ne voit pas l'ordre » (§203.5)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q7b": {
+      "hash": "f059562f81f7cf23e2da88c3da194075a8f73a23444cc07d8fc427bb361bb0d5",
+      "kind": "str",
+      "mistakes": {
+        "0626fe81c32836a84500c5e0465cac18b2e0c12d375abe415c2d5d87ee7e72b1": "la sortie est une moyenne de valeurs : pourquoi serait-elle nulle ?",
+        "11e09065927cd826c5b795fe514e6d592944788e740efc99fe3306a674fd4a74": "sans position, l'attention sait-elle qui est voisin de qui ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q7c": {
+      "hash": "f75e68ac8a038364eb058bad47ed1475e165f0f64100a5171e28aa58d56edbb6",
+      "kind": "str",
+      "mistakes": {
+        "12b2b18e45787106b73c05a2fdb04ca4a53d818e6ab29632b7a05545192eae66": "relis « Les positions apprises » : la table a-t-elle une règle pour les positions trop grandes ?",
+        "d0696f0b8d4c136b62d087fcb92473c72344e059b6475331d545a3b6700ef9ae": "relis « Les positions apprises » : quelle est la limite de la table ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q7d": {
+      "hash": "9c810fb9d92b0efed71f6c60acef75255b3325d533a7097115c47f2ddc2f21dc",
+      "kind": "str",
+      "mistakes": {
+        "5a7eeb139ed8b2588572cd5c9f63c3061a696c74a8bfe2fa0214db59785edc69": "relis les trois points pratiques de RoPE : quels vecteurs sont tournés ?",
+        "74ce1a21872ccdaef017e09c9bb215d663f9a3a9f1af234c98239d36974a5246": "relis le premier paragraphe de « RoPE » : touche-t-il aux embeddings ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q7e": {
+      "alt_coarse": [
+        "543d7a023bb6e8c4101314dbd3c3e2182a839d375320ae4b30aa5aa88d35840f"
+      ],
+      "decimals": 1,
+      "hash": "5931533d1ea6de0ae95cc52d1405b5624bb926acd098c056eeeba808fc47f516",
+      "hash_coarse": "cecd93c716f2c17281ab1f79662f89241a8038c48580cab83a4862f59fd8c99f",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a6ed1c5e69724ce7fa38eb924d8602f33a7c4dd52f9d5cf8f0eab5c7b6788cef": "on demande des radians, pas des degrés",
+        "bd0e6f661a350a02e4a32c503090ec421efbb1ae89d3060da26fa2a17c8d2ef5": "vérifie l'exposant de la fréquence θ_i (fiche, « RoPE »)",
+        "f74110faa0387b151517999065b78ee90b3e87348e58815172477c79f2da829c": "relis la question : la paire i = 16, pas la paire 0"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q8a": {
+      "hash": "45886c28be3a8207f1eeb4613880063100025b49c84f0a6b0d3d5372488ee7af",
+      "kind": "str",
+      "mistakes": {
+        "56fc085d3f792c61409caa89bdafecbe3f6038011bde72d2c443e342837e33ad": "relis les deux formules du §203.6 : que manque-t-il ?",
+        "5d4441a8b32e1c4db67b4c5af94338d1a02107b319b84402e058cd2fba633613": "relis les deux formules du §203.6 : où se place la layer norm en pré-LN ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q8b": {
+      "hash": "17637d9fa32431c85a83ef970d2cecfaca4f0f77f349226c2a4bc12a93fc401d",
+      "kind": "bool",
+      "mistakes": {
+        "5cc0ca6d91067c7ecb58e9c7a357f13555de58f5e95e878a6ee699d8690acac5": "relis le paragraphe qui suit la figure des deux blocs (§203.6)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q8c": {
+      "hash": "ebe136b95ee395789dbbd9ef4b8b44a5c0a0ef2fdf8193123947b03085c88c23",
+      "kind": "str",
+      "mistakes": {
+        "973798d3d3f2c947856ad1d837b883f11691e7e10326fb65b132bb175b4bb4e0": "relis le paragraphe sur Xiong et coll. : est-ce le pré-LN ou le post-LN qui supporte un warmup court ?",
+        "ad11c409b19ff4df538fb4f783e22d82d9a002b95be3c34ba694a4cd8e3ba23d": "relis le paragraphe sur Xiong et coll. : où les gradients sont-ils grands ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q8d": {
+      "hash": "ced54b0fba2ccbe248b3ef826be8320a3d84a35c209933406496b8823bb5d29b",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "0d20a04960c8ce5e021c6f42694bee25acecf62213923017e1a123cd0d40fa95": "n'oublie pas les biais des deux couches denses",
+        "38dc6b8138f5aa86842b72916573851125682f9bfe70f4de0397515734c51a1f": "vérifie la taille du biais de la seconde couche",
+        "7f52d9103a834b86b8c3edbb1968c20316ce447cc2f80a880f12daaf64aabaa0": "le MLP a deux couches denses",
+        "a8539f7e012959a819840a57c0dee6555ddbbdb29bd93e1ed758517abb8b8e58": "vérifie la taille du biais de la première couche"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q8e": {
+      "hash": "d789196a649adb8e70a2b9212a7339162b0791d5f1b5ae33b40a47e6f4540c9a",
+      "kind": "bool",
+      "mistakes": {
+        "dc086eef946df09f00c054aa3e57dad1e2af9b97820acb92dce2725b0525014b": "relis le rôle de la connexion résiduelle (§203.6 et le rappel R3)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q9a": {
+      "hash": "962f3fadbf1669a147e19bd49af05e976b8a3bfd72014cfb7770d0113780413b",
+      "kind": "str",
+      "mistakes": {
+        "87a271917067ac33962d603c84842b41fe8e288ebe4fee195124bb2f40d66dfb": "c'est l'objectif d'un décodeur : relis « L'encodeur : BERT »",
+        "90eb2b7abb12c2a20747ba284c91003bb8cb6c793c29e6912e7397f8f10d29b2": "c'est l'objectif de T5 : relis « L'encodeur : BERT »"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q9b": {
+      "hash": "df06b237e2995a65c24e0d4060301addb962e52a712d16f7305e95e9fe1eb7e0",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "1079840f3772e7a5f70dcf1c85cb728a69fc0d64c353414be304f05b5026f293": "relis la question : on demande toutes les positions choisies",
+        "dfc59f1597819b52db397728a354c7ea78348230680def5647fbd6b3f52f855b": "on demande les positions choisies, pas les autres",
+        "f6ab33e64c2a1bc4e611a6280849e19b5016efbbc0cfadd72a764efae8c2f4f9": "relis la question : 15 % de 200 tokens"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q9c": {
+      "hash": "e2ccc7f11080acbd4bed1228c9ceec12638d7c1e3abff18123c4350570986008",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "07423332eb6c92b48e0a3902b3d63b7a84069988c53d8dfc057c04dde7eb3784": "relis la question : on demande celles qui deviennent [MASK]",
+        "0bdcf7a499c338402e2f3ec9d275c153857837dc7959ef55e3eb190579175971": "relis la proportion des positions choisies qui deviennent [MASK] (§203.7)",
+        "b77412b77eabcea76135c64237c2da8537e048790d1044ab5660b4a3bd36c038": "relis la question : parmi les positions choisies seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q9d": {
+      "hash": "b511d43821eea6a4a9472eb711bad57abbf79e88ecbf9e5ef2fb867f4bd28660",
+      "kind": "bool",
+      "mistakes": {
+        "255927e45c37f94d1c1f184662a325d04f6d8ad0ba27d0ada390eebe7e38d535": "relis le paragraphe sur le décodeur (§203.7) : que permet le prompt ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q9e": {
+      "hash": "120276d9ff8cd769ed160c66e39e18602d730d904dc324f5657c71866e063675",
+      "kind": "str",
+      "mistakes": {
+        "5c2265a05e3f77e07de72b5a0c32f9b552670880b6ec6723f277466ed7c417f1": "relis la ligne « Sortie typique » du tableau des familles : que produit cette famille ?",
+        "c1cebc8b31a979b392fd1568288180a450c4c87d59e18bf50ad37dd8b99a292c": "relis la ligne « Sortie typique » du tableau des familles"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q10a": {
+      "hash": "56ea0a67e7236628985ccd2d70bd1f9670ef28f5fc699057fb6ebf3fc8bbab8e",
+      "kind": "str",
+      "mistakes": {
+        "028a97df08d2655767e02d3d270ce91db85fc3d8d5d8524db0cf57ec4034bc2b": "relis le tableau « chat » : combien de cibles pour T entrées ?",
+        "3016becffd80dad8fe684d76f997e127ccb734f55094795ed5c846a71fc88f9e": "les cibles sont-elles les entrées elles-mêmes ? Relis le tableau « chat » (§203.7)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q10b": {
+      "hash": "d45bf93dab3ac9f6f9c9fddc7220053b39cc80f23ffc9bb1ebf093e6a2c63b50",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "62604539a0b80e85947c700f8f6369dff35694cb6cfbea0ef30e973563ca8a5f": "relis la question : T = 256",
+        "cf144cf202fae0d8e3b467919d34721fa7fe91bc5d093a7b0d67ef28fbad8f99": "relis le tableau « chat » : la dernière position a-t-elle une cible ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q10c": {
+      "hash": "5e6646c614f426860a1bd0451f4eb5614a877d0b7fd71ba34a4da5280b3437a3",
+      "kind": "bool",
+      "mistakes": {
+        "7347566d2cf2f862c7828045703af639ec26773aafc538fea43eeb423200de34": "relis la définition du teacher forcing (§203.7) : quelle séquence est donnée en entrée ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q10d": {
+      "hash": "f36d54d3d7e96b985eb19dc1b99c90a0c00266abac093ae7e57c9550d0b080fe",
+      "kind": "str",
+      "mistakes": {
+        "b4158c7a83fe96862a46547c833c08ccd61e7f63e21e8822c37a18889e45eaae": "le modèle voit-il la cible dans son entrée ?",
+        "fdcf189bba5a419b811a57376cae8110e8dc1417daffa8206905a308405fec46": "une loss qui diverge vient d'un learning rate ou d'une initialisation : ici, que voit le modèle ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q10e": {
+      "decimals": 2,
+      "hash": "ce7e6dc84becb7c77670bfd91d435236dbfabe38582ac6060c633e26658ffd31",
+      "hash_coarse": "59844f6bd79fc0f14a90bf966f0ce42220a35a40bb766c8b7ee51a033a7d08ca",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1fc92a187087914551c63ca95ed432d1311f91593567984fb9378930a5aedc1f": "on demande une loss, pas une probabilité",
+        "4eb653163e55e14eeb2c45ef4c9d608ccc507f029878bf1cd63f4a296e901ff9": "le logarithme est naturel ici, pas en base 2",
+        "70d35ce0d0dae8b258dfa23b11d14ce89122924192582149d25ff4e48f0333b2": "le logarithme est naturel ici, pas décimal"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q11a": {
+      "hash": "1ec2c8b572721373e9b675f4aa3438ca753778e6ac9ec61cca785ff68be09763",
+      "kind": "str",
+      "mistakes": {
+        "965cc3d33795329febc0d432a521c0fe281632351b8ed5a8f1afdda9fcf52235": "relis « Le KV cache » : que garde-t-on pour chaque couche ?",
+        "d79ce9dce63dea0ec0a92e97b45e4f2d4efe9143d2cf43d307a9a70b88cde1e1": "relis « Le KV cache » : les anciennes requêtes resservent-elles ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q11b": {
+      "hash": "ed1001461a68f5775522f7bb633eb9dd3fae0ec8430a96792566ccb1b14b0b19",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "8b835c077d48090ae19524c14de85be7a63e3543cdadfe2e2aa5ae5b31c75d90": "le nouveau token a-t-il besoin d'une requête ?",
+        "ff75e62df75242d6efdd680d006e2072e64100f227c20f190a23d4af2caa24c0": "relis l'étape 1 du KV cache : combien de tokens passent dans le modèle ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q11c": {
+      "hash": "920d656e3b3a9e0ecf6d9b83b5371c71445d68b1e5646ede70aeb479333f67ea",
+      "kind": "bool",
+      "mistakes": {
+        "8a8bf26d2f6da11210f8abbecef6977cdfed1d2e0af80bd1017adceb74faa603": "relis la vérification de la fiche (une couche, cache contre calcul complet) : les sorties diffèrent-elles ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q11d": {
+      "hash": "bfbba528cfab58f784421ce53f2c0a6a67ad9f012774ac9c9c8e507a9adda9ee",
+      "kind": "str",
+      "mistakes": {
+        "566ce4c2a72208f979b016b587f6444ce8b22250c4320391006504e3bef2e6f4": "relis « Ce que coûte le cache » : de quoi dépend la formule ?",
+        "baa0e90a947f9154464a559f5074e149b6dee8edd167a374e6e5d6fd6a26be39": "relis la formule du cache : T y apparaît-il au carré ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q11e": {
+      "hash": "a305bc2737d04069d7f562a61f4095a73063716f03342291e5e236562f8ca0ad",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "2afaec607ea15ff8d4c4edb325eeb44c39d0ee3d7c228c3e1b95d0c37f0706f1": "recompte les facteurs de la formule du cache : il en manque un de 2",
+        "88097d87faee2ba3bddb6e9285572d3a978dee80e3febaae99298c1c2831cbf5": "on demande des octets, pas des bits",
+        "c8251daea7bb8b9594ca4aa22f062f36b40899a0b6a2c88603f9f3d8f8ce41f6": "tu as compté des valeurs, ou oublié deux facteurs : relis la formule du cache"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q12a": {
+      "hash": "bbd944b276917a29fd63980d97e60c812831b11a983dbaf05abf8337c32eae88",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "43d6d893f3bcbb8b9b7b4dd09c5790a80ad16d0f93d031f461eb905d28dea56d": "relis « La mémoire : la matrice T × T » : comment la mémoire croît-elle avec T ?",
+        "4478c05c3d991d22a3cc25f98250d1bb560d75266b6340f3f5e8e7d6ce4f642f": "le carré de la longueur, pas son cube",
+        "838e4ea115e62c94fe95ac0a7fbbfb58c84a0cae3864afa41cbe81768d2035fb": "relis la question : on multiplie la longueur par 8"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q12b": {
+      "hash": "f01a82525a968d083e622eeaefc8e5d11ba05ec85e37c229771a98056e0743c8",
+      "kind": "bool",
+      "mistakes": {
+        "ec2977328ae1ff3280ebc6ec1c1d7823c85c325dbd9b736807ca8e6d3eee184f": "relis le résultat de FlashAttention (§203.10) : est-ce une approximation ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q12c": {
+      "hash": "1b3b4007a5bc4a7faed0639c9d8303dff5dd8a6be5f3384aa0152fa046eb8abb",
+      "kind": "str",
+      "mistakes": {
+        "2ddab7eaf8c76ae0670d42bea95a1bd4a5659f02b78ad15c6cf1294282813eff": "relis le résultat de FlashAttention : que devient le nombre de FLOPs ?",
+        "e7940fe21ee62ce929ac705f3c211ba3eb9a3fc61d959375388cdd10bf0999d2": "FlashAttention change-t-il le modèle ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q12d": {
+      "hash": "1204219d7ab7aae47622bde5ca2cfa29ab887f8af2cf1d98d460721739e2b049",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "0892cf1bd2049698d8423b7c8166767efe184837094b810c0082e9fac5f0d3c3": "le seuil n'est pas T = d : relis le rapport des deux coûts (§203.10)",
+        "a15aa42b15edf6dc8c6e0433db6fe68f0bd8d14d62d7896a8eacfc4c16cd1d56": "relis la question : un décodeur causal, où une requête voit en moyenne la moitié des clés"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.Q12e": {
+      "hash": "4e3f63cedbefefeae7e6fb4342cb80a24c1f97e982dc921160b58f5ac05225e1",
+      "kind": "bool",
+      "mistakes": {
+        "f1751c2ed292b4eeb05ce5858ce2c37da50c4d56f0fc35cc1f2481cff4e7f4f5": "relis l'exemple de la fiche pour d = 4 096 (§203.10)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R1a": {
+      "hash": "59c0763509f21f9c4a68d8b1cca63563f9cefcd918d269fd48835db4bb6047a7",
+      "kind": "bool",
+      "mistakes": {
+        "cc627f1709012568f57d72428a604c2b06b23c696c14e038a924c590a4f46add": "compare le nombre de tokens d'un même texte avec deux tokenizers de B2"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R1b": {
+      "fractional": "on demande un nombre de tokens",
+      "hash": "6796e35c310f289bf3560eadb8c9d6a2d89ba74f443573c247c84de309e3b3e7",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "464367ad85fa9aef0ca1ce84e4e8d1b064c440816625eae9e164567f080c5d51": "relis la définition de la compression (B2) : des octets par token"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R1c": {
+      "hash": "3cdb0fba40d133ab77462b3091f8c9589ad1b27f4c327f7dd30355a6688faabc",
+      "kind": "str",
+      "mistakes": {
+        "6fd00b25201962d83e67f8b50ab1bffdebb4535d41d7ba104b8ce6e4e3f11796": "relis B2 : une fusion de plus change-t-elle le découpage ?",
+        "dc5a1dfd0c6ad3991ce59712bda72f3eb72253e4f1cc475c9ed33deebb785881": "relis B2 (§202.3) : que fait une fusion au nombre de tokens du corpus ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R1d": {
+      "hash": "3748da5ad8a308b4506b88661d88ef05e3387758ed3aaaec772cc3fa211f04e8",
+      "kind": "bool",
+      "mistakes": {
+        "73986cbee945d84bda7caef8a2d97be7d323f9db1dee1f897666c4fc71b01a35": "relis la fertilité du français avec GPT-2 (B2, §202.6)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R1e": {
+      "hash": "74bd3bf62dda60d43d8b145cfaabdebb7523de0f9dce65b0899ae4b95524fce2",
+      "kind": "str",
+      "mistakes": {
+        "549a4be5523b2ecbd9e5d2d75d18e81cdaf27b02bdecc6ee1c5163931f01e00c": "compare la longueur moyenne d'un token BPE à celle d'un caractère",
+        "9e05c7912c42804d7b3dee20d3b64a21dcce76fc18009c48bbebf1e0d3d07156": "relis la compression de B2 : combien de caractères par token BPE ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R2a": {
+      "decimals": 4,
+      "hash": "d01673cc756acaa65177ed5907be0e2fc923bd3484f5470e5597a790283b9b39",
+      "hash_coarse": "ac1d905d7141a7f7101250805311d42f911c3d3db16329c932cdacc94a2e5d7f",
+      "kind": "float",
+      "magnitude": -3,
+      "mistakes": {
+        "e7a94e481af42ab178e3c13b45fccb8195d595cd0a19983eadda254f803297e5": "relis le ch. 22 : le gradient traverse 50 jacobiennes l'une après l'autre",
+        "f414f86325b8d045c67c71470c690711e3ecec4d239b7f4e8224322ecf4ea3c1": "relis la question : 50 pas"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R2b": {
+      "hash": "194c9dba34f462f742a0cadad827631dc71695904690d6dfe3977c40ad39ba4a",
+      "kind": "bool",
+      "mistakes": {
+        "f6823f60b937f887e0749095bc8f7a4f9fb6238a024a88e97ed33ddcc48b11f2": "relis le ch. 22 : le LSTM atténue-t-il ou supprime-t-il le problème ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R2c": {
+      "hash": "f0bc7706b2de96ff72b659d0a809f5ade5ae0c52f09c403ad128cd1893f090e7",
+      "kind": "str",
+      "mistakes": {
+        "2c9495e0c9bf9b89e36e3139a63597b2652c2d5ee310a53df658570e4c96936b": "c'est le chemin dans un RNN : relis le tableau de §203.1",
+        "f001d78a381a4cf40b6712090743027f9eff6d59da01bb1b826644a0f797f9a5": "relis le tableau de §203.1 : chemin entre deux tokens éloignés"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R2d": {
+      "hash": "461c4d878334b2672f880cd861c576eb11b85e1c33e9b19733a20494ae3d9673",
+      "kind": "str",
+      "mistakes": {
+        "211f29a4a0774ce8e403f7ffc69352489a4838ddfa3ea8c979d1ce8d10e34231": "le dropout régularise : relis ce que le ch. 22 fait contre l'explosion",
+        "3f2979a33351c935b81262a95f1cb16deeda1455c1b8de4ec985a7ce31e0e523": "la température sert à la génération"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R2e": {
+      "hash": "b6c68a64c59802531e30fa42ddb8ad91aa488eda92d292deb2e864a273344108",
+      "kind": "bool",
+      "mistakes": {
+        "ce90645e3bd705b744fa33570fcbd161be8925ebf2361c3b6000b5634c355d7a": "relis « Et si l'on supprimait les RNN ? » (§203.1)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R3a": {
+      "decimals": 3,
+      "hash": "4591a52e970eaac97a28508e67842e184ec36c522951d9d44d26306aa1a2eef8",
+      "hash_coarse": "08f83ad8f3243a300f63c593664789741b6ee3709de592a35a2238e7fab80473",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "3bd45f027fde0711dd8d54e3a5aafd2363e5c85c6503ddcd7953fbecfa7aa8ef": "relis la docstring de ta layer_norm : quelle variance utilise-t-elle ?",
+        "5fa767f52bc018309cd3eaa6863861aa4752e07b5af6ee7b34988db970bbd8df": "vérifie le signe",
+        "6d95418a22766ec985df5438a6e04fa8226bc51826b2f60a768ced0f801586fd": "tu as divisé par la variance : relis la formule de ta layer_norm",
+        "8830fbdb3c4f0055439a8e04a5412c76b96046c0145f769af8c40081e9ed4e6d": "as-tu soustrait la moyenne ?"
+      },
+      "sign": -1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R3b": {
+      "hash": "c96219725e488ea484f13ce2a19851ac47976932279936f8e8be042e5226a419",
+      "kind": "bool",
+      "mistakes": {
+        "1be3a179cce597aee0ebebfb644c96cd2021c9f92ff3ba5e0d99b76b1f75ca00": "relis le ch. 20 : sur quel axe la layer norm calcule-t-elle ses statistiques ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R3c": {
+      "hash": "4a3b69e32e576a8939146f5b6831740c498a7b5aec97e111811ea425bd7b1787",
+      "kind": "str",
+      "mistakes": {
+        "2b232b663d8245fd1c0a9612ab014a7326a09949cde0e3f8db9ac51d5a0c9e80": "dérive y terme par terme : que donne le second terme ?",
+        "85fe12f1bedb235c2a13d9be07579b78e526227bb611d92a95c44671e9e5d090": "dérive y terme par terme : que donne le premier terme ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R3d": {
+      "hash": "7257c376b196a675f880c98804f1c32e1277bda95ece05b24fbc48d944e8d80a",
+      "kind": "bool",
+      "mistakes": {
+        "402e5d6f6835439ab257478078c35d5c8eabf0842e8789831c583ee6a5caabee": "relis le 🔗 Lien avec le ch. 20 (§203.6)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.R3e": {
+      "hash": "f745da47b1b19bbd0a5703a6268011d998b6fcd960a08539a98c5218a30222c7",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "82fa55d80c8ddc5e62ab2b3391a963a4b2c666bb6e4d144710ca9598e8e63530": "relis : γ et β sont-ils des matrices ?",
+        "b080ee9ac72247f84206e3c3a41a12ed8fd3b09f3a1456d26aa734f799e4aaa8": "relis le ch. 20 : combien de vecteurs de paramètres a une layer norm ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

@@ -289,7 +289,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q2",
@@ -307,7 +307,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q3",
@@ -326,7 +326,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q4",
@@ -344,7 +344,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q5",
@@ -363,7 +363,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q6",
@@ -381,7 +381,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q7",
@@ -399,7 +399,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q8",
@@ -415,7 +415,7 @@
     "203.6"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q9",
@@ -433,7 +433,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q10",
@@ -451,7 +451,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q11",
@@ -469,7 +469,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.Q12",
@@ -485,7 +485,7 @@
     "203.10"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.R1",
@@ -505,7 +505,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.R2",
@@ -525,7 +525,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.R3",
@@ -545,7 +545,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.1",

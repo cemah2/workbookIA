@@ -570,3 +570,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Interroger des embeddings (cosinus, voisins, analogies avec exclusion) et construire une recherche sémantique avec des embeddings de phrases | |
 | Discuter les biais de la tokenisation (surcoût selon la langue) et des embeddings (stéréotypes), et comment les mesurer | |
 <!-- wb:end B2 -->
+<!-- wb:section B3 -->
+## B3 — Attention et Transformers : un mini-GPT from scratch
+
+| Compétence | Niveau |
+|---|:-:|
+| Calculer à la main une attention par produit scalaire, avec et sans masque causal, et justifier la division par $\sqrt{d_k}$ (variance du produit scalaire) | |
+| Construire et combiner les masques (causal aligné en bas à droite, padding), et passer d'une convention de masque à l'autre (SDPA, `nn.MultiheadAttention`) | |
+| Suivre les formes d'une attention multi-têtes (découpage en têtes, attention croisée, GQA) et compter ses paramètres | |
+| Calculer un encodage sinusoïdal, l'effet d'un décalage de position, et démontrer la propriété relative de RoPE | |
+| Implémenter en NumPy l'attention multi-têtes, les encodages de position et un bloc Transformer pré-LN, validés contre PyTorch | |
+| Compter les paramètres d'un GPT bloc par bloc, et distinguer encodeur, décodeur et encodeur-décodeur (masques, objectifs, usages) | |
+| Écrire et entraîner un mini-GPT en PyTorch, lire ses courbes et comparer des perplexités ramenées au caractère | |
+| Générer avec un KV cache, et chiffrer sa mémoire, le coût quadratique du contexte et le calcul d'un entraînement ($6ND$) | |
+| Mener des ablations (position, résiduel, normalisation, têtes) et discuter la mémorisation des données d'entraînement | |
+<!-- wb:end B3 -->

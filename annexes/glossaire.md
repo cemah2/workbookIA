@@ -971,6 +971,49 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | programmation dynamique | dynamic programming | résoudre un problème en combinant les solutions de ses sous-problèmes, chacune calculée une fois (la segmentation d'un texte en le moins de tokens, Viterbi) | B2 |
 | segmentation la plus courte | shortest (optimal) tokenization | à vocabulaire fixé, le découpage d'un texte en le moins de tokens possible, trouvé par programmation dynamique ; les fusions par rang ne le donnent pas toujours | B2 |
 | biais de fréquence (embeddings) | frequency bias | sur un petit corpus, les voisins d'un mot sont souvent des mots de fréquence voisine, en particulier des mots-outils, plutôt que des mots de même sens | B2 |
+| encodeur-décodeur | encoder-decoder, seq2seq | deux réseaux : l'encodeur lit la séquence source, le décodeur génère une autre séquence ; d'abord deux RNN (2014), puis un Transformer (2017) | B3 |
+| vecteur de contexte | context vector | le dernier état de l'encodeur d'un encodeur-décodeur récurrent, qui doit résumer toute la phrase source : le goulot que l'attention supprime | B3 |
+| alignement (traduction) | alignment | quel mot source correspond à quel mot cible ; l'attention de Bahdanau l'apprend comme une distribution de poids (alignement souple), sans annotation. À ne pas confondre avec l'alignement d'un LLM sur des préférences humaines (ch. 1) | B3 |
+| attention additive | additive attention | attention de Bahdanau, dont le score est un petit MLP : $e_{ij} = \mathbf{w}^\top \tanh(\mathbf{W}\mathbf{s}_{i-1} + \mathbf{U}\mathbf{h}_j)$ | B3 |
+| requête, clé, valeur | query, key, value | les trois projections apprises d'un token : ce qu'il cherche ($\mathbf{q} = \mathbf{x}\mathbf{W}_Q$), ce qu'il montre ($\mathbf{k}$), ce qu'il transmet ($\mathbf{v}$) | B3 |
+| attention par produit scalaire mis à l'échelle | scaled dot-product attention | $\operatorname{softmax}(\mathbf{Q}\mathbf{K}^\top / \sqrt{d_k} + \mathbf{M})\,\mathbf{V}$, la softmax sur les clés ; `F.scaled_dot_product_attention` | B3 |
+| carte d'attention | attention map | la matrice des poids d'attention, une ligne par requête (de somme 1), une colonne par clé | B3 |
+| auto-attention | self-attention | attention dont les requêtes, les clés et les valeurs viennent de la même séquence ($L = S$) | B3 |
+| attention croisée | cross-attention | attention dont les requêtes viennent d'une séquence (la traduction) et les clés et les valeurs d'une autre (la sortie de l'encodeur) | B3 |
+| masque causal | causal mask | interdit à chaque requête les clés qui la suivent ; aligné en bas à droite quand $L < S$ (KV cache) : la requête $i$ voit les clés $j \le i + S - L$ | B3 |
+| masque de padding | padding mask | vrai sur les vrais tokens, faux sur le padding, de forme $(N, S)$, remis en $(N, 1, 1, S)$ pour les scores ; `True` = autorisé pour SDPA, masqué pour `nn.MultiheadAttention` | B3 |
+| tête d'attention | attention head | une des $H$ attentions parallèles d'une attention multi-têtes, de taille $d_h = d/H$, avec sa carte d'attention ; à ne pas confondre avec la tête d'un modèle (ch. 23) | B3 |
+| attention multi-têtes (MHA) | multi-head attention | $H$ attentions en parallèle sur des sous-espaces de taille $d/H$, concaténées puis mélangées par $\mathbf{W}_O$ : $4d^2 + 4d$ paramètres, quel que soit $H$ | B3 |
+| projection de sortie | output projection | la matrice $\mathbf{W}_O$, de forme $(d, d)$, qui mélange les sorties concaténées des têtes | B3 |
+| MQA, GQA | multi-query attention, grouped-query attention | une seule tête de clés et de valeurs pour toutes les têtes de requêtes (MQA), ou une par groupe (GQA) : un KV cache plus petit d'autant | B3 |
+| équivariance par permutation | permutation equivariance | permuter les entrées permute les sorties de la même façon ; l'auto-attention sans position ni masque l'est : elle ne voit pas l'ordre | B3 |
+| encodage de position | positional encoding | vecteur qui dépend de la position, ajouté à l'embedding d'un token ; l'encodage sinusoïdal de 2017 : $PE_{p, 2i} = \sin(p\,\omega_i)$, $PE_{p, 2i+1} = \cos(p\,\omega_i)$ | B3 |
+| positions apprises | learned positional embeddings | une table `nn.Embedding(T_max, d)` de vecteurs de position, apprise avec le modèle (GPT-2, BERT, ViT) ; rien au-delà de $T_{\max}$ | B3 |
+| encodage de position rotatif (RoPE) | rotary position embedding | tourner requêtes et clés, paire par paire, d'un angle proportionnel à la position : $\langle R_m \mathbf{q}, R_n \mathbf{k}\rangle = \langle \mathbf{q}, R_{n-m}\mathbf{k}\rangle$ (J. Su et coll., 2021) | B3 |
+| pré-LN, post-LN | pre-LN, post-LN | la layer norm à l'entrée de chaque sous-couche, $\mathbf{x} + F(\operatorname{LN}(\mathbf{x}))$ (GPT-2), ou après l'addition résiduelle, $\operatorname{LN}(\mathbf{x} + F(\mathbf{x}))$ (2017) | B3 |
+| bloc Transformer | Transformer block | une attention multi-têtes puis un MLP, chacun avec sa connexion résiduelle et sa layer norm : environ $12d^2$ paramètres | B3 |
+| modèle de langue causal (auto-régressif) | causal language model | décodeur à masque causal entraîné à prédire le token suivant à chaque position, et qui génère un token à la fois (GPT) | B3 |
+| modèle de langue masqué (MLM) | masked language model | encodeur entraîné à retrouver des tokens masqués (15 % des tokens) avec le contexte des deux côtés (BERT) | B3 |
+| corruption de segments | span corruption | pré-entraînement de T5 : des segments du texte d'entrée sont remplacés par des marqueurs, que le décodeur doit réécrire | B3 |
+| teacher forcing | forçage par l'enseignant | entraîner un décodeur sur la séquence vraie, avec les cibles décalées d'un token ($y_t = x_{t+1}$) : $T$ prédictions en parallèle | B3 |
+| biais d'exposition | exposure bias | à la génération, le modèle lit ses propres prédictions, qu'il n'a pas vues à l'entraînement : une erreur peut l'emmener loin | B3 |
+| KV cache | key-value cache | les clés et les valeurs des tokens déjà vus, gardées pour chaque couche ; chaque nouveau token passe seul dans le modèle ; mémoire $2 \times L \times T \times n_{kv} d_h \times$ octets | B3 |
+| prefill | prefill | la phase d'inférence qui traite tout le prompt d'un coup et remplit le KV cache, avant le décodage token par token | B3 |
+| softmax en ligne | online softmax | softmax calculée par blocs, en gardant le maximum, la somme des exponentielles et la somme pondérée, remis à l'échelle à chaque nouveau maximum ; exacte | B3 |
+| FlashAttention | FlashAttention | attention exacte calculée par blocs dans la mémoire rapide du GPU, sans écrire la matrice $T \times T$ : mémoire linéaire, mêmes FLOPs (T. Dao et coll., 2022) | B3 |
+| fenêtre glissante (attention) | sliding window attention | chaque token ne voit que ses $w$ prédécesseurs : un coût en $O(Tw)$ (Mistral 7B, gpt-oss) | B3 |
+| mélange d'experts (MoE) | mixture of experts | plusieurs MLP « experts » par bloc, dont quelques-uns seulement servent à chaque token : beaucoup de paramètres, peu de calcul par token | B3 |
+| QK-Norm | query-key normalization | normaliser les requêtes et les clés avant le produit scalaire (Qwen3), pour garder l'échelle des scores | B3 |
+| lois d'échelle | scaling laws | la loss de test baisse comme une loi de puissance des paramètres, des tokens et du calcul ; Chinchilla : environ 20 tokens par paramètre pour un budget donné | B3 |
+| PagedAttention (attention paginée) | PagedAttention | ranger le KV cache par pages de taille fixe, comme la mémoire virtuelle (vLLM) : moins de fragmentation, plus de requêtes servies | B3 |
+| décodage spéculatif | speculative decoding | un petit modèle propose plusieurs tokens, que le grand vérifie en une passe, sans changer la distribution des tokens générés | B3 |
+| YaRN | yet another RoPE extension | méthode qui étire les fréquences de RoPE pour allonger le contexte d'un modèle déjà entraîné (B. Peng et coll., 2023) | B3 |
+| ALiBi | attention with linear biases | ajoute aux scores un biais proportionnel à la distance, sans encodage de position (O. Press et coll., 2021) | B3 |
+| patch (ViT) | patch | carré de $P \times P$ pixels d'une image, aplati et projeté en un token (une convolution de noyau $P$ et de stride $P$) | B3 |
+| token `[CLS]` | classification token | token appris placé en tête de séquence, dont la sortie sert à classer (BERT, ViT) | B3 |
+| mémorisation (modèle de langue) | memorization | le modèle reproduit mot pour mot des passages de ses données d'entraînement ; elle croît avec la taille du modèle, les répétitions et la longueur du prompt (Carlini et coll.) | B3 |
+| canari | canary | chaîne secrète aléatoire insérée dans les données d'entraînement pour mesurer si le modèle la recrache (Carlini et coll., 2019) | B3 |
+| confidentialité différentielle (DP-SGD) | differential privacy | entraînement aux gradients rognés et bruités exemple par exemple, qui borne l'influence de chaque exemple sur le modèle | B3 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

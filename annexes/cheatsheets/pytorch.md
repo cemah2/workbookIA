@@ -236,6 +236,26 @@
 | `model.get_input_embeddings().weight[ids]` ; `model(**batch).last_hidden_state` | le vecteur **statique** d'un token (la table d'entrée) et ses vecteurs **contextuels** (la sortie du dernier bloc) (B2.29) |
 | `pre_tokenizers.ByteLevel(add_prefix_space=False, use_regex=False)` ; `BpeTrainer(initial_alphabet=pre_tokenizers.ByteLevel.alphabet())` | un BPE octet sans pré-tokenisation par mots : des tokens qui franchissent les espaces (B2.31) |
 
+## Attention et Transformers (bonus B3)
+
+| Code | Effet |
+|---|---|
+| `F.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=False, scale=None)` | l'attention sur `(..., L, d_k)`, `(..., S, d_k)`, `(..., S, d_v)` → `(..., L, d_v)` ; `scale=None` divise par $\sqrt{d_k}$ ; `dropout_p` s'applique même en `eval()` |
+| `attn_mask` booléen : `True` = la paire **participe** ; masque flottant : **ajouté** aux scores | la convention de ta librairie ; ne jamais passer `attn_mask` **et** `is_causal=True` |
+| `torch.tril(torch.ones(L, S, dtype=torch.bool), diagonal=S - L)` ; `torch.nn.attention.bias.causal_lower_right(L, S)` | le masque causal aligné en bas à droite (KV cache) ; `is_causal=True` l'aligne en haut à gauche quand $L \ne S$ |
+| `pad = torch.arange(S) < lengths[:, None]` ; `pad[:, None, None, :]` ; `causal & pad[:, None, None, :]` | le masque de padding `(N, S)` → `(N, 1, 1, S)`, diffusé sur les têtes et les requêtes, combiné au masque causal |
+| `nn.MultiheadAttention(d, H, batch_first=True)` ; `mha(q, k, v, attn_mask=~mask, key_padding_mask=~pad, average_attn_weights=False)` | convention **inverse** : `True` = masqué ; `batch_first=False` par défaut ; poids par tête avec `average_attn_weights=False` |
+| `mha.in_proj_weight` `(3d, d)`, `mha.in_proj_bias` `(3d,)`, `mha.out_proj` | $\mathbf{W}_Q$, $\mathbf{W}_K$, $\mathbf{W}_V$ empilées, chacune transposée par rapport à `mylearn` (`nn.Linear` calcule $\mathbf{x}\mathbf{W}^\top$) |
+| `q.view(N, T, H, d_h).transpose(1, 2)` ; `y.transpose(1, 2).reshape(N, T, d)` | découper en têtes `(N, H, T, d_h)` et recoller ; `view` après `transpose` échoue : `reshape` ou `.contiguous()` |
+| `F.scaled_dot_product_attention(q, k, v, enable_gqa=True)` ; `k.repeat_interleave(H // H_kv, dim=1)` | GQA : chaque tête de clés sert un groupe de têtes de requêtes voisines (pas `repeat`) |
+| `with torch.nn.attention.sdpa_kernel(SDPBackend.MATH):` ; `torch._fused_sdp_choice(q, k, v)` | imposer le noyau de référence ; lire le noyau que la fonction choisirait (une fonction interne, qui peut changer d'une version à l'autre) |
+| `nn.TransformerEncoderLayer(d, H, F, dropout=0.0, activation="gelu", batch_first=True, norm_first=True)` | un bloc pré-LN (`norm_first=False`, le défaut : post-LN) ; avec un masque causal, un bloc de GPT ; `model.eval()` pour le comparer |
+| `nn.GELU()` ; `nn.GELU(approximate="tanh")` | la GELU exacte ; l'approximation par tanh de GPT-2 (`gelu_new`), à moins de $10^{-3}$ de la première |
+| `F.cross_entropy(logits.reshape(-1, V), y.reshape(-1), ignore_index=-100)` | la loss d'un modèle de langue, logits `(N, T, V)` aplatis ; les cibles à `-100` (padding) sont ignorées |
+| `x, y = data[i:i + T], data[i + 1:i + 1 + T]` | une fenêtre et ses cibles décalées d'un token (teacher forcing) |
+| `K_cache = torch.cat([K_cache, k_new], dim=2)` ; `F.scaled_dot_product_attention(q_new, K_cache, V_cache)` | un pas de génération avec KV cache : une requête face à toutes les clés gardées, sans masque |
+| `nn.Conv2d(C, d, kernel_size=P, stride=P)(img).flatten(2).transpose(1, 2)` | les patchs d'un ViT : `(N, C, H, W)` → `(N, (H/P)(W/P), d)` |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

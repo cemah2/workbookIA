@@ -27,18 +27,18 @@ e) Vrai ou faux : Bahdanau et ses coauteurs apprennent l'alignement sans aucun a
 ### B3.Q2 — Requête, clé, valeur : un dictionnaire où l'on cherche « à peu près » 🧠 ⏱️ 3 min
 *Fiche §203.2 · parcours R*
 
-a) Un dictionnaire Python rend la valeur de la clé égale à la requête. L'attention rend : (A) la valeur de la clé la plus proche de la requête, et elle seule ; (B) une moyenne des valeurs, pondérée par la ressemblance de la requête à chaque clé ; (C) la clé la plus proche de la requête.
+a) Un dictionnaire Python rend la valeur de la clé égale à la requête. L'attention rend : (A) la valeur de la clé la plus proche de la requête, et elle seule, comme un dictionnaire qui tolérerait les fautes de frappe ; (B) une moyenne des valeurs, pondérée par la ressemblance de la requête à chaque clé ; (C) la clé la plus proche de la requête.
 b) Vrai ou faux : dans une auto-attention, la requête, la clé et la valeur d'un même token sont égales, puisqu'elles viennent toutes du même vecteur $\mathbf{x}_i$.
 c) Avec $\mathbf{q} = (1, 3)$, $\mathbf{k} = (2, 2)$ et $d_k = 2$, que vaut le score mis à l'échelle $\mathbf{q} \cdot \mathbf{k} / \sqrt{d_k}$, à 2 décimales ?
 d) Une requête donne les scores $(0 ;\ 0 ;\ \ln 3)$ à trois clés. Que vaut le poids de la troisième clé, à 1 décimale ?
-e) Pour **une** requête, la sortie de l'attention a la forme : (A) $(S,)$, un poids par clé ; (B) $(S, d_v)$, une valeur par clé ; (C) $(d_v,)$, une seule moyenne de valeurs.
+e) Pour **une** requête, la sortie de l'attention a la forme : (A) $(S,)$, un poids par clé ; (B) $(S, d_v)$, une valeur par clé, multipliée par son poids ; (C) $(d_v,)$, une seule moyenne de valeurs.
 
 ### B3.Q3 — Pourquoi diviser les scores par √d_k ? 🧠 ★★ ⏱️ 3 min
 *Fiche §203.2 · parcours R, M*
 
 a) Les composantes de $\mathbf{q}$ et de $\mathbf{k}$ sont indépendantes, centrées, de variance 1, et $d_k = 256$. Quel est l'écart-type du produit scalaire $\mathbf{q} \cdot \mathbf{k}$ ?
 b) Vrai ou faux : avec les mêmes hypothèses, après la division par $\sqrt{d_k}$, la variance des scores vaut 1 quelle que soit $d_k$.
-c) Une softmax **saturée** : (A) donne presque tout le poids au plus grand score, et ses dérivées sont presque nulles ; (B) donne des poids presque égaux, et ses dérivées explosent ; (C) donne des poids négatifs aux plus petits scores.
+c) Une softmax **saturée** : (A) donne presque tout le poids au plus grand score, et ses dérivées sont presque nulles ; (B) donne des poids presque égaux à toutes les clés, quelle que soit la requête, et ses dérivées explosent ; (C) donne des poids négatifs aux plus petits scores.
 d) Si l'on divisait les scores par $d_k$ au lieu de $\sqrt{d_k}$, avec $d_k$ grand : (A) la softmax resterait la même, à un facteur près ; (B) la softmax saturerait encore plus vite ; (C) les poids seraient presque uniformes.
 e) Vrai ou faux : la division par $\sqrt{d_k}$ compense la taille des valeurs $\mathbf{v}_j$, qui grandit avec $d_v$.
 
@@ -46,7 +46,7 @@ e) Vrai ou faux : la division par $\sqrt{d_k}$ compense la taille des valeurs $\
 *Fiche §203.3 · parcours R*
 
 a) Combien de cases valent `True` dans le masque causal booléen d'une séquence de 5 tokens ?
-b) La ligne 2 de ce masque autorise : (A) la seule clé 2 ; (B) les clés 0, 1 et 2 ; (C) les clés 2, 3 et 4.
+b) La ligne 2 de ce masque autorise : (A) la seule clé 2 ; (B) les clés 0, 1 et 2 ; (C) les clés 2, 3 et 4, celles qui la suivent.
 c) Vrai ou faux : avec un masque causal, modifier le token 4 change la sortie de la position 1.
 d) Pendant une génération avec KV cache, une seule nouvelle requête fait face à $S = 9$ clés. Combien de clés voit-elle avec `causal_mask(1, 9)` de ta librairie ?
 e) Le masque causal sert à : (A) empêcher chaque position de regarder les tokens qui la suivent ; (B) ignorer le padding en fin de séquence ; (C) sauter la moitié des scores pour aller deux fois plus vite.
@@ -66,7 +66,7 @@ e) Vrai ou faux : en auto-attention, $L = S$.
 a) Avec $d = 512$ et $H = 16$ têtes, que vaut $d_h$ ?
 b) Vrai ou faux : à $d$ fixé, passer de 8 à 16 têtes double le nombre de paramètres de l'attention.
 c) Un modèle a 32 têtes de requêtes et 4 têtes de clés et de valeurs (GQA). Par combien son KV cache est-il divisé, face au même modèle avec 32 têtes de clés et de valeurs ?
-d) Écrire directement `x.reshape(N, H, T, d_h)` au lieu de `split_heads` : (A) donne la bonne forme, mais une tête reçoit des morceaux de tokens différents ; (B) lève une erreur de forme ; (C) donne exactement le même tenseur.
+d) Écrire directement `x.reshape(N, H, T, d_h)` au lieu de `split_heads` : (A) donne la bonne forme, mais une tête reçoit des morceaux de tokens différents ; (B) lève une erreur de forme, puisque les axes ne sont pas dans le bon ordre ; (C) donne exactement le même tenseur que `split_heads`, en une seule opération au lieu de deux.
 e) Vrai ou faux : en GQA avec 8 têtes de requêtes et 2 de clés, si l'on répète les têtes de clés avec `repeat` (et non `repeat_interleave`), la tête de requêtes 1 utilise la tête de clés 1.
 
 ### B3.Q7 — Sans encodage de position, l'attention voit-elle l'ordre des mots ? 🧠 ★★ ⏱️ 3 min
@@ -74,7 +74,7 @@ e) Vrai ou faux : en GQA avec 8 têtes de requêtes et 2 de clés, si l'on rép�
 
 a) Vrai ou faux : sans encodage de position ni masque, permuter les tokens d'une séquence permute les sorties de l'auto-attention de la même façon, sans les changer.
 b) Sans position ni masque, la sortie du token « chien » dans « le chien mord l'homme » et dans « l'homme mord le chien » (un token par mot) : (A) est la même dans les deux phrases ; (B) diffère, car « chien » n'a pas les mêmes voisins ; (C) est nulle.
-c) Un modèle à positions apprises (une table de 1 024 lignes) reçoit un token en position 1 500 : (A) il extrapole sans difficulté ; (B) aucune ligne de la table ne correspond à cette position ; (C) la position est ramenée à 1 023 automatiquement.
+c) Un modèle à positions apprises (une table de 1 024 lignes) reçoit un token en position 1 500 : (A) il extrapole sans difficulté, comme pour les positions déjà vues à l'entraînement ; (B) aucune ligne de la table ne correspond à cette position ; (C) la position est ramenée à 1 023 automatiquement.
 d) RoPE tourne : (A) les embeddings des tokens, à l'entrée du modèle ; (B) les valeurs, dans chaque couche ; (C) les requêtes et les clés, dans chaque couche.
 e) RoPE, base 10 000, $d_h = 64$ : quel est l'angle de rotation de la paire $i = 16$ à la position 250, en radians, à 1 décimale ?
 
@@ -83,14 +83,14 @@ e) RoPE, base 10 000, $d_h = 64$ : quel est l'angle de rotation de la paire $i =
 
 a) Un bloc **pré-LN** écrit sa sous-couche d'attention : (A) $\mathbf{h} = \operatorname{LN}\big(\mathbf{x} + \operatorname{MHA}(\mathbf{x})\big)$ ; (B) $\mathbf{h} = \operatorname{MHA}\big(\operatorname{LN}(\mathbf{x})\big)$ ; (C) $\mathbf{h} = \mathbf{x} + \operatorname{MHA}\big(\operatorname{LN}(\mathbf{x})\big)$.
 b) Vrai ou faux : dans un Transformer pré-LN, le chemin résiduel de l'entrée du premier bloc à la sortie du dernier ne traverse aucune layer norm.
-c) D'après Xiong et coll. (2020), à l'initialisation d'un Transformer post-LN : (A) les gradients des paramètres proches de la sortie sont grands, et il faut un warmup long ; (B) les gradients près de l'entrée explosent, et un gradient clipping suffit ; (C) les gradients sont bien répartis, et aucun warmup n'est nécessaire.
+c) D'après Xiong et coll. (2020), à l'initialisation d'un Transformer post-LN : (A) les gradients des paramètres proches de la sortie sont grands, et il faut un warmup long ; (B) les gradients des paramètres proches de l'entrée explosent dès les premiers pas, et un gradient clipping à 1 suffit à stabiliser l'entraînement ; (C) les gradients sont bien répartis, et aucun warmup n'est nécessaire.
 d) Combien de paramètres a le MLP d'un bloc avec $d = 512$, $F = 2\,048$ et des biais ?
 e) Vrai ou faux : sans connexions résiduelles, un Transformer de 12 blocs s'entraîne aussi bien, grâce à ses layer norms.
 
 ### B3.Q9 — BERT, GPT, T5 : quel masque, quel objectif, quel usage ? 🧠 ⏱️ 3 min
 *Fiche §203.7 · parcours R*
 
-a) L'objectif de pré-entraînement de BERT : (A) retrouver des tokens masqués, avec le contexte des deux côtés ; (B) prédire le token suivant ; (C) réécrire des segments corrompus.
+a) L'objectif de pré-entraînement de BERT : (A) retrouver des tokens masqués, avec le contexte des deux côtés ; (B) prédire le token suivant ; (C) réécrire des segments corrompus du texte d'entrée, remplacés par des marqueurs.
 b) BERT choisit 15 % des 200 tokens d'un texte. Combien de positions comptent dans la loss ?
 c) Parmi ces positions choisies, combien sont remplacées par `[MASK]`, en moyenne ?
 d) Vrai ou faux : un décodeur comme GPT peut aussi classer un texte, si on le lui demande dans le prompt.
@@ -111,7 +111,7 @@ e) Quelle loss attends-tu au tout premier pas pour un modèle de caractères à 
 a) Le KV cache garde, pour chaque couche : (A) les requêtes et les clés des tokens déjà vus ; (B) les clés et les valeurs des tokens déjà vus ; (C) les logits des tokens déjà générés.
 b) Avec un KV cache, combien de nouvelles requêtes calcule-t-on, par tête et par couche, pour chaque token généré ?
 c) Vrai ou faux : à graine égale, générer avec un KV cache donne d'autres tokens que sans cache.
-d) La mémoire du cache d'une séquence est : (A) proportionnelle au nombre de tokens déjà vus ; (B) constante ; (C) proportionnelle au carré du nombre de tokens.
+d) La mémoire du cache d'une séquence est : (A) proportionnelle au nombre de tokens déjà vus ; (B) constante ; (C) proportionnelle au carré du nombre de tokens, comme la matrice des poids d'attention.
 e) Combien d'octets occupe le cache d'un modèle de 2 couches, $d = 64$, après 100 tokens, en float32 ?
 
 ### B3.Q12 — Coût quadratique du contexte et ce que change FlashAttention 🧠 ★★ ⏱️ 3 min
@@ -150,7 +150,7 @@ e) Vrai ou faux : à l'entraînement, un RNN calcule les états de toutes les po
 
 a) `layer_norm` de $\mathbf{x} = (1, 2, 3, 6)$ avec $\gamma = 1$, $\beta = 0$ et $\epsilon$ négligé : que vaut la première composante, à 3 décimales ?
 b) Vrai ou faux : la layer norm calcule sa moyenne et sa variance sur le batch, comme la batchnorm.
-c) Pour $\mathbf{y} = \mathbf{x} + F(\mathbf{x})$, la jacobienne $\partial \mathbf{y} / \partial \mathbf{x}$ vaut : (A) $\partial F / \partial \mathbf{x}$ ; (B) $\mathbf{I} + \partial F / \partial \mathbf{x}$ ; (C) $\mathbf{I}$.
+c) Pour $\mathbf{y} = \mathbf{x} + F(\mathbf{x})$, la jacobienne $\partial \mathbf{y} / \partial \mathbf{x}$ vaut : (A) $\partial F / \partial \mathbf{x}$ seul, puisque $\mathbf{x}$ ne dépend d'aucun poids ; (B) $\mathbf{I} + \partial F / \partial \mathbf{x}$ ; (C) $\mathbf{I}$.
 d) Vrai ou faux : une layer norm donne le même résultat pour un token, quels que soient la taille du batch et le reste de la séquence.
 e) Combien de paramètres a une layer norm de dimension $d = 1\,600$ (celle de GPT-2 XL) ?
 
@@ -219,7 +219,7 @@ Dans ta copie : que se passe-t-il avec $H = 5$ ? Quelles sont les formes de $\ma
 **Objectif :** calculer des valeurs de l'encodage sinusoïdal et vérifier qu'un décalage de position agit comme une rotation de chaque paire de colonnes.
 **Prérequis :** fiche §203.5 (encodage sinusoïdal, matrice du décalage) · 0B (sinus, cosinus, radians) · **Parcours :** M
 
-On prend $d = 8$ et la base 10 000 : $PE_{p, 2i} = \sin(p\,\omega_i)$ et $PE_{p, 2i+1} = \cos(p\,\omega_i)$, avec $\omega_i = 10000^{-2i/d}$ et $i = 0, 1, 2, 3$. Les angles sont en **radians** ; arrondis à 4 décimales, sauf en a).
+On prend $d = 8$ et la base 10 000 : $PE_{p, 2i} = \sin(p\,\omega_i)$ et $PE_{p, 2i+1} = \cos(p\,\omega_i)$, avec $\omega_i = 10000^{-2i/d}$ et $i = 0, 1, 2, 3$. Les angles sont en **radians** ; arrondis à 4 décimales, sauf en a) (à l'entier) et en b) (à 3 décimales).
 
 a) La période de la paire $i = 2$ (colonnes 4 et 5), en positions, arrondie à l'entier.
 b) $PE_{25, 0}$.
