@@ -213,4 +213,213 @@ de sommes de lignes (et de colonnes) 4, 3, 5 et 2. a) (le, chat) deux fois et (c
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B2.13 à B2.31) seront ajoutées à la prochaine session de génération, avec les parties A à E du notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB2.py` (comptes des six tokenizers, rejeu du 🐛, temps) ; les extraits, les découpages et les révisions des tokenizers sont figés, donc tes chiffres sont les mêmes, sauf les durées, qui dépendent de la machine et sont données en fourchette.
+
+### Ex B2.13 — Tokenizers réels : GPT-2, BERT et un tokenizer multilingue sur Holmes et Verne 📦
+**Réponse** : a) **13 419** tokens de GPT-2 pour l'extrait de Holmes ; b) **16 944** tokens de BERT pour celui de Verne ; c) une fertilité de **1,3749** pour e5 sur Holmes ; d) **3,6045** octets par token pour e5 sur Verne. Le tableau complet (fertilité ; octets par token) : GPT-2 1,453 et 3,80 sur Holmes, 2,407 et 2,69 sur Verne ; BERT 1,276 et 4,33, puis 2,132 et 3,04 ; e5 1,375 et 4,01, puis 1,798 et 3,60. Sur Holmes, BERT est le plus économe ; sur Verne, e5.
+**Démarche** : `AutoTokenizer.from_pretrained(dépôt, revision=commit)` lit les fichiers du tokenizer à un commit fixé (une mise à jour du dépôt ne change donc pas tes chiffres) ; `tok(text, add_special_tokens=False)["input_ids"]` compte le texte seul. BERT paraît très économe sur Verne parce que `bert-base-uncased` met en minuscules et retire les accents avant WordPiece : « Ça coûte cher, dit Passepartout. » revient en « ca coute cher, dit passepartout. ». Il gagne des tokens en perdant de l'information, et son décodage ne redonne pas le texte : sa compression ne se compare pas à celle d'un tokenizer sans perte. e5, appris sur une centaine de langues, coûte à peine plus sur Verne que sur Holmes (fertilité 1,80 contre 1,38) ; GPT-2, appris sur un Web surtout anglais, coûte 1,66 fois plus par mot. Les trois marques : « Ġ » est l'espace collée devant un mot (table octet → caractère de GPT-2, §202.4), « ## » marque la suite d'un mot chez WordPiece, « ▁ » le début d'un mot chez SentencePiece ; « Phileas Fogg paria » donne `['Ph', 'ile', 'as', 'ĠF', 'ogg', 'Ġpar', 'ia']`, `['phil', '##ea', '##s', 'fog', '##g', 'par', '##ia']` et `['▁Phil', 'e', 'as', '▁Fog', 'g', '▁pari', 'a']`.
+**Erreurs fréquentes** : compter les tokens spéciaux (`tok(text)` ajoute `[CLS]` et `[SEP]` à BERT, `<s>` et `</s>` à e5 : 16 946 au lieu de 16 944) ; diviser des caractères au lieu d'octets (3,50 au lieu de 3,60 pour e5 sur Verne : une lettre accentuée prend deux octets) ; inverser la fertilité (mots / tokens) ; passer la révision en deuxième argument positionnel au lieu de `revision=` (elle est alors ignorée, sans erreur).
+**Variante** : sur les extraits `[200000:250000]`, les fertilités sont presque les mêmes : GPT-2 1,469 sur Holmes et 2,411 sur Verne, BERT 1,277 et 2,143, e5 1,404 et 1,796 ; la fertilité est une propriété du tokenizer et de la langue plus que du passage choisi.
+
+### Ex B2.14 — Prédire : quel texte coûte le plus de tokens, Holmes, Verne, des nombres ou des emoji ? 🔮
+**Réponse** : a) **D**, les emoji : 1,58 octet par token avec GPT-2, contre 2,56 pour les nombres, 2,69 pour Verne et 3,80 pour Holmes ; b) **A** : avec CamemBERT, l'extrait de Verne coûte 12 741 tokens et celui de Holmes 16 806, un rapport de 0,76 ; c) **A** : BERT rend **un seul** token, `[UNK]`, pour les 1 200 emoji.
+**Démarche** : a) un emoji prend 4 octets en UTF-8 (§202.2), et GPT-2 a vu peu d'emoji en 2019 : 🙂 lui coûte 2 tokens, 🚀, 🎉, 🐍 et ❤️ 3, 👍🏽 5, soit 19 tokens pour les six et 3 800 pour le texte, plus de 3 par emoji. Les nombres viennent ensuite : GPT-2 les découpe au gré de ses fusions (§202.6). b) En B2.13, GPT-2 coûtait 1,43 fois plus cher sur Verne que sur Holmes ; CamemBERT, appris sur du français, inverse l'écart : c'est l'anglais qui lui coûte 1,32 fois plus. Le « surcoût » d'une langue vient des textes sur lesquels le tokenizer a appris, pas de la langue elle-même ; la table montre aussi e5 (1,13), plus équilibré. c) Le pré-tokenizer de BERT coupe aux espaces et à la ponctuation ; les emoji ne sont pas de la ponctuation (catégorie Unicode « So »), et le texte n'a aucune espace : c'est **un seul mot** de 1 600 points de code. WordPiece remplace un mot qu'il ne sait pas découper (ou de plus de 100 caractères) par un seul `[UNK]` (§202.5). CamemBERT rend 2 tokens, `▁` et `<unk>`. Un tokenizer au niveau octet (GPT-2, Qwen3, SmolLM2) ne perd rien : Qwen3 et e5 ont un token par point de code d'emoji (1 600), SmolLM2 en prend 4 200.
+**Erreurs fréquentes** : croire que les nombres sont le pire cas parce que Qwen3 et SmolLM2 les découpent chiffre par chiffre (1 octet par token pour eux, mais GPT-2 groupe les chiffres) ; transposer le « deux fois plus cher » de la fiche à tout tokenizer, sans regarder sur quoi il a appris ; attendre un `[UNK]` par emoji de BERT, ou un par octet.
+**Variante** : les mêmes 1 200 emoji séparés par des espaces : BERT rend alors 1 200 `[UNK]`, un par emoji, et GPT-2 3 601 tokens (les espaces se collent aux emoji suivants).
+
+### Ex B2.15 — get_pair_counts et merge_pair 🔨
+**Réponse** : les 42 tests de l'exercice passent ; sur l'extrait de Verne, 3 069 mots distincts (pour 7 948 mots) donnent 873 paires de caractères voisins.
+**Démarche** :
+```python
+def get_pair_counts(words):
+    counts = {}
+    for word, freq in words.items():
+        if freq < 0:
+            raise ValueError(f"word frequencies must be >= 0, got {freq} for the word {tuple(word)!r}")
+        for pair in zip(word, word[1:]):            # adjacent pairs, overlapping ones included
+            counts[pair] = counts.get(pair, 0) + freq
+    return counts
+
+
+def merge_pair(ids, pair, new_id):
+    pair = tuple(pair)
+    if len(pair) != 2:
+        raise ValueError(f"pair must contain exactly two ids, got {pair!r}")
+    out, i = [], 0
+    while i < len(ids):
+        if i + 1 < len(ids) and (ids[i], ids[i + 1]) == pair:
+            out.append(new_id)
+            i += 2                                   # skip both: no overlap
+        else:
+            out.append(ids[i])
+            i += 1
+    return out
+```
+`zip(word, word[1:])` donne les paires voisines, chevauchements compris, sans jamais franchir la frontière d'un mot puisqu'on ne sort pas du tuple. Travailler sur les mots **distincts** avec leur fréquence divise le travail par 2,6 ici, et par 13,5 sur Holmes entier (105 863 mots, 7 817 formes) : chaque fusion ne parcourt que des mots différents. `merge_pair` rend une liste neuve même sans fusion, car `fit` garde les mots d'une étape à l'autre : une liste partagée modifiée plus tard changerait aussi l'ancienne.
+**Erreurs fréquentes** : oublier la fréquence (compter chaque mot une fois) ; compter `(1, 1)` une seule fois dans `(1, 1, 1)` ; recoller tous les mots en une seule suite (des paires à cheval sur deux mots) ; dans `merge_pair`, avancer de 1 après une fusion (`[1, 1, 1]` donnerait `[5, 5]`) ; rendre l'entrée elle-même quand rien ne change, ou un tuple.
+**Variante** : sur les mots de l'extrait de Holmes, 2 638 formes donnent 725 paires ; la plus fréquente est « h e », 1 109 fois : la première fusion d'un BPE de Holmes au niveau caractère.
+
+### Ex B2.16 — BPETokenizer.fit : apprendre les fusions, au niveau caractère puis octet 🔨
+**Réponse** : les 49 tests de l'exercice passent (dont les 5 de `pre_tokenize`) ; sur l'extrait de Verne, tes 400 tokens au niveau caractère sont ceux de `BpeTrainer`, dans le même ordre.
+**Démarche** :
+```python
+def fit(self, texts):
+    if self.level not in ("byte", "char"):
+        raise ValueError(f"level must be 'byte' or 'char', not {self.level!r}")
+    if self.pre_tokenizer not in ("whitespace", "gpt2", None):
+        raise ValueError(f"pre_tokenizer must be 'whitespace', 'gpt2' or None, not {self.pre_tokenizer!r}")
+    if self.unk_token is not None and self.level == "byte":
+        raise ValueError("unk_token is for level='char' only")
+    specials = list(dict.fromkeys(self.special_tokens))
+    if self.unk_token is not None and self.unk_token not in specials:
+        specials.append(self.unk_token)
+    texts = [texts] if isinstance(texts, str) else texts
+    freqs = Counter(piece for text in texts for piece in pre_tokenize(text, self.pre_tokenizer, specials)
+                    if piece not in specials)                       # the special tokens are left out
+    if self.level == "byte":
+        vocab = {i: bytes([i]) for i in range(256)}
+        words = {tuple(piece.encode("utf-8")): f for piece, f in freqs.items()}
+    else:
+        alphabet = sorted({ch for piece in freqs for ch in piece})  # sorted by code point
+        vocab = {i: ch.encode("utf-8") for i, ch in enumerate(alphabet)}
+        index = {ch: i for i, ch in enumerate(alphabet)}
+        words = {tuple(index[ch] for ch in piece): f for piece, f in freqs.items()}
+    n_base = len(vocab)
+    if self.vocab_size < n_base + len(specials):
+        raise ValueError(f"vocab_size={self.vocab_size} < {n_base} + {len(specials)} special token(s)")
+    merges = []
+    while n_base + len(merges) + len(specials) < self.vocab_size:
+        counts = get_pair_counts(words)
+        if not counts:
+            break
+        best = min(counts, key=lambda p: (-counts[p], p))           # most frequent, then the smallest pair
+        if counts[best] < self.min_frequency:
+            break
+        new_id = n_base + len(merges)
+        merges.append(best)
+        vocab[new_id] = vocab[best[0]] + vocab[best[1]]
+        words = {tuple(merge_pair(w, best, new_id)): f for w, f in words.items()}
+    self.n_base_, self.merges_ = n_base, merges
+    self.special_ids_ = {tok: n_base + len(merges) + i for i, tok in enumerate(specials)}
+    for tok, i in self.special_ids_.items():
+        vocab[i] = tok.encode("utf-8")
+    self.vocab_ = vocab
+    return self
+```
+Cette version recompte toutes les paires à chaque fusion : elle passe les tests en quelques secondes, mais met de 30 s à 2 min pour 2 000 tokens sur un roman entier. La référence (`solutions/mylearn_ref/tokenizer.py`) ne met à jour que les mots qui contiennent la paire fusionnée (un index paire → mots) et garde un tas `(-compte, paire)` dont les entrées périmées sont sautées : mêmes fusions, environ 1 s pour 2 000 tokens sur Verne. Le tri par point de code et le départage par la plus petite paire sont ceux de `BpeTrainer` : avec l'ordre d'apparition, les identifiants de l'alphabet changeraient, et avec eux le départage de chaque égalité. `vocab_size` compte les tokens spéciaux parce que c'est le nombre de lignes de la table d'embedding du modèle (§202.7).
+**Erreurs fréquentes** : départager par `max(counts, key=counts.get)`, qui garde la première paire vue ; trier l'alphabet dans l'ordre d'apparition ; laisser les tokens spéciaux dans le comptage (leurs caractères entrent dans l'alphabet) ; ne pas compter `unk_token` dans `vocab_size` ; parcourir une `str` seule comme une liste de textes d'un caractère ; oublier `return self` ; ranger les fusions en listes.
+**Variante** : sur l'extrait de Holmes, l'alphabet compte 79 caractères et les six premières fusions sont « he », « in », « the », « an », « er » et « ou ».
+
+### Ex B2.17 — encode et decode : fusions appliquées par rang, aller-retour sans perte 🔨
+**Réponse** : les 36 tests de l'exercice passent ; tes identifiants d'un passage de Verne sont ceux de `tokenizers`, et l'aller-retour d'un texte accentué avec un emoji et des idéogrammes est exact.
+**Démarche** :
+```python
+def encode(self, text):
+    if not all(hasattr(self, a) for a in ("merges_", "vocab_", "n_base_", "special_ids_")):
+        raise ValueError("this BPETokenizer is not fitted yet: call fit() first")
+    rank = {tuple(pair): r for r, pair in enumerate(self.merges_)}
+    alphabet = None if self.level == "byte" else {self.vocab_[i].decode("utf-8"): i for i in range(self.n_base_)}
+    unk = self.special_ids_.get(self.unk_token) if self.unk_token is not None else None
+    out = []
+    for piece in pre_tokenize(text, self.pre_tokenizer, list(self.special_ids_)):
+        if piece in self.special_ids_:
+            out.append(self.special_ids_[piece])
+            continue
+        if alphabet is None:
+            ids = list(piece.encode("utf-8"))
+        else:
+            ids = []
+            for ch in piece:
+                if ch not in alphabet and unk is None:
+                    raise ValueError(f"the character {ch!r} was not seen during fit and unk_token is None")
+                ids.append(alphabet.get(ch, unk))
+        while len(ids) > 1:
+            best = min(zip(ids, ids[1:]), key=lambda p: rank.get(p, float("inf")))   # the LOWEST rank first
+            if best not in rank:
+                break
+            ids = merge_pair(ids, best, self.n_base_ + rank[best])
+        out += ids
+    return out
+
+
+def decode(self, ids):
+    if not hasattr(self, "vocab_"):
+        raise ValueError("this BPETokenizer is not fitted yet: call fit() first")
+    parts = []
+    for i in ids:
+        if isinstance(i, bool) or not isinstance(i, numbers.Integral) or int(i) not in self.vocab_:
+            raise ValueError(f"{i!r} is not a token id of this tokenizer")   # -1 included: not a list index
+        parts.append(self.vocab_[int(i)])
+    return b"".join(parts).decode("utf-8", errors="replace")      # join the bytes, THEN decode
+
+
+def tokenize(self, text):
+    return [self.vocab_[i].decode("utf-8", errors="replace") for i in self.encode(text)]
+```
+(`import numbers` en tête du fichier, pour `numbers.Integral` : un entier Python ou NumPy.) Les fusions par rang refont, dans chaque pré-token, ce que l'entraînement a fait : la fusion de rang 0 d'abord, partout où elle s'applique, puis la suivante (✏️ B2.4). Recoller les octets avant de décoder garde entiers les caractères coupés entre deux tokens, et `errors="replace"` change un octet seul en « � » au lieu de planter. Avec `'whitespace'`, `decode(encode("le chat dort"))` rend « lechatdort » : le pré-tokenizer a jeté les espaces, et aucun token ne les porte ; `'gpt2'` colle l'espace au mot suivant, qui la garde dans ses octets. Avec seulement 256 tokens, `tokenize("été")` rend `['�', '�', 't', '�', '�']` : un token par octet, et un octet de « é » seul n'est pas un caractère.
+**Erreurs fréquentes** : fusionner la première paire connue de gauche à droite au lieu de la paire de plus petit rang ; décoder token par token (« é » coupé entre deux tokens devient « �� », ou lève `UnicodeDecodeError` sans `errors=`) ; lire `vocab_[i]` sans `try` (`KeyError`) ; indexer une liste, où −1 désigne le dernier token sans rien dire ; un seul `<unk>` pour une suite de caractères inconnus ; un cache posé par `fit`, absent du tokenizer rechargé par `load`.
+**Variante** : avec le BPE caractère de 400 tokens appris sur l'extrait de Verne, « Passepartout » est un seul token (l'id 177), et « Phileas Fogg » deux ; au niveau octet avec 600 tokens, `tokenize("été")` rend `['é', 'té']`.
+
+### Ex B2.18 — Le tokenizer qui abîme les accents : trois bugs d'Unicode et de fusions 🐛
+**Réponse** : les trois erreurs, dans l'ordre des diagnostics :
+1. `decode_18` décode chaque token **séparément**, en mode strict : un caractère de plusieurs octets coupé entre deux tokens (ici « « », « » » et 🙂, jamais fusionnés à 300 tokens) lève `UnicodeDecodeError`. Correction : `b"".join(vocab[i] for i in ids).decode("utf-8", errors="replace")`.
+2. `clean_18` met le texte d'entraînement en **NFD** (« é » devient « e » + U+0301), alors que les textes encodés sont en NFC (« é » est U+00E9, les octets C3 A9) : les fusions apprises pour les accents ne servent jamais, et « é », 1 613 fois dans le texte d'entraînement, reste 2 tokens d'un octet. Correction : `unicodedata.normalize("NFC", text)`, la forme des fichiers.
+3. `encode_18` fusionne la **première** paire connue de gauche à droite, au lieu de celle de plus petit rang : 675 des 5 337 mots distincts du texte d'entraînement ne sont pas découpés comme à l'entraînement, dont « les » (`[' l', 'es']` à l'entraînement, `[' le', 's']` par `encode`). Correction : `min(zip(ids, ids[1:]), key=lambda p: rank.get(p, math.inf))` à chaque tour.
+
+Réparé, le tokenizer fait 1,43 octet par token sur 20 000 caractères de la validation de Verne (300 tokens seulement).
+**Démarche** : les points s'enchaînent dans l'ordre où les erreurs se masquent : tant que `decode` plante, on ne voit rien d'autre. Le texte d'essai contient des caractères absents des fusions (🙂, les guillemets), pour que l'erreur 1 se montre même une fois les autres corrigées. L'erreur 1 aurait laissé passer un aller-retour sur un texte anglais sans accent ni emoji : chaque token y contient des caractères entiers. L'erreur 3 ne change jamais le texte rendu par `decode` (toute suite de fusions recolle les mêmes octets), seulement le découpage : sur 20 000 caractères, 14 395 tokens au lieu de 14 393, presque rien, mais des découpages que le modèle n'a jamais vus à l'entraînement. Rejoué sur les huit versions partiellement corrigées, chaque version s'arrête au premier point dont l'erreur reste (`history_chB2.py`).
+**Erreurs fréquentes** : appliquer `clean_18` aussi dans `encode_18`, en NFD : le texte rendu s'affiche pareil mais n'a plus les mêmes points de code (le point 1 le dit) ; décoder token par token avec `errors="replace"` : plus d'erreur, mais « é » coupé devient « �� » ; recoller les octets mais décoder en mode strict : un octet seul plante encore ; retirer la normalisation sans comprendre pourquoi NFD gênait.
+**Variante** : avec la seule erreur 2 laissée (1 et 3 corrigées), le même texte de validation fait 14 959 tokens au lieu de 14 393 (+3,9 %) : 1,37 octet par token au lieu de 1,43.
+
+### Ex B2.19 — Ton BPE contre la bibliothèque tokenizers : mêmes fusions, autre vitesse 📦
+**Réponse** : a) **101** caractères dans l'alphabet de base ; b) « Passepartout » naît à la fusion de **rang 96** (sa 97ᵉ fusion) ; c) **12 257** tokens pour `VERNE_VAL`. Ton BPE apprend les mêmes 1 899 fusions dans le même ordre, et donne les mêmes identifiants pour toute la validation. Temps d'entraînement mesurés sur deux cœurs : `tokenizers` 0,17 à 0,25 s ; la référence, à comptage incrémental, 0,6 à 0,8 s ; une version qui recompte toutes les paires à chaque fusion, de 30 à 80 s, soit 150 à 450 fois plus lente que `tokenizers` (une mesure, pas une réponse : elle dépend de la machine).
+**Démarche** :
+```python
+def train_hf_19(text, vocab_size, min_frequency=2):
+    tok = Tokenizer(models.BPE())
+    tok.pre_tokenizer = pre_tokenizers.Whitespace()
+    tok.train_from_iterator([text], trainers.BpeTrainer(vocab_size=vocab_size, min_frequency=min_frequency,
+                                                        show_progress=False))
+    return tok
+
+
+def hf_merges_19(hf_tok):
+    vocab = hf_tok.get_vocab()
+    merges = json.loads(hf_tok.to_str())["model"]["merges"]       # ["a", "b"] pairs ("a b" in older versions)
+    return [(vocab[a], vocab[b]) for a, b in (m.split(" ", 1) if isinstance(m, str) else m for m in merges)]
+```
+La description JSON est le `tokenizer.json` de la fiche : son modèle contient le vocabulaire et la liste ordonnée des fusions. La comparaison exacte n'est possible que parce que les deux implémentations ont la même règle de départage (la plus petite paire d'identifiants) et le même ordre de l'alphabet (les points de code) : avec une autre règle, elles divergent dès la première égalité. « Passepartout » (451 occurrences, presque toujours entier) devient un token dès le rang 96, avant « Phileas » (rang 135) : un nom propre fréquent et toujours écrit pareil est une suite d'octets idéale pour BPE. L'écart de vitesse a deux causes : le langage (Rust contre Python, un facteur 3 à 5 entre `tokenizers` et la référence) et l'algorithme (recompter toutes les paires à chaque fusion rend l'entraînement 40 à 120 fois plus lent que la référence).
+**Erreurs fréquentes** : laisser la barre de progression ; rendre des listes au lieu de tuples ; lire les fusions dans `get_vocab()` trié par identifiant (une fusion qui redonne un token existant n'aurait pas d'identifiant propre) ; découper `"a b"` sans limite (`split(" ", 1)`) ; conclure qu'un BPE est lent par nature, alors qu'un comptage incrémental en Python reste sous la seconde.
+**Variante** : sur Holmes (`HOLMES_TRAIN`, 2 000 tokens), l'alphabet a 85 caractères, « Holmes » naît au rang 116, « Watson » au rang 484, et `HOLMES_VAL` fait 15 965 tokens.
+
+### Ex B2.20 — Taille du vocabulaire : compression et entropie par token, de 300 à 8 000 tokens 🔬
+**Réponse** (BPE octet `'gpt2'` appris sur `VERNE_TRAIN`, mesuré sur `VERNE_VAL`) :
+
+| taille | octets par token | bits par token | bits par octet | ids utilisés |
+|---|---|---|---|---|
+| 300 | 1,422 | 6,124 | 4,306 | 132 |
+| 500 | 2,045 | 7,499 | 3,667 | 319 |
+| 1 000 | 2,560 | 8,298 | 3,241 | 770 |
+| 2 000 | 3,001 | 8,715 | 2,904 | 1 410 |
+| 4 000 | 3,382 | 8,857 | 2,619 | 2 023 |
+| 8 000 | 3,641 | 8,843 | 2,429 | 2 342 |
+
+**Démarche** : la compression croît de moins en moins vite : +0,62 octet par token de 300 à 500, +0,52 de 500 à 1 000, +0,44 de 1 000 à 2 000, +0,38 de 2 000 à 4 000, +0,26 de 4 000 à 8 000 ; chaque doublement rapporte moins, car les dernières fusions portent sur des suites rares. L'entropie par token monte (6,1 à 8,9 bits) : plus de tokens différents, chacun plus rare ; mais elle monte moins vite que la compression, si bien que les **bits par octet** baissent régulièrement, de 4,31 à 2,43 (rappel : bits par token = octets par token × bits par octet). Un code de Huffman sur les tokens de 8 000 coderait Verne avec environ 2,4 bits par octet (un peu plus que l'entropie), contre 4,3 avec 300 tokens. Le plafond de l'entropie à 4 000 et 8 000 tokens est en partie un effet de la petite validation : 42 203 caractères ne montrent que 2 342 des 8 000 tokens, et une entropie estimée sur peu d'occurrences est sous-estimée. À 300 tokens, seuls 132 identifiants servent : la plupart des 256 octets n'apparaissent jamais dans un texte français. Pour un petit modèle de Verne, 1 000 à 2 000 tokens est un bon compromis : au-delà, chaque doublement rapporte 8 à 13 % de compression mais double la table d'embedding et laisse beaucoup de tokens vus trop rarement pour être bien appris.
+**Erreurs fréquentes** : diviser des caractères au lieu d'octets ; une entropie en logarithme naturel (en nats) ; mesurer sur le texte d'entraînement du tokenizer ; conclure de la seule courbe de compression qu'il faut le plus grand vocabulaire.
+**Variante** : le pré-tokenizer `'whitespace'` donne 1,69, 2,95 et 3,48 octets par token à 300, 1 000 et 2 000 tokens (BPE appris de même) : mieux, puisqu'aucun token ne porte d'espace, mais le décodage perd les espaces et le texte rendu n'est plus le texte.
+
+### Ex B2.21 — Tokenizer entraîné sur Holmes, appliqué à Verne (et l'inverse) : le coût de la langue 🔬
+**Réponse** (octets par token sur la validation, 2 000 tokens) :
+
+| tokenizer | Holmes | Verne |
+|---|---|---|
+| appris sur Holmes | 3,15 | 1,84 |
+| appris sur Verne | 1,79 | 3,00 |
+| mixte (les deux) | 2,97 | 2,74 |
+| GPT-2 (50 257 tokens) | 3,72 | 2,62 |
+
+**Démarche** : un tokenizer appliqué à l'autre roman perd environ 40 % de sa compression : 1,84 au lieu de 3,00 sur Verne (−39 %), 1,79 au lieu de 3,15 sur Holmes (−43 %). L'effet est **symétrique** : le surcoût ne vient pas du français, mais de l'écart entre les textes d'entraînement du tokenizer et le texte encodé. Le tokenizer mixte partage ses 2 000 tokens : il coûte 6 % à Holmes et 9 % à Verne par rapport à leur tokenizer « maison », bien moins qu'un tokenizer de l'autre langue ; le français paie un peu plus, car Holmes fournit plus de texte (505 966 caractères contre 379 133) et le français a des accents de deux octets. GPT-2, avec 25 fois plus de tokens, fait mieux que le tokenizer de Holmes sur Holmes (3,72), mais **moins bien sur Verne que le petit tokenizer de 2 000 tokens appris sur Verne** (2,62 contre 3,00) : des données d'entraînement de la bonne langue valent plus qu'un grand vocabulaire. Pour un modèle multilingue, c'est l'argument de la fiche (§202.6) : la « taxe » d'une langue se règle en la mettant dans les données du tokenizer, en proportion de son usage.
+**Erreurs fréquentes** : mesurer sur le texte d'entraînement ; comparer des tokenizers de tailles différentes sans le dire (GPT-2) ; lire le tableau transposé ; conclure que le français « coûte plus » en général.
+**Variante** : à 8 000 tokens, l'écart demeure : le tokenizer de Holmes fait 2,08 octets par token sur Verne (3,64 pour celui de Verne), celui de Verne 1,99 sur Holmes (3,73 pour celui de Holmes).
+
+Les solutions des exercices B2.22 à B2.31 (parties D et E du notebook) seront ajoutées à la prochaine étape de génération.
