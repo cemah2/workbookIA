@@ -1,0 +1,391 @@
+{
+ "bug17": {
+  "versions": [
+   {
+    "fixed": "",
+    "first_failure": 1,
+    "expected": 1,
+    "seconds": 0.01,
+    "lines": [
+     "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 0 de chaque séquence ; que voit cette position dans la couche d'attention ?",
+     "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+    ]
+   },
+   {
+    "fixed": "3",
+    "first_failure": 1,
+    "expected": 1,
+    "seconds": 0.01,
+    "lines": [
+     "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 0 de chaque séquence ; que voit cette position dans la couche d'attention ?",
+     "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+    ]
+   },
+   {
+    "fixed": "2",
+    "first_failure": 1,
+    "expected": 1,
+    "seconds": 0.01,
+    "lines": [
+     "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 62 de chaque séquence ; que voit cette position dans la couche d'attention ?",
+     "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+    ]
+   },
+   {
+    "fixed": "23",
+    "first_failure": 1,
+    "expected": 1,
+    "seconds": 0.0,
+    "lines": [
+     "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 62 de chaque séquence ; que voit cette position dans la couche d'attention ?",
+     "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+    ]
+   },
+   {
+    "fixed": "1",
+    "first_failure": 2,
+    "expected": 2,
+    "seconds": 2.48,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,626).",
+     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0.15) ; après 200 itérations, la loss de validation tombe à 1,42 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2."
+    ]
+   },
+   {
+    "fixed": "13",
+    "first_failure": 2,
+    "expected": 2,
+    "seconds": 1.58,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,593).",
+     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0.15) ; après 200 itérations, la loss de validation tombe à 0,86 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2."
+    ]
+   },
+   {
+    "fixed": "12",
+    "first_failure": 3,
+    "expected": 3,
+    "seconds": 1.31,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,661).",
+     "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
+     "❌ Ex B3.17 : point 3 : la loss d'un même batch de 16 lignes vaut 2,2988 sur 39 positions et 1,4963 une fois complété par 21 positions de padding ; quelles positions entrent dans la moyenne ?"
+    ]
+   },
+   {
+    "fixed": "123",
+    "first_failure": null,
+    "expected": null,
+    "seconds": 1.94,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,581).",
+     "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
+     "✅ Ex B3.17 : point 3, le padding ne compte pas (la loss d'un même batch ne dépend pas de son padding (2,8388 sur 39 positions comme sur 60)).",
+     "✅ Ex B3.17 : les trois diagnostics passent."
+    ]
+   }
+  ],
+  "probe20": {
+   "grad_norms": [
+    1.5309956073760986,
+    1.6671303510665894,
+    1.471787929534912,
+    1.3347163200378418,
+    1.274869680404663,
+    1.1595240831375122
+   ],
+   "gap_clip": 0.0010344497859477997,
+   "gap_solution": 0.0
+  }
+ },
+ "p13": {
+  "keys": [
+   10,
+   30,
+   100,
+   300,
+   1000,
+   3000,
+   10000,
+   30000,
+   100000
+  ],
+  "runs": {
+   "13": {
+    "scaled": [
+     0.9951873133674838,
+     0.982263446113542,
+     0.9431144379548579,
+     0.8459367689485267,
+     0.6190018528696893,
+     0.35508751205900513,
+     0.14289612384094097,
+     0.05312373526545287,
+     0.016548393509174506
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999992,
+     0.9999999999999888,
+     0.9999999999999306,
+     0.9999999999994909
+    ]
+   },
+   "0": {
+    "scaled": [
+     0.9951475224652238,
+     0.9826408318783861,
+     0.9368796049773256,
+     0.8278099638651275,
+     0.5909293018669428,
+     0.3250832586766399,
+     0.12720848610379334,
+     0.04645992593998391,
+     0.014359892244558144
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999984,
+     0.9999999999999778,
+     0.9999999999998136,
+     0.999999999998576
+    ]
+   },
+   "1": {
+    "scaled": [
+     0.9939069269667999,
+     0.9791821680347846,
+     0.9337021344928425,
+     0.8300775245059006,
+     0.596830067477901,
+     0.3311456245099751,
+     0.1318617524647725,
+     0.04878465743074445,
+     0.015178041897271306
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999998,
+     0.9999999999999966,
+     0.99999999999997,
+     0.9999999999998487,
+     0.9999999999986805
+    ]
+   },
+   "2": {
+    "scaled": [
+     0.995146842577142,
+     0.9832247466708208,
+     0.9426900235738331,
+     0.8440855771652044,
+     0.6217674695572433,
+     0.34080924943518076,
+     0.13610379111122275,
+     0.04988242487893341,
+     0.015575983436027802
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999999,
+     0.9999999999999982,
+     0.9999999999999875,
+     0.9999999999998881,
+     0.9999999999993692
+    ]
+   },
+   "3": {
+    "scaled": [
+     0.995054708410895,
+     0.9829488707254128,
+     0.9433765211898728,
+     0.8430684732795999,
+     0.6129581341569288,
+     0.34671955622076817,
+     0.13685444004096767,
+     0.05081640835163813,
+     0.015805732226530943
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999976,
+     0.9999999999999751,
+     0.9999999999998423,
+     0.9999999999990468
+    ]
+   },
+   "4": {
+    "scaled": [
+     0.9943750783825839,
+     0.9814183264196857,
+     0.9390794043686558,
+     0.8456824968194234,
+     0.6133714027376826,
+     0.3455356290304712,
+     0.1365756748036232,
+     0.049920835740553025,
+     0.015516435448467366
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999998,
+     0.9999999999999982,
+     0.9999999999999711,
+     0.9999999999998184,
+     0.9999999999988141
+    ]
+   },
+   "5": {
+    "scaled": [
+     0.994714608505959,
+     0.9840035810780006,
+     0.9484939035718565,
+     0.8548886122072837,
+     0.6434809022221004,
+     0.3738852987229798,
+     0.15170977428430607,
+     0.05642719640105205,
+     0.017529824331449468
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999989,
+     0.9999999999999903,
+     0.9999999999999382,
+     0.9999999999994839
+    ]
+   },
+   "6": {
+    "scaled": [
+     0.9956335580935423,
+     0.9851604285521012,
+     0.9539109141667763,
+     0.8737293073542902,
+     0.6722260953804047,
+     0.40607320306674216,
+     0.1679299730581163,
+     0.06286790665615413,
+     0.019650419550700418
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999998,
+     0.9999999999999966,
+     0.9999999999999732,
+     0.9999999999997553
+    ]
+   },
+   "7": {
+    "scaled": [
+     0.99531073914338,
+     0.9828399073193234,
+     0.9449435104583117,
+     0.8387949894995255,
+     0.6103782284469832,
+     0.33952936964940095,
+     0.13434283694046592,
+     0.049061867282196685,
+     0.015098464563776273
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999998,
+     0.9999999999999992,
+     0.9999999999999895,
+     0.9999999999998243,
+     0.9999999999989482
+    ]
+   },
+   "8": {
+    "scaled": [
+     0.9945160044323047,
+     0.9830820058208385,
+     0.9414716045134559,
+     0.8404723029446658,
+     0.6194717133133214,
+     0.3434728672729959,
+     0.13666477101332755,
+     0.04973959704375201,
+     0.015538958047075346
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999981,
+     0.9999999999999785,
+     0.9999999999998747,
+     0.999999999998188
+    ]
+   },
+   "9": {
+    "scaled": [
+     0.9946853243639286,
+     0.9838333745135375,
+     0.9429816099577039,
+     0.8413404660968611,
+     0.6222972838627635,
+     0.36106119055758623,
+     0.14522877101558213,
+     0.05370048498718544,
+     0.01669937485262664
+    ],
+    "unscaled": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.9999999999999993,
+     0.9999999999999909,
+     0.999999999999928,
+     0.9999999999992508
+    ]
+   }
+  },
+  "margin": 0.09092930186694281,
+  "answers": {
+   "exponent": 3,
+   "keeps_half": true
+  }
+ }
+}

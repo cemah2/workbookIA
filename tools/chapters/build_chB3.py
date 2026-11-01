@@ -12,8 +12,11 @@ B3.1 to B3.5 (02_exercices.md). The derivations ∂ B3.6 and B3.7, the estimate 
 the context cell of the solutions notebook, then checked against the reference library (mylearn.attention,
 mylearn.nn.regularization), PyTorch (F.scaled_dot_product_attention, nn.MultiheadAttention, nn.LayerNorm) and
 transformers (GPT2Config on the meta device, no download).
-Parts A and B (exercises B3.12 to B3.30) come at the second generation session (NEXT_SESSION): the NumPy bricks of
-attention.py, then the mini-GPT in PyTorch.
+Part A (exercises B3.12 to B3.17, chB3_parts.py and chB3_code.py; long or repeated computations in history_chB3.py):
+the NumPy bricks of attention.py, checked by run_pytest_group, the 🔮 of the copied key and the 🐛 of the three masks.
+Part B, first half (B3.18 to B3.20): the attention module and the mini-GPT in PyTorch, then its training on Holmes
+against the LSTM of ch. 22, with the single checkpoint of the trained model (wb.gpt.learner_key). B3.21 to B3.30 come
+next (NEXT_SESSION): they reload that checkpoint (EN_COURS.md, « Pour la seconde moitié »).
 """
 
 from __future__ import annotations
@@ -553,16 +556,14 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A and B (exercises B3.12 to B3.30): second generation session
+# Parts A and B (exercises B3.12 to B3.20, session 68, first half); B3.21 to B3.30 next (NEXT_SESSION)
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB3_code  # noqa: E402,F401  (the cells; history_chB3.py reuses them)
+from chB3_parts import PARTS  # noqa: E402
+
 NEXT_SESSION = [
-    ("A", "B3.12 à B3.17", "ta librairie NumPy : masques et attention, carte d'attention à prédire, têtes, positions "
-                           "sinusoïdales et RoPE, bloc Transformer complet validé contre PyTorch, trois masques qui "
-                           "mentent"),
-    ("B", "B3.18 à B3.30", "le mini-GPT en PyTorch : module d'attention, modèle, entraînement sur Holmes, courbes, "
-                           "Holmes amorcé en français, KV cache, cartes d'attention, ablations, BPE contre caractères, "
-                           "contexte long, ViT, test de causalité, défi"),
+    ("B", "B3.21 à B3.30", "la suite du mini-GPT : courbes, Holmes amorcé en français, KV cache, cartes d'attention, "
+                           "ablations, BPE contre caractères, contexte long, ViT, test de causalité, défi"),
 ]
 
 
@@ -573,9 +574,7 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine étape de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B3 · Attention et Transformers : un mini-GPT from scratch — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -583,7 +582,10 @@ def header_cells(kind: str) -> list:
                "NotImplementedError`), puis une cellule de vérification (`wb.check`, ou des tests). « Tout "
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
-               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`.\n\n"
+               "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Tout "
+               "tourne sur CPU : la partie B entraîne ton mini-GPT en environ 2 min 20 en mode rapide (🚀 15 à 20 min "
+               "en mode complet, plutôt sur un GPU de Colab), puis le sauvegarde hors du dépôt pour la suite du "
+               "chapitre.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b3_transformers/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B3`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
@@ -619,10 +621,10 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B3.12 à B3.30 (partie A : ta librairie NumPy ; partie B : le mini-GPT en "
-             "PyTorch) seront ajoutés à la prochaine session de génération ; relance alors "
-             "`python tools/start_chapter.py B3` pour obtenir le notebook complet.*")
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B3.21 à B3.30 (la suite du mini-GPT : courbes, génération et KV cache, cartes "
+             "d'attention, expériences, ViT, test de causalité et défi) seront ajoutés à la prochaine étape de "
+             "génération ; relance alors `python tools/start_chapter.py B3` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer une attention à la main, masque causal compris, et dire pourquoi on divise par "

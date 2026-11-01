@@ -586,4 +586,233 @@ Commence par : « Sans information de position, l'auto-attention traite une phra
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B3.12 à B3.30) seront ajoutés à la prochaine session de génération, avec les parties A et B du notebook.
+### Ex B3.12 — causal_mask, padding_mask et scaled_dot_product_attention 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « La formule » (§203.2), puis « Le masque causal », « Le masque de padding » et « Le masque causal quand il y a moins de requêtes que de clés » (§203.3). Chaque masque est **une seule comparaison** entre une colonne et une ligne d'indices (la diffusion, *broadcasting*) ; l'attention se fait en quatre temps : les scores, le masquage, la softmax sur l'axe des clés, la somme pondérée des valeurs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `causal_mask` : compare la ligne d'indices de clés `np.arange(S)[None, :]` à la colonne d'indices de requêtes `np.arange(L)[:, None]` décalée de $S - L$ ; les deux refus d'abord.
+- `padding_mask` : `np.arange(S)[None, :] < lengths[:, None]`, après avoir vérifié les longueurs.
+- `scaled_dot_product_attention` : convertis les trois entrées en tableaux de flottants (des listes peuvent arriver) ; `np.swapaxes(k, -1, -2)` transpose les deux derniers axes, quel que soit le nombre d'axes de tête ; `np.broadcast_to(mask, scores.shape)` étend le masque (et lève une erreur s'il ne se diffuse pas) ; `mask.any(axis=-1)` repère une ligne sans aucune clé autorisée ; `np.where(mask, scores, -np.inf)` masque avant la softmax ; ta `softmax(..., axis=-1)` du ch. 17 fait le reste. Pour l'échelle, teste `scale is None`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def scaled_dot_product_attention(q, k, v, mask=None, scale=None):
+    q, k, v = (np.asarray(a, dtype=float) for a in (q, k, v))
+    ...                                                   # d_k of q and k, S of k and v: ValueError otherwise
+    scale = 1 / math.sqrt(q.shape[-1]) if scale is None else scale
+    scores = (q @ np.swapaxes(k, -1, -2)) * scale
+    if mask is not None:
+        ...                                               # broadcast to scores.shape, refuse an empty row, then -inf
+    weights = softmax(scores, axis=-1)
+    return ..., weights
+```
+
+</details>
+
+### Ex B3.13 — Prédire la carte d'attention quand une clé copie la requête, puis quand on retire la division par √d_k 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis ∂ B3.6 : la variance du produit scalaire de deux vecteurs aléatoires indépendants, et ce que devient le produit scalaire d'un vecteur avec lui-même. Vois la softmax comme une compétition : le poids de la clé copiée vaut $e^{s_0} / \big(e^{s_0} + \sum_{j \ge 1} e^{s_j}\big)$.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec la division, le score de la clé copiée est $\lVert\mathbf{q}\rVert^2 / \sqrt{d_k}$, avec $\mathbb{E}\lVert\mathbf{q}\rVert^2 = d_k$ ; les scores des autres clés sont centrés, de variance 1 (∂ B3.6). Pour un score gaussien $Z$ de variance $\sigma^2$, $\mathbb{E}[e^{Z}] = e^{\sigma^2 / 2}$ (la moyenne d'une loi log-normale) : la somme des $S - 1$ autres exponentielles vaut environ $(S - 1)\,\mathbb{E}[e^{Z}]$. La clé copiée garde plus de la moitié du poids tant que son exponentielle dépasse cette somme. Sans la division, refais le raisonnement avec des scores $\sqrt{d_k}$ fois plus grands : le score copié et l'écart-type des autres changent tous les deux.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose l'égalité $e^{s_0} = (S - 1)\,\mathbb{E}[e^{Z}]$ avec les valeurs typiques de l'indice 2, et résous-la en $S$, une fois avec la division ($s_0 \approx d_k/\sqrt{d_k}$, $\sigma^2 = 1$), une fois sans ($s_0 \approx d_k$, $\sigma^2 = d_k$). Compare le premier $S$ aux puissances de 10 de la question a), le second à 100 000 pour b). La médiane sur 200 requêtes suit le cas typique, $\lVert\mathbf{q}\rVert^2 \approx d_k$.
+
+</details>
+
+### Ex B3.14 — split_heads, merge_heads et multi_head_attention 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Une seule matrice pour toutes les têtes » et le piège du reshape direct (§203.4), et tes formes de ✏️ B3.3 : une seule projection pour toutes les têtes, puis un découpage de l'axe des features, que l'on fait passer avant l'axe du temps.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `split_heads` : `reshape(N, T, H, d_h)`, puis `transpose(0, 2, 1, 3)` ; `merge_heads` : les mêmes opérations dans l'ordre inverse.
+- `multi_head_attention` : vérifie d'abord que les huit paramètres sont dans `params` (une `ValueError` qui nomme ceux qui manquent, avant toute lecture `params["W_q"]`, qui lèverait `KeyError`), puis les formes ; les trois projections `x @ W + b`, `split_heads` de chacune, ta `scaled_dot_product_attention` de B3.12 (elle diffuse le masque sur les têtes : `(L, S)` ou `(N, 1, 1, S)` conviennent tels quels), `merge_heads`, la projection de sortie.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def multi_head_attention(query, key, value, params, n_heads, mask=None):
+    missing = [name for name in ("W_q", "W_k", "W_v", "W_o", "b_q", "b_k", "b_v", "b_o") if name not in params]
+    if missing:
+        raise ValueError(f"missing parameter(s): {missing}")
+    ...                                                   # float arrays, 3-D, same N and D, H divides D
+    Q = split_heads(np.asarray(query, dtype=float) @ params["W_q"] + params["b_q"], n_heads)
+    ...                                                   # K from key, V from value
+    heads, weights = scaled_dot_product_attention(Q, K, V, mask=mask)
+    return ..., weights                                   # merge_heads, then W_o and b_o
+```
+
+</details>
+
+### Ex B3.15 — positional_encoding et apply_rope 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « L'encodage sinusoïdal (2017) » et « RoPE : tourner les requêtes et les clés » (§203.5), et ✏️ B3.4 : une matrice d'angles positions × fréquences, puis des sinus et des cosinus. Pour RoPE, la propriété de ∂ B3.7 vaut pour chaque paire, quelle que soit la façon de former les paires.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `positional_encoding` : `angles = positions[:, None] / base ** (np.arange(0, D, 2) / D)`, de forme `(T, D/2)`, puis `pe[:, 0::2] = np.sin(angles)` et `pe[:, 1::2] = np.cos(angles)`.
+- `apply_rope` : les angles `(T, d/2)`, position × `base ** (-2 i / d)` ; les deux moitiés `x1 = x[..., :d // 2]` et `x2 = x[..., d // 2:]` ; recolle `x1 cos − x2 sin` et `x2 cos + x1 sin` par `np.concatenate(..., axis=-1)`. La diffusion s'occupe des axes de tête. Vérifie toi-même que `positions` a exactement $T$ valeurs : NumPy diffuserait une seule position sans rien dire.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def apply_rope(x, positions=None, base=10000.0):
+    x = np.asarray(x, dtype=float)
+    T, d = x.shape[-2:]
+    ...                                                   # d even; pos = arange(T), or exactly T given positions
+    theta = pos[:, None] * base ** (-2.0 * np.arange(d // 2) / d)      # (T, d/2)
+    x1, x2 = x[..., : d // 2], x[..., d // 2:]
+    return np.concatenate([..., ...], axis=-1)
+```
+
+</details>
+
+### Ex B3.16 — transformer_block en NumPy, validé contre nn.TransformerEncoderLayer 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Pré-LN ou post-LN » et « Le bloc en équations, et sa vérification » (§203.6) : deux sous-couches, chacune précédée de **sa** layer norm et ajoutée au chemin résiduel. Tu as déjà presque tout : ta `multi_head_attention` (B3.14), ta `layer_norm` (20.17) et ta `gelu` (17.14).
+
+</details>
+<details><summary>Indice 2</summary>
+
+Vérifie d'abord les seize paramètres (une `ValueError` pour un manquant) et lis $F$ dans `W_1.shape[1]`. Puis, dans l'ordre : `a = layer_norm(x, ln1_gamma, ln1_beta, eps=eps)` ; `h = x + multi_head_attention(a, a, a, params, n_heads, mask)[0]` ; `m = layer_norm(h, ln2_gamma, ln2_beta, eps=eps)` ; la sortie `h + gelu(m @ W_1 + b_1) @ W_2 + b_2`. Si tu recodes la layer norm : sur le dernier axe, variance biaisée (`np.var`, comme `nn.LayerNorm`), `eps` sous la racine ; la GELU exacte : $\tfrac{z}{2}\big(1 + \operatorname{erf}(z / \sqrt{2})\big)$, par exemple avec `np.vectorize(math.erf)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def transformer_block(x, params, n_heads, mask=None, eps=1e-5):
+    ...                                                   # the 16 parameters, x 3-D, the shapes
+    a = layer_norm(x, params["ln1_gamma"], params["ln1_beta"], eps=eps)
+    h = x + multi_head_attention(a, a, a, params, n_heads, mask=mask)[0]
+    ...                                                   # LN2 of h, then the MLP, added to h
+```
+
+</details>
+
+### Ex B3.17 — Trois masques qui mentent : convention inversée, masque transposé, padding compté dans la loss 🐛
+
+<details><summary>Indice 1</summary>
+
+Les trois erreurs sont dans le tableau des pièges de la fiche et dans ses paragraphes (§203.3 et §203.8) : une convention de masque, un masque, une loss. Lis les diagnostics dans l'ordre : chacun ne parle que de son erreur, et le premier peut cacher les deux autres.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Point 1 : une position dont toutes les clés sont masquées rend des `nan` dans `nn.MultiheadAttention` ; dans quelle convention ce module lit-il un masque booléen (encadré 🕰️ sur `nn.MultiheadAttention`, §203.3), et dans laquelle `causal_mask_17` est-il écrit ? Point 2 : écris la ligne 2 de `causal_mask_17(4)` (comme en ✏️ B3.2 h) : quelles clés autorise-t-elle ? Point 3 : quelles cibles entrent dans la moyenne de `F.cross_entropy`, et quel argument en exclut (§203.8, « Deux remarques ») ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le correctif du point 1 tient en un caractère, dans `forward` ; celui du point 2 en un mot, dans `causal_mask_17` : compare `torch.ones(3, 3, dtype=torch.bool).triu()` et `.tril()` à la définition du masque causal (la requête $i$ voit les clés $j \le i$) ; celui du point 3 en un argument de `F.cross_entropy`, qui reçoit l'identifiant du padding des cibles.
+
+</details>
+
+### Ex B3.18 — De NumPy à PyTorch : un module CausalSelfAttention avec F.scaled_dot_product_attention 📦
+
+<details><summary>Indice 1</summary>
+
+Relis l'encadré 🕰️ sur `F.scaled_dot_product_attention` (§203.3) et « Une seule matrice pour toutes les têtes » (§203.4) : un seul produit pour les trois projections, puis le même découpage en têtes que ton `split_heads`, écrit en PyTorch.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Dans `__init__` : `self.qkv = nn.Linear(d_model, 3 * d_model)`, `self.proj = nn.Linear(d_model, d_model)`, `self.resid_drop = nn.Dropout(dropout)`, et garde `n_head` et `dropout`. Dans `forward` : `self.qkv(x).split(d_model, dim=2)` rend les requêtes, les clés et les valeurs ; chacune passe par `view(N, T, H, d_model // H).transpose(1, 2)` ; puis SDPA avec `is_causal=True` et `dropout_p=self.dropout if self.training else 0.0` ; enfin `transpose(1, 2).reshape(N, T, d_model)` (pas `view` : après un `transpose`, le tenseur n'est plus contigu), `proj` et le dropout.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward(self, x):
+    N, T, D = x.shape
+    q, k, v = self.qkv(x).split(D, dim=2)
+    q, k, v = (t.view(N, T, self.n_head, D // self.n_head).transpose(1, 2) for t in (q, k, v))
+    y = F.scaled_dot_product_attention(...)               # causal; dropout on the weights in training only
+    ...                                                   # merge the heads, proj, resid_drop
+```
+
+</details>
+
+### Ex B3.19 — Mini-GPT caractère par caractère : embeddings de tokens et de positions, blocs pré-LN, tête liée 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le modèle » et « La recette d'entraînement » (§203.8), et ta liste de ✏️ B3.5 j) : les tenseurs du modèle sont ceux que tu as comptés. Le contrat fixe leurs noms : `wbgpt.expected_state_shapes()` les affiche, et `{n: tuple(t.shape) for n, t in modele.state_dict().items()}` montre les tiens.
+
+</details>
+<details><summary>Indice 2</summary>
+
+`Block_19` : quatre attributs et deux lignes de `forward`. `MiniGPT_19` : les deux tables, le dropout, un `nn.ModuleList` de blocs, `ln_f` et `head` sans biais ; puis la liaison `self.head.weight = self.tok_emb.weight`, qui affecte le même `nn.Parameter` (copier ses valeurs ferait deux tenseurs). L'initialisation : une boucle sur `self.modules()` (`nn.init.normal_(m.weight, std=0.02)` pour les `nn.Linear` et les `nn.Embedding`, `nn.init.zeros_(m.bias)` pour les biais), puis, pour chaque bloc, `attn.proj` et `mlp[2]` à l'écart-type `0.02 / math.sqrt(2 * n_layer)`. Dans `forward`, `self.pos_emb(torch.arange(T))` se diffuse sur le batch.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class MiniGPT_19(nn.Module):
+    def __init__(self, vocab_size, block_size=128, n_layer=4, n_head=4, d_model=128, dropout=0.0):
+        super().__init__()
+        ...                                               # block_size, tok_emb, pos_emb, drop, blocks, ln_f, head
+        self.head.weight = self.tok_emb.weight            # tied: the same parameter
+        ...                                               # nanoGPT initialisation, then the two residual projections
+
+    def forward(self, idx):
+        ...                                               # ValueError if T > block_size
+        x = self.drop(self.tok_emb(idx) + self.pos_emb(torch.arange(idx.shape[1], device=idx.device)))
+        ...                                               # the blocks, ln_f, head
+```
+
+</details>
+
+### Ex B3.20 — Entraîner le mini-GPT sur Holmes : AdamW, warmup + cosinus, clipping, perplexité, face au LSTM du ch. 22 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « La recette d'entraînement » (§203.8), ta boucle du ch. 20, et le ch. 19 pour AdamW, le warmup + cosinus (19.19) et le clipping. Le contrat fixe l'ordre des opérations de chaque itération : la cellule de vérification compare tes poids, après 6 itérations, à ceux de la recette.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `configure_optimizer_20` : parcours `model.parameters()`, qui ne liste la table liée qu'une fois, et range chaque paramètre selon `p.dim() >= 2` ; puis `torch.optim.AdamW([{"params": ..., "weight_decay": weight_decay}, {"params": ..., "weight_decay": 0.0}], lr=lr, betas=betas)`.
+- `estimate_loss_20` : `model.eval()`, puis, sous `torch.no_grad()`, `n_batches` appels à `get_batch` et la moyenne des `loss.item()` ; enfin `model.train()`.
+- `train_20` : une fonction interne `evaluate(done)` qui ajoute `done` à `val_iter` et la loss estimée avec un générateur neuf `torch.Generator().manual_seed(settings["eval_seed"])` ; appelle-la avant la boucle. Dans la boucle : le learning rate de chaque groupe (`group["lr"] = ...`, avec ton `cosine_lr` ou sa formule), le batch, la loss, `optimizer.zero_grad()`, `loss.backward()`, `nn.utils.clip_grad_norm_(model.parameters(), settings["clip"])`, `optimizer.step()`, l'historique, puis l'évaluation quand `(it + 1) % eval_interval == 0` ou après la dernière itération.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+for it in range(s["iters"]):
+    lr = ...                                              # cosine_lr(it, s["iters"], s["lr"], s["warmup"], s["min_lr"])
+    for group in optimizer.param_groups:
+        group["lr"] = lr
+    x, y = get_batch(train_ids, s["batch_size"], block_size, generator)
+    loss = F.cross_entropy(model(x).flatten(0, 1), y.flatten())
+    ...                                                   # gradients, clipping, step, history, evaluation
+```
+
+</details>
+
+Les indices des exercices B3.21 à B3.30 seront ajoutés à la prochaine étape de génération, avec la suite de la partie B du notebook.
