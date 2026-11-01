@@ -1007,7 +1007,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.22",
@@ -1027,7 +1027,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.23",
@@ -1089,7 +1089,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.26",
@@ -1111,7 +1111,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B3.27",
@@ -1193,7 +1193,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "B3.E1",

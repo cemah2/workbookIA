@@ -12,6 +12,7 @@ Quick reference
 >>> ckpt = load_checkpoint(key)              # None when absent; else {"state_dict", "config", "itos", "history", ...}
 >>> model, ckpt = reference_model(fast=True) # the reference mini-GPT, trained once (≈ 2 min on CPU), then reloaded
 >>> config = mini_config(fast=True)          # MINI_CONFIG, with a dropout of 0.2 in full mode
+>>> out = generate(model, idx, 100)          # greedy generation without cache (temperature=0.8: random draws)
 
 The configuration of the contract (``MINI_CONFIG``: 4 blocks, 4 heads, d = 128, context 128, characters of Holmes) and
 the training settings (``train_settings``: 600 iterations of 32 sequences in fast mode, 5 000 in full mode) are those
@@ -280,6 +281,32 @@ def expected_state_shapes(config: dict | None = None) -> dict[str, tuple[int, ..
                    p + "mlp.0.bias": (4 * d,), p + "mlp.2.weight": (d, 4 * d), p + "mlp.2.bias": (d,)}
     shapes |= {"ln_f.weight": (d,), "ln_f.bias": (d,), "head.weight": (V, d)}
     return shapes
+
+
+@torch.no_grad()
+def generate(model: nn.Module, idx: torch.Tensor, n_new: int, temperature: float = 0.0,
+             generator: torch.Generator | None = None) -> torch.Tensor:
+    """``idx`` (N, T0) int64 followed by ``n_new`` generated tokens, **without** a KV cache (§203.9): at each step,
+    the logits of the last position, computed on the last ``model.block_size`` tokens; ``temperature = 0`` takes the
+    most probable token (greedy decoding), otherwise one draw from ``softmax(logits / temperature)`` with
+    ``generator``. The model is evaluated in ``eval()`` mode, then put back in its former mode."""
+    if n_new < 0:
+        raise ValueError(f"n_new must be >= 0, got {n_new}")
+    if temperature < 0:
+        raise ValueError(f"temperature must be >= 0, got {temperature}")
+    was_training = model.training
+    model.eval()
+    try:
+        for _ in range(n_new):
+            logits = model(idx[:, -model.block_size:])[:, -1].float()
+            if temperature == 0:
+                nxt = logits.argmax(dim=-1, keepdim=True)
+            else:
+                nxt = torch.multinomial(torch.softmax(logits / temperature, dim=-1), 1, generator=generator)
+            idx = torch.cat([idx, nxt], dim=1)
+    finally:
+        model.train(was_training)
+    return idx
 
 
 # ---------------------------------------------------------------------------

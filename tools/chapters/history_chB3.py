@@ -296,17 +296,243 @@ def lstm(ns) -> dict:
                                                         "full": len(windows(data.train_ids, len(data.train_ids))[0])}}
 
 
+# --- the second half of the chapter (B3.21 to B3.30) --------------------------------------------------------------------
+CALIBRATION_SEEDS = (2320, 2321, 2322)
+
+
+def _second_namespace(ns, fast: bool = True) -> dict:
+    """The namespace of parts C to E: the solutions of B3.18 to B3.20, then the tools of part C."""
+    import chB3_code2 as C2
+    ns = _gpt_namespace(ns, fast)
+    ns["model_ok_19"], ns["probes_ok_20"] = True, True
+    with contextlib.redirect_stdout(io.StringIO()):
+        exec(C2.TOOLS_C, ns)
+    return ns
+
+
+def _calibration_models(ns) -> dict:
+    """The reference mini-GPT trained in fast mode with three seeds (the first is the model of the solution, bit for
+    bit), cached in wbgpt.checkpoints_dir() under the source "calibration", and the reference full-mode model."""
+    import torch
+    wbgpt, data, models = ns["wbgpt"], ns["DATA"], {}
+    for seed in CALIBRATION_SEEDS:
+        settings = wbgpt.train_settings(True) | {"seed": seed}
+        key = wbgpt.checkpoint_key(wbgpt.mini_config(True), settings, fast=True, source="calibration")
+        ckpt = wbgpt.load_checkpoint(key)
+        if ckpt is None:
+            torch.manual_seed(seed)
+            model = wbgpt.ReferenceGPT(**wbgpt.mini_config(True))
+            history = wbgpt.train(model, data.train_ids, data.val_ids, settings, torch.Generator().manual_seed(seed))
+            wbgpt.save_checkpoint(key, model, history, data.itos, extra={"char_loss": wbgpt.char_loss(model, data.val_ids)})
+            ckpt = wbgpt.load_checkpoint(key)
+        models[f"fast {seed}"] = wbgpt.build_from_checkpoint(wbgpt.ReferenceGPT, ckpt)
+    models["full"] = wbgpt.reference_model(False, verbose=False)[0]
+    return models
+
+
+def p22(ns) -> dict:
+    """🔮 B3.22 on four models (three fast seeds, the full mode) and four generator seeds: both answers must agree."""
+    import chB3_code2 as C2
+    import torch
+    ns = _second_namespace(ns)
+    with contextlib.redirect_stdout(io.StringIO()):
+        exec(C2.GIVEN_22, ns)
+    rows, answers = [], set()
+    for name, model in _calibration_models(ns).items():
+        french = ns["FRENCH_22"]
+        loss = ns["wbgpt"].char_loss(model, french)
+        majority = []
+        for gen_seed in (22, 0, 1, 2):
+            start = ns["DATA"].encode(ns["PROMPT_FR_22"])[None].repeat(10, 1)
+            out = ns["wbgpt"].generate(model, start, 120, temperature=1.0, generator=torch.Generator().manual_seed(gen_seed))
+            counts = [ns["languages_22"](ns["DATA"].decode(row[start.shape[1]:])) for row in out]
+            majority.append(sum(f > e for e, f in counts))
+        row = {"model": name, "french_loss": loss, "uniform": math.log(88), "majority_french": majority,
+               "buckets": ns["loss_by_position_22"](model, french)}
+        rows.append(row)
+        answers.add((max(majority) > 5, loss < math.log(88), int(loss)))
+        print(f"  p22 {name}: loss {loss:.3f}, majority french {majority}, buckets {np.round(row['buckets'], 3)}", flush=True)
+    if len(answers) != 1:
+        raise SystemExit(f"❌ p22: the answers depend on the model or the seed: {answers}")
+    french, beats, k = answers.pop()
+    return {"rows": rows, "answers": {"french": bool(french), "beats_uniform": bool(beats), "integer_part": k}}
+
+
+def p24(ns) -> dict:
+    """📈 B3.24: the three scores of every head (previous character, the character itself, entropy) for each model."""
+    import chB3_code2 as C2
+    import torch
+    ns = _second_namespace(ns)
+    out = {}
+    for name, model in _calibration_models(ns).items():
+        ns["GPT"] = model
+        with contextlib.redirect_stdout(io.StringIO()):
+            exec(C2.GIVEN_24.split("\nif GPT is None:")[0], ns)
+        maps = ns["attention_maps_24"](model, ns["WINDOWS_24"])
+        rows = torch.arange(1, 128)
+        scores = {"previous": maps[..., rows, rows - 1].mean(dim=(0, -1)),
+                  "diagonal": maps.diagonal(dim1=-2, dim2=-1)[..., 1:].mean(dim=(0, -1)),
+                  "spread": -(maps * maps.clamp_min(1e-12).log()).sum(-1)[..., 32:].mean(dim=(0, -1))}
+        out[name] = {k: v.numpy().round(3).tolist() for k, v in scores.items()}
+        for k, v in scores.items():
+            flat = sorted(v.flatten().tolist(), reverse=True)
+            print(f"  p24 {name} {k}: best {flat[0]:.3f}, second {flat[1]:.3f}, within 10 % of the best: "
+                  f"{sum(x >= 0.9 * flat[0] for x in flat)}", flush=True)
+    return out
+
+
+def _protocol_runs(ns, ex: str, mode: str, train_one) -> dict:
+    import chB3_code2 as C2
+    P = C2.PROTOCOLS[ex][mode]
+    results, seconds = {}, {}
+    for seed in P["seeds"]:
+        for name, loss, sec in train_one(P, seed):
+            results.setdefault(name, []).append(loss)
+            seconds[name] = seconds.get(name, 0.0) + sec
+            print(f"  {ex} {mode} seed {seed} {name}: {loss:.4f} ({sec:.0f} s)", flush=True)
+    return {"losses": results, "seconds": {k: round(v / len(P["seeds"]), 1) for k, v in seconds.items()}}
+
+
+def ablations(ns) -> dict:
+    """🔬 B3.25: the five variants in both protocols (fast: the notebook; full: the 🚀 mode), with the solution."""
+    import chB3_code2 as C2
+    import torch
+    ns = _second_namespace(ns)
+    exec(C2.GIVEN_25.replace("«PROTOCOL_FAST_25»", "None").replace("«PROTOCOL_FULL_25»", "None")
+         .replace("«FULL_25»", "None"), ns)
+    exec(C2.SOLUTION_25, ns)
+    wbgpt, data = ns["wbgpt"], ns["DATA"]
+
+    def train_one(P, seed):
+        for name in ns["VARIANTS_25"]:
+            torch.manual_seed(seed)
+            model = ns["make_variant_25"](name, P["config"])
+            start = time.perf_counter()
+            ns["train_20"](model, data.train_ids, data.val_ids, P["settings"], torch.Generator().manual_seed(seed),
+                           block_size=P["config"]["block_size"])
+            sec = time.perf_counter() - start
+            yield name, wbgpt.char_loss(model, data.val_ids[:P["val_chars"]], block_size=P["config"]["block_size"]), sec
+
+    return {mode: _protocol_runs(ns, "25", mode, train_one) for mode in ("fast", "full")}
+
+
+def bpe26(ns) -> dict:
+    """🔬 B3.26: characters against BPE 512 at equal budget, in both protocols, with the solution."""
+    import chB3_code2 as C2
+    import torch
+    ns = _second_namespace(ns)
+    ns["wb"] = __import__("wb")
+    with contextlib.redirect_stdout(io.StringIO()):
+        exec(C2.GIVEN_26.replace("«PROTOCOL_FAST_26»", "None").replace("«PROTOCOL_FULL_26»", "None")
+             .replace("«FULL_26»", "None"), ns)
+    exec(C2.SOLUTION_26, ns)
+    wbgpt, data, tok = ns["wbgpt"], ns["DATA"], ns["TOK_26"]
+    cpt = ns["chars_per_token_26"](tok, data.train_text[:100_000])
+    train_bpe = torch.tensor(tok.encode(data.train_text))
+
+    def train_one(P, seed):
+        block_bpe = ns["budget_block_26"](cpt, P["char_block"])
+        val_bpe = torch.tensor(tok.encode(data.val_text[:P["val_chars"]]))
+        for name, vocab, block, train_ids, val_ids in (("caractères", 88, P["char_block"], data.train_ids, data.val_ids),
+                                                        ("BPE 512", 512, block_bpe, train_bpe, val_bpe)):
+            torch.manual_seed(seed)
+            model = ns["MiniGPT_19"](**(P["config"] | {"vocab_size": vocab, "block_size": block}))
+            start = time.perf_counter()
+            ns["train_20"](model, train_ids, val_ids, P["settings"], torch.Generator().manual_seed(seed), block_size=block)
+            sec = time.perf_counter() - start
+            if name == "caractères":
+                loss = wbgpt.char_loss(model, data.val_ids[:P["val_chars"]], block_size=block)
+            else:
+                loss = ns["nats_per_char_26"](model, val_bpe, tok, block)
+            yield name, loss, sec
+
+    out = {mode: _protocol_runs(ns, "26", mode, train_one) for mode in ("fast", "full")}
+    out["chars_per_token"] = {"train_100k": cpt, "val": ns["chars_per_token_26"](tok, data.val_text)}
+    return out
+
+
+VIT_SEEDS = (28, 29, 30)
+VIT_FULL_EPOCHS = 12
+
+
+def vit28(ns) -> dict:
+    """📦 B3.28: the ViT of the solution, fast mode with three seeds (the threshold), full mode with one."""
+    import chB3_code2 as C2
+    import torch
+    out = {}
+    for fast in (True, False):
+        local = _second_namespace(dict(ns), fast)
+        src = C2.GIVEN_28.replace("«EPOCHS_FULL_28»", str(VIT_FULL_EPOCHS)).replace("«TARGET_28»", "0.0") \
+            .replace("«TARGET_FULL_28»", "0.0")
+        with contextlib.redirect_stdout(io.StringIO()):
+            exec(src, local)
+        exec(C2.SOLUTION_28, local)
+        runs = []
+        for seed in (VIT_SEEDS if fast else VIT_SEEDS[:1]):
+            torch.manual_seed(seed)
+            model = local["ViT_28"]()
+            start = time.perf_counter()
+            losses = local["train_vit_28"](model, local["X_TRAIN_28"], local["Y_TRAIN_28"], local["EPOCHS_28"], seed=seed)
+            sec = time.perf_counter() - start
+            acc = local["accuracy_28"](model, local["X_TEST_28"], local["Y_TEST_28"])
+            runs.append({"seed": seed, "accuracy": acc, "seconds": round(sec, 1), "losses": losses,
+                         "params": sum(p.numel() for p in model.parameters())})
+            print(f"  vit28 {'fast' if fast else 'full'} seed {seed}: {acc:.4f} in {sec:.0f} s", flush=True)
+        out["fast" if fast else "full"] = runs
+    worst = min(r["accuracy"] for r in out["fast"])
+    out["target_fast"] = math.floor((worst - 0.02) * 100) / 100           # 2 points under the worst seed
+    out["target_full"] = math.floor((out["full"][0]["accuracy"] - 0.02) * 100) / 100
+    return out
+
+
+CHALLENGE_SEEDS = {"fast": (3030, 3031, 3032, 3033, 3034), "full": (3030, 3031, 3032)}
+
+
+def challenge30(ns, modes=("fast", "full")) -> dict:
+    """🏆 B3.30: the reference method run by evaluate_30 itself (time limits, control) with several seeds, per mode."""
+    import chB3_code2 as C2
+    out = {}
+    for mode in modes:
+        local = _second_namespace(dict(ns), mode == "fast")
+        src = C2.GIVEN_30
+        for k, v in {"«GOAL_FAST_30»": "9.9", "«GOAL_FULL_30»": "9.9", "«REF_FAST_30»": "(0.0, 0.0)",
+                     "«REF_FULL_30»": "(0.0, 0.0)", "«CONTROL_GAP_FAST_30»": "(0.0, 9.9)",
+                     "«CONTROL_GAP_FULL_30»": "(0.0, 9.9)"}.items():
+            src = src.replace(k, v)
+        with contextlib.redirect_stdout(io.StringIO()):
+            exec(src, local)
+        exec(C2.SOLUTION_30, local)
+        runs = []
+        for seed in CHALLENGE_SEEDS[mode]:
+            local["SEED_30"] = seed
+            text = io.StringIO()
+            with contextlib.redirect_stdout(text):
+                result = local["evaluate_30"](local["method_30"])
+            fails = [line for line in text.getvalue().splitlines() if line.startswith("❌")]
+            runs.append(result | {"seed": seed, "failures": fails})
+            print(f"  challenge30 {mode} seed {seed}: {result['loss']:.4f} in {result['seconds']:.0f} s, control "
+                  f"{result['control_val']:.3f} / {result['control_held']:.3f} in {result['control_seconds']:.0f} s, "
+                  f"failures {fails}", flush=True)
+        losses = [r["loss"] for r in runs]
+        gaps = [r["control_val"] - r["control_held"] for r in runs]
+        out[mode] = {"runs": runs, "reference": (min(losses), max(losses)),
+                     "goal": math.ceil(max(losses) * 1.05 * 100) / 100,
+                     "control_gap": (float(np.mean(gaps)), max(0.08, round(3 * (max(gaps) - min(gaps)), 2)))}
+    return out
+
+
 ENTRIES = {"p13": (("GIVEN_13",), p13), "bug17": (("GIVEN_17",), bug17), "gpt_fast": ((), gpt_fast),
-           "gpt_full": ((), gpt_full), "lstm": ((), lstm)}
+           "gpt_full": ((), gpt_full), "lstm": ((), lstm), "p22": ((), p22), "p24": ((), p24),
+           "ablations": ((), ablations), "bpe26": ((), bpe26), "vit28": ((), vit28), "challenge30": ((), challenge30)}
 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--only", choices=sorted(ENTRIES))
+    parser.add_argument("--only", choices=sorted(ENTRIES), nargs="+")
     args = parser.parse_args(argv)
     data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     for name, (blocks, fn) in ENTRIES.items():
-        if args.only and args.only != name:
+        if args.only and name not in args.only:
             continue
         start = time.perf_counter()
         print(f"{name}…", flush=True)

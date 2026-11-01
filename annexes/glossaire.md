@@ -999,6 +999,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | biais d'exposition | exposure bias | à la génération, le modèle lit ses propres prédictions, qu'il n'a pas vues à l'entraînement : une erreur peut l'emmener loin | B3 |
 | KV cache | key-value cache | les clés et les valeurs des tokens déjà vus, gardées pour chaque couche ; chaque nouveau token passe seul dans le modèle ; mémoire $2 \times L \times T \times n_{kv} d_h \times$ octets | B3 |
 | prefill | prefill | la phase d'inférence qui traite tout le prompt d'un coup et remplit le KV cache, avant le décodage token par token | B3 |
+| noyau (d'une opération) | kernel | l'implémentation qu'une bibliothèque choisit pour calculer une opération sur un matériel donné : pour `F.scaled_dot_product_attention` sur CPU, `MATH` (la matrice des poids en entier) ou `FLASH_ATTENTION` (par blocs) | B3 |
 | softmax en ligne | online softmax | softmax calculée par blocs, en gardant le maximum, la somme des exponentielles et la somme pondérée, remis à l'échelle à chaque nouveau maximum ; exacte | B3 |
 | FlashAttention | FlashAttention | attention exacte calculée par blocs dans la mémoire rapide du GPU, sans écrire la matrice $T \times T$ : mémoire linéaire, mêmes FLOPs (T. Dao et coll., 2022) | B3 |
 | fenêtre glissante (attention) | sliding window attention | chaque token ne voit que ses $w$ prédécesseurs : un coût en $O(Tw)$ (Mistral 7B, gpt-oss) | B3 |

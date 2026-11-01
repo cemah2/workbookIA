@@ -14,9 +14,11 @@ mylearn.nn.regularization), PyTorch (F.scaled_dot_product_attention, nn.Multihea
 transformers (GPT2Config on the meta device, no download).
 Part A (exercises B3.12 to B3.17, chB3_parts.py and chB3_code.py; long or repeated computations in history_chB3.py):
 the NumPy bricks of attention.py, checked by run_pytest_group, the 🔮 of the copied key and the 🐛 of the three masks.
-Part B, first half (B3.18 to B3.20): the attention module and the mini-GPT in PyTorch, then its training on Holmes
-against the LSTM of ch. 22, with the single checkpoint of the trained model (wb.gpt.learner_key). B3.21 to B3.30 come
-next (NEXT_SESSION): they reload that checkpoint (EN_COURS.md, « Pour la seconde moitié »).
+Part B (B3.18 to B3.20): the attention module and the mini-GPT in PyTorch, then its training on Holmes against the
+LSTM of ch. 22, with the single checkpoint of the trained model (wb.gpt.learner_key).
+Parts C to E (B3.21 to B3.30, chB3_parts2.py and chB3_code2.py; the long protocols precomputed by history_chB3.py):
+the trained model reloaded (curves, French prompt, KV cache, attention maps), the experiments (ablations, BPE against
+characters, long context), the ViT, the causality test and the challenge.
 """
 
 from __future__ import annotations
@@ -558,15 +560,13 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A and B (exercises B3.12 to B3.20, session 68, first half); B3.21 to B3.30 next (NEXT_SESSION)
+# Parts A to E (exercises B3.12 to B3.30)
 # ---------------------------------------------------------------------------
 import chB3_code  # noqa: E402,F401  (the cells; history_chB3.py reuses them)
-from chB3_parts import PARTS  # noqa: E402
+from chB3_parts import PARTS as _PARTS_AB  # noqa: E402
+from chB3_parts2 import PARTS2  # noqa: E402
 
-NEXT_SESSION = [
-    ("B", "B3.21 à B3.30", "la suite du mini-GPT : courbes, Holmes amorcé en français, KV cache, cartes d'attention, "
-                           "ablations, BPE contre caractères, contexte long, ViT, test de causalité, défi"),
-]
+PARTS = _PARTS_AB + PARTS2
 
 
 def header_cells(kind: str) -> list:
@@ -576,7 +576,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    rows += [f"| {key} | {ids} | {title} (*prochaine étape de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B3 · Attention et Transformers : un mini-GPT from scratch — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -587,7 +586,7 @@ def header_cells(kind: str) -> list:
                "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Tout "
                "tourne sur CPU : la partie B entraîne ton mini-GPT en 2 à 3 min en mode rapide (🚀 environ 35 min "
                "en mode complet, plutôt sur un GPU de Colab), puis le sauvegarde hors du dépôt pour la suite du "
-               "chapitre.\n\n"
+               "chapitre ; tout le notebook prend une dizaine de minutes en mode rapide, le défi B3.30 compris.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b3_transformers/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B3`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "
@@ -623,20 +622,17 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if not NEXT_SESSION else
-             "\n\n*Les exercices B3.21 à B3.30 (la suite du mini-GPT : courbes, génération et KV cache, cartes "
-             "d'attention, expériences, ViT, test de causalité et défi) seront ajoutés à la prochaine étape de "
-             "génération ; relance alors `python tools/start_chapter.py B3` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer une attention à la main, masque causal compris, et dire pourquoi on divise par "
                "$\\sqrt{d_k}$ ?\n"
-               "2. Sais-tu suivre les formes d'une attention multi-têtes et compter les paramètres d'un GPT ?\n"
-               "3. Sais-tu dire ce que font un encodage sinusoïdal et RoPE, et démontrer la propriété de RoPE ?\n"
-               "4. Sais-tu chiffrer le calcul d'un entraînement et la mémoire d'un KV cache ?\n\n"
+               "2. Sais-tu écrire un bloc Transformer, puis un mini-GPT, et l'entraîner avec la recette de nanoGPT ?\n"
+               "3. Sais-tu dire ce que fait un KV cache, ce qu'il économise et ce qu'il coûte en mémoire ?\n"
+               "4. Sais-tu mener une ablation avec sa dispersion, et comparer deux tokenizers en nats par caractère ?\n"
+               "5. Sais-tu chiffrer le calcul d'un entraînement et le coût quadratique d'un long contexte ?\n\n"
                "**Pour aller plus loin** : la vidéo « Let's build GPT » d'A. Karpathy et *The Annotated "
-               "Transformer*, cités dans la fiche. La suite : le bonus B4, les LLM en pratique."
-               + later)]
+               "Transformer*, cités dans la fiche ; nanochat, du même auteur, jusqu'au modèle de chat. La suite : le "
+               "bonus B4, les LLM en pratique.")]
 
 
 def build(kind: str) -> list:

@@ -89,6 +89,36 @@ def test_char_loss_equals_a_direct_computation_and_restores_the_mode():
     assert model.training, "expected the model back in train mode"
 
 
+class Counter(nn.Module):
+    """A model that always predicts the token after the last one (modulo V), with a small context."""
+
+    def __init__(self, vocab_size, block_size=4):
+        super().__init__()
+        self.vocab_size, self.block_size, self.seen = vocab_size, block_size, []
+        self.dummy = nn.Parameter(torch.zeros(1))
+
+    def forward(self, idx):
+        self.seen.append(idx.shape[1])
+        return nn.functional.one_hot((idx + 1) % self.vocab_size, self.vocab_size).float() * 10
+
+
+def test_generate_is_greedy_crops_the_context_and_samples_with_the_generator():
+    model = Counter(7).train()
+    out = G.generate(model, torch.tensor([[0, 1], [5, 6]]), 6)
+    assert out.tolist() == [[0, 1, 2, 3, 4, 5, 6, 0], [5, 6, 0, 1, 2, 3, 4, 5]], "expected greedy decoding"
+    assert max(model.seen) == 4, "expected the context cropped to block_size"
+    assert model.training, "expected the model back in train mode"
+    assert torch.equal(G.generate(model, torch.tensor([[3]]), 0), torch.tensor([[3]]))
+    torch.manual_seed(0)
+    gpt = G.ReferenceGPT(vocab_size=11, block_size=8, n_layer=1, n_head=1, d_model=8)
+    a = G.generate(gpt, torch.zeros(2, 1, dtype=torch.long), 20, 1.0, torch.Generator().manual_seed(3))
+    b = G.generate(gpt, torch.zeros(2, 1, dtype=torch.long), 20, 1.0, torch.Generator().manual_seed(3))
+    assert torch.equal(a, b) and a.shape == (2, 21), "expected the draws of the generator"
+    assert len(set(a[0].tolist())) > 3, "expected random draws at temperature 1 from a nearly uniform model"
+    with pytest.raises(ValueError, match="temperature"):
+        G.generate(gpt, torch.zeros(1, 1, dtype=torch.long), 2, -1.0)
+
+
 def test_reference_gpt_follows_the_contract():
     torch.manual_seed(0)
     model = G.ReferenceGPT(**G.MINI_CONFIG)

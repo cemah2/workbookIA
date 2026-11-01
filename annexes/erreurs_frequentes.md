@@ -332,6 +332,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `RuntimeError: ... Explicit attn_mask should not be set when is_causal=True` (ou, avec un autre noyau, aucune erreur) | `attn_mask` et `is_causal=True` passés ensemble à `F.scaled_dot_product_attention` | n'en passer qu'un : le masque complet, ou `is_causal=True` seul (fiche B3, §203.3) |
 | un bloc qui diffère de GPT-2 d'environ $10^{-3}$, alors que tout le reste est juste | GELU exacte d'un côté, approximation par tanh (`gelu_new`) de l'autre | `nn.GELU(approximate="tanh")` pour reproduire GPT-2 (fiche B3, §203.6) |
 | une évaluation qui change d'une exécution à l'autre | `dropout_p` de `F.scaled_dot_product_attention` s'applique même en `eval()` | `dropout_p=self.dropout if self.training else 0.0` (fiche B3, §203.3) |
+| une génération avec KV cache qui suit le calcul complet sur le prompt, puis s'en écarte | le nouveau token reçoit l'embedding de la position 0 (`pos_emb(torch.arange(1))`) au lieu de la sienne | `pos_emb(torch.arange(start, start + T))`, `start` = le nombre de tokens déjà dans le cache (B3.23) |
+| un ViT dont l'accuracy reste au hasard (10 %), sans erreur | le bloc d'encodeur garde `is_causal=True` : le `[CLS]`, en tête, ne voit que lui-même | aucun masque dans un encodeur ; vérifier que la sortie change quand on modifie le dernier patch (B3.28) |
+| un temps d'attention mesuré qui varie d'un facteur 10 d'un essai à l'autre | un seul appel mesuré, ou une moyenne qui compte le premier appel (allocations) et les essais perturbés | un appel non mesuré, puis le **meilleur** de plusieurs essais avec `time.perf_counter()` (B3.27) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -483,5 +486,6 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une loss qui baisse sur des séquences de longueurs différentes, sans que le modèle progresse | les positions de padding comptées dans la cross-entropy : le modèle apprend à prédire du padding | cibles de padding à `-100` (`ignore_index`) (fiche B3, §203.8) |
 | une loss initiale très au-dessus de $\log V$ | initialisation trop forte : des logits déjà grands et confiants | poids en $\mathcal{N}(0 ;\ 0{,}02^2)$, projections résiduelles réduites de $1/\sqrt{2 n_{\text{blocs}}}$ (fiche B3, §203.8) |
 | un modèle BPE « bien meilleur » qu'un modèle de caractères, d'après la perplexité | perplexités par token de deux tokenizers : elles ne mesurent pas la même chose | ramener la loss au caractère sur le même texte (fiche B3, §203.8) |
+| « sans position, le modèle perd 0,1 nat » conclu d'un seul entraînement | un écart du même ordre que la dispersion d'une graine à l'autre | plusieurs graines, l'écart graine par graine à la référence, sa moyenne et son écart-type (B3.25) |
 | « 16 Go de poids, ça tient sur un GPU de 24 Go », puis un manque de mémoire en production | le KV cache oublié : il grandit avec le contexte et le nombre de conversations | ajouter $2 \times L \times T \times n_{kv} d_h \times$ octets par séquence servie (fiche B3, §203.9) |
 | un compte de paramètres de GPT-2 small à 117 millions | le chiffre du tableau 2 de l'article de GPT-2, faux (le dépôt `openai/gpt-2` le reconnaît) | compter sur le modèle : `sum(p.numel() for p in model.parameters())` (✏️ B3.5) |

@@ -1,8 +1,8 @@
-"""Parts A and B of the chapter B3 notebook, first half (B3.12 to B3.20): statements and cells (used by build_chB3.py).
+"""Parts A and B of the chapter B3 notebook (B3.12 to B3.20): statements and cells (used by build_chB3.py).
 
 Part A: your NumPy library attention.py (B3.12 to B3.17). Part B: the mini-GPT in PyTorch, its module, the model and
-its training on Holmes (B3.18 to B3.20); the second half of the chapter (B3.21 to B3.30) reloads the model that B3.20
-saves (wb.gpt.learner_key) and appends its exercises to PART_B (or adds parts).
+its training on Holmes (B3.18 to B3.20). Parts C to E (B3.21 to B3.30, chB3_parts2.py) reload the model that B3.20
+saves (wb.gpt.learner_key).
 """
 
 from __future__ import annotations

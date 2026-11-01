@@ -255,6 +255,9 @@
 | `x, y = data[i:i + T], data[i + 1:i + 1 + T]` | une fenêtre et ses cibles décalées d'un token (teacher forcing) |
 | `K_cache = torch.cat([K_cache, k_new], dim=2)` ; `F.scaled_dot_product_attention(q_new, K_cache, V_cache)` | un pas de génération avec KV cache : une requête face à toutes les clés gardées, sans masque |
 | `nn.Conv2d(C, d, kernel_size=P, stride=P)(img).flatten(2).transpose(1, 2)` | les patchs d'un ViT : une image `(N, C, h, w)` → `(N, hw/P², d)`, un token par patch ($h \times w$ pixels) |
+| `self.cls_token = nn.Parameter(torch.zeros(1, 1, d))` ; `torch.cat([self.cls_token.expand(N, -1, -1), tokens], dim=1)` | le token `[CLS]` appris, répété pour le batch sans copie et placé en tête de la séquence (B3.28) |
+| `h = module.register_forward_hook(lambda m, inp, out: saved.append(out))` ; `h.remove()` | lire la sortie (ou l'entrée, `inp[0]`) d'un sous-module à chaque passe avant, puis retirer le hook (B3.23, B3.24) |
+| `with torch.profiler.profile(activities=[ProfilerActivity.CPU], profile_memory=True) as prof:` ; `prof.key_averages()` | la mémoire allouée par chaque opérateur (`cpu_memory_usage`) ; `tracemalloc` ne voit pas les tenseurs de PyTorch (B3.27) |
 
 ## Dataset et DataLoader
 

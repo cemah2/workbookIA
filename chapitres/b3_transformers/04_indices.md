@@ -815,4 +815,249 @@ for it in range(s["iters"]):
 
 </details>
 
-Les indices des exercices B3.21 à B3.30 seront ajoutés à la prochaine étape de génération, avec la suite de la partie B du notebook.
+### Ex B3.21 — Lire les courbes d'entraînement du mini-GPT et poser un diagnostic 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « La loss et la perplexité » (§203.8, le contrôle de départ) et, au ch. 20, la lecture des courbes d'entraînement et de validation : une validation qui baisse encore, une validation qui remonte pendant que l'entraînement continue de baisser, un dropout qui ne joue qu'à l'entraînement.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) À l'initialisation, la distribution prédite est presque uniforme sur les $V$ caractères possibles : la loss vaut alors $\log V$ ; combien de caractères distincts le modèle prédit-il ? b) Regarde les dernières évaluations de ta courbe de validation. c) et d) Le graphique 3 met les deux validations sur la même échelle : cherche le point le plus bas de la courbe sans dropout, puis compare-le au dernier point de la courbe avec dropout. e) Le graphique 2 : mesure, à 5 000 itérations, l'écart entre la courbe d'entraînement et la courbe de validation du même entraînement.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) La loss de départ vaut environ 4,5 sur la courbe : $V \approx e^{4{,}5}$, que tu arrondis au nombre de caractères distincts affiché par la cellule des outils de la partie A. Pour les autres : b) la dernière évaluation est-elle sous l'avant-dernière ? c) le minimum de la courbe rouge, parmi les quatre itérations proposées ; d) « plus bas » se lit sur l'axe vertical du graphique 3 ; e) un écart de 0,1 nat, à l'échelle du graphique 2, fait environ un vingtième de sa hauteur.
+
+</details>
+
+### Ex B3.22 — Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La boucle de génération » (§203.9) : à chaque pas, le modèle ne voit que son contexte, les 128 derniers caractères, et tire le suivant selon ce qu'il a appris. Et « La loss et la perplexité » (§203.8) : une prédiction uniforme sur 88 caractères coûte $\log 88$ nats par caractère.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Le prompt sort de la fenêtre au fil de la génération : ce que le modèle a appris l'emporte-t-il sur ce qu'il lit ? Pense aussi à ce que le modèle peut écrire : a-t-il jamais vu les mots de Verne ? b) Une prédiction uniforme ne sait rien ; ton modèle sait que les espaces sont fréquents, qu'une majuscule suit un point, quelles lettres reviennent souvent. Le français et l'anglais partagent-ils ces régularités ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) Pour qu'une continuation compte comme française, il faut que les mots que seul Verne contient y soient plus nombreux que ceux que seul Holmes contient : estime ce que le modèle produit après quelques dizaines de caractères, quand son contexte contient de plus en plus de ses propres mots. b) Compare $\log 88$ à ce que coûterait un modèle qui ne connaîtrait que la fréquence des lettres, communes en partie aux deux langues : un tel modèle est-il plus près d'une prédiction uniforme ou de 1,6 nat par caractère ?
+
+</details>
+
+### Ex B3.23 — Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le KV cache » (§203.9) et son extrait sur une couche : la sortie d'une position ne dépend que des clés et des valeurs des positions précédentes, qui ne changent plus. Il faut le faire dans les quatre blocs, avec les positions apprises et les connexions résiduelles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `generate_23` : une boucle de `n_new` pas ; à chaque pas, `model(idx[:, -model.block_size:])[:, -1]`, l'argmax, puis `torch.cat` ;
+- `generate_cached_23` : une fonction interne qui fait passer `T` nouveaux tokens à partir de la position `start` : les embeddings de tokens et de positions (`torch.arange(start, start + T)`), puis, dans chaque bloc, `ln1`, `attn.qkv`, le découpage en têtes comme ton `forward` de B3.18, l'ajout des clés et des valeurs au cache du bloc (`torch.cat` sur l'axe des positions), SDPA, le recollage, `attn.proj`, l'ajout résiduel, puis `ln2`, `mlp` et le second ajout ; enfin `ln_f` et `head` sur la dernière position ;
+- pour le prefill, les `T0` requêtes ont besoin du masque causal ; pour un seul nouveau token, sa requête voit tout le cache : le masque causal aligné en bas à droite de `causal_mask` couvre les deux cas.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward_new(tokens, start):
+    T = tokens.shape[1]
+    x = model.tok_emb(tokens) + model.pos_emb(torch.arange(start, start + T))
+    for i, block in enumerate(model.blocks):
+        q, k, v = ...                                     # block.attn.qkv(block.ln1(x)), split into heads
+        if cache[i] is not None:
+            k, v = torch.cat([cache[i][0], k], dim=2), torch.cat([cache[i][1], v], dim=2)
+        cache[i] = (k, v)
+        ...                                               # SDPA with the bottom-right causal mask, proj, residual, mlp
+    return model.head(model.ln_f(x[:, -1]))
+```
+
+</details>
+
+### Ex B3.24 — Les cartes d'attention de chaque tête sur une phrase de Holmes 📈
+
+<details><summary>Indice 1</summary>
+
+Une ligne de carte est la distribution des poids d'**une** requête sur ses clés, et la somme de la ligne vaut 1. Relis le masque causal (§203.3) : rien au-dessus de la diagonale. Une tête qui regarde toujours la même position **relative** dessine une droite parallèle à la diagonale.
+
+</details>
+<details><summary>Indice 2</summary>
+
+a) Le caractère précédent de la requête $i$ est la clé $i - 1$ : cherche la carte où la ligne juste sous la diagonale est la plus jaune. b) La clé $i$ elle-même : la diagonale. c) Une attention étalée se voit à une carte sans case jaune vive, faite de nuances uniformes sur chaque ligne ; une attention concentrée, à des cases isolées très claires.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), parcours les 16 cartes et note, pour chacune, si la sous-diagonale est plus claire que le reste de la ligne : la tête retenue est celle où elle l'est le plus nettement. Fais de même pour la diagonale (b) et pour les lignes les plus grises (c), puis écris les trois couples `(bloc, tête)`. Si une affirmation est refusée, la mesure affichée te dit à quel point ta tête la vérifie : compare-la aux autres cartes.
+
+</details>
+
+### Ex B3.25 — Ablations : sans position, sans résiduel, post-LN, une seule tête 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis les deux formules du bloc (§203.6, pré-LN et post-LN) et le rôle de la connexion résiduelle (ch. 20). Chaque variante ne change qu'une chose au modèle de B3.19 : écris une classe de bloc à options et une classe de modèle à options, ou des sous-classes des tiennes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Un bloc à deux options (`residual`, `pre_ln`) qui hérite de `Block_19` : `super().__init__(d_model, n_head)` crée `ln1`, `attn`, `ln2` et `mlp`, et `forward` choisit l'une des trois formules du contrat.
+- Un modèle qui reprend `MiniGPT_19` avec ces blocs, une option `positions` (sans positions : `self.pos_emb = None`, qui ne crée aucun paramètre, et `forward` n'ajoute rien) et la même initialisation, faite **après** la construction des blocs.
+- `"one_head"` : le même modèle avec `n_head = 1`.
+- L'écart à la référence se calcule **graine par graine** (la même graine donne la même initialisation des parties communes et les mêmes batches), puis sa moyenne et son écart-type.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class AblatedBlock_25(Block_19):
+    def __init__(self, d_model, n_head, residual=True, pre_ln=True):
+        super().__init__(d_model, n_head)
+        self.residual, self.pre_ln = residual, pre_ln
+
+    def forward(self, x):
+        if not self.pre_ln:
+            x = self.ln1(x + self.attn(x))
+            return ...                                    # the second sub-layer, then ln2
+        ...                                               # without residual; else super().forward(x)
+```
+
+Pour c), compare dans le tableau, ligne par ligne, l'écart moyen du protocole complet au double de sa dispersion : la première ligne d'ablation se décide ainsi, fais de même pour les trois autres.
+
+</details>
+
+### Ex B3.26 — Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis la fin de « La loss et la perplexité » (§203.8) : une loss totale ne change pas d'unité quand on la répartit sur des caractères au lieu de tokens ; seul le nombre par lequel on la divise change. Et la compression d'un tokenizer (B2, 🔁 R1).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `chars_per_token_26` : `len(text) / len(tok.encode(text))` ;
+- `budget_block_26` : `round` du rapport, qui rend déjà un `int` ;
+- `nats_per_char_26` : la loss moyenne par token sur les cibles `ids[block_size:]`, multipliée par leur nombre, donne la loss **totale** en nats ; divise-la par le nombre de caractères de `tok.decode(ids[block_size:].tolist())`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def nats_per_char_26(model, ids, tok, block_size):
+    per_token = wbgpt.char_loss(model, ids, block_size=block_size, stride=block_size // 4)
+    targets = ids[block_size:]
+    ...                                                   # total nats, then divided by the characters of the targets
+```
+
+Pour b), compare l'écart des deux moyennes du protocole complet au double de la plus grande des deux dispersions.
+
+</details>
+
+### Ex B3.27 — Temps et mémoire de l'attention selon la longueur du contexte (64 à 2 048) 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « La mémoire : la matrice $T \times T$ » (§203.10) et, au ch. 23 ou en B1, la mesure d'un temps sur CPU : un premier appel plus lent (allocations), des essais perturbés par le reste de la machine, d'où le **meilleur** de plusieurs essais.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `attention_time_27` : crée `q`, `k`, `v` par `torch.randn(1, n_head, T, d_head)`, ouvre `with sdpa_kernel(backend):`, fais un appel non mesuré, puis une boucle de `repeats` appels encadrés par `time.perf_counter()`, et rends `1000 * min(...)` ;
+- `weights_bytes_27` : une carte $T \times T$ par tête, chaque poids sur `bytes_per_value` octets.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+with sdpa_kernel(backend):
+    F.scaled_dot_product_attention(q, k, v, is_causal=True)          # not timed
+    for _ in range(repeats):
+        start = time.perf_counter()
+        ...                                                          # one call, then keep the best time
+```
+
+</details>
+
+### Ex B3.28 — Un Vision Transformer minuscule : Fashion-MNIST découpé en patchs 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le Vision Transformer » (§203.10) et son extrait : la convolution de noyau et de stride $P$ découpe et projette les patchs d'un coup. Le bloc est celui de B3.19, l'encodeur de §203.7 : la seule différence est le masque.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `EncoderBlock_28` : les attributs de `Block_19` et de `CausalSelfAttention_18` réunis (`ln1`, `qkv`, `proj`, `ln2`, `mlp`), et SDPA **sans** `is_causal` ;
+- `ViT_28` : `patch_embed(x)` rend `(N, d, 4, 4)` ; `flatten(2).transpose(1, 2)` en fait `(N, 16, d)` ; `self.cls_token.expand(N, -1, -1)` répète le `[CLS]` pour le batch, `torch.cat` le place en tête, puis on ajoute `pos_emb` (qui se diffuse sur le batch) ; après les blocs et `ln_f`, `head` ne lit que la position 0.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def forward(self, x):
+    tokens = self.patch_embed(x).flatten(2).transpose(1, 2)              # (N, 16, d)
+    tokens = torch.cat([self.cls_token.expand(len(x), -1, -1), tokens], dim=1) + self.pos_emb
+    ...                                                                  # the blocks, ln_f, head on the [CLS]
+```
+
+</details>
+
+### Ex B3.29 — Un test pytest qui prouve la causalité : modifier le futur ne change pas les logits passés 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis la vérification de causalité de la cellule de B3.19 et le 💼 « En entreprise » de §203.8. Un test qui ne change qu'**une** position ne voit qu'une partie des fuites possibles.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Tire un batch d'ids avec un générateur à graine (`torch.randint(0, VOCAB_SIZE, (2, BLOCK_SIZE), generator=...)`), calcule les logits une fois ; puis, pour **chaque** position $t$ de 1 à `BLOCK_SIZE - 1`, change le token $t$, recalcule, et compare les logits des positions $0$ à $t - 1$. Le message de l'`assert` dit la position et l'écart.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def test_causality_29():
+    idx = torch.randint(0, VOCAB_SIZE, (2, BLOCK_SIZE), generator=torch.Generator().manual_seed(0))
+    logits = MODEL(idx)
+    for t in range(1, BLOCK_SIZE):
+        changed = idx.clone()
+        changed[:, t] = (changed[:, t] + 1) % VOCAB_SIZE
+        ...                                               # compare the logits before t, assert with a message
+```
+
+</details>
+
+### Ex B3.30 — Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU 🏆
+
+<details><summary>Indice 1</summary>
+
+Relis les courbes de B3.21 : en 600 itérations, ton mini-GPT de B3.20 apprenait encore. Le budget de 10 minutes est d'abord un nombre d'itérations : mesure ce que coûte une itération sur ta machine.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Une méthode simple : le mini-GPT de B3.20, entraîné aussi longtemps que le budget le permet, avec un warmup puis un cosinus qui finit **à la fin du budget**. Mesure la durée des premières itérations, déduis-en le nombre total d'itérations, et garde une marge (le contrôle a le quart du temps). Ensuite, B3.21 te dit si le dropout sert à ce nombre d'itérations, et B3.25 ce que coûte chaque pièce du bloc ; tu peux aussi changer $d$, le nombre de blocs, le contexte, le learning rate ou la taille des batches, en restant sous 1 000 000 de valeurs.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def method_30(train_ids, vocab_size, seconds):
+    start = time.perf_counter()
+    model = MiniGPT_19(vocab_size)                        # 820 992 parameters
+    optimizer = configure_optimizer_20(model, 5e-3, 0.1, (0.9, 0.99))
+    ...                                                   # after 20 iterations: total = 0.92 * seconds / (time per step)
+    ...                                                   # warmup + cosine down to `total`, clipping; stop in time
+    return model.eval()
+```
+
+</details>
