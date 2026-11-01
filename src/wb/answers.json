@@ -52721,18 +52721,17 @@
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
     "B2.5d": {
-      "decimals": 0,
+      "decimals": 1,
       "element_hashes": [
-        "0ea4dc6c9191640b4fb86b52df4982f2504d897eb7714e7f6a5116a3c00bd588",
-        "68a4f68c2c7d31f36b254769c3cf3c340c3fcbceffed6423102194919c2305f2",
-        "3ee9285e9e8c21c557d249240507ae9704867dd0fb1f5c5242fbb5010c0874f7"
+        "6d76b3a42de8673f9b054fc808220359694a58faf3fa793a43cc99cb01386bb6",
+        "b64092681c86918fa65425f68b9c22835625d5818e5203dab87476c8221af876",
+        "4e281886f27d80f2df8e41dcf54bac64bf7df1615aa116aa35f2dfec72ebf31b"
       ],
-      "hash": "ec6bbdf9ba6bfd35e8d3cd45e9504f225ee1ab064c147d20f4874e1b75446c66",
-      "integer": true,
+      "hash": "e104aa7fb60f4575a90ccbabe8782594ae0fc4811aff2df98779cf4c51fe4527",
       "kind": "array",
       "mistakes": {
-        "6aecd0e05812cb6a85851160dad6166712fad2c94a3182734cecac718e24e21d": "le token 3 apparaît deux fois : sa ligne reçoit la somme des deux gradients",
-        "d71b06eb6aea8080f1407c15c2302b6d96f0c700fe51a5baf1b8bc49a02ee2ec": "le gradient de w · e par rapport à e est w, pas e"
+        "7f9211df0045d4f02c1e07fd316990be1cb13ed89762ee299fdf98129ea3d1b4": "le gradient de w · e par rapport à e est w, pas e",
+        "e9dbc57b5fc404ff14b6ee903434f10c3800a446579bd10ac733975789eab07a": "le token 3 apparaît deux fois : sa ligne reçoit la somme des deux gradients"
       },
       "shape": [
         3

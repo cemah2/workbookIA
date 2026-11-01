@@ -532,7 +532,7 @@ PAPER = [
         ("b", VECTOR, "OUT_B25[1].tolist()", r'''mistakes={"les positions sont numérotées à partir de 0 : t = 1 est la deuxième": OUT_B25[0].tolist(),
           "le token lu à la position t = 1 est 0 : relis sa ligne de la table": E_B25[1].tolist()}'''),
         ("c", DEC1, "L_B25", r'''decimals=1, mistakes={"le token 3 apparaît deux fois : compte ses deux positions": -7.0}'''),
-        ("d", VECTOR, "GRAD_B25[3].tolist()", r'''mistakes={"le token 3 apparaît deux fois : sa ligne reçoit la somme des deux gradients": W_B25.tolist(),
+        ("d", VECTOR, "GRAD_B25[3].tolist()", r'''decimals=1, mistakes={"le token 3 apparaît deux fois : sa ligne reçoit la somme des deux gradients": W_B25.tolist(),
           "le gradient de w · e par rapport à e est w, pas e": (2 * E_B25[3]).tolist()}'''),
         ("e", WHOLE, "int((np.abs(GRAD_B25).sum(axis=1) > 0).sum())", r'''mistakes={"une ligne lue deux fois ne compte qu'une fois": 4,
           "les lignes jamais lues ne reçoivent rien": 5}'''),

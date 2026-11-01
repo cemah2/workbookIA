@@ -4833,21 +4833,21 @@ Avant qu'un modèle de langue lise un texte, il faut le découper en tokens puis
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B2.Q1 | 🧠 | Caractères, mots ou sous-mots : taille du vocabulaire contre longueur des séquences | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q2 | 🧠 | Octets, points de code, caractères affichés : combien « é » compte-t-il ? | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q3 | 🧠 | NFC ou NFD : deux chaînes identiques à l'écran, différentes en mémoire | ★★ | 3 | — | 02 | — | – | manual |
-| B2.Q4 | 🧠 | Fusions BPE : pourquoi la liste ordonnée des fusions est le modèle | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q5 | 🧠 | BPE au niveau octet : jamais de token inconnu, vrai ou faux ? | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q6 | 🧠 | Tokens spéciaux et espace initial : « Ġthe » n'est pas « the » | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q7 | 🧠 | WordPiece, Unigram, SentencePiece : quel critère pour quelle méthode ? | ★★ | 3 | — | 02 | — | R | manual |
-| B2.Q8 | 🧠 | Pourquoi un LLM compte mal les lettres d'un mot et calcule mal avec les chiffres | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q9 | 🧠 | nn.Embedding : une table de consultation entraînable, pas une couche magique | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q10 | 🧠 | L'hypothèse distributionnelle : un mot se définit par ses voisins | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q11 | 🧠 | Statique ou contextuel : l'« avocat » du tribunal et celui du marché | ★ | 3 | — | 02 | — | R | manual |
-| B2.Q12 | 🧠 | Cosinus ou distance euclidienne pour des embeddings normalisés ? | ★★ | 3 | — | 02 | — | M | manual |
-| B2.R1 | 🔁 | À quoi sert l'embedding d'image extrait d'un réseau pré-entraîné ? | ★ | 5 | — | 02 | B1 | R | manual |
-| B2.R2 | 🔁 | build_vocab, encode, decode et le token inconnu | ★ | 5 | — | 02 | 22 | R | manual |
-| B2.R3 | 🔁 | Entropie, Huffman et ce que l'on compresse vraiment | ★ | 5 | — | 02 | 6 | R | manual |
+| B2.Q1 | 🧠 | Caractères, mots ou sous-mots : taille du vocabulaire contre longueur des séquences | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q2 | 🧠 | Octets, points de code, caractères affichés : combien « é » compte-t-il ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q3 | 🧠 | NFC ou NFD : deux chaînes identiques à l'écran, différentes en mémoire | ★★ | 3 | — | 02 | — | – | wb.check |
+| B2.Q4 | 🧠 | Fusions BPE : pourquoi la liste ordonnée des fusions est le modèle | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q5 | 🧠 | BPE au niveau octet : jamais de token inconnu, vrai ou faux ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q6 | 🧠 | Tokens spéciaux et espace initial : « Ġthe » n'est pas « the » | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q7 | 🧠 | WordPiece, Unigram, SentencePiece : quel critère pour quelle méthode ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q8 | 🧠 | Pourquoi un LLM compte mal les lettres d'un mot et calcule mal avec les chiffres | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q9 | 🧠 | nn.Embedding : une table de consultation entraînable, pas une couche magique | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q10 | 🧠 | L'hypothèse distributionnelle : un mot se définit par ses voisins | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q11 | 🧠 | Statique ou contextuel : l'« avocat » du tribunal et celui du marché | ★ | 3 | — | 02 | — | R | wb.check |
+| B2.Q12 | 🧠 | Cosinus ou distance euclidienne pour des embeddings normalisés ? | ★★ | 3 | — | 02 | — | M | wb.check |
+| B2.R1 | 🔁 | À quoi sert l'embedding d'image extrait d'un réseau pré-entraîné ? | ★ | 5 | — | 02 | B1 | R | wb.check |
+| B2.R2 | 🔁 | build_vocab, encode, decode et le token inconnu | ★ | 5 | — | 02 | 22 | R | wb.check |
+| B2.R3 | 🔁 | Entropie, Huffman et ce que l'on compresse vraiment | ★ | 5 | — | 02 | 6 | R | wb.check |
 | B2.1 | ✏️ | « Noël à Paris » en UTF-8 : octets, points de code, longueur | ★ | 10 | — | 02 | 0A | RM | wb.check |
 | B2.2 | ✏️ | Analogie à la main : roi − homme + femme sur des vecteurs de dimension 3 | ★ | 10 | — | 02 | 0B | M | wb.check |
 | B2.3 | ✏️ | Trois fusions BPE à la main sur un mini-corpus | ★★ | 20 | — | 02 | B2.1 | RM | wb.check |

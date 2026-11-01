@@ -555,3 +555,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Classer en zéro-shot avec CLIP et en few-shot par prototypes de classe | |
 | Comparer des backbones (accuracy, taille, latence sur CPU) et publier un modèle dérivé avec sa model card | |
 <!-- wb:end B1 -->
+<!-- wb:section B2 -->
+## B2 — Tokenisation et embeddings
+
+| Compétence | Niveau |
+|---|:-:|
+| Compter les octets et les points de code d'un texte, écrire un caractère en UTF-8 et normaliser un texte (NFC, NFD) | |
+| Dérouler un entraînement BPE à la main, départage compris, et encoder un mot nouveau par rang | |
+| Écrire un tokenizer BPE (fusions, encodage, décodage sans perte) et le valider contre la bibliothèque `tokenizers` | |
+| Comparer des tokenizers réels (BPE octet, WordPiece, Unigram) et mesurer leur fertilité et leur compression selon la langue | |
+| Chiffrer le coût d'un texte en tokens (contexte, prix, temps) et le poids d'une table d'embedding | |
+| Relier `nn.Embedding` à un produit one-hot × table, et dire quelles lignes reçoivent un gradient | |
+| Construire des embeddings par PPMI et SVD, et entraîner un skip-gram avec échantillonnage négatif | |
+| Interroger des embeddings (cosinus, voisins, analogies avec exclusion) et construire une recherche sémantique avec des embeddings de phrases | |
+| Discuter les biais de la tokenisation (surcoût selon la langue) et des embeddings (stéréotypes), et comment les mesurer | |
+<!-- wb:end B2 -->

@@ -215,6 +215,22 @@
 | `with safe_open("model.safetensors", framework="pt") as f: f.metadata(), f.keys()` ; `model.load_state_dict(load_file(path))` | relire les métadonnées et les noms des tenseurs sans tout charger ; recharger sans pickle |
 | `start = time.perf_counter()` ; `model(x)` ; `1000 * (time.perf_counter() - start)` ; `np.median(times)` ; `torch.get_num_threads()` | mesurer une latence en ms après quelques passes de chauffe ; la médiane de plusieurs mesures ; le nombre de cœurs utilisés |
 
+## Tokenisation et embeddings (bonus B2)
+
+| Code | Effet |
+|---|---|
+| `s.encode("utf-8")` ; `b.decode("utf-8", errors="replace")` ; `unicodedata.normalize("NFC", s)` | un texte en octets, et retour (« � » pour des octets coupés) ; une seule normalisation, à l'entraînement et à l'usage |
+| `tok = AutoTokenizer.from_pretrained(nom, revision=sha)` ; `tok.encode(t)` ; `tok.convert_ids_to_tokens(ids)` ; `tok.decode(ids)` | le tokenizer d'un modèle (sans ses poids), ses identifiants et ses tokens lisibles ; décoder la liste **entière** |
+| `batch = tok(textes, padding=True, truncation=True, max_length=256, return_tensors="pt")` | des tenseurs `input_ids` et `attention_mask` (1 sur les vrais tokens, 0 sur le padding) |
+| `Tokenizer(models.BPE(unk_token="[UNK]"))` ; `tok.pre_tokenizer = pre_tokenizers.ByteLevel(add_prefix_space=False)` ; `tok.train_from_iterator(textes, trainers.BpeTrainer(vocab_size=V, min_frequency=2, special_tokens=[...]))` | entraîner un BPE avec la bibliothèque `tokenizers` (les tokens spéciaux reçoivent les premiers identifiants) ; `tok.save("tokenizer.json")`, `Tokenizer.from_file(...)` |
+| `emb = nn.Embedding(V, d, padding_idx=0)` ; `emb(ids)` | une table de forme `(V, d)`, des ids `(N, T)` → `(N, T, d)` ; la ligne `padding_idx` vaut 0 et ne reçoit jamais de gradient |
+| `F.one_hot(ids, num_classes=V).float() @ emb.weight` | la même lecture de table, écrite comme un produit one-hot × matrice (à éviter pour un grand $V$) |
+| `nn.Embedding(V, d, sparse=True)` avec `torch.optim.SparseAdam` | un gradient creux, limité aux lignes lues, pour une très grande table |
+| `self.head = nn.Linear(d, V, bias=False)` ; `self.head.weight = self.emb.weight` | des poids liés : une seule matrice `(V, d)`, que `parameters()` ne compte qu'une fois |
+| `model.resize_token_embeddings(len(tok))` | agrandir la table après `tok.add_tokens([...])` (les nouvelles lignes restent à apprendre) |
+| `loss = -F.logsigmoid(u_c @ v) - F.logsigmoid(-(u_neg @ v)).sum()` | la loss du skip-gram à échantillonnage négatif, sans débordement |
+| `m = batch["attention_mask"].unsqueeze(-1).float()` ; `s = (h * m).sum(1) / m.sum(1)` ; `F.normalize(s, dim=1)` | mean pooling avec masque, puis norme 1 : le cosinus devient un produit scalaire (`q @ D.T`) |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

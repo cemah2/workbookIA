@@ -927,6 +927,43 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | modèle dérivé | derived model | modèle obtenu par fine-tuning d'un modèle de base : il hérite de ses poids, de sa licence et de ses biais, et sa fiche modèle le cite | B1 |
 | accord top-1 | top-1 agreement | part des images pour lesquelles deux classifieurs prédisent la même classe la plus probable ; mesure l'oubli quand on remet l'ancienne tête sur un backbone fine-tuné | B1 |
 | démarrage à froid | cold start | premier appel d'un modèle, plus lent (allocations, choix des algorithmes, caches vides) : on le laisse hors de la mesure par des passes de chauffe | B1 |
+| identifiant (d'un token) | id | entier de $0$ à $V - 1$ qui numérote un token ; le modèle ne voit que ces identifiants | B2 |
+| point de code | code point | entier de 0 à 0x10FFFF qui désigne un caractère Unicode, noté U+00E9 ; `len` d'un `str` compte les points de code | B2 |
+| UTF-8 | UTF-8 | encodage qui écrit un point de code sur 1 à 4 octets (l'ASCII sur 1) ; chaque octet dit s'il commence un caractère ou le continue | B2 |
+| caractère combinant | combining character | point de code qui s'ajoute au précédent (U+0301, l'accent aigu combinant) : « é » s'écrit U+00E9, ou « e » + U+0301 | B2 |
+| NFC, NFD, NFKC | canonical composition, canonical decomposition, compatibility normalization | les formes de normalisation d'Unicode : tout composer, tout décomposer, ou remplacer aussi les variantes de présentation (« ﬁ » → « fi », avec perte d'information) ; `unicodedata.normalize` | B2 |
+| pré-tokenizer | pre-tokenizer | découpe le texte en morceaux avant BPE (expression régulière de GPT-2, `Whitespace`) ; aucune fusion ne franchit deux morceaux | B2 |
+| fusion (BPE), rang | merge, rank | remplacement d'une paire de tokens voisins par un nouveau token ; le rang est le numéro de la fusion dans la liste ordonnée, qui fixe l'ordre d'application à l'encodage | B2 |
+| BPE au niveau octet | byte-level BPE | BPE dont l'alphabet est fait des 256 octets : aucun token inconnu n'est possible (GPT-2, Llama 3, Qwen3) | B2 |
+| token spécial | special token | token réservé, jamais découpé : BOS et EOS (début et fin de séquence), PAD (padding), UNK (inconnu), CLS, SEP et MASK (BERT), balises de conversation | B2 |
+| offsets | décalages | position (début, fin) de chaque token ou pré-token dans le texte d'origine | B2 |
+| WordPiece | WordPiece | méthode de BERT : fusionne la paire au meilleur score $\frac{\operatorname{count}(a, b)}{\operatorname{count}(a)\operatorname{count}(b)}$, marque les suites de mot par `##`, encode de façon gloutonne (M. Schuster et K. Nakajima, 2012) | B2 |
+| Unigram (tokenizer) | unigram language model | part d'un grand vocabulaire et l'élague selon la vraisemblance du corpus ; encode par le découpage le plus probable, algorithme de Viterbi (T. Kudo, 2018) | B2 |
+| SentencePiece | SentencePiece | bibliothèque qui entraîne BPE ou Unigram sur le texte brut, sans pré-tokenisation, l'espace devenant « ▁ » (T. Kudo et J. Richardson, 2018) | B2 |
+| repli sur les octets | byte fallback | un caractère absent du vocabulaire s'écrit avec les tokens de ses octets (Mistral 7B) | B2 |
+| fertilité | fertility | nombre moyen de tokens par mot d'un texte, pour un tokenizer donné | B2 |
+| compression (d'un tokenizer) | bytes per token | nombre d'octets UTF-8 par token : plus elle est grande, plus le texte est court ; à ne pas confondre avec le taux de compression du ch. 6 | B2 |
+| surcoût de tokenisation | tokenization premium | rapport du nombre de tokens d'un texte à celui de sa traduction anglaise, avec le même tokenizer (A. Petrov et coll., 2023) | B2 |
+| masque d'attention | attention mask | tenseur de 1 (vrais tokens) et de 0 (padding) que rend le tokenizer avec `padding=True` ; sert au mean pooling et à l'attention | B2 |
+| poids liés | weight tying | la couche de sortie d'un modèle de langue réutilise la table d'embedding, $\mathbf{W}_{\text{out}} = \mathbf{E}$ : $V \times d$ paramètres de moins (O. Press et L. Wolf, 2017) | B2 |
+| accès contrôlé (dépôt) | gated repository | dépôt du Hugging Face Hub dont les fichiers ne se téléchargent qu'après avoir accepté une licence (Llama, Gemma) | B2 |
+| hypothèse distributionnelle | distributional hypothesis | des mots aux contextes semblables ont des sens semblables (Z. Harris, 1954 ; J. R. Firth, 1957) | B2 |
+| matrice de co-occurrences | co-occurrence matrix | $\mathbf{C}[w, c]$, le nombre de fois où le contexte $c$ apparaît dans la fenêtre du mot $w$ ; une ligne par mot, une colonne par contexte | B2 |
+| PMI, PPMI | pointwise mutual information, positive PMI | information mutuelle ponctuelle, $\log \frac{p(w, c)}{p(w)\,p(c)}$, et sa partie positive $\max(0, \operatorname{PMI})$, nulle quand le compte est nul | B2 |
+| lissage des contextes | context distribution smoothing | remplacer $p(c)$ par $\#(c)^{\alpha} / \sum_{c'} \#(c')^{\alpha}$, $\alpha = 0{,}75$, ce qui baisse la PMI des contextes rares (O. Levy, Y. Goldberg et I. Dagan, 2015) | B2 |
+| SVD tronquée | truncated SVD | garder les $d$ plus grandes valeurs singulières, sans centrer : la meilleure approximation de rang $d$, qui accepte une matrice creuse (`TruncatedSVD`) | B2 |
+| word2vec | word2vec | modèles qui apprennent des vecteurs de mots par une tâche de prédiction : skip-gram et CBOW (T. Mikolov et coll., 2013) | B2 |
+| skip-gram, CBOW | skip-gram, continuous bag of words | chaque mot prédit les mots de sa fenêtre ; ou la moyenne des contextes prédit le mot central | B2 |
+| échantillonnage négatif | negative sampling | remplacer la softmax sur les $V$ mots par une régression logistique : le vrai contexte contre $K$ mots tirés au hasard, selon la fréquence à la puissance 3/4 | B2 |
+| sous-échantillonnage des mots fréquents | subsampling of frequent words | jeter chaque occurrence d'un mot de fréquence $f$ avec la probabilité $1 - \sqrt{t/f}$, $t \approx 10^{-5}$ | B2 |
+| GloVe | global vectors | vecteurs de mots ajustés, par moindres carrés pondérés, au logarithme des comptes de co-occurrences (J. Pennington, R. Socher et C. Manning, 2014) | B2 |
+| 3CosAdd | 3CosAdd | résoudre « $a$ est à $b$ ce que $c$ est à ? » par $\arg\max_{x \notin \{a, b, c\}} \cos(\mathbf{x}, \mathbf{b} - \mathbf{a} + \mathbf{c})$ | B2 |
+| embedding statique, contextuel | static, contextual embedding | un vecteur par mot, quel que soit le contexte (word2vec) ; ou un vecteur par occurrence, qui dépend de toute la phrase (sortie d'un Transformer) | B2 |
+| mean pooling | moyenne des tokens | embedding d'un texte : la moyenne des vecteurs de ses vrais tokens, $\mathbf{s} = \sum_t m_t \mathbf{h}_t / \sum_t m_t$, avec le masque d'attention | B2 |
+| embedding de phrase | sentence embedding | un vecteur par phrase ou passage, comparé par le cosinus (all-MiniLM-L6-v2, multilingual-e5) | B2 |
+| siamois (réseau) | siamese network | le même réseau encode deux entrées, et la loss rapproche celles de même sens (Sentence-BERT, N. Reimers et I. Gurevych, 2019) | B2 |
+| recherche sémantique | semantic search | retrouver des documents par le sens : indexer leurs embeddings normalisés, puis les classer par cosinus avec celui de la requête | B2 |
+| cross-encoder | cross-encoder | modèle qui lit la requête et le document ensemble pour noter leur pertinence : plus précis, trop lent pour tout un corpus, il reclasse les premiers résultats | B2 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

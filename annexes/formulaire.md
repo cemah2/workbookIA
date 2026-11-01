@@ -744,5 +744,24 @@ Notations : $\phi(\mathbf{x}) \in \mathbb{R}^d$ l'embedding (la sortie du backbo
 | accord top-1 (oubli) | $\frac{1}{N}\sum_{i} \mathbb{1}\big[\arg\max h_0(\phi_{\text{ft}}(\mathbf{x}_i)) = \arg\max h_0(\phi_0(\mathbf{x}_i))\big]$, $h_0$ l'ancienne tête | `(old(x).argmax(1) == reference(x).argmax(1)).float().mean()` (🔬 B1.23) |
 | latence et débit | latence : la médiane de plusieurs temps d'un batch de 1 ; débit $= B / t_B$ pour un batch de $B$ images traité en $t_B$ secondes | `1000 * np.median(times)` (🔬 B1.26) |
 
-### B2 à B8
+### B2 · Tokenisation et embeddings
+
+Notations : $V$ la taille du vocabulaire, identifiants de $0$ à $V - 1$ ; $\mathbf{E}$ la table d'embedding, de forme $(V, d)$ ; $w$ un mot, $c$ un mot de son contexte, $\#(w, c)$ un compte, $N$ la somme des comptes ; $\mathbf{v}_w$ et $\mathbf{u}_c$ les vecteurs de mot et de contexte de word2vec, $n_1, \dots, n_K$ les négatifs ; $\mathbf{h}_t$ l'embedding contextuel du token $t$, $m_t$ son masque ; $\log$ naturel.
+
+| Notion | Formule | En code |
+|---|---|---|
+| fertilité et compression | $\text{fertilité} = \frac{\text{nombre de tokens}}{\text{nombre de mots}}$ ; $\text{compression} = \frac{\text{nombre d'octets}}{\text{nombre de tokens}}$ | `len(tok.encode(t)) / len(t.split())` ; `len(t.encode("utf-8")) / len(tok.encode(t))` |
+| UTF-8 sur deux octets | de U+0080 à U+07FF : `110xxxxx 10xxxxxx`, les 5 bits de poids fort de $u$ puis ses 6 bits de poids faible | `[0xC0 \| (u >> 6), 0x80 \| (u & 0x3F)]` ; `chr(u).encode("utf-8")` (✏️ B2.1) |
+| fusion BPE | $(a, b)^* = \arg\max_{(a, b)} \operatorname{count}(a, b)$, puis $a\,b \rightarrow$ un nouveau token d'identifiant $n_{\text{base}} + r$ au rang $r$ ; à égalité, la plus petite paire $(a, b)$ (`BpeTrainer`) | `trainers.BpeTrainer(vocab_size=..., min_frequency=...)` ; `BPETokenizer(...).fit(textes)` (✏️ B2.3, 🔨 B2.16) |
+| encodage par rang | tant qu'une paire voisine est une fusion, fusionner celle de plus petit rang, dans chaque pré-token | `tok.encode(texte)` ; `tok.decode(ids)` sur la liste entière (✏️ B2.4, 🔨 B2.17) |
+| score de WordPiece | $\operatorname{score}(a, b) = \frac{\operatorname{count}(a, b)}{\operatorname{count}(a)\,\operatorname{count}(b)}$ | |
+| one-hot × table | $\mathbf{e} = \mathbf{x}_{\text{one-hot}}^\top \mathbf{E} = \mathbf{E}[i, :]$ ; $\frac{\partial L}{\partial \mathbf{E}} = \mathbf{X}^\top \frac{\partial L}{\partial (\mathbf{X}\mathbf{E})}$ : seules les lignes lues, une somme par lecture | `nn.Embedding(V, d)(ids)` ; `F.one_hot(ids, V).float() @ emb.weight` (✏️ B2.5) |
+| PMI et PPMI | $\operatorname{PMI}(w, c) = \log \frac{p(w, c)}{p(w)\,p(c)}$, $p(w, c) = \frac{\#(w, c)}{N}$ ; $\operatorname{PPMI} = \max(0, \operatorname{PMI})$ | `mylearn.embeddings.ppmi(C)` (✏️ B2.6, 🔨 B2.22) |
+| lissage des contextes | $p_\alpha(c) = \frac{\#(c)^{\alpha}}{\sum_{c'} \#(c')^{\alpha}}$, $\#(c)$ la somme de la colonne, $\alpha = 0{,}75$ ; il remplace $p(c)$ dans la PMI | `ppmi(C, alpha=0.75)` |
+| skip-gram avec échantillonnage négatif | $L = -\log \sigma(\mathbf{u}_c^\top \mathbf{v}_w) - \sum_{k=1}^{K} \log \sigma(-\mathbf{u}_{n_k}^\top \mathbf{v}_w)$ ; négatifs tirés selon $\#(w)^{3/4}$ ; à l'optimum, $\mathbf{u}_c^\top \mathbf{v}_w = \operatorname{PMI}(w, c) - \log K$ | `-F.logsigmoid(u_c @ v) - F.logsigmoid(-(u_neg @ v)).sum()` (∂ B2.7, 📦 B2.25) |
+| sous-échantillonnage | une occurrence d'un mot de fréquence $f(w)$ est jetée avec la probabilité $1 - \sqrt{t / f(w)}$, $t \approx 10^{-5}$ | |
+| cosinus et analogie (3CosAdd) | $\cos(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert\mathbf{a}\rVert\,\lVert\mathbf{b}\rVert}$ ; $x^* = \arg\max_{x \notin \{a, b, c\}} \cos(\mathbf{x}, \mathbf{b} - \mathbf{a} + \mathbf{c})$ ; pour des vecteurs de norme 1, $\lVert\mathbf{a} - \mathbf{b}\rVert^2 = 2 - 2\cos(\mathbf{a}, \mathbf{b})$ | `most_similar(E, E[b] - E[a] + E[c], k, exclude=(a, b, c))` (✏️ B2.2, 🔨 B2.23) |
+| mean pooling | $\mathbf{s} = \frac{\sum_t m_t \mathbf{h}_t}{\sum_t m_t}$ | `(h * m).sum(1) / m.sum(1)` avec `m = attention_mask.unsqueeze(-1)` (📦 B2.28) |
+
+### B3 à B8
 *(à compléter)*
