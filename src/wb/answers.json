@@ -53075,6 +53075,40 @@
       "sign": 1,
       "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
     },
+    "B2.26a": {
+      "hash": "bbbec5bb8e0e2e30a1fbd6b6549a4a60ba4fafc53820ecdb4b966c2539d0955c",
+      "kind": "str",
+      "mistakes": {
+        "88409739e1142138d79ad9f19e88c279d58654ad69cd178c14a0d68e314dcd6f": "regarde les deux premiers voisins affichés pour « fogg » : sont-ce des verbes ?",
+        "8d019e6214f8fc03731b3a459e73e7691501e8cbfc3a993ebbeea90244a2b9cb": "regarde les deux premiers voisins affichés pour « fogg » : relis les trois autres choix",
+        "af8199376d183f1f1852ef2a47a72b1fa73b284d6f0ba6055d949b2388b4f271": "regarde les deux premiers voisins affichés pour « fogg » : sont-ce d'autres personnages ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.26b": {
+      "hash": "fe8d739c6ae61f02911c0abb22dfcd968cb30b3939064f96d78ed06e1919e815",
+      "kind": "bool",
+      "mistakes": {
+        "06fccd8b2e04c89aeadfc80b3d145e6928ec69f8e014f2ce87e3ec01e0077c3f": "compte les noms de CHARACTERS_26 parmi les 10 voisins de « passepartout » (la ligne affichée sous les voisins)"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.27a": {
+      "hash": "4c3afb928b40f6ec32c9d8dfe754f930c1c1c19ea0c6f95e392d99995386561d",
+      "kind": "bool",
+      "mistakes": {
+        "95f9871f399bcb96c03c777185ca15f3bf5212116ad3c51bb5526a6874e91c47": "suis la couleur de la carte (1) de gauche à droite : passe-t-elle régulièrement du violet au jaune ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
+    "B2.27b": {
+      "hash": "47417484470f08670cbbfce2b74d639be6762462f7e302fd3d2d59ccafc23429",
+      "kind": "bool",
+      "mistakes": {
+        "037c827a77d0dde7414b87d6a05e03ea7a0caedf78e6699c7a5b73c756ab4dbf": "regarde où sont les points jaunes de la carte (2) : partout, ou surtout à quelques endroits ?"
+      },
+      "source": "chapitres/b2_tokenisation/05_solutions.ipynb"
+    },
     "B2.Q1a": {
       "hash": "e409042f12dbb0a0c98cc8712cac692ca9359e061d70b21ec5017d3fc60d7a53",
       "kind": "str",

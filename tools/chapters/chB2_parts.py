@@ -1,6 +1,6 @@
 """Parts A to C of the chapter B2 notebook (tokenization phase): statements and cells (used by build_chB2.py).
 
-Parts D and E (embeddings, B2.22 to B2.31) come at the next generation step (build_chB2.NEXT_SESSION).
+Parts D and E (embeddings, B2.22 to B2.31) are in chB2_parts_de.py, appended to PARTS at the end of this file.
 """
 
 from __future__ import annotations
@@ -339,4 +339,6 @@ Dans tes notes :
        todo=C.TODO_21, check=C.CHECK_21, solution=C.SOLUTION_21 + "\n\n\n" + C.CHECK_21),
 ])
 
-PARTS = [PART_A, PART_B, PART_C]
+from chB2_parts_de import PART_D, PART_E  # noqa: E402  (the phase « embeddings »)
+
+PARTS = [PART_A, PART_B, PART_C, PART_D, PART_E]

@@ -13,8 +13,9 @@ formulas in the context cell of the solutions notebook, then checked against the
 mylearn.embeddings, mylearn.sequences, mylearn.info), Hugging Face tokenizers and PyTorch (no download).
 Parts A to C (exercises B2.13 to B2.21, chB2_parts.py and chB2_code.py; long checks in history_chB2.py): real
 tokenizers and their cost, your BPE, a tokenizer to repair, the comparison to tokenizers, experiments on the
-vocabulary size and the language. Parts D and E (B2.22 to B2.31: word vectors, sentence embeddings, delivery and the
-challenge) come at the next generation step (NEXT_SESSION).
+vocabulary size and the language. Parts D and E (B2.22 to B2.31, chB2_parts_de.py and chB2_code_de.py): word vectors
+by counting and by word2vec, the maps, sentence embeddings and semantic search, static against contextual, the delivery
+of a tokenizer and the challenge.
 """
 
 from __future__ import annotations
@@ -596,17 +597,12 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "⚖️ B2.11, 📄 B2.12) et l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B2.13 to B2.21, the tokenization phase: session 66); parts D and E come next
+# Parts A to E (exercises B2.13 to B2.31: the tokenization phase, then the embeddings phase; session 66)
 # ---------------------------------------------------------------------------
 import chB2_code  # noqa: E402,F401  (the cells; history_chB2.py reuses them)
 from chB2_parts import PARTS  # noqa: E402
 
-NEXT_SESSION = [
-    ("D", "B2.22 à B2.27", "vecteurs de mots : co-occurrences et PPMI, cosinus et voisins, PPMI + SVD sur Holmes, "
-                           "word2vec sur Verne, voisins de « Fogg » et « Passepartout », carte des embeddings"),
-    ("E", "B2.28 à B2.31", "embeddings de phrases et recherche sémantique, statique contre contextuel, sauvegarder "
-                           "un tokenizer, et le défi"),
-]
+NEXT_SESSION: list = []      # every part is written (session 66)
 
 
 def header_cells(kind: str) -> list:
@@ -626,9 +622,10 @@ def header_cells(kind: str) -> list:
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
                "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Le "
-               "notebook télécharge les fichiers de six tokenizers du Hugging Face Hub (quelques Mo, pas les poids "
-               "des modèles) s'ils ne sont pas déjà là ; sans connexion, leurs cellules affichent ⏳ et le reste "
-               "continue. Tout tourne sur CPU.\n\n"
+               "notebook télécharge du Hugging Face Hub, s'ils ne sont pas déjà là, les fichiers de six tokenizers "
+               "(quelques Mo, pas les poids des modèles), puis le modèle all-MiniLM-L6-v2 (≈ 90 Mo) pour B2.28 et "
+               "B2.29 ; sans connexion, leurs cellules affichent ⏳ et le reste continue. Tout tourne sur CPU (≈ 5 min "
+               "pour les solutions en mode rapide).\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b2_tokenisation/03_notebook.ipynb`, créée par "
                "`python tools/start_chapter.py B2`) : ce fichier-ci est mis à jour par Claude. Sur Colab, le badge "
                "ouvre cette version du dépôt, qui n'est pas enregistrée : crée puis ouvre ta copie comme l'explique "

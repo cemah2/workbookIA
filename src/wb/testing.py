@@ -15,6 +15,7 @@ exactly as in a ``tests/test_*.py`` file.
 from __future__ import annotations
 
 import inspect
+import os
 import re
 import subprocess
 import sys
@@ -107,9 +108,10 @@ def run_pytest(tests, *, subject=None, name: str | None = None, extra=(), preamb
         path = folder / "test_notebook.py"
         path.write_text("".join(parts), encoding="utf-8")
         command = [sys.executable, "-m", "pytest", str(path), "-q", "-p", "no:cacheprovider", "--color=no",
-                   "--rootdir", str(folder)]
-        try:
-            completed = subprocess.run(command, cwd=folder, capture_output=True, text=True, timeout=timeout)
+                   "--code-highlight=no", "--rootdir", str(folder)]
+        try:   # COLUMNS=1000: the reason of each failure is not cut at 80 characters in the short summary
+            completed = subprocess.run(command, cwd=folder, capture_output=True, text=True, timeout=timeout,
+                                       env={**os.environ, "COLUMNS": "1000"})
         except subprocess.TimeoutExpired:
             message = f"tes tests ont dépassé {timeout:.0f} s : une boucle infinie ?"
             if not quiet:

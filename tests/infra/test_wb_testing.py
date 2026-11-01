@@ -99,3 +99,14 @@ def test_run_pytest_stops_a_test_that_never_ends(capsys):
     result = wb.run_pytest([test_endless], subject=loop_forever, timeout=3)
     assert not result.ok and result.errors == 1 and result.summary == "timeout"
     assert "boucle infinie" in capsys.readouterr().out
+
+
+def test_run_pytest_output_has_no_colour_and_keeps_the_whole_reason():
+    def test_fails_with_a_long_message():
+        assert scale_bug([2, 4, 6])[0] == 0.0, "expected the smallest value to become 0 " + "and the largest 1 " * 10
+
+    result = wb.run_pytest(test_fails_with_a_long_message, subject=scale_bug, quiet=True)
+    assert result.failed == 1
+    assert "\x1b[" not in result.output, "expected no ANSI colour codes (code highlighting off)"
+    summary = [line for line in result.output.splitlines() if line.startswith("FAILED ")]
+    assert summary and summary[0].rstrip().endswith("and the largest 1"), "expected the whole reason (COLUMNS=1000)"

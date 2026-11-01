@@ -131,5 +131,440 @@
   "naive_verne_char_2000": 79.8,
   "naive_part_byte_400": 2.5,
   "train_18": 1.04
+ },
+ "c31": {
+  "splits": {
+   "frozen": {
+    "reference": 3.437,
+    "seconds": 0.8,
+    "baseline": 3.001,
+    "baseline_dp": 3.074
+   },
+   "tenth_5": {
+    "reference": 3.288,
+    "seconds": 0.8,
+    "baseline": 2.877,
+    "baseline_dp": 2.94
+   },
+   "tenth_6": {
+    "reference": 3.337,
+    "seconds": 0.9,
+    "baseline": 2.887,
+    "baseline_dp": 2.945
+   },
+   "tenth_7": {
+    "reference": 3.3,
+    "seconds": 0.9,
+    "baseline": 2.891,
+    "baseline_dp": 2.955
+   },
+   "tenth_8": {
+    "reference": 3.399,
+    "seconds": 0.9,
+    "baseline": 2.972,
+    "baseline_dp": 3.039
+   }
+  },
+  "goal": 3.2,
+  "leaks": {
+   "global": {
+    "ok": true,
+    "score": 3.415,
+    "flagged": false
+   },
+   "captured": {
+    "ok": false,
+    "score": 3.551,
+    "flagged": true
+   },
+   "honest": {
+    "ok": true,
+    "score": 3.437,
+    "control": [
+     "✅ Ex B2.31 : contrôle : sur un texte tenu à l'écart, ta méthode gagne autant sur la référence de B2.20 (14,4 %) que sur la validation (14,5 %)."
+    ]
+   }
+  }
+ },
+ "w2v": {
+  "runs": [
+   {
+    "variant": "contract",
+    "seed": 0,
+    "seconds": 10.5,
+    "loss": [
+     2.774,
+     2.084
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "fix",
+     "froidement",
+     "passepartout",
+     "lui",
+     "francis",
+     "son",
+     "hôtel",
+     "mrs"
+    ],
+    "passepartout": [
+     "fix",
+     "lui",
+     "il",
+     "son",
+     "fogg",
+     "phileas",
+     "s",
+     "un",
+     "qui",
+     "gentleman"
+    ],
+    "names": 3,
+    "rho_pc1": 0.141,
+    "rho_pc2": -0.226,
+    "umap_share": 0.481
+   },
+   {
+    "variant": "contract",
+    "seed": 1,
+    "seconds": 10.3,
+    "loss": [
+     2.77,
+     2.09
+    ],
+    "fogg": [
+     "phileas",
+     "mr",
+     "il",
+     "fix",
+     "passepartout",
+     "lui",
+     "répondit",
+     "ses",
+     "sauver",
+     "basse"
+    ],
+    "passepartout": [
+     "fix",
+     "un",
+     "s",
+     "il",
+     "fogg",
+     "son",
+     "sans",
+     "phileas",
+     "la",
+     "le"
+    ],
+    "names": 3,
+    "rho_pc1": -0.17,
+    "rho_pc2": -0.184,
+    "umap_share": 0.53
+   },
+   {
+    "variant": "contract",
+    "seed": 2,
+    "seconds": 9.1,
+    "loss": [
+     2.773,
+     2.089
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "que",
+     "à",
+     "répondit",
+     "policeman",
+     "monsieur",
+     "en",
+     "w",
+     "simplement"
+    ],
+    "passepartout": [
+     "fix",
+     "vous",
+     "il",
+     "maître",
+     "son",
+     "à",
+     "s",
+     "aucun",
+     "sa",
+     "fogg"
+    ],
+    "names": 2,
+    "rho_pc1": 0.177,
+    "rho_pc2": 0.187,
+    "umap_share": 0.556
+   },
+   {
+    "variant": "contract",
+    "seed": 3,
+    "seconds": 8.9,
+    "loss": [
+     2.776,
+     2.082
+    ],
+    "fogg": [
+     "phileas",
+     "mr",
+     "mrs",
+     "simplement",
+     "aouda",
+     "lui",
+     "répondit",
+     "dit",
+     "offrit",
+     "intérêts"
+    ],
+    "passepartout": [
+     "son",
+     "fix",
+     "se",
+     "sans",
+     "mon",
+     "maître",
+     "fogg",
+     "sa",
+     "monsieur",
+     "il"
+    ],
+    "names": 2,
+    "rho_pc1": 0.185,
+    "rho_pc2": 0.159,
+    "umap_share": 0.538
+   },
+   {
+    "variant": "batch1024_lr0.02",
+    "seed": 0,
+    "seconds": 7.0,
+    "loss": [
+     2.794,
+     2.191
+    ],
+    "fogg": [
+     "phileas",
+     "mr",
+     "passepartout",
+     "fix",
+     "lui",
+     "froidement",
+     "répondit",
+     "demanda",
+     "l",
+     "le"
+    ],
+    "passepartout": [
+     "fogg",
+     "fix",
+     "lui",
+     "dans",
+     "son",
+     "s",
+     "inspecteur",
+     "aouda",
+     "phileas",
+     "mais"
+    ],
+    "names": 4,
+    "rho_pc1": 0.164,
+    "rho_pc2": -0.268,
+    "umap_share": 0.536
+   },
+   {
+    "variant": "batch1024_lr0.02",
+    "seed": 1,
+    "seconds": 6.8,
+    "loss": [
+     2.798,
+     2.216
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "il",
+     "fallentin",
+     "fix",
+     "partenaires",
+     "son",
+     "lui",
+     "compagnons",
+     "qu"
+    ],
+    "passepartout": [
+     "fix",
+     "stamp",
+     "la",
+     "un",
+     "sans",
+     "convaincu",
+     "d",
+     "son",
+     "mouvement",
+     "où"
+    ],
+    "names": 2,
+    "rho_pc1": -0.16,
+    "rho_pc2": 0.244,
+    "umap_share": 0.542
+   },
+   {
+    "variant": "lr0.005",
+    "seed": 0,
+    "seconds": 9.5,
+    "loss": [
+     2.857,
+     2.032
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "froidement",
+     "fix",
+     "passepartout",
+     "lui",
+     "tranquillement",
+     "sortit",
+     "congé",
+     "regarda"
+    ],
+    "passepartout": [
+     "fix",
+     "il",
+     "fogg",
+     "enchanté",
+     "son",
+     "écoutez",
+     "adversaire",
+     "achever",
+     "lui",
+     "hitch"
+    ],
+    "names": 2,
+    "rho_pc1": -0.147,
+    "rho_pc2": -0.195,
+    "umap_share": 0.327
+   },
+   {
+    "variant": "lr0.005",
+    "seed": 1,
+    "seconds": 10.5,
+    "loss": [
+     2.854,
+     2.03
+    ],
+    "fogg": [
+     "phileas",
+     "mr",
+     "sortir",
+     "fix",
+     "policeman",
+     "partenaires",
+     "froidement",
+     "traces",
+     "lui",
+     "il"
+    ],
+    "passepartout": [
+     "fix",
+     "il",
+     "certain",
+     "mouvement",
+     "continent",
+     "james",
+     "forster",
+     "surpris",
+     "assez",
+     "sortait"
+    ],
+    "names": 1,
+    "rho_pc1": 0.166,
+    "rho_pc2": 0.118,
+    "umap_share": 0.213
+   },
+   {
+    "variant": "batch256",
+    "seed": 0,
+    "seconds": 13.2,
+    "loss": [
+     2.734,
+     2.177
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "passepartout",
+     "fix",
+     "froidement",
+     "répondit",
+     "lui",
+     "partenaires",
+     "l",
+     "mrs"
+    ],
+    "passepartout": [
+     "son",
+     "lui",
+     "fix",
+     "fogg",
+     "s",
+     "dans",
+     "phileas",
+     "qui",
+     "le",
+     "inspecteur"
+    ],
+    "names": 3,
+    "rho_pc1": 0.149,
+    "rho_pc2": 0.273,
+    "umap_share": 0.556
+   },
+   {
+    "variant": "batch256",
+    "seed": 1,
+    "seconds": 14.1,
+    "loss": [
+     2.737,
+     2.179
+    ],
+    "fogg": [
+     "mr",
+     "phileas",
+     "fix",
+     "froidement",
+     "il",
+     "lui",
+     "son",
+     "dit",
+     "sa",
+     "basse"
+    ],
+    "passepartout": [
+     "sans",
+     "fix",
+     "il",
+     "la",
+     "un",
+     "avec",
+     "d",
+     "regardait",
+     "james",
+     "son"
+    ],
+    "names": 1,
+    "rho_pc1": 0.174,
+    "rho_pc2": 0.225,
+    "umap_share": 0.548
+   }
+  ],
+  "chance_umap": 0.063,
+  "answers": {
+   "fogg": "B",
+   "characters": false,
+   "pca_axis": false,
+   "umap_frequent": true
+  }
  }
 }

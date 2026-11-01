@@ -373,8 +373,9 @@ def load_sentence_model(name: str = "minilm", *, reuse: bool = True) -> Sentence
     if reuse and name in _SENTENCE_LOADED:
         return _SENTENCE_LOADED[name]
     spec = SENTENCE_MODELS[name]
+    from wb.transfer import quiet_hub
     try:
-        with quiet_transformers():
+        with quiet_hub():                         # no progress bar (« Loading weights »), no info log
             from transformers import AutoModel, AutoTokenizer
 
             tok = AutoTokenizer.from_pretrained(spec["repo"], revision=spec["revision"])

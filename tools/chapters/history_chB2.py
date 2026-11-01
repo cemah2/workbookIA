@@ -2,7 +2,7 @@
 """Calibrate the predictions, replay the bug hunt and measure the times of chapter B2 (used by Claude).
 
     python tools/chapters/history_chB2.py                 # everything (about 6 min on a 2-core CPU, the Hub reachable)
-    python tools/chapters/history_chB2.py --only bug18    # one entry: p14, bug18, timing
+    python tools/chapters/history_chB2.py --only bug18    # one entry: p14, bug18, timing, w2v, c31
 
 Writes tools/chapters/history_chB2.json (statistics only), which chB2_parts.py reads:
 - "p14": 🔮 B2.14, the counts of tokens of the six real tokenizers on the four texts (two frozen excerpts, the numbers,
@@ -12,7 +12,14 @@ Writes tools/chapters/history_chB2.json (statistics only), which chB2_parts.py r
   left (and nothing must crash); the fixed version must also encode by rank exactly like mylearn (reference);
 - "timing": the training times of the reference BPETokenizer, of a naive version (every pair counted again and every
   word merged again after each merge, the way a learner first writes it), of tokenizers and of wb.text.byte_bpe_merges,
-  for the statements, the hints and the solutions.
+  for the statements, the hints and the solutions;
+- "w2v": 🔮 B2.26 and 📈 B2.27, the word2vec of the solution (B2.25) trained with 4 seeds and 3 other settings (batch
+  size, learning rate): the two nearest neighbours of « fogg », the characters among the neighbours of « passepartout »,
+  the rank correlation between the frequency and the first axis of the PCA, the frequent words grouped on the UMAP;
+  each answer must be the same in every run, with a margin;
+- "c31": 🏆 B2.31, the reference method (no pre-tokenization inside a line, shortest segmentation) and the baseline of
+  B2.20 on the frozen split and on 4 other splits of Verne, the goal checked against both with a margin, and the
+  anti-leak rules tried on two methods that read the validation.
 The cells of the notebook are reused as is (tools/chapters/chB2_code.py), executed in one namespace.
 """
 
@@ -26,6 +33,8 @@ import json
 import sys
 import time
 from pathlib import Path
+
+import numpy as np
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -57,7 +66,7 @@ EDITS_18 = {
 P14_BOUNDS = {"ratio": (0.9, 1.1), "bert_emoji": (10, 2000)}
 
 
-def namespace(blocks=()) -> dict:
+def namespace(blocks=(), blocks_de=()) -> dict:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -70,6 +79,10 @@ def namespace(blocks=()) -> dict:
           "mylearn": wb.load_mylearn("ref")}
     for block in ("TOOLS", *blocks):
         exec(getattr(C, block), ns)
+    if blocks_de:
+        import chB2_code_de as D
+        for block in ("TOOLS_D", *blocks_de):
+            exec(getattr(D, block), ns)
     return ns
 
 
@@ -204,7 +217,114 @@ def timing(ns) -> dict:
     return out
 
 
-ENTRIES = {"p14": (("GIVEN_14",), p14), "bug18": (("GIVEN_18",), bug18), "timing": (("GIVEN_18", "SOLUTION_18"), timing)}
+# 🔮 B2.26 and 📈 B2.27: the settings of train_word2vec_25 tried, besides the contract (seeds 0 to 3)
+W2V_VARIANTS = {"contract": ({}, (0, 1, 2, 3)), "batch1024_lr0.02": ({"batch_size": 1024, "lr": 0.02}, (0, 1)),
+                "lr0.005": ({"lr": 0.005}, (0, 1)), "batch256": ({"batch_size": 256}, (0, 1))}
+
+
+def w2v(ns) -> dict:
+    from scipy.stats import spearmanr
+    from sklearn.neighbors import NearestNeighbors
+    rows = []
+    for name, (kwargs, seeds) in W2V_VARIANTS.items():
+        for seed in seeds:
+            start = time.perf_counter()
+            model, losses = ns["train_word2vec_25"](ns["IDS_25"], ns["COUNTS_25"], seed=seed, **kwargs)
+            seconds = time.perf_counter() - start
+            E = model.center.weight.detach().double().numpy()
+            E /= np.linalg.norm(E, axis=1, keepdims=True)
+            fogg = [w for w, _ in ns["nearest_words"](E, ns["ITOS_25"], "fogg", 10, ns["STOI_25"])]
+            pp = [w for w, _ in ns["nearest_words"](E, ns["ITOS_25"], "passepartout", 10, ns["STOI_25"])]
+            pca_all, umap_all, pca_groups, _ = ns["maps_27"](E, ns["COUNTS_25"], ns["GROUPS_27"])
+            logf = np.log10(ns["COUNTS_25"])
+            _, near = NearestNeighbors(n_neighbors=11).fit(umap_all).kneighbors(umap_all)
+            top = np.arange(len(ns["ITOS_25"])) < 100
+            row = {"variant": name, "seed": seed, "seconds": round(seconds, 1), "loss": [round(losses[0], 3), round(losses[-1], 3)],
+                   "fogg": fogg, "passepartout": pp, "names": sum(w in ns["CHARACTERS_26"] for w in pp),
+                   "rho_pc1": round(float(spearmanr(pca_all[:, 0], logf)[0]), 3),
+                   "rho_pc2": round(float(spearmanr(pca_all[:, 1], logf)[0]), 3),
+                   "umap_share": round(float(top[near[top, 1:]].mean()), 3)}
+            rows.append(row)
+            print(f"  w2v {name} {seed}: {row}", flush=True)
+    chance = 100 / len(ns["ITOS_25"])
+    checks = {"fogg": all(set(r["fogg"][:2]) == {"phileas", "mr"} for r in rows),
+              "names": max(r["names"] for r in rows) <= 4,                      # b): at least 5 of the 10, never
+              "pca_axis": max(abs(r["rho_pc1"]) for r in rows) < 0.35,
+              "umap": min(r["umap_share"] for r in rows) > 3 * chance}
+    if not all(checks.values()):
+        raise SystemExit(f"❌ w2v: an answer is not the same in every run: {checks}")
+    return {"runs": rows, "chance_umap": round(chance, 3),
+            "answers": {"fogg": "B", "characters": False, "pca_axis": False, "umap_frequent": True}}
+
+
+def c31(ns) -> dict:
+    from wb import text as wbtext
+    full = wbtext.load_text("verne")
+    splits = {"frozen": (ns["VERNE_TRAIN"], ns["VERNE_VAL"])}
+    for k in range(4):                                   # four other tenths of the text as the validation
+        a, b = int(len(full) * (0.5 + 0.1 * k)), int(len(full) * (0.6 + 0.1 * k))
+        a, b = full.rfind("\n", 0, a) + 1, full.rfind("\n", 0, b) + 1
+        splits[f"tenth_{5 + k}"] = (full[:a] + full[b:], full[a:b])
+    out = {}
+    for name, (train, val) in splits.items():
+        start = time.perf_counter()
+        tok = ns["method_31"](train)
+        ids = tok.encode(val)
+        seconds = time.perf_counter() - start
+        assert b"".join(tok.vocab_[i] for i in ids) == val.encode() and len(tok.vocab_) <= 2000
+        base = ns["fast_byte_bpe"](train, 2000)
+        base_dp = ns["LinesTokenizer31"](base.vocab_)
+        n = len(val.encode())
+        out[name] = {"reference": round(n / len(ids), 3), "seconds": round(seconds, 1),
+                     "baseline": round(n / len(base.encode(val)), 3), "baseline_dp": round(n / len(base_dp.encode(val)), 3)}
+        print(f"  c31 {name}: {out[name]}", flush=True)
+    goal, frozen = ns["GOAL_31"], out["frozen"]
+    if abs(frozen["baseline"] - ns["BASELINE_31"]) > 5e-4:
+        raise SystemExit(f"❌ c31: the baseline of B2.20 is {frozen['baseline']}, not {ns['BASELINE_31']}")
+    cut = wbtext.split_point(ns["VERNE_TRAIN"], 8 / 9)
+    held, learned = ns["VERNE_TRAIN"][cut:], ns["VERNE_TRAIN"][:cut]
+    control = round(len(held.encode()) / len(ns["fast_byte_bpe"](learned, 2000).encode(held)), 3)
+    if abs(control - ns["BASELINE_CONTROL_31"]) > 5e-4:
+        raise SystemExit(f"❌ c31: the baseline of the control is {control}, not {ns['BASELINE_CONTROL_31']}")
+    if frozen["reference"] < 1.03 * goal or frozen["baseline_dp"] > 0.98 * goal:
+        raise SystemExit(f"❌ c31: the goal {goal} is too close to the reference or to the baseline: {frozen}")
+    for name, row in out.items():                         # the same goal, scaled by the baseline of each split
+        if row["reference"] < 1.03 * goal * row["baseline"] / frozen["baseline"]:
+            raise SystemExit(f"❌ c31: on {name}, the reference does not clear the scaled goal: {row}")
+    # the anti-leak rules: a method that reads the validation through a global, and one that captured it before
+    honest = ns["method_31"]
+
+    def reads_global(text):
+        return honest(text + "\n" + ns["VERNE_VAL"])
+
+    def captured(text, _val=ns["VERNE_VAL"]):
+        return honest(text + "\n" + _val)
+
+    import contextlib
+    import io
+    leaks = {}
+    for label, method in (("global", reads_global), ("captured", captured)):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            result = ns["evaluate_31"](method)
+        leaks[label] = {"ok": bool(result and result["ok"]), "score": round(result["bytes_per_token"], 3) if result else None,
+                        "flagged": "❌ Ex B2.31 : contrôle" in buf.getvalue()}
+        print(f"  c31 leak {label}: {leaks[label]}", flush=True)
+    honest_run = io.StringIO()
+    with contextlib.redirect_stdout(honest_run):
+        honest_result = ns["evaluate_31"](honest)
+    leaks["honest"] = {"ok": honest_result["ok"], "score": round(honest_result["bytes_per_token"], 3),
+                       "control": [line for line in honest_run.getvalue().splitlines() if "contrôle" in line]}
+    print(f"  c31 honest: {leaks['honest']}", flush=True)
+    # the global variable is a decoy during the run (no gain); the captured validation is caught by the control
+    if leaks["global"]["score"] > leaks["honest"]["score"] + 0.005 or leaks["captured"]["ok"] or not leaks["honest"]["ok"]:
+        raise SystemExit(f"❌ c31: a method that reads the validation is not stopped: {leaks}")
+    return {"splits": out, "goal": goal, "leaks": leaks}
+
+
+ENTRIES = {"p14": (("GIVEN_14",), p14), "bug18": (("GIVEN_18",), bug18), "timing": (("GIVEN_18", "SOLUTION_18"), timing),
+           "w2v": ((), w2v, ("GIVEN_25", "SOLUTION_25", "GIVEN_26", "GIVEN_27")),
+           "c31": ((), c31, ("GIVEN_31", "SOLUTION_31"))}
 
 
 def main(argv=None) -> int:
@@ -212,12 +332,12 @@ def main(argv=None) -> int:
     parser.add_argument("--only", choices=sorted(ENTRIES))
     args = parser.parse_args(argv)
     data = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
-    for name, (blocks, fn) in ENTRIES.items():
+    for name, (blocks, fn, *blocks_de) in ENTRIES.items():
         if args.only and args.only != name:
             continue
         start = time.perf_counter()
         print(f"{name}…", flush=True)
-        data[name] = fn(namespace(blocks))
+        data[name] = fn(namespace(blocks, *blocks_de))
         print(f"{name}: {time.perf_counter() - start:.0f} s", flush=True)
         OUT.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"✅ {OUT.relative_to(ROOT)}")
