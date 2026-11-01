@@ -322,7 +322,9 @@ PAPER = [
         ("d", WHOLE, "Q8D", r'''mistakes={"n'oublie pas les biais des deux couches denses": 2 * 512 * 2048,
           "vérifie la taille du biais de la seconde couche": 2 * 512 * 2048 + 2 * 2048,
           "vérifie la taille du biais de la première couche": 2 * 512 * 2048 + 2 * 512,
-          "le MLP a deux couches denses": 512 * 2048 + 2048}'''),
+          "le MLP a deux couches denses": 512 * 2048 + 2048,
+          "n'oublie pas le biais de la seconde couche dense": 2 * 512 * 2048 + 2048,
+          "n'oublie pas le biais de la première couche dense": 2 * 512 * 2048 + 512}'''),
         ("e", TF, "False", r'''mistakes={"relis le rôle de la connexion résiduelle (§203.6 et le rappel R3)": True}'''),
     ]),
     Paper("B3.Q9", "BERT, GPT, T5 : quel masque, quel objectif, quel usage ?", [
@@ -333,7 +335,8 @@ PAPER = [
           "on demande les positions choisies, pas les autres": 170}'''),
         ("c", WHOLE, "30 * 80 // 100", r'''mistakes={"relis la question : on demande celles qui deviennent [MASK]": 30,
           "relis la question : parmi les positions choisies seulement": 160,
-          "relis la proportion des positions choisies qui deviennent [MASK] (§203.7)": 3}'''),
+          "relis la proportion des positions choisies qui deviennent [MASK] (§203.7)": 3,
+          "relis les trois sorts d'une position choisie (§203.7) : un token tiré au hasard est-il un [MASK] ?": 27}'''),
         ("d", TF, "True", r'''mistakes={"relis le paragraphe sur le décodeur (§203.7) : que permet le prompt ?": False}'''),
         ("e", LETTER, '"B"', letters("B", {"A": "relis la ligne « Sortie typique » du tableau des familles",
                                            "C": "relis la ligne « Sortie typique » du tableau des familles : que produit cette famille ?"})),
@@ -370,7 +373,8 @@ PAPER = [
         ("c", LETTER, '"C"', letters("C", {"A": "FlashAttention change-t-il le modèle ?",
                                            "B": "relis le résultat de FlashAttention : que devient le nombre de FLOPs ?"})),
         ("d", WHOLE, "12 * 768", r'''mistakes={"le seuil n'est pas T = d : relis le rapport des deux coûts (§203.10)": 768,
-          "relis la question : un décodeur causal, où une requête voit en moyenne la moitié des clés": 24 * 768}'''),
+          "relis la question : dans un décodeur causal, une requête voit-elle toutes les clés ?": 6 * 768,
+          "compte les deux produits de l'attention : les scores, puis la somme pondérée des valeurs": 24 * 768}'''),
         ("e", TF, "True", r'''mistakes={"relis l'exemple de la fiche pour d = 4 096 (§203.10)": False}'''),
     ]),
     Paper("B3.R1", "De quoi dépend le nombre de tokens d'un texte ?", [
@@ -421,7 +425,7 @@ PAPER = [
           "la softmax porte sur les clés (chaque ligne), pas sur les requêtes": (A_COLUMNS_B31[2] @ V_B31).tolist()}'''),
         ("e", DEC3, "A_NOSCALE_B31[2, 2]", r'''decimals=3, mistakes={"relis la question : ici, sans la division par √d_k": A_B31[2, 2],
           "la softmax porte sur les clés (chaque ligne), pas sur les requêtes": softmax_rows(RAW_B31.T).T[2, 2]}'''),
-        ("f", TF, "True", r'''mistakes={"compare les scores des clés 1 et 2 pour la requête 0": False}'''),
+        ("f", TF, "False", r'''mistakes={"compare les scores des clés 1 et 2 pour la requête 0": True}'''),
         ("g", DEC3, "float(A_B31[:, 0].sum())", r'''decimals=3, mistakes={"relis la question : on additionne la colonne 0, sur les trois requêtes": 1.0,
           "relis la définition de s_ij : la division par √d_k": float(A_NOSCALE_B31[:, 0].sum())}'''),
     ]),
@@ -527,7 +531,9 @@ PAPER = [
         ("j", WHOLE, 'MINI_B35["total"]', r'''mistakes={"relis la question : on demande tous les paramètres, tables comprises": MINI_B35["non_embedding"],
           "relis l'énoncé : la couche de sortie est liée": gpt_params(4, 128, 88, 128, tied=False)["total"],
           "n'oublie pas la table des positions": MINI_B35["total"] - MINI_B35["wpe"],
-          "relis la question : le compte exact, tables comprises": 4 * 12 * 128 ** 2}'''),
+          "relis la question : le compte exact, tables comprises": 4 * 12 * 128 ** 2,
+          "relis la question : les tables d'embedding et la layer norm finale comptent aussi": MINI_B35["blocks"],
+          "n'oublie pas la layer norm finale": MINI_B35["total"] - MINI_B35["ln_f"]}'''),
     ]),
 ]
 for _p in PAPER:
@@ -605,8 +611,8 @@ def objectives_cell() -> list:
                "la softmax sur les clés, $M_{ij} = -\\infty$ là où le masque vaut `False`. Masque causal : la requête "
                "$i$ voit les clés $j \\le i + S - L$. Multi-têtes : $(N, T, d) \\to (N, H, T, d_h)$, $4d^2 + 4d$ "
                "paramètres. Encodage sinusoïdal : $PE_{p, 2i} = \\sin(p\\,\\omega_i)$, $PE_{p, 2i+1} = "
-               "\\cos(p\\,\\omega_i)$, $\\omega_i = 10000^{-2i/d}$. RoPE : $\\langle R_m \\mathbf{q}, R_n \\mathbf{k} "
-               "\\rangle = \\langle \\mathbf{q}, R_{n-m} \\mathbf{k} \\rangle$. Bloc pré-LN : $\\mathbf{h} = \\mathbf{x} + "
+               "\\cos(p\\,\\omega_i)$, $\\omega_i = 10000^{-2i/d}$. RoPE : $\\langle R_{m\\theta} \\mathbf{q}, R_{n\\theta} \\mathbf{k} "
+               "\\rangle = \\langle \\mathbf{q}, R_{(n-m)\\theta} \\mathbf{k} \\rangle$. Bloc pré-LN : $\\mathbf{h} = \\mathbf{x} + "
                "\\operatorname{MHA}(\\operatorname{LN}_1(\\mathbf{x}))$, $\\mathbf{y} = \\mathbf{h} + "
                "\\operatorname{MLP}(\\operatorname{LN}_2(\\mathbf{h}))$, environ $12d^2$ paramètres. Entraînement : "
                "environ $6ND$ FLOPs ; KV cache : $2 \\times L \\times T \\times d \\times$ octets par valeur.")]

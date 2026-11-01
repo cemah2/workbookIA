@@ -53923,10 +53923,10 @@
       "source": "chapitres/b3_transformers/05_solutions.ipynb"
     },
     "B3.1f": {
-      "hash": "fa10c6936b33a99d1730fc7af22d74ab69f222ae478bc9bf5a18274b7a59675e",
+      "hash": "c52a30d70a755133613643ecb52200865a9206ddbcfe5b8e9284da352d452526",
       "kind": "bool",
       "mistakes": {
-        "c52a30d70a755133613643ecb52200865a9206ddbcfe5b8e9284da352d452526": "compare les scores des clés 1 et 2 pour la requête 0"
+        "fa10c6936b33a99d1730fc7af22d74ab69f222ae478bc9bf5a18274b7a59675e": "compare les scores des clés 1 et 2 pour la requête 0"
       },
       "source": "chapitres/b3_transformers/05_solutions.ipynb"
     },
@@ -54387,8 +54387,10 @@
       "magnitude": 5,
       "mistakes": {
         "25e93709364c9449823e7bfc6da4436750d9a43bad3ef178cd8d304a7cbf605e": "relis l'énoncé : la couche de sortie est liée",
+        "4240d8b3fe9f4cd7979679c7be0d316ae25a806252d99bdea186337c5c1aafd4": "n'oublie pas la layer norm finale",
         "7506d3e5a723f5713d56cbb13d9bf8353bfd2f82c6753a01fb4fac77da2a20f0": "n'oublie pas la table des positions",
         "a9d540f82e2589000decbe83cd3c59b4a8a79a4e4764a83c1d80fa6b165d1c8f": "relis la question : on demande tous les paramètres, tables comprises",
+        "b06a6bf9b3ff37f5a084580abee1dfab2cfa6437b6a77a098e292ef104651a5f": "relis la question : les tables d'embedding et la layer norm finale comptent aussi",
         "ee2c5d523f82e036f2ab869ba2a0ab43ec6d768beb1fca56e17401c1f1c936c6": "relis la question : le compte exact, tables comprises"
       },
       "sign": 1,
@@ -54764,7 +54766,9 @@
         "0d20a04960c8ce5e021c6f42694bee25acecf62213923017e1a123cd0d40fa95": "n'oublie pas les biais des deux couches denses",
         "38dc6b8138f5aa86842b72916573851125682f9bfe70f4de0397515734c51a1f": "vérifie la taille du biais de la seconde couche",
         "7f52d9103a834b86b8c3edbb1968c20316ce447cc2f80a880f12daaf64aabaa0": "le MLP a deux couches denses",
-        "a8539f7e012959a819840a57c0dee6555ddbbdb29bd93e1ed758517abb8b8e58": "vérifie la taille du biais de la première couche"
+        "89ac926e5b553fd5ebfeb4dc55366726923ccde0149b6eb299d95fce59f9c24f": "n'oublie pas le biais de la seconde couche dense",
+        "a8539f7e012959a819840a57c0dee6555ddbbdb29bd93e1ed758517abb8b8e58": "vérifie la taille du biais de la première couche",
+        "b3b42e3df184777591be9f61006d6c92af07d2d12ce6dd5b81e3a6033fea2a60": "n'oublie pas le biais de la première couche dense"
       },
       "sign": 1,
       "source": "chapitres/b3_transformers/05_solutions.ipynb"
@@ -54805,6 +54809,7 @@
       "mistakes": {
         "07423332eb6c92b48e0a3902b3d63b7a84069988c53d8dfc057c04dde7eb3784": "relis la question : on demande celles qui deviennent [MASK]",
         "0bdcf7a499c338402e2f3ec9d275c153857837dc7959ef55e3eb190579175971": "relis la proportion des positions choisies qui deviennent [MASK] (§203.7)",
+        "5bb352d8a47c2ba46922ddaf7143a321c02d323abde0eac7371f8068a9b9963a": "relis les trois sorts d'une position choisie (§203.7) : un token tiré au hasard est-il un [MASK] ?",
         "b77412b77eabcea76135c64237c2da8537e048790d1044ab5660b4a3bd36c038": "relis la question : parmi les positions choisies seulement"
       },
       "sign": 1,
@@ -54962,7 +54967,8 @@
       "magnitude": 3,
       "mistakes": {
         "0892cf1bd2049698d8423b7c8166767efe184837094b810c0082e9fac5f0d3c3": "le seuil n'est pas T = d : relis le rapport des deux coûts (§203.10)",
-        "a15aa42b15edf6dc8c6e0433db6fe68f0bd8d14d62d7896a8eacfc4c16cd1d56": "relis la question : un décodeur causal, où une requête voit en moyenne la moitié des clés"
+        "8adbf8e075c014e03fd979a0bca9a40049ef1a89b11412c8d8f4174870409464": "relis la question : dans un décodeur causal, une requête voit-elle toutes les clés ?",
+        "a15aa42b15edf6dc8c6e0433db6fe68f0bd8d14d62d7896a8eacfc4c16cd1d56": "compte les deux produits de l'attention : les scores, puis la somme pondérée des valeurs"
       },
       "sign": 1,
       "source": "chapitres/b3_transformers/05_solutions.ipynb"

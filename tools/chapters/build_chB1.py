@@ -160,7 +160,7 @@ exec(PAPER_CONTEXT)  # the builder computes a few mistakes with the same helpers
 exec(LIBRARY_CHECKS)
 
 TF = "True or False"
-LETTER = 'the letter of your choice, e.g. "B"'
+LETTER = 'the letter of your choice, e.g. "E"'
 LETTERS = 'the letters, e.g. "AC"'
 WHOLE = "a whole number"
 NUMBER = "a number"
@@ -462,7 +462,7 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "copie de `06_mes_reponses.md`. Reporte ensuite chaque réponse courte ici : **la valeur** que tu as "
                "trouvée, pas l'expression Python, sinon tu ne vérifies rien. Un nombre : `42` ou `0.3` (en Python, "
                "le séparateur décimal est un **point** ; `0,3` sans guillemets serait un couple de deux nombres) ; "
-               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"B\"`) ; "
+               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"E\"`) ; "
                "plusieurs lettres : entre guillemets (`\"AC\"`) ; une forme de tenseur : entre guillemets "
                "(`\"(2, 3)\"`) ; un nom de classe : entre guillemets (`\"chat\"`). Arrondis comme l'énoncé le demande, "
                "et seulement à la fin du calcul. Les réponses pas encore remplies affichent ⏳. Les questions « dans "

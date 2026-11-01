@@ -2,7 +2,7 @@
 
 > Écris tes réponses dans **ta copie** `mon_travail/ch29_datasets/06_mes_reponses.md` (créée par `python tools/start_chapter.py 29`), jamais dans ce fichier : il est mis à jour par Claude.
 > Les réponses courtes des **quiz**, des **rappels** et des exercices ✏️ 29.1 et 29.2 se vérifient dans la **partie 0** du notebook (`wb.check`). Les questions marquées « dans ta copie », l'estimation 🧮 29.3, la réflexion (🗣️ ⚖️ 📄) et l'entretien se corrigent avec `05_solutions.md`. Indices : `04_indices.md`.
-> Formats de réponse : un nombre (`0.3` ou `"0,3"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"B"`), plusieurs lettres entre guillemets pour un choix multiple (`"AC"`).
+> Formats de réponse : un nombre (`0.3` ou `"0,3"`), `True` ou `False` pour un vrai ou faux, une lettre seule entre guillemets pour un choix (`"E"`), plusieurs lettres entre guillemets pour un choix multiple (`"AC"`).
 > Conventions du chapitre (fiche) : 1 Mo = $10^6$ octets, 1 Go = $10^9$ octets ; un `uint8` occupe 1 octet, un `float32` 4 octets ; $N$ exemples, $n_c$ de la classe $c$.
 
 **Sommaire** : [🧠 Quiz](#quiz) · [🔁 Rappels](#rappels) · [✏️ 🧮 Papier-crayon](#papier) · [🗣️ ⚖️ 📄 Réflexion](#reflexion) · [💼 Entretien](#entretien) · [Exercices du notebook](#notebook)

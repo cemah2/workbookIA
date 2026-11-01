@@ -1738,7 +1738,7 @@ TODO_23 = r'''def imagenet_agreement_23(model, reference, images, size=SIZE, bat
     its head, its weights and its mode."""
     raise NotImplementedError("imagenet_agreement_23")'''
 
-ANSWERS_23 = r'''# What you read in the table of the previous cell (the values, e.g. "B" and True)
+ANSWERS_23 = r'''# What you read in the table of the previous cell (the values: a letter between quotes, then True or False)
 kept19_23 = ...         # a) the agreement of MODEL_19 (whole network fine-tuned): "A" below 30 %, "B" from 30 to 70 %,
                         #    "C" above 70 %
 partial_more_23 = ...   # b) True or False: MODEL_17 (only layer4 and the head trained) keeps more ImageNet predictions

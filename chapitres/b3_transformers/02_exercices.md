@@ -22,7 +22,7 @@ a) Dans l'encodeur-décodeur récurrent de 2014 (sans attention), que reçoit le
 b) Vrai ou faux : la taille du vecteur de contexte $\mathbf{c}$ grandit avec la longueur de la phrase source.
 c) Avec l'attention de Bahdanau, on traduit une phrase source de 12 mots par une phrase de 9 mots. Combien de poids $\alpha_{ij}$ le décodeur calcule-t-il en tout ?
 d) À un pas $i$ fixé, les poids $\alpha_{ij}$ : (A) font 1 quand on les additionne sur les mots source $j$ ; (B) font 1 quand on les additionne sur les pas $i$ de la traduction ; (C) valent 0 ou 1, le décodeur choisissant un seul mot source.
-e) Vrai ou faux : Bahdanau et ses coauteurs apprennent l'alignement sans aucun alignement annoté, par rétropropagation.
+e) Vrai ou faux : pour entraîner l'attention de Bahdanau, des paires de phrases traduites suffisent, sans que personne n'indique quel mot traduit quel mot.
 
 ### B3.Q2 — Requête, clé, valeur : un dictionnaire où l'on cherche « à peu près » 🧠 ⏱️ 3 min
 *Fiche §203.2 · parcours R*
@@ -37,7 +37,7 @@ e) Pour **une** requête, la sortie de l'attention a la forme : (A) $(S,)$, un p
 *Fiche §203.2 · parcours R, M*
 
 a) Les composantes de $\mathbf{q}$ et de $\mathbf{k}$ sont indépendantes, centrées, de variance 1, et $d_k = 256$. Quel est l'écart-type du produit scalaire $\mathbf{q} \cdot \mathbf{k}$ ?
-b) Vrai ou faux : avec les mêmes hypothèses, après la division par $\sqrt{d_k}$, la variance des scores vaut 1 quelle que soit $d_k$.
+b) Vrai ou faux : avec les mêmes hypothèses, des scores divisés par $\sqrt{d_k}$ ont le même écart-type pour $d_k = 16$ que pour $d_k = 1\,024$.
 c) Une softmax **saturée** : (A) donne presque tout le poids au plus grand score, et ses dérivées sont presque nulles ; (B) donne des poids presque égaux à toutes les clés, quelle que soit la requête, et ses dérivées explosent ; (C) donne des poids négatifs aux plus petits scores.
 d) Si l'on divisait les scores par $d_k$ au lieu de $\sqrt{d_k}$, avec $d_k$ grand : (A) la softmax resterait la même, à un facteur près ; (B) la softmax saturerait encore plus vite ; (C) les poids seraient presque uniformes.
 e) Vrai ou faux : la division par $\sqrt{d_k}$ compense la taille des valeurs $\mathbf{v}_j$, qui grandit avec $d_v$.
@@ -82,8 +82,8 @@ e) RoPE, base 10 000, $d_h = 64$ : quel est l'angle de rotation de la paire $i =
 *Fiche §203.6*
 
 a) Un bloc **pré-LN** écrit sa sous-couche d'attention : (A) $\mathbf{h} = \operatorname{LN}\big(\mathbf{x} + \operatorname{MHA}(\mathbf{x})\big)$ ; (B) $\mathbf{h} = \operatorname{MHA}\big(\operatorname{LN}(\mathbf{x})\big)$ ; (C) $\mathbf{h} = \mathbf{x} + \operatorname{MHA}\big(\operatorname{LN}(\mathbf{x})\big)$.
-b) Vrai ou faux : dans un Transformer pré-LN, le chemin résiduel de l'entrée du premier bloc à la sortie du dernier ne traverse aucune layer norm.
-c) D'après Xiong et coll. (2020), à l'initialisation d'un Transformer post-LN : (A) les gradients des paramètres proches de la sortie sont grands, et il faut un warmup long ; (B) les gradients des paramètres proches de l'entrée explosent dès les premiers pas, et un gradient clipping à 1 suffit à stabiliser l'entraînement ; (C) les gradients sont bien répartis, et aucun warmup n'est nécessaire.
+b) Vrai ou faux : dans un Transformer pré-LN, ce qu'un bloc ajoute au flux résiduel arrive à la sortie du dernier bloc sans passer par aucune layer norm.
+c) D'après Xiong et coll. (2020), à l'initialisation d'un Transformer post-LN : (A) ce sont les couches les plus hautes, près de la sortie, qui reçoivent les plus forts gradients, d'où une montée lente du learning rate au début ; (B) les gradients des paramètres proches de l'entrée explosent dès les premiers pas, et un gradient clipping à 1 suffit à stabiliser l'entraînement ; (C) les gradients sont bien répartis, et aucun warmup n'est nécessaire.
 d) Combien de paramètres a le MLP d'un bloc avec $d = 512$, $F = 2\,048$ et des biais ?
 e) Vrai ou faux : sans connexions résiduelles, un Transformer de 12 blocs s'entraîne aussi bien, grâce à ses layer norms.
 
@@ -110,7 +110,7 @@ e) Quelle loss attends-tu au tout premier pas pour un modèle de caractères à 
 
 a) Le KV cache garde, pour chaque couche : (A) les requêtes et les clés des tokens déjà vus ; (B) les clés et les valeurs des tokens déjà vus ; (C) les logits des tokens déjà générés.
 b) Avec un KV cache, combien de nouvelles requêtes calcule-t-on, par tête et par couche, pour chaque token généré ?
-c) Vrai ou faux : à graine égale, générer avec un KV cache donne d'autres tokens que sans cache.
+c) Vrai ou faux : à graine égale, et aux arrondis de calcul près, générer avec un KV cache donne d'autres tokens que sans cache.
 d) La mémoire du cache d'une séquence est : (A) proportionnelle au nombre de tokens déjà vus ; (B) constante ; (C) proportionnelle au carré du nombre de tokens, comme la matrice des poids d'attention.
 e) Combien d'octets occupe le cache d'un modèle de 2 couches, $d = 64$, après 100 tokens, en float32 ?
 
@@ -118,7 +118,7 @@ e) Combien d'octets occupe le cache d'un modèle de 2 couches, $d = 64$, après 
 *Fiche §203.10*
 
 a) Multiplier par 8 la longueur du contexte multiplie la mémoire de la matrice des poids d'attention (implémentation directe) par combien ?
-b) Vrai ou faux : FlashAttention calcule une approximation de l'attention, au prix d'une petite erreur.
+b) Vrai ou faux : FlashAttention se trompe un peu : ses sorties s'écartent de celles de l'attention directe de quelques pour cent, un prix accepté pour la vitesse.
 c) FlashAttention réduit : (A) le nombre de paramètres ; (B) le nombre de FLOPs, qui devient linéaire en $T$ ; (C) la mémoire et les lectures-écritures, pas les FLOPs.
 d) Dans un décodeur causal de dimension $d = 768$, à partir de combien de tokens de contexte l'attention d'une couche coûte-t-elle autant que ses couches denses ?
 e) Vrai ou faux : avec $d = 4\,096$ et un contexte de 100 000 tokens, l'attention fait la plus grande part du calcul d'une couche.
@@ -134,7 +134,7 @@ a) Vrai ou faux : un même texte compte le même nombre de tokens, quel que soit
 b) Un texte de 4 000 octets, avec un tokenizer qui compresse à 3,2 octets par token : combien de tokens ?
 c) Pour un même texte, augmenter la taille du vocabulaire d'un BPE (plus de fusions) : (A) augmente le nombre de tokens ; (B) ne le change pas ; (C) le diminue.
 d) Vrai ou faux : avec le tokenizer de GPT-2, un texte français donne en général plus de tokens que sa traduction anglaise.
-e) Un mini-GPT a un contexte de 128 positions. Quelle version couvre le plus de texte ? (A) 128 caractères ; (B) 128 tokens BPE ; (C) les deux couvrent autant.
+e) Un mini-GPT a un contexte de 128 positions. Quelle version couvre le plus de texte, en moyenne ? (A) 128 caractères ; (B) 128 tokens BPE ; (C) les deux couvrent autant.
 
 ### B3.R2 — Ch. 22 : pourquoi le gradient s'évanouit dans un RNN déroulé 🔁 ★ ⏱️ 5 min
 *Ch. 22 (rétropropagation dans le temps, gradient évanescent, LSTM) · fiche §203.1 · parcours R*
@@ -175,7 +175,7 @@ b) Le score $s_{2,1}$.
 c) Le poids $\alpha_{2,1}$.
 d) La sortie $\mathbf{o}_2$, en liste.
 e) Le poids $\alpha_{2,2}$ que l'on obtiendrait **sans** la division par $\sqrt{d_k}$.
-f) Vrai ou faux : $\alpha_{0,1} = \alpha_{0,2}$.
+f) Vrai ou faux : $\alpha_{0,1} > \alpha_{0,2}$.
 g) La somme $\alpha_{0,0} + \alpha_{1,0} + \alpha_{2,0}$ de la colonne 0 de la carte d'attention.
 
 Dans ta copie : écris $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$, la matrice des scores $3 \times 3$ et la carte d'attention entière, et vérifie que chaque ligne fait 1. Que devient la ligne 2 de la carte si l'on multiplie $\mathbf{W}_Q$ par 10 ?
@@ -205,7 +205,7 @@ Une attention multi-têtes de dimension $d = 384$ à $H = 6$ têtes, avec des bi
 
 a) La forme de $\mathbf{Q} = \mathbf{X}\mathbf{W}_Q + \mathbf{b}_Q$.
 b) La forme de $\mathbf{Q}$ après `split_heads`.
-c) La forme des poids d'attention rendus par `multi_head_attention` (le second résultat).
+c) La forme des poids d'attention rendus par `multi_head_attention` (le second résultat ; relis sa docstring).
 d) Le nombre total de scores $\mathbf{q} \cdot \mathbf{k}$ calculés pour ce batch, toutes têtes comprises.
 e) Le nombre de paramètres de cette attention multi-têtes.
 f) Vrai ou faux : avec $H = 12$ têtes au lieu de 6, le nombre de paramètres est le même.
@@ -233,7 +233,7 @@ f) $PE_{p+10, 3}$.
 g) Le produit scalaire $PE_0 \cdot PE_2$ des encodages des positions 0 et 2 (les 8 colonnes).
 h) Vrai ou faux : $PE_{100} \cdot PE_{102} = PE_0 \cdot PE_2$.
 
-Dans ta copie : vérifie que $e^2 + f^2 = 1$ et dis pourquoi c'était attendu. Que vaut $p$ ? Pourquoi les colonnes 6 et 7 ne distinguent-elles presque pas les positions 0 à 100 ?
+Dans ta copie : vérifie que $e^2 + f^2 = 1$ et dis pourquoi c'était attendu. Que vaut la plus petite valeur positive de $p$ ? Pourquoi les colonnes 6 et 7 ne distinguent-elles presque pas les positions 0 à 100 ?
 
 ### Ex B3.5 — Compter les paramètres d'un GPT et retrouver les 124 millions de GPT-2 small ✏️ ★★ ⏱️ 25 min
 **Objectif :** compter les paramètres d'un GPT bloc par bloc, retrouver le compte exact de GPT-2 small et celui du mini-GPT du notebook.
@@ -266,7 +266,7 @@ Hypothèses : $\mathbf{q} = (q_1, \dots, q_{d_k})$ et $\mathbf{k} = (k_1, \dots,
 2. Les $d_k$ produits $q_c k_c$ sont indépendants entre eux (on l'admet : ce sont des fonctions de couples indépendants). Montre que $\mathbb{E}[\mathbf{q} \cdot \mathbf{k}] = 0$ et $\operatorname{Var}(\mathbf{q} \cdot \mathbf{k}) = d_k$, puis que $\mathbf{q} \cdot \mathbf{k} / \sqrt{d_k}$ a une variance 1.
 3. Les composantes de $\mathbf{q}$ ont maintenant une variance $\sigma_q^2$ et celles de $\mathbf{k}$ une variance $\sigma_k^2$ (toujours centrées). Que vaut $\operatorname{Var}(\mathbf{q} \cdot \mathbf{k})$ ? Par quoi faudrait-il diviser pour revenir à une variance 1 ?
 4. Les composantes sont maintenant de moyenne $\mu \ne 0$ et de variance 1. Montre que $\mathbb{E}[\mathbf{q} \cdot \mathbf{k}] = d_k \mu^2$ et que $\operatorname{Var}(q_c k_c) = 1 + 2\mu^2$. Un même décalage ajouté à tous les scores d'une ligne change-t-il les poids de la softmax (ch. 17) ? Qu'est-ce qui compte alors pour la saturation ?
-5. **La saturation, chiffrée.** Une requête et deux clés, de scores $(s, 0)$. Montre que le poids de la première clé vaut $p = \sigma(s) = 1/(1 + e^{-s})$, et que $\partial p / \partial s = p(1 - p)$. Calcule $p$ et $p(1 - p)$ pour $s = 8$ (un écart-type de score pour $d_k = 64$, sans la division) et pour $s = 1$ (le même écart après la division par $\sqrt{64}$). Par combien le gradient est-il multiplié ?
+5. **La saturation, chiffrée.** Une requête et deux clés, de scores $(s, 0)$. Montre que le poids de la première clé vaut $p = \sigma(s) = 1/(1 + e^{-s})$, et que $\partial p / \partial s = p(1 - p)$. Calcule $p$ et $p(1 - p)$ pour $s = 8$ (un écart-type de score pour $d_k = 64$, sans la division) et pour $s = 1$ (le même écart après la division par $\sqrt{64}$). Par combien la dérivée $\partial p / \partial s$ est-elle multipliée quand on passe de $s = 8$ à $s = 1$ ?
 6. Si l'on divisait par $d_k$ au lieu de $\sqrt{d_k}$, que vaudrait l'écart-type des scores pour $d_k = 64$ ? Calcule $p$ pour un écart de scores égal à cet écart-type, et dis ce que deviendrait l'attention.
 7. Un modèle qui apprend $\mathbf{W}_Q$ pourrait réduire lui-même l'échelle de ses scores. Pourquoi fixer quand même $1/\sqrt{d_k}$ dès le départ ?
 
@@ -274,17 +274,17 @@ Hypothèses : $\mathbf{q} = (q_1, \dots, q_{d_k})$ et $\mathbf{k} = (k_1, \dots,
 **Objectif :** démontrer la propriété de RoPE en dimension 2, puis en dimension $d_h$, et la comparer à l'encodage additif.
 **Prérequis :** Ex B3.4 · fiche §203.5 (RoPE, encadré 🧮 sur la rotation d'un vecteur du plan) · **Parcours :** M
 
-On note $R_\varphi$ la matrice de rotation d'angle $\varphi$ de la fiche, et, pour RoPE en dimension 2 avec la fréquence $\theta$, $R_m = R_{m\theta}$ la rotation de la position $m$. Les vecteurs s'écrivent en colonne.
+On note $R_\varphi$ la matrice de rotation d'angle $\varphi$ de la fiche, et, pour RoPE en dimension 2 avec la fréquence $\theta$, $R_{m\theta}$ la rotation de la position $m$ : l'indice est toujours un **angle** ($R_{(n-m)\theta}$ tourne de $(n - m)\,\theta$ radians). Les vecteurs s'écrivent en colonne.
 
 > 🧮 **Rappel maths — produit scalaire et transposée d'un produit** — Pour deux vecteurs colonnes, $\langle \mathbf{a}, \mathbf{b} \rangle = \mathbf{a}^\top \mathbf{b}$. La transposée d'un produit inverse l'ordre : $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top$, donc $(\mathbf{A}\mathbf{x})^\top = \mathbf{x}^\top \mathbf{A}^\top$. Exemple : $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 0 & 1 \end{pmatrix}$, $\mathbf{x} = (1, 1)^\top$ : $\mathbf{A}\mathbf{x} = (3, 1)^\top$, et $\mathbf{x}^\top \mathbf{A}^\top = (1, 1) \begin{pmatrix} 1 & 0 \\ 2 & 1 \end{pmatrix} = (3, 1)$.
 
 Réponds dans ta copie.
 
-1. Montre que $\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle = \mathbf{q}^\top R_m^\top R_n \mathbf{k}$, puis, avec les propriétés de l'encadré de la fiche, que $\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle = \langle \mathbf{q}, R_{n-m} \mathbf{k} \rangle$.
+1. Montre que $\langle R_{m\theta} \mathbf{q}, R_{n\theta} \mathbf{k} \rangle = \mathbf{q}^\top R_{m\theta}^\top R_{n\theta} \mathbf{k}$, puis, avec les propriétés de l'encadré de la fiche, que $\langle R_{m\theta} \mathbf{q}, R_{n\theta} \mathbf{k} \rangle = \langle \mathbf{q}, R_{(n-m)\theta} \mathbf{k} \rangle$.
 2. Développe : montre que $\langle \mathbf{q}, R_\varphi \mathbf{k} \rangle = (\mathbf{q} \cdot \mathbf{k}) \cos\varphi + (q_2 k_1 - q_1 k_2) \sin\varphi$. Vérifie ta formule sur l'exemple de la fiche ($\mathbf{q} = (1, 2)$, $\mathbf{k} = (3, -1)$, $\theta = 0{,}5$ : écarts $+3$ et $-3$).
-3. **Application.** $\theta = \pi/6$, $\mathbf{q} = (2, 1)$, $\mathbf{k} = (1, 1)$. Calcule le score $\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle$ pour $(m, n) = (0, 0)$, $(5, 2)$, $(1, 4)$ et $(7, 10)$. Que remarques-tu ?
-4. En dimension $d_h$, RoPE tourne chaque paire $i$ d'un angle $m\,\theta_i$ : la matrice de la position $m$ est **diagonale par blocs**, un bloc $R_{m\theta_i}$ de taille $2 \times 2$ par paire. Montre que la propriété de la question 1 reste vraie, chaque paire ayant sa propre fréquence.
-5. Montre que $\lVert R_m \mathbf{q} \rVert = \lVert \mathbf{q} \rVert$ pour tout $d_h$. Pourquoi est-ce une bonne nouvelle pour la mise à l'échelle de ∂ B3.6 ?
+3. **Application.** $\theta = \pi/6$, $\mathbf{q} = (2, 1)$, $\mathbf{k} = (1, 1)$. Calcule le score $\langle R_{m\theta} \mathbf{q}, R_{n\theta} \mathbf{k} \rangle$ pour $(m, n) = (0, 0)$, $(5, 2)$, $(1, 4)$ et $(7, 10)$. Que remarques-tu ?
+4. En dimension $d_h$, RoPE tourne chaque paire $i$ d'un angle $m\,\theta_i$ : la matrice de la position $m$ est **diagonale par blocs**, un bloc $R_{m\theta_i}$ de taille $2 \times 2$ par paire (paires voisines ; avec la convention « rotate half » de ta `apply_rope`, à une permutation des coordonnées près). Montre que la propriété de la question 1 reste vraie, chaque paire ayant sa propre fréquence.
+5. Montre que $\lVert R_{m\theta} \mathbf{q} \rVert = \lVert \mathbf{q} \rVert$ pour tout $d_h$. Pourquoi est-ce une bonne nouvelle pour la mise à l'échelle de ∂ B3.6 ?
 6. **Comparaison.** Avec l'encodage additif, la requête et la clé viennent de $\mathbf{x}_m + \mathbf{p}_m$ et $\mathbf{x}_n + \mathbf{p}_n$ ($\mathbf{p}$ sinusoïdal, sans projection pour simplifier). Développe $(\mathbf{x}_m + \mathbf{p}_m) \cdot (\mathbf{x}_n + \mathbf{p}_n)$ en quatre termes. Lesquels dépendent de $m$ et $n$ séparément, et lequel seulement de $n - m$ ?
 7. **KV cache.** Avec RoPE, on tourne chaque clé selon sa position **avant** de la ranger dans le cache. Montre, avec la question 1, que cette clé tournée reste juste pour toutes les requêtes qui viendront ensuite, quelle que soit leur position.
 
@@ -295,7 +295,7 @@ Réponds dans ta copie.
 Hypothèses de calcul (des ordres de grandeur, pas des mesures) :
 - **ton mini-GPT** : le nombre de paramètres $N$ de ✏️ B3.5 j) ; 4 blocs, $d = 128$, contexte $T = 128$ ; en mode rapide, 600 itérations de 32 séquences de 128 tokens ; en mode complet, 5 000 itérations ; ton processeur soutient environ $10^{11}$ FLOP/s en float32 ;
 - **GPT-3** (Brown et coll., 2020, tableau 2.1) : 175 milliards de paramètres, 96 couches, $d = 12\,288$, contexte de 2 048 tokens, entraîné sur 300 milliards de tokens ; on suppose des GPU qui soutiennent chacun $3 \times 10^{13}$ FLOP/s ;
-- **Qwen3-8B** (`config.json` du Hub) : 36 couches, 8 têtes de clés et de valeurs de taille 128 (GQA), valeurs en bfloat16 (2 octets) ; ses poids occupent environ 16 Go ;
+- **Qwen3-8B** (`config.json` du Hub) : 36 couches, 8 têtes de clés et de valeurs de taille 128 (GQA), valeurs en bfloat16 (2 octets) ; ses poids occupent environ 16 Go (dans tout l'exercice, 1 Go = $10^9$ octets : le GPU de la question 6 a $24 \times 10^9$ octets) ;
 - on néglige le terme de l'attention dans $6ND$, sauf à la question 2.
 
 Réponds dans ta copie, avec des puissances de 10.

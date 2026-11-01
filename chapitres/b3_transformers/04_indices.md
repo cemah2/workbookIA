@@ -403,12 +403,12 @@ Relis « RoPE : tourner les requêtes et les clés » et l'encadré 🧮 sur la 
 </details>
 <details><summary>Indice 2</summary>
 
-Pour 1 : $\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle = (R_m\mathbf{q})^\top (R_n \mathbf{k})$, puis $R_m^\top = R_{-m}$ et $R_{-m} R_n = R_{n-m}$ (des angles qui s'additionnent). Pour 2, écris $R_\varphi \mathbf{k}$ composante par composante. Pour 4, un produit scalaire en dimension $d_h$ est la somme des produits scalaires de ses paires. Pour 6, développe comme $(a + b)(c + d)$.
+Pour 1 : $\langle R_{m\theta} \mathbf{q}, R_{n\theta} \mathbf{k} \rangle = (R_{m\theta}\mathbf{q})^\top (R_{n\theta} \mathbf{k})$, puis $R_{m\theta}^\top = R_{-m\theta}$ et $R_{-m\theta} R_{n\theta} = R_{(n-m)\theta}$ (des angles qui s'additionnent). Pour 2, écris $R_\varphi \mathbf{k}$ composante par composante. Pour 4, un produit scalaire en dimension $d_h$ est la somme des produits scalaires de ses paires. Pour 6, développe comme $(a + b)(c + d)$.
 
 </details>
 <details><summary>Indice 3</summary>
 
-1. $(R_m\mathbf{q})^\top (R_n\mathbf{k}) = \mathbf{q}^\top R_m^\top R_n \mathbf{k} = \mathbf{q}^\top R_{-m} R_n \mathbf{k} = \mathbf{q}^\top R_{n-m}\mathbf{k} = \langle \mathbf{q}, R_{n-m}\mathbf{k}\rangle$. Pour 2, $R_\varphi\mathbf{k} = (k_1\cos\varphi - k_2\sin\varphi ;\ k_1\sin\varphi + k_2\cos\varphi)$ : fais le produit scalaire avec $\mathbf{q}$ et regroupe les termes en $\cos\varphi$ et en $\sin\varphi$. Pour 3, calcule $\mathbf{q} \cdot \mathbf{k}$ et $q_2 k_1 - q_1 k_2$, puis l'angle $\varphi = (n - m)\,\pi/6$ de chaque couple. Pour 4, applique 1 à chaque bloc et additionne. Pour 5, utilise $\lVert \mathbf{x} \rVert^2 = \mathbf{x}^\top\mathbf{x}$ et $R^\top R = \mathbf{I}$, bloc par bloc. Pour 6, écris les quatre produits et regarde de quelles positions dépend chacun. Pour 7, de quoi dépend la clé rangée $R_n \mathbf{k}$ ?
+1. $(R_{m\theta}\mathbf{q})^\top (R_{n\theta}\mathbf{k}) = \mathbf{q}^\top R_{m\theta}^\top R_{n\theta} \mathbf{k} = \mathbf{q}^\top R_{-m\theta} R_{n\theta} \mathbf{k} = \mathbf{q}^\top R_{(n-m)\theta}\mathbf{k} = \langle \mathbf{q}, R_{(n-m)\theta}\mathbf{k}\rangle$. Pour 2, $R_\varphi\mathbf{k} = (k_1\cos\varphi - k_2\sin\varphi ;\ k_1\sin\varphi + k_2\cos\varphi)$ : fais le produit scalaire avec $\mathbf{q}$ et regroupe les termes en $\cos\varphi$ et en $\sin\varphi$. Pour 3, calcule $\mathbf{q} \cdot \mathbf{k}$ et $q_2 k_1 - q_1 k_2$, puis l'angle $\varphi = (n - m)\,\pi/6$ de chaque couple. Pour 4, applique 1 à chaque bloc et additionne. Pour 5, utilise $\lVert \mathbf{x} \rVert^2 = \mathbf{x}^\top\mathbf{x}$ et $R^\top R = \mathbf{I}$, bloc par bloc. Pour 6, écris les quatre produits et regarde de quelles positions dépend chacun. Pour 7, de quoi dépend la clé rangée $R_{n\theta} \mathbf{k}$ ?
 
 </details>
 

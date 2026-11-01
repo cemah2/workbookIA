@@ -400,9 +400,9 @@ J. Su, Y. Lu, S. Pan, A. Murtadha, B. Wen et Y. Liu (« RoFormer: Enhanced Trans
 > $$R_\theta = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}.$$
 > Exemple : $(1, 0)$ tourné de $90°$ ($\theta = \pi/2$) donne $(0, 1)$. Trois propriétés suffisent pour ce chapitre : tourner de $\alpha$ puis de $\beta$, c'est tourner de $\alpha + \beta$, soit $R_\beta R_\alpha = R_{\alpha + \beta}$ (formules d'addition) ; la transposée défait la rotation, $R_\theta^\top = R_{-\theta}$ ; et une rotation garde les longueurs, $\lVert R_\theta \mathbf{x}\rVert = \lVert \mathbf{x} \rVert$ (car $\cos^2 + \sin^2 = 1$). La matrice de l'encodage sinusoïdal ci-dessus est $R_{-k\omega_i}$, écrite pour le vecteur (sin, cos).
 
-On découpe les $d_h$ coordonnées d'une requête ou d'une clé en $d_h / 2$ **paires**, et l'on tourne la paire $i$ d'un angle $p\,\theta_i$, où $p$ est la position du token et $\theta_i = \text{base}^{-2i/d_h}$ (base 10 000 dans RoFormer et Llama 2 ; 500 000 dans Llama 3, 1 000 000 dans Qwen3) : les mêmes fréquences que l'encodage sinusoïdal. La propriété qui compte relie la rotation $R_m$ (position $m$) et la rotation $R_n$ (position $n$), appliquées paire par paire :
+On découpe les $d_h$ coordonnées d'une requête ou d'une clé en $d_h / 2$ **paires**, et l'on tourne la paire $i$ d'un angle $p\,\theta_i$, où $p$ est la position du token et $\theta_i = \text{base}^{-2i/d_h}$ (base 10 000 dans RoFormer et Llama 2 ; 500 000 dans Llama 3, 1 000 000 dans Qwen3) : les mêmes fréquences que l'encodage sinusoïdal. On note $R_{m\theta}$ la rotation de la position $m$, qui tourne chaque paire $i$ de $m\,\theta_i$ (l'indice est un angle, comme dans $R_\theta$ ci-dessus). La propriété qui compte relie les rotations des positions $m$ et $n$ :
 
-$$\langle R_m \mathbf{q}, R_n \mathbf{k} \rangle = \langle \mathbf{q}, R_{n-m} \mathbf{k} \rangle.$$
+$$\langle R_{m\theta} \mathbf{q}, R_{n\theta} \mathbf{k} \rangle = \langle \mathbf{q}, R_{(n-m)\theta} \mathbf{k} \rangle.$$
 
 Le score d'une requête en position $m$ et d'une clé en position $n$ ne dépend que de leur **écart** $n - m$ (et de leurs contenus) : une position **relative**, obtenue avec une opération **absolue** (chaque vecteur tourné selon sa propre position, sans connaître l'autre). ∂ B3.7 te fait démontrer cette égalité.
 

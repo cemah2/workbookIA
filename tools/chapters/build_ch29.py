@@ -40,7 +40,7 @@ N_29_2 = sum(COUNTS_29_2.values())
 exec(PAPER_CONTEXT)  # the builder computes a few mistakes with the same constants
 
 TF = "True or False"
-LETTER = 'the letter of your choice, e.g. "B"'
+LETTER = 'the letter of your choice, e.g. "E"'
 LETTERS = 'the letters, e.g. "ABD"'
 WHOLE = "a whole number"
 DEC2 = "a number, 2 decimals"
@@ -179,7 +179,7 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "copie de `06_mes_reponses.md`. Reporte ensuite chaque réponse courte ici : **la valeur** que tu as "
                "trouvée, pas l'expression Python, sinon tu ne vérifies rien. Un nombre : `42` ou `0.3` (en Python, "
                "le séparateur décimal est un **point** ; `0,3` sans guillemets serait un couple de deux nombres) ; "
-               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"B\"`) ; "
+               "un vrai ou faux : `True` ou `False` ; un choix : la lettre seule, entre guillemets (`\"E\"`) ; "
                "plusieurs lettres : entre guillemets (`\"ABD\"`). Arrondis comme l'énoncé le demande, et seulement "
                "à la fin du calcul. Les réponses pas encore remplies affichent ⏳. Les questions « dans ta copie », "
                "l'estimation 🧮 29.3, la réflexion (🗣️ 29.4, ⚖️ 29.5, 📄 29.6) et l'entretien se corrigent avec "

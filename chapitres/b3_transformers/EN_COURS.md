@@ -10,7 +10,7 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
 | `flashcards.csv` | complet (28 cartes, session 67) |
 | `03_notebook.ipynb`, `05_solutions.ipynb` | partie 0 (session 67 : 117 vérifications `wb.check` sur 20 exercices, réponses recalculées contre `mylearn` (référence), PyTorch et transformers sur le device `meta`, sans téléchargement ; chaque message `mistakes` vérifié : sa valeur déclenche bien son message) ; parties A et B (B3.12 à B3.30) à la session 68 |
 | `mylearn` | `attention.py` : référence et tests (session 67 : `tests/test_chb3_attention.py`, 168 tests ; 49 mutants tués sur 61, les autres équivalents) |
-| contrat | `chB3.json` : seul le champ `check` des quiz Q1 à Q12 et des rappels R1 à R3 change (`manual` → `wb.check`, comme en B1 et B2) ; `syllabus.py build` reste à lancer (d'ici là, `test_generated_documents_are_up_to_date[docs/SYLLABUS.md]` échoue, c'est attendu) |
+| contrat | `chB3.json` : seul le champ `check` des quiz Q1 à Q12 et des rappels R1 à R3 change (`manual` → `wb.check`, comme en B1 et B2), et la formule de RoPE s'écrit avec des angles ($R_{m\theta}$, $R_{(n-m)\theta}$) comme dans la fiche ; `syllabus.py build` lancé en fin de session 67 |
 | annexes | glossaire (43 termes, ch. B3), formulaire (section B3, 13 lignes), erreurs fréquentes (15 lignes : 3 en Python et NumPy, 6 en PyTorch, 6 de raisonnement), auto-évaluation (section B3), aide-mémoire PyTorch (section « Attention et Transformers (bonus B3) », 15 lignes, convention inverse de `nn.MultiheadAttention` comprise) : session 67 |
 
 ## Pour la session 68
@@ -71,7 +71,7 @@ Notes pour le rédacteur des exercices (`02_exercices.md`, indices, solutions, p
 
 ### 1. Fichiers produits
 
-- `chapitres/b3_transformers/01_fiche.md` : 14 796 mots après relecture (`len(text.split())`), soit **120 min** à 125 mots/min (5 × round(118,4 / 5)), avec une marge d'environ 520 mots. L'en-tête dit « lecture de la fiche ≈ 2,0 h » et « ≈ 22 h » au total (valeurs du SYLLABUS). Les dix sections 203.x sont marquées ⏩ (bonus : tous les parcours lisent toute la fiche).
+- `chapitres/b3_transformers/01_fiche.md` : 14 812 mots après les relectures V2 et V3 (`len(text.split())`), soit **120 min** à 125 mots/min (5 × round(118,5 / 5)), avec une marge d'environ 500 mots. Relecture V3 : seule la notation de RoPE change en 203.5 ($R_{m\theta}$, $R_{(n-m)\theta}$ : l'indice est toujours un angle), comme dans les exercices, les indices, les solutions, la flashcard, le formulaire et le glossaire ; le contrat `chB3.json` garde $R_{n-m}$ dans sa liste de formules (à aligner avec `syllabus.py build`). L'en-tête dit « lecture de la fiche ≈ 2,0 h » et « ≈ 22 h » au total (valeurs du SYLLABUS). Les dix sections 203.x sont marquées ⏩ (bonus : tous les parcours lisent toute la fiche).
 - `tools/chapters/figures_chB3.py` → `figures/` (7 PNG, ≈ 5 s, sans réseau ni entraînement) : `goulot.png`, `qkv.png`, `masques.png`, `tetes.png`, `positions.png`, `bloc.png`, `cout.png`. Rien d'appris ni de mesuré : les poids de `goulot.png` sont marqués « illustratifs » ; `cout.png` est théorique (mémoire $32 T^2 \times 4$ octets ; part de l'attention $T / (T + 12d)$ pour $d$ = 512, 2 048, 8 192).
 - `tests/infra/test_terminology.py` et `tests/infra/test_syllabus.py` passent (48 tests) ; `syllabus.py check` : 0 problème. Tous les blocs de code de la fiche ont été rejoués d'un seul tenant (17 blocs) : les sorties en commentaire sont celles de l'exécution.
 
@@ -133,7 +133,7 @@ Le dépôt `meta-llama/Meta-Llama-3-8B` est à accès contrôlé (401) : copies 
 - Masques : `tril(4×4)`, padding `[3, 5]` sur 5, $L$ = 2 et $S$ = 5 (code), $L$ = 2 et $S$ = 6, longueurs 4 et 6 (figure). Les docstrings du stub publient déjà `causal_mask(3)`, `causal_mask(2, 4)`, `padding_mask([2, 3], 4)`.
 - MHA : `nn.MultiheadAttention(8, 2)` = 288 paramètres ; formule $4d^2 + 4d$ ; GQA 8 têtes de requêtes / 2 de clés.
 - Positions : $d$ = 16 (périodes, $PE_5 \cdot PE_9 = PE_{20} \cdot PE_{24} \approx 5{,}5597$, $PE_p \cdot PE_p = 8$) ; figure : 64 × 64 ; la matrice du décalage sur (sin, cos) est donnée en général. Le stub publie déjà `positional_encoding(3, 4)` et `apply_rope(np.ones((3, 4)))`.
-- RoPE 2D : θ = 0,5 rad, $\mathbf{q} = (1, 2)$, $\mathbf{k} = (3, -1)$, paires (0, 3), (4, 7), (10, 13) → 7,0532 ; (7, 4) → −6,9117. Le rappel 🧮 donne la matrice de rotation, $R_\beta R_\alpha = R_{\alpha+\beta}$, $R_\theta^\top = R_{-\theta}$ et la conservation des normes, **pas** l'assemblage $\langle R_m q, R_n k\rangle = q^\top R_m^\top R_n k$ (∂ B3.7).
+- RoPE 2D : θ = 0,5 rad, $\mathbf{q} = (1, 2)$, $\mathbf{k} = (3, -1)$, paires (0, 3), (4, 7), (10, 13) → 7,0532 ; (7, 4) → −6,9117. Le rappel 🧮 donne la matrice de rotation, $R_\beta R_\alpha = R_{\alpha+\beta}$, $R_\theta^\top = R_{-\theta}$ et la conservation des normes, **pas** l'assemblage $\langle R_{m\theta} q, R_{n\theta} k\rangle = q^\top R_{m\theta}^\top R_{n\theta} k$ (∂ B3.7).
 - Variance : le rappel 🧮 donne $\operatorname{Var}(XY) = \operatorname{Var}X \operatorname{Var}Y$ (centrées, indépendantes) avec l'exemple des ±1 ; la preuve complète de $\operatorname{Var}(\mathbf{q}\cdot\mathbf{k}) = d_k$ reste à ∂ B3.6.
 - Bloc : $d$ = 256, $F$ = 1 024 (789 760) ; GPT-2 medium complet (354 823 168).
 - Loss initiale : $\log 50\,257 \approx 10{,}825$ (pas $\log 88$ du mini-GPT, pour 📈 B3.21).

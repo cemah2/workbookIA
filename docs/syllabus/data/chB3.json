@@ -97,7 +97,7 @@
   "$\\operatorname{Var}(\\mathbf{q} \\cdot \\mathbf{k}) = d_k$ pour des composantes indépendantes, centrées, de variance 1",
   "$\\operatorname{MHA}(\\mathbf{X}) = \\operatorname{concat}(\\text{tête}_1, \\dots, \\text{tête}_H)\\,\\mathbf{W}_O$, $\\text{tête}_h = \\operatorname{Attention}(\\mathbf{X}\\mathbf{W}_Q^h, \\mathbf{X}\\mathbf{W}_K^h, \\mathbf{X}\\mathbf{W}_V^h)$",
   "$PE_{p, 2i} = \\sin\\left(p / 10000^{2i/d}\\right)$, $PE_{p, 2i+1} = \\cos\\left(p / 10000^{2i/d}\\right)$",
-  "RoPE : $\\langle R_m \\mathbf{q}, R_n \\mathbf{k} \\rangle = \\langle \\mathbf{q}, R_{n-m} \\mathbf{k} \\rangle$",
+  "RoPE : $\\langle R_{m\\theta} \\mathbf{q}, R_{n\\theta} \\mathbf{k} \\rangle = \\langle \\mathbf{q}, R_{(n-m)\\theta} \\mathbf{k} \\rangle$",
   "bloc pré-LN : $\\mathbf{h} = \\mathbf{x} + \\operatorname{MHA}(\\operatorname{LN}_1(\\mathbf{x}))$, $\\mathbf{y} = \\mathbf{h} + \\operatorname{MLP}(\\operatorname{LN}_2(\\mathbf{h}))$",
   "paramètres par bloc $\\approx 12\\,d^2$ (attention $4d^2$, MLP $8d^2$ avec $F = 4d$)",
   "FLOPs d'entraînement $\\approx 6\\,N\\,D$ ($N$ paramètres, $D$ tokens) ; KV cache $= 2 \\times L \\times T \\times d \\times$ octets par valeur",

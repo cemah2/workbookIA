@@ -4968,21 +4968,21 @@ L'attention permet à chaque position d'une séquence d'aller chercher directeme
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B3.Q1 | 🧠 | Le goulot de l'encodeur-décodeur récurrent : pourquoi un seul vecteur ne suffit pas | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q2 | 🧠 | Requête, clé, valeur : un dictionnaire où l'on cherche « à peu près » | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q3 | 🧠 | Pourquoi diviser les scores par √d_k ? | ★★ | 3 | — | 02 | — | RM | manual |
-| B3.Q4 | 🧠 | Masque causal : qui a le droit de regarder qui ? | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q5 | 🧠 | Auto-attention ou attention croisée : d'où viennent Q, K et V ? | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q6 | 🧠 | Plusieurs têtes pour le prix d'une : que gagne-t-on ? | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q7 | 🧠 | Sans encodage de position, l'attention voit-elle l'ordre des mots ? | ★★ | 3 | — | 02 | — | R | manual |
-| B3.Q8 | 🧠 | Résiduel, pré-LN ou post-LN : ce qui rend un Transformer profond entraînable | ★★ | 3 | — | 02 | — | – | manual |
-| B3.Q9 | 🧠 | BERT, GPT, T5 : quel masque, quel objectif, quel usage ? | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q10 | 🧠 | Décalage d'un token : ce que chaque position apprend à prédire | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q11 | 🧠 | KV cache : ce que l'on garde et pourquoi la génération s'accélère | ★ | 3 | — | 02 | — | R | manual |
-| B3.Q12 | 🧠 | Coût quadratique du contexte et ce que change FlashAttention | ★★ | 3 | — | 02 | — | – | manual |
-| B3.R1 | 🔁 | De quoi dépend le nombre de tokens d'un texte ? | ★ | 5 | — | 02 | B2 | R | manual |
-| B3.R2 | 🔁 | Pourquoi le gradient s'évanouit dans un RNN déroulé | ★ | 5 | — | 02 | 22 | R | manual |
-| B3.R3 | 🔁 | Layer norm et connexion résiduelle, à quoi sert chacune ? | ★ | 5 | — | 02 | 20 | R | manual |
+| B3.Q1 | 🧠 | Le goulot de l'encodeur-décodeur récurrent : pourquoi un seul vecteur ne suffit pas | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q2 | 🧠 | Requête, clé, valeur : un dictionnaire où l'on cherche « à peu près » | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q3 | 🧠 | Pourquoi diviser les scores par √d_k ? | ★★ | 3 | — | 02 | — | RM | wb.check |
+| B3.Q4 | 🧠 | Masque causal : qui a le droit de regarder qui ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q5 | 🧠 | Auto-attention ou attention croisée : d'où viennent Q, K et V ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q6 | 🧠 | Plusieurs têtes pour le prix d'une : que gagne-t-on ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q7 | 🧠 | Sans encodage de position, l'attention voit-elle l'ordre des mots ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q8 | 🧠 | Résiduel, pré-LN ou post-LN : ce qui rend un Transformer profond entraînable | ★★ | 3 | — | 02 | — | – | wb.check |
+| B3.Q9 | 🧠 | BERT, GPT, T5 : quel masque, quel objectif, quel usage ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q10 | 🧠 | Décalage d'un token : ce que chaque position apprend à prédire | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q11 | 🧠 | KV cache : ce que l'on garde et pourquoi la génération s'accélère | ★ | 3 | — | 02 | — | R | wb.check |
+| B3.Q12 | 🧠 | Coût quadratique du contexte et ce que change FlashAttention | ★★ | 3 | — | 02 | — | – | wb.check |
+| B3.R1 | 🔁 | De quoi dépend le nombre de tokens d'un texte ? | ★ | 5 | — | 02 | B2 | R | wb.check |
+| B3.R2 | 🔁 | Pourquoi le gradient s'évanouit dans un RNN déroulé | ★ | 5 | — | 02 | 22 | R | wb.check |
+| B3.R3 | 🔁 | Layer norm et connexion résiduelle, à quoi sert chacune ? | ★ | 5 | — | 02 | 20 | R | wb.check |
 | B3.1 | ✏️ | L'attention à la main : trois tokens, d_k = 2, scores, softmax et sortie | ★★ | 20 | — | 02 | 17, 0B | RM | wb.check |
 | B3.2 | ✏️ | Le même calcul avec un masque causal | ★ | 10 | — | 02 | B3.1 | RM | wb.check |
 | B3.3 | ✏️ | Suivre les formes dans l'attention multi-têtes et compter ses paramètres | ★★ | 15 | — | 02 | B3.1 | RM | wb.check |

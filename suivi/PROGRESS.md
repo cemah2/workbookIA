@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-10-31, session 61 (checkpoint VI).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-01, session 67 (bonus B3, 1ʳᵉ partie).*
 
 ## Prochaine étape
 
-➡️ **Session 67 : chapitre bonus B3 (Attention et Transformers : un mini-GPT from scratch), 1ʳᵉ partie** (`docs/syllabus/data/chB3.json`, 2 sessions), puis les bonus B4 à B8.
+➡️ **Session 68 : chapitre bonus B3 (Attention et Transformers : un mini-GPT from scratch), 2ᵉ et dernière partie** : le notebook B3.12 à B3.30 (briques NumPy de `attention.py`, puis mini-GPT PyTorch, génération, expériences et ViT), ses indices et solutions, la fin du chapitre ; tout ce qu'il faut est dans `chapitres/b3_transformers/EN_COURS.md` (« Pour la session 68 »). Puis les bonus B4 à B8.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -181,7 +181,8 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | CP-VI | Checkpoint partie VI (+ audit P5) | ✅ (audit P5 des parties V et VI : session 62, R1 à R9 appliqués) | 61 | examen blanc de 13 questions (114 min, sur 20 ; 2 points sur les parties IV et V) : sujet, notebook (partie A : 📦 CP6.8 la loss d'un VAE, 🐛 CP6.9 un pas de GAN à réparer ; partie B : 39 vérifications `wb.check`, propriétés du code comparées aux formules et au pas de référence, poids par poids), corrigé détaillé, copie, figure CP6.7 (trois entraînements réels), 🔮 CP6.6 mesuré sur Flippers ; synthèse (carte mentale, 18 formules, AE/VAE/GAN/diffusion, RL, gradient par rapport à l'entrée, check-list d'un dataset, pièges) ; mini-projet MP6 (`genbench` : VAE convolutif, DCGAN et cGAN, classifieur de référence, distance de Fréchet sur 3 graines, classes générées, plus proches voisins, slerp, reprise d'un GAN au bit près ; 19 tests, cinq mutants ; mode complet : DCGAN 95,1 ± 4,8 contre VAE 214,9 ± 3,2, cGAN 37,3, classifieur 92,5 % ; notebook rapide en ≈ 4 min, complet en ≈ 48 min sur CPU) |
 | B1 | Transfer learning et modèles pré-entraînés | ✅ | 63-64 | 47 exercices (dont 18 dans le notebook, parties A à D), fiche (≈ 11 300 mots, 5 figures), 24 flashcards, partie 0 (107 vérifications) ; infrastructure `wb.transfer` (backbones avec repli, cache d'embeddings) et sous-ensembles emboîtés de CIFAR-10 et Fashion-MNIST ; pas de module `mylearn` |
 | B2 | Tokenisation et embeddings | ✅ | 65-66 | 49 exercices (dont 19 dans le notebook, phases tokenisation et embeddings), fiche (≈ 12 500 mots, 5 figures), 26 flashcards, partie 0 (127 vérifications) ; `mylearn/tokenizer.py` et `mylearn/embeddings.py` (189 tests) ; infrastructure `wb.text` |
-| B3-B8 | Chapitres bonus | 📅 | | |
+| B3 | Attention et Transformers : un mini-GPT from scratch | 🛠️ 1/2 | 67 | fiche (≈ 14 800 mots, 7 figures), 31 exercices papier, 28 flashcards, partie 0 (117 vérifications) ; `mylearn/attention.py` (référence et 168 tests) ; notebook B3.12 à B3.30 à la session 68 |
+| B4-B8 | Chapitres bonus | 📅 | | |
 | PF | Projet final et finalisation (P10) | 📅 | | |
 
 ## Session 1 (2026-09-29) : mise en place ✅
@@ -638,6 +639,24 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 67 (2026-11-01) : chapitre bonus B3 (Attention et Transformers : un mini-GPT from scratch), 1ʳᵉ partie ✅
+
+**Fait** :
+- **Fiche** (`01_fiche.md`, ≈ 14 800 mots, sections 203.1 à 203.10, toutes ⏩ ; figures `tools/chapters/figures_chB3.py` : goulot de l'encodeur-décodeur, Q/K/V, masques, têtes, positions et RoPE, bloc pré-LN contre post-LN, coût du contexte). Comportements de PyTorch 2.11 vérifiés en exécutant : `is_causal` aligné en haut à gauche quand L ≠ S, `attn_mask` et `is_causal` ensemble refusés par le noyau MATH mais pas par le noyau par défaut du CPU, ligne entièrement masquée (zéros avec SDPA, NaN avec `nn.MultiheadAttention`). Chiffres recalculés (GPT-2 medium 354 823 168, KV cache de Llama 3.1 8B, 6ND, Chinchilla) ; articles vérifiés par l'API arXiv ; crédit de nanoGPT (MIT, commit figé, déclaré obsolète au profit de nanochat).
+- **Exercices papier** (`02_exercices.md`) : 12 quiz, 3 rappels (B2, 22, 20), ✏️ B3.1 à B3.5 (dont GPT-2 small : 124 439 808 paramètres, l'écart avec les « 117M » de l'article expliqué par le README d'`openai/gpt-2`), ∂ B3.6 (√d_k) et B3.7 (RoPE), 🧮 B3.8, 🗣️ B3.9, ⚖️ B3.10, 📄 B3.11 (Vaswani et coll. 2017, relu sur les versions v1 à v7 de l'article), 5 entretiens ; indices et solutions ; `06_mes_reponses.md` ; 28 flashcards.
+- **Partie 0 du notebook** (`tools/chapters/build_chB3.py`) : 117 vérifications `wb.check` (réponses recalculées contre `mylearn_ref`, PyTorch et transformers sur le device `meta`) ; parties suivantes annoncées.
+- **`mylearn.attention`** : référence (`solutions/mylearn_ref/attention.py`) et 168 tests (`tests/test_chb3_attention.py`) contre `F.scaled_dot_product_attention`, `nn.MultiheadAttention` (masque inversé), `nn.TransformerEncoderLayer(norm_first=True)` et `LlamaRotaryEmbedding` de transformers ; 49 mutants tués sur 61 (les autres équivalents) ; un ⏳ venu de `softmax`, `gelu` ou `layer_norm` nomme leur fichier et leur chapitre ; un encodage sinusoïdal en float32 est signalé.
+- Annexes : glossaire (43 termes), formulaire (section B3), erreurs fréquentes (15 lignes), aide-mémoire PyTorch (section B3, convention inverse de `nn.MultiheadAttention`), auto-évaluation (section B3) ; `EN_COURS.md` (« Pour la session 68 », précisions pour les énoncés des 🔨, notes de rédaction de la fiche).
+- Exemple de format des choix `"B"` → `"E"` dans les parties 0 de B1, B2 et du ch. 29 (`"B"` était une bonne réponse) ; notebooks reconstruits, aucune réponse enregistrée ne change.
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. B3, 1ʳᵉ partie ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests mode apprenant 584, `--impl=ref` des tests B2 et B3 357, `--impl=stubs` des tests B3 168 échecs attendus ; `build_answers.py --check`, `export_flashcards.py --check` (835 cartes), `check_env.py` ; partie 0 sans ❌, « Run all » du notebook vide sans erreur ; `mon_travail/` intact. En-tête de la fiche : 22 h, lecture 2,0 h.
+- Écarts : section « Écarts » (session 67).
+
+**Leçons** :
+- un apprenant simulé qui écrit le module par d'autres méthodes (`einsum`, matrices de rotation explicites) confirme le contrat, mais c'est en le laissant sans les modules des chapitres antérieurs qu'il trouve les messages ⏳ muets sur l'endroit où chercher ;
+- une notation qui mélange position et angle ($R_{n-m}$) se lit de deux façons : l'indice d'une rotation est toujours un angle ;
+- un chiffre d'article (117M, 41,0 contre 41,8 BLEU) se vérifie sur toutes ses versions avant d'en faire une question.
 
 ## Session 66 (2026-11-01) : chapitre bonus B2 (Tokenisation et embeddings), 2ᵉ et dernière partie ✅
 
@@ -1318,4 +1337,5 @@ Côté apprenant : **l'audit des parties V et VI est fait.** Rien ne change dans
 | 64 | B1 | vérifications : B1.12, B1.15 et B1.20 `manual` → `wb.check` ; B1.28 `wb.check` → `manual` (un défi se vérifie par `verdict`) ; `prereq` complétés : B1.21 (+ B1.13), B1.22 (+ B1.21, B1.16, B1.13), B1.23 (+ B1.17) ; seuil du défi gardé à 90 % (référence 92,2 à 93,3 %) ; aucun ID, titre, type, durée ni parcours ne change | le code de ces exercices est appelé par les suivants |
 | 65 | B2 (chapitre non publié) | vérifications des quiz B2.Q1 à Q12 et des rappels B2.R1 à R3 `manual` → `wb.check` (partie 0) ; aucun ID, titre, type, durée ni parcours ne change | comme B1 et les ch. 21 à 29 |
 | 66 | B2 | vérifications : B2.14, B2.26, B2.27 `manual` → `wb.check` ; B2.31 `wb.check` → `manual` (un défi se juge par `verdict`) ; B2.25 : 10 epochs en ≈ 10 s au lieu de « 2 epochs ≈ 1 min » des notes, sous-échantillonnage $t = 10^{-3}$ (la fiche cite $10^{-5}$, réglage d'un milliard de mots) ; B2.26 : prédictions stables d'une graine à l'autre ; B2.28 : MiniLM seul exécuté, e5 en option ; B2.31 : objectif 3,20 octets par token, 2 min ; aucun ID, titre, type, durée ni parcours ne change | calibrage sur plusieurs graines et découpages |
+| 67 | B3 (chapitre non publié) | vérifications des quiz B3.Q1 à Q12 et des rappels B3.R1 à R3 `manual` → `wb.check` (partie 0) ; formule de RoPE écrite avec des angles ($R_{m\theta}$, $R_{(n-m)\theta}$) ; aucun ID, titre, type, durée ni parcours ne change | comme B1 et B2 ; notation sans ambiguïté (solveur à l'aveugle) |
 | 62 | 21 à 29, CP4 à CP6, MP5, MP6 (R1 à R9 validés) | **titres** changés, ID inchangés : 23.15, 23.28, 24.8, 24.E2, 25.27, 26.E4, 26.31, 27.R1, 27.Q7, 29.R3, MP5.1, MP6.7 ; **types et ★** : CP6.8 📦 → 🔨, CP6.4 et CP6.9 ★ → ★★, titre de CP6.9 « Réparer un pas d'entraînement de GAN » ; **durées** : 21.12 ★★ 30, 21.23 25, 22.12 ★★ 30, 22.13 30, 25.28 ★★★ 35, 26.14 ★★ 30, 26.19 ★★★ 35, 26.20 ★★★ 75, 26.21 ★★★ 90, 26.31 ★★★ 40, MP5.8 90 min (MP5 : 10 h) ; **parcours maths** : 23.12, 23.13, 23.15, 23.16, 23.18, 23.23, 23.25, 24.19, 24.20, 24.22, 24.23, 27.20, 27.27 ; **énoncés précisés**, réponses inchangées : 21.Q8 a, 22.20, 24.24, 24.27, 24.R1 a, 26.17, 26.35, 29.15, CP6.7, CP6.8 ; `cp6.json` : champs `notes` et `study_notes` | audit P5 V-VI, rapport §6 |
