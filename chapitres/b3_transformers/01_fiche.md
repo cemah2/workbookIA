@@ -60,7 +60,7 @@ La fiche et les exercices papier posent les idées et les calculs ; le notebook 
 9. Un GPT apprend à prédire le token suivant **à chaque** position (loss $L$, perplexité $e^L$) ; il génère un token à la fois, et le **KV cache** garde clés et valeurs déjà calculées, au prix d'une mémoire qui grandit avec le texte.
 10. L'attention coûte $O(T^2)$ ; **FlashAttention** calcule le même résultat sans stocker la matrice $T \times T$. L'entraînement coûte environ $6ND$ FLOPs, et les **lois d'échelle** disent comment partager un budget entre paramètres et tokens.
 
-> 📐 **Conventions de la fiche** — Comme aux ch. 22 et B2, on reprend les noms de PyTorch : un batch contient $N$ séquences de $T$ tokens ; dans une attention, $L$ est le nombre de **requêtes** et $S$ le nombre de **clés** ($L = S = T$ en auto-attention). $d$ est la dimension du modèle (*d_model*, notée $D$ dans les docstrings et les formes de ta librairie), $H$ le nombre de têtes, $d_h = d/H$ la taille d'une tête, $d_k$ et $d_v$ celles des clés et des valeurs ($d_k = d_v = d_h$ dans une attention multi-têtes), $F$ la largeur du MLP d'un bloc ($F = 4d$ d'habitude) et $V$ (en italique) la taille du vocabulaire. Les matrices sont en gras : $\mathbf{X}$ de forme $(T, d)$ empile une ligne par token ; $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$ les requêtes, clés et valeurs ; $\mathbf{W}_Q$, $\mathbf{W}_K$, $\mathbf{W}_V$, $\mathbf{W}_O$ les projections, de forme $(d, d)$, avec la convention de `mylearn` pour les couches denses (ch. 16) : $\mathbf{z} = \mathbf{x}\mathbf{W} + \mathbf{b}$, le vecteur à gauche. Les positions $p$, $m$, $n$ et les indices de tokens $i$, $j$ partent de 0, comme en Python. $\log$ est le logarithme naturel. **Écarts au §6** : $d$ est une dimension d'embedding (comme en B1 et B2) ; $L$ change de sens selon la section, comme dans les bibliothèques : nombre de requêtes en 203.2 à 203.4, **loss** en 203.8 (§6), **nombre de couches** dans les formules de coût de 203.9 et 203.10 ; dans la formule $6ND$ (203.10), $N$ est un nombre de **paramètres** et $D$ un nombre de **tokens**, comme dans les articles sur les lois d'échelle ; $H$ compte des têtes (au ch. 22, c'était la taille de l'état). Le contexte dit toujours de quoi il s'agit.
+> 📐 **Conventions de la fiche** — Comme aux ch. 22 et B2, on reprend les noms de PyTorch : un batch contient $N$ séquences de $T$ tokens ; dans une attention, $L$ est le nombre de **requêtes** et $S$ le nombre de **clés** ($L = S = T$ en auto-attention). $d$ est la dimension du modèle (*d_model*, notée $D$ dans les docstrings et les formes de ta librairie), $H$ le nombre de têtes, $d_h = d/H$ la taille d'une tête, $d_k$ et $d_v$ celles des clés et des valeurs ($d_k = d_v = d_h$ dans une attention multi-têtes), $F$ la largeur du MLP d'un bloc ($F = 4d$ d'habitude) et $V$ (en italique) la taille du vocabulaire. Les matrices sont en gras : $\mathbf{X}$, de forme $(T, d)$, a une ligne par token ; $\mathbf{Q}$, $\mathbf{K}$, $\mathbf{V}$ sont les requêtes, clés et valeurs, $\mathbf{W}_Q$, $\mathbf{W}_K$, $\mathbf{W}_V$, $\mathbf{W}_O$ les projections $(d, d)$, avec la convention de `mylearn` (ch. 16) : $\mathbf{z} = \mathbf{x}\mathbf{W} + \mathbf{b}$. Les positions $p$, $m$, $n$ et les indices de tokens $i$, $j$ partent de 0, comme en Python. $\log$ est le logarithme naturel. **Écarts au §6** : $d$ est une dimension d'embedding (comme en B1 et B2) ; $L$ change de sens selon la section, comme dans les bibliothèques : nombre de requêtes en 203.2 à 203.4, **loss** en 203.8 (§6), **nombre de couches** dans les formules de coût de 203.9 et 203.10 ; dans la formule $6ND$ (203.10), $N$ est un nombre de **paramètres** et $D$ un nombre de **tokens**, comme dans les articles sur les lois d'échelle ; $H$ compte des têtes (au ch. 22, c'était la taille de l'état). Le contexte dit toujours de quoi il s'agit.
 
 ---
 
@@ -68,7 +68,7 @@ La fiche et les exercices papier posent les idées et les calculs ; le notebook 
 
 ### Traduire avec deux RNN
 
-En 2014, I. Sutskever, O. Vinyals et Q. Le (Google), puis K. Cho et ses coauteurs (Montréal) traduisent des phrases entières avec un **encodeur-décodeur** (*encoder-decoder*, ou *seq2seq*), fait de deux réseaux récurrents (ch. 22) :
+En 2014, K. Cho et ses coauteurs (Montréal), puis I. Sutskever, O. Vinyals et Q. Le (Google) traduisent avec un **encodeur-décodeur** (*encoder-decoder*, ou *seq2seq*), fait de deux réseaux récurrents (ch. 22) :
 - l'**encodeur** lit la phrase source token après token et met à jour son état $\mathbf{h}_t$ ; son **dernier** état, le **vecteur de contexte** $\mathbf{c}$, doit résumer toute la phrase ;
 - le **décodeur** part de $\mathbf{c}$ et génère la traduction token après token, chaque token produit devenant l'entrée du pas suivant, comme le générateur de Holmes du ch. 22.
 
@@ -76,9 +76,9 @@ Les mots « encodeur » et « décodeur » ont le sens du ch. 25 (une moitié r�
 
 ### Le goulot
 
-Toute la phrase passe par $\mathbf{c}$, un vecteur de taille fixe (quelques centaines de nombres), qu'elle compte 5 mots ou 50. C'est un **goulot** (*bottleneck*, ch. 25), et il se voit : la qualité des traductions de l'encodeur-décodeur s'effondre quand les phrases s'allongent. Deux raisons :
+Toute la phrase passe par $\mathbf{c}$, un vecteur de taille fixe, qu'elle compte 5 mots ou 50. C'est un **goulot** (*bottleneck*, ch. 25), et il se voit : la qualité des traductions de l'encodeur-décodeur s'effondre quand les phrases s'allongent. Deux raisons :
 - **la capacité** : un vecteur de taille fixe ne garde pas tout d'une phrase longue ;
-- **le chemin** : l'information du premier mot doit traverser tous les pas de l'encodeur puis tous ceux du décodeur. Le gradient qui relie le premier mot source au dernier mot traduit traverse autant de pas, et s'évanouit (🔁 R2, ch. 22). Sutskever et ses coauteurs l'avaient remarqué : retourner la phrase source rapproche ses premiers mots du début de la traduction, et améliore nettement les résultats.
+- **le chemin** : l'information du premier mot doit traverser tous les pas de l'encodeur puis tous ceux du décodeur. Le gradient qui relie le premier mot source au dernier mot traduit traverse autant de pas, et s'évanouit (🔁 R2, ch. 22). Sutskever et ses coauteurs le contournaient en retournant la phrase source, ce qui rapproche ses premiers mots du début de la traduction.
 
 ### L'idée de Bahdanau : relire la source à chaque pas
 
@@ -88,15 +88,13 @@ D. Bahdanau, K. Cho et Y. Bengio (« Neural Machine Translation by Jointly Learn
 3. calcule un contexte **propre à ce pas** : $\mathbf{c}_i = \sum_j \alpha_{ij}\,\mathbf{h}_j$, la moyenne des états source pondérée par les poids ;
 4. s'en sert pour produire le mot $i$.
 
-Les poids $\alpha_{ij}$ forment l'**attention** (*attention*) : le décodeur « regarde » surtout les mots source qui l'aident. L'article parle d'**alignement** (*alignment*), au sens de la traduction : quel mot source correspond à quel mot cible (rien à voir avec l'alignement d'un LLM sur des préférences humaines, ch. 1). L'alignement est **souple** (*soft*) : une distribution de poids, pas un choix d'un seul mot, donc dérivable et appris par rétropropagation avec le reste du réseau, sans aucun alignement annoté.
+Les poids $\alpha_{ij}$ forment l'**attention** : le décodeur « regarde » les mots source qui l'aident. L'article parle d'**alignement** (*alignment*), au sens de la traduction : quel mot source correspond à quel mot cible (rien à voir avec l'alignement d'un LLM sur des préférences humaines, ch. 1). L'alignement est **souple** (*soft*) : une distribution de poids, pas un choix d'un seul mot, donc dérivable et appris par rétropropagation avec le reste du réseau, sans aucun alignement annoté.
 
 ![À gauche, l'encodeur-décodeur récurrent : les états de l'encodeur se résument en un seul vecteur de contexte, le goulot, d'où part le décodeur ; à droite, l'attention : à chaque pas, le décodeur pondère tous les états de l'encodeur et en fait un contexte propre à ce pas](figures/goulot.png)
 
-Deux effets, mesurés dans l'article : la qualité ne s'effondre plus sur les phrases longues (le modèle à attention, entraîné sur des phrases de 50 mots au plus, garde sa qualité au-delà de 30 mots, là où l'encodeur-décodeur chute), et les cartes de poids $\alpha_{ij}$ se lisent : sur l'anglais et le français, elles suivent presque la diagonale, et s'en écartent là où les deux langues n'ordonnent pas les mots de la même façon (l'adjectif après le nom en français). C'est la première **carte d'attention** (*attention map*) : la matrice des poids, une ligne par mot cible, une colonne par mot source (📈 B3.24).
+Deux effets, mesurés dans l'article : la qualité ne s'effondre plus sur les phrases longues, et les cartes de poids $\alpha_{ij}$ se lisent : sur l'anglais et le français, elles suivent presque la diagonale, et s'en écartent là où les deux langues n'ordonnent pas les mots de la même façon (l'adjectif après le nom en français). C'est la première **carte d'attention** (*attention map*) : la matrice des poids, une ligne par mot cible, une colonne par mot source (📈 B3.24).
 
-### Le score : additif ou par produit scalaire
-
-Bahdanau calcule son score par un petit MLP, $e_{ij} = \mathbf{w}^\top \tanh(\mathbf{W}\mathbf{s}_{i-1} + \mathbf{U}\mathbf{h}_j)$ (l'**attention additive**). M.-T. Luong, H. Pham et C. Manning (EMNLP 2015) essaient le simple **produit scalaire** $\mathbf{s}_i \cdot \mathbf{h}_j$ (0B), que le Transformer garde, mis à l'échelle (203.2).
+Bahdanau calcule son score par un petit MLP, $e_{ij} = \mathbf{w}^\top \tanh(\mathbf{W}\mathbf{s}_{i-1} + \mathbf{U}\mathbf{h}_j)$ (l'**attention additive**) ; M.-T. Luong, H. Pham et C. Manning (EMNLP 2015) essaient le **produit scalaire** $\mathbf{s}_i \cdot \mathbf{h}_j$ (0B), que le Transformer garde (203.2).
 
 ### Et si l'on supprimait les RNN ?
 
@@ -109,8 +107,6 @@ L'attention résout le goulot, mais l'encodeur et le décodeur restent récurren
 | Calcul le long de la séquence | séquentiel | séquentiel | parallèle à l'entraînement |
 | Coût d'une couche sur $T$ tokens | $O(T d^2)$ | $O(T d^2 + T^2 d)$ | $O(T d^2 + T^2 d)$ |
 
-Le prix du parallélisme est dans la dernière ligne (203.10).
-
 > 🕰️ **Mise à jour (2026) — RNN contre Transformers** — **Le livre :** les RNN et les LSTM sont l'outil des séquences (ch. 22). · **Aujourd'hui :** les Transformers dominent le texte, la traduction, la parole, le code et une bonne part de la vision. Pour les contextes très longs, les **modèles à espace d'états** (Mamba, A. Gu et T. Dao, 2023 ; ch. 22) reviennent dans des **hybrides** qui gardent quelques couches d'attention : Jamba (AI21, 2024), Nemotron-H (NVIDIA, avril 2025 : jusqu'à 3 fois plus rapide à l'inférence que des Transformers de taille voisine), Granite 4.0 (IBM, octobre 2025 : neuf couches Mamba-2 pour une d'attention, plus de 70 % de mémoire en moins sur les longues entrées selon IBM). · **Faut-il quand même l'apprendre ?** Oui : l'attention est la brique de tous ces modèles, hybrides compris, et les RNN restent utiles sur des flux et de petites séries (ch. 22). · *Sources :* [Vaswani et coll., arXiv:1706.03762](https://arxiv.org/abs/1706.03762) ; [Gu et Dao, Mamba, arXiv:2312.00752](https://arxiv.org/abs/2312.00752) ; [Lieber et coll., Jamba, arXiv:2403.19887](https://arxiv.org/abs/2403.19887) ; [NVIDIA, Nemotron-H, arXiv:2504.03624](https://arxiv.org/abs/2504.03624) ; [IBM, annonce de Granite 4.0 (2 octobre 2025)](https://www.ibm.com/new/announcements/ibm-granite-4-0-hyper-efficient-high-performance-hybrid-models).
 
 ---
@@ -122,9 +118,7 @@ Le prix du parallélisme est dans la dernière ligne (203.10).
 Un dictionnaire Python associe des **clés** à des **valeurs** : `d["chat"]` cherche la clé égale à `"chat"` et rend sa valeur, une seule. L'attention en est une version **souple** (🧠 Q2) :
 - une **requête** (*query*) $\mathbf{q}$ décrit ce que l'on cherche ;
 - chaque élément de la séquence offre une **clé** (*key*) $\mathbf{k}_j$, qui dit ce qu'il contient, et une **valeur** (*value*) $\mathbf{v}_j$, ce qu'il rend ;
-- au lieu d'exiger l'égalité, on mesure la **ressemblance** de $\mathbf{q}$ à chaque clé par un produit scalaire, on la transforme en poids de somme 1, et l'on rend la **moyenne des valeurs pondérée** par ces poids.
-
-Une clé très proche de la requête domine la moyenne ; des clés également proches se partagent le poids ; et tout reste dérivable, ce qui permet d'apprendre où regarder.
+- au lieu d'exiger l'égalité, on mesure la **ressemblance** de $\mathbf{q}$ à chaque clé par un produit scalaire, on la transforme en poids de somme 1, et l'on rend la **moyenne des valeurs pondérée** par ces poids. Tout reste dérivable : le réseau peut apprendre où regarder.
 
 ### D'où viennent les requêtes, les clés et les valeurs
 
@@ -132,7 +126,7 @@ Dans un Transformer, chaque token arrive avec un vecteur $\mathbf{x}_i$ de dimen
 
 $$\mathbf{q}_i = \mathbf{x}_i \mathbf{W}_Q, \qquad \mathbf{k}_i = \mathbf{x}_i \mathbf{W}_K, \qquad \mathbf{v}_i = \mathbf{x}_i \mathbf{W}_V,$$
 
-ou, pour toute la séquence d'un coup, $\mathbf{Q} = \mathbf{X}\mathbf{W}_Q$, $\mathbf{K} = \mathbf{X}\mathbf{W}_K$, $\mathbf{V} = \mathbf{X}\mathbf{W}_V$, de formes $(T, d_k)$, $(T, d_k)$ et $(T, d_v)$ (avec des biais dans GPT-2 et dans ta librairie, sans dans la plupart des modèles récents). Le même token joue donc trois rôles avec trois vecteurs différents : ce qu'il cherche ($\mathbf{q}_i$) n'est pas ce qu'il montre ($\mathbf{k}_i$), ni ce qu'il transmet ($\mathbf{v}_i$). Dans « le chat que Marie a adopté dort », « dort » peut chercher son sujet, et « chat » s'annoncer comme tel par sa clé, à quatre mots de distance.
+ou, pour toute la séquence d'un coup, $\mathbf{Q} = \mathbf{X}\mathbf{W}_Q$, $\mathbf{K} = \mathbf{X}\mathbf{W}_K$, $\mathbf{V} = \mathbf{X}\mathbf{W}_V$, de formes $(T, d_k)$, $(T, d_k)$ et $(T, d_v)$ (avec des biais dans GPT-2 et dans ta librairie, sans dans la plupart des modèles récents). Ce qu'un token cherche ($\mathbf{q}_i$) n'est pas ce qu'il montre ($\mathbf{k}_i$), ni ce qu'il transmet ($\mathbf{v}_i$) : dans « le chat que Marie a adopté dort », « dort » peut chercher son sujet, que « chat » annonce par sa clé.
 
 ### La formule
 
@@ -196,8 +190,8 @@ for dk in (4, 64, 512):
     dots = (q * k).sum(axis=1)                            # 100,000 dot products
     print(dk, dots.var().round(2), (dots / np.sqrt(dk)).var().round(3))
 # 4 4.03 1.007
-# 64 64.19 1.003
-# 512 511.74 0.999
+# 64 64.09 1.001
+# 512 514.18 1.004
 ```
 
 Le paramètre `scale` de PyTorch et de ta librairie remplace $1/\sqrt{d_k}$ si besoin.
@@ -300,7 +294,7 @@ _, w_bad = mha(x, x, x, attn_mask=causal, average_attn_weights=False) # forgot t
 print(w_bad[0, 0, 3])                                     # tensor([nan, nan, nan, nan]): the last token sees nothing
 ```
 
-Sans l'inversion, la première requête voit tout sauf elle-même et la dernière ne voit rien (`nan`) ; avec un masque de padding inversé, rien ne se voit : les poids restent finis et le modèle apprend sur du padding. Ta `multi_head_attention` est testée ainsi : contre `nn.MultiheadAttention` avec `attn_mask = ~mask`.
+Sans l'inversion, la première requête voit tout sauf elle-même et la dernière ne voit rien (`nan`) ; avec un masque de padding inversé, l'erreur ne se voit pas : les poids restent finis, et le modèle apprend sur du padding. Ta `multi_head_attention` est testée ainsi : contre `nn.MultiheadAttention` avec `attn_mask = ~mask`.
 
 ---
 
@@ -338,7 +332,7 @@ $$\#\text{paramètres}(\text{MHA}) = 4d^2 + 4d,$$
 
 ### Des têtes, mais combien ?
 
-Plus de têtes, ce sont des cartes plus nombreuses mais des têtes plus petites. Les modèles publiés gardent $d_h$ entre 64 et 128 : 64 pour GPT-2 ($768 / 12$) et BERT, 128 pour Llama 3 et Qwen3. P. Michel, O. Levy et G. Neubig (NeurIPS 2019) ont montré qu'on peut **retirer** beaucoup de têtes d'un modèle entraîné sans grande perte : elles sont en partie redondantes. Tu compareras un mini-GPT à quatre têtes et à une seule (🔬 B3.25).
+Plus de têtes, ce sont des têtes plus petites. Les modèles publiés gardent $d_h$ entre 64 (GPT-2, BERT) et 128 (Llama 3, Qwen3). P. Michel, O. Levy et G. Neubig (NeurIPS 2019) ont montré qu'on peut **retirer** beaucoup de têtes d'un modèle entraîné sans grande dégradation : elles sont en partie redondantes. Tu compareras un mini-GPT à quatre têtes et à une seule (🔬 B3.25).
 
 ### Moins de têtes pour les clés : MQA et GQA
 
@@ -536,7 +530,7 @@ Le décodeur d'un **encodeur-décodeur** a **trois** sous-couches par bloc : l'a
 
 ### Teacher forcing et décalage d'un token
 
-Comment un décodeur s'entraîne-t-il à générer, alors que générer est séquentiel ? On lui donne la séquence **vraie** en entrée, et l'on demande à chaque position le token **suivant** de cette même séquence : c'est le **teacher forcing** (*apprentissage forcé par le professeur* ; on garde le terme anglais). Pour le texte « chat » :
+Comment un décodeur s'entraîne-t-il à générer, alors que générer est séquentiel ? On lui donne la séquence **vraie** en entrée, et l'on demande à chaque position le token **suivant** de cette même séquence : c'est le **teacher forcing** (*forçage par l'enseignant*). Pour le texte « chat » :
 
 | position $t$ | 0 | 1 | 2 | 3 |
 |---|---|---|---|---|
@@ -559,7 +553,7 @@ Ton mini-GPT (📦 B3.19) est un décodeur, au niveau caractère sur Holmes, com
 
 La configuration du notebook (4 blocs, 4 têtes, $d = 128$, $T_{\max} = 128$) compte environ 0,8 million de paramètres. Le contexte est de 128 caractères : le modèle ne voit jamais plus loin que les 128 derniers caractères, une ou deux phrases de Holmes.
 
-> 🔗 **Crédit — nanoGPT** — La structure du mini-GPT du notebook (noms des modules, initialisation, poids liés, boucle d'entraînement) suit [**nanoGPT**](https://github.com/karpathy/nanoGPT) d'A. Karpathy (2022), sous **licence MIT** : un GPT complet en deux fichiers d'environ 300 lignes (`model.py`, `train.py`), dont la configuration « CPU » du README est voisine de la nôtre (4 blocs, 4 têtes, $d = 128$). Depuis novembre 2025, son README le dit « très vieux et obsolète » et renvoie à [nanochat](https://github.com/karpathy/nanochat), du même auteur, qui va jusqu'au modèle de chat ; nanoGPT reste la référence la plus lisible pour un premier GPT. Le code du workbook n'en recopie aucun fichier.
+**Crédit : nanoGPT.** La structure du mini-GPT du notebook (noms des modules, initialisation, poids liés, boucle d'entraînement) suit [**nanoGPT**](https://github.com/karpathy/nanoGPT) d'A. Karpathy (2022), sous **licence MIT** : un GPT complet en deux fichiers d'environ 300 lignes (`model.py`, `train.py`), dont la configuration « CPU » du README est voisine de la nôtre (4 blocs, 4 têtes, $d = 128$). Depuis novembre 2025, son README le dit « très vieux et obsolète » et renvoie à [nanochat](https://github.com/karpathy/nanochat), du même auteur, qui va jusqu'au modèle de chat ; nanoGPT reste la référence la plus lisible pour un premier GPT. Le code du workbook n'en recopie aucun fichier.
 
 ### Les données
 
@@ -612,11 +606,11 @@ C'est la boucle du ch. 20, avec les réglages du ch. 19 :
 
 Le 📦 B3.20 te fait entraîner le mini-GPT, puis comparer sa perplexité de validation à celle du LSTM du ch. 22 sur le **même** vocabulaire et le **même** texte, et le 📈 B3.21 lire ses courbes.
 
-> 💼 **En entreprise** — Avant un long entraînement, on vérifie trois choses en cinq minutes : la loss initiale vaut à peu près $\log V$ ; le modèle **surapprend** un seul batch jusqu'à une loss presque nulle (sinon, il y a un bug) ; et un test de causalité passe : changer un token futur ne change aucun logit passé (🛠️ B3.29).
+> 💼 **En entreprise** — Avant un long entraînement, trois contrôles de cinq minutes : la loss initiale vaut environ $\log V$ ; le modèle **surapprend** un seul batch jusqu'à une loss presque nulle (sinon, il y a un bug) ; changer un token futur ne change aucun logit passé (🛠️ B3.29).
 
 ### Ce que le modèle retient
 
-Un modèle de langue apprend la distribution de son corpus, et parfois le corpus lui-même : un passage peut ressortir mot pour mot. N. Carlini et ses coauteurs (« Extracting Training Data from Large Language Models », USENIX Security 2021) ont ainsi fait générer à GPT-2 des centaines de passages de ses données d'entraînement, dont des noms, des numéros de téléphone et des adresses électroniques. Ton mini-GPT, qui voit Holmes des dizaines de fois, permet d'étudier ce phénomène à petite échelle (⚖️ B3.10).
+Un modèle de langue apprend la distribution de son corpus, et parfois le corpus lui-même : un passage peut ressortir mot pour mot. N. Carlini et ses coauteurs (« Extracting Training Data from Large Language Models », USENIX Security 2021) ont ainsi fait générer à GPT-2 des centaines de passages de ses données d'entraînement, dont des noms, des numéros de téléphone et des adresses électroniques. Ton mini-GPT, qui revoit Holmes de nombreuses fois, permet d'étudier ce phénomène à petite échelle (⚖️ B3.10).
 
 ---
 
@@ -727,7 +721,7 @@ for start in range(0, 1000, 128):                                 # keys by bloc
 print(np.allclose(acc / l, reference))                            # True: exact, never the full row of weights
 ```
 
-Résultat : une attention **exacte** (ce n'est pas une approximation), une mémoire **linéaire** en $T$ au lieu de quadratique, et un entraînement plus rapide : 15 % de gain sur BERT-large, 3 fois plus vite sur GPT-2 avec 1 024 tokens, selon l'article. Le nombre de FLOPs, lui, reste en $T^2$ : FlashAttention ne change pas la complexité, il supprime le goulot de la mémoire. FlashAttention-2 (T. Dao, 2023) et FlashAttention-3 (J. Shah, T. Dao et coll., 2024, pour les GPU H100) améliorent le parallélisme et la précision réduite ; PyTorch les appelle par `F.scaled_dot_product_attention` quand le matériel le permet (203.3). Le 🔬 B3.27 te fait mesurer le temps et la mémoire de l'attention de 64 à 2 048 tokens, avec le noyau de référence et le noyau de type FlashAttention de PyTorch sur CPU.
+Résultat : une attention **exacte** (ce n'est pas une approximation), une mémoire **linéaire** en $T$ au lieu de quadratique, et un entraînement plus rapide : 15 % de gain sur BERT-large, 3 fois plus vite sur GPT-2 avec 1 024 tokens, selon l'article. Le nombre de FLOPs, lui, reste en $T^2$ : FlashAttention ne change pas la complexité, il supprime le goulot de la mémoire. FlashAttention-2 (T. Dao, 2023) et FlashAttention-3 (J. Shah, T. Dao et coll., 2024, GPU H100) l'accélèrent encore ; `F.scaled_dot_product_attention` les appelle quand le matériel le permet (203.3). Le 🔬 B3.27 te fait mesurer le temps et la mémoire de l'attention de 64 à 2 048 tokens, avec le noyau de référence et le noyau de type FlashAttention de PyTorch sur CPU.
 
 ### Les autres voies vers les contextes longs
 
@@ -782,7 +776,7 @@ Le ViT a **moins de biais inductifs** qu'un CNN : rien ne lui dit que des pixels
 - **Ch. 16 à 19** : paramètres, FLOPs et initialisation ; softmax stable et GELU de ta librairie, réutilisées par `attention.py` ; le coût de la passe arrière ; AdamW, warmup + cosinus et gradient clipping.
 - **Ch. 20** : la **layer norm** de ta librairie, que `transformer_block` réutilise ; les **connexions résiduelles**, sans lesquelles un Transformer de 12 blocs ne s'entraîne pas ; le dropout ; la boucle PyTorch.
 - **Ch. 21** : la convolution de stride $P$ qui fait les patchs d'un ViT ; ce que les biais inductifs d'un CNN apportent quand les données sont rares.
-- **Ch. 22** : le goulot des RNN et le gradient évanescent que l'attention contourne ; `sequences.py` (vocabulaire, encodage, température, échantillonnage) et le **LSTM de Holmes**, auquel tu compares ton mini-GPT ; la question d'entretien 22.E1 (pourquoi les Transformers ont remplacé les RNN), que ce chapitre prolonge sans la reprendre.
+- **Ch. 22** : le goulot et le gradient évanescent des RNN ; `sequences.py` et le **LSTM de Holmes**, auquel tu compares ton mini-GPT ; l'entretien 22.E1 (pourquoi les Transformers ont remplacé les RNN), que ce chapitre prolonge.
 - **Ch. 25 et 28** : encodeur, décodeur et goulot ; température, top-k et top-p.
 - **B2** : le mini-GPT **réutilise ton tokenizer** (caractères, puis ton `BPETokenizer` en 🔬 B3.26) ; `nn.Embedding`, poids liés, masque d'attention d'un tokenizer et embeddings contextuels d'un encodeur.
 - **B4** : des LLM réels (Hugging Face) avec leur `generate()`, leur KV cache, leurs chat templates ; l'attention à requêtes groupées et RoPE dans des modèles que tu charges ; LoRA appliqué aux projections $\mathbf{W}_Q$ et $\mathbf{W}_V$.
@@ -793,7 +787,7 @@ Le ViT a **moins de biais inductifs** qu'un CNN : rien ne lui dit que des pixels
 
 Ce chapitre n'a pas de lecture dans le livre : **tous les parcours lisent la fiche en entier** (≈ 2 h), d'où ses dix sections marquées ⏩. Refais à la main ses exemples chiffrés (l'attention sur quatre clés avec et sans masque, GPT-2 medium, le KV cache de Llama 3.1 8B), suis l'ordre conseillé, écris tes réponses papier dans `mon_travail/b3_transformers/06_mes_reponses.md` et vérifie les ✏️ dans la partie 0 du notebook (`wb.check`).
 
-**Le notebook** n'a besoin d'aucun téléchargement de poids pour sa première phase (NumPy et PyTorch) ; transformers sert d'oracle à `apply_rope`. Le mini-GPT s'entraîne sur CPU en mode rapide (quelques minutes), est sauvegardé une fois et rechargé par les exercices suivants ; les modes complets marqués 🚀 (B3.20, B3.25, B3.26, B3.28) tournent mieux sur un GPU de Colab, et le défi 🏆 B3.30 impose lui-même 10 minutes de CPU.
+**Le notebook** ne télécharge aucun modèle pré-entraîné ; le mini-GPT s'entraîne sur CPU en mode rapide, est sauvegardé une fois et rechargé par les exercices suivants ; les modes complets 🚀 (B3.20, B3.25, B3.26, B3.28) tournent mieux sur un GPU de Colab, et le défi 🏆 B3.30 impose 10 minutes de CPU.
 
 **Parcours rapide** : toute la fiche, les quiz Q1 à Q7 et Q9 à Q11, les trois rappels, les ✏️ B3.1, B3.2, B3.3 et B3.5, 🧮 B3.8 et 🗣️ B3.9 ; dans le notebook B3.12, B3.14, B3.15, B3.17 à B3.20 et B3.23 ; les cinq entretiens ; les corrigés de ✏️ B3.4 et ∂ B3.7 à lire. **Parcours maths** : le quiz Q3, les ✏️ B3.1 à B3.5, ∂ B3.6 et B3.7, 🧮 B3.8, 📄 B3.11, puis B3.12, B3.14, B3.15, B3.18 à B3.20 et B3.26. **Parcours code** : tout le notebook (B3.12 à B3.30), et les corrigés de ✏️ B3.2 à B3.4, ∂ B3.6 et B3.7 à lire. La liste exacte est dans `docs/PARCOURS.md`. **Si tu bloques** : règle des 15 minutes, puis les indices de `04_indices.md`, un niveau à la fois.
 
