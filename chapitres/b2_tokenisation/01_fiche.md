@@ -1,19 +1,19 @@
 # B2 · Tokenisation et embeddings — fiche de cours
 
-> Ce chapitre bonus n'a pas d'équivalent dans le livre de Glassner : **cette fiche est le cours**. Un modèle de langue lit des nombres : la **tokenisation** découpe le texte en morceaux numérotés, les tokens, puis la **table d'embedding** remplace chaque numéro par un vecteur. Le livre travaille par caractères ou par mots (ch. 22 et 24) ; les modèles actuels, par **sous-mots**. Tu comprends Unicode et UTF-8, tu écris un tokenizer BPE que tu compares à la bibliothèque `tokenizers`, tu mesures ce que la tokenisation coûte selon la langue, puis tu construis des vecteurs de mots, par comptage (PPMI et SVD) et par apprentissage (word2vec), jusqu'aux embeddings de phrases et à la recherche sémantique.
+> Ce chapitre bonus n'a pas d'équivalent dans le livre de Glassner : **cette fiche est le cours**. Un modèle de langue lit des nombres : la **tokenisation** découpe le texte en morceaux numérotés, les tokens, puis la **table d'embedding** remplace chaque numéro par un vecteur. Le livre travaille par caractères ou par mots (ch. 22 et 24) ; les modèles actuels, par **sous-mots**. Tu vas des octets d'un texte à ton propre tokenizer BPE et à son coût selon la langue, puis des vecteurs de mots (PPMI et SVD, word2vec) à la recherche sémantique.
 
 | | |
 |---|---|
 | **Livre** | — (chapitre propre au workbook) |
 | **Sections** | 202.1 à 202.10 (numérotation interne du workbook : 202 = bonus B2) |
 | **Temps total estimé** | ≈ 18 h : lecture de la fiche ≈ 1,7 h, exercices ≈ 15 h, 26 flashcards ≈ 0,9 h |
-| **Prérequis** | 0A (chaînes, fichiers en UTF-8, expressions régulières `re`, §100.6.5) · 0B (produit scalaire, norme, similarité cosinus) · ch. 6 (entropie, code de Huffman, cross-entropy, divergence KL, perplexité) · ch. 12 (one-hot, PCA et SVD, UMAP) · ch. 17 (sigmoïde, softmax, log-sum-exp) · ch. 18 (règle de la chaîne) · ch. 20 (boucle d'entraînement PyTorch) · ch. 22 (vocabulaire, `encode` et `decode`, token inconnu) · ch. 24 (`nn.Embedding`, génération mot par mot) · B1 (embedding d'un modèle pré-entraîné, cosinus, fiche modèle, licences) |
+| **Prérequis** | 0A (chaînes, fichiers en UTF-8, expressions régulières `re`, §100.6.5) · 0B (produit scalaire, norme, similarité cosinus) · ch. 6 (entropie, code de Huffman, cross-entropy, divergence KL, perplexité) · ch. 12 (one-hot, PCA et SVD, UMAP, information mutuelle) · ch. 13 (régression logistique) · ch. 17 (sigmoïde, softmax, log-sum-exp) · ch. 18 (règle de la chaîne) · ch. 20 (boucle d'entraînement PyTorch) · ch. 22 (vocabulaire, `encode` et `decode`, token inconnu) · ch. 24 (`nn.Embedding`, génération mot par mot) · B1 (embedding d'un modèle pré-entraîné, cosinus, fiche modèle, licences) |
 | **Fichiers du chapitre** | `02_exercices.md` (quiz, rappels, papier, réflexion, entretien) · `03_notebook.ipynb` · `04_indices.md` · `05_solutions.md` et `05_solutions.ipynb` · `06_mes_reponses.md` · `flashcards.csv` |
 | **mylearn** | `tokenizer.py` : `get_pair_counts` et `merge_pair` (B2.15), `BPETokenizer.fit` (B2.16), `encode`, `decode` et `tokenize` (B2.17) ; `pre_tokenize`, `save` et `load` sont fournis · `embeddings.py` : `cooccurrence_matrix` et `ppmi` (B2.22), `cosine_similarity_matrix` et `most_similar` (B2.23). Le tokenizer resservira en B3 (un mini-GPT sur des tokens BPE) et B4 ; `most_similar` en B4 (recherche dense) |
 
 ## Comment utiliser ce chapitre
 
-La fiche et les exercices papier posent les idées et les calculs ; le notebook les met en œuvre sur Holmes et Verne. Les codes de la fiche ont été exécutés avec les versions du workbook (Python 3.13, tokenizers 0.23.3, transformers 5.21, PyTorch 2.11, NumPy 2.1, scikit-learn 1.6), sur **d'autres phrases et d'autres corpus** que les exercices.
+La fiche et les exercices papier posent les idées et les calculs ; le notebook les met en œuvre sur Holmes et Verne. Les codes de la fiche ont été exécutés avec les versions du workbook (Python 3.13, tokenizers 0.23.3, transformers 5.21, PyTorch 2.11, NumPy 2.1, scikit-learn 1.6), sur **d'autres phrases, d'autres corpus ou d'autres mots** que les exercices.
 
 **Ordre conseillé.**
 1. Lis 202.1 et 202.2. Fais les quiz Q1 à Q3, le rappel R2 et le calcul ✏️ B2.1.
@@ -59,7 +59,7 @@ La fiche et les exercices papier posent les idées et les calculs ; le notebook 
 9. **Un mot se définit par ses voisins** : la PPMI des co-occurrences réduite par SVD, ou word2vec, qui distingue les vrais contextes de mots tirés au hasard, rapprochent par le **cosinus** les mots de sens proche.
 10. Ces vecteurs **statiques** ont un sens par mot et héritent des stéréotypes du corpus ; les Transformers donnent des embeddings **contextuels**, et un **embedding de phrase** (mean pooling) permet la recherche sémantique.
 
-> 📐 **Conventions de la fiche** — L'**identifiant** (*id*) d'un token est un entier de $0$ à $V - 1$, $V$ étant la taille du vocabulaire (numérotation à partir de 0, comme en Python). $d$ est la dimension des embeddings et $\mathbf{E}$, de forme $(V, d)$, la table d'embedding ; $\mathbf{E}[i, :]$ est sa ligne $i$. Pour les co-occurrences, $w$ est un mot, $c$ un mot de son contexte, $\#(w, c)$ un compte et $\mathbf{C}$ la matrice des comptes. Dans word2vec, $\mathbf{v}_w$ est la ligne du mot $w$ dans la table des mots $\mathbf{E}$, $\mathbf{u}_c$ celle du contexte $c$ dans une seconde table $\mathbf{E}'$, et $n_1, \dots, n_K$ sont les $K$ mots tirés au hasard. $\mathbf{h}_t$ est l'embedding contextuel du token $t$ et $m_t \in \{0, 1\}$ son masque. $\log$ est le logarithme naturel (des nats, ch. 6) ; $\sigma$ est la sigmoïde. **Écarts au §6** : $d$ est la dimension d'un embedding (comme en B1), $K$ un nombre de tirages et non de classes, $V$ (en italique) une taille et non une matrice ; les vecteurs de word2vec s'appellent $\mathbf{u}$ et $\mathbf{v}$, comme dans l'article de Mikolov et coll. (2013).
+> 📐 **Conventions de la fiche** — L'**identifiant** (*id*) d'un token est un entier de $0$ à $V - 1$, $V$ étant la taille du vocabulaire (numérotation à partir de 0, comme en Python). $d$ est la dimension des embeddings et $\mathbf{E}$, de forme $(V, d)$, la table d'embedding ; $\mathbf{E}[i, :]$ est sa ligne $i$. Pour les co-occurrences, $w$ est un mot, $c$ un mot de son contexte, $\#(w, c)$ un compte et $\mathbf{C}$ la matrice des comptes. Dans word2vec, $\mathbf{v}_w$ est la ligne du mot $w$ dans la table des mots $\mathbf{E}$, $\mathbf{u}_c$ celle du contexte $c$ dans une seconde table $\mathbf{E}'$, et $n_1, \dots, n_K$ sont les $K$ mots tirés au hasard. $\mathbf{h}_t$ est l'embedding contextuel du token $t$ et $m_t \in \{0, 1\}$ son masque. $\log$ est le logarithme naturel (des nats, ch. 6) ; $\sigma$ est la sigmoïde. **Écarts au §6** : $d$ est la dimension d'un embedding (comme en B1), $K$ un nombre de tirages et non de classes, $V$ (en italique) une taille et non une matrice ; un batch compte $N$ séquences de $T$ tokens (comme au ch. 22), mais en 202.8 $N$ est le total des comptes de $\mathbf{C}$ ; $k$ est la demi-largeur de la fenêtre en 202.8 et un nombre de voisins en 202.9 et 202.10 ; les vecteurs de word2vec s'appellent $\mathbf{u}$ et $\mathbf{v}$, comme dans l'article de Mikolov et coll. (2013).
 
 ---
 
@@ -112,7 +112,7 @@ Un texte est une suite de **points de code** (*code points*) Unicode : des entie
 | U+0800 à U+FFFF | 3 | `1110xxxx 10xxxxxx 10xxxxxx` | « € » → `E2 82 AC` |
 | U+10000 à U+10FFFF | 4 | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` | « 🙂 » → `F0 9F 99 82` |
 
-Les `x` reçoivent les bits du point de code. Pour « ç » : $\text{0xE7} = 231 = 000\,1110\,0111$ sur 11 bits ; `00011` va dans `110 00011` = 0xC3, `100111` dans `10 100111` = 0xA7. Pour un tokenizer, UTF-8 a trois qualités : l'**ASCII reste un octet** ; **chaque octet dit son rôle** (`0…` complet, `110…`, `1110…`, `11110…` début, `10…` suite) ; et **256 symboles suffisent** pour tout texte, la base du BPE au niveau octet (202.4). Le prix : 2 octets pour un caractère accentué, grec, cyrillique ou arabe, 3 pour le hindi, le thaï, le chinois ou le japonais, 4 pour un emoji.
+Les `x` reçoivent les bits du point de code. Pour « ç » : $\text{0xE7} = 231 = 000\,1110\,0111$ sur 11 bits ; `00011` va dans `110 00011` = 0xC3, `100111` dans `10 100111` = 0xA7. Pour un tokenizer, UTF-8 a trois qualités : l'**ASCII reste un octet** ; **chaque octet dit son rôle** (`0…` complet, `110…`, `1110…`, `11110…` début, `10…` suite) ; et **256 symboles suffisent** pour tout texte, la base du BPE au niveau octet (202.4). Le prix : 2 octets pour une lettre accentuée du français, une lettre grecque, cyrillique ou arabe, 3 pour le hindi, le thaï, le chinois ou le japonais, 4 pour la plupart des emoji.
 
 > 🧮 **Rappel outil — `str`, `bytes` et `encode`** — En Python 3, un `str` est une suite de points de code et `len` compte les points de code ; un `bytes` est une suite d'octets, écrite `b'...'`, et `len` compte les octets. `texte.encode("utf-8")` passe du premier au second, `donnees.decode("utf-8")` revient. `ord("ç")` donne le point de code (231), `chr(231)` le caractère, `f"U+{ord(c):04X}"` l'écriture U+. Un `bytes` se lit comme une liste d'entiers : `list(b"ab")` vaut `[97, 98]`. Décoder des octets qui ne forment pas de l'UTF-8 valide lève `UnicodeDecodeError`, sauf avec `errors="replace"`, qui met le caractère de remplacement « � » (U+FFFD) à la place de chaque morceau invalide.
 
@@ -125,7 +125,7 @@ print([f"U+{ord(c):04X}" for c in s if ord(c) > 127])   # ['U+00C7', 'U+00FB', '
 print(b[:1].decode("utf-8", errors="replace"))           # '�': the first byte of 'Ç' alone
 ```
 
-Treize points de code, dix-sept octets. Couper un `bytes` au milieu d'un caractère donne des octets invalides : c'est ce qui arrive quand on décode **un par un** les tokens d'un tokenizer au niveau octet (202.4, 🐛 B2.18).
+Couper un `bytes` au milieu d'un caractère donne des octets invalides : c'est ce qui arrive quand on décode **un par un** les tokens d'un tokenizer au niveau octet (202.4, 🐛 B2.18).
 
 ### Un caractère affiché, plusieurs points de code
 
@@ -160,7 +160,7 @@ Mettre en minuscules (`lower()`, ou `casefold()` qui fait aussi de « ß » un �
 
 ### Un algorithme de compression devenu tokenizer
 
-Le **Byte Pair Encoding** (BPE) est d'abord un algorithme de compression (P. Gage, 1994) : remplacer la paire d'octets voisins la plus fréquente par un octet inutilisé, et recommencer. R. Sennrich, B. Haddow et A. Birch l'ont adapté à la traduction automatique (ACL 2016, 📄 B2.12) : on fusionne des caractères, puis des suites de caractères, et chaque fusion crée un **sous-mot**. Leurs systèmes anglais → allemand et anglais → russe gagnaient 1,1 et 1,3 point de BLEU sur une référence qui traitait les mots rares avec un dictionnaire.
+Le **Byte Pair Encoding** (BPE) est d'abord un algorithme de compression (P. Gage, 1994) : remplacer la paire d'octets voisins la plus fréquente par un octet inutilisé, et recommencer. R. Sennrich, B. Haddow et A. Birch l'ont adapté à la traduction automatique (ACL 2016, 📄 B2.12) : on fusionne des caractères, puis des suites de caractères, et chaque fusion crée un **sous-mot** ; leurs systèmes traduisent ainsi des mots jamais vus.
 
 Lien avec le ch. 6 : Huffman donne des codes courts aux symboles fréquents ; BPE donne **un seul token** aux suites fréquentes. Les deux compressent, mais BPE produit des unités qu'on peut donner à un réseau (🔁 R3).
 
@@ -200,7 +200,7 @@ où $\operatorname{count}(a, b)$ somme la fréquence des mots, une fois par occu
 
 Avec `vocab_size=14` (8 caractères et 6 fusions), l'entraînement s'arrête là : « chaton » est un token, « raton » reste « rat » + « on ». BPE retrouve des **racines** (« chat », « rat ») et un **suffixe** (« on »), simplement parce qu'ils reviennent souvent.
 
-> 🕰️ **Mise à jour (2026) — le départage des fusions dans `tokenizers`** — **Le livre :** ne présente aucun tokenizer de sous-mots. · **Aujourd'hui :** `BpeTrainer` de la bibliothèque `tokenizers` range ses candidats dans un tas trié par compte décroissant ; à compte égal, c'est la **plus petite paire d'identifiants** qui sort la première (comparaison de `(a, b)` d'abord sur `a`, puis sur `b`). Les identifiants de l'alphabet suivent l'**ordre des points de code** (l'alphabet est trié par `char as u32`), et ceux des tokens fusionnés l'ordre de création. Les tokens spéciaux, eux, reçoivent les **premiers** identifiants. · **Faut-il quand même l'apprendre ?** Oui : sans cette règle, deux implémentations justes de BPE divergent dès la première égalité, et ton `BPETokenizer` ne pourrait pas se comparer exactement à `tokenizers` (📦 B2.19). · *Source :* [`tokenizers/src/models/bpe/trainer.rs`, tag v0.23.3](https://github.com/huggingface/tokenizers/blob/v0.23.3/tokenizers/src/models/bpe/trainer.rs) (`impl Ord for Merge` : « Here we want ascending order » ; `compute_alphabet` : `sort_unstable_by_key(|k| *k.0 as u32)`).
+> 🕰️ **Mise à jour (2026) — le départage des fusions dans `tokenizers`** — **Le livre :** ne présente aucun tokenizer de sous-mots. · **Aujourd'hui :** `BpeTrainer` de la bibliothèque `tokenizers` range ses candidats dans un tas trié par compte décroissant ; à compte égal, c'est la **plus petite paire d'identifiants** qui sort la première (comparaison de `(a, b)` d'abord sur `a`, puis sur `b`). Les identifiants de l'alphabet suivent l'**ordre des points de code** (l'alphabet est trié par `char as u32`), et ceux des tokens fusionnés l'ordre de création. · **Faut-il quand même l'apprendre ?** Oui : sans cette règle, deux implémentations justes de BPE divergent dès la première égalité, et ton `BPETokenizer` ne pourrait pas se comparer exactement à `tokenizers` (📦 B2.19). · *Source :* [`tokenizers/src/models/bpe/trainer.rs`, tag v0.23.3](https://github.com/huggingface/tokenizers/blob/v0.23.3/tokenizers/src/models/bpe/trainer.rs) (`impl Ord for Merge` : « Here we want ascending order » ; `compute_alphabet` : `sort_unstable_by_key(|k| *k.0 as u32)`).
 
 La bibliothèque `tokenizers` redonne exactement ces fusions :
 
@@ -243,10 +243,10 @@ Recompter toutes les paires après chaque fusion coûte cher. Deux astuces : tra
 Les 🔨 B2.15 à B2.17 te font écrire un BPE complet avec la seule bibliothèque standard :
 - `get_pair_counts(words)` reçoit `{mot en tuple d'identifiants: fréquence}` et rend `{(a, b): compte pondéré}` ; les paires d'un mot peuvent se chevaucher, et les comptes somment à $\sum \text{fréquence} \times (\text{longueur} - 1)$ ;
 - `merge_pair(ids, pair, new_id)` remplace chaque occurrence de la paire, de gauche à droite et **sans chevauchement**, et rend une **nouvelle** liste ;
-- `BPETokenizer.fit` apprend `merges_`, `vocab_` (les octets de chaque token), `n_base_` et `special_ids_`. Identifiants : l'alphabet (les 256 octets, ou les caractères vus triés par point de code), puis les fusions dans l'ordre, puis les tokens spéciaux ; `vocab_size` compte **tout**, comme `BpeTrainer`. Arrêt à cette taille, faute de paire, ou quand la meilleure paire apparaît moins de `min_frequency` fois ; à égalité, la plus petite paire d'identifiants ;
+- `BPETokenizer.fit` apprend `merges_`, `vocab_` (les octets de chaque token), `n_base_` et `special_ids_`. Identifiants : l'alphabet (les 256 octets, ou les caractères vus triés par point de code), puis les fusions dans l'ordre, puis les tokens spéciaux (202.4) ; `vocab_size` compte **tout**, comme `BpeTrainer`. Arrêt à cette taille, faute de paire, ou quand la meilleure paire apparaît moins de `min_frequency` fois ; à égalité, la plus petite paire d'identifiants ;
 - `encode` applique les fusions par rang dans chaque pré-token, `decode` recolle les octets et décode l'UTF-8 avec `errors="replace"`. `pre_tokenize`, `save` et `load` sont fournis.
 
-Au niveau caractère, avec `'whitespace'` et sans token spécial, tes fusions doivent être **identiques** à celles de `tokenizers`. Deux écarts sont permis (docstring) : `tokenizers` place les tokens spéciaux en tête, et réutilise l'identifiant d'une chaîne déjà présente au lieu d'en créer un.
+Au niveau caractère, avec `'whitespace'` et sans token spécial, tes fusions doivent être **identiques** à celles de `tokenizers` ; la docstring de la classe liste les deux seuls écarts permis (où vont les tokens spéciaux, et une chaîne recréée par une seconde fusion).
 
 ---
 
@@ -303,12 +303,12 @@ Un **token spécial** (*special token*) est un signal pour le modèle : il a son
 |---|---|---|
 | **BOS** (*beginning of sequence*) | début d'une séquence | `<s>` (CamemBERT, XLM-R), `<|begin_of_text|>` (Llama 3) |
 | **EOS** (*end of sequence*) | fin d'un document ; le modèle le génère pour s'arrêter | `<|endoftext|>` (GPT-2, id 50 256), `</s>` (T5) |
-| **PAD** | remplissage des séquences courtes d'un batch (202.5) | `[PAD]` (BERT, id 0) |
+| **PAD** | padding des séquences courtes d'un batch (202.5) | `[PAD]` (BERT, id 0) |
 | **UNK** | token inconnu, si l'alphabet en a besoin | `[UNK]` (BERT), `<unk>` (T5) |
 | **CLS**, **SEP**, **MASK** | résumé de la phrase, séparation de deux phrases, mot masqué à deviner | `[CLS]`, `[SEP]`, `[MASK]` (BERT) |
 | balises de conversation | début et fin d'un tour de parole dans un modèle de chat | `<|im_start|>`, `<|im_end|>` (Qwen) |
 
-GPT-2 n'a que `<|endoftext|>`, qui sépare les documents et sert de début et de fin ; faute de token de remplissage, on le prend souvent à sa place. Les modèles de chat (B4) ajoutent des balises qui délimitent les messages.
+GPT-2 n'a que `<|endoftext|>`, qui sépare les documents et sert de début et de fin ; faute de token de padding, on le prend souvent à sa place. Les modèles de chat (B4) ajoutent des balises qui délimitent les messages.
 
 > ⚠️ **Piège classique — un token spécial tapé par l'utilisateur** — Avec `transformers`, `"<|endoftext|>"` écrit **dans le texte** devient le token spécial : `tok.encode("hi<|endoftext|>")` rend `[5303, 50256]`, et un utilisateur peut glisser une fin de document ou une balise de conversation dans un prompt. `tiktoken` refuse par défaut un tel texte (`disallowed_special="all"`) ; avec `transformers`, filtre ces chaînes avant d'encoder.
 
@@ -330,11 +330,11 @@ qui favorise les paires dont les éléments apparaissent **surtout ensemble** (l
 
 ### Unigram : partir de trop et élaguer
 
-**Unigram** (T. Kudo, ACL 2018) prend le chemin inverse : partir d'un **grand** vocabulaire (les caractères et les sous-chaînes fréquentes) et l'**élaguer**. Chaque token a une probabilité $p(x)$, et un découpage $x_1, \dots, x_k$ a la probabilité $\prod_i p(x_i)$. On alterne : estimer les $p(x)$ par l'algorithme EM ; mesurer de combien la vraisemblance du corpus baisserait sans chaque token ; garder les plus utiles (par exemple 80 %), et toujours les caractères seuls. Pour **encoder**, on prend le découpage le plus probable (algorithme de Viterbi) ; Kudo en **tire** aussi au hasard pour régulariser un modèle de traduction (*subword regularization*).
+**Unigram** (T. Kudo, ACL 2018) prend le chemin inverse : partir d'un **grand** vocabulaire (les caractères et les sous-chaînes fréquentes) et l'**élaguer**. Chaque token a une probabilité $p(x)$, et un découpage $x_1, \dots, x_m$ a la probabilité $\prod_i p(x_i)$. On alterne : estimer les $p(x)$ (algorithme EM, *expectation-maximization* : découper le corpus avec les probabilités du moment, puis les recompter) ; mesurer de combien la vraisemblance du corpus baisserait sans chaque token ; garder les plus utiles (par exemple 80 %), et toujours les caractères seuls. Pour **encoder**, on prend le découpage le plus probable (algorithme de Viterbi, qui le trouve sans énumérer tous les découpages) ; Kudo en **tire** aussi au hasard pour régulariser un modèle de traduction (*subword regularization*).
 
 ### SentencePiece : sans pré-tokenisation
 
-**SentencePiece** (T. Kudo et J. Richardson, EMNLP 2018) n'est pas un algorithme mais une **bibliothèque** qui entraîne BPE ou Unigram **sur le texte brut**, sans supposer d'espaces entre les mots (le japonais et le chinois n'en ont pas). L'espace devient un symbole ordinaire, « ▁ » (U+2581), collé au morceau qui suit (« ▁chaton ») : le décodage est sans perte. T5, CamemBERT, XLM-R et la famille e5 multilingue utilisent SentencePiece avec Unigram ; Mistral 7B, SentencePiece avec BPE et un repli sur les octets (*byte fallback*) : un caractère absent du vocabulaire s'écrit avec les tokens de ses octets.
+**SentencePiece** (T. Kudo et J. Richardson, EMNLP 2018) n'est pas un algorithme mais une **bibliothèque** qui entraîne BPE ou Unigram **sur le texte brut**, sans supposer d'espaces entre les mots (le japonais et le chinois n'en ont pas). L'espace devient un symbole ordinaire, « ▁ » (U+2581), collé au morceau qui suit (« ▁chaton ») : le décodage est sans perte. T5, CamemBERT et XLM-R l'utilisent avec Unigram, Mistral 7B avec BPE et un **repli sur les octets** (*byte fallback*) : un caractère absent du vocabulaire s'écrit avec les tokens de ses octets.
 
 ### Les tokenizers des modèles, lus dans leur `tokenizer.json`
 
@@ -349,17 +349,17 @@ Sur le Hub, le fichier `tokenizer.json` d'un modèle contient son normaliseur, s
 | XLM-R et multilingual-e5 (`intfloat/multilingual-e5-small`) | SentencePiece Unigram | 250 002 | une centaine de langues |
 | Mistral 7B (`mistralai/Mistral-7B-v0.1`, 2023) | SentencePiece BPE | 32 000 | repli sur les octets |
 | SmolLM2 (`HuggingFaceTB/SmolLM2-135M`, 2024) | BPE octet | 49 152 | chiffres un par un |
-| Llama 3 (`meta-llama/…`, 2024) | BPE octet | 128 256 | 128 000 appris, 256 réservés ; dépôts à **accès contrôlé** (*gated*) : lu dans une copie publique (`unsloth/Llama-3.2-1B`), confirmé par Hugging Face |
+| Llama 3 (`meta-llama/…`, 2024) | BPE octet | 128 256 | 128 000 appris, 256 réservés ; lu dans une copie publique (`unsloth/Llama-3.2-1B`) |
 | Qwen3 (`Qwen/Qwen3-0.6B`, 2025) | BPE octet | 151 669 | NFC, chiffres un par un ; table d'embedding de 151 936 lignes |
 | gpt-oss (`openai/gpt-oss-20b`, 2025) | BPE octet (`o200k_harmony`) | 200 019 | famille des tokenizers récents d'OpenAI |
 
-Les dépôts de Gemma et de Llama sont à accès contrôlé : leur `tokenizer.json` ne se lit qu'après avoir accepté la licence.
+Les dépôts de Gemma et de Llama sont à **accès contrôlé** (*gated*) : leur `tokenizer.json` ne se lit qu'après avoir accepté la licence.
 
-> 🕰️ **Mise à jour (2026) — la tokenisation des modèles de langue** — **Le livre :** travaille par caractères (le générateur de Holmes du ch. 22, 89 caractères) ou par mots (ch. 24 : les 8 000 mots les plus fréquents, un même mot pour tous les autres) ; il ne parle pas de sous-mots. · **Aujourd'hui :** tous les modèles de langue utilisent des sous-mots : BPE au niveau octet pour GPT, Llama 3, Qwen et gpt-oss, SentencePiece Unigram pour T5 et XLM-R, WordPiece pour BERT ; les vocabulaires vont de 32 000 à plus de 250 000 tokens, et grandissent avec les modèles multilingues (32 000 pour Llama 2, 128 256 pour Llama 3). · **Faut-il quand même l'apprendre ?** Oui : le coût, les limites (chiffres, langues) et des bugs d'un modèle viennent de son tokenizer. · *Sources :* les `tokenizer.json` des dépôts cités ; [annonce de Llama 3 par Hugging Face](https://huggingface.co/blog/llama3) (« expands the vocabulary size to 128,256 (from 32K tokens in the previous version) »).
+> 🕰️ **Mise à jour (2026) — la tokenisation des modèles de langue** — **Le livre :** travaille par caractères (le générateur de Holmes du ch. 22, 89 caractères) ou par mots (ch. 24 : les 8 000 mots les plus fréquents, un même mot pour tous les autres) ; il ne parle pas de sous-mots. · **Aujourd'hui :** tous les modèles de langue utilisent des sous-mots (tableau ci-dessus) ; les vocabulaires vont de 30 000 à plus de 250 000 tokens et grandissent d'une génération à l'autre (32 000 pour Llama 2, 128 256 pour Llama 3). · **Faut-il quand même l'apprendre ?** Oui : le coût, les limites (chiffres, langues) et des bugs d'un modèle viennent de son tokenizer. · *Sources :* les `tokenizer.json` des dépôts cités ; [annonce de Llama 3 par Hugging Face](https://huggingface.co/blog/llama3) (« expands the vocabulary size to 128,256 (from 32K tokens in the previous version) »).
 
 ### Utiliser un tokenizer avec `transformers`
 
-`AutoTokenizer.from_pretrained(nom)` télécharge les fichiers du tokenizer (quelques Mo, sans les poids) et rend un objet qui découpe, numérote, ajoute les tokens spéciaux, **complète** (*padding*) et **tronque** :
+`AutoTokenizer.from_pretrained(nom)` télécharge les fichiers du tokenizer (quelques Mo, sans les poids) et rend un objet qui découpe, numérote, ajoute les tokens spéciaux, fait le **padding** des textes courts et **tronque** les longs :
 
 ```python
 bert = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
@@ -370,7 +370,7 @@ print(enc["attention_mask"])
 # [[1, 1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 0, 0]]: two [PAD] at the end of the second text
 ```
 
-Pour ranger plusieurs textes dans un tenseur, `padding=True` complète les plus courts avec `[PAD]`, et le **masque d'attention** (`attention_mask`) vaut 1 sur les vrais tokens, 0 sur le remplissage (il servira en 202.10) ; `truncation=True` coupe à `tok.model_max_length`.
+Pour ranger plusieurs textes dans un tenseur, `padding=True` complète les plus courts avec `[PAD]`, et le **masque d'attention** (`attention_mask`) vaut 1 sur les vrais tokens, 0 sur le padding (il servira en 202.10) ; `truncation=True` coupe à `tok.model_max_length`.
 
 > 🕰️ **Mise à jour (2026) — les tokenizers dans transformers 5** — **Le livre :** n'en parle pas (la bibliothèque est née fin 2018, sous un autre nom). · **Aujourd'hui :** la version 5 supprime la distinction entre tokenizers « lents » (Python) et « rapides » (`…Fast`, Rust) : **un seul** fichier `tokenization_<modèle>.py` par modèle, qui utilise de préférence le moteur de `tokenizers` (`TokenizersBackend`), sinon SentencePiece ou Python ; `type(tok).__name__` affiche `GPT2Tokenizer`, `BertTokenizer` ou `TokenizersBackend`, sans « Fast ». · **Faut-il quand même l'apprendre ?** Oui, pour lire du code ancien, plein de `use_fast=True` et de `BertTokenizerFast`. · *Source :* [guide de migration vers transformers v5, tag v5.21](https://raw.githubusercontent.com/huggingface/transformers/v5.21/MIGRATION_GUIDE_V5.md) (« In v5, we consolidate to a single tokenizer file per model »).
 
@@ -396,7 +396,7 @@ Le token spécial a l'identifiant 0 : `tokenizers` place les tokens spéciaux **
 
 > ⚠️ **Piège classique — un BPE qui jette des caractères** — `models.BPE()` sans `unk_token`, au niveau caractère, **supprime sans prévenir** les caractères jamais vus : avec le tokenizer « chat » de 202.3, `tok.encode("Le chat, le rat.").tokens` rend `['chat', 'rat']`. Déclare un `unk_token`, ou travaille au niveau octet.
 
-> 🕰️ **Mise à jour (2026) — `tiktoken`** — **Le livre :** —. · **Aujourd'hui :** OpenAI publie ses tokenizers dans `tiktoken` (0.14.0) : `tiktoken.encoding_for_model("gpt-4o")` ; GPT-4o, o1, o3 et GPT-5 utilisent `o200k_base`, GPT-4 `cl100k_base`. Préinstallée sur Colab, absente de l'environnement du workbook : le chapitre s'en passe (`openai/gpt-oss-20b` donne un tokenizer de la même famille dans `transformers`). · **Faut-il quand même l'apprendre ?** Oui, pour compter les tokens d'un prompt avant d'appeler l'API d'OpenAI. · *Source :* [dépôt `openai/tiktoken`](https://github.com/openai/tiktoken) (`README.md`, `tiktoken/model.py`, `tiktoken/core.py`).
+> 🕰️ **Mise à jour (2026) — `tiktoken`** — **Le livre :** —. · **Aujourd'hui :** OpenAI publie ses tokenizers dans `tiktoken` (0.14.0) : `tiktoken.encoding_for_model("gpt-4o")` ; GPT-4o, o1, o3 et GPT-5 utilisent `o200k_base`, GPT-4 `cl100k_base`. Préinstallée sur Colab, absente de l'environnement du workbook : le chapitre s'en passe (`openai/gpt-oss-20b` donne un tokenizer de la même famille dans `transformers`). · **Faut-il quand même l'apprendre ?** Oui, pour compter les tokens d'un prompt avant d'appeler l'API d'OpenAI. · *Source :* [dépôt `openai/tiktoken`, tag 0.14.0](https://github.com/openai/tiktoken/tree/0.14.0) (`README.md`, `tiktoken/model.py`, `tiktoken/core.py`).
 
 ---
 
@@ -417,8 +417,8 @@ Sur la Déclaration universelle des droits de l'homme (préambule et 30 articles
 Lecture de la figure :
 - **GPT-2**, appris sur de l'anglais, paie environ 2 fois plus en français, en espagnol ou en allemand, 6,5 fois en russe, 9 en hindi, 19 en tamoul, 22 en birman : pour les écritures non latines, il retombe souvent sur un token par octet ;
 - **gpt-oss** (`o200k`) réduit beaucoup l'écart (1,33 pour le français, 1,66 pour le hindi), sauf en birman (4,3) ;
-- **Qwen3** est économe en chinois (0,91, moins que l'anglais), pas en grec ni en hindi (5,4) ;
-- **XLM-R** (250 000 tokens, une centaine de langues) est le plus égal, de 0,87 à 3,5 (le yoruba, hors figure), mais l'anglais lui coûte 10 à 13 % de plus qu'aux trois autres.
+- **Qwen3** est économe en chinois (0,91, moins que l'anglais), pas en grec ni en hindi (5,4), encore moins en tamoul (7,7) et en birman (12) ;
+- **XLM-R** (250 000 tokens, une centaine de langues) est le plus égal, de 0,87 (chinois) à 2,2 (birman), mais l'anglais lui coûte 10 à 13 % de plus qu'aux trois autres.
 
 A. Petrov, E. La Malfa, P. Torr et A. Bibi (NeurIPS 2023) ont mesuré ces écarts sur FLORES-200, des phrases traduites en 200 langues. Leur **surcoût** (*tokenization premium*), le rapport au nombre de tokens de la traduction anglaise, vaut 2,00 pour le français avec GPT-2, comme ici, et dépasse 15 pour certaines langues ; même au niveau des caractères ou des octets, l'écart dépasse 4 fois entre certaines langues. Leur conclusion : entraîner des tokenizers **équitables entre les langues** (⚖️ B2.11). Personne n'a décidé de faire payer plus les locuteurs du tamoul : le surcoût vient du corpus du tokenizer, où l'anglais domine, et il se paie trois fois :
 - **en argent** : les API facturent au token ;
@@ -427,7 +427,7 @@ A. Petrov, E. La Malfa, P. Torr et A. Bibi (NeurIPS 2023) ont mesuré ces écart
 
 ### Le prix d'un token
 
-Les API facturent au million de tokens, avec un tarif pour l'**entrée** (le prompt, les documents) et un pour la **sortie** (le texte généré). Relevés fin octobre 2026 par deux comparateurs ([BenchLM](https://benchlm.ai/md/blog/posts/llm-pricing-2026.md), données du 29 octobre ; [GeoToolbox](https://geotoolbox.ai/blog/ai-token-cost.md), mise à jour du 28 octobre), les prix vont de 0,05 $ à 30 $ par million de tokens d'entrée, et de 0,40 $ à 180 $ par million de tokens de sortie ; la sortie coûte en général 3 à 8 fois plus que l'entrée, et la plupart des modèles courants coûtent entre 0,10 $ et 10 $ par million de tokens d'entrée. Ces prix baissent vite : vérifie la page officielle du fournisseur le jour de ton estimation. Exemple : classer 10 000 tickets de support de 150 mots en anglais, soit 1,5 million de mots ; avec une fertilité de 1,2, 1,8 million de tokens d'entrée, de 0,18 $ (à 0,10 $ le million) à 18 $ (à 10 $). En français, avec une fertilité de 1,5 : 2,25 millions de tokens, 25 % de plus (🧮 B2.8).
+Les API facturent au million de tokens, avec un tarif pour l'**entrée** (le prompt, les documents) et un pour la **sortie** (le texte généré). Le 1ᵉʳ novembre 2026, les pages officielles d'[OpenAI](https://developers.openai.com/api/docs/pricing), d'[Anthropic](https://platform.claude.com/docs/en/about-claude/pricing) et de [Google](https://ai.google.dev/gemini-api/docs/pricing) affichent, pour leurs modèles de texte actuels au tarif standard, de 0,10 $ à 10 $ par million de tokens d'entrée et de 0,40 $ à 50 $ par million de tokens de sortie : la sortie coûte 4 à 8 fois l'entrée. Ces prix changent souvent : relève-les le jour de ton estimation. Exemple : classer 10 000 tickets de support de 150 mots en anglais, soit 1,5 million de mots ; avec une fertilité de 1,2, 1,8 million de tokens d'entrée, de 0,18 $ (à 0,10 $ le million) à 18 $ (à 10 $). En français, avec une fertilité de 1,5 : 2,25 millions de tokens, 25 % de plus (🧮 B2.8).
 
 ### Les chiffres et les lettres
 
@@ -437,7 +437,7 @@ Le tokenizer explique deux faiblesses célèbres des modèles de langue (🧠 Q8
 
 **Les lettres.** « Ġpeacefully » est un seul identifiant pour GPT-2, aussi opaque qu'un numéro de série. Compter les « r » d'un mot ou l'épeler à l'envers demande au modèle d'avoir appris de quelles lettres chaque token est fait : il le sait souvent, pas toujours.
 
-> 💼 **En entreprise** — Avant de choisir un modèle pour une autre langue que l'anglais, on mesure la fertilité de son tokenizer sur **ses** textes : trois lignes de code, et souvent 30 % d'écart sur la facture et la fenêtre de contexte, bien plus pour du code, des nombres ou une langue peu dotée.
+> 💼 **En entreprise** — Avant de choisir un modèle pour une autre langue que l'anglais, on mesure la fertilité de son tokenizer sur **ses** textes : trois lignes de code, et souvent 30 % d'écart ou plus sur la facture et la fenêtre de contexte, bien plus pour du code, des nombres ou une langue peu dotée.
 
 ---
 
@@ -491,7 +491,7 @@ Tailles lues dans les fichiers de poids. e5 multilingue est surtout une table : 
 
 ### Les poids liés
 
-Un modèle de langue a une table d'entrée $\mathbf{E}$, de forme $(V, d)$, et une couche de sortie qui transforme un vecteur $\mathbf{h}$ en $V$ logits : une matrice $\mathbf{W}_{\text{out}}$ de forme $(V, d)$ elle aussi. Les **poids liés** (*weight tying*, O. Press et L. Wolf, 2017) imposent $\mathbf{W}_{\text{out}} = \mathbf{E}$ : les logits $\mathbf{E}\,\mathbf{h}$ comparent $\mathbf{h}$ à l'embedding de chaque token. On économise $V \times d$ paramètres, souvent avec une meilleure perplexité sur de petits corpus.
+Un modèle de langue a une table d'entrée $\mathbf{E}$, de forme $(V, d)$, et une couche de sortie qui transforme un vecteur $\mathbf{h}$ en $V$ logits : une matrice $\mathbf{W}_{\text{out}}$ de forme $(V, d)$ elle aussi. Les **poids liés** (*weight tying*, O. Press et L. Wolf, 2017) imposent $\mathbf{W}_{\text{out}} = \mathbf{E}$ : les logits $\mathbf{E}\,\mathbf{h}$ comparent $\mathbf{h}$ à l'embedding de chaque token. On économise $V \times d$ paramètres, souvent avec une meilleure perplexité.
 
 ```python
 class TinyLM(nn.Module):
@@ -529,15 +529,15 @@ On ne veut pas savoir si $c$ est **souvent** près de $w$, mais s'il y est **plu
 
 > 🧮 **Rappel maths — l'information mutuelle ponctuelle (PMI)** — Avec $N = \sum_{w, c} \#(w, c)$, on estime $p(w, c) = \#(w, c) / N$, $p(w) = \sum_c \#(w, c) / N$ (somme de la ligne) et $p(c) = \sum_w \#(w, c) / N$ (somme de la colonne). L'**information mutuelle ponctuelle** compare la probabilité de voir $w$ et $c$ ensemble à celle de l'indépendance :
 > $$\operatorname{PMI}(w, c) = \log \frac{p(w, c)}{p(w)\,p(c)}, \qquad \operatorname{PPMI}(w, c) = \max\big(0, \operatorname{PMI}(w, c)\big).$$
-> PMI $> 0$ : plus souvent que par hasard ; $< 0$ : moins ; $-\infty$ si $\#(w, c) = 0$, d'où la **PPMI** (*positive PMI*), qui vaut alors 0. Lien avec le ch. 6 : la moyenne de la PMI pondérée par $p(w, c)$ est l'**information mutuelle** $I(W; C)$, la divergence KL entre la loi jointe et le produit des marginales, nulle exactement à l'indépendance.
+> PMI $> 0$ : plus souvent que par hasard ; $< 0$ : moins ; $-\infty$ si $\#(w, c) = 0$, d'où la **PPMI** (*positive PMI*), qui vaut alors 0. La moyenne de la PMI pondérée par $p(w, c)$ est l'**information mutuelle** $I(W; C)$ des ch. 12 et 13, c'est-à-dire la divergence KL (ch. 6) entre la loi jointe et le produit des marginales, nulle exactement à l'indépendance.
 >
 > *Exemple.* Trois mots, « chien », « chat », « os », et la matrice de comptes (lignes et colonnes dans cet ordre) $\begin{pmatrix} 0 & 4 & 1 \\ 4 & 0 & 1 \\ 1 & 1 & 2 \end{pmatrix}$, de total $N = 14$. Les sommes des lignes valent 5, 5 et 4. $\operatorname{PMI}(\text{chien}, \text{chat}) = \log \frac{4/14}{(5/14)(5/14)} = \log \frac{4 \times 14}{25} = \log 2{,}24 \approx 0{,}807$ ; $\operatorname{PMI}(\text{chien}, \text{os}) = \log \frac{1 \times 14}{5 \times 4} = \log 0{,}7 \approx -0{,}357$, donc PPMI $= 0$ ; $\operatorname{PMI}(\text{os}, \text{os}) = \log \frac{2 \times 14}{16} \approx 0{,}560$.
 
 La PMI exagère les contextes **rares** : un contexte vu une fois, justement à côté de $w$, a une PMI énorme. O. Levy, Y. Goldberg et I. Dagan (2015) reprennent un réglage de word2vec : **lisser** la loi des contextes avec $\alpha = 0{,}75$,
 
-$$p_\alpha(c) = \frac{\#(c)^{\alpha}}{\sum_{c'} \#(c')^{\alpha}},$$
+$$p_\alpha(c) = \frac{\#(c)^{\alpha}}{\sum_{c'} \#(c')^{\alpha}}, \qquad \#(c) = \sum_w \#(w, c) \text{ (somme de la colonne)},$$
 
-ce qui augmente la probabilité des contextes rares, donc diminue leur PMI. Dans l'exemple, $p_\alpha$ vaut 0,351 pour « chien » et « chat » (au lieu de 0,357) et 0,297 pour « os » (au lieu de 0,286), et la PPMI de (chien, chat) passe de 0,807 à 0,823. `ppmi(C, alpha)` de ta librairie calcule cette formule (avec $\alpha = 1$ par défaut, la PPMI simple), et `cooccurrence_matrix(ids, vocab_size, window, weighting, symmetric)` la matrice de comptes, avec les deux pondérations (🔨 B2.22).
+qui remplace $p(c)$ dans la PMI : cela augmente la probabilité des contextes rares, donc diminue leur PMI. Dans l'exemple, $p_\alpha$ vaut 0,351 pour « chien » et « chat » (au lieu de 0,357) et 0,297 pour « os » (au lieu de 0,286), et la PPMI de (chien, chat) passe de 0,807 à 0,823. `ppmi(C, alpha)` de ta librairie calcule cette formule (avec $\alpha = 1$ par défaut, la PPMI simple), et `cooccurrence_matrix(ids, vocab_size, window, weighting, symmetric)` la matrice de comptes, avec les deux pondérations (🔨 B2.22).
 
 ### Réduire : la SVD tronquée
 
@@ -570,7 +570,7 @@ Le premier terme pousse $\sigma(\mathbf{u}_c^\top \mathbf{v}_w)$ vers 1 : le vra
 
 ![Le skip-gram avec échantillonnage négatif : dans « le vieux phare éclaire la côte », le mot central « éclaire » a pour contextes positifs « phare » et « côte », et trois négatifs tirés au hasard, « fromage », « lundi », « parce » ; son vecteur, lu dans la table des mots, est comparé par produit scalaire aux vecteurs de contexte, et la sigmoïde de chaque score doit tendre vers 1 pour les vrais contextes et vers 0 pour les négatifs](figures/skipgram.png)
 
-*Exemple chiffré* ($d = 3$, $K = 2$). $\mathbf{v}_w = (0{,}5 ;\ -1 ;\ 2)$, le vrai contexte $\mathbf{u}_c = (1 ;\ 0 ;\ 0{,}5)$, deux négatifs $\mathbf{u}_{n_1} = (0 ;\ 1 ;\ 0)$ et $\mathbf{u}_{n_2} = (-1 ;\ 0{,}5 ;\ 1)$. Scores : $\mathbf{u}_c^\top \mathbf{v}_w = 0{,}5 + 0 + 1 = 1{,}5$, puis $-1$ et $-0{,}5 - 0{,}5 + 2 = 1$. $L = -\log \sigma(1{,}5) - \log \sigma(1) - \log \sigma(-1) \approx 0{,}201 + 0{,}313 + 1{,}313 = 1{,}828$. Le second négatif, qui a un score positif, coûte le plus : c'est lui que le gradient corrigera le plus.
+*Exemple chiffré* ($d = 3$, $K = 2$). $\mathbf{v}_w = (0{,}5 ;\ -1 ;\ 2)$, le vrai contexte $\mathbf{u}_c = (1 ;\ 0 ;\ 0{,}5)$, deux négatifs $\mathbf{u}_{n_1} = (0 ;\ 1 ;\ 0)$ et $\mathbf{u}_{n_2} = (-1 ;\ 0{,}5 ;\ 1)$. Scores : $\mathbf{u}_c^\top \mathbf{v}_w = 0{,}5 + 0 + 1 = 1{,}5$, puis $-1$ et $-0{,}5 - 0{,}5 + 2 = 1$. $L = -\log \sigma(1{,}5) - \log \sigma(1) - \log \sigma(-1) \approx 0{,}201 + 0{,}313 + 1{,}313 = 1{,}828$. Le second négatif, qui a un score positif, coûte le plus.
 
 ```python
 import torch
@@ -596,7 +596,7 @@ L'autre version, **CBOW** (*continuous bag of words*), prédit le mot central à
 
 O. Levy et Y. Goldberg (2014) ont montré que le skip-gram à $K$ négatifs **factorise implicitement** la PMI décalée : à l'optimum, $\mathbf{u}_c^\top \mathbf{v}_w = \operatorname{PMI}(w, c) - \log K$. Compter et prédire apprennent au fond la même chose ; leur article de 2015 montre qu'avec les mêmes réglages (le lissage $\alpha = 0{,}75$, le sous-échantillonnage, la pondération de la SVD), les méthodes par comptage font jeu égal avec word2vec sur plusieurs tâches : une bonne part de l'avance de word2vec venait de ses réglages.
 
-> 🕰️ **Mise à jour (2026) — word2vec et les embeddings statiques** — **Le livre :** propose word2vec pour « donner des numéros proches à des mots proches » (ch. 22, p. 1077), sans le décrire. · **Aujourd'hui :** word2vec, GloVe et fastText (2017, qui ajoute des n-grammes de caractères pour les mots rares) donnent **un** vecteur par mot, quel que soit le contexte : ils ont été supplantés par les embeddings **contextuels** des Transformers (202.10) pour presque toutes les tâches. Ils restent utiles pour comprendre les embeddings, pour des systèmes très légers (quelques Mo, aucune passe de réseau), et comme point de comparaison. · **Faut-il quand même l'apprendre ?** Oui : l'échantillonnage négatif est le cousin des losses contrastives de CLIP (B1) et des modèles d'embedding de phrases, et le lien avec la PMI explique ce que capturent les embeddings. · *Sources :* [Mikolov et coll., NeurIPS 2013, arXiv:1310.4546](https://arxiv.org/abs/1310.4546) ; [Levy, Goldberg et Dagan, TACL 2015](https://transacl.org/ojs/index.php/tacl/article/viewFile/570/124) ; [Pennington, Socher et Manning, GloVe, EMNLP 2014](https://aclanthology.org/D14-1162.pdf).
+> 🕰️ **Mise à jour (2026) — word2vec et les embeddings statiques** — **Le livre :** propose word2vec pour « donner des numéros proches à des mots proches » (ch. 22, p. 1077), sans le décrire. · **Aujourd'hui :** word2vec, GloVe et fastText (2017, qui ajoute des n-grammes de caractères pour les mots rares) donnent **un** vecteur par mot, quel que soit le contexte : ils ont été supplantés par les embeddings **contextuels** des Transformers (202.10) pour presque toutes les tâches. Ils restent utiles pour comprendre les embeddings, pour des systèmes très légers (quelques Mo, aucune passe de réseau), et comme point de comparaison. · **Faut-il quand même l'apprendre ?** Oui : l'échantillonnage négatif est le cousin des losses contrastives de CLIP (B1) et des modèles d'embedding de phrases, et le lien avec la PMI explique ce que capturent les embeddings. · *Sources :* [Mikolov et coll., NeurIPS 2013, arXiv:1310.4546](https://arxiv.org/abs/1310.4546) ; [Levy, Goldberg et Dagan, TACL 2015](https://aclanthology.org/Q15-1016/) ; [Pennington, Socher et Manning, GloVe, EMNLP 2014](https://aclanthology.org/D14-1162.pdf).
 
 ---
 
@@ -612,7 +612,7 @@ Elle compare des **directions** : la norme d'un embedding de mot dépend aussi d
 
 ### Les plus proches voisins
 
-Les **voisins** d'un mot sont les lignes de plus grand cosinus avec la sienne. Sur les vecteurs PPMI + SVD de Holmes de la carte ci-dessous, ceux de « father » sont « sister », « son » et « wife » ; ceux de « three », « four », « hundred », puis un intrus, « smack », qui vient d'une seule phrase (« Smack! smack! smack! Three gone… ») : un mot rare, vu à côté de « three », garde une forte PPMI malgré le lissage. `most_similar(E, query, k, exclude)` de ta librairie rend les $k$ indices de plus grand cosinus avec `query`, par cosinus décroissant (égalités : le plus petit indice), sans ceux de `exclude`.
+Les **voisins** d'un mot sont les lignes de plus grand cosinus avec la sienne. Sur les vecteurs PPMI + SVD de Holmes de la carte ci-dessous, ceux de « father » sont « sister », « son » et « wife » ; ceux de « three », « four », « hundred », puis un intrus, « smack », qui vient d'une seule phrase (« Smack! smack! smack! Three gone… ») : un mot rare, vu à côté de « three », garde une forte PPMI malgré le lissage. `most_similar(E, query, k, exclude)` de ta librairie rend les $k$ indices de plus grand cosinus avec `query` et ces cosinus, par cosinus décroissant (égalités : le plus petit indice), sans ceux de `exclude`.
 
 ### Les analogies
 
@@ -630,9 +630,9 @@ L'exclusion n'est pas un détail : sur de vrais embeddings, le plus proche de $\
 
 Une PCA ou un UMAP en 2D (ch. 12) montre des groupes, avec les précautions du ch. 12 et de B1 : la projection perd presque toute l'information, et UMAP ne conserve pas les distances entre groupes.
 
-![Carte PCA à deux dimensions d'embeddings PPMI + SVD appris sur Holmes, pour cinq groupes de mots anglais : les nombres (two, three, hundred…) à gauche, les moments (morning, week, year…) en bas au centre, la famille (father, mother, uncle…) en bas à droite, les parties du corps (hand, eyes, lips…) à droite, les couleurs (red, black, white…) en haut](figures/carte_embeddings.png)
+![Carte PCA à deux dimensions d'embeddings PPMI + SVD appris sur Holmes, pour cinq groupes de mots anglais : les nombres (two, three, hundred…) à gauche, les moments (morning, week, night…) en bas au centre, la famille (father, mother, uncle…) en bas à droite, les parties du corps (hand, eyes, lips…) à droite, les couleurs (red, black, white…) en haut](figures/carte_embeddings.png)
 
-Sans aucun label, à partir des seules co-occurrences, les cinq groupes se séparent ; « minutes » se range près des nombres, que suivent près de la moitié de ses 46 occurrences (« ten minutes »). Le 📈 B2.27 te fait lire une carte faite avec tes vecteurs word2vec de Verne.
+Sans aucun label, à partir des seules co-occurrences, les cinq groupes se séparent presque : « minutes » et « year » se rangent près des nombres, qui précèdent près de la moitié des 46 occurrences de « minutes » (« ten minutes »). Le 📈 B2.27 te fait lire une carte faite avec tes vecteurs word2vec de Verne.
 
 ### Les biais des embeddings
 
@@ -650,7 +650,7 @@ Un embedding statique donne **un seul** vecteur à « glace », à la vanille, d
 
 ### D'une suite de vecteurs à un vecteur de phrase
 
-Pour comparer deux phrases, il faut **un** vecteur par phrase. Le plus courant est le **mean pooling** (*moyenne des tokens*) : la moyenne des $\mathbf{h}_t$, en ignorant le remplissage grâce au masque d'attention,
+Pour comparer deux phrases, il faut **un** vecteur par phrase. Le plus courant est le **mean pooling** (*moyenne des tokens*) : la moyenne des $\mathbf{h}_t$, en ignorant le padding grâce au masque d'attention,
 
 $$\mathbf{s} = \frac{\sum_t m_t\,\mathbf{h}_t}{\sum_t m_t},$$
 
@@ -711,7 +711,7 @@ Aucun mot de la requête n'est dans le document trouvé. Avec e5 multilingue, on
 
 Sur des millions de documents, une **base de données vectorielle** (ch. 7) trouve des voisins approchés, et un **cross-encoder**, qui lit la requête et le document ensemble, reclasse souvent les premiers résultats : c'est la recherche d'un RAG (B4, 💼 E5).
 
-> 🕰️ **Mise à jour (2026) — les embeddings de phrases** — **Le livre :** —. · **Aujourd'hui :** des modèles dédiés (all-MiniLM-L6-v2, e5, BGE, GTE…), comparés sur le benchmark MTEB ; beaucoup demandent des **préfixes** (« query: », « passage: ») dont l'oubli dégrade la recherche sans message d'erreur. `sentence-transformers` les emballe en une ligne (`SentenceTransformer(nom).encode(textes)`) ; préinstallée sur Colab, absente du workbook, elle n'est pas nécessaire : `transformers` et un mean pooling suffisent. · **Faut-il quand même l'apprendre ?** Oui : c'est la brique de toute recherche sémantique et de tout RAG. · *Sources :* [fiche modèle de all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) (« maps sentences & paragraphs to a 384 dimensional dense vector space », « input text longer than 256 word pieces is truncated ») ; [fiche modèle de multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small) (« Each input text should start with "query: " or "passage: ", even for non-English texts ») ; [Reimers et Gurevych, arXiv:1908.10084](https://arxiv.org/abs/1908.10084).
+> 🕰️ **Mise à jour (2026) — les embeddings de phrases** — **Le livre :** —. · **Aujourd'hui :** des modèles dédiés (all-MiniLM-L6-v2, e5, BGE, GTE…), comparés sur le benchmark MTEB ; beaucoup demandent des **préfixes** (« query: », « passage: ») dont l'oubli dégrade la recherche sans message d'erreur. `sentence-transformers` les emballe en une ligne (`SentenceTransformer(nom).encode(textes)`) ; préinstallée sur Colab, absente du workbook, elle n'est pas nécessaire : `transformers` et un mean pooling suffisent. · **Faut-il quand même l'apprendre ?** Oui : c'est la brique de toute recherche sémantique et de tout RAG. · *Sources :* [fiche modèle de all-MiniLM-L6-v2, révision `1110a24`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/blob/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md) (« maps sentences & paragraphs to a 384 dimensional dense vector space », « input text longer than 256 word pieces is truncated ») ; [fiche modèle de multilingual-e5-small, révision `614241f`](https://huggingface.co/intfloat/multilingual-e5-small/blob/614241f622f53c4eeff9890bdc4f31cfecc418b3/README.md) (« Each input text should start with "query: " or "passage: ", even for non-English texts ») ; [Reimers et Gurevych, arXiv:1908.10084](https://arxiv.org/abs/1908.10084).
 
 > ⚠️ **Piège classique — la longueur maximale** — Pour all-MiniLM-L6-v2, `tok.model_max_length` vaut 512, mais la fiche modèle tronque à 256 tokens : passe `max_length=256`, et découpe les longs documents en passages avant de les indexer, sinon leur fin est ignorée sans prévenir.
 
@@ -739,8 +739,8 @@ Sur des millions de documents, une **base de données vectorielle** (ch. 7) trou
 ## Liens avec les autres chapitres 🔗
 
 - **0A et 0B** : chaînes, UTF-8, expressions régulières ; produit scalaire, norme, similarité cosinus.
-- **Ch. 6** : Huffman et la compression sans perte (BPE est un compresseur), la perplexité, l'information mutuelle dont la PMI est la version ponctuelle.
-- **Ch. 12, 13 et 17** : one-hot, PCA et SVD, UMAP ; régression logistique, sigmoïde et log-sum-exp, au cœur de l'échantillonnage négatif.
+- **Ch. 6** : Huffman et la compression sans perte (BPE est un compresseur), la perplexité, la divergence KL.
+- **Ch. 12, 13 et 17** : one-hot, PCA et SVD, UMAP ; l'information mutuelle, dont la PMI est la version ponctuelle ; régression logistique, sigmoïde et log-sum-exp, au cœur de l'échantillonnage négatif.
 - **Ch. 18, 20, 22 et 24** : la règle de la chaîne (gradient d'une ligne lue deux fois), la boucle d'entraînement ; le vocabulaire, `encode`, `decode` et le token inconnu ; `nn.Embedding` et la génération mot par mot.
 - **B1** : des embeddings d'images comparés par cosinus ; fiche modèle, licence et révision figée ; la loss contrastive de CLIP.
 - **B3** : le mini-GPT **réutilise ton `BPETokenizer`** sur Holmes et Verne, ajoute des encodages de **position** aux embeddings de tokens et discute les poids liés.
@@ -757,7 +757,7 @@ Ce chapitre n'a pas de lecture dans le livre : **tous les parcours lisent la fic
 
 ## Pour aller plus loin
 
-- Le [cours LLM de Hugging Face, chapitre 6](https://huggingface.co/learn/llm-course/fr/chapter6/6) (en français) : la bibliothèque `tokenizers`, et une page par algorithme (BPE, WordPiece, Unigram), avec le code de chaque entraînement.
+- Le [cours LLM de Hugging Face, chapitre 6](https://huggingface.co/learn/llm-course/fr/chapter6/1) (en français) : la bibliothèque `tokenizers`, et une page par algorithme (BPE, WordPiece, Unigram), avec le code de chaque entraînement.
 - A. Karpathy, [`minbpe`](https://github.com/karpathy/minbpe) et sa vidéo « Let's build the GPT Tokenizer » (2024) : un BPE au niveau octet en quelques centaines de lignes de Python, jusqu'au tokenizer de GPT-4.
 - D. Jurafsky et J. H. Martin, [*Speech and Language Processing*](https://web.stanford.edu/~jurafsky/slp3/), 3ᵉ édition en ligne (version du 19 août 2026) : chapitre 2 (*Words and Tokens*), chapitre 5 (*Embeddings*) et annexe J (*PPMI*).
 - A. Petrov, E. La Malfa, P. Torr et A. Bibi, « [Language Model Tokenizers Introduce Unfairness Between Languages](https://proceedings.neurips.cc/paper_files/paper/2023/hash/74bb24dca8334adce292883b4b651eda-Abstract.html) », NeurIPS 2023 : le surcoût de la tokenisation dans 200 langues.

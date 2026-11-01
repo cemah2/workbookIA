@@ -184,7 +184,7 @@ def figure_merges() -> None:
         new_token = None if pair is None else pair[0] + pair[1]
         for j, w in enumerate(words):
             colors = ["#fbe8b5" if piece == new_token else "#e8eef8" for piece in segm[w]]
-            chips(ax, y, segm[w], colors, x0=col_x[j + 1] + 0.05, h=0.5, fontsize=9.5, char_w=0.11, pad=0.12,
+            chips(ax, y, segm[w], colors, x0=col_x[j + 1] + 0.05, h=0.5, fontsize=9.5, char_w=0.14, pad=0.1,
                   gap=0.05)
     ax.set_xlim(-2.2, col_x[-1] + 2.0)
     ax.set_ylim(-len(steps) * 0.86 + 0.3, 1.1)
@@ -221,7 +221,7 @@ def figure_fertility() -> None:
     ax.set_xlabel("tokens nécessaires, rapportés à ceux du texte anglais (échelle log)")
     ax.set_title("Déclaration universelle des droits de l'homme (préambule et 30 articles) : le même texte "
                  "dans 16 langues", fontsize=10)
-    ax.legend(loc="lower right", fontsize=9, frameon=False, title="tokenizer", title_fontsize=9)
+    ax.legend(loc="upper right", fontsize=9, frameon=False, title="tokenizer", title_fontsize=9)
     ax.grid(axis="x", color=wbplot.GRID, lw=0.6)
     ax.set_axisbelow(True)
     save(fig, "fertilite.png")
@@ -280,6 +280,11 @@ MAP_GROUPS = {
 }
 
 
+# labels moved away from a neighbouring point or label (offset in points, horizontal alignment)
+MAP_LABEL_OFFSETS = {"white": (4, 6, "left"), "grey": (4, -3, "left"), "yellow": (4, -11, "left"),
+                     "fingers": (4, -11, "left"), "evening": (-4, 3, "right"), "minutes": (3, -11, "left")}
+
+
 def ppmi_svd_embeddings(text: str, n_words: int = 4000, window: int = 2, dim: int = 100, alpha: float = 0.75):
     """PPMI (context smoothing alpha) of a symmetric window, then a truncated SVD weighted by sqrt of S."""
     import scipy.sparse as sp
@@ -323,8 +328,10 @@ def figure_map() -> None:
         pts = P[k:k + len(ws)]
         ax.scatter(pts[:, 0], pts[:, 1], s=28, color=C[g], label=name, zorder=3)
         for w, (x, y) in zip(ws, pts):
-            ax.annotate(w, (x, y), xytext=(3, 3), textcoords="offset points", fontsize=8.5, color=C[g])
+            dx, dy, ha = MAP_LABEL_OFFSETS.get(w, (3, 3, "left"))
+            ax.annotate(w, (x, y), xytext=(dx, dy), textcoords="offset points", fontsize=8.5, color=C[g], ha=ha)
         k += len(ws)
+    ax.margins(x=0.1, y=0.06)                       # room for the labels of the points on the edges
     ax.set_xlabel("composante principale 1")
     ax.set_ylabel("composante principale 2")
     ax.set_title("Holmes : embeddings PPMI + SVD (4 000 mots, fenêtre de 2, d = 100), projetés par PCA",
