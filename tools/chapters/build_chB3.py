@@ -186,6 +186,8 @@ for p in (0, 7, 33):
 assert round(2 * math.pi / OMEGA_B34[2]) == 628
 
 # ✏️ B3.5: GPT-2 small and the mini-GPT, built without their weights (meta device)
+import warnings
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers)
 from transformers import GPT2Config, GPT2LMHeadModel
 with torch.device("meta"):
     gpt2 = GPT2LMHeadModel(GPT2Config())
@@ -583,7 +585,7 @@ def header_cells(kind: str) -> list:
                "exécuter » (*Run all*) va jusqu'au bout même si rien n'est rempli : ce qui n'est pas fait affiche "
                "⏳. Les questions « dans tes notes » qui n'ont pas de cellule 📝 se notent dans la section « Notes "
                "sur le notebook » de ta copie de `06_mes_reponses.md`. Bloqué 15 minutes ? `04_indices.md`. Tout "
-               "tourne sur CPU : la partie B entraîne ton mini-GPT en environ 2 min 20 en mode rapide (🚀 15 à 20 min "
+               "tourne sur CPU : la partie B entraîne ton mini-GPT en 2 à 3 min en mode rapide (🚀 environ 35 min "
                "en mode complet, plutôt sur un GPU de Colab), puis le sauvegarde hors du dépôt pour la suite du "
                "chapitre.\n\n"
                "> Travaille dans **ta copie** (`mon_travail/b3_transformers/03_notebook.ipynb`, créée par "

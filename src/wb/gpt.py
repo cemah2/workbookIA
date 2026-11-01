@@ -443,7 +443,7 @@ def build_from_checkpoint(model_class, ckpt: dict) -> nn.Module:
 
 def reference_model(fast: bool = True, folder: str | Path | None = None, verbose: bool = True):
     """``(model, checkpoint)`` of the reference mini-GPT: read from its checkpoint, or trained once with the settings
-    of Ex B3.20 and the seed ``SEED`` (≈ 2 min on two CPU cores in fast mode, 15 to 20 min in full mode), then saved.
+    of Ex B3.20 and the seed ``SEED`` (≈ 2 min on two CPU cores in fast mode, ≈ 35 min in full mode), then saved.
     The model is a :class:`ReferenceGPT` in eval mode."""
     key = reference_key(fast)
     ckpt = load_checkpoint(key, folder)

@@ -106,7 +106,7 @@ Dans tes notes : avec `causal_mask(2, 5)`, quelle requête est le token de quell
        body=r"""Une requête $\mathbf{q}$ de dimension $d_k = 64$, de composantes indépendantes tirées selon $\mathcal{N}(0;\ 1)$. Parmi ses $S$ clés, l'une est $\mathbf{q}$ elle-même : une clé qui **copie** la requête ; les $S - 1$ autres sont tirées comme $\mathbf{q}$, indépendamment. La cellule suivante donne `copied_weight_13(S, scaled)`, qui calcule pour 200 requêtes le poids d'attention de la clé copiée parmi $S$ clés, avec (`scaled=True`) ou sans (`scaled=False`) la division par $\sqrt{d_k}$.
 
 L'expérience trace d'abord deux cartes d'attention avec ta `scaled_dot_product_attention` (6 requêtes et 32 clés, dont les 6 premières copient les requêtes), avec puis sans la division ; puis le poids **médian** de la clé copiée, sur les 200 requêtes, pour $S$ = 10, 30, 100, 300, …, 100 000. **Avant d'exécuter**, écris tes deux prédictions :
-- a) `exponent_13` : **avec** la division, l'entier $k$ tel que le poids médian de la clé copiée passe sous 1/2 entre $10^k$ et $10^{k+1}$ clés (par exemple `1` si la bascule a lieu entre 10 et 100 clés) ;
+- a) `exponent_13` : **avec** la division, l'entier $k$, de 0 à 5, tel que le poids médian de la clé copiée passe sous 1/2 entre $10^k$ et $10^{k+1}$ clés (par exemple `1` si la bascule a lieu entre 10 et 100 clés ; 0 si elle a lieu avant 10 clés, 5 si elle n'a pas encore eu lieu à 100 000) ;
 - b) `keeps_half_13` : **sans** la division, avec 100 000 clés, le poids médian de la clé copiée est-il encore au-dessus de 1/2 ? `True` ou `False`.
 
 La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont pas écrites ; elle les vérifie à la fin. La courbe ne dépend pas de ton code ; les deux cartes, si (B3.12).""",
@@ -120,7 +120,7 @@ La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont p
                    4: "relis le tableau sous la courbe : à 10 000 clés, le poids médian avec la division est-il encore au-dessus de 1/2 ?",
                    5: "relis le tableau sous la courbe : à 100 000 clés, le poids médian avec la division est-il encore au-dessus de 1/2 ?",
                }.items() if v != P13["exponent"])
-               + '}, fractional="on demande l\'exposant k de la puissance de 10, un entier")\n'
+               + '}, fractional="on demande l\'exposant k de la puissance de 10, un entier", choices=[0, 1, 2, 3, 4, 5])\n'
                f'wb.record("B3.13b", {P13["keeps_half"]}, mistakes={{"relis le tableau sous la courbe : sans la '
                f'division, que vaut le poids médian à 100 000 clés ?": {not P13["keeps_half"]}}})'),
        after=[("code", guarded(C.EXPERIMENT_13, ["exponent_13", "keeps_half_13"],
@@ -303,11 +303,11 @@ Dans tes notes : mesure la loss de départ d'un modèle dont les tables gardent 
   - l'évaluation, `estimate_loss_20` sur `val_ids` avec `eval_batches` batches, avant la première itération, après chaque multiple de `eval_interval` itérations et après la dernière ; chacune tire ses batches avec un générateur neuf, `torch.Generator().manual_seed(settings["eval_seed"])` (les mêmes batches de validation à chaque fois ; le générateur de l'entraînement ne sert jamais à l'évaluation) ;
   - rend l'historique, un dictionnaire de listes : `"train_loss"` et `"lr"` (une valeur par itération), `"val_iter"` (le nombre d'itérations faites à chaque évaluation : 0, 50, 100…) et `"val_loss"`.
 
-La cellule de vérification contrôle d'abord tes trois fonctions sur un petit modèle (celui de référence de `wb.gpt`, pour ne pas dépendre de B3.19) : les groupes de l'optimiseur, paramètre par paramètre ; `estimate_loss_20` (le mode, le gradient, la valeur) ; puis 6 itérations de `train_20`, comparées à la recette du contrat, avec un clipping qui agit à chaque itération. La cellule suivante entraîne ton `MiniGPT_19` sur Holmes : environ 2 min 20 sur un CPU à deux cœurs en mode rapide (600 itérations) ; 🚀 en mode complet (5 000 itérations, 15 à 20 min sur CPU), un GPU de Colab est conseillé. Elle mesure ensuite sa loss sur **toute** la validation (`wbgpt.char_loss` : chaque caractère à partir du 129ᵉ, prédit à partir des 97 à 128 caractères qui le précèdent), la compare au seuil `TARGET_20` et au LSTM du ch. 22 sur les mêmes caractères de validation (le tableau `LSTM_20`, précalculé), puis **sauvegarde** ton modèle dans `wbgpt.checkpoints_dir()` (sur ta machine, `data/downloads/gpt/`, hors du suivi de git ; sur Colab, `/content/wb_cache/gpt/`, qui s'efface avec la session). Le temps affiché est une mesure, pas une réponse : il dépend de la machine.
+La cellule de vérification contrôle d'abord tes trois fonctions sur un petit modèle (celui de référence de `wb.gpt`, pour ne pas dépendre de B3.19) : les groupes de l'optimiseur, paramètre par paramètre ; `estimate_loss_20` (le mode, le gradient, la valeur) ; puis 6 itérations de `train_20`, comparées à la recette du contrat, avec un clipping qui agit à chaque itération. La cellule suivante entraîne ton `MiniGPT_19` sur Holmes : 2 à 3 min sur un CPU à deux cœurs en mode rapide (600 itérations) ; 🚀 en mode complet (5 000 itérations avec dropout, environ 35 min sur CPU), un GPU de Colab est conseillé. La dernière mesure ensuite sa loss sur **toute** la validation (`wbgpt.char_loss` : chaque caractère à partir du 129ᵉ, prédit à partir des 97 à 128 caractères qui le précèdent), la compare au seuil `TARGET_20` et au LSTM du ch. 22 sur les mêmes caractères de validation (le tableau `LSTM_20`, précalculé), puis **sauvegarde** ton modèle dans `wbgpt.checkpoints_dir()` (sur ta machine, `data/downloads/gpt/`, hors du suivi de git ; sur Colab, `/content/wb_cache/gpt/`, qui s'efface avec la session). Le temps affiché est une mesure, pas une réponse : il dépend de la machine.
 
 Dans tes notes : le mini-GPT bat-il le LSTM du ch. 22 à temps de calcul voisin ? Qu'est-ce qui rend la comparaison inégale (paramètres, contexte, caractères vus) ? Pourquoi la dernière loss estimée pendant l'entraînement (8 batches de validation) et celle de `char_loss` (toute la validation) diffèrent-elles un peu ?""",
        given=GIVEN_20, todo=C.TODO_20, check=C.CHECK_20, solution=C.SOLUTION_20 + "\n\n\n" + C.CHECK_20,
-       after=[("code", C.EXPERIMENT_20)]),
+       after=[("code", C.EXPERIMENT_20), ("code", C.EXPERIMENT_20B)]),
 ])
 
 PARTS = [PART_A, PART_B]

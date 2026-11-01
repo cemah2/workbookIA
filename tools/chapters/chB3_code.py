@@ -104,12 +104,16 @@ CHECK_12 = r'''with checked("B3.12"):
     rng_12 = np.random.default_rng(12)
     q_12, k_12, v_12 = rng_12.normal(size=(2, 3, 5, 8)), rng_12.normal(size=(2, 3, 7, 8)), rng_12.normal(size=(2, 3, 7, 4))
     keys_12 = (np.arange(7) < np.array([7, 4])[:, None])[:, None, None, :]          # sequence 1 has 4 real keys
+    q_copy_12 = q_12.copy()
     want_12 = F.scaled_dot_product_attention(*(torch.from_numpy(a) for a in (q_12, k_12, v_12)),
                                              attn_mask=torch.from_numpy(keys_12)).numpy()
     out_12, w_12 = pair("B3.12", "scaled_dot_product_attention", A.scaled_dot_product_attention(q_12, k_12, v_12, mask=keys_12),
                         names=("output", "weights"))
     same("B3.12", "sortie (2, 3, 5, 4) avec un masque de padding (2, 1, 1, 7), contre F.scaled_dot_product_attention",
          out_12, want_12, rtol=1e-6, atol=1e-6)
+    if not np.array_equal(q_12, q_copy_12):
+        print("❌ Ex B3.12 : scaled_dot_product_attention a modifié les requêtes reçues (la suite part de requêtes neuves).")
+        q_12 = q_copy_12.copy()
     out_c12, _ = A.scaled_dot_product_attention(q_12[..., :5, :], k_12[..., :5, :], v_12[..., :5, :], mask=causal_np(5))
     want_c12 = F.scaled_dot_product_attention(*(torch.from_numpy(a[..., :5, :]) for a in (q_12, k_12, v_12)), is_causal=True).numpy()
     same("B3.12", "masque causal (5, 5) contre is_causal=True", out_c12, want_c12, rtol=1e-6, atol=1e-6)
@@ -145,8 +149,8 @@ def copied_weight_13(n_keys, scaled=True, d_k=D_13, n_queries=QUERIES_13, seed=1
         left -= len(k)
     return 1 / (1 + np.exp(others - own))                               # exp(own) / (exp(own) + the others)'''
 
-TODO_13 = r'''exponent_13 = ...      # a) WITH the division by sqrt(d_k): the integer k such that the median weight of the copied
-                       #    key falls under 1/2 between 10**k and 10**(k + 1) keys
+TODO_13 = r'''exponent_13 = ...      # a) WITH the division by sqrt(d_k): the integer k, 0 to 5, such that the median weight of the
+                       #    copied key falls under 1/2 between 10**k and 10**(k + 1) keys
 keeps_half_13 = ...    # b) WITHOUT the division: with 100 000 keys, is the median weight of the copied key still
                        #    above 1/2? True or False'''
 
@@ -763,7 +767,7 @@ with checked("B3.19"):
     std_19 = {"tok_emb": gpt_19.tok_emb.weight.std().item(), "attn.qkv": gpt_19.blocks[0].attn.qkv.weight.std().item(),
               "attn.proj": gpt_19.blocks[0].attn.proj.weight.std().item(), "mlp.2": gpt_19.blocks[0].mlp[2].weight.std().item()}
     want_std_19 = {"tok_emb": 0.02, "attn.qkv": 0.02, "attn.proj": 0.02 / math.sqrt(8), "mlp.2": 0.02 / math.sqrt(8)}
-    zero_bias_19 = all(float(m.bias.abs().max()) == 0 for m in gpt_19.modules() if isinstance(m, nn.Linear) and m.bias is not None)
+    zero_bias_19 = all(m.bias.detach().abs().max().item() == 0 for m in gpt_19.modules() if isinstance(m, nn.Linear) and m.bias is not None)
     verdict("B3.19", all(abs(std_19[k] / want_std_19[k] - 1) < 0.1 for k in std_19) and zero_bias_19,
             "initialisation de nanoGPT : écarts-types 0,02 et 0,02/√8 pour les deux projections résiduelles, biais nuls.",
             "l'initialisation n'est pas celle du contrat : écarts-types mesurés "
@@ -893,7 +897,8 @@ with checked("B3.20"):
     seen_20 = [id(p) for g in opt_20.param_groups for p in g["params"]]
     decay_20 = {id(p): g["weight_decay"] for g in opt_20.param_groups for p in g["params"]}
     wrong_20 = [n for n, p in small_20.named_parameters() if decay_20.get(id(p)) != (0.1 if p.dim() >= 2 else 0.0)]
-    verdict("B3.20", sorted(seen_20) == sorted(id(p) for p in small_20.parameters()) and not wrong_20,
+    groups_ok_20 = sorted(seen_20) == sorted(id(p) for p in small_20.parameters()) and not wrong_20
+    verdict("B3.20", groups_ok_20,
             "AdamW : chaque paramètre une fois, weight decay 0,1 sur les matrices et les tables, 0 sur les biais et les layer norms.",
             (f"weight decay mal réglé pour {wrong_20[:4]} : 0,1 sur les paramètres à deux axes ou plus, 0 sur les autres."
              if wrong_20 else "chaque paramètre du modèle doit être dans un groupe, et une seule fois (la tête liée est la "
@@ -914,11 +919,13 @@ with checked("B3.20"):
     spy_20 = Spy_20(copy.deepcopy(small_20)).train()
     est_20 = estimate_loss_20(spy_20, DATA.val_ids, 3, 4, 16, torch.Generator().manual_seed(5))
     want_est_20 = wbgpt.estimate_loss(copy.deepcopy(small_20), DATA.val_ids, 3, 4, 16, torch.Generator().manual_seed(5))
-    verdict("B3.20", type(est_20) is float and math.isclose(est_20, want_est_20, rel_tol=1e-6),
+    est_ok_20 = type(est_20) is float and math.isclose(est_20, want_est_20, rel_tol=1e-6)
+    verdict("B3.20", est_ok_20,
             f"estimate_loss_20 : la moyenne des loss de 3 batches, un float ({fr(est_20, 4)}).",
             f"estimate_loss_20 doit rendre un float Python, la moyenne des loss de 3 batches de get_batch(..., generator) : "
             f"attendu {fr(want_est_20, 4)}, reçu {est_20!r}.")
-    verdict("B3.20", len(spy_20.calls) == 3 and all(not t and not g for t, g in spy_20.calls) and spy_20.training,
+    mode_ok_20 = len(spy_20.calls) == 3 and all(not t and not g for t, g in spy_20.calls) and spy_20.training
+    verdict("B3.20", mode_ok_20,
             "pendant la mesure : mode eval et sans gradient ; le modèle revient en mode train.",
             f"pendant la mesure, attendu 3 passes en mode eval sans gradient, puis le modèle en mode train ; vu "
             f"{[('train' if t else 'eval') + (', gradient' if g else '') for t, g in spy_20.calls]}, mode final "
@@ -932,14 +939,16 @@ with checked("B3.20"):
         raise StopCheck
     want_hist_20 = wbgpt.train(ref_20, DATA.train_ids, DATA.val_ids, probe_20, torch.Generator().manual_seed(7), block_size=16)
     keys_ok_20 = isinstance(hist_20, dict) and all(k in hist_20 for k in want_hist_20)
-    verdict("B3.20", keys_ok_20 and len(hist_20["train_loss"]) == len(hist_20["lr"]) == 6 and list(hist_20["val_iter"]) == [0, 4, 6],
+    hist_ok_20 = keys_ok_20 and len(hist_20["train_loss"]) == len(hist_20["lr"]) == 6 and list(hist_20["val_iter"]) == [0, 4, 6]
+    verdict("B3.20", hist_ok_20,
             "historique : 6 loss et 6 learning rates, la validation avant la 1ʳᵉ itération, après la 4ᵉ et après la dernière.",
             "train_20 doit rendre un dict de listes train_loss et lr (une valeur par itération), val_iter et val_loss (avant "
             "la première itération, toutes les eval_interval itérations et après la dernière) ; avec 6 itérations et "
             f"eval_interval = 4, val_iter = [0, 4, 6] ; reçu {hist_20 if not keys_ok_20 else hist_20['val_iter']!r:.200}.")
     if not keys_ok_20:
         raise StopCheck
-    verdict("B3.20", np.allclose(hist_20["lr"], want_hist_20["lr"], rtol=1e-9, atol=1e-12),
+    lr_ok_20 = len(hist_20["lr"]) == 6 and np.allclose(hist_20["lr"], want_hist_20["lr"], rtol=1e-9, atol=1e-12)
+    verdict("B3.20", lr_ok_20,
             "learning rate : montée linéaire de 0, puis cosinus jusqu'à min_lr (ton cosine_lr du ch. 19).",
             f"learning rates attendus {np.round(want_hist_20['lr'], 6).tolist()}, reçus {np.round(hist_20['lr'], 6).tolist()}.")
     same_20 = all(torch.allclose(a, b, rtol=1e-4, atol=1e-7) for a, b in zip(mine_20.parameters(), ref_20.parameters()))
@@ -954,7 +963,7 @@ with checked("B3.20"):
               + ("ils sont ceux d'un entraînement sans clipping (la norme des gradients dépasse ici 0,05 à chaque itération)."
                  if unclipped_20 else "vérifie l'ordre de chaque itération (learning rate, get_batch, loss, gradients, "
                  "clipping, pas de l'optimiseur) et que l'évaluation tire ses batches avec un générateur à part."))
-    probes_ok_20 = same_20'''
+    probes_ok_20 = all([groups_ok_20, est_ok_20, mode_ok_20, hist_ok_20, lr_ok_20, same_20])'''
 
 EXPERIMENT_20 = r'''model_20 = history_20 = val_char_20 = None
 if not (globals().get("probes_ok_20") and globals().get("model_ok_19")):
@@ -962,23 +971,31 @@ if not (globals().get("probes_ok_20") and globals().get("model_ok_19")):
 else:
     with checked("B3.20"):
         torch.manual_seed(SEED_20)
-        model_20 = MiniGPT_19(**CONFIG_20)
+        trained_20 = MiniGPT_19(**CONFIG_20)
         started_20 = time.perf_counter()
-        history_20 = train_20(model_20, DATA.train_ids, DATA.val_ids, TRAIN_20, torch.Generator().manual_seed(SEED_20))
+        history_20 = train_20(trained_20, DATA.train_ids, DATA.val_ids, TRAIN_20, torch.Generator().manual_seed(SEED_20))
         seconds_20 = time.perf_counter() - started_20
+        if returned("B3.20", "train_20", history_20):
+            model_20 = trained_20
+            print(f"{TRAIN_20['iters']} itérations en {seconds_20:.0f} s ; dernière loss de validation estimée "
+                  f"{fr(history_20['val_loss'][-1], 3)} nats par caractère.")'''
+
+EXPERIMENT_20B = r'''if model_20 is None:
+    print("⏳ Ex B3.20 : la mesure et la sauvegarde attendent l'entraînement de la cellule précédente.")
+else:
+    with checked("B3.20"):
         val_char_20 = wbgpt.char_loss(model_20, DATA.val_ids)       # every character of the validation from index 128 on
         path_20 = wbgpt.save_checkpoint(wbgpt.learner_key(FAST_MODE), model_20, history_20, DATA.itos,
                                         extra={"char_loss": val_char_20, "seconds": seconds_20})
-        print(f"{TRAIN_20['iters']} itérations en {seconds_20:.0f} s ; loss de validation estimée {fr(history_20['val_loss'][-1], 3)} "
-              f"nats par token ; modèle sauvegardé dans {path_20}")
+        print(f"modèle sauvegardé : {path_20.name}, dans wbgpt.checkpoints_dir()")
         verdict("B3.20", val_char_20 < TARGET_20,
                 f"sur toute la validation, {fr(val_char_20, 3)} nats par caractère (perplexité {fr(math.exp(val_char_20), 2)}, "
                 f"{fr(val_char_20 / math.log(2), 3)} bits par caractère) : sous {fr(TARGET_20, 2)}.",
                 f"sur toute la validation, {fr(val_char_20, 3)} nats par caractère : attendu moins de {fr(TARGET_20, 2)} ; "
-                "relance les contrôles de la cellule précédente, puis ceux de B3.19.")
+                "relance les contrôles de la cellule de vérification, puis ceux de B3.19.")
         rows_20 = [(name, params, budget, loss) for name, params, budget, loss in LSTM_20]
         rows_20.append(("ton mini-GPT (" + ("mode rapide" if FAST_MODE else "mode complet") + ")", n_params(model_20),
                         f"{TRAIN_20['iters']} itérations, {fr(seconds_20 / 60, 1)} min", val_char_20))
-        print(f"\n{'modèle':<48} {'paramètres':>10}  {'budget':<38} {'nats/car.':>9} {'perplexité':>10}")
+        print(f"\n{'modèle':<50} {'paramètres':>10}  {'budget':<38} {'nats/car.':>9} {'perplexité':>10}")
         for name, params, budget, loss in rows_20:
-            print(f"{name:<48} {params:>10_}  {budget:<38} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}".replace("_", " "))'''
+            print(f"{name:<50} {params:>10_}  {budget:<38} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}".replace("_", " "))'''

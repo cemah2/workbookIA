@@ -54396,6 +54396,45 @@
       "sign": 1,
       "source": "chapitres/b3_transformers/05_solutions.ipynb"
     },
+    "B3.13a": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "fractional": "on demande l'exposant k de la puissance de 10, un entier",
+      "hash": "5abb350658adb5e26b5b3a32b4027bd92fbb95c4d8005b941bb64f1ed50abf34",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "10e581571ac2b626233093874515ab0d11fe3a2caa60a790f97a2057482f7eb7": "relis le tableau sous la courbe : à 100 000 clés, le poids médian avec la division est-il encore au-dessus de 1/2 ?",
+        "4db5e8bc624f0fc88728f3f476bd2feee2e300ab35d45ae11510c8ac652cde4e": "relis le tableau sous la courbe : à 1 000 clés, le poids médian avec la division est-il déjà sous 1/2 ?",
+        "8e4f26f8236f8cc73b9ca7fb050f328ce4e7f9288998e4a599c9afba079a257f": "relis le tableau sous la courbe : à 10 000 clés, le poids médian avec la division est-il encore au-dessus de 1/2 ?",
+        "c61bf691ef3e0866b0636d181f46cde71e2f9d04b5a7f10cfded805f716e618f": "relis le tableau sous la courbe : à 100 clés, le poids médian avec la division est-il déjà sous 1/2 ?",
+        "cf64b8e5dd9ca80c5d26ea8783bc6ee171177c0458ad8964034feec7ac272966": "relis le tableau sous la courbe : à 10 clés, le poids médian avec la division est-il déjà sous 1/2 ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.13b": {
+      "hash": "e0c054a4fbde4beb6bd60a49c2015dd94791c3f0fab9b67f0a08af413b859bd7",
+      "kind": "bool",
+      "mistakes": {
+        "77f06a77ab35318b8488c7a1eb5db1a9b6604acc0e80bc1020ce4f93074c380b": "relis le tableau sous la courbe : sans la division, que vaut le poids médian à 100 000 clés ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.18": {
+      "hash": "a7d5811ba6d11c1d1e79a1c63bb202480984dcb4d51f79be49119bc594c4e81a",
+      "kind": "bool",
+      "mistakes": {
+        "c25a3aa0e9fa86336c6be4a95db46f6dc42edbf76cd9b733240af10609bdde1e": "l'écart à ta version NumPy dépasse 1e-5 : relis les lignes ❌ au-dessus (elles disent lequel des deux codes s'écarte de nn.MultiheadAttention)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
     "B3.Q1a": {
       "hash": "365b1b487e54aca5cf2c3ec7bc0fae05ebf0de2f731ec8c9b5277f1b687ee8fd",
       "kind": "str",

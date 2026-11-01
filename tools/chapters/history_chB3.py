@@ -2,7 +2,7 @@
 """Calibrate the predictions, replay the bug hunt and precompute the long trainings of chapter B3, first half (used by
 Claude).
 
-    python tools/chapters/history_chB3.py                  # everything (about 45 min on a 2-core CPU)
+    python tools/chapters/history_chB3.py                  # everything (about 65 min on a 2-core CPU)
     python tools/chapters/history_chB3.py --only bug17     # one entry: p13, bug17, gpt_fast, gpt_full, lstm
 
 Writes tools/chapters/history_chB3.json (statistics only, no weights), which chB3_parts.py reads:
@@ -12,8 +12,11 @@ Writes tools/chapters/history_chB3.json (statistics only, no weights), which chB
   left (nothing must crash); the clipping of the probe of B3.20 must act (and change the weights);
 - "gpt_fast": the mini-GPT of the solution (B3.19 and B3.20) trained in fast mode with three seeds: loss on the whole
   validation (wb.gpt.char_loss), time, history of the main seed; the threshold TARGET_20 of fast mode;
-- "gpt_full": the same in full mode (5 000 iterations, one seed, 15 to 20 min): the 🚀 row of the comparison, the
+- "gpt_full": the same in full mode (5 000 iterations, dropout 0.2, one seed, ≈ 35 min): the 🚀 row of the comparison, the
   threshold of full mode, and the history that the second half of the chapter (📈 B3.21) can draw;
+- "gpt_full_nodropout": the same full mode without dropout (the configuration of fast mode), kept from a run of
+  session 68 and not recomputed by this script (run gpt_full with mini_config(True) to redo it): the validation
+  loss is lowest around 2 500 iterations, then rises again (overfitting), 1 118 s;
 - "lstm": the character LSTM of ch. 22 (solution of 22.25: two LSTM layers of 128, windows of 40 characters, stride 3,
   RMSprop, clipping), retrained on the split and the vocabulary of B3 in its fast mode (2 epochs on 240 000 characters)
   and in its full mode (the first 12 of its 20 epochs on the whole training text, the best epoch kept: in 22.26 the
@@ -201,7 +204,7 @@ def gpt_full(ns) -> dict:
     target = math.ceil((run["char_loss"] + 0.08) * 20) / 20
     s = ns["wbgpt"].train_settings(False)
     return {"name": "mini-GPT de référence, mode complet (dropout 0,2)", "params": run["params"],
-            "budget": f"{s['iters']} itérations, {run['seconds'] / 60:.0f} min (CPU)", "char_loss": run["char_loss"],
+            "budget": f"{s['iters']:_} itérations, {run['seconds'] / 60:.0f} min (CPU)".replace("_", " "), "char_loss": run["char_loss"],
             "seconds": run["seconds"], "history": run["history"], "target": target}
 
 
