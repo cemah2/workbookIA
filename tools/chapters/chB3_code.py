@@ -800,10 +800,11 @@ with checked("B3.19"):
                        future_19 == 0])'''
 
 # --- 📦 B3.20 ----------------------------------------------------------------------------------------------------------
-GIVEN_20 = r'''CONFIG_20 = dict(MINI_CONFIG)                       # the model of B3.19
+GIVEN_20 = r'''CONFIG_20 = wbgpt.mini_config(FAST_MODE)             # the model of B3.19; dropout 0.2 in full mode
 TRAIN_20 = wbgpt.train_settings(FAST_MODE)           # 600 iterations in fast mode, 5 000 in full mode
 SEED_20 = wbgpt.SEED                                 # seed of the initialisation and of the training batches
 get_batch = wbgpt.get_batch                          # the get_batch of the fiche (§203.8)
+print(CONFIG_20)
 print(TRAIN_20)'''
 
 TODO_20 = r'''def configure_optimizer_20(model, lr, weight_decay, betas=(0.9, 0.99)):
@@ -977,7 +978,7 @@ else:
                 "relance les contrôles de la cellule précédente, puis ceux de B3.19.")
         rows_20 = [(name, params, budget, loss) for name, params, budget, loss in LSTM_20]
         rows_20.append(("ton mini-GPT (" + ("mode rapide" if FAST_MODE else "mode complet") + ")", n_params(model_20),
-                        f"{TRAIN_20['iters']} itérations, {seconds_20 / 60:.1f} min", val_char_20))
-        print(f"\n{'modèle':<44} {'paramètres':>10}  {'budget':<30} {'nats/car.':>9} {'perplexité':>10}")
+                        f"{TRAIN_20['iters']} itérations, {fr(seconds_20 / 60, 1)} min", val_char_20))
+        print(f"\n{'modèle':<48} {'paramètres':>10}  {'budget':<38} {'nats/car.':>9} {'perplexité':>10}")
         for name, params, budget, loss in rows_20:
-            print(f"{name:<44} {params:>10_}  {budget:<30} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}".replace("_", " "))'''
+            print(f"{name:<48} {params:>10_}  {budget:<38} {fr(loss, 3):>9} {fr(math.exp(loss), 2):>10}".replace("_", " "))'''

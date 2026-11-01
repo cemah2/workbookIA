@@ -200,8 +200,8 @@ def gpt_full(ns) -> dict:
     run = _train_gpt(ns, ns["wbgpt"].SEED, False)
     target = math.ceil((run["char_loss"] + 0.08) * 20) / 20
     s = ns["wbgpt"].train_settings(False)
-    return {"name": "mini-GPT de référence, mode complet (précalculé)", "params": run["params"],
-            "budget": f"{s['iters']} itérations, {run['seconds'] / 60:.0f} min", "char_loss": run["char_loss"],
+    return {"name": "mini-GPT de référence, mode complet (dropout 0,2)", "params": run["params"],
+            "budget": f"{s['iters']} itérations, {run['seconds'] / 60:.0f} min (CPU)", "char_loss": run["char_loss"],
             "seconds": run["seconds"], "history": run["history"], "target": target}
 
 
@@ -281,12 +281,12 @@ def lstm(ns) -> dict:
         params = sum(p.numel() for p in model.parameters())
         if mode == "fast":
             rows.append({"name": "LSTM du ch. 22, mode rapide", "params": params,
-                         "budget": f"2 epochs sur 240 000 car., {curve[-1]['seconds'] / 60:.1f} min",
+                         "budget": f"2 epochs sur 240 000 car., {curve[-1]['seconds'] / 60:.1f} min".replace(".", ","),
                          "char_loss": curve[-1]["val_char_loss"]})
         else:
             best = min(curve, key=lambda e: e["val_char_loss"])
             rows.append({"name": "LSTM du ch. 22, mode complet (meilleure epoch)", "params": params,  # of 12
-                         "budget": f"{best['epoch']} epochs sur tout l'entr., {best['seconds'] / 60:.0f} min",
+                         "budget": f"{best['epoch']} epochs sur tout l'entraînement, {best['seconds'] / 60:.0f} min",
                          "char_loss": best["val_char_loss"]})
         curves[mode] = curve
     return {"rows": rows, "curves": curves, "windows": {"fast": len(windows(data.train_ids, 240_000)[0]),

@@ -91,7 +91,7 @@ PART_A = Part("A", "Ta librairie NumPy : attention.py",
   - `scale` : seul `None` donne $1/\sqrt{d_k}$ ; `scale=0.0` est une échelle comme une autre (des scores nuls) ;
   - `ValueError` si les formes sont incompatibles, ou si une ligne du masque n'autorise **aucune** clé, y compris quand cette ligne vient d'un masque 4-D `(N, 1, 1, S)` (une séquence entièrement masquée). `F.scaled_dot_product_attention` rendrait une ligne de zéros et `nn.MultiheadAttention` des `nan` : ta librairie refuse.
 
-La première cellule de vérification essaie tes masques sur des cas visibles (dont ceux des docstrings) et contre `torch.tril`, refait l'attention à la main de la fiche (§203.2 : une requête, quatre clés), compare ton attention à `F.scaled_dot_product_attention` sur un batch à têtes avec un masque de padding `(2, 1, 1, 7)` et avec le masque causal, essaie `scale=0.0`, puis trois refus. La seconde lance les 55 tests de l'exercice (`-k "test_causal_mask_ or test_padding_mask_ or test_scaled_dot_product_attention_"`).
+La première cellule de vérification essaie tes masques sur des cas visibles (dont ceux des docstrings) et contre `torch.tril`, refait l'attention à la main de la fiche (§203.2 : une requête, quatre clés), compare ton attention à `F.scaled_dot_product_attention` sur un batch à têtes avec un masque de padding `(2, 1, 1, 7)` et avec le masque causal, essaie `scale=0.0` et quatre refus. La seconde lance les 55 tests de l'exercice (`-k "test_causal_mask_ or test_padding_mask_ or test_scaled_dot_product_attention_"`).
 
 Dans tes notes : avec `causal_mask(2, 5)`, quelle requête est le token de quelle position, et que donnerait `is_causal=True` à la place ? Pourquoi ta fonction refuse-t-elle une ligne sans aucune clé autorisée, plutôt que de rendre des zéros comme SDPA ?""",
        check=RELOAD + C.CHECK_12, solution=C.CHECK_12,
@@ -292,7 +292,7 @@ Dans tes notes : mesure la loss de départ d'un modèle dont les tables gardent 
        "LSTM du ch. 22.",
        "Ex B3.19 · ch. 19 (AdamW, warmup + cosinus, clipping ; 19.19) · ch. 22 (22.25, 22.26) · fiche §203.8 (« Les "
        "données », « La loss et la perplexité », « La recette d'entraînement »)", thread="Holmes", tracks="R, M, C",
-       body=r"""Les données : `DATA.train_ids` et `DATA.val_ids`, deux tenseurs 1-D d'ids (le découpage figé de `wb.text.train_val("holmes")` : 90 % puis 10 %, coupé à une fin de ligne, jamais mélangé : la validation n'est jamais vue) ; `get_batch`, celui de la fiche ; `TRAIN_20`, les réglages (affichés par la cellule suivante).
+       body=r"""Les données : `DATA.train_ids` et `DATA.val_ids`, deux tenseurs 1-D d'ids (le découpage figé de `wb.text.train_val("holmes")` : 90 % puis 10 %, coupé à une fin de ligne, jamais mélangé : la validation n'est jamais vue) ; `get_batch`, celui de la fiche ; `CONFIG_20`, la configuration du modèle (celle de B3.19, avec un dropout de 0,2 en mode complet : 5 000 itérations font environ 40 passages sur le texte d'entraînement, aucun en mode rapide) ; `TRAIN_20`, les réglages (affichés par la cellule suivante).
 
 **Contrat**
 - `configure_optimizer_20(model, lr, weight_decay, betas=(0.9, 0.99))` : un `torch.optim.AdamW` à deux groupes, `weight_decay` sur les paramètres à deux axes ou plus (les matrices et les tables d'embedding), 0 sur les autres (les biais, les $\gamma$ et $\beta$ des layer norms) ; chaque paramètre une seule fois.

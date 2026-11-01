@@ -165,6 +165,8 @@ def test_keys_are_complete():
         assert {"config", "settings", "fast", "source", "split", "vocab"} <= set(key)
         assert key["settings"]["seed"] == G.SEED and key["split"] == G.char_data().fingerprint
     assert fast["settings"]["iters"] == 600 and full["settings"]["iters"] == 5000
+    assert fast["config"]["dropout"] == 0.0 and full["config"]["dropout"] == 0.2
+    assert {k: v for k, v in full["config"].items() if k != "dropout"} == {k: v for k, v in G.MINI_CONFIG.items() if k != "dropout"}
 
 
 def test_reference_model_is_read_from_its_checkpoint(tmp_path, monkeypatch):

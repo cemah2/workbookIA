@@ -11,6 +11,7 @@ Quick reference
 >>> save_checkpoint(key, model, history, data.itos)   # written atomically, outside the repository
 >>> ckpt = load_checkpoint(key)              # None when absent; else {"state_dict", "config", "itos", "history", ...}
 >>> model, ckpt = reference_model(fast=True) # the reference mini-GPT, trained once (≈ 2 min on CPU), then reloaded
+>>> config = mini_config(fast=True)          # MINI_CONFIG, with a dropout of 0.2 in full mode
 
 The configuration of the contract (``MINI_CONFIG``: 4 blocks, 4 heads, d = 128, context 128, characters of Holmes) and
 the training settings (``train_settings``: 600 iterations of 32 sequences in fast mode, 5 000 in full mode) are those
@@ -43,6 +44,13 @@ MINI_CONFIG = {"vocab_size": 88, "block_size": 128, "n_layer": 4, "n_head": 4, "
 SEED = 2320            # the seed of the initialisation and of the training batches (Ex B3.20)
 EVAL_SEED = 2321       # every estimate of the validation loss draws its batches again from this seed
 SLIDING_STRIDE = 32    # char_loss: a window every 32 characters, each scoring its last 32 targets
+
+
+def mini_config(fast: bool = True) -> dict:
+    """The configuration of the mini-GPT of Ex B3.19 and B3.20: ``MINI_CONFIG``, with a dropout of 0.2 in full mode
+    (5 000 iterations are about 40 passes over the training text: without dropout, the validation loss rises again
+    after about 2 500 iterations), none in fast mode (600 iterations, far from overfitting)."""
+    return MINI_CONFIG | {"dropout": 0.0 if fast else 0.2}
 
 
 def train_settings(fast: bool = True) -> dict:
@@ -372,12 +380,12 @@ def checkpoint_key(config: dict, settings: dict, *, fast: bool, source: str, dat
 
 def learner_key(fast: bool = True) -> dict:
     """The key of the model trained and saved by Ex B3.20 (the configuration and the settings of the contract)."""
-    return checkpoint_key(MINI_CONFIG, train_settings(fast), fast=fast, source="learner")
+    return checkpoint_key(mini_config(fast), train_settings(fast), fast=fast, source="learner")
 
 
 def reference_key(fast: bool = True) -> dict:
     """The key of the reference mini-GPT (``reference_model``)."""
-    return checkpoint_key(MINI_CONFIG, train_settings(fast), fast=fast, source="reference")
+    return checkpoint_key(mini_config(fast), train_settings(fast), fast=fast, source="reference")
 
 
 def checkpoint_file(key: dict, folder: str | Path | None = None) -> Path:
@@ -445,7 +453,7 @@ def reference_model(fast: bool = True, folder: str | Path | None = None, verbose
             print(f"ℹ️ entraînement du mini-GPT de référence ({train_settings(fast)['iters']} itérations, une seule fois)",
                   flush=True)
         torch.manual_seed(SEED)
-        model = ReferenceGPT(**MINI_CONFIG)
+        model = ReferenceGPT(**mini_config(fast))
         started = time.perf_counter()
         history = train(model, data.train_ids, data.val_ids, train_settings(fast), torch.Generator().manual_seed(SEED))
         seconds = time.perf_counter() - started
