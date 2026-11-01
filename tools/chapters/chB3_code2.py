@@ -352,6 +352,7 @@ EXPERIMENT_23 = r'''with checked("B3.23"):
 # --- 📈 B3.24 ----------------------------------------------------------------------------------------------------------
 GIVEN_24 = r'''SENTENCE_24 = "“To the man who loves art for its own sake,” remarked Sherlock Holmes."
 WINDOWS_24 = DATA.val_ids[:16 * 128].view(16, 128)        # 16 windows of the validation, for the measures
+SPACES_24 = (WINDOWS_24 == DATA.stoi[" "]).float()         # 1 on the keys that are a space
 
 
 @torch.no_grad()
@@ -405,7 +406,7 @@ else:
     plot_maps_24(attention_maps_24(GPT, ids_24)[0], SENTENCE_24)'''
 
 TODO_24 = r'''previous_24 = ...   # a) (block, head), both counted from 0: the head that looks the most at the PREVIOUS character
-diagonal_24 = ...   # b) (block, head): the head that looks the most at the character ITSELF
+spaces_24 = ...     # b) (block, head): the head that looks the most at the SPACES (bright columns at the spaces)
 spread_24 = ...     # c) (block, head): the head whose attention is the most SPREAD over the keys (the least peaked)'''
 
 CHECK_24 = r'''with checked("B3.24"):
@@ -414,14 +415,14 @@ CHECK_24 = r'''with checked("B3.24"):
     rows_24 = torch.arange(1, 128)
     scores_24 = {
         "previous": maps_24[..., rows_24, rows_24 - 1].mean(dim=(0, -1)),     # (n_layer, H): weight on j = i - 1
-        "diagonal": maps_24.diagonal(dim1=-2, dim2=-1)[..., 1:].mean(dim=(0, -1)),   # weight on j = i
+        "spaces": (maps_24 * SPACES_24[:, None, None, None, :]).sum(-1)[..., 32:].mean(dim=(0, -1)),   # on spaces
         "spread": -(maps_24 * maps_24.clamp_min(1e-12).log()).sum(-1)[..., 32:].mean(dim=(0, -1)),   # entropy, rows >= 32
     }
     n_layer_24, n_head_24 = scores_24["previous"].shape
     what_24 = {"previous": ("a)", "de poids moyen au caractère précédent"),
-               "diagonal": ("b)", "de poids moyen au caractère lui-même"),
+               "spaces": ("b)", "de poids total aux espaces (les espaces font 17 % des caractères)"),
                "spread": ("c)", "nats d'entropie moyenne (une attention uniforme sur 64 clés : 4,16)")}
-    claims_24 = {"previous": previous_24, "diagonal": diagonal_24, "spread": spread_24}
+    claims_24 = {"previous": previous_24, "spaces": spaces_24, "spread": spread_24}
     good_24 = 0
     for key, claim in claims_24.items():
         letter, unit = what_24[key]
@@ -635,13 +636,13 @@ else:
         plt.tight_layout()
         plt.show()'''
 
-TODO_25B = r'''worst_25 = ...     # a) in the full protocol, the ablation that loses the most: "P" no position, "R" no residual,
-                   #    "L" post-LN, "H" one head
+TODO_25B = r'''stuck_25 = ...     # a) in the full protocol, the letters of the ablations whose loss stays above 3 nats per character
+                   #    ("P" no position, "R" no residual, "L" post-LN, "H" one head), e.g. "PH"
 mildest_25 = ...   # b) in the full protocol, the ablation that loses the least: "P", "R", "L" or "H"
 clear_25 = ...     # c) in the full protocol, how many of the four ablations lose more than twice the dispersion of
                    #    their gap (mean gap > 2 standard deviations)? a whole number from 0 to 4'''
 
-CHECK_25B = r'''for letter, answer in zip("abc", [worst_25, mildest_25, clear_25]):
+CHECK_25B = r'''for letter, answer in zip("abc", [stuck_25, mildest_25, clear_25]):
     wb.check(f"B3.25{letter}", answer)'''
 
 # --- 🔬 B3.26 ----------------------------------------------------------------------------------------------------------

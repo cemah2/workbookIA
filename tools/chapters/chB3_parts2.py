@@ -106,13 +106,13 @@ RECORD_22 = (f'wb.record("B3.22a", {P22["french"]}, mistakes={{"compte les conti
 # --- 📈 B3.24: the heads of the model of the solution (the fast model of seed 2320, read on its maps) ---------------
 def _heads_24() -> str:
     scores = HISTORY.get("p24", {}).get("fast 2320")
-    if not scores:
-        return "previous_24, diagonal_24, spread_24 = (0, 0), (0, 1), (0, 2)"
+    if not scores or "spaces" not in scores:
+        return "previous_24, spaces_24, spread_24 = (0, 0), (0, 1), (0, 2)"
     picks = []
-    for key in ("previous", "diagonal", "spread"):
+    for key in ("previous", "spaces", "spread"):
         table = np.array(scores[key])
         picks.append(tuple(int(i) for i in np.unravel_index(table.argmax(), table.shape)))
-    return (f"previous_24, diagonal_24, spread_24 = {picks[0]}, {picks[1]}, {picks[2]}   # read on the maps of the model "
+    return (f"previous_24, spaces_24, spread_24 = {picks[0]}, {picks[1]}, {picks[2]}   # read on the maps of the model "
             "of the solution")
 
 
@@ -125,21 +125,23 @@ def _ablations():
     full = abl.get("full", {}).get("losses")
     if not full:
         return ({n: [1.6, 1.6, 1.6] for n in ("reference", "no_position", "no_residual", "post_ln", "one_head")},
-                {"worst": "R", "mildest": "H", "clear": 3})
+                {"stuck": "LR", "mildest": "H", "clear": 4})
     ref = np.array(full["reference"])
     gaps = {n: np.array(full[n]) - ref for n in LETTERS_25}
     means = {n: g.mean() for n, g in gaps.items()}
     stds = {n: g.std() for n, g in gaps.items()}
+    losses = {n: np.mean(full[n]) for n in LETTERS_25}
+    if any(abs(v - 3.0) < 0.1 for v in losses.values()):
+        raise ValueError(f"B3.25 a): a mean loss is too close to 3 nats: {losses}")
     order = sorted(means, key=means.get)
-    if means[order[-1]] - means[order[-2]] < 2 * max(stds[order[-1]], stds[order[-2]]):
-        raise ValueError(f"B3.25 a): the two worst ablations are not separated: {means}, {stds}")
     if means[order[1]] - means[order[0]] < 2 * max(stds[order[1]], stds[order[0]]):
         raise ValueError(f"B3.25 b): the two mildest ablations are not separated: {means}, {stds}")
     for n in LETTERS_25:
         if abs(means[n] - 2 * stds[n]) < 0.01:
             raise ValueError(f"B3.25 c): the gap of {n} is too close to twice its dispersion")
     clear = sum(means[n] > 2 * stds[n] for n in LETTERS_25)
-    return full, {"worst": LETTERS_25[order[-1]], "mildest": LETTERS_25[order[0]], "clear": int(clear)}
+    stuck = "".join(sorted(LETTERS_25[n] for n in LETTERS_25 if losses[n] > 3.0))
+    return full, {"stuck": stuck, "mildest": LETTERS_25[order[0]], "clear": int(clear)}
 
 
 FULL_25, A25 = _ablations()
@@ -150,10 +152,23 @@ _HINTS_25 = {"P": "relis la colonne « protocole complet » : est-ce bien sans p
              "R": "relis la colonne « protocole complet » : est-ce bien sans résiduel que l'écart est",
              "L": "relis la colonne « protocole complet » : est-ce bien en post-LN que l'écart est",
              "H": "relis la colonne « protocole complet » : est-ce bien avec une seule tête que l'écart est"}
-SOLUTION_25B = f'worst_25, mildest_25, clear_25 = "{A25["worst"]}", "{A25["mildest"]}", {A25["clear"]}'
+SOLUTION_25B = f'stuck_25, mildest_25, clear_25 = "{A25["stuck"]}", "{A25["mildest"]}", {A25["clear"]}'
+
+
+def _stuck_mistakes(answer: str) -> str:
+    """One message for each set of letters that misses one ablation or has one too many (no letter named)."""
+    entries = {}
+    for k, letter in enumerate(sorted(set(answer))):
+        entries[f"il en manque {'une' if k == 0 else 'au moins une'} : compare chaque loss moyenne du protocole complet "
+                f"à 3 nats{' (relis toutes les lignes)' if k else ''}"] = answer.replace(letter, "")
+    for k, letter in enumerate(sorted(set("HLPR") - set(answer))):
+        entries[f"une de trop{' encore' if k else ''} : une ablation ne compte que si sa loss moyenne du protocole complet "
+                f"dépasse 3 nats{' (relis chaque ligne)' if k else ''}"] = "".join(sorted(answer + letter))
+    return "{" + ", ".join(f"{json.dumps(m, ensure_ascii=False)}: {json.dumps(v)}" for m, v in entries.items() if v) + "}"
+
+
 RECORD_25 = (
-    f'wb.record("B3.25a", "{A25["worst"]}", mistakes='
-    + _letters(A25["worst"], {k: v + " le plus grand ?" for k, v in _HINTS_25.items()}) + ')\n'
+    f'wb.record("B3.25a", "{A25["stuck"]}", mistakes=' + _stuck_mistakes(A25["stuck"]) + ')\n'
     f'wb.record("B3.25b", "{A25["mildest"]}", mistakes='
     + _letters(A25["mildest"], {k: v + " le plus petit ?" for k, v in _HINTS_25.items()}) + ')\n'
     f'wb.record("B3.25c", {A25["clear"]}, mistakes={{'
@@ -297,12 +312,12 @@ Dans tes notes : le gain grandit-il avec le nombre de tokens générés, et pour
 
 Écris, pour chaque affirmation, la tête qui la vérifie le mieux, un couple `(bloc, tête)` d'entiers comptés à partir de 0 :
 - a) `previous_24` : la tête qui regarde le plus le **caractère précédent** ;
-- b) `diagonal_24` : la tête qui regarde le plus le **caractère lui-même** ;
+- b) `spaces_24` : la tête qui regarde le plus les **espaces** (des colonnes claires sous chaque espace) ;
 - c) `spread_24` : la tête dont l'attention est la plus **étalée** sur les clés (la moins concentrée).
 
-La cellule de vérification mesure chaque affirmation sur les poids de 16 fenêtres de 128 caractères de la validation : a) le poids moyen de la clé $i - 1$ pour la requête $i$ ; b) celui de la clé $i$ ; c) l'entropie moyenne d'une ligne de poids, $-\sum_j \alpha_{ij} \ln \alpha_{ij}$, sur les requêtes 32 à 127. Ta tête est acceptée si sa mesure atteint au moins 90 % de la plus forte des 16. Ton modèle n'est pas celui d'un autre : les têtes qui portent ces motifs changent d'un entraînement à l'autre, c'est pourquoi la cellule les mesure sur tes poids au lieu de comparer à une réponse.
+La cellule de vérification mesure chaque affirmation sur les poids de 16 fenêtres de 128 caractères de la validation : a) le poids moyen de la clé $i - 1$ pour la requête $i$ ; b) le poids total des clés qui sont des espaces, sur les requêtes 32 à 127 ; c) l'entropie moyenne d'une ligne de poids, $-\sum_j \alpha_{ij} \ln \alpha_{ij}$, sur les requêtes 32 à 127. Ta tête est acceptée si sa mesure atteint au moins 90 % de la plus forte des 16. Ton modèle n'est pas celui d'un autre : les têtes qui portent ces motifs changent d'un entraînement à l'autre, c'est pourquoi la cellule les mesure sur tes poids au lieu de comparer à une réponse.
 
-Dans tes notes : décris deux autres motifs que tu vois (une tête qui regarde les espaces, la ponctuation, le début de la fenêtre…) et vérifie-les sur les poids, avec un calcul du même genre. Les têtes du bloc 0 et celles du bloc 3 se ressemblent-elles ? Pourquoi une tête « caractère précédent » est-elle utile à un modèle de caractères, et pourquoi aucune carte n'a-t-elle de poids au-dessus de la diagonale ?""",
+Dans tes notes : décris deux autres motifs que tu vois (deux caractères en arrière, la ponctuation, les majuscules…) et vérifie-les sur les poids, avec un calcul du même genre. Les têtes du bloc 0 et celles du bloc 3 se ressemblent-elles ? Pourquoi une tête « caractère précédent » est-elle utile à un modèle de caractères, et pourquoi aucune carte n'a-t-elle de poids au-dessus de la diagonale ?""",
        given=C.GIVEN_24, todo=C.TODO_24, check=C.CHECK_24, solution=SOLUTION_24 + "\n\n\n" + C.CHECK_24),
 ])
 
@@ -329,8 +344,8 @@ PART_D = Part("D", "Expériences : ablations, tokens, contexte long",
 - pour le reste, le modèle de B3.19 : les mêmes noms (`tok_emb`, `pos_emb`, `blocks[i]` avec `ln1`, `attn` et ses `qkv` et `proj`, `ln2`, `mlp`, puis `ln_f` et `head`), la tête liée, l'initialisation de nanoGPT, `forward(idx)` → logits `(N, T, vocab_size)`, la causalité. Tu peux réutiliser tes classes `Block_19`, `CausalSelfAttention_18` et `MiniGPT_19`.
 
 La première cellule de vérification construit les cinq variantes sur un petit modèle (2 blocs, $d = 16$) et contrôle pour chacune les noms et les formes du `state_dict`, le calcul d'un bloc à partir de ses propres sous-modules, le nombre de têtes de l'attention (recalculée à partir de `qkv`), l'usage des positions (un même caractère répété), la causalité, la tête liée et l'initialisation. La cellule suivante entraîne les cinq variantes avec les réglages de `PROTOCOL_25` et chaque graine, mesure leur loss sur la validation (`wbgpt.char_loss`), puis affiche pour chacune la loss moyenne, son écart à la référence graine par graine (moyenne ± écart-type) et les mêmes chiffres du protocole complet (`FULL_25`), avec un graphique des écarts. Puis réponds, d'après le **protocole complet** :
-- a) `worst_25` : l'ablation qui perd le plus : `"P"` sans position, `"R"` sans résiduel, `"L"` post-LN, `"H"` une seule tête ;
-- b) `mildest_25` : celle qui perd le moins (mêmes lettres) ;
+- a) `stuck_25` : les lettres des ablations dont la loss reste au-dessus de 3 nats par caractère, à peu près celle d'un modèle qui n'aurait appris que la fréquence de chaque caractère : `"P"` sans position, `"R"` sans résiduel, `"L"` post-LN, `"H"` une seule tête (par exemple `"PH"`) ;
+- b) `mildest_25` : l'ablation qui perd le moins (mêmes lettres) ;
 - c) `clear_25` : combien des quatre ablations ont un écart moyen supérieur au double de sa dispersion (l'écart-type de l'écart sur les trois graines) ? Un entier de 0 à 4.
 
 Dans tes notes : ton classement, avec les écarts et leurs dispersions. Ton protocole rapide donne-t-il le même classement que le protocole complet, et qu'est-ce qui peut les séparer (taille du modèle, nombre d'itérations, nombre de graines) ? Pourquoi le modèle sans position ne s'effondre-t-il pas ? Que ferais-tu pour savoir si le post-LN souffre du warmup trop court de la recette (50 itérations) ? Pourquoi trois graines suffisent-elles à peine à conclure ?""",

@@ -359,7 +359,7 @@ def p22(ns) -> dict:
 
 
 def p24(ns) -> dict:
-    """📈 B3.24: the three scores of every head (previous character, the character itself, entropy) for each model."""
+    """📈 B3.24: the three scores of every head (previous character, spaces, entropy) for each model."""
     import chB3_code2 as C2
     import torch
     ns = _second_namespace(ns)
@@ -371,7 +371,7 @@ def p24(ns) -> dict:
         maps = ns["attention_maps_24"](model, ns["WINDOWS_24"])
         rows = torch.arange(1, 128)
         scores = {"previous": maps[..., rows, rows - 1].mean(dim=(0, -1)),
-                  "diagonal": maps.diagonal(dim1=-2, dim2=-1)[..., 1:].mean(dim=(0, -1)),
+                  "spaces": (maps * ns["SPACES_24"][:, None, None, None, :]).sum(-1)[..., 32:].mean(dim=(0, -1)),
                   "spread": -(maps * maps.clamp_min(1e-12).log()).sum(-1)[..., 32:].mean(dim=(0, -1))}
         out[name] = {k: v.numpy().round(3).tolist() for k, v in scores.items()}
         for k, v in scores.items():

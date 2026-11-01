@@ -891,12 +891,12 @@ Une ligne de carte est la distribution des poids d'**une** requête sur ses clé
 </details>
 <details><summary>Indice 2</summary>
 
-a) Le caractère précédent de la requête $i$ est la clé $i - 1$ : cherche la carte où la ligne juste sous la diagonale est la plus jaune. b) La clé $i$ elle-même : la diagonale. c) Une attention étalée se voit à une carte sans case jaune vive, faite de nuances uniformes sur chaque ligne ; une attention concentrée, à des cases isolées très claires.
+a) Le caractère précédent de la requête $i$ est la clé $i - 1$ : cherche la carte où la ligne juste sous la diagonale est la plus jaune. b) Une tête qui regarde les espaces dessine des **colonnes** claires sous les espaces (␣) de la phrase, quelle que soit la requête. c) Une attention étalée se voit à une carte sans case jaune vive, faite de nuances uniformes sur chaque ligne ; une attention concentrée, à des cases isolées très claires.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), parcours les 16 cartes et note, pour chacune, si la sous-diagonale est plus claire que le reste de la ligne : la tête retenue est celle où elle l'est le plus nettement. Fais de même pour la diagonale (b) et pour les lignes les plus grises (c), puis écris les trois couples `(bloc, tête)`. Si une affirmation est refusée, la mesure affichée te dit à quel point ta tête la vérifie : compare-la aux autres cartes.
+Pour a), parcours les 16 cartes et note, pour chacune, si la sous-diagonale est plus claire que le reste de la ligne : la tête retenue est celle où elle l'est le plus nettement. Fais de même pour les colonnes des espaces (b) et pour les lignes les plus grises (c), puis écris les trois couples `(bloc, tête)`. Si une affirmation est refusée, la mesure affichée te dit à quel point ta tête la vérifie : compare-la aux autres cartes.
 
 </details>
 
