@@ -56422,7 +56422,7 @@
       "hash": "e0dfd307da50a71ba5f86517130aa9f95876328885107f217415bcd5b9e5e584",
       "kind": "bool",
       "mistakes": {
-        "a47f86becd6f10845ef05b3dcf54b60e9294dd5f6afc06b0d55c1cc08514758a": "relis le 🔁 Rappel B3 (§204.3) : peut-on écrire le token 2 avant de connaître le token 1 ?"
+        "a47f86becd6f10845ef05b3dcf54b60e9294dd5f6afc06b0d55c1cc08514758a": "relis l'encadré 🔗 « Lien avec B3 » (§204.3) : peut-on écrire le token 2 avant de connaître le token 1 ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
@@ -56442,7 +56442,7 @@
       "hash": "bab776d1ea682e580e904f0caf2f8c39446a51b87214cf75a0f4bd4671e82ad1",
       "kind": "str",
       "mistakes": {
-        "15400c6aa067712deb95d901820d7f96413585880b837b2d6caaedd9deac569a": "relis le 🔁 Rappel B3 de §204.3 : de quoi le temps d'une réponse est-il proportionnel ?",
+        "15400c6aa067712deb95d901820d7f96413585880b837b2d6caaedd9deac569a": "relis l'encadré 🔗 « Lien avec B3 » de §204.3 : de quoi le temps d'une réponse est-il proportionnel ?",
         "d4dad0d3c9455b7f3c7073c3a1f6a0e1e68e0a3881d833fe199f504e033a9bd8": "le nombre de têtes change-t-il le nombre de passes avant ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
@@ -56459,8 +56459,8 @@
       "hash": "9214972f214ed47923931ab3953c5eeee53e085e58cd01b7460d1fa3e53952a2",
       "kind": "str",
       "mistakes": {
-        "8ccecf20ebc6d7e39668c975f3c6cced15c8adac6850dd7538059abd2b47aa07": "relis le 🔁 Rappel B1 (§204.8) : avec peu d'exemples, qui gagnait ?",
-        "b8d5339418a1e8fd6c66ee4a467acfeeefcf391636d808f1d24fb6a453f67175": "relis le 🔁 Rappel B1 (§204.8) : les deux méthodes donnaient-elles la même chose ?"
+        "8ccecf20ebc6d7e39668c975f3c6cced15c8adac6850dd7538059abd2b47aa07": "relis l'encadré 🔗 « Lien avec B1 » (§204.8) : avec peu d'exemples, qui gagnait ?",
+        "b8d5339418a1e8fd6c66ee4a467acfeeefcf391636d808f1d24fb6a453f67175": "relis l'encadré 🔗 « Lien avec B1 » (§204.8) : les deux méthodes donnaient-elles la même chose ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
@@ -56477,7 +56477,7 @@
       "kind": "str",
       "mistakes": {
         "3737712df38fcdb9e6aa6ec76bb71223be5753374d72535943c8c45dc4a207d9": "relis la première puce de « Ce que dit chaque morceau » : W est-elle entraînée ?",
-        "f7da75070c6f90e1dc1702944c2a035bfdfa565a798e9f3c3e0da5f085becd8c": "relis le 🔁 Rappel B1 (§204.8) : où LoRA place-t-il ses paramètres ?"
+        "f7da75070c6f90e1dc1702944c2a035bfdfa565a798e9f3c3e0da5f085becd8c": "relis l'encadré 🔗 « Lien avec B1 » (§204.8) : où LoRA place-t-il ses paramètres ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
@@ -56485,7 +56485,7 @@
       "hash": "7ece45907ecc472e107de1987d1e2bd78f875f0f5a8b8f178a7049f981285194",
       "kind": "bool",
       "mistakes": {
-        "7215da4c72078587b02d5f9994c752cb18f055004bdbeab84ce15131dc6e2a18": "relis le 🔁 Rappel B1 (§204.8) : que risque un fine-tuning complet avec peu d'exemples ?"
+        "7215da4c72078587b02d5f9994c752cb18f055004bdbeab84ce15131dc6e2a18": "relis l'encadré 🔗 « Lien avec B1 » (§204.8) : que risque un fine-tuning complet avec peu d'exemples ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },

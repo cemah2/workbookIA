@@ -232,7 +232,7 @@ a) **B** : l'attaquant cache ses instructions dans un document que le système v
 
 <details><summary>Indice 1</summary>
 
-Relis en B3 le masque causal, le KV cache et le prefill, puis le 🔁 Rappel B3 de §204.3 et la formule du KV cache (§204.2).
+Relis en B3 le masque causal, le KV cache et le prefill, puis l'encadré 🔗 « Lien avec B3 » de §204.3 et la formule du KV cache (§204.2).
 
 </details>
 <details><summary>Indice 2</summary>
@@ -250,7 +250,7 @@ a) Une passe sur le prompt donne le token 1, puis une passe par token suivant : 
 
 <details><summary>Indice 1</summary>
 
-Relis en B1 l'extraction de features, le fine-tuning et l'oubli catastrophique, puis le 🔁 Rappel B1 de §204.8.
+Relis en B1 l'extraction de features, le fine-tuning et l'oubli catastrophique, puis l'encadré 🔗 « Lien avec B1 » de §204.8.
 
 </details>
 <details><summary>Indice 2</summary>
@@ -484,7 +484,7 @@ Pour les comptes, reprends ta méthode de ✏️ B4.3 : GPT-3 a 96 couches de $d
 </details>
 <details><summary>Indice 3</summary>
 
-1. Chaque tâche demanderait sa copie complète de 175 milliards de paramètres ; les adaptateurs ajoutent des couches traitées l'une après l'autre (de la latence), l'optimisation du prompt est difficile et prend une partie de la séquence. Pour le tableau 1, regarde la colonne où le batch et la séquence sont les plus petits. Pour 2, relis le deuxième paragraphe de l'introduction. Pour 3, relis les deux paragraphes qui suivent l'équation (3). Pour 4, calcule $2 \times 96 \times 12\,288 \times 8$, puis multiplie par 2 octets. Pour 5, divise 175 255,8 millions par le budget de 4 ; calcule le rapport et l'écart relatif des deux débits. Pour 6, relis la fin de l'annexe D.4. Pour 7, relis la phrase sous le tableau 6 et la note 6. Pour 8, divise $\lVert\Delta\mathbf{W}_q\rVert_F$ par $\lVert\mathbf{U}^\top\mathbf{W}_q\mathbf{V}^\top\rVert_F$ pour $r = 4$. Pour 9, compare à la fiche : `target_modules`, `lora_alpha`, rsLoRA, DoRA, QLoRA.
+1. Chaque tâche demanderait sa copie complète de 175 milliards de paramètres ; les adaptateurs ajoutent des couches traitées l'une après l'autre (de la latence), l'optimisation du prompt est difficile et prend une partie de la séquence. Pour le tableau 1, regarde la colonne où le batch et la séquence sont les plus petits. Pour 2, relis le deuxième paragraphe de l'introduction. Pour 3, relis les deux paragraphes qui suivent l'équation (3). Pour 4, calcule $2 \times 96 \times 12\,288 \times 8$, puis multiplie par 2 octets. Pour 5, divise 175 255,8 millions par le budget de la question 4 ; calcule le rapport et l'écart relatif des deux débits. Pour 6, relis la fin de l'annexe D.4. Pour 7, relis la phrase sous le tableau 6 et la note 6. Pour 8, divise $\lVert\Delta\mathbf{W}_q\rVert_F$ par $\lVert\mathbf{U}^\top\mathbf{W}_q\mathbf{V}^\top\rVert_F$ pour $r = 4$. Pour 9, compare à la fiche : `target_modules`, `lora_alpha`, rsLoRA, DoRA, QLoRA.
 
 </details>
 
