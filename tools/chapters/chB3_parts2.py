@@ -157,13 +157,15 @@ SOLUTION_25B = f'stuck_25, mildest_25, clear_25 = "{A25["stuck"]}", "{A25["milde
 
 def _stuck_mistakes(answer: str) -> str:
     """One message for each set of letters that misses one ablation or has one too many (no letter named)."""
+    missing = ["il en manque une : compare chaque loss moyenne du protocole complet à 3 nats",
+               "il en manque une : relis chaque ligne du protocole complet et compare sa loss moyenne à 3 nats"]
+    extra = ["une de trop : une ablation ne compte que si sa loss moyenne du protocole complet dépasse 3 nats",
+             "il y en a une de trop : relis chaque ligne du protocole complet et compare sa loss moyenne à 3 nats"]
     entries = {}
     for k, letter in enumerate(sorted(set(answer))):
-        entries[f"il en manque {'une' if k == 0 else 'au moins une'} : compare chaque loss moyenne du protocole complet "
-                f"à 3 nats{' (relis toutes les lignes)' if k else ''}"] = answer.replace(letter, "")
+        entries[missing[k % 2] + (" (et chaque ligne compte)" if k >= 2 else "")] = answer.replace(letter, "")
     for k, letter in enumerate(sorted(set("HLPR") - set(answer))):
-        entries[f"une de trop{' encore' if k else ''} : une ablation ne compte que si sa loss moyenne du protocole complet "
-                f"dépasse 3 nats{' (relis chaque ligne)' if k else ''}"] = "".join(sorted(answer + letter))
+        entries[extra[k % 2] + (" (et chaque ligne compte)" if k >= 2 else "")] = "".join(sorted(answer + letter))
     return "{" + ", ".join(f"{json.dumps(m, ensure_ascii=False)}: {json.dumps(v)}" for m, v in entries.items() if v) + "}"
 
 

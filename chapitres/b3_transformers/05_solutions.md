@@ -225,7 +225,7 @@ g) $PE_0$ vaut 0 dans les colonnes paires et 1 dans les impaires : $PE_0 \cdot P
 
 ## Exercices du notebook
 
-Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB3.py` (calibrage du 🔮 B3.13 sur onze graines, rejeu du 🐛 B3.17 sur ses huit versions, mini-GPT sur trois graines et en mode complet, LSTM du ch. 22 réentraîné sur le découpage de B3) ; le découpage, le vocabulaire et les graines sont figés, donc tes chiffres sont les mêmes à l'arrondi près, sauf les durées, qui dépendent de la machine et sont données en fourchette.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB3.py` (calibrage du 🔮 B3.13 sur onze graines, rejeu du 🐛 B3.17 sur ses huit versions, mini-GPT sur trois graines et en mode complet, LSTM du ch. 22 réentraîné sur le découpage de B3 ; pour les parties C à E, le 🔮 B3.22 et les cartes de B3.24 sur quatre modèles, les protocoles complets des 🔬 B3.25 et B3.26, le ViT de B3.28 et le calibrage du défi B3.30) ; le découpage, le vocabulaire et les graines sont figés, donc tes chiffres sont les mêmes à l'arrondi près, sauf les durées, qui dépendent de la machine et sont données en fourchette.
 
 ### Ex B3.12 — causal_mask, padding_mask et scaled_dot_product_attention 🔨
 **Réponse** : les 55 tests de l'exercice passent ; l'attention à la main de la fiche redonne les poids (0,1411 ; 0,1411 ; 0,6323 ; 0,0856) ; contre `F.scaled_dot_product_attention`, l'écart est de $3 \times 10^{-16}$ en float64.
@@ -497,4 +497,273 @@ Les matrices et les tables portent l'essentiel de la capacité du modèle : le w
 **Erreurs fréquentes** : un seul groupe de paramètres, qui applique le weight decay aux biais et aux layer norms ; parcourir `named_parameters(remove_duplicate=False)`, qui donne deux fois la table liée ; oublier `model.eval()` ou `torch.no_grad()` dans l'estimation (un dropout actif, de la mémoire gaspillée), ou oublier de revenir en mode train ; le clipping après `optimizer.step()`, qui n'agit plus sur rien ; tirer les batches de validation avec le générateur de l'entraînement, ce qui change la suite des batches d'entraînement à chaque évaluation ; comparer des loss par token d'un modèle de caractères et d'un modèle de tokens BPE (🔬 B3.26).
 **Variante** : en bits, 1,590 nat par caractère font $1{,}590 / \ln 2 \approx 2{,}29$ bits ; un codeur arithmétique guidé par ce modèle écrirait la validation de Holmes en 2,29 bits par caractère environ, contre 8 en ASCII : une compression d'un facteur 3,5 (mesuré sur la même validation : `zlib` au niveau 9 donne 3,27 bits par caractère, `lzma` 3,06 et `bz2` 2,77 ; des compresseurs généralistes, qui n'apprennent que sur le texte qu'ils compressent).
 
-Les solutions des exercices B3.21 à B3.30 seront ajoutées à la prochaine étape de génération, avec la suite de la partie B du notebook.
+### Ex B3.21 — Lire les courbes d'entraînement du mini-GPT et poser un diagnostic 📈
+**Réponse** : a) **88** ; b) **"A"** ; c) **2 500** ; d) **False** ; e) **True**.
+**Démarche** :
+- a) À l'initialisation, les logits sont petits et la distribution prédite presque uniforme : la loss vaut $\log V$ (le contrôle de départ, §203.8). La courbe part de 4,50 (estimée sur 8 batches) ; $\log 88 \approx 4{,}477$ et $e^{4{,}50} \approx 90$ : à cette précision, c'est bien le nombre de caractères distincts de Holmes, 88. Une loss de départ nettement au-dessus aurait signalé une initialisation trop forte (88 nats avec les tables de PyTorch par défaut, B3.19).
+- b) Ta validation estimée baisse jusqu'au bout (1,618 à 550 itérations, 1,599 à 600 pour le modèle de la solution) et l'entraînement la suit de près : le modèle est **sous-entraîné**, il apprendrait encore. On voit aussi la recette : pendant le warmup (50 itérations), le learning rate monte de 0 à $5 \times 10^{-3}$ et la loss tombe très vite de 4,5 vers 2,5 ; puis le cosinus le fait redescendre jusqu'à $5 \times 10^{-4}$, et la loss continue de baisser sans rebondir.
+- c) Sans dropout, la loss de validation estimée descend jusqu'à **1,384 à 2 500 itérations**, reste à plat jusqu'à 3 250 (1,388 à 1,394), puis remonte jusqu'à 1,553 à 5 000, pendant que l'entraînement descend à 0,83 : de l'**overfitting** caractéristique. Environ 40 passages sur le même texte de 506 000 caractères suffisent à un modèle de 820 992 paramètres pour en apprendre des morceaux par cœur (⚖️ B3.10).
+- d) Arrêté à son meilleur point (1,384), l'entraînement sans dropout reste au-dessus de l'entraînement avec dropout à 5 000 itérations (**1,352**, et 1,327 sur toute la validation par `char_loss`) : le dropout ne fait pas que retarder l'overfitting, il permet de profiter des itérations suivantes.
+- e) Avec dropout, l'entraînement finit à 1,366 (moyenne des 250 dernières itérations) et la validation à 1,352 : moins de 0,02 nat d'écart, l'entraînement **au-dessus** même, parce que sa loss est mesurée avec le dropout actif (un réseau amputé de 20 % de ses sorties), et la validation sans. Sans dropout, l'écart final dépasse 0,7 nat.
+
+Le dropout fait commencer l'entraînement plus haut (2,64 contre 2,56 en moyenne sur les 250 premières itérations) et descendre plus lentement : chaque batch est appris par un réseau différent, ce qui freine la mémorisation. Sans pouvoir changer la configuration, on garderait le modèle de la meilleure itération (early stopping, ch. 20 : une sauvegarde à chaque évaluation, ou 2 500 itérations au lieu de 5 000).
+**Erreurs fréquentes** : lire la loss de départ comme $\log_2 V$ (6,46) ou prendre le vocabulaire d'un autre modèle (65 caractères dans le quiz Q10, 50 257 tokens pour GPT-2) ; conclure à l'overfitting dès que l'entraînement passe sous la validation (c'est l'écart qui **grandit** pendant que la validation remonte qui le signe) ; croire qu'un entraînement plus haut que la validation est un bug : avec dropout, c'est attendu ; comparer des points de courbes estimés sur quelques batches comme s'ils étaient exacts : à 0,01 près, deux points voisins se valent.
+**Variante** : la validation sans dropout vaut 1,408 à 2 000 itérations et 1,394 à 3 000 : arrêter n'importe où entre 2 250 et 3 250 itérations donne une loss à 0,012 près de la meilleure ; c'est pourquoi on garde le meilleur modèle vu plutôt que de chercher l'itération exacte.
+
+### Ex B3.22 — Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne 🔮
+**Réponse** : a) **False** : aucune des 10 continuations n'a plus de mots français que de mots anglais (en moyenne 10,4 mots anglais et 0,2 mot français par continuation de 120 caractères ; sur quatre suites de tirages, 0 continuation française sur 10 à chaque fois) ; b) **True** : sur toute la validation de Verne, le modèle fait **3,467** nats par caractère, sous $\log 88 \approx 4{,}477$ (et loin des 1,590 de Holmes). Sur quatre modèles (les trois graines du mode rapide, 3,447 à 3,467, et le mode complet, 3,808) et quatre suites de tirages chacun, les deux réponses ne changent pas.
+**Démarche** : a) Le prompt ne fait qu'une partie du contexte, puis il en sort : au bout de quelques dizaines de caractères, le modèle lit surtout ce qu'il a lui-même écrit. Et il ne peut écrire que ce qu'il a appris : des suites de lettres de Holmes. Il écrit des mots anglais, ou des pseudo-mots aux sonorités anglaises. b) Une prédiction uniforme ne sait rien ; le modèle de Holmes sait beaucoup de choses que le français partage avec l'anglais : la fréquence des espaces, des voyelles, une majuscule après un point, la ponctuation, des lettres qui vont ensemble (« qu », « tion », « ent »), des mots communs (« a », « est »… à l'orthographe près). Il paie près de 2 nats de plus par caractère que sur Holmes, mais reste à 1 nat sous l'uniforme. Le tableau des positions dit autre chose : sur Holmes, la loss baisse quand le contexte s'allonge (1,786 aux positions 0 à 15, 1,600 aux positions 64 à 127) ; sur Verne, elle ne baisse pas (3,496 puis 3,523) : un contexte qu'il ne comprend pas ne l'aide pas. Le modèle du mode complet, meilleur sur Holmes (1,327), est **pire** sur Verne (3,808) : plus spécialisé, il est plus sûr de lui dans ses habitudes anglaises, et chaque surprise coûte plus cher. Pour qu'il continue en français, il faudrait du français dans l'entraînement (un modèle multilingue), ou un fine-tuning sur Verne (B1, B4).
+**Erreurs fréquentes** : croire qu'un modèle de langue « suit » la langue du prompt sans l'avoir apprise (c'est vrai d'un grand modèle multilingue, pas d'un modèle d'un seul roman) ; croire qu'un texte hors distribution coûte forcément plus qu'une prédiction uniforme : un modèle reste meilleur que l'uniforme tant que ce qu'il sait se transfère en partie ; lire la perplexité par caractère de Verne ($e^{3{,}467} \approx 32$) comme un nombre de mots possibles : ce sont des caractères.
+**Variante** : avec les mêmes tirages, à température 0,5, les continuations sont plus anglaises encore : 17,9 mots anglais en moyenne, contre 10,4 à température 1 (le modèle reste sur ses mots les plus probables) ; à température 1,5, 5,2 seulement, dans un mélange de pseudo-mots ; les mots français restent à 0,1 ou 0,2 par continuation, et aucune continuation n'est française.
+
+### Ex B3.23 — Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur 📦
+**Réponse** : tes deux générations passent les contrôles (40 tokens gloutons après 5, le contexte coupé à 32 ; les mêmes 27 tokens avec le cache ; chaque `attn.qkv` voit le prompt une fois, puis un token par pas ; un refus) et donnent les mêmes tokens à toutes les longueurs sur ton mini-GPT. Sur 4 prompts de 32 caractères, la génération sans cache prend de 65 à 85 ms (16 tokens) à 570 à 640 ms (96 tokens), avec cache de 30 à 45 ms à 160 à 195 ms : un gain d'environ 2 à 16 tokens, de 3 à 3,5 à 64 et 96 tokens (des mesures, sur deux exécutions : elles changent avec la charge de la machine).
+**Démarche** :
+```python
+@torch.no_grad()
+def generate_23(model, idx, n_new):
+    model.eval()
+    for _ in range(n_new):
+        logits = model(idx[:, -model.block_size:])[:, -1]
+        idx = torch.cat([idx, logits.argmax(dim=-1, keepdim=True)], dim=1)
+    return idx
+
+
+@torch.no_grad()
+def generate_cached_23(model, idx, n_new, n_head):
+    N, T0 = idx.shape
+    if T0 + n_new > model.block_size:
+        raise ValueError(f"{T0} + {n_new} tokens: more than block_size = {model.block_size}")
+    model.eval()
+    cache = [None] * len(model.blocks)
+
+    def forward_new(tokens, start):
+        T = tokens.shape[1]
+        x = model.tok_emb(tokens) + model.pos_emb(torch.arange(start, start + T, device=tokens.device))
+        for i, block in enumerate(model.blocks):
+            D = x.shape[-1]
+            q, k, v = block.attn.qkv(block.ln1(x)).split(D, dim=2)
+            q, k, v = (t.view(N, T, n_head, D // n_head).transpose(1, 2) for t in (q, k, v))
+            if cache[i] is not None:
+                k, v = torch.cat([cache[i][0], k], dim=2), torch.cat([cache[i][1], v], dim=2)
+            cache[i] = (k, v)
+            S = k.shape[2]
+            mask = torch.ones(T, S, dtype=torch.bool, device=x.device).tril(diagonal=S - T)
+            y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
+            x = x + block.attn.proj(y.transpose(1, 2).reshape(N, T, D))
+            x = x + block.mlp(block.ln2(x))
+        return model.head(model.ln_f(x[:, -1]))
+
+    out, logits = [idx], forward_new(idx, 0)          # the prefill
+    for j in range(n_new):
+        nxt = logits.argmax(dim=-1, keepdim=True)
+        out.append(nxt)
+        if j < n_new - 1:
+            logits = forward_new(nxt, T0 + j)          # one token, at its own position
+    return torch.cat(out, dim=1)
+```
+Le masque causal ne change jamais la sortie d'une position quand on ajoute des tokens après elle (§203.3) : dans chaque bloc, les clés et les valeurs des anciens tokens sont donc **les mêmes** à chaque pas, et on peut les garder. Le nouveau token a besoin de tout ce qu'un token reçoit dans un bloc : sa layer norm, sa requête, sa clé et sa valeur, puis l'ajout résiduel et le MLP ; seule l'attention lit le passé, par le cache. Un seul masque sert aux deux phases : le masque causal aligné en bas à droite (`tril(diagonal=S - T)`, celui de ta `causal_mask`) est triangulaire pour le prefill ($T = S$) et plein pour une seule requête ($T = 1$). Le token tiré au dernier pas n'a pas besoin de passer dans le modèle : on ne lui demande aucune suite. Le gain reste modeste ici, parce que le contexte est court (128 tokens au plus) et que le modèle est petit : sans cache, une passe sur 128 tokens ne coûte pas 128 fois une passe sur un token, car sur CPU une bonne part du temps d'un module est un coût fixe (l'appel, l'allocation), le même pour 1 ou 128 tokens ; le cache économise le calcul, pas ces coûts fixes. Sur un grand modèle et un long contexte, le calcul domine, et le cache rend le coût d'un token proportionnel à $t$ dans l'attention et constant ailleurs, au lieu de proportionnel à $t$ partout (§203.9). Mémoire du cache à 128 tokens pour 4 prompts : $2 \times 4 \text{ blocs} \times 128 \times 128 \times 4$ octets par séquence, soit 512 Kio, et 2 Mio pour les quatre (🧮 B3.8).
+**Erreurs fréquentes** : donner au nouveau token l'embedding de la position 0 (`pos_emb(torch.arange(1))`) : la génération suit le calcul complet sur le prompt puis s'en écarte ; `is_causal=True` pour le pas d'un seul token : avec $L = 1 < S$, le triangle s'aligne en haut à gauche et la requête ne voit que la première clé ; appeler `block.attn(...)` sur le nouveau token seul, qui ne voit plus le passé ; oublier l'ajout résiduel ou `ln2` ; ranger le cache après le découpage de la **requête** au lieu des clés et des valeurs ; couper la séquence à `block_size` comme sans cache : les clés en cache ont été calculées avec d'autres positions.
+**Variante** : avec un tirage aléatoire (`torch.multinomial` à température 1), les deux générations restent identiques si elles tirent avec le **même** générateur dans le même ordre, et si les logits sont assez proches : un écart de l'ordre de $10^{-6}$ entre les deux calculs ne change un tirage que si le nombre aléatoire tombe à moins de $10^{-6}$ d'une frontière de la répartition cumulée, une chance sur un million par pas environ.
+
+### Ex B3.24 — Les cartes d'attention de chaque tête sur une phrase de Holmes 📈
+**Réponse** (le modèle de la solution ; le tien a ses propres têtes, mesurées par la cellule) : a) **(0, 1)** : 0,82 de son poids va en moyenne au caractère précédent, la deuxième tête n'en donne que 0,21 ; b) **(3, 2)** : 0,41 de son poids va aux espaces, qui ne font que 17,5 % des caractères de ces fenêtres (la deuxième : 0,27) ; c) **(2, 1)** : 3,74 nats d'entropie moyenne sur les requêtes 32 à 127, contre 4,16 pour une attention uniforme sur 64 clés (la deuxième : 3,61, acceptée aussi, à moins de 10 %).
+**Démarche** : une ligne de carte est la distribution de poids d'**une** requête ; une tête qui regarde une position **relative** fixe dessine une droite parallèle à la diagonale (la sous-diagonale pour le caractère précédent), une tête qui regarde un **type** de caractère dessine des colonnes (les espaces), une tête étalée, des lignes grises sans case claire. La mesure confirme ce que l'œil propose, sur 2 048 caractères au lieu d'une phrase : une impression sur une seule phrase peut venir de ses mots. La tête « caractère précédent » est la plus nette des trois motifs : (0, 1) dans le bloc 0, celui qui ne voit que les embeddings ; sur les quatre modèles calibrés (trois graines du mode rapide, le mode complet), la meilleure tête de ce motif donne de 0,66 à 1,00 de son poids au caractère précédent, et la deuxième au plus 0,32 (sauf en mode complet, où deux têtes le font à 0,98 et 1,00). Pour un modèle de caractères, c'est l'information la plus utile : le caractère précédent et le caractère courant donnent déjà les paires de lettres (un modèle de paires fait 2,43 nats par caractère sur la validation) ; les blocs suivants combinent ces informations, ce qui donne des cartes moins lisibles. Aucune carte n'a de poids au-dessus de la diagonale : le masque causal le met exactement à 0 (§203.3). Les motifs des espaces et des têtes étalées sont moins tranchés : plusieurs têtes s'en approchent, d'où la tolérance de 10 %.
+**Erreurs fréquentes** : lire une carte par colonne au lieu de la lire par ligne ; compter les têtes à partir de 1 ; confondre une tête qui regarde le caractère précédent avec une tête qui regarde le caractère lui-même (la diagonale : aucune tête n'y met plus de 0,16 de son poids sur les quatre modèles calibrés) ; conclure d'une seule phrase ; chercher les mêmes têtes que la solution dans un autre entraînement.
+**Variante** : le poids moyen de la clé $i - 2$ (deux caractères en arrière) se mesure de la même façon : `maps_24[..., rows[1:], rows[1:] - 2]` ; dans le modèle de la solution, la tête (0, 0) lui donne 0,50 de son poids, la plus forte (puis (0, 3) avec 0,26), et la tête (0, 1) du caractère précédent 0,07 seulement : les têtes du même bloc se partagent les voisins.
+
+### Ex B3.25 — Ablations : sans position, sans résiduel, post-LN, une seule tête 🔬
+**Réponse** : tes cinq variantes passent les contrôles. Protocole complet (le mini-GPT de B3.20, 600 itérations, trois graines ; loss sur toute la validation, en nats par caractère) : référence **1,613** (1,598 à 1,622) ; sans position **+0,554 ± 0,018** ; sans résiduel **+1,491 ± 0,011** ; post-LN **+1,491 ± 0,011** ; une seule tête **+0,023 ± 0,017**. a) **"LR"** : sans résiduel et en post-LN, la loss reste à 3,103 ou 3,104 nats par caractère ; b) **"H"** ; c) **3** : seul l'écart d'une tête unique (0,023) reste sous le double de sa dispersion (0,034). Dans le protocole rapide du notebook (2 blocs, $d = 64$, 200 itérations, deux graines) : référence 2,469 ; sans position +0,003 ± 0,008 ; sans résiduel +0,649 ± 0,018 ; post-LN +0,663 ± 0,015 ; une seule tête +0,037 ± 0,044 (environ une minute pour les dix entraînements).
+**Démarche** :
+```python
+class AblatedBlock_25(Block_19):
+    def __init__(self, d_model, n_head, residual=True, pre_ln=True):
+        super().__init__(d_model, n_head)
+        self.residual, self.pre_ln = residual, pre_ln
+
+    def forward(self, x):
+        if not self.pre_ln:                               # post-LN (2017)
+            x = self.ln1(x + self.attn(x))
+            return self.ln2(x + self.mlp(x))
+        if not self.residual:                             # each sub-layer replaces its input
+            x = self.attn(self.ln1(x))
+            return self.mlp(self.ln2(x))
+        return super().forward(x)
+
+
+class AblatedGPT_25(nn.Module):
+    def __init__(self, vocab_size, block_size, n_layer, n_head, d_model, positions=True, residual=True, pre_ln=True):
+        super().__init__()
+        self.block_size = block_size
+        self.tok_emb = nn.Embedding(vocab_size, d_model)
+        self.pos_emb = nn.Embedding(block_size, d_model) if positions else None
+        self.blocks = nn.ModuleList([AblatedBlock_25(d_model, n_head, residual, pre_ln) for _ in range(n_layer)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, vocab_size, bias=False)
+        self.head.weight = self.tok_emb.weight
+        ...                                               # the nanoGPT initialisation of MiniGPT_19
+
+    def forward(self, idx):
+        x = self.tok_emb(idx)
+        if self.pos_emb is not None:
+            x = x + self.pos_emb(torch.arange(idx.shape[1], device=idx.device))
+        for block in self.blocks:
+            x = block(x)
+        return self.head(self.ln_f(x))
+
+
+def make_variant_25(name, config):
+    if name not in VARIANTS_25:
+        raise ValueError(f"unknown variant {name!r}")
+    c = {k: config[k] for k in ("vocab_size", "block_size", "n_layer", "n_head", "d_model")}
+    if name == "one_head":
+        c["n_head"] = 1
+    return AblatedGPT_25(**c, positions=name != "no_position", residual=name != "no_residual",
+                         pre_ln=name != "post_ln")
+```
+Le classement du protocole complet, de la plus coûteuse à la plus anodine : sans résiduel et post-LN (à égalité), puis sans position, puis une seule tête.
+- **Sans résiduel, post-LN** : 3,103 nats par caractère, c'est exactement la cross-entropy, sur la validation, d'un modèle qui ne connaîtrait que la **fréquence** de chaque caractère dans l'entraînement (3,103, calculée directement). Les deux modèles n'ont rien appris d'autre : avec le learning rate de la recette ($5 \times 10^{-3}$) et 50 itérations de warmup, leur entraînement s'effondre sur la solution la plus simple, la même pour les trois graines (d'où la dispersion presque nulle). Sans chemin résiduel, le gradient doit traverser quatre blocs entiers (ch. 20) ; en post-LN, la layer norm placée **sur** le chemin résiduel donne des gradients grands près de la sortie au début de l'entraînement, et le warmup court ne suffit pas (Xiong et coll., §203.6). C'est la conclusion attendue ; ce que l'ablation chiffre, c'est qu'il ne reste **rien** du modèle avec cette recette.
+- **Sans position** : +0,554 nat, un coût net (30 fois la dispersion) mais pas un effondrement : 2,16, mieux qu'un modèle de paires de caractères (2,428 sur les mêmes cibles, appris sur l'entraînement avec un lissage de 0,1). Le masque causal donne au modèle **ce qui précède**, en vrac : il sait quels caractères sont passés, pas dans quel ordre, et il ne peut pas faire de tête « caractère précédent » (B3.24). Il retrouve un peu d'ordre, comme le dit la fiche (§203.5, Haviv et coll.), mais un modèle de caractères a besoin de l'ordre exact de ses voisins.
+- **Une seule tête** : +0,023 ± 0,017 : dans la dispersion, avec 3 graines on ne peut pas conclure qu'une tête de 128 features perd quelque chose face à quatre têtes de 32 à ce stade de l'entraînement.
+
+Les deux protocoles ne classent pas tout pareil : en 200 itérations et avec 2 blocs, sans position ne coûte rien (+0,003) : le petit modèle n'a pas encore appris à se servir des positions, il en est aux fréquences et aux paires. Les deux effondrements, eux, apparaissent dès le protocole rapide (3,12 à 3,13). Un protocole court mesure ce qui compte **au début** de l'entraînement : une conclusion sur le modèle final demande le protocole complet. Trois graines suffisent pour les écarts de 0,5 et 1,5 nat ; pour 0,02, il en faudrait bien davantage, ou des entraînements plus longs.
+**Erreurs fréquentes** : comparer chaque variante à la moyenne de la référence au lieu de calculer l'écart **graine par graine** (la même graine donne les mêmes batches : l'écart apparié est moins bruité) ; un modèle sans position qui garde `pos_emb` à zéro (il reste dans le `state_dict` et son gradient l'apprend) ; un post-LN qui normalise l'entrée de la sous-couche **et** la somme ; oublier de refaire l'initialisation après avoir remplacé les blocs ; conclure d'une seule graine ; lire « le post-LN ne marche pas » au lieu de « le post-LN ne marche pas avec cette recette ».
+**Variante** : le post-LN n'est pas condamné, il est mal réglé. Avec la graine 2501 et 600 itérations : un learning rate de $10^{-3}$ (jusqu'à $10^{-4}$) au lieu de $5 \times 10^{-3}$ le sort de l'effondrement, 2,465 nats par caractère (le pré-LN fait 1,982 avec ce même learning rate) ; un warmup de 300 itérations au lieu de 50, avec le learning rate de la recette, aussi : 2,265. Il reste loin du pré-LN de la recette (1,598) : le pré-LN supporte un learning rate élevé et un warmup court, ce qui, à budget fixé, vaut beaucoup.
+
+### Ex B3.26 — Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal 🔬
+**Réponse** : `TOK_26` fait **2,1180** caractères par token sur toute la validation de Holmes (B3.26a) ; à budget égal, le contexte BPE vaut 62 tokens dans le protocole complet (2,076 caractères par token sur les 100 000 premiers caractères de l'entraînement) et 31 en mode rapide. b) **"B"** : dans le protocole complet, le mini-GPT BPE fait **1,471 ± 0,005** nat par caractère (1,467 à 1,478) contre **1,599 ± 0,007** pour les caractères (1,590 à 1,606, les modèles de B3.20) : 0,128 nat de mieux, près de vingt fois la dispersion, avec 866 816 paramètres au lieu de 820 992, et en 75 s au lieu de 130 par entraînement. En mode rapide (200 itérations, petit modèle) : caractères 2,465 ± 0,008, BPE 2,327 ± 0,109.
+**Démarche** :
+```python
+def chars_per_token_26(tok, text):
+    return len(text) / len(tok.encode(text))
+
+
+def budget_block_26(chars_per_token, char_block):
+    return round(char_block / chars_per_token)
+
+
+def nats_per_char_26(model, ids, tok, block_size):
+    per_token = wbgpt.char_loss(model, ids, block_size=block_size, stride=max(1, block_size // 4))
+    targets = ids[block_size:]
+    return per_token * len(targets) / len(tok.decode(targets.tolist()))
+```
+La loss par token du modèle BPE (environ 3,1 nats) ne se compare à rien : chaque token porte en moyenne 2,1 caractères, et prédire un token, c'est prédire plusieurs caractères d'un coup. La loss **totale** d'un texte ne dépend pas du découpage : on la divise par le nombre de caractères. Avec 62 tokens de 2,08 caractères, chaque fenêtre BPE couvre environ 129 caractères, contre 128 : les deux modèles voient à peu près le même texte (32 × 128 = 4 096 caractères par itération contre 32 × 62 × 2,08 ≈ 4 120). Mais le modèle BPE ne calcule que 62 positions par séquence au lieu de 128 (1 984 positions par itération au lieu de 4 096) : il fait moins de calcul pour un meilleur résultat, ce qui explique son temps. Sa table de 512 tokens coûte 54 272 paramètres de plus, et ses 62 positions apprises 8 448 de moins. Pourquoi gagne-t-il ? Chaque position mélange deux caractères en moyenne : avec le même $d$, le modèle « voit » plus loin en nombre d'unités, et une partie du travail (reconnaître « the », « ing ») est déjà faite par le tokenizer. À **calcul** égal (le même nombre de positions par batch, donc des fenêtres BPE de 128 tokens, environ 265 caractères), l'écart grandirait sans doute encore, au prix d'un texte vu deux fois plus long. Les grands modèles prennent des tokens BPE pour cette raison : des séquences deux à quatre fois plus courtes, donc moins de calcul et un contexte plus long, pour un vocabulaire et une table plus grands (B2.20) ; un modèle de caractères n'a ni token inconnu ni table énorme, mais il paie la longueur des séquences, et l'attention en $T^2$ (B3.27).
+**Erreurs fréquentes** : comparer les perplexités par token ; diviser la loss par le nombre de tokens **de tout le texte** au lieu des cibles notées ; compter les caractères avec `len(ids)` ; un contexte BPE de 128 tokens, qui donne au modèle BPE deux fois plus de texte (le budget n'est plus égal) ; oublier que `round` rend déjà un `int` en Python et écrire `int(x)`, qui tronque (61 au lieu de 62).
+**Variante** : avec 2 000 tokens (B2.20), le texte se compresse davantage et le contexte à budget égal raccourcit encore, mais la table passe à $2\,000 \times 128 = 256\,000$ paramètres : plus du quart du budget du défi (B3.30).
+
+### Ex B3.27 — Temps et mémoire de l'attention selon la longueur du contexte (64 à 2 048) 🔬
+**Réponse** : sur ce CPU, PyTorch choisit par défaut le noyau **FLASH_ATTENTION** (`torch._fused_sdp_choice` rend 1), et `EFFICIENT_ATTENTION` lève « No viable backend for scaled_dot_product_attention was found » : il n'existe que pour GPU. Mesures du notebook (4 têtes, $d_h = 32$, le meilleur de 5 essais) : MATH 0,2 ms à 64 tokens, 4 à 7 ms à 512, 87 ms à 2 048 ; FLASH 0,03, 0,9 et 9 ms ; le rapport va de 4 à 8 jusqu'à 1 024 tokens et atteint **10** à 2 048 (des fourchettes, sur deux exécutions et la mesure de la première moitié de session : à 2 048 tokens, de 85 à 95 ms pour MATH et de 8,5 à 9 ms pour FLASH). Pente en log-log de 512 à 2 048 tokens : de 1,8 à 2,2 pour MATH selon l'exécution, 1,6 pour FLASH. Mémoire : la plus grosse allocation de MATH suit ta formule, 65,0 Mio mesurés pour 64 Mio de poids à 2 048 tokens ($4 \times 2048^2 \times 4$ octets) ; celle de FLASH reste à 1,1 Mio.
+**Démarche** :
+```python
+def attention_time_27(T, backend, n_head=4, d_head=32, repeats=5):
+    q, k, v = (torch.randn(1, n_head, T, d_head) for _ in range(3))
+    best = math.inf
+    with sdpa_kernel(backend):
+        F.scaled_dot_product_attention(q, k, v, is_causal=True)          # not timed
+        for _ in range(repeats):
+            start = time.perf_counter()
+            F.scaled_dot_product_attention(q, k, v, is_causal=True)
+            best = min(best, time.perf_counter() - start)
+    return 1000 * best
+
+
+def weights_bytes_27(T, n_head=4, bytes_per_value=4):
+    return n_head * T * T * bytes_per_value
+```
+Le premier appel paie des allocations et le choix du noyau ; les suivants sont perturbés par le reste de la machine, toujours **vers le haut** : le meilleur essai est la mesure la moins bruitée du coût propre de l'opération, une moyenne mélangerait les deux. Le noyau MATH calcule les scores, écrit la matrice $(H, T, T)$, la passe en softmax et la multiplie par les valeurs : sa mémoire est celle de la formule, en $T^2$, et son temps aussi pour les grands $T$ ; la pente encadre 2 sans y tomber exactement : à 512 tokens, une partie du temps est encore fixe (l'appel, les petites opérations), et quelques millisecondes de bruit de la machine déplacent la droite. Le noyau FLASH parcourt les clés par blocs avec la softmax en ligne (§203.10) et ne garde que des blocs : sa mémoire ne dépend presque pas de $T$ (1,1 Mio à 1 024 comme à 2 048, la taille des sorties et de ses blocs), et il évite d'écrire puis de relire la matrice, d'où un temps 5 à 10 fois plus court ; mais il fait les mêmes FLOPs, en $T^2$ : sa pente (1,6 ici, encore en partie faite de coûts fixes) n'est pas celle d'un coût linéaire, qui vaudrait 1. Pour 32 têtes et 131 072 tokens, la formule donne $32 \times 131\,072^2 \times 4 = 2^{41}$ octets, 2 Tio par couche et par séquence (fiche §203.10) : impossible sans un noyau par blocs. `tracemalloc` ne verrait rien : PyTorch alloue ses tenseurs hors de l'allocateur de Python.
+**Erreurs fréquentes** : mesurer un seul appel, ou le premier ; faire la moyenne des essais ; oublier `with sdpa_kernel(...)` (on mesure deux fois FLASH) ; passer un masque explicite **et** `is_causal=True` (refusé par MATH, §203.3) ; rendre des secondes ; compter $T^2$ sans les têtes ; conclure que FLASH « n'est pas quadratique » parce que sa mémoire est petite.
+**Variante** : avec $d_h = 64$ au lieu de 32, la matrice des poids ne change pas (elle ne dépend que de $H$ et de $T$) : la mémoire de MATH reste à 64 Mio à 2 048 tokens, et seul le temps des deux produits grandit.
+
+### Ex B3.28 — Un Vision Transformer minuscule : Fashion-MNIST découpé en patchs 📦
+**Réponse** : ton ViT passe les contrôles (17 positions, le `[CLS]` voit le premier et le dernier patch, les positions servent, un refus) ; 205 066 paramètres. En mode rapide (12 000 images, 3 epochs, environ 17 s sur CPU), l'accuracy de test vaut **81,8 %** (81,8 à 82,1 % sur trois graines ; seuil 79 %) ; en mode complet (60 000 images, 12 epochs, environ 6 min), **89,6 %** (seuil 87 %).
+**Démarche** :
+```python
+class EncoderBlock_28(nn.Module):
+    def __init__(self, d_model, n_head, dropout=0.0):
+        super().__init__()
+        self.n_head, self.dropout = n_head, dropout
+        self.ln1, self.ln2 = nn.LayerNorm(d_model), nn.LayerNorm(d_model)
+        self.qkv, self.proj = nn.Linear(d_model, 3 * d_model), nn.Linear(d_model, d_model)
+        self.mlp = nn.Sequential(nn.Linear(d_model, 4 * d_model), nn.GELU(), nn.Linear(4 * d_model, d_model),
+                                 nn.Dropout(dropout))
+
+    def forward(self, x):
+        N, T, D = x.shape
+        q, k, v = self.qkv(self.ln1(x)).split(D, dim=2)
+        q, k, v = (t.view(N, T, self.n_head, D // self.n_head).transpose(1, 2) for t in (q, k, v))
+        y = F.scaled_dot_product_attention(q, k, v, dropout_p=self.dropout if self.training else 0.0)   # no mask
+        x = x + self.proj(y.transpose(1, 2).reshape(N, T, D))
+        return x + self.mlp(self.ln2(x))
+
+
+class ViT_28(nn.Module):
+    def __init__(self, image_size=28, patch_size=7, n_classes=10, d_model=64, n_layer=4, n_head=4, dropout=0.0):
+        super().__init__()
+        if image_size % patch_size:
+            raise ValueError(f"patch_size = {patch_size} must divide image_size = {image_size}")
+        n_patches = (image_size // patch_size) ** 2
+        self.patch_embed = nn.Conv2d(1, d_model, kernel_size=patch_size, stride=patch_size)
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, d_model))
+        self.pos_emb = nn.Parameter(torch.randn(1, 1 + n_patches, d_model) * 0.02)
+        self.blocks = nn.ModuleList([EncoderBlock_28(d_model, n_head, dropout) for _ in range(n_layer)])
+        self.ln_f = nn.LayerNorm(d_model)
+        self.head = nn.Linear(d_model, n_classes)
+
+    def forward(self, x):
+        tokens = self.patch_embed(x).flatten(2).transpose(1, 2)                      # (N, 16, d)
+        tokens = torch.cat([self.cls_token.expand(len(x), -1, -1), tokens], dim=1) + self.pos_emb
+        for block in self.blocks:
+            tokens = block(tokens)
+        return self.head(self.ln_f(tokens[:, 0]))
+```
+Le ViT découpe chaque image en 16 tokens de 49 pixels, projetés par une convolution de noyau et de stride 7, soit une couche dense appliquée à chaque patch (fiche §203.10), puis il les traite comme une phrase : aucun d'eux ne sait d'avance qu'il est voisin d'un autre, ce sont les positions apprises et l'attention qui le lui apprennent. Le `[CLS]` est un token de plus, sans pixel, dont la sortie résume l'image par l'attention ; sans masque, il voit tous les patchs. Avec le masque causal de B3.19, le `[CLS]`, en tête, ne verrait que lui-même : sa sortie serait la même pour toutes les images, et l'accuracy celle du hasard, 10 % (le contrôle « la sortie dépend du dernier patch » l'attrape). Une moyenne des 16 tokens de sortie (*mean pooling*) marche aussi, souvent aussi bien ; le `[CLS]` vient de BERT. Face au CNN du ch. 21 (92 % avec moins de 100 000 paramètres, appris sur les 60 000 images), ton ViT, deux fois plus gros, fait moins bien : il n'a pas les biais inductifs d'une convolution (des voisins qui vont ensemble, un motif reconnu partout, §203.10) et doit les apprendre des données ; à la fin du mode complet, sa loss d'entraînement (0,125) est bien sous celle du test, signe d'overfitting. Sur 60 000 petites images, les CNN gardent l'avantage ; le ViT l'emporte avec des centaines de millions d'images (JFT-300M) ou un pré-entraînement auto-supervisé (DINOv2, B1).
+**Erreurs fréquentes** : garder `is_causal=True` en copiant `CausalSelfAttention_18` ; ajouter les positions avant d'ajouter le `[CLS]` (17 positions pour 16 tokens) ; `cls_token.repeat` au lieu d'`expand` (une copie inutile, mais juste) ; `view(N, 16, d)` sur la sortie de la convolution sans `transpose` (les features et les positions mélangées) ; classer avec la moyenne de tous les tokens en oubliant `ln_f` ; une image non normalisée.
+**Variante** : avec des patchs de $4 \times 4$ ($28 = 7 \times 4$ : 49 patchs de 16 pixels), la séquence passe à 50 tokens : l'attention coûte environ $(50/17)^2 \approx 8{,}7$ fois plus par bloc, pour des patchs plus fins.
+
+### Ex B3.29 — Un test pytest qui prouve la causalité : modifier le futur ne change pas les logits passés 🛠️
+**Réponse** : ton test passe sur le bon modèle et échoue sur les trois modèles qui voient le futur, y compris celui qui ne fuit qu'à partir de la position 100.
+**Démarche** :
+```python
+def test_causality_29():
+    """Changing the token at a position t never changes the logits of the positions before t."""
+    generator = torch.Generator().manual_seed(0)
+    idx = torch.randint(0, VOCAB_SIZE, (2, BLOCK_SIZE), generator=generator)
+    logits = MODEL(idx)
+    for t in range(1, BLOCK_SIZE):
+        changed = idx.clone()
+        changed[:, t] = (changed[:, t] + 1) % VOCAB_SIZE
+        past = (MODEL(changed)[:, :t] - logits[:, :t]).abs().max().item()
+        assert past == 0, f"expected the logits before position {t} unchanged, got a change of {past:.2e}"
+```
+Le test prend l'invariant tel que la fiche l'énonce et le vérifie **partout** : chaque position $t$, et toutes les positions avant elle. Un test qui ne change que le dernier token et ne regarde que la position 0 attrape le masque transposé (la position 0 y voit tout), mais pas un modèle qui ne regarde le token suivant qu'à partir de la position 100 : c'est le rôle de la troisième copie. La comparaison exacte est possible parce que, sur CPU et en mode eval, les positions avant $t$ font exactement les mêmes opérations sur les mêmes nombres quand seul le token $t$ change : le masque met à 0 les poids des clés futures, qui n'entrent dans aucune somme. Sur GPU, ou avec un noyau qui découpe la séquence en blocs dont la frontière dépend de $T$, une tolérance (`torch.allclose(..., atol=1e-6)`) serait plus sûre ; elle ne cacherait aucune fuite réelle, dont l'effet est de l'ordre de la loss. Le test coûte `BLOCK_SIZE` passes du modèle sur 2 séquences, quelques secondes sur CPU. Il a sa place dans `tests/` à côté du modèle, lancé à chaque modification par l'intégration continue, avec deux voisins : la forme des logits et la loss de départ proche de $\log V$ (les trois contrôles du 💼 de §203.8), et `model.head.weight is model.tok_emb.weight`.
+**Erreurs fréquentes** : un test qui calcule les logits en mode train (le dropout change tout, le test échoue sur le bon modèle) ; changer le token $t$ et comparer les logits **jusqu'à** $t$ compris (la position $t$ voit son propre token : le test échoue toujours) ; un seul couple de positions ; des ids tirés sans générateur (un test qui ne rejoue pas le même cas) ; un `assert` sans message ; lire une variable du notebook (`GPT`, `DATA`), absente du fichier de test.
+**Variante** : avec `@pytest.mark.parametrize("t", [1, 64, 127])`, pytest lance trois tests nommés, dont chacun dit sa position en cas d'échec ; mais le modèle qui ne fuit qu'à partir de la position 100 n'est attrapé que par `t = 127`, et un modèle qui fuirait seulement entre 65 et 99 passerait : trois positions coûtent moins cher que 127, au prix de trous. Ici, 127 positions sur 2 séquences tiennent en quelques secondes : autant toutes les tester.
+
+### Ex B3.30 — Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU 🏆
+**Réponse** : la méthode de référence (le mini-GPT de B3.20, entraîné jusqu'à la fin du budget, un cosinus réglé sur le temps) respecte les quatre règles ; en mode complet, 10 minutes, elle fait **1,351 à 1,360** nats par caractère sur trois graines (perplexité 3,86 à 3,89 ; en 552 s d'entraînement), d'où l'objectif de **1,43** (la pire graine + 5 %, arrondi au centième supérieur) ; son contrôle, appris en 2 min 30 sur les 8/9 de l'entraînement, fait 1,563 à 1,588 sur la validation et 1,530 à 1,550 sur le neuvième tenu à l'écart, un écart de 0,037 en moyenne (tolérance ± 0,08). En mode rapide, 2 minutes : **1,630 à 1,672** sur cinq graines, objectif **1,76** ; contrôle (30 s) : 2,398 à 2,434 contre 2,365 à 2,399, un écart de 0,034. Dans le notebook de solutions (mode rapide), sur deux exécutions : **1,651** et 1,681 en 110 s, sous l'objectif ; contrôle 2,417 à 2,433 sur la validation et 2,382 à 2,397 sur le neuvième tenu à l'écart, en 28 s.
+**Démarche** :
+```python
+def method_30(train_ids, vocab_size, seconds):
+    start = time.perf_counter()
+    torch.manual_seed(SEED_30)
+    generator = torch.Generator().manual_seed(SEED_30)
+    model = MiniGPT_19(vocab_size, block_size=128, n_layer=4, n_head=4, d_model=128)    # 820 992 parameters
+    optimizer = configure_optimizer_20(model, 5e-3, 0.1, (0.9, 0.99))
+    model.train()
+    budget, warmup, it = 0.92 * seconds, 50, 0
+    while (elapsed := time.perf_counter() - start) < budget:
+        lr = 5e-3 * it / warmup if it < warmup else 5e-4 + 4.5e-3 * 0.5 * (1 + math.cos(math.pi * elapsed / budget))
+        for group in optimizer.param_groups:
+            group["lr"] = lr
+        x, y = wbgpt.get_batch(train_ids, 32, 128, generator)
+        loss = F.cross_entropy(model(x).flatten(0, 1), y.flatten())
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        optimizer.step()
+        it += 1
+    return model.eval()
+```
+La méthode de référence est la recette de B3.20, sans rien changer au modèle : elle mise tout sur le **nombre d'itérations**. B3.21 a montré qu'en 600 itérations le modèle apprenait encore, et que sans dropout l'overfitting ne commence que vers 2 500 itérations : dix minutes, environ 2 500 itérations sur deux cœurs (552 s à 210-230 ms par itération), tombent au début du plateau, d'où un modèle sans dropout. Le cosinus suit le **temps** et non le numéro d'itération : le nombre d'itérations dépend de la machine (de 210 à 265 ms par itération ici selon la charge), et un planning fixé d'avance finirait trop tôt ou trop tard. La marge de 8 % couvre la fin de l'appel. Ce que la référence ne fait pas, et qu'un apprenant peut essayer : un modèle plus large ou plus profond sous le million de valeurs (5 blocs de $d = 128$ font 1 019 264 paramètres, trop ; 4 blocs de $d = 136$, 924 528), un contexte plus long, des batches plus grands avec un learning rate ajusté, un peu de dropout si l'on dépasse 3 000 itérations, ou un learning rate plus haut au début (B3.25 a montré la marge du pré-LN). Les règles visent les raccourcis : un modèle chargé au lieu d'être entraîné (règle 2), la validation lue par une variable globale ou par `wb` (règle 3 et son contrôle), un entraînement plus long que le budget (règle 4, à froid).
+**Erreurs fréquentes** : un planning en itérations calculé pour une autre machine (le cosinus finit trop tôt, ou la course dépasse le temps) ; garder le dropout de 0,2 du mode complet de B3.20 (inutile avant l'overfitting, et il fait quitter à SDPA le noyau FLASH pour le noyau MATH, près de 4 fois plus lent pour l'attention sur CPU) ; un modèle de plus d'un million de valeurs en comptant mal la tête liée ; oublier `model.eval()` (le score se calcule en mode eval de toute façon, mais un modèle rendu en mode train surprend) ; relire `DATA` dans la méthode ; ignorer `seconds` (le contrôle, avec le quart du temps, le voit).
+**Variante** : le mini-GPT du mode complet de B3.20 (5 000 itérations, dropout 0,2) fait 1,327, sous l'objectif, mais en 34 minutes : il viole la règle 4 ; le LSTM du ch. 22 dans son mode complet (1,543, 9 minutes) respecte le temps mais pas l'objectif. Sur le même budget, les quelque 2 500 itérations de la référence font mieux que les 5 000 itérations avec dropout ne le feraient à mi-course (1,451 estimé à 2 500 itérations, B3.21) : sans overfitting en vue, le dropout ne fait que ralentir.

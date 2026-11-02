@@ -85,7 +85,7 @@ def block_means_21(values, width):
 fig_21, axes_21 = plt.subplots(1, 3, figsize=(17, 4.4))
 ax = axes_21[0]
 if CKPT is None:
-    ax.text(0.5, 0.5, "⏳ ton entraînement (B3.20)", ha="center", va="center", transform=ax.transAxes)
+    ax.text(0.5, 0.5, "en attente de ton entraînement (B3.20)", ha="center", va="center", transform=ax.transAxes)
 else:
     h_21 = CKPT["history"]
     x_21, m_21 = block_means_21(h_21["train_loss"], 10)
@@ -188,8 +188,8 @@ EXPERIMENT_22 = r'''with checked("B3.22"):
         counts_22 = [languages_22(t) for t in texts_22]
         rows_22[name] = sum(fr_ > en for en, fr_ in counts_22)
         print(f"{name} : {rows_22[name]} continuation(s) sur 10 ont plus de mots français que de mots anglais "
-              f"(en moyenne {np.mean([c[0] for c in counts_22]):.1f} mots anglais et "
-              f"{np.mean([c[1] for c in counts_22]):.1f} mots français par continuation). Les deux premières :")
+              f"(en moyenne {fr(np.mean([c[0] for c in counts_22]), 1)} mots anglais et "
+              f"{fr(np.mean([c[1] for c in counts_22]), 1)} mots français par continuation). Les deux premières :")
         for t in texts_22[:2]:
             print("   ", repr(t[:160]))
     fr_loss_22 = wbgpt.char_loss(GPT, FRENCH_22)
@@ -808,6 +808,9 @@ CHECK_26B = r'''wb.check("B3.26b", better_26)'''
 # --- 🔬 B3.27 ----------------------------------------------------------------------------------------------------------
 GIVEN_27 = r'''from torch.nn.attention import SDPBackend, sdpa_kernel
 from torch.profiler import ProfilerActivity, profile
+import warnings
+
+warnings.filterwarnings("ignore", message=".*Profiler clears events.*")   # one profile per call: nothing to keep
 
 LENGTHS_27 = (64, 128, 256, 512, 1024, 2048)
 BACKENDS_27 = {"MATH": SDPBackend.MATH, "FLASH": SDPBackend.FLASH_ATTENTION}
@@ -1221,13 +1224,13 @@ else:
                 "ton test doit passer sur le bon modèle (la sortie de pytest est au-dessus).")
         if not good_29.ok:
             raise StopCheck
-        for kind, label in (("transposed", "le masque causal transposé (triu au lieu de tril)"),
-                            ("one_ahead", "un masque qui laisse voir le token suivant"),
-                            ("late_leak", "un masque qui laisse voir le token suivant à partir de la position 100 seulement")):
+        for kind, label in (("transposed", "au masque causal transposé (triu au lieu de tril)"),
+                            ("one_ahead", "dont le masque laisse voir le token suivant"),
+                            ("late_leak", "dont le masque laisse voir le token suivant à partir de la position 100 seulement")):
             bad_29 = wb.run_pytest([test_causality_29], preamble=preamble_29(kind), quiet=True)
             caught_29 = not bad_29.ok and bad_29.failed > 0
-            verdict("B3.29", caught_29, f"ton test échoue sur un modèle à {label} :",
-                    f"ton test laisse passer un modèle à {label}" + ("." if bad_29.errors == 0 else
+            verdict("B3.29", caught_29, f"ton test échoue sur un modèle {label} :",
+                    f"ton test laisse passer un modèle {label}" + ("." if bad_29.errors == 0 else
                     f" (pytest : {bad_29.summary})."))
             for name, reason in failures_29(bad_29)[:1]:
                 print(f"   {name}\n   {reason[:300]}")'''
@@ -1337,7 +1340,7 @@ def _make_evaluate_30(data):
         if not isinstance(model, nn.Module):
             print(f"❌ Ex B3.30 : method_30 doit rendre un nn.Module ; reçu {type(model).__name__}.")
             return None
-        old = [p for m in before for p in m.parameters()]
+        old = [p for m in before for p in m.parameters() if p.device.type != "meta"]   # not the shapes-only models
         copied = any(p.data_ptr() in pointers or any(q.shape == p.shape and torch.equal(q.detach(), p.detach()) for q in old)
                      for p in model.parameters() if p.numel() > 1000)
         if any(model is m for m in before) or copied:

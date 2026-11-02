@@ -2,8 +2,8 @@
 """Calibrate the predictions, replay the bug hunt and precompute the long trainings of chapter B3, first half (used by
 Claude).
 
-    python tools/chapters/history_chB3.py                  # everything (about 65 min on a 2-core CPU)
-    python tools/chapters/history_chB3.py --only bug17     # one entry: p13, bug17, gpt_fast, gpt_full, lstm
+    python tools/chapters/history_chB3.py                  # everything (about 3 h 30 on a 2-core CPU)
+    python tools/chapters/history_chB3.py --only p22 p24   # some entries (names below)
 
 Writes tools/chapters/history_chB3.json (statistics only, no weights), which chB3_parts.py reads:
 - "p13": 🔮 B3.13, the median weight of the copied key over 200 queries for 10 to 100 000 keys, with and without the
@@ -22,7 +22,17 @@ Writes tools/chapters/history_chB3.json (statistics only, no weights), which chB
   and in its full mode (the first 12 of its 20 epochs on the whole training text, the best epoch kept: in 22.26 the
   validation loss is lowest at epoch 9), and evaluated on the same validation
   targets as the mini-GPT (every character of the validation from index 128 on, read with its 40 previous characters).
-The cells of the notebook are reused as is (tools/chapters/chB3_code.py), executed in one namespace.
+Second half (parts C to E, the cells of chB3_code2.py; the calibration models, the reference mini-GPT trained in fast
+mode with seeds 2320 to 2322, are cached in wbgpt.checkpoints_dir() under the source "calibration", the full-mode one is
+wbgpt.reference_model(False)):
+- "p22": 🔮 B3.22 on the four models and four series of draws: both answers must agree everywhere;
+- "p24": 📈 B3.24, the three scores of every head (previous character, spaces, entropy) of each model;
+- "ablations": 🔬 B3.25, the five variants in the fast protocol of the notebook and in the full protocol (≈ 36 min);
+- "bpe26": 🔬 B3.26, characters against BPE 512 at equal budget, both protocols (≈ 11 min);
+- "vit28": 📦 B3.28, the ViT in fast mode (three seeds, the threshold) and in full mode (≈ 7 min);
+- "challenge30": 🏆 B3.30, the reference method run by evaluate_30 (fast: five seeds, full: three; ≈ 50 min), the goal
+  (worst seed + 5 %) and the gap of the control.
+The cells of the notebook are reused as is (tools/chapters/chB3_code.py, chB3_code2.py), executed in one namespace.
 """
 
 from __future__ import annotations

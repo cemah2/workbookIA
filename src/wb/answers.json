@@ -54435,6 +54435,141 @@
       },
       "source": "chapitres/b3_transformers/05_solutions.ipynb"
     },
+    "B3.21a": {
+      "fractional": "on demande un nombre de caractères, un entier",
+      "hash": "74cd4dba45f76d0ef8f61254c3fa638d7034c266923c03b085cfd75cd6b77969",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "2560a6a2fbedffecd7cdea128304005baccd5b7e664fc949416cd096add17190": "on demande V, pas la loss",
+        "ab27a7084130915c29f610aeed854c41d115b56252b143aa908edf5fb89c0694": "c'est le nombre d'ids de B3.17, padding compris : combien de caractères distincts le modèle prédit-il ?",
+        "bbb52c64194e3708fd6b909a5da33959570e48a943a2d423192b2df945f86dab": "c'est le vocabulaire de GPT-2 : ici, le modèle prédit des caractères",
+        "c6c092c25bd59f1332b971aa7dde68a330455e24d132c228d6bb8e571f5e3e5e": "c'est le vocabulaire du quiz Q10 : combien de caractères distincts a Holmes (la cellule des outils de la partie A le dit) ?",
+        "dda1e5d97cba3635b93697d5e6596f2b66ede12b3021936cf7f9ee2d1c7e2c70": "la loss de départ n'est qu'à peu près log V : combien de caractères distincts le modèle prédit-il ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.21b": {
+      "hash": "23bf2f8cb12afc3f646d8476acb7617b80255bd1112b95a3591571c3cc5e3ec8",
+      "kind": "str",
+      "mistakes": {
+        "0545cf6154a5c147f2464f319d627d634df9051e8df98d589de82f0078008e23": "regarde la courbe de validation du graphique 1 sur ses dernières itérations : remonte-t-elle ?",
+        "372ab1c64ccbbe14afa60fa72eccd154d1750956a46ae85dd75ec0405d9a2911": "regarde la courbe d'entraînement du graphique 1 : saute-t-elle, ou diverge-t-elle ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.21c": {
+      "choices": [
+        "1000",
+        "2500",
+        "4000",
+        "5000"
+      ],
+      "fractional": "choisis l'une des quatre itérations proposées",
+      "hash": "c8f2bf75f851218742a5661146d94260ac2ba0246bab945e4a901bcfc90916b5",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "4af115648bb79c7b31b83e983bf361c9097fa6aef18a612471c86c1990d15a79": "graphique 3 : la courbe rouge (sans dropout) finit-elle à son plus bas ?",
+        "8293ec482897d87d32876dc3d8fffdd7b12392b62742ec5c748296830572ae51": "graphique 3 : où la courbe rouge (sans dropout) atteint-elle son plus bas ?",
+        "f569e01522a3cd3e3519ba4a001c078c5e9d8b818472c3f09830d3e1be8a4725": "graphique 3 : la courbe rouge (sans dropout) est-elle à son plus bas vers 1 000 itérations ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.21d": {
+      "hash": "cbd64eeb7ca6a28f688aaf8dc39c526491c4ab431daf9b3092ad83d4f195682b",
+      "kind": "bool",
+      "mistakes": {
+        "7a825365bca5be3facc6ab4eb63fffcc73092f8ec76e3befa784de5c344e6ad7": "graphique 3 : compare le point le plus bas de la courbe rouge à la fin de la courbe verte"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.21e": {
+      "hash": "d4a8ace63666faec0770361fbd7c14fc543a7c7d66e28147219cb8961ffb2086",
+      "kind": "bool",
+      "mistakes": {
+        "1391a01b7307458d8ec495404ec3f946068227ad4100a1c17010606fc664b909": "graphique 2 : à 5 000 itérations, mesure l'écart entre les deux courbes vertes (entraînement et validation avec dropout)"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.22a": {
+      "hash": "10b8567922f7de7642c0b4324e78f14de87c3482cf6a0f27956759b840d906ec",
+      "kind": "bool",
+      "mistakes": {
+        "9013a7c956fb653f9a8ad854a365cc3dab6581ca7a756173983a48ce5412d80b": "compte les continuations où les mots français l'emportent, dans la ligne affichée pour le prompt français"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.22b": {
+      "hash": "08cfe4551c72291a74c4ae60b9c7825fc15e5732395f8011cd0f747ae3874f9d",
+      "kind": "bool",
+      "mistakes": {
+        "30ca66ffa8ad6d709b87702e129af686600d6c8e8756a02579ac7aebfe168115": "compare la loss sur Verne à celle d'une prédiction uniforme, affichées l'une à côté de l'autre"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.25a": {
+      "hash": "4f08be04652b76a537316c82eaba37393559636c1d74a713e4b2d1dd9048a7a0",
+      "kind": "str",
+      "mistakes": {
+        "3f10805620f96292f33ee8cd764c2bf8fecd49f635d3a4b086c8fb341d05dc1c": "il en manque une : relis chaque ligne du protocole complet et compare sa loss moyenne à 3 nats",
+        "75317ed8eb69243f512c89b7c4a6a2e6dc152dfafacc673eeafcc5135c0c80fd": "une de trop : une ablation ne compte que si sa loss moyenne du protocole complet dépasse 3 nats",
+        "9c4a9debf32420de3a6eb3ba66eb29113c40a96855b3d22f4f97e7bb3d19a99e": "il y en a une de trop : relis chaque ligne du protocole complet et compare sa loss moyenne à 3 nats",
+        "eb85e315585d05ec6c91b915cb0b2fca8436cc447cdceb9a5c79fb9647f7f94d": "il en manque une : compare chaque loss moyenne du protocole complet à 3 nats"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.25b": {
+      "hash": "c82edaf828e264a47284ffeda88bb485545e0dfeba4c5f70eb03868100ec68b5",
+      "kind": "str",
+      "mistakes": {
+        "8c68879d9be47cd9f45c1ad4eee6555640bc6fb65a85e4d34ba8c08d99ffde9a": "relis la colonne « protocole complet » : est-ce bien sans résiduel que l'écart est le plus petit ?",
+        "a5efed776f94da419cde4875598ad890d8aa17244127f561ff6ac77b946860c6": "relis la colonne « protocole complet » : est-ce bien en post-LN que l'écart est le plus petit ?",
+        "e4eb2a6462824311d401b48f28c306c6472aab5cf877100dc7d9a3cfc2b9208d": "relis la colonne « protocole complet » : est-ce bien sans position que l'écart est le plus petit ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.25c": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "fractional": "on demande un nombre d'ablations, un entier",
+      "hash": "c09badf62b1719c235108a1ef2b0fd02762fd8304a15e9913b0af8dd5c8441ab",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "77b1bb57fd8a249e46a6a9acde8b9c4fd0283c6b15280d2a002727b3a19b5c21": "compare, ligne par ligne, l'écart moyen du protocole complet au double de sa dispersion (tu en comptes 4)",
+        "8356e0ee854026629704ca43b8bd6a7ba7b3313c2bda0d94f5e836f6d6794811": "compare, ligne par ligne, l'écart moyen du protocole complet au double de sa dispersion (tu en comptes 0)",
+        "9983d8015a85f389aecfea8de4d91c88ccc8389bc7959cc3ef94ad6c7101eb3a": "compare, ligne par ligne, l'écart moyen du protocole complet au double de sa dispersion (tu en comptes 2)",
+        "b2a9396ba40f17ea4b4e2baa6ca43d2526a24ed2bb0695f18ffe328550584302": "compare, ligne par ligne, l'écart moyen du protocole complet au double de sa dispersion (tu en comptes 1)"
+      },
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.26a": {
+      "decimals": 4,
+      "hash": "4a1509e751b202491c0e0811fc8cb2933f0bec204d562fbe33da0dbb252e6fce",
+      "hash_coarse": "d2f3649d552d32c3c9d741c6f699f26dc84402c87ae9ee5776a07f56ba0665c4",
+      "kind": "float",
+      "magnitude": 0,
+      "sign": 1,
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
+    "B3.26b": {
+      "hash": "467dce6dfabd3b32b3cdc8354b933e25a150cea7c41abc8d521c81f6ec6c89c5",
+      "kind": "str",
+      "mistakes": {
+        "9e3e56d776f6cfd09b44a66c08b42e17a4db062fad6fb4e91b2b770e0e38d166": "relis les deux lignes du protocole complet : le modèle de caractères est-il le plus bas, au-delà de la dispersion ?",
+        "ce122a6ea4952d2f22d6077954ea173fdb13fa4daa30a7d69c14bd6ed928ee38": "relis les deux lignes du protocole complet : l'écart des moyennes est-il plus petit que la dispersion des graines ?"
+      },
+      "source": "chapitres/b3_transformers/05_solutions.ipynb"
+    },
     "B3.Q1a": {
       "hash": "365b1b487e54aca5cf2c3ec7bc0fae05ebf0de2f731ec8c9b5277f1b687ee8fd",
       "kind": "str",
