@@ -151,6 +151,39 @@ def test_the_frozen_solution_cache_is_versioned_with_solution_keys():
         assert entry["key"]["revision"] in {spec["revision"] for spec in wbllm.LLMS.values()}
 
 
+def test_without_network_try_llm_says_pending_and_the_weights_raise_llm_unavailable(monkeypatch, capsys):
+    """No network and no local copy: try_llm gives None with a ⏳ line (the notebook goes on), and weights that
+    cannot be read raise LLMUnavailable, never the raw error of the Hub."""
+    import transformers
+
+    def offline(*args, **kwargs):
+        raise OSError("We couldn't connect to 'https://huggingface.co' to load the files (simulated)")
+
+    monkeypatch.setattr(transformers.AutoTokenizer, "from_pretrained", offline)
+    monkeypatch.setattr(transformers.AutoModelForCausalLM, "from_pretrained", offline)
+    monkeypatch.setattr(wbllm, "_LOADED", {})
+    assert wbllm.try_llm("qwen2.5", "B4.21") is None
+    text = capsys.readouterr().out
+    assert text.startswith("⏳ Ex B4.21 : modèle qwen2.5") and "à valider sur Colab" in text
+    llm = wbllm.ChatLM("smollm2", FakeTokenizer())
+    with pytest.raises(wbllm.LLMUnavailable, match="impossible à charger"):
+        llm.model  # noqa: B018
+
+
+def test_the_exercise_notebook_uses_the_learner_cache_and_never_the_frozen_file():
+    """The cache line of chapter B4: the exercise notebook writes the source "learner" and reads no frozen file; only
+    the solutions notebook reads the frozen replies, under the source "solution"."""
+    def code(name):
+        cells = json.loads((ROOT / "chapitres" / "b4_llm" / name).read_text(encoding="utf-8"))["cells"]
+        return "\n".join("".join(c["source"]) for c in cells if c["cell_type"] == "code")
+
+    exercise, solution = code("03_notebook.ipynb"), code("05_solutions.ipynb")
+    assert 'GenerationCache("learner")' in exercise
+    assert "SOLUTION_CACHE" not in exercise and "frozen=" not in exercise and '"solution"' not in exercise
+    assert 'GenerationCache("solution", frozen=wb.repo_root() / wbllm.SOLUTION_CACHE)' in solution
+    assert 'GenerationCache("learner")' not in solution
+
+
 def test_unknown_model_or_dtype_is_refused():
     with pytest.raises(ValueError):
         wbllm.load_llm("gpt-5")

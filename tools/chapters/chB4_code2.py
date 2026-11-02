@@ -196,12 +196,14 @@ SPEC_26 = wbllm.LLMS[NAME_26]                                   # repo, revision
 TARGETS_26 = ["c_attn"] if NAME_26 == "distilgpt2" else ["q_proj", "v_proj"]   # the attention projections
 FAN_IN_FAN_OUT_26 = NAME_26 == "distilgpt2"                     # GPT-2's Conv1D layers store their weight (in, out)
 STEPS_26, BATCH_26, LEN_26, LR_26 = («FAST_26») if FAST_MODE else («FULL_26»)
-with wb.transfer.quiet_hub():
-    TOK_26 = AutoTokenizer.from_pretrained(SPEC_26["repo"], revision=SPEC_26["revision"])
-with wb.text.quiet_transformers():                             # no warning "sequence longer than the maximum": we cut windows
-    TRAIN_IDS_26 = torch.tensor(TOK_26("\n\n".join(body for _, body in DOCS[:10]))["input_ids"])   # stories 1 to 10
-    _held_26 = torch.tensor(TOK_26("\n\n".join(body for _, body in DOCS[10:]))["input_ids"])       # stories 11 and 12
-HELD_26 = torch.stack([_held_26[s:s + LEN_26] for s in torch.linspace(0, len(_held_26) - LEN_26, 16).long().tolist()])
+_base_26 = wbllm.try_llm(NAME_26, "B4.26")                      # its tokenizer (None, with ⏳, without network)
+TOK_26 = _base_26.tokenizer if _base_26 is not None else None
+TRAIN_IDS_26 = HELD_26 = None
+if TOK_26 is not None:
+    with wb.text.quiet_transformers():                         # no warning "sequence longer than the maximum": we cut windows
+        TRAIN_IDS_26 = torch.tensor(TOK_26("\n\n".join(body for _, body in DOCS[:10]))["input_ids"])   # stories 1 to 10
+        _held_26 = torch.tensor(TOK_26("\n\n".join(body for _, body in DOCS[10:]))["input_ids"])       # stories 11, 12
+    HELD_26 = torch.stack([_held_26[s:s + LEN_26] for s in torch.linspace(0, len(_held_26) - LEN_26, 16).long().tolist()])
 
 
 def batch_26(generator):
@@ -210,9 +212,10 @@ def batch_26(generator):
     return torch.stack([TRAIN_IDS_26[s:s + LEN_26] for s in starts])
 
 
-print(f"{NAME_26} ({SPEC_26['repo']} @ {SPEC_26['revision'][:7]}, {SPEC_26['license']}) ; entraînement : "
-      f"{len(TRAIN_IDS_26):_} tokens (10 nouvelles) ; tenus à l'écart : {tuple(HELD_26.shape)} (les nouvelles 11 et "
-      "12)".replace("_", " "))'''
+if TOK_26 is not None:
+    print(f"{NAME_26} ({SPEC_26['repo']} @ {SPEC_26['revision'][:7]}, {SPEC_26['license']}) ; entraînement : "
+          f"{len(TRAIN_IDS_26):_} tokens (10 nouvelles) ; tenus à l'écart : {tuple(HELD_26.shape)} (les nouvelles 11 et "
+          "12)".replace("_", " "))'''
 
 TODO_26 = r'''def load_base_26():
     """A fresh model NAME_26 (SPEC_26["repo"] at SPEC_26["revision"]), float32, in eval mode."""
@@ -280,6 +283,9 @@ def train_26(model, steps, lr, generator):
 
 CHECK_26 = r'''base_26 = peft_26 = None
 with checked("B4.26"):
+    if TOK_26 is None:
+        print(f"⏳ Ex B4.26 : {NAME_26} n'a pas pu être chargé : l'exercice est « à valider sur Colab ».")
+        raise StopCheck
     calls_26 = []
     with spy_from_pretrained(calls_26):
         base_26 = load_base_26()
@@ -373,6 +379,9 @@ SOLUTION_27 = r'''def experiment_27(r, alpha, targets, steps, seed):
     return {"trainable": trainable(model), "ppl": perplexity_26(model, HELD_26)}'''
 
 CHECK_27 = r'''with checked("B4.27"):
+    if TOK_26 is None:
+        print(f"⏳ Ex B4.27 : {NAME_26} n'a pas pu être chargé : l'exercice est « à valider sur Colab ».")
+        raise StopCheck
     one_27 = experiment_27(2, 4, TARGETS_26, 2, 0)
     if returned("B4.27", "experiment_27", one_27):
         ref_27 = lora_model_26(load_base_26(), 2, 4, TARGETS_26)
@@ -385,7 +394,9 @@ CHECK_27 = r'''with checked("B4.27"):
                 f"{one_27!r}.")'''
 
 EXPERIMENT_27 = r'''rows_27 = None
-if written(lambda: experiment_27(1, 1, TARGETS_26, 0, 0)):
+if TOK_26 is None:
+    print("⏳ Ex B4.27 : l'expérience est « à valider sur Colab » (le modèle n'a pas pu être chargé).")
+elif written(lambda: experiment_27(1, 1, TARGETS_26, 0, 0)):
     with checked("B4.27"):
         base_ppl_27 = perplexity_26(load_base_26(), HELD_26)
         start_27 = time.perf_counter()
@@ -435,15 +446,21 @@ CATEGORIES_28 = ["comp.graphics", "rec.autos", "sci.med", "sci.space"]
 TOPICS_28 = ["computer", "cars", "medicine", "space"]       # the names given to the LLM: one token each (SmolLM2, Qwen2.5)
 N_TRAIN_28, N_TEST_28, N_LLM_28 = (1000, 400, 100) if FAST_MODE else (None, None, 400)   # None: every message
 EPOCHS_28, MAX_LEN_28 = (1, 64) if FAST_MODE else (3, 128)
-TRAIN_X28, TRAIN_Y28 = wb.datasets.load_20newsgroups(CATEGORIES_28, "train", N_TRAIN_28, seed=28)
-TEST_X28, TEST_Y28 = wb.datasets.load_20newsgroups(CATEGORIES_28, "test", N_TEST_28, seed=28)
+try:                                                          # ≈ 14 Mo downloaded once
+    TRAIN_X28, TRAIN_Y28 = wb.datasets.load_20newsgroups(CATEGORIES_28, "train", N_TRAIN_28, seed=28)
+    TEST_X28, TEST_Y28 = wb.datasets.load_20newsgroups(CATEGORIES_28, "test", N_TEST_28, seed=28)
+except Exception as exc:  # noqa: BLE001 - no network: the exercise waits
+    TRAIN_X28 = TRAIN_Y28 = TEST_X28 = TEST_Y28 = None
+    print(f"⏳ Ex B4.28 : 20 Newsgroups n'a pas pu être téléchargé ({type(exc).__name__}) : l'exercice est « à valider "
+          "sur Colab ».")
 MINILM_28 = wb.text.SENTENCE_MODELS["minilm"]                 # repo and revision of all-MiniLM-L6-v2 (B2)
 LLM_28 = LLM if FAST_MODE else wbllm.try_llm("qwen2.5", "B4.28")   # SmolLM2 in fast mode, Qwen2.5 in full mode
 ZERO_SHOT_SYSTEM_28 = ("Classify the message into one of these topics: computer, cars, medicine, space. Reply with the "
                        "topic only, in one word.")
-print(f"20 Newsgroups, {len(CATEGORIES_28)} catégories, sans en-têtes, signatures ni citations : {len(TRAIN_X28)} "
-      f"messages d'entraînement, {len(TEST_X28)} de test (le zéro-shot sur les {N_LLM_28} premiers).")
-print("Exemple :", repr(TRAIN_X28[0][:160]), "→", CATEGORIES_28[TRAIN_Y28[0]])'''
+if TRAIN_X28 is not None:
+    print(f"20 Newsgroups, {len(CATEGORIES_28)} catégories, sans en-têtes, signatures ni citations : {len(TRAIN_X28)} "
+          f"messages d'entraînement, {len(TEST_X28)} de test (le zéro-shot sur les {N_LLM_28} premiers).")
+    print("Exemple :", repr(TRAIN_X28[0][:160]), "→", CATEGORIES_28[TRAIN_Y28[0]])'''
 
 TODO_28 = r'''def baseline_28(texts, labels):
     """A scikit-learn Pipeline [("tfidf", TfidfVectorizer(sublinear_tf=True, min_df=2)),
@@ -545,6 +562,9 @@ def zero_shot_28(llm, texts):
 
 CHECK_28 = r'''results_28 = {}
 with checked("B4.28"):
+    if TRAIN_X28 is None:
+        print("⏳ Ex B4.28 : les vérifications attendent 20 Newsgroups (cellule précédente).")
+        raise StopCheck
     start_28 = time.perf_counter()
     pipe_28 = baseline_28(TRAIN_X28, TRAIN_Y28)
     fit_28 = time.perf_counter() - start_28
@@ -562,6 +582,10 @@ with checked("B4.28"):
             f"{len(pipe_28[-1].coef_.ravel()):_} coefficients)".replace("_", " "))
 
 with checked("B4.28"):
+    if TRAIN_X28 is None or globals().get("SM_19") is None:      # MiniLM, as in B4.19 (None without network)
+        if TRAIN_X28 is not None:
+            print("⏳ Ex B4.28 : MiniLM n'a pas pu être chargé : l'encodeur est « à valider sur Colab ».")
+        raise StopCheck
     tok_28, enc_28 = encoder_28()
     if not hasattr(enc_28, "peft_config"):
         print("❌ Ex B4.28 : encoder_28 doit rendre (tok, le PeftModel de get_peft_model).")
@@ -588,7 +612,7 @@ with checked("B4.28"):
                 "train_encoder_28 et predict_encoder_28.")
         results_28["MiniLM + LoRA"] = (pred_e28, fit_e28, per_e28, f"{n_tr_28:_} entraînables".replace("_", " "))
 
-if LLM_28 is not None:
+if LLM_28 is not None and TRAIN_X28 is not None:
     with checked("B4.28"):
         sample_28 = TEST_X28[:N_LLM_28]
         start_28 = time.perf_counter()
@@ -1357,7 +1381,8 @@ def _make_evaluate_30():
         verdict("B4.30", largest <= MAX_PARAMS_30,
                 (f"générateur de {spaced(largest)} paramètres (model.num_parameters()), au plus 0,6 milliard."
                  if sizes else "aucune génération par generate() : rien à compter."),
-                f"un modèle de {spaced(largest)} paramètres a généré : le défi en permet {spaced(MAX_PARAMS_30)}.")
+                f"un modèle de langue de {spaced(largest)} paramètres a servi pendant la course : le défi en permet "
+                f"{spaced(MAX_PARAMS_30)}.")
         honest = rate_control >= rate - CONTROL_MARGIN_30
         verdict("B4.30", honest,
                 f"contrôle : {good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart "
@@ -1389,7 +1414,9 @@ TODO_30 = r'''def method_30(questions, documents):
     raise NotImplementedError("method_30")'''
 
 CHECK_30 = r'''with checked("B4.30"):
-    if written(lambda: method_30([], [])):
+    if LLM is None and QWEN is None:
+        print("⏳ Ex B4.30 : aucun modèle de langue n'a pu être chargé : le défi est « à valider sur Colab ».")
+    elif written(lambda: method_30([], [])):
         if QWEN is not None:
             QWEN.model                             # Qwen2.5's weights loaded before the race (loading is not timed)
         result_30 = evaluate_30(method_30)

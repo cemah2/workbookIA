@@ -130,6 +130,9 @@ estimate_12 = 28.0   # ✏️ B4.1 j), by proportion of the memories (the soluti
 CHECK_12 = r'''tok_12 = model_12 = None
 calls_12 = []
 with checked("B4.12"):
+    if LLM is None:
+        print("⏳ Ex B4.12 : SmolLM2 n'a pas pu être chargé : l'exercice est « à valider sur Colab ».")
+        raise StopCheck
     with spy_from_pretrained(calls_12), wb.transfer.quiet_hub():
         loaded_12 = load_12()
     tok_12, model_12 = pair("B4.12", "load_12", loaded_12, names=("tok", "model"))
