@@ -30,7 +30,7 @@ too); a document that does not contain a query term gets 0 from it, also with ``
 ``fit`` called again replaces every statistic; ``cosine_top_k`` gives a similarity of 0 to a row of zeros (as
 ``cosine_similarity_matrix``) and returns NumPy arrays (integer indices, float similarities);
 ``reciprocal_rank_fusion`` accepts rankings of different lengths, empty ones and NumPy arrays (the rows returned by
-``cosine_top_k``); ``recall_at_k`` and ``mean_reciprocal_rank`` accept a 2-D NumPy array of retrieved ids (the
+``cosine_top_k``), and returns an integer array even when no id is found; ``recall_at_k`` and ``mean_reciprocal_rank`` accept a 2-D NumPy array of retrieved ids (the
 indices returned by ``cosine_top_k``), relevant ids given as sets, lists or tuples, retrieved lists shorter than
 ``k``, and return one number; ``mean_reciprocal_rank`` gives 0 to a query whose relevant set is empty.
 The values are compared with rtol=1e-6, atol=1e-6 (the docstrings fix no tolerance; a computation in float32
@@ -232,6 +232,14 @@ def chunks_of(ret, text, *args, **kwargs):
     return result
 
 
+CHAR_NOTE = (" (unit='char': every character is a unit, spaces and newlines included; the whitespace "
+             "normalisation of the docstring concerns the 'word' unit only)")
+
+
+def _unit_note(unit):
+    return CHAR_NOTE if unit == "char" else ""
+
+
 def chunk_oracle(text, chunk_size, overlap, unit):
     """Closed form: chunk j starts at j * step; m = 1 + ceil((n - size) / step) chunks when n > size."""
     units = text.split() if unit == "word" else list(text)
@@ -270,9 +278,9 @@ def test_chunk_text_docstring_examples(ret):
 def test_chunk_text_hand_examples(ret, text, size, overlap, unit, want):
     assert chunk_oracle(text, size, overlap, unit) == want, ORACLE_BUG
     got = chunks_of(ret, text, chunk_size=size, overlap=overlap, unit=unit)
-    assert_list_equal(got, want, f"chunk_text({text!r}, chunk_size={size}, overlap={overlap}, unit={unit!r}) "
-                                 "(starts 0, step, 2 step, ...; the last chunk is the first that reaches the end)",
-                      "chunk")
+    assert_list_equal(got, want, f"chunk_text({text!r}, chunk_size={size}, overlap={overlap}, unit={unit!r})"
+                                 + (_unit_note(unit) or " (starts 0, step, 2 step, ...; the last chunk is the first "
+                                                        "that reaches the end)"), "chunk")
 
 
 def test_chunk_text_default_arguments(ret):
@@ -308,7 +316,7 @@ def test_chunk_text_properties(ret, n, size, overlap, unit):
     text = _random_text(rng, n, unit)
     units = text.split() if unit == "word" else list(text)
     got = chunks_of(ret, text, chunk_size=size, overlap=overlap, unit=unit)
-    msg = f"chunk_text of {len(units)} {unit}s, chunk_size={size}, overlap={overlap}"
+    msg = f"chunk_text of {len(units)} {unit}s, chunk_size={size}, overlap={overlap}" + _unit_note(unit)
     parts = [c.split(" ") if unit == "word" else list(c) for c in got]
     want = chunk_oracle(text, size, overlap, unit)
     if len(got) != len(want):
@@ -352,7 +360,8 @@ def test_chunk_text_normalises_whitespace_in_word_mode(ret):
 ])
 def test_chunk_text_text_with_no_unit(ret, text, unit, want):
     got = chunks_of(ret, text, chunk_size=4, overlap=1, unit=unit)
-    assert_list_equal(got, want, f"chunk_text({text!r}, chunk_size=4, overlap=1, unit={unit!r})", "chunk")
+    assert_list_equal(got, want, f"chunk_text({text!r}, chunk_size=4, overlap=1, unit={unit!r})" + _unit_note(unit),
+                      "chunk")
 
 
 @pytest.mark.parametrize("kwargs,why", [
@@ -979,9 +988,18 @@ def test_reciprocal_rank_fusion_rankings_of_different_lengths_and_empty_ones(ret
     want, _ = rrf_oracle(rankings)
     got = fused_of(ret, rankings, "reciprocal_rank_fusion")
     assert_list_equal(got, want, f"reciprocal_rank_fusion({rankings}) (an empty ranking adds nothing)", "id")
-    got = fused_of(ret, [[]], "reciprocal_rank_fusion")
-    if got:
-        _fail("reciprocal_rank_fusion([[]])", f"expected an empty array (no id found), got {got}")
+    for rankings in ([[]], [[], []]):
+        result = call(ret.reciprocal_rank_fusion, rankings, expected="an empty array of ids")
+        what = f"reciprocal_rank_fusion({rankings})"
+        if result is None:
+            _fail(what, "expected an empty integer array (no id found), got None (did you forget the return?)")
+        if not isinstance(result, np.ndarray):
+            _fail(what, f"expected an empty NumPy array of int (no id found), got {type(result).__name__}")
+        if result.shape != (0,):
+            _fail(what, f"expected an empty array of shape (0,) (no id found), got shape {result.shape}")
+        if not np.issubdtype(result.dtype, np.integer):
+            _fail(what, f"expected an empty array of int (np.ndarray of int, even with no id), got dtype "
+                        f"{result.dtype} (np.array([]) is a float array: give dtype=int)")
 
 
 def test_reciprocal_rank_fusion_accepts_numpy_arrays(ret):
