@@ -57282,6 +57282,155 @@
       },
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
     },
+    "B5.13a": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "fractional": "on demande un nombre de cas, un entier de 0 à 6",
+      "hash": "34942d4136247375ad996ec344e1bb592faa4e47fe0f7cd660cd24c55b8782e7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "14157f3694bd6adc9572a95e29b7db1604f1dfb3b9b17ea17d96d666fcd665f7": "relis le tableau : que vaut l'accuracy au pas 600 du linéaire ?",
+        "6a02be9130a34a3b82fbc9fd8667cc9515ea888a660a0f7b59bc7f4f1b31b5c4": "relis le tableau : le linéaire au pas 300 atteint-il 70 % ? ",
+        "b2058ace0346fe9a0cc1b97eb964d86fb0eb1330eb029286e6534884c383e442": "relis le tableau : au pas 600, le cosinus atteint-il 70 % ?",
+        "dbc0ce0dd4286d72acd47c7d59a4e1c49eafea5a9859cedf62c94d58c6756db9": "relis le tableau : le cosinus au pas 300 atteint-il 70 % ?",
+        "e072bf347d9afedc5229527c6cebcc389b48d3db8556b75d2dcfded7fca5edd8": "relis le tableau : compte le pas 100 des deux plannings",
+        "e3b933762d6efc3604f6c1d5f8374aeaeff057c2de7c34f54dedd3d1132fe1ca": "relis le tableau : au pas 100, le classifieur reconnaît-il encore les chiffres ?"
+      },
+      "prediction": true,
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.13b": {
+      "hash": "23bf3e2120c2ecb465ec0f0183118021a2553d58ed2ff6dbdd8f387729643a92",
+      "kind": "bool",
+      "mistakes": {
+        "d24e0310784a3116dfbe70eef3b28cecbf613fa3d5f3e78b3a17423757f03ab4": "relis le tableau : au pas 600 du cosinus, l'accuracy dépasse-t-elle 50 % ?"
+      },
+      "prediction": true,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.15a": {
+      "hash": "0d733b3a883aebc74bae889a2be9181451a40ef6535cd0bb0cdc8498f1c9f35c",
+      "kind": "str",
+      "mistakes": {
+        "70d14e8cd9736ce24853d849220b6e590506979a3602b81f6227578cf8cdfcce": "compare les deux courbes à T = 400 à la courbe L du graphique de gauche : laquelle se superpose ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.15b": {
+      "hash": "c2e8f889c1fcc0cfc934517e2fb9a13993b6afec1059380433a28eab63092e03",
+      "kind": "str",
+      "mistakes": {
+        "6019932b0c4ba9b5e96d2c315db587af9f921ec33cc67a87d89e0bf6b8586f31": "lis la fin des courbes du graphique de droite : la courbe L finit-elle le plus haut ?",
+        "85ce77f168bb69e1b236963c949f2685cf7ec9388fccf97cb09718bea75c7ea6": "lis la fin des courbes du graphique de droite : la courbe S finit-elle le plus haut ?",
+        "9e23ff474db1b766dd41682fc710694054471b0c7660d2d62e3645c91bbea4ca": "lis la fin des courbes du graphique de droite : la courbe C finit-elle le plus haut ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.15c": {
+      "hash": "4f22cf25ca9519d2e3befa4e69cbe9138bdba9f53c1eae3c8f60e7c09145d7c4",
+      "kind": "str",
+      "mistakes": {
+        "097038db0622dc2b4dacc538bcbdf04473b84f90ad3b404be04e894d81b11d8c": "suis les courbes C et L du graphique de droite : où se croisent-elles ?",
+        "3e365f80a69bc68f01694caa7c970ec7ed1f2b494ff8f79bbf684fbd549f1ebe": "suis les courbes C et L du graphique de droite jusqu'au dernier indice : où se croisent-elles ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.18a": {
+      "hash": "52afd4015cf940a2145abb1f91b4a76ddf2a082601db183e1b097bacfdf7a29f",
+      "kind": "bool",
+      "mistakes": {
+        "ecc08c6a37511bf1b76456dd855e785173adb6f2612265eeb21808221a470cca": "relis l'écart de la première ligne du tableau"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.18b": {
+      "hash": "bc384163679c2df81951723ef8b3b8cfe19b93d3f290cd375558a21101a8aacc",
+      "kind": "bool",
+      "mistakes": {
+        "f0866915345a51279154f81e2fc7d82e2d7ecbc193b5b21fe8e98bc70a7eb356": "relis l'écart de la deuxième ligne du tableau"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.18c": {
+      "hash": "d0b32a88a842dd9e7855cbe92362a868949d9e6ce126fc62f038daedcde60f5f",
+      "kind": "bool",
+      "mistakes": {
+        "6c42fb840e08fc45736751781f1bb60f4ebefb06a23f78f1bf10fe25063fbee8": "relis l'écart de la quatrième ligne du tableau"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.18d": {
+      "hash": "9f0e26d55bd03dd66a9473dc74031a87714402a38d1c1814d98f51776c48bff0",
+      "kind": "bool",
+      "mistakes": {
+        "9643f88f13bef9bd9fc06374d260679f38672729388f05cefde21e5eb353eb48": "relis l'écart de la dernière ligne du tableau"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.20a": {
+      "choices": [
+        "1",
+        "2",
+        "5",
+        "10",
+        "20",
+        "50",
+        "100"
+      ],
+      "fractional": "on demande un nombre de pas de STEPS_20",
+      "hash": "8f7d83f8f8eaa0ea6fe3152b3373e5ae570c4ca1619cdd5ce80770333d6ecc1a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "a88bdad8b402104f01b863ecf5d3223fa602939e757c703cce3a570939eeaa43": "relis la ligne Euler du protocole complet : à 1 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "b65c438cc9d746c88a6a35d8747b954b92f730230b060216dfc3e71cfeb700b3": "relis la ligne Euler du protocole complet : à 2 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "d231a4b49fa78d99d9579d48b9af85d1c24ebdbd7501b77bad4864bc6cde54f6": "relis la ligne Euler du protocole complet : à 10 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "e1fe5fd447661b1d8ac651b32ca95432cb58b180140a3e5474a35a28e71b6cab": "relis la ligne Euler du protocole complet : à 50 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "e2ebd9bc5a2d89c7ae68d091793faf09504d9fd728ced79ce6908e146f45d032": "relis la ligne Euler du protocole complet : à 100 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "f34191b9ef2966f90e0416ed6979e487ccab6022749da1f338f5c89811ab0a12": "relis la ligne Euler du protocole complet : à 20 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.20b": {
+      "hash": "989f32cf24bb69a3c8f0af29de188d0853496bdd6a02fa9e7ccebedc6f7ea17b",
+      "kind": "str",
+      "mistakes": {
+        "d69857d66c1d2845618ea39c7247eb5a08034261ea95d7c2b0d641be724a5d8d": "relis la colonne des 5 pas du tableau du protocole complet"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.21a": {
+      "fractional": "un nombre de paramètres est un entier",
+      "hash": "8ef667507fe667989b360bbe9346e87eb5515baccc6c679adb00c249a5fc0eb9",
+      "kind": "int",
+      "magnitude": 5,
+      "mistakes": {
+        "81ddd8bd8daa194f69585c7afda79d1e2089e8c32700b4f5b596f2de32fc98c7": "compte les canaux reçus par u2 et u1 : la sortie du décodeur et celle de l'encodeur",
+        "e9f54b6a515ee9cc05fe229af81969345ad7367f956b1cc953d7d803be017361": "relis le contrat de t_mlp : deux couches denses"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.21b": {
+      "hash": "a439301b73d51ef9e0e19b15bfaf7c62bec3eda52c5dafec7b553bde525949e0",
+      "kind": "str",
+      "mistakes": {
+        "b2432cada756123f497e0da911ffc1cea0be3595307f3bc1316f6b467b399e49": "un batch de 8 images : le premier axe compte les images",
+        "bb51e7dfa0fc2e1c0abbc739db9e1217e3faf5cbca5e69e83d25017bcf4d9759": "relis la question : on demande l'entrée de u1, à 28 × 28",
+        "c7e7dc416b2ce6646324250b0090eb1129a5c5ffbb644de5d1cb99fb51cf4d2b": "c'est la sortie de up1 seule : ajoute les canaux de la connexion de saut"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
     "B5.Q1a": {
       "hash": "41720f303bfd990d3dc5f44dff8194f5c33a30516f977bcae6615a8fd8ad206d",
       "kind": "str",

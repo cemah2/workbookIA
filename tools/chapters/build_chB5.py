@@ -12,8 +12,10 @@ B5.1 to B5.5 (02_exercices.md). The derivations ∂ B5.6 and B5.7, the estimate 
 the context cell of the solutions notebook, then checked against the reference library (mylearn.diffusion,
 mylearn.attention, mylearn.gen_metrics, mylearn.vae) and, if it is installed, against diffusers (DDPMScheduler and
 DDIMScheduler built from the toy schedule of ✏️ B5.2, their noise set to zero): part 0 downloads nothing.
-The notebook itself (exercises B5.12 to B5.31) comes at the second generation session (NEXT_SESSION), in three
-phases: the mathematics of diffusion.py and their checks, 2-D toys, the U-Net on MNIST and Fashion-MNIST.
+The notebook itself has three phases: A, the mathematics of diffusion.py and their checks (B5.12 to B5.18); B, the 2-D
+toys (B5.19, B5.20); C, the U-Net on MNIST and Fashion-MNIST (B5.21 to B5.31). Session 72 writes it in two halves:
+chB5_parts.py and chB5_code.py hold B5.12 to B5.21 (history_chB5.py precomputes their calibrations); the second half
+(B5.22 to B5.31, NEXT_SESSION until then) appends its exercises to PART_C.
 """
 
 from __future__ import annotations
@@ -587,16 +589,48 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B5.12 to B5.31): second generation session
+# Parts A to C (exercises B5.12 to B5.31). Session 72, first half: parts A and B and the U-Net of part C (B5.12 to
+# B5.21, chB5_parts.py and chB5_code.py); the second half (B5.22 to B5.31) appends its exercises to part C.
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB5_code  # noqa: E402,F401  (the cells; history_chB5.py reuses them)
+from chB5_parts import PART_C, PARTS  # noqa: E402
+
+
+def _record_21() -> str:
+    """wb.record of 📦 B5.21: the count of parameters of the small U-Net and the shape of the input of u1, with the
+    counts of two classic slips (no concatenation before u2 and u1; a step MLP of one layer)."""
+    import torch  # noqa: F401
+
+    from wb import diffusion as wbd
+
+    small = wbd.TinyUNet(400, channels=(16, 32, 64), t_dim=64)
+    count = wbd.count_params(small)
+    no_cat = (count - wbd.count_params(small.u2) - wbd.count_params(small.u1)
+              + wbd.count_params(wbd.ResBlock(32, 32, 64)) + wbd.count_params(wbd.ResBlock(16, 16, 64)))
+    one_layer = count - (64 * 64 + 64)
+    return (f'wb.record("B5.21a", {count}, mistakes={{'
+            f'"compte les canaux reçus par u2 et u1 : la sortie du décodeur et celle de l\'encodeur": {no_cat}, '
+            f'"relis le contrat de t_mlp : deux couches denses": {one_layer}}}, '
+            'fractional="un nombre de paramètres est un entier")\n'
+            'wb.record("B5.21b", "(8, 32, 28, 28)", mistakes={'
+            '"c\'est la sortie de up1 seule : ajoute les canaux de la connexion de saut": "(8, 16, 28, 28)", '
+            '"relis la question : on demande l\'entrée de u1, à 28 × 28": "(8, 64, 14, 14)", '
+            '"un batch de 8 images : le premier axe compte les images": "(1, 32, 28, 28)"})')
+
+
+for _ex in PART_C.exercises:
+    if _ex.record == "RECORD_21_PLACEHOLDER":
+        _ex.record = _record_21()
+for _part in PARTS:
+    for _ex in _part.exercises:
+        check_unique_keys(_ex.record or "x = 1", _ex.id)
+
 NEXT_SESSION = [
-    ("A", "B5.12 à B5.18", "les mathématiques de ta librairie et leurs contrôles : plannings de bruit, bruitage en "
-                           "forme fermée, posterior, pas DDPM et DDIM, aller-retour avec le vrai bruit"),
-    ("B", "B5.19 et B5.20", "jouets 2D : un MLP débruiteur conditionné par le pas, puis le flow matching"),
-    ("C", "B5.21 à B5.31", "le U-Net sur MNIST et Fashion-MNIST : quatre bugs, entraînement avec EMA, DDPM contre "
-                           "DDIM, guidance, mémorisation, distance de Fréchet, script autonome et défi"),
+    ("C", "B5.22 à B5.31", "la suite du U-Net sur MNIST et Fashion-MNIST : quatre bugs, entraînement avec EMA, DDPM "
+                           "contre DDIM, nombre de pas, guidance, mémorisation, distance de Fréchet, script autonome "
+                           "et défi"),
 ]
+DONE_IDS = {ex.id for part in PARTS for ex in part.exercises}
 
 
 def header_cells(kind: str) -> list:
@@ -606,8 +640,8 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
+    if "B5.31" not in DONE_IDS:
+        rows += [f"| {key} | {ids} | {title} (*prochaine étape de la génération*) | | | |"
                  for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B5 · Modèles de diffusion : un DDPM minimal — notebook d'exercices"
@@ -653,10 +687,10 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B5.12 à B5.31 (mathématiques de ta librairie, jouets 2D, U-Net sur "
-             "MNIST et Fashion-MNIST) seront ajoutés à la prochaine session de génération ; relance alors "
-             "`python tools/start_chapter.py B5` pour obtenir le notebook complet.*")
+    later = ("" if "B5.31" in DONE_IDS else
+             "\n\n*Les exercices B5.22 à B5.31 (bugs, entraînement du U-Net sur MNIST, échantillonnage, guidance, "
+             "mémorisation, distance de Fréchet, script autonome et défi) seront ajoutés à la prochaine étape de la "
+             "génération ; relance alors `python tools/start_chapter.py B5` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer à la main un planning de bruit, ses $\\bar\\alpha_t$ et son rapport signal sur "
