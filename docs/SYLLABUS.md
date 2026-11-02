@@ -5239,15 +5239,15 @@ Un modèle de diffusion apprend à débruiter : on abîme les images en ajoutant
 | B5.10 | ⚖️ | Un générateur peut-il recopier ses images d'entraînement ? Mémorisation, droits et traçabilité | ★★ | 20 | — | 02 | 27, 29 | R | manual |
 | B5.11 | 📄 | Ho, Jain et Abbeel (2020) : « Denoising Diffusion Probabilistic Models » | ★★★ | 45 | — | 02 | B5.7 | M | manual |
 | B5.12 | 🔨 | linear_beta_schedule, cosine_beta_schedule et noise_schedule | ★★ | 20 | — | 03 | B5.2 | RMC | pytest |
-| B5.13 | 🔮 | Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus | ★ | 10 | MNIST | 03 | B5.12 | RC | manual |
+| B5.13 | 🔮 | Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus | ★ | 10 | MNIST | 03 | B5.12 | RC | wb.check |
 | B5.14 | 🔨 | q_sample : bruiter un batch d'images à des pas différents | ★★ | 20 | MNIST | 03 | B5.12, B5.6 | RMC | pytest |
-| B5.15 | 📈 | Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings | ★ | 15 | MNIST | 03 | B5.14, B5.3 | C | manual |
+| B5.15 | 📈 | Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings | ★ | 15 | MNIST | 03 | B5.14, B5.3 | C | wb.check |
 | B5.16 | 🔨 | q_posterior_mean_variance et predict_x0_from_eps | ★★ | 30 | — | 03 | B5.14, B5.7 | RMC | pytest |
 | B5.17 | 🔨 | ddpm_step et ddim_step | ★★★ | 40 | — | 03 | B5.16, B5.5 | RMC | pytest |
 | B5.18 | 🔬 | Avec le vrai bruit, DDPM et DDIM retrouvent-ils x_0 ? Contrôle sur des données 2D | ★★ | 25 | synth | 03 | B5.17 | MC | wb.check |
 | B5.19 | 📦 | Diffusion en 2D : un MLP débruiteur conditionné par le pas de temps, entraîné puis échantillonné | ★★ | 30 | synth | 03 | B5.17, B3 | RMC | manual |
-| B5.20 | 🔬 | Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler | ★★★ | 40 | synth | 03 | B5.19 | MC | manual |
-| B5.21 | 📦 | Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps | ★★★ | 50 | MNIST | 03 | B5.19, 21 | RC | wb.check |
+| B5.20 | 🔬 | Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler | ★★★ | 40 | synth | 03 | B5.19 | MC | wb.check |
+| B5.21 | 📦 | Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps | ★★★ | 50 | MNIST | 03 | B5.19, 21, B3 | RC | wb.check |
 | B5.22 | 🐛 | Le DDPM qui ne produit que du gris : quatre bugs d'indices, de racines et d'échelle | ★★ | 25 | MNIST | 03 | B5.21 | RC | manual |
 | B5.23 | 📦 | Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de loss 🚀 | ★★★ | 60 | MNIST | 03 | B5.21, B5.22, 19 | RC | manual |
 | B5.24 | 📦 | Échantillonner : DDPM à 1 000 pas contre DDIM à 50 pas, qualité et temps | ★★ | 30 | MNIST | 03 | B5.23 | RC | manual |
