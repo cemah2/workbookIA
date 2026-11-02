@@ -5116,13 +5116,13 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 | B4.10 | ⚖️ | Fine-tuner sur des romans : domaine public, œuvres protégées et droit de retrait (opt-out) | ★★ | 20 | — | 02 | 28, 29 | – | manual |
 | B4.11 | 📄 | Hu et coll. (2021) : « LoRA: Low-Rank Adaptation of Large Language Models » | ★★★ | 45 | — | 02 | B4.6 | M | manual |
 | B4.12 | 📦 | Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle | ★★ | 25 | Holmes | 03 | B3 | RC | wb.check |
-| B4.13 | 🔮 | Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 | ★ | 10 | Holmes | 03 | B4.12, B3 | C | manual |
+| B4.13 | 🔮 | Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 | ★ | 10 | Holmes | 03 | B4.12, B3 | C | wb.check |
 | B4.14 | 📦 | Chat template, message système, arrêt et streaming avec un modèle instruct | ★★ | 25 | Holmes/Verne | 03 | B4.12 | RC | manual |
 | B4.15 | 📦 | Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire | ★★★ | 45 | Holmes | 03 | B4.14 | RC | manual |
 | B4.16 | 🔬 | Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples | ★★★ | 40 | Holmes | 03 | B4.15 | C | manual |
 | B4.17 | 🔨 | chunk_text et BM25 : découper un roman et classer ses passages | ★★★ | 45 | Holmes/Verne | 03 | B4.5 | RC | pytest |
 | B4.18 | 🔨 | cosine_top_k, fusion de classements (RRF), recall@k et MRR | ★★ | 30 | Holmes/Verne | 03 | B4.2, B2 | RC | pytest |
-| B4.19 | 🔮 | Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? | ★ | 10 | Holmes/Verne | 03 | B4.17, B4.18 | RC | manual |
+| B4.19 | 🔮 | Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? | ★ | 10 | Holmes/Verne | 03 | B4.17, B4.18 | RC | wb.check |
 | B4.20 | 📦 | Recherche dense (MiniLM, e5) contre BM25 contre hybride sur 30 questions annotées | ★★★ | 45 | Holmes/Verne | 03 | B4.19 | RC | manual |
 | B4.21 | 📦 | Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit modèle | ★★★ | 60 | Holmes | 03 | B4.20, B4.14 | RC | manual |
 | B4.22 | 🐛 | Le RAG qui répond à côté : quatre défauts de découpage, d'encodage et de contexte | ★★ | 30 | Holmes | 03 | B4.21 | RC | manual |
