@@ -12,7 +12,7 @@
  "summary": "Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correctement est un métier. Tu fais tourner de petits modèles sur CPU avec transformers, tu maîtrises génération, chat templates et prompting, puis tu mesures leurs résultats au lieu de les croire. Tu construis un RAG complet sur Holmes (découpage, BM25 codé dans mylearn, recherche dense, citations) avec son évaluation, tu adaptes un modèle par LoRA (codé à la main puis avec peft) et tu compares fine-tuning et prompting sur une tâche de classification. Hallucinations, injection de prompt, données et licences sont traités comme des problèmes d'ingénierie.",
  "objectives": [
   "Charger et exécuter un LLM avec transformers en maîtrisant dtype, mémoire, décodage et chat templates",
-  "Concevoir, versionner et évaluer des prompts (zero-shot, few-shot, sortie structurée) sur plusieurs graines",
+  "Concevoir, versionner et évaluer des prompts (zéro-shot, few-shot, sortie structurée) sur plusieurs graines",
   "Implémenter BM25 et les métriques de recherche, puis construire et évaluer un RAG avec citations",
   "Expliquer LoRA mathématiquement, l'implémenter à la main et l'appliquer avec peft",
   "Choisir entre prompting, RAG et fine-tuning pour une tâche donnée, chiffres à l'appui",
@@ -33,7 +33,7 @@
   },
   {
    "ref": "204.4",
-   "title": "Prompting : zero-shot, few-shot, instructions, sortie structurée, raisonnement pas à pas"
+   "title": "Prompting : zéro-shot, few-shot, instructions, sortie structurée, raisonnement pas à pas"
   },
   {
    "ref": "204.5",
@@ -53,7 +53,7 @@
   },
   {
    "ref": "204.9",
-   "title": "Classer des textes : encodeur fine-tuné, LLM en zero-shot ou baseline classique"
+   "title": "Classer des textes : encodeur fine-tuné, LLM en zéro-shot ou baseline classique"
   },
   {
    "ref": "204.10",
@@ -68,7 +68,7 @@
   "generate(), max_new_tokens, arrêt",
   "chat template, rôles",
   "streaming",
-  "zero-shot, few-shot",
+  "zéro-shot, few-shot",
   "sortie structurée (JSON)",
   "chain-of-thought",
   "auto-cohérence (vote majoritaire)",
@@ -370,7 +370,7 @@
   {
    "id": "B4.Q6",
    "type": "🧠",
-   "title": "Zero-shot, few-shot, chain-of-thought : vrai ou faux",
+   "title": "Zéro-shot, few-shot, chain-of-thought : vrai ou faux",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -850,7 +850,7 @@
   {
    "id": "B4.15",
    "type": "📦",
-   "title": "Prompting pour extraire des informations de Holmes : zero-shot, few-shot, JSON validé, vote majoritaire",
+   "title": "Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire",
    "stars": 3,
    "minutes": 45,
    "gpu": false,
@@ -1131,7 +1131,7 @@
   {
    "id": "B4.28",
    "type": "📦",
-   "title": "Classer des textes : encodeur fine-tuné par LoRA, LLM en zero-shot, TF-IDF + régression logistique",
+   "title": "Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique",
    "stars": 3,
    "minutes": 60,
    "gpu": true,
