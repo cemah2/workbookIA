@@ -56658,6 +56658,1294 @@
       "sign": 1,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
+    "B5.1a": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "75cf984b49cac05a94877637e73315d1f2b7acb186378e629665822ae4e69360"
+        ],
+        [
+          "4c4a8c4935ee5e1688ff9bb447e876a80f1621d62a739f2c36bc4d1185efb371"
+        ]
+      ],
+      "element_hashes": [
+        "e48c8f6ba388968e4973462718ee5d4aa31092e4bd8c6e20540f8238a78e2fa8",
+        "41899b55e99828d02fa01a26c79f06fbd3040fffa196695c0050cfa18045eb1d"
+      ],
+      "hash": "6e866ad36d5037bc93a7bc059fb047ede01d463e310e7f1dfd1951ca4d3933e6",
+      "kind": "array",
+      "mistakes": {
+        "106644b23b35aef1a281a8e3c919cee7aba0b75bcb7205b695e108021794f509": "avec w = 0, quelle prédiction garde-t-on ? Relis la formule"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1b": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "a4383bfebb4e94ea8d1a966b683350d9973383d74a5d5e3a69ba3de2b0c448ad"
+        ],
+        [
+          "8158bbaa05b412dcf247b5884c199e3aa865b6dbbd030c62038f59ce6d83335e"
+        ]
+      ],
+      "element_hashes": [
+        "2e2ba7cfbaa38dd9ee4198e91d1585521df08c06ca908fb7d1bd3f9472480b2b",
+        "f1e56ab2a569ed3610ac0e5335cc9e5602fb463114da88659bc861d0ad5fe13a"
+      ],
+      "hash": "f4179e5de688f4aadc0a9bb34ded75fea290dea107d63ae2ba0143874fa8b30f",
+      "kind": "array",
+      "mistakes": {
+        "7b8a32537ebbaccf69465888659e3e0075e99764bfda2e203d1ab498a930bdcc": "(1 + w) multiplie la prédiction avec condition, w celle sans condition",
+        "83ea9fab2b958aed938b19ece8758bcff0cf4449a37d3f25fb23136719d39dde": "la guidance n'est pas une moyenne des deux prédictions : relis la formule",
+        "cb3eb65e7e2bddceb2ec191769e209024b8c3a0e773f601fcb17257f8ca6c0c2": "relis la question : w = 1"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1c": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "b0f09298086092f779eca28e0e776691974b8cf492c8190f617dfbfebd9ce85e"
+        ],
+        [
+          "f3958b01621f0eaef27f8c31234e07ba5157ed9fc611bd5a8897499c98968e4a"
+        ]
+      ],
+      "element_hashes": [
+        "0bee4bf31ef806c0a042f27f03d06e207ed9c646d59098209196143278978259",
+        "209f90e515ffb5a5d5238ebaf93e4a4bef5bda45220f2a1cf9844bbc616a8697"
+      ],
+      "hash": "ab7ef7a748f13a6a564dfd8e33a7fb6eb1035baccabc78cef6742bce31c78325",
+      "kind": "array",
+      "mistakes": {
+        "8a123ee9abccddd50649d735da8b7c7991f6c285a11d0e6bcea513324d6daf47": "(1 + w) multiplie la prédiction avec condition, w celle sans condition",
+        "da05944852a3a8d3a29d674e3341e0d1ecfd54df319bba2e3b15c2e30f981b37": "relis la question : w = 3",
+        "f3b9191243c4e86842ee88d3b432552247d745c98a068920fa4bcb02d980c9c8": "c'est guidance_scale = 3, la convention de diffusers : relis le piège classique de 205.7"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1d": {
+      "hash": "615c7affd763f6190a9ba67f29a4a2dcf4166c3a7e9387a24391fd3e82c372f5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0e2d420f5da9c873245e95aa2ed90c372ce9e0a286fb7cfc03e0e73f16e01463": "guidance_scale = 1 + w : vérifie le sens",
+        "fb04203dfe70a549025a4c8b7db88b123fa8949833008210fe96de391f72ad62": "relis le piège classique « deux conventions pour l'échelle de guidance » (§205.7)"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1e": {
+      "decimals": 2,
+      "hash": "063609455a832b066e35cacdfdb4cfbda191b75fc2775b3bfa6ad8541a0d093f",
+      "hash_coarse": "26748f1f962cab95a8745ba9e8e0d06fa311a0361b4d6c1467e1fb2f72dbbf9a",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "56abdf46b4188093ca0dcfa61f2ab8592300387d08073384fb2c199ed341dfd6": "la norme euclidienne est la racine de la somme des carrés",
+        "5bd1d83b39dd9d798cacd6b2c48d8a14c75de297266ad7ebd929fbd51f1e365f": "multiplie l'écart des deux prédictions par w",
+        "7cff111b979c1b35aaeebe730436c6c3515b8f77849f0df95a9ebd2c230ef81b": "relis la question : on demande l'écart à ε_c, pas la norme de ε̃"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1f": {
+      "hash": "f0816f3bb2459eb7a863879beda30fb1d08e9e13dad7c926df58701bcae91dfa",
+      "kind": "bool",
+      "mistakes": {
+        "25aeb1bdd100c016b195470c62d3323a02e353ccd909c8a79e2e4b97db8445c3": "remplace w par −1 dans la formule"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1g": {
+      "hash": "0b473a969bb2db9214c2c12db8cde9c90a10bb8d36942135a5303806e7b036bf",
+      "kind": "bool",
+      "mistakes": {
+        "daeef0b0e5ac339bb090a06ed973af769a44c1d7307c2c34e36d4e21b1595e66": "compare ta réponse c) aux deux prédictions, composante par composante"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.1h": {
+      "hash": "af5fb2991bd01ebe5e698ce6668a0faec5c4a496c29d6dd58d8571b4cb036278",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "960ee7ef967c93b9a4428a81b3e7189ae48ff3e58e78e669b77828e3cee6b289": "la guidance demande deux prédictions à chaque pas",
+        "a62a96916f68b59d7c466d664c8f87b941144dc3153c151d87592161ad8d4cd5": "relis la question : 50 pas DDIM, pas 1 000"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2a": {
+      "alt_coarse": [
+        "224a543eff99f0b2de7bf76237bf384820558b603d655abee3b6462dae59851c"
+      ],
+      "decimals": 2,
+      "hash": "0067a79e6beaa07629aadd1f114b3ff1667466986f35e8acc37a14973db47afd",
+      "hash_coarse": "3203b3757c6cf58604daee14f407b1d9abad07671320857c638a2f548d2d79d5",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "459c5919e1341d81e56adbd78bcee8bfbe7056be11b506c4f83bc7922c520517": "4 valeurs de 0,05 à 0,35 font 3 intervalles, pas 4",
+        "e8f110db21a2238bbfc72f982bdc259c846e622a974a01d5118f5a791c5150d1": "relis la question : β_2 est la deuxième valeur, à l'indice 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2b": {
+      "alt_coarse": [
+        "6872f72db8799cddf431a33ff0e055a559a2ce08f8e6cd4ca4507d20960c907f"
+      ],
+      "decimals": 4,
+      "hash": "9439a649f005fc82c5c9e8494be5f16627692d820f33798209d6e1e50b7bf9fb",
+      "hash_coarse": "01f5fe76506d62f4e45227ff7b9f2b29d730d2bbee6cbee429736b53930a3d63",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4e42f9ef93bcbbdf48a9d8267b90906ffb893ccb6293cda866063514c6e6f855": "ᾱ est un produit des 1 − β, pas 1 moins la somme des β",
+        "6d61629e80b9a01df327c5c82b3de74f53f8fb2adba17d12b26fa85592e437a5": "relis la question : on demande ᾱ_2, au pas 2",
+        "8c0c6e2bc5d52a9b33b1b1137953b8df8262f05cebbb29303fb7ee6dcbfab089": "c'est α_2 : ᾱ_2 est le produit des α jusqu'au pas 2"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2c": {
+      "decimals": 4,
+      "hash": "3b3be0df20c6d18f986ad16dcdfcc840d81445013c3179b5b01f18a2c35c5b95",
+      "hash_coarse": "f8587423a2d4caad50ce9d75db8b116d01dc2985251ca927e43198ca5eaeb6e0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6349f30863ba57171cfab2fa9e0e17ec63833cc5a7ffdeeeec01eedd7453af42": "on demande ᾱ_4, pas sa racine",
+        "9db45c94c100693460a2da70a0c7e6750f423deec6b284434516f0075aa9ebfe": "c'est α_4 : ᾱ_4 est le produit des α jusqu'au pas 4",
+        "b88e120a02d2984a4e21fe4779c0ac1ee0ea9a40de02b908ddc77f365e40cd99": "relis la question : le produit va jusqu'au pas 4",
+        "c4a3e86ef1de2d7529ede38122156f647a284fa12ae3621d0c0a7cc0c7458326": "ᾱ est un produit des 1 − β, pas 1 moins la somme des β"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2d": {
+      "decimals": 4,
+      "hash": "f970e4879db6f2752486159602d6e8aee77ca11ac71c8d9abda6a862e15acfe1",
+      "hash_coarse": "0d60bd3fdb43c5dd4480b63fee84df4546525e15c957449698dc4b5643ba0c28",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "910fd147bcafbc2bb4a1bf571517e55e5c3a6c779a48953e47f57699b9b649a2": "relis la question : on demande le coefficient de x₀, pas celui du bruit",
+        "beff64d63b5bf29a14557fc1a6ba050d1af0bb0dd2dc52bae2df2377c20a085c": "c'est ᾱ_4 : relis la forme fermée, le coefficient de x₀ est sa racine"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2e": {
+      "decimals": 4,
+      "hash": "506f84588763e21aa615abcba5e6e7c9fc01440ba254fd5fc375aa5918c44a62",
+      "hash_coarse": "cda6a21811524438a2f0a2b0ad56b1f1a283944c7d14157cd42f757f1c059205",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7aad7c2cf63f8b1426134e73d668f41aebb72c65512cfc95fcd84e76b730cdad": "recompte la somme des quatre β",
+        "e8b77eba03f7addaa4b90b8a15651a5b02503f65f99b8e2be2cc6161dc0c4c66": "relis la question : on demande l'approximation e^(−Σβ), pas la valeur exacte"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2f": {
+      "hash": "cd2a0220057a6c7414dc906ee28263ae1067a2ba896bf67fdbe6066b8c4b5f85",
+      "kind": "bool",
+      "mistakes": {
+        "b0c704e9e4eea1d751c1b8c6b3e33f72671e5ddafe1d753585f4a2906fd313ba": "compare tes réponses c) et e) : calcule l'écart relatif"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2g": {
+      "decimals": 2,
+      "hash": "1ce7f4567a0ee6396ea9777907fb92fba662b025cc0eceff733c1e129f544947",
+      "hash_coarse": "68dd7e1c29763fd0608148dbb590a88f5c0c324e1b199d6f55d2d8d06a6ce2e9",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "422be23178a723a3f292ef0595a3cb7598dcfca6ff6d798e070e990b8304cbe8": "relis la question : on demande la somme des 1 000 β, pas leur moyenne",
+        "4a17c8ebed4c64737b9edf49732ef0dddf5e61619598c5bb9899b75de4ec3e34": "la somme d'une suite arithmétique est T × (premier + dernier) / 2 : n'oublie pas le / 2",
+        "b11c60a3949f25b38d97c4851002e0f890924893035e56044e14698962b18ab4": "relis l'énoncé : le dernier β vaut 0,02"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2h": {
+      "decimals": 2,
+      "hash": "f511470c66c99808909ad6078851cbb2566f3c9d5e708c599892d2a6baa7a188",
+      "hash_coarse": "9f3932f1c310b9b14bc6a18d8d55281a40252e0b820813bd9d2d32f1eae66957",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0c5c33a2ff00ab5225ab49d42e5261aa3dd74d26c70a7bc348e50e7d982f56b3": "garde la somme des β de g) sans l'arrondir à 10",
+        "8408c40719ab6049550df1d4cedd751000b8e7aeb91962802daaeaf0d5471b5b": "relis la question : multiplie l'approximation par 10⁵"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2i": {
+      "decimals": 2,
+      "hash": "ea388e695aecb5e8c0f330db986559f2e95b98b4e6bfc1293ed38973f716fca7",
+      "hash_coarse": "6997132638a55bd306dee743f3d80f54a7e8873e4be60f7c1a161da279586c1c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "954f00c0a42fc5c865f8c9c040e7b3b4bc59f7a1f883fd605944a7aee26ed3e5": "relis la question : en pourcentage, donc multiplié par 100",
+        "e1c067d59139ecd056a716f1f4513cb4d702706a037ec6e7504a77ebef1c89a6": "h) est multiplié par 10⁵ : reviens à ᾱ_T avant de prendre la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2j": {
+      "decimals": 2,
+      "hash": "75e4da0ec651d0b5e8e094f9d6cd09043cdadcf838686457acc2ef477e19cea7",
+      "hash_coarse": "93af6e59a31413ba89d4002cbb08f79ba40f17159d378e2f4009fe0ec097fa80",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8544cd79b84f47db459a144f1e0f7f57eab03a8e55848f7becfea16918ae468f": "n'oublie pas le / 2 de la somme d'une suite arithmétique",
+        "cdf7ce3e7f83fab08bcb8eb65a5237b42f735fd9eff499f244b6308c4b48d482": "relis la question : les mêmes bornes, mais 400 β seulement"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2k": {
+      "decimals": 2,
+      "hash": "0c95b2bf90edaaccc8304e5fb0b474f81e59c1ed1e01dc5604d0cb0e34643aea",
+      "hash_coarse": "b5a9448f50a7d9571d10ea34f48da42489d58cac157a539e54ade3115a5e842a",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "11b6adb55d47f3a2d59bae5cc2a334f674e93feeeaf59de093f39cbab5862765": "relis la question : les deux bornes sont multipliées par 1 000/400",
+        "3e9ad4bc0a899baee3b003d33b2400f07c12e095c500eaf2d5db9de693e51878": "n'oublie pas le / 2 de la somme d'une suite arithmétique"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.2l": {
+      "hash": "04b803b336d05d48f53494c616df4e15ceb050e5c433b75d9142d43c4ef85a69",
+      "kind": "bool",
+      "mistakes": {
+        "b2cd788462e46fbe2712486fb9eb48b6301a0a2680ad0615dbee76c7729c8cb0": "compare tes réponses g) et k)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3a": {
+      "decimals": 3,
+      "hash": "dd7f468dd0741eb01bea3e073c31c08efb73870a9bef0a0c04f36c160e2a9967",
+      "hash_coarse": "1c37021d581d21d3cfa20600546e8e9ef41077389f44c3d1a63467885aefcd1b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "51bee9f92e760812f6f084a3e1376839b39818a4e850b142591fd5f8abb0574a": "S(500) somme les 500 premiers β, pas 500 fois la moyenne de tous les β",
+        "e43b033db3a967db4cc93430fa90ad0e55dfe1adf7c97410024c9c2ebd54899f": "relis la formule de S(t) : t(t − 1), pas t²"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3b": {
+      "decimals": 2,
+      "hash": "04bbe4817ed33ec112f2ddac10cf9e65fab01cdd297639bdfb7a3ce12778f980",
+      "hash_coarse": "d2d92be9a99273785043510db2fcb695c4aef2a7d671b5fa97053db07e235c0f",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "3302ca29d0b6cc1a975e5561e4359b75a9e66b7c2c4c7a4b4568fd0b47efd47c": "le SNR met la part de l'image au numérateur, celle du bruit au dénominateur",
+        "b5fe43e0d0ad9bc6c704d7984f00d509bc26ac4bf6e094f420d3e5d1b79e8e7e": "c'est ᾱ_t : on demande le SNR"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3c": {
+      "decimals": 2,
+      "hash": "3824385b01666721155e21afb199ecda634a1bee52f664a83e1659218bfe6550",
+      "hash_coarse": "248bb56e0b3e692666227cea92f22fc4651cccb14ee06e4fbc86bddbd66dca53",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "19c39b286ebd897f962b155ebec79e1310b88ec9aaf0f181a2f07af592c7629f": "n'oublie pas le décalage s = 0,008",
+        "7235ff38c450cfd55e631e6f9b6207087eb2cb3bab61cb6651cd0af63c76b804": "c'est ᾱ_t : on demande le SNR"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3d": {
+      "decimals": 2,
+      "hash": "3fe49c4cefe78ef8ea63f7dcf550b7a13d95c76a1b3ce9362728fe10b4c6e602",
+      "hash_coarse": "314caf34f2cc6543d01dc03f844e0f4a3eea9d43181b8fe9c6c5018144879869",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "94d25507b8a86ab7ca9434802aa9fea423b9c3d294a418d704bd641c68d09f93": "résous l'équation du second degré en t, puis divise t par T",
+        "e25693cafe86214e26c15106eb4af2895d9ab495d53883298637d72c2cfd1461": "SNR = 1 veut dire ᾱ = 1/2 : relis le lien entre ᾱ_t et S(t)"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3e": {
+      "decimals": 2,
+      "hash": "6c845df5fecd77f9f22362fd409f8055337c10f19461e719f7029fa7c5c46c52",
+      "hash_coarse": "b9fdcbcb3a6cd7baf27aa2fdb66517b45615f8889d1228b0fa2899c1997b7548",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "ef9909a0ea895da15a777bfef5f9df239f2558c2358e1d793a98ef141e8480fa": "SNR = 1 veut dire ᾱ = 1/2 : c'est le carré du cosinus qui vaut 1/2, pas le cosinus"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3f": {
+      "decimals": 2,
+      "hash": "374ff9d7b630aba84dd7f63fef95b76ea5ac8dc8f22ee4479dd830d5978e3966",
+      "hash_coarse": "98d53f14c0b23b5241895936c67f6a91e3c086a79b07de3e941e1c34e859d6ed",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3ff8678665e78193d68ec823db14e413e74e99aa811670d07067ba19dfc4c5d3": "SNR = 0,1 ne veut pas dire ᾱ = 0,1 : écris ᾱ en fonction du SNR",
+        "c3419e9a7f7d8d353f8a278b87c2fc2ca3cea09b9f012c697c690de5c46fdb55": "relis la question : le seuil de lisibilité est 0,1, pas 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3g": {
+      "decimals": 2,
+      "hash": "ea5b712926ca9a8b9332d0901e74c52e2cebe813d1bc81adb9b50a2b2b0cd3c8",
+      "hash_coarse": "92b2c901f96d9521b7fd213aed548fc3597a2488bb066f2e51e8808e52315d10",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "764011fdc2b859d214b6ea1efe5649c2c136c8af9e8479181606a4f1c98a4c1b": "n'oublie pas le décalage s = 0,008",
+        "dc156f987cd1cde1d854d043a4cdbe9f159753d1600e07f9a70e8b877e6f3ac6": "SNR = 0,1 ne veut pas dire ᾱ = 0,1 : écris ᾱ en fonction du SNR"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3h": {
+      "hash": "69a33174c9b1472f37f660ae0f50b56afad4ab9595f58d0897e9b79004c1793a",
+      "kind": "bool",
+      "mistakes": {
+        "7afc84d4fe9ac3050f4f9bacbcf1a199f4ede69c38ea2f2d965c26cc1e2658c5": "compare ta réponse f) à 0,5"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3i": {
+      "hash": "c295c0d9444c74ed17a3cd490ddd679a66bd6ba977fb0872df1b685b56c0271f",
+      "kind": "bool",
+      "mistakes": {
+        "01a1dd21ca7f263915a4f60a6966b6a7724ca4bf0aac6a93b543c4c9400cf6eb": "relis ta réponse g) : quelle part des pas reste lisible ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.3j": {
+      "hash": "346d079aad1cf03b9418a07163d29d027adc4f439cf7aaf9280011d6da86a350",
+      "kind": "str",
+      "mistakes": {
+        "832b41faaa92c2d7270e6ee7c382f6e0c991528f53c644d8af25a1f02591826c": "calcule f) − d) et g) − e) : sont-elles égales ?",
+        "b72c8739a7e6d2f2473087b7ccde70cec73e34556cb6f6c69028884364140c1e": "compare f) − d) et g) − e)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4a": {
+      "decimals": 4,
+      "hash": "b1e75ea809fcf0089334134f40817cc8f813abba329c7baecc46d356c13b9ad1",
+      "hash_coarse": "c1dc85a0a41fd480635175e25d63361feeddebc1fe87a53020edd5da86116bff",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "416e7ffe47ce4ca821a6d3123ddbdc82478cc2f144f319d67d780281e71523ac": "décalage d'un cran : le pas 3 est l'indice 2, avec β_3 = 0,25",
+        "e298d2288abdd80e6bd119148fa06c7a596902f9e2d3048954be750e33222199": "relis l'algorithme 2 : β_t est divisé par la racine de 1 − ᾱ_t",
+        "e9b7d9fdac10783a34838fae264a93a91e675870940439f4c5ee1739d6657c1b": "relis l'algorithme 2 : c'est 1 − ᾱ_t, pas 1 − α_t"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4b": {
+      "decimals": 4,
+      "hash": "9c9d979f59e6a7964e192195fb30317e78a22e05688afe8e36b1d8f49bdc1aaa",
+      "hash_coarse": "6da5fde0c481cec3270b44eea159b2aacd31d02f536d3f466d79d0be3f3c5a7b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2734739da7f52805c415d17ddd157a521d73b2066efb83da01bcee00a81db39e": "on divise par la racine de α_t, pas de ᾱ_t",
+        "b518c7c36fe73a65d43cb155e910143efd3e26f0b7dd7964480bd11c4059474e": "vérifie le signe : on retire le bruit prédit",
+        "d181d51e87e5150fd727ee78aea6d852f05a9a7d1617a592676a109991a9312f": "décalage d'un cran : le pas 3 est l'indice 2",
+        "f5be57910f4c02daa049613c5360eb7c51e08aa7a33dbc570f69f86c50e06d68": "relis l'algorithme 2 : β_t est divisé par la racine de 1 − ᾱ_t"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4c": {
+      "decimals": 4,
+      "hash": "3459b964267c2d1a3294f9947ba66c4c3fb1279eaf1806753a1bf5d90ebc3b90",
+      "hash_coarse": "843206cb2f23b4ca22c3a3342333b93d238c8f599525542357d00f21919c869b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "347986e9d7bca3befe0d220102de0c5fa45405799ab5b264b98b683e123093ae": "c'est β_3 : la variance du posterior a un facteur en plus",
+        "77e4161d3d892e1d67aa5f2eaa51b629e520e9de1d66e50a56962e5507c44300": "décalage d'un cran : le pas 3 est l'indice 2",
+        "ffc4921876e2acfac3ccbdaed0369fac0d251e6bbd7562af0f9702a892ad1bdd": "relis la formule de β̃ : (1 − ᾱ_{t−1}) au numérateur, (1 − ᾱ_t) au dénominateur"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4d": {
+      "decimals": 4,
+      "hash": "3f37cbefb1c46577577d0c7dead0e2bbbe25e69fcab7c21cdd4865aae092e06b",
+      "hash_coarse": "a1e522910025017616216c3ef2bc403bb636af4f9a13400b325d4e57d18cf821",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2e572a7924a4e714886ebbe3293b34c345e72d1a0a9454c91882bea30aec023a": "relis la question : on demande x₂, avec le tirage z",
+        "4999dda8f21f94fdfef74fd832210c5e60cc040addeb01a59e8eb724917e6ae7": "z multiplie l'écart-type σ_t, pas la variance",
+        "a7303613b87bc3b485eb762138dc9593ae176d39adea12301673051d9989f188": "vérifie le signe de z : z = −1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4e": {
+      "decimals": 4,
+      "hash": "024ddca4d794429c56da6d36869be698aa08ff7b84a966464efb5dec38aca974",
+      "hash_coarse": "14d14b3d247465047bae15ca5981d142fbb5747e45be32b25019c4e237526896",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "124605ce556f45a255f46e0441e4cf18721bed4603216b0abb161e9df1aa9094": "relis la question : la variance est β_3, pas β̃_3",
+        "f5acf0985e59c382c79e8440b0a588e3c9075d9d549d334cca7b6ca659ca0c97": "z multiplie l'écart-type, la racine de β_3"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4f": {
+      "decimals": 4,
+      "hash": "8caf2c099e0f099959d7221a4397272b0e5b803d25eaf2b3c16f62b2cceed3c1",
+      "hash_coarse": "466ec8f1e484bbe30fc849204ed9b24feb65f9e8772afb53789766f602a5c46e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "72c03ad304fa2321ca4d5c8adf6ba4ca85682f63706dbd65d50ab763746f98ca": "tu n'as pas écrêté x̂₀ dans [−1, 1]",
+        "d1b0674a219c21c2863a49a45f58278e4353e0fdf75a571d2b407c98891091d2": "relis la question : on demande la moyenne, pas x̂₀ écrêté"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4g": {
+      "decimals": 4,
+      "hash": "cc407c1bf35bd000443ae23ef820f3c99a53547b7e47c1232201128210ff7a93",
+      "hash_coarse": "c3641da5eaddd0b84ef88273273b297d1510185cc07d625551c6131c4473a054",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2ca1e393bd7ccaffb314b81b3e58df1f50c17272f337284e2f0d5c7eb096f5d9": "relis la question : au pas 1, on prend les constantes de l'indice 0",
+        "749bac333202d3d490c332917bb95af270c7a4c783de65e47a90f1cea8090224": "vérifie le signe : on retire le bruit prédit"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4h": {
+      "hash": "bf442033935f2825d9e8a66a34efb00deb8e1de6aac7b6aa7d206fb356335cd1",
+      "kind": "bool",
+      "mistakes": {
+        "b91114aab8f62adfe9ca53acca096521900fef65d92296fda2bc3129bdf40a24": "relis la docstring de ddpm_step (« no noise at all at t = 0 ») et la phrase qui suit l'algorithme 2"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.4i": {
+      "hash": "8442a47ea9bc0177cc9210d0b2bfd96e536e4b7912b3c2946ff583d96c936eb5",
+      "kind": "bool",
+      "mistakes": {
+        "c45e945b262cd0efbd45639f80e439214a9cf2a7206fc001a2d84a92712e51bc": "compare tes calculs de d) et e) : quelle partie change ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5a": {
+      "decimals": 4,
+      "hash": "7fe12fc3d66a21be99ac4f5e3233fcf3eb14c34cd8bf3b18ac2a5177706a8afe",
+      "hash_coarse": "f950b957e41e7dee8b8c72414c25bec1c8a7ec39e0fb0fafde41c45d54169a9f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "388471095fc8b5cd1199a3fd8ed6b29729ed4a3bf4740be2d1e6b7aa20f00bb2": "relis la formule de x̂₀ : des racines de ᾱ_t et de 1 − ᾱ_t",
+        "3b258e8f4dd8a5f9eeb2b432efceced75502dbcf358a3f4ec37c9badf13a48de": "vérifie le signe : on retire le bruit de x_t",
+        "be6e024fb5947aef1ce7596570a4e8c34f4b67e5a2dc9c7d47ff9bab92944782": "décalage d'un cran : le pas 4 est l'indice 3"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5b": {
+      "decimals": 4,
+      "hash": "68d0628f68cd26e670461c4323870c5a8c6c6da82b8dbab02438016f0e49304b",
+      "hash_coarse": "f6465323aee8a33550b4c1bb6c9115bb24b9c6b739efead1855857dc56e3480c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2cd11380b1420e644cee71cd2ff99290f604b69c7aa0ae6a41a05984eaab3c91": "le pas DDIM réutilise aussi le bruit prédit, multiplié par la racine de 1 − ᾱ_{t'}",
+        "471f2411e4ce83265af3651a00aa8c675bb65a36125f3f4946087187d565b5c6": "relis la question : on s'arrête au pas 1 (indice 0), pas à l'image propre",
+        "f64b4cb4bdc6ef167aa2723e3cc987c4e7fda645bff6ad7cb17c33d681d6227b": "relis la question : du pas 4 au pas 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5c": {
+      "hash": "65e8dc82fc0525f3910c7efbd234c2198a65417cef84f93f47d75b6d40d7d256",
+      "kind": "str",
+      "mistakes": {
+        "2d41c9e1832c5d760a5c965648a46641e711f2cbd6931fc3c3e48f29d2b7b4c2": "ta librairie compte les pas en indices : le pas t est l'indice t − 1",
+        "aa9054fd00c6f52d47f7c98f1ab5802c80d5785360a4d4a5533887b0e61ccbb4": "l'indice −1 désigne l'image propre : relis la question, on va au pas 1"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5d": {
+      "decimals": 4,
+      "hash": "7765083494a321c2608a8f0ecf77ba250b694c0d73754d322d8d59ebc4023243",
+      "hash_coarse": "6b8749a95dc5e71c17c6558849034fb6203b8db7835ef7feb5f403aa62875e75",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "06378ba7915373b551e0e541f7289ddf0af3a44f8c262bb7aebad7326470ce2a": "le pas DDIM réutilise aussi le bruit prédit",
+        "7d617b5e8d3507428aec8049e278bc4b52be2729cbfed5928bdb6b79b170aca6": "décalage d'un cran : le pas 2 est l'indice 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5e": {
+      "hash": "20b7a82657d65d248801f56012d971b0d4ca89509090ac411e7a553ed3abbeac",
+      "kind": "bool",
+      "mistakes": {
+        "af14deb832084fd98f98b7954ce77b962bcf55f66f0e47dc670b10d7e383751b": "recalcule x̂₀ à partir de ton x₂ et du même ε_θ : que trouves-tu ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5f": {
+      "decimals": 4,
+      "hash": "4942967a68e5467652b12bdd3dceddbdb52dedacbab20d2e85a62498f38a4bfe",
+      "hash_coarse": "efceb3a48c56d011a0ec2d11bd0a10c564bfe72b5cfc99a75b11c6f6e99ee49d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2f35f29a43fab8887f06b4739fe23816f1f57258e887316ab3d90e453f72b9ba": "relis la formule de σ : le premier rapport est (1 − ᾱ_{t'}) / (1 − ᾱ_t)",
+        "6b492df269c39f36883da8eb37c84ed792cc2e814af915e1062503b0b5980217": "on demande σ², pas σ",
+        "755e17ea813d702bd7ab38507f3a6c8539532534e0c6ec8b81756b1431d9025d": "c'est β_4 : relis la formule de σ dans « Le paramètre η »"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5g": {
+      "decimals": 4,
+      "hash": "f7d9c648c8a58ccb1860cf131f9138bbf978e527adca6b71b738443b5990aea6",
+      "hash_coarse": "26c52849b788377777474ecc497eb100df03e7d2973ac86b9461933cd9ea43d0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "50b62084db1002a29a54f7e0fbf64ad6d25d21d014b66e92e7ab9c49b6cb5cd0": "relis la question : du pas 4 au pas 1, soit de l'indice 3 à l'indice 0",
+        "b905de9e1bf166e5693716e52ddeb8c8e9e780a24d68db6d93c27a56d4016f46": "on demande σ, pas σ²"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5h": {
+      "decimals": 4,
+      "hash": "141fb93d9aa397a3a3be8c25b660cea6371e62e121bed5aaf96f38e4feefe067",
+      "hash_coarse": "c250dc26ad220d007a7dc7acb6a3ccca0a49376f60de7b392976f69566b7ef12",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "9754053a398c6a8cc051d5728eccd56416f640fdbeae2550dc868c92b084f92d": "prends la racine de 1 − ᾱ₁ − σ²",
+        "da79c54a0cd5046d1e36656baa52b9665e24625bb8badaa7b0dbcbf95fa60076": "n'oublie pas de retirer σ² sous la racine"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.5i": {
+      "hash": "3d7edd954e848a67c41c8dc1aa29c584d365da1fb12a40a17db1738bb854eeb7",
+      "kind": "bool",
+      "mistakes": {
+        "93fc98f8152181d38a0c610d9366e966534245eabaed621492de4f4e8e146bae": "compare tes réponses g) et h)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q1a": {
+      "hash": "41720f303bfd990d3dc5f44dff8194f5c33a30516f977bcae6615a8fd8ad206d",
+      "kind": "str",
+      "mistakes": {
+        "3888407bcd4f66824bda54d8a4c8d8961382b75fce8bf171aaf51b1dbdaf97b8": "pour générer, part-on d'une image du dataset ? Relis l'encadré 🔗 de 205.1",
+        "98560c3d2eac11c494f5e3ab63b7ff5060503afc39b75132d37d247589eaf757": "relis l'encadré 🔗 « Lien avec les ch. 25 et 27 » : combien de passes du décodeur pour générer avec un VAE ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q1b": {
+      "hash": "9765d05e0491668deecbfcfe28e7f8ae69a00f1227d851ef1965a5d5264a0205",
+      "kind": "bool",
+      "mistakes": {
+        "060620eacdb00f1abfbb5d99e1d32d54aa87c468130a034cf0422a3ea62c1812": "relis « Détruire est facile » (§205.1) : le processus direct s'apprend-il ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q1c": {
+      "hash": "583732202f06286a76edfdd7cd55f3dc520de1afb3832471b931864676c232c5",
+      "kind": "str",
+      "mistakes": {
+        "226a1167aa75d3e143a25ed867bb40659b37e20fae774013bbc1f1507d6688f5": "relis l'encadré 🔗 de 205.1 : la diffusion s'entraîne-t-elle contre un adversaire ?",
+        "e8d590f06bcb3900eaf2af8f6b05c86305d0f8e5a18ed7510677cf2f85d377d3": "le VAE a-t-il un discriminateur ? Relis l'encadré 🔗 de 205.1"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q1d": {
+      "hash": "dc1613e67df69a280e9c1906d6ac9bdc82f4607fab9c698211a9e59d84ed510d",
+      "kind": "bool",
+      "mistakes": {
+        "84efb593a8140733edb6380fda3a1f5d197d53516226d563acae224736ece20c": "relis l'encadré 🔗 « Lien avec les ch. 25 et 27 » : quelle taille ont les codes de la diffusion ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q1e": {
+      "hash": "dbc664ffaf0d52b09fb8def07abd30eadc964afe3cc0641d6c300b0c930965da",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "abee8f0ad4b4ed1f52ff93dbf4f76dc447ca7c132584f863b7f715215e64ba1f": "c'est le nombre de passes : on demande des secondes",
+        "b92a65e7ecd22ebc786a884f6966403a6f139c009e9121cdcd433f1577b46be1": "vérifie la multiplication par 1 000"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q2a": {
+      "hash": "094818d2a8a2354a0889983c7f1314fcaa69b394cf1774d3bca1958ccf8f9dc8",
+      "kind": "str",
+      "mistakes": {
+        "b4f01a88802c1bcda9330e0f6e43afa29ced09409eb664cf85f62546f88969fc": "un réseau entraîné par MSE recopie-t-il un exemple ? Relis l'encadré 🧮 de 205.1",
+        "c304df0643bf9b28c3a048ca9bee692254b6886c130132a69f34af724f1a9378": "relis l'encadré 🧮 « la MSE apprend une moyenne » (§205.1) : que rend un réseau entraîné par MSE quand plusieurs cibles sont possibles ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q2b": {
+      "decimals": 2,
+      "hash": "78107d440a9641580dd6fb5192b8db493bc66a5a4adb90cd7e448e056a02678a",
+      "hash_coarse": "a1f4b98c299bedbb6d28b80d7407a26cde30ebffa5e8a43264123ec38c41e3a9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "05831900b805231409287bc8e58bbec9763f9d50ba81095ef2f5588975d79921": "c'est le milieu entre la plus petite et la plus grande cible : relis l'encadré 🧮 de 205.1",
+        "bb0f542c4a5e90f59dc4f87d31fcad0f0d4738cf05d68e7a13a2d213b8c2a4a2": "c'est la médiane : la MSE est minimisée par une autre grandeur (encadré 🧮 de 205.1)"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q2c": {
+      "decimals": 2,
+      "hash": "f967acfd1c6c3348a71c14daeb7d807fda2b378256f54c061d86f2fb75f1707d",
+      "hash_coarse": "e02d1bb5a9fae680efbc8e636d612077c33b543d4c0c5ea6ca2e76d7b57c1335",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "53eb1fe231adf9ed1a6438f62065875cf5cbad9a8900bb373cb08f870a8ce189": "c'est la MSE de la prédiction 0 : prends la prédiction de b)",
+        "a1b29cfc040fb30f85f76c6603662979ae53147cea25bfab210106fc0055cdc2": "élève les écarts au carré avant de faire la moyenne",
+        "b7226bca1370cde6bb411fb9678c5a61e46705d03f5985cb0a85333d6d425940": "la MSE est une moyenne des carrés des écarts : divise par le nombre de cibles"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q2d": {
+      "hash": "2a5e4e63860b9bebbc4fa2712fe591ab19265e9ebb9cbb8c22e1b8897e49c67e",
+      "kind": "bool",
+      "mistakes": {
+        "8d62c8b091e5a256e7d92b6bd0d384a5302231d1ca7bd26e3ba44400eff5b5a7": "relis « Ce qu'on voudrait » (§205.3) : que dit-on de ce pas quand β_t est petit ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q2e": {
+      "hash": "6ab524cbddd704aeb1ab5e9b4a2dcff1e6f59f3cdf190603c08172df7de99cc2",
+      "kind": "bool",
+      "mistakes": {
+        "88e98ffadf9d5bff252fc363228a1ac4fa3488d77af92f9331ab2c52858f256c": "relis l'approximation ln ᾱ_T ≈ −Σβ (§205.2) : à somme égale, que deviennent les β quand il y a deux fois plus de pas ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q3a": {
+      "decimals": 2,
+      "hash": "fad54c90c758d36d3f929e8f0beacc3e97d2de79178e24f59997151aab2e57ad",
+      "hash_coarse": "98f03cce9a77a0dd7bd4fd37cf10094a7aa488f9099b214d928cd80ff1c03f4e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5b082ddfe2aa19d480987580180299cf94991e4d7a84ccc7a23f07aa87f0c559": "c'est ᾱ_t : relis la forme fermée, le coefficient de x₀ est-il ᾱ_t ?",
+        "821dde2d176f9264898828ea23fc23e4b682e26de8059af02e2c168104d6d065": "relis la question : on demande le coefficient de x₀, pas celui du bruit"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q3b": {
+      "decimals": 2,
+      "hash": "25c6c597d65c25763d0625df0ff5ea63983e70adcca46841b6518cad4e722314",
+      "hash_coarse": "ef22d2133a9888058e66f00cb45d8e46529016d0478d14c16c49f7015d0a11cd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "6f6f88f03b8feffdc7148c78da558fbe48985a87911d928b3f6299a8fe3656ac": "relis la question : on demande le coefficient du bruit, pas celui de x₀",
+        "947b55c0baf6487545c8a24f3b38ff546aa7a1ebfad0c24a2720275e68ef9156": "c'est 1 − ᾱ_t : relis la forme fermée, le coefficient du bruit est-il 1 − ᾱ_t ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q3c": {
+      "hash": "933ee18444e10fa952a61a07a0846ce80e94ab0f48df5763e552c20aebb3ecf2",
+      "kind": "bool",
+      "mistakes": {
+        "b0121028247209358fd7aab5456056484175435c88d80040dc3f938c1d06f962": "calcule la somme de tes réponses a) et b) ; relis la dernière phrase de « La forme fermée »"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q3d": {
+      "decimals": 2,
+      "hash": "2bdad7aec0a4a3a46144863959e87a4e609d20cc6c29cbe8bb5c485262bdcfad",
+      "hash_coarse": "56579a3dd6b1dac52b6a5c666dee9ccadc9a15828ad7de0492b76dfc2bd08934",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6035a05be8f0e51f1f697e8e54009152e99ce689d8510aa4e10f7a733b75db83": "le SNR met la part de l'image au numérateur",
+        "f4658d6921c0a0798b3845387377223fb5755c182f6027d441d63629b179c9f4": "le SNR est un rapport de variances, pas de coefficients"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q3e": {
+      "hash": "ab9234cd9b9ab93108c2b2c3fd40254883d53e191d3caecf9713bbac5b92c8a9",
+      "kind": "str",
+      "mistakes": {
+        "44ae4ae47533bffd279a21c65c1601bf53b13c2c6c28a1538edad48f0d4a9be1": "regarde la figure `plannings.png` (§205.2) : ᾱ_t reste-t-il constant ?",
+        "9b87a6104ca9eedbdf89f595806d34a2e6a6d9ed5507f471df68f86171170b88": "relis la définition de ᾱ_t : un produit de nombres plus petits que 1 peut-il croître ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q4a": {
+      "hash": "bfb6795642a6d6b50d64e3a40e8b3bb2d4fff9eaa5ee18f857e3bd76cb9c2863",
+      "kind": "str",
+      "mistakes": {
+        "5a67a8bc195589b301e6e26ef998d5504f369e0cc0e83294614b9e4bd7855dd7": "relis « Prédire le bruit » (§205.3) : la formule de x̂₀ est-elle une approximation quand le bruit est le vrai ?",
+        "afc7240a09d1900a530ba6801608680382c0f9ba4e916dcafdb92b7158e9f41a": "relis « Prédire le bruit » (§205.3) : la forme fermée s'inverse-t-elle ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q4b": {
+      "alt_coarse": [
+        "0ea6fb4152e772a877405d93fc9c9e5fa97403121242285b6e4949464d41d0e6"
+      ],
+      "decimals": 3,
+      "hash": "178742548729aa10e29912caf40ed673ca98d46c5b2df4373d38b54f6e2658b8",
+      "hash_coarse": "8cf32c251715715e3549a6e671549d4b8a0e1b0d5f9aef859cfaed5c2eb6ed08",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4a7f5bc959d6dd62cc18c51bc96a037d6ea2557f8198c380af127800b6a3be88": "n'oublie pas de diviser par la racine de ᾱ_t",
+        "59248d3c9978905b14f5f3c063f7654c5a7cb203ce53f7fc134eb9a6d67554e1": "relis la formule de x̂₀ : on divise par la racine de ᾱ_t, et le bruit est multiplié par la racine de 1 − ᾱ_t",
+        "998f6203b9d0f332c22a9646fece10205d13d3827ef97b9ac73cdaf59237f8bf": "vérifie le signe : on retire le bruit de x_t"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q4c": {
+      "hash": "62a30d71a6101343b7544e264c36b581ca39eedc02c34195670182ce004642bd",
+      "kind": "bool",
+      "mistakes": {
+        "e3f745aee885809afac44ce82183aa32bbcc9bbb0f085be5874961399d0d5a57": "relis le paragraphe qui suit la moyenne μ_θ (§205.3) : qu'ont trouvé Ho et coll. pour la prédiction de x₀ ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q4d": {
+      "hash": "55b2248d6da4e6895865677bf0ac75bfe858b2e7040a1bf1db39aff7b8dd90f6",
+      "kind": "str",
+      "mistakes": {
+        "075c7ac7f7fca72155e760f920a3d43d73767d503a3de56b1467269453218c38": "le réseau reçoit-il encore t quand il prédit le bruit ? Relis « Dire au réseau quel est le pas »",
+        "47a9ff3e1f7a67440cf28b19b2496820af96f3d6676d27b5f8d80a1f22725456": "le bruit est-il toujours plus petit que l'image ? Relis la raison donnée en 205.3"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q4e": {
+      "hash": "71a6655e3d6099ce9f99be8a580f3b813b45f63301a907ed60adb58d6427599e",
+      "kind": "bool",
+      "mistakes": {
+        "3ed0a3be88fd004b993adcec81573eaf7819d917d1ea5a3621a780ff577f7a4d": "relis le paragraphe qui suit l'encadré 🧮 sur Euler (§205.9) : les deux « v » sont-ils la même grandeur ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q5a": {
+      "hash": "e1cc67682c4ff50a34a369e5128e3a9665034f8b5268bfed646fed0b86f6579e",
+      "kind": "str",
+      "mistakes": {
+        "3e32a67cdd1a6d965cce6563c49ea7ff7bd229844195bb2bdf58803b0d526c3e": "relis « Reconstruire s'apprend » (§205.1) : combien de réseaux sert-on pour tous les pas ?",
+        "45829bd96fc3743ec3ba777759e74f54f1bc8f1cb9d3deb584d9d287d6e0ab5f": "ᾱ_t se calcule-t-il dans le réseau ? Relis « Dire au réseau quel est le pas »"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q5b": {
+      "hash": "ce2341a06111b77bf7037f83d0b975ccb798cbdd77b1b857fb96ecd4f34ede85",
+      "kind": "bool",
+      "mistakes": {
+        "f138295139b743639d4b2842c931c2ace22fafedf4e5ce134c3f71ac1160e34b": "relis « Dire au réseau quel est le pas » (§205.4) : que dit la fiche d'un nombre de 0 à 999 donné tel quel ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q5c": {
+      "hash": "55b7f4d34aef60e4bc7f5d0432c0f8fd824b93333cd689cd5b189b683c121cdf",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4dff560bed34a418ef18e213ee7ff0b3dbd293e89fed39c7b797f48a6fdb1cae": "c'est le nombre de colonnes : chaque couple en occupe deux",
+        "b6e3853db5d5807c1cb712966538d3b74912979114a6750bb84fd0cc71440ed6": "relis l'appel : d_model = 128"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q5d": {
+      "hash": "9975b60afffde0356c764540511f5391df2bb8cafbfb57c5b08c9172e72d8465",
+      "kind": "str",
+      "mistakes": {
+        "604f21ea791aaf4b0c38454dda3e6ea44d598500971fe7f73dbb854840eb622b": "relis la ligne `h = h + self.time(temb)[:, :, None, None]` du bloc résiduel",
+        "7cd09679d32341ca8a9a0b24a53e63a6f3c11c4d77a7c69dc5d2d17d02125925": "relis « Un bloc résiduel conditionné par le pas » : l'encodage est-il concaténé ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q5e": {
+      "hash": "b9f056bf34dd455521092e481af610368d4d6599694fee1f9e58acee7c6f081d",
+      "kind": "bool",
+      "mistakes": {
+        "40da199f89a6be9d55d75901dca268a043421bbc64326485e61dce115b5607ea": "relis la fin de « Dire au réseau quel est le pas » : que dit la fiche des permutations de colonnes ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q6a": {
+      "hash": "2af279216aa4a1eef516d317f75367fb5e479522b1d2c3d0fc1b487909017dcb",
+      "kind": "str",
+      "mistakes": {
+        "6d4d83e07df204a3c3dd4288ecbf5971f835988e0091319bd523677ba5543401": "relis « Le U-Net et ses connexions de saut » : à quelle résolution relient-elles l'encodeur et le décodeur ?",
+        "afc15161be5ba7bee0d167a69393dee56a41290a24cfe634b94f90254a57baa6": "c'est une connexion résiduelle : relis le piège classique « deux skip connections »"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q6b": {
+      "hash": "3243595f7f596899ce48af140a9797adab88a4f0af263ea1f4d6d1a252f21ec7",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "0f43e0f63f59276edc86ad96d545c78d3cf70945276c5ed8841ffe154bca8b53": "relis la question : 128 canaux du décodeur et 64 de l'encodeur",
+        "8a45ccb2f94a9d2e59cabfb9e208586511e0fc80bd7c2ae5fa42487d5eecec37": "la connexion de saut concatène : les canaux de l'encodeur s'ajoutent à ceux du décodeur",
+        "ecdd1eebfcdaaedd99443d79bdbd5c7f964a3faa14d66017e6070a6943eb74b4": "relis la question : la convolution suivante reçoit aussi les canaux du décodeur"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q6c": {
+      "hash": "9b502f04c9de40001d4adca69320a4df6a7540b25f502b0c2c4c8dbfc4fb92cf",
+      "kind": "bool",
+      "mistakes": {
+        "bf2d576b677332d6a3e99313283cd809e52d1fe04e66cd48db0a41a1b9f23488": "relis le paragraphe qui suit la figure du U-Net (§205.4) : que deviendrait la sortie sans connexions de saut ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q6d": {
+      "hash": "59035dd78a86e6e02d09a6c2661a9c548d0ccd95bae383884ff6100a736f1618",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "005f105e892c4e71059db82a82bd8ed359f3bc157d521686ba9c1e2f5c63bc86": "relis la question : trois réductions, pas deux",
+        "f67af41f399ed146b12d4a9576c0cc09f6555fd6ea35d1a4a3e013bfa10a8274": "compte les réductions : il y en a trois, chacune divise la largeur par 2"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q6e": {
+      "hash": "48d8fa481a652aebd75e43dcc41732246acc80792ddf06a98f990ca6033d501c",
+      "kind": "str",
+      "mistakes": {
+        "459f86a140bb9fd2f049810500792482265dbf41bf6182147c26d7afe02e07d9": "la group norm a-t-elle des paramètres γ et β ? Relis le compte du bloc résiduel",
+        "cbf6d0438c145c250303285e465aa3f80fd620b66b13c5367ad6454c584e07e5": "relis la définition de la group norm (§205.4) : que normalise-t-elle ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q7a": {
+      "hash": "7abd9a8d854c2571a3934d519e409161e7ed3d2d53f9a0ce9e20f92cc5f3058c",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "a6e14655a09094448176c4cb5e2331c1360d2038ca64ee7acad944d59f4fd436": "vérifie la multiplication : 1 000 passes de 0,05 s",
+        "e6ed7d79d6ba9dcc4dbe2b5d2d89f01e7592f7120e910779d8d60bac6b2795a9": "c'est le nombre de passes : on demande des secondes"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q7b": {
+      "hash": "eaab222072e0334799831a31a53e4751c5b86148ad42644a57743c84093a759e",
+      "kind": "bool",
+      "mistakes": {
+        "618ff13307c3a4a4de193992c5d98993f0993d3bb9db842ad3c43c0096610dad": "relis « Ce que coûte un échantillon » (§205.5) : que tire-t-on à chaque pas ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q7c": {
+      "hash": "4454b8b8d94464306b0d6fa11a15d819550b38912c8ed57bdd29efecd705d9a4",
+      "kind": "bool",
+      "mistakes": {
+        "1a2e40b0ed14ed8c03529106a3a38687d1fe8d8e918819ab195ea53875b8c4f3": "relis la phrase qui suit l'algorithme 2 (§205.5)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q7d": {
+      "hash": "9d22a7f7f7ca7602cf48241f6955a963f194d91106c3957f125ba3d546e7576a",
+      "kind": "str",
+      "mistakes": {
+        "5e4da9c8bde398d900293eb748e4e70f4816392f4fc046290e932918dd11cd0e": "le planning interdit-il les batches ? Relis « Ce que coûte un échantillon »",
+        "fe0e1683a77ac849ed7525f5a747e7b8aaeb7730bfac51ea5f063d81b0b73b9b": "un réseau peut-il servir plusieurs calculs ? Relis « Ce que coûte un échantillon » : de quoi chaque passe a-t-elle besoin ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q7e": {
+      "hash": "0fe870619113a3783c249f1d24f12883a458574e5c59de8d50325bab32ca39a5",
+      "kind": "str",
+      "mistakes": {
+        "10daebb7ace8e2f053d4387964be474262d4128a170dad8e4f433efdc0b9ea6f": "relis « Quelle variance ? » (§205.5) : le réseau prédit-il la variance ?",
+        "a324d0df25317e72a5a324d995cfafbfa8cfdff3f1d739bcdef8e3b780cf1998": "relis la fin de 205.3 : β̃_t ≤ β_t, et l'égalité ne vaut qu'au premier pas ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q8a": {
+      "hash": "4da32600807556aa9d50ffea57d2f49e09818c57f0a821202c78ebb248a8a8e8",
+      "kind": "bool",
+      "mistakes": {
+        "c5da9d1db4071e5f788099ca426d88f231f2539222a298e5f11335ac70664a55": "relis « L'idée de DDIM » (§205.6) : l'entraînement change-t-il ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q8b": {
+      "hash": "01cefb5acadf0ba72942e087616cb638480f47471af7a121d262af006e8a2de9",
+      "kind": "bool",
+      "mistakes": {
+        "94ffca2e98cd92f7b4bfa09853240e7b84068f0978b91758d230edfff0dcbeab": "relis la formule DDIM avec η = 0 : y a-t-il un tirage ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q8c": {
+      "hash": "80da9ea4e24f2e5b587aa87232a1c245752fc4b4676f6dba3b01f6ddeab92f94",
+      "kind": "bool",
+      "mistakes": {
+        "5ea00f61d1ae74d9b7205097a9b4e932af46a2b20355e6c6ec8db00502755274": "relis « Le paramètre η » (§205.6) : que vaut σ² quand η = 1 et t' = t − 1 ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q8d": {
+      "hash": "1b89795826b2a5f2beea7e1ded6887b1cfd84d805119adc79a3770141408f59c",
+      "kind": "bool",
+      "mistakes": {
+        "bad9cf5a3a2bcdcc8fb16410ff7b82ecee63ac8ee592e63c75ffd738d10720f9": "relis l'étape 2 de DDIM (§205.6) : t' doit-il être le pas juste avant ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q8e": {
+      "hash": "e878d55ce26ec8d2ef191036bd47bfd7f67d2b0e9e37e92a36a6afdc9d13f89d",
+      "kind": "bool",
+      "mistakes": {
+        "eb03951d30da60b4b3143c011387c547ab91daae493641addee2300aa5927ee4": "relis « Pourquoi c'est plus rapide » (§205.6) : une trajectoire se suit-elle aussi bien avec très peu de pas ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q9a": {
+      "decimals": 1,
+      "hash": "0af48be07708958405ce64cf7f9de3610a3d19de99c05f7e84a524e0a223a910",
+      "hash_coarse": "17533303c3aa63bf1014df2b19154c8e0e0ede98269b51a9915f2206b2122eb4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9c38cdc50d8af29fa76486ca47706708d368295bf58d384216b314081a1a5c08": "relis la question : w = 2",
+        "d4faca14fc495a4a7adbe5a2a4cde6be696778f638667e31fcd5eadea2cb8942": "vérifie le signe de l'extrapolation",
+        "e71ede53935594605b7002922965cbf8e2e048c17dfbdf7a50e06fa115c6a15f": "(1 + w) multiplie la prédiction avec condition, w celle sans condition"
+      },
+      "sign": -1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q9b": {
+      "hash": "fc0809dbd7bd694ed8b8d16252c8223fc7ba317291e35cc2e63f2dde8db86f75",
+      "kind": "str",
+      "mistakes": {
+        "a150331c475c472bd4285172026be460da0700cbc96ec9493c4f80b3ee551acc": "relis la formule avec w = 0 : quelle prédiction reste-t-il ?",
+        "e0bbbac766ded1f58fbad31a2f8bf296ee4d323cb828ecc7cb6da333474511cd": "relis la formule avec w = 0 : y a-t-il une moyenne ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q9c": {
+      "hash": "d009eaa1efb5637854a0ddaac6346b1e70ab010a86f83ca9c26591ab9dd0c89e",
+      "kind": "bool",
+      "mistakes": {
+        "f7fe497ffd73a7977276505947639dbfa911bd0d038d91c4fbab9e7d22678468": "relis le paragraphe qui suit la figure de la guidance (§205.7)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q9d": {
+      "hash": "707de4c940625c869ed0efb6cbb403730f2c8bcc930b970e1166e8a36c7c64e5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "b303346abd2026d00f738207966949523bbfecaabfa4f2aab421da1d29f1f724": "guidance_scale = 1 + w : résous pour w",
+        "cdc587b3db080e46dfce68faccaefbaf088a77b8948045092698d368fb52fc29": "relis le piège classique « deux conventions pour l'échelle de guidance » (§205.7)"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q9e": {
+      "hash": "855a2937d8b85819311901fd68a8ece8d6def5f8ef66c61574a9ef80441b45fe",
+      "kind": "str",
+      "mistakes": {
+        "31c9cf7981900a6d7cd27609d2120c6aff875bae63e6cf78a7f61b1702261821": "relis « La guidance sans classifieur » : combien de réseaux entraîne-t-on ?",
+        "e29822ec937287f4330e353addfab329cf07b0f458b9f1c4658cac5f3fc2bbbc": "le réseau peut-il prédire sans condition s'il n'a jamais vu ∅ ? Relis « La guidance sans classifieur »"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q10a": {
+      "hash": "11f4e64b983a4ca64c809ecf789230b362c61ae9d79aa239d4a9553fa4c5352e",
+      "kind": "bool",
+      "mistakes": {
+        "5e726cfd17b47f2d011e4970cc5364b4c129d93e4e48e49ad044a3dc4ee3486f": "relis « La mémorisation » (§205.8) : que verrait une distance de Fréchet d'un modèle qui recopie ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q10b": {
+      "hash": "7b2d919e66fdd1c265c90a03ac4e21d35e093ad3d08a838df0ecff069bd8f47c",
+      "kind": "str",
+      "mistakes": {
+        "ab8afd626935256f6c7dc30db96b5806bc1cb0cf5fd1e520b58a7aa0ec8fb372": "la loss dit-elle quelles images sont recopiées ? Relis « La mémorisation »",
+        "e215f80387ac93053f3578231a064482fc765154e7a01d08a94d08e6fa13feb4": "plus d'images rend-il la distance de Fréchet sensible à la copie ? Relis « La mémorisation »"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q10c": {
+      "hash": "821c814fedf24a9d0200dd5d6790a12db607a7b739dd9b14cb4ed3f5279cc1a8",
+      "kind": "bool",
+      "mistakes": {
+        "02d0e2a5fa036f7fde108662747407673deccc46cd1c371b3781b3b6c7731b5b": "relis la dernière puce des résultats de Carlini et coll. (§205.8)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q10d": {
+      "hash": "f34bd1584af8b16979ed145e4c73d9acb0bf31fb28cfdee1c41f62ed5adcd32c",
+      "kind": "str",
+      "mistakes": {
+        "5b54f0f1eb463f0868962b2dd21e70d93e1cdca35edb1a220c75d9d031287d65": "la distance dépend-elle du nombre d'images de façon proportionnelle ? Relis les trois règles de 205.8",
+        "af07744aab66b4db22e7fcb62cc2a3e956bc6dd0471b2372ae14fb881bd64878": "relis les trois règles de « La distance de Fréchet » (§205.8)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q10e": {
+      "hash": "df71f7effb20d75f4e6d27b37ab888bfad5d4735acca449038b8100afd2a68c8",
+      "kind": "bool",
+      "mistakes": {
+        "0b1ebe5c2153c4a9ce97a2e1ba086e72f3adb33d9622b657ceaf2311ef3dbe35": "relis « Fidélité et diversité » (§205.8) : un seul nombre sépare-t-il les deux qualités ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q11a": {
+      "hash": "de96e14b3f214c5c80b2f82bc5c815e0ed292442779bc290eb2ee79bc69d1d6b",
+      "kind": "int",
+      "magnitude": 4,
+      "mistakes": {
+        "18e86e4853606208274e2971b5014738375953086fd6a797314118e18bbf9da7": "relis l'énoncé : le latent a 3 canaux",
+        "5f9fc6ffe61cb280aa8d448fbf094f0feabd9fed327f270a5791a599f096fb80": "n'oublie pas les 3 canaux du latent",
+        "c6b4a99e948a5108a410a9a3379362f3e6c636093f116c304adf31343db52a40": "le facteur f divise la largeur et la hauteur, chacune"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q11b": {
+      "hash": "92353b2a193a5a3de8a50def67158fa4ce80a0c71d3596b70471b8631cbd53d8",
+      "kind": "str",
+      "mistakes": {
+        "e33d29a407f8fcf9a138894cf7ea3af1f3f4808d124ac4a13fedcc172b233c15": "relis « Les transformers de diffusion » (§205.9) : d'où viennent les tokens d'un DiT ?",
+        "f1b52e9f20587d428e885f2e8b20a36557a1bc04a4ab091326a402e2f24bd1f8": "relis « Les transformers de diffusion » : combien de tokens pour un latent de 32 × 32 × 4 ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q11c": {
+      "hash": "6a7b88aa45fd369ec0f92a2cbeebbbf30b7f1ee20c42f334b1f3c5810a5387ca",
+      "kind": "str",
+      "mistakes": {
+        "69c0cb644c9c8a7824267cea49b8c14fa9197229ee94afeeeb74ff020d6e3a9c": "dérive x_s par rapport à s : le coefficient de x₀ est 1 − s",
+        "792ffe96fc88f3f8fe676c6c09ff9e3527bd9de3461ef3db9a450522a50b96d9": "dérive x_s par rapport à s : vérifie le signe"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q11d": {
+      "hash": "0dca92cd291d37b70364061f9a14c8e65a4ae1e965ea157e481e2461638b7961",
+      "kind": "bool",
+      "mistakes": {
+        "9c16cd3c4d2553814963114122b540229b448505cfacf1eb2158817303ad7a75": "relis l'encadré 🧮 « la méthode d'Euler » (§205.9) : d'où vient l'erreur d'Euler ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.Q11e": {
+      "hash": "bf5e4c14eea17cfc70820fa33985635faaf2f089a980d451de5e3eae74af2039",
+      "kind": "bool",
+      "mistakes": {
+        "308a9a5fa9dad9de014611ef21294d40d3ae29a34c9bd360d39899a5356f5bee": "relis « Les transformers de diffusion » et « Flow matching et rectified flow » (§205.9)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R1a": {
+      "hash": "202d43d8d1c269bb9e12d78036ab5f808798ab51438e19bb4f3660119673093b",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c84fc6e33ed6f157a8b2f8f6c243c822cfd54635e73af0f6a9da333b1661b944": "la colonne 1 est impaire : sinus ou cosinus ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R1b": {
+      "decimals": 2,
+      "hash": "6d3933b0ed309f90a2b3b717d8a9549f18e8e27dd36fbebd78d20dd7714eba6a",
+      "hash_coarse": "39a734eef1f0c33882483056bb9048911eb7ff24c729c08f5ac3f8aa6b0fbbab",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6530bbdb6de830448c4b5982c0260de9cb3447d3df4aff1d403523e01dbd13b1": "une période de sinus est un tour complet : relis la formule de la colonne 0",
+        "d45c99575cc61fd84c83f38d3e968293ba7cfc9bc169d97839c5499aa31e0c6f": "relis la formule : à la colonne 0, la fréquence vaut 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R1c": {
+      "hash": "212a846eeb25c4f27c7fdd4aecff2bdb6d6e1c331d715b3fd547d5f80e065a37",
+      "kind": "bool",
+      "mistakes": {
+        "88e4ea5a7d6d976e585014df83019fb25b461e03efc74812fd9488bc9404f74c": "relis l'encodage sinusoïdal en B3 : quelles colonnes changent vite d'une position à la suivante ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R1d": {
+      "hash": "a494f7ec38958838c6a251d20bbbc14cade36aecae15f42c65d06e7b63ca9de1",
+      "kind": "bool",
+      "mistakes": {
+        "decc4eb27374b221e6c54741e92d1ec66ccf8b37c674708ad19d164f0334b59d": "calcule la période 2π · 10 000^(126/128) de la dernière paire et compare-la à 1 000"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R1e": {
+      "hash": "3db9c0c4da66de802637bc7cf6fba4afc0a7e824a3c71e46a625151c3cf3992b",
+      "kind": "str",
+      "mistakes": {
+        "7b231704a5d077fbfd258b0c159aa1fb029bf1a88358d7161e7f55103aa30991": "relis la formule de l'énoncé",
+        "bb926728b100bed3001cd286de27387f0c7c904cfe1a3cfe6e4e6c116e27e774": "relis la formule de l'énoncé : PE[p, 2i] est-il un cosinus ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R2a": {
+      "fractional": "relis le calcul : avec ces nombres, le résultat est entier",
+      "hash": "b83d9d99b3eed1583b2eaa5e72d559a9750b87880502487d824686e070b64f89",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "61b9200131427d9b18dc01905732e1dabfe69943e249762a18f16f5858b34723": "il manque un des deux termes de la formule : la moyenne ou la covariance",
+        "8b7f9a80672acd1ff7d4e7c15c6d0713e3654cc17c6cb47cf2021cc9041e86d6": "n'oublie pas le terme −2(Σ₁Σ₂)^(1/2)"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R2b": {
+      "hash": "11cc26a8c983eac465f3bb2e44c43ae71a9968feebf6067c81917a05612dd26d",
+      "kind": "str",
+      "mistakes": {
+        "b4ac2d11ebe3fa70c291149a9e7db70fa53d79b44857ddaa0e5469ac5908269a": "la distance de Fréchet juge-t-elle chaque image à part ? Relis la formule",
+        "d55440c668e38f4ee072c9da2837bf60c89c82879cb7cdc85bd414fcb74d5286": "une distance nulle demanderait la même moyenne et la même covariance : est-ce le cas ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R2c": {
+      "hash": "a61c2d446bd2861f1887bf32edf677f26d111c5d28f65c8e76c508a9b7cf26dc",
+      "kind": "bool",
+      "mistakes": {
+        "f160ca0d992a0213e91c4904affc4897ee2a4f4b07361b40e5e88095a3340c72": "chaque terme de la formule est-il nul quand les moyennes et les covariances sont égales, et seulement alors ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R2d": {
+      "hash": "521d91d41d08c0569a24e066e9fb8139ac59e3e17dbe556046ab889c2f0c1412",
+      "kind": "bool",
+      "mistakes": {
+        "822d57a9d743d51b5c39cebd8cdd22da893fad64e90e4a1910c34b288f92efee": "relis le ch. 27 : sur quoi le FID calcule-t-il ses moyennes et covariances ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R2e": {
+      "fractional": "relis le calcul : avec ces nombres, le résultat est entier",
+      "hash": "1b800428d7a27cd4c844b6bd8ae19887f12b829fcc101430c86efae5dd510548",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "871d1262d4de4d3e5f1e46012a83abbf98c7261c9f7eaf89cd3f0a476504d294": "un générateur qui rend toujours la même feature a-t-il la covariance des vraies images ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R3a": {
+      "decimals": 2,
+      "hash": "74d92e69dd584e8cd12f4067743354cb01abc0f6d2d58915f7641709340bb60b",
+      "hash_coarse": "c2c7317387fe4e7a5fb26410de3d5731c4fac5fd5e9c51c62f17aa940bd86618",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1d0008746d8f4c5f9108f2fd031efbcc97b6e531e17de8d2302bb26206b5ab93": "z = μ + σ ε, avec σ = exp(0,5 ln σ²), pas ln σ²",
+        "27633c0bbbf1269b90dd5d644b3efc9e2d7f1c6ec1db27a153bf4cb9e7e45855": "vérifie le signe : ε = −2",
+        "ea380cbd28f2038e3a9b0895ecf26daccbf07fc6f1238f5671a0b0e9e9dbb475": "ln σ² = ln 0,25 : σ est la racine de 0,25, pas 0,25"
+      },
+      "sign": -1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R3b": {
+      "decimals": 4,
+      "hash": "73a66e9612aa81154a4233733a66e20d6aedcf4e7e1426ac29e9ae347dc48788",
+      "hash_coarse": "bcbf3cb8f72efc38a22c0897eae033cec3ebdc3f73ca5e2c6da87e5206c6d433",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "42a511f3dce60b38f25218a5da75f01c30f8a09a3798e77c5cd80ae3d3dc2382": "σ² = 0,25 : relis le terme de variance de la formule",
+        "744a9b5fdf61334f15283a06bb6c76b42a4b8cc1c573f4cd06598c9f673254c0": "il manque le terme − ln σ²",
+        "77983f8233313ae7781115dd37d83a6323f4a3674cb422ec42a6641e1efb50b3": "n'oublie pas le facteur 1/2 de la formule"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R3c": {
+      "hash": "352cb1b04e22286fc59491023e341657601ca40578e875104af175a1818e213a",
+      "kind": "str",
+      "mistakes": {
+        "a16bae3bdbec9d4b495b25af4acd191b5e92c8666381794f53465c77a0e4bf02": "la reparamétrisation change-t-elle la taille du latent ? Relis le ch. 25",
+        "f0f8f17ae82e9367b6ef7bcd8fd142f46be101b3afa9c273b32178011c2faa1c": "z reste-t-il aléatoire avec la reparamétrisation ? Relis le ch. 25"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R3d": {
+      "hash": "c398a6d639c0ea3792ad3f1b1b713da8a72941f1d7860867e0343a4ba2722df4",
+      "kind": "bool",
+      "mistakes": {
+        "581a22bc9fd732e9f2d6e7a2c48dddd90113af977cc504dca6bef6d5e8d61915": "relis l'encadré 🔗 « Lien avec la reparamétrisation (ch. 25) » (§205.3)"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.R3e": {
+      "hash": "0a080ec5301e6179de5fa093fb68541cce5ec060f5926b79ca4ab3913dd2855f",
+      "kind": "bool",
+      "mistakes": {
+        "ad6da6ea75c544bda26552375fe83f0b99b8dba2a3371fbf023f80e19eceeddb": "relis « Le lien avec l'ELBO » (§205.3) : ce terme dépend-il des paramètres du réseau ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

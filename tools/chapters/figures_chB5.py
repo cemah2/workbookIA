@@ -19,7 +19,8 @@ Writes small PNG files into chapitres/b5_diffusion/figures/:
 
 Nothing here is trained, downloaded or timed. The 2-D data are neither the ring of Gaussians of the notebook
 (B5.18 to B5.20) nor MNIST; the guidance scale (w = 0.5) is none of those of B5.1 and B5.26; no figure shows a
-noisy digit or marks a step number (B5.3, B5.13, B5.15).
+noisy digit or marks a step number (B5.3, B5.13, B5.15); plannings.png has no grid and no tick at ln SNR = 0
+or alpha_bar = 0.5, so that the crossings asked in B5.3 cannot be read off it to two decimals.
 """
 
 from __future__ import annotations
@@ -193,9 +194,12 @@ def figure_schedules() -> None:
     axes[1].set_ylabel("$\\ln \\mathrm{SNR}(t) = \\ln \\frac{\\bar\\alpha_t}{1 - \\bar\\alpha_t}$")
     axes[1].set_title("Rapport signal sur bruit, en échelle logarithmique", fontsize=10.5)
     axes[1].set_ylim(-8, 10)
+    # No grid, and no tick at ln SNR = 0 or alpha_bar = 0.5: the crossings of B5.3 must be computed, not read.
+    axes[0].set_yticks([0.0, 0.3, 0.6, 0.9])
+    axes[1].set_yticks([-7, -4, -1, 2, 5, 8])
     for ax in axes:
         ax.set_xlabel("$t / T$ (avancement de la chaîne)")
-        ax.grid(color=wbplot.GRID, lw=0.6)
+        ax.set_xticks([0, 0.25, 0.5, 0.75, 1])
         ax.legend(fontsize=8.5, frameon=False)
         ax.set_xlim(0, 1)
     fig.tight_layout()
@@ -212,7 +216,7 @@ def figure_unet() -> None:
            (6.25, 0.8, "conv stride 2\n+ bloc du milieu\n128 × 7 × 7", GREY)]
     dec = [(8.5, 1.9, "conv. transposée,\n‖, bloc résiduel\n64 × 14 × 14", ORANGE),
            (10.3, 3.0, "conv. transposée,\n‖, bloc résiduel\n32 × 28 × 28", ORANGE),
-           (12.1, 3.0, "conv 3×3\n$\\hat{\\boldsymbol{\\varepsilon}}$ : 1 × 28 × 28", "#ffffff")]
+           (12.1, 3.0, "conv 3×3\n$\\boldsymbol{\\varepsilon}_\\theta$ : 1 × 28 × 28", "#ffffff")]
     nodes = enc + dec
     for x, y, text, fc in nodes:
         box(ax, x, y, 1.6, 0.86, text, fc=fc, fontsize=8.4)
@@ -255,7 +259,7 @@ def figure_ddpm_ddim() -> None:
         path = ddpm_path(starts, abs_, betas, np.random.default_rng(rng_seed), mixture_eps)
         for j in range(len(starts)):
             ax.plot(path[::5, j, 0], path[::5, j, 1], color=C[j % 8], lw=0.7, ls=ls, alpha=0.8)
-            ax.plot(*path[-1, j], marker="o", ms=4.5, color=C[j % 8], mec="white", mew=0.6)
+            ax.plot(*path[-1, j], marker="o", ms=8, color=C[j % 8], mec="black", mew=0.9, zorder=5)
     ax.set_title("DDPM : 1 000 pas, un bruit $\\mathbf{z}$ neuf à chaque pas\n(deux tirages depuis les mêmes "
                  "départs : trait plein, tirets)", fontsize=10)
     ax = axes[1]
@@ -264,7 +268,7 @@ def figure_ddpm_ddim() -> None:
     path = ddim_path(starts, abs_, steps, mixture_eps)
     for j in range(len(starts)):
         ax.plot(path[:, j, 0], path[:, j, 1], color=C[j % 8], lw=1.2, marker=".", ms=2.5)
-        ax.plot(*path[-1, j], marker="o", ms=4.5, color=C[j % 8], mec="white", mew=0.6)
+        ax.plot(*path[-1, j], marker="o", ms=8, color=C[j % 8], mec="black", mew=0.9, zorder=5)
     ax.set_title("DDIM ($\\eta$ = 0) : 50 pas, aucun tirage\n(même départ → même point d'arrivée)", fontsize=10)
     for ax in axes:
         ax.plot(starts[:, 0], starts[:, 1], "kx", ms=6, mew=1.2)
@@ -272,8 +276,9 @@ def figure_ddpm_ddim() -> None:
         ax.set_ylim(-3.0, 3.0)
         ax.set_aspect("equal")
         ax.grid(color=wbplot.GRID, lw=0.5)
-    fig.text(0.5, 0.01, "croix : départs $\\mathbf{x}_T$ ; cercles gris : les trois gaussiennes des données (1 et 2 "
-             "écarts-types) ; prédicteur de bruit exact, sans réseau", ha="center", fontsize=9, color=MUTED)
+    fig.text(0.5, 0.01, "croix : départs $\\mathbf{x}_T$ ; ronds cerclés de noir : arrivées ; cercles gris : les trois "
+             "gaussiennes des données (1 et 2 écarts-types) ; prédicteur de bruit exact, sans réseau",
+             ha="center", fontsize=9, color=MUTED)
     fig.tight_layout(rect=(0, 0.04, 1, 1))
     save(fig, "ddpm_ddim.png")
 

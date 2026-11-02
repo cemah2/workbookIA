@@ -138,14 +138,17 @@ def call(function, *args, expected="a result", **kwargs):
         raise AssertionError(f"expected {expected}, but {name} raised {type(exc).__name__}: {exc}") from None
 
 
-def array_result(result, msg, shape=None, float64=False) -> np.ndarray:
-    """The learner's result as an ndarray, checked for None, type, shape and (schedules) dtype."""
+def array_result(result, msg, shape=None, float64=False, inputs="") -> np.ndarray:
+    """The learner's result as an ndarray, checked for None, type, shape and (schedules) dtype.
+
+    `inputs` names the shapes of the inputs (e.g. "x0 of shape (5,) and t of shape (5,)") in the shape message.
+    """
     if result is None:
         _fail(msg, "expected a NumPy array, got None (did you forget the return?)")
     if not isinstance(result, np.ndarray):
         _fail(msg, f"expected a NumPy array, got {type(result).__name__}")
     if shape is not None and result.shape != tuple(shape):
-        _fail(msg, f"expected shape {tuple(shape)}, got shape {result.shape}")
+        _fail(msg, f"expected shape {tuple(shape)}" + (f" for {inputs}" if inputs else "") + f", got shape {result.shape}")
     if float64 and result.dtype != np.float64:
         _fail(msg, f"expected a float64 array (docstring), got dtype {result.dtype}")
     return result
@@ -358,7 +361,7 @@ def linear(dif, *args, **kwargs):
 
 
 def test_linear_beta_schedule_docstring_example(dif):
-    got = array_result(linear(dif, 5), "linear_beta_schedule(5)", (5,), float64=True)
+    got = array_result(linear(dif, 5), "linear_beta_schedule(5)", (5,), float64=True, inputs="n_steps = 5")
     assert np.allclose(oracle_linear(5), [0.0001, 0.005075, 0.01005, 0.015025, 0.02], rtol=0, atol=1e-12), ORACLE_BUG
     assert_close(got, oracle_linear(5), SCHED_RTOL, SCHED_ATOL, "linear_beta_schedule(5) (as np.linspace)")
 
@@ -372,7 +375,7 @@ def test_linear_beta_schedule_docstring_example(dif):
 ])
 def test_linear_beta_schedule_matches_linspace(dif, args):
     msg = f"linear_beta_schedule{args}"
-    got = array_result(linear(dif, *args), msg, (args[0],), float64=True)
+    got = array_result(linear(dif, *args), msg, (args[0],), float64=True, inputs=f"n_steps = {args[0]}")
     want = oracle_linear(*args)
     assert_close(got[0], want[0], SCHED_RTOL, SCHED_ATOL, msg + " (index 0 is beta_start)")
     assert_close(got[-1], want[-1], SCHED_RTOL, SCHED_ATOL, msg + " (index T - 1 is beta_end)")
@@ -380,7 +383,8 @@ def test_linear_beta_schedule_matches_linspace(dif, args):
 
 
 def test_linear_beta_schedule_one_step(dif):
-    got = array_result(linear(dif, 1, 0.01, 0.02), "linear_beta_schedule(1, 0.01, 0.02)", (1,), float64=True)
+    got = array_result(linear(dif, 1, 0.01, 0.02), "linear_beta_schedule(1, 0.01, 0.02)", (1,), float64=True,
+                       inputs="n_steps = 1")
     if not (np.isclose(got[0], 0.01, rtol=SCHED_RTOL) or np.isclose(got[0], 0.02, rtol=SCHED_RTOL)):
         _fail("linear_beta_schedule(1, 0.01, 0.02)",
               f"expected [0.01] (np.linspace(0.01, 0.02, 1); [0.02] is accepted too), got {_short(got)}"
@@ -395,8 +399,8 @@ def test_linear_beta_schedule_one_step(dif):
     pytest.param((10, 0.03, 0.02), "beta_start = 0.03 > beta_end = 0.02", id="start-above-end"),
     pytest.param((10, 1e-4, 1.0), "beta_end = 1 (beta_end < 1 is required)", id="beta-end-1"),
     pytest.param((10, 1e-4, 1.5), "beta_end = 1.5", id="beta-end-above-1"),
-    pytest.param((10, float("nan"), 0.02), "beta_start = nan (the condition 0 < beta_start <= beta_end < 1 does "
-                                           "not hold)", id="beta-start-nan"),
+    pytest.param((10, float("nan"), 0.02), "beta_start = nan (NaN is outside (0, 1): comparisons with NaN are False, so "
+                                           "0 < beta_start <= beta_end < 1 does not hold)", id="beta-start-nan"),
 ])
 def test_linear_beta_schedule_refuses_invalid_arguments(dif, args, why):
     assert_raises(ValueError, dif.linear_beta_schedule, *args, why=why)
@@ -408,7 +412,8 @@ def test_linear_beta_schedule_matches_diffusers(dif, hf, args):
     sched = hf["DDPM"](num_train_timesteps=args[0], beta_start=args[1], beta_end=args[2], beta_schedule="linear")
     ref = sched.betas.numpy().astype(np.float64)
     assert np.allclose(ref, oracle_linear(*args), rtol=F32_RTOL, atol=F32_ATOL), ORACLE_BUG
-    got = array_result(linear(dif, *args), f"linear_beta_schedule{args}", (args[0],), float64=True)
+    got = array_result(linear(dif, *args), f"linear_beta_schedule{args}", (args[0],), float64=True,
+                       inputs=f"n_steps = {args[0]}")
     assert_close(got, ref, F32_RTOL, F32_ATOL, f"linear_beta_schedule{args} against "
                                                "DDPMScheduler(beta_schedule='linear').betas (float32)")
 
@@ -420,7 +425,7 @@ def cosine(dif, *args, **kwargs):
 
 def test_cosine_beta_schedule_docstring_example(dif):
     assert np.array_equal(np.round(oracle_cosine(5), 4), [0.1013, 0.2795, 0.4736, 0.7241, 0.999]), ORACLE_BUG
-    got = array_result(cosine(dif, 5), "cosine_beta_schedule(5)", (5,), float64=True)
+    got = array_result(cosine(dif, 5), "cosine_beta_schedule(5)", (5,), float64=True, inputs="n_steps = 5")
     assert_close(got, oracle_cosine(5), SCHED_RTOL, SCHED_ATOL, "cosine_beta_schedule(5) (closed form; the last "
                                                                 "beta is clipped to max_beta = 0.999)")
 
@@ -436,7 +441,7 @@ def test_cosine_beta_schedule_docstring_example(dif):
 ])
 def test_cosine_beta_schedule_matches_closed_form(dif, args):
     msg = f"cosine_beta_schedule{args}"
-    got = array_result(cosine(dif, *args), msg, (args[0],), float64=True)
+    got = array_result(cosine(dif, *args), msg, (args[0],), float64=True, inputs=f"n_steps = {args[0]}")
     assert_close(got, oracle_cosine(*args), SCHED_RTOL, SCHED_ATOL,
                  msg + " (f evaluated at t / T for t = 0 .. T, beta_t = min(1 - ab(t + 1) / ab(t), max_beta))")
 
@@ -445,7 +450,7 @@ def test_cosine_beta_schedule_matches_closed_form(dif, args):
                                   pytest.param((30, 0.02, 0.5), id="T30-max-beta-0.5")])
 def test_cosine_beta_schedule_properties(dif, args):
     msg = f"cosine_beta_schedule{args}"
-    got = array_result(cosine(dif, *args), msg, (args[0],), float64=True)
+    got = array_result(cosine(dif, *args), msg, (args[0],), float64=True, inputs=f"n_steps = {args[0]}")
     max_beta = args[2] if len(args) > 2 else 0.999
     if not (np.all(got > 0) and np.all(got <= max_beta)):
         _fail(msg, f"expected every beta in (0, {max_beta}], got values from {got.min():.6g} to {got.max():.6g}")
@@ -468,7 +473,7 @@ def test_cosine_beta_schedule_properties(dif, args):
     pytest.param((10, 0.008, 1.0), "max_beta = 1, not in (0, 1)", id="max-beta-1"),
     pytest.param((10, 0.008, 1.5), "max_beta = 1.5", id="max-beta-above-1"),
     pytest.param((10, 0.008, -0.2), "max_beta = -0.2", id="max-beta-negative"),
-    pytest.param((10, 0.008, float("nan")), "max_beta = nan (not in (0, 1))", id="max-beta-nan"),
+    pytest.param((10, 0.008, float("nan")), "max_beta = nan (NaN is outside (0, 1): comparisons with NaN are False)", id="max-beta-nan"),
 ])
 def test_cosine_beta_schedule_refuses_invalid_arguments(dif, args, why):
     assert_raises(ValueError, dif.cosine_beta_schedule, *args, why=why)
@@ -478,7 +483,8 @@ def test_cosine_beta_schedule_refuses_invalid_arguments(dif, args, why):
 def test_cosine_beta_schedule_matches_diffusers(dif, hf, n_steps):
     ref = hf["DDPM"](num_train_timesteps=n_steps, beta_schedule="squaredcos_cap_v2").betas.numpy().astype(float)
     assert np.allclose(ref, oracle_cosine(n_steps), rtol=F32_RTOL, atol=F32_ATOL), ORACLE_BUG
-    got = array_result(cosine(dif, n_steps), f"cosine_beta_schedule({n_steps})", (n_steps,), float64=True)
+    got = array_result(cosine(dif, n_steps), f"cosine_beta_schedule({n_steps})", (n_steps,), float64=True,
+                       inputs=f"n_steps = {n_steps}")
     assert_close(got, ref, F32_RTOL, F32_ATOL, f"cosine_beta_schedule({n_steps}) against "
                                                "DDPMScheduler(beta_schedule='squaredcos_cap_v2').betas (float32)")
 
@@ -497,7 +503,7 @@ def schedule_of(dif, betas):
         _fail(msg, f"expected the keys {', '.join(SCHEDULE_KEYS)}; missing: {', '.join(missing)}")
     T = len(betas)
     for key in SCHEDULE_KEYS:
-        array_result(result[key], f"noise_schedule(...)[{key!r}]", (T,), float64=True)
+        array_result(result[key], f"noise_schedule(...)[{key!r}]", (T,), float64=True, inputs=f"{T} betas")
     return result
 
 
@@ -577,7 +583,7 @@ def test_noise_schedule_does_not_modify_betas(dif):
     pytest.param([0.1, 1.0], "a beta equal to 1", id="beta-1"),
     pytest.param([0.1, -0.2], "a negative beta", id="beta-negative"),
     pytest.param([0.1, 1.5], "a beta above 1", id="beta-above-1"),
-    pytest.param([0.1, float("nan")], "a beta equal to nan (not in (0, 1))", id="beta-nan"),
+    pytest.param([0.1, float("nan")], "a beta equal to nan (NaN is outside (0, 1): comparisons with NaN are False)", id="beta-nan"),
 ])
 def test_noise_schedule_refuses_invalid_betas(dif, betas, why):
     assert_raises(ValueError, dif.noise_schedule, betas, why=why)
@@ -608,8 +614,9 @@ def q_sample(dif, x0, t, alpha_bars, noise=None, rng=None):
     result = pair_result(call(dif.q_sample, copy.deepcopy(x0), copy.deepcopy(t), copy.deepcopy(alpha_bars),
                               expected="the pair (x_t, noise)", **kwargs), msg)
     shape = np.shape(x0)
-    x_t = array_result(result[0], "q_sample(...)[0] (x_t)", shape)
-    eps = array_result(result[1], "q_sample(...)[1] (noise)", shape)
+    inputs = f"x0 of shape {shape} and t of shape {np.shape(t)}"
+    x_t = array_result(result[0], "q_sample(...)[0] (x_t)", shape, inputs=inputs)
+    eps = array_result(result[1], "q_sample(...)[1] (noise)", shape, inputs=inputs)
     return x_t, eps
 
 
@@ -735,10 +742,11 @@ def posterior(dif, x0, x_t, t, sched):
     result = pair_result(call(dif.q_posterior_mean_variance, copy.deepcopy(x0), copy.deepcopy(x_t),
                               copy.deepcopy(t), copy.deepcopy(sched), expected="the pair (mean, variance)"), msg)
     x0 = np.asarray(x0)
-    mean = array_result(result[0], "q_posterior_mean_variance(...)[0] (mean)", x0.shape)
+    inputs = f"x0 of shape {x0.shape} and t of shape {np.shape(t)}"
+    mean = array_result(result[0], "q_posterior_mean_variance(...)[0] (mean)", x0.shape, inputs=inputs)
     var_shape = (x0.shape[0],) + (1,) * (x0.ndim - 1)
     var = array_result(result[1], f"q_posterior_mean_variance(...)[1] (variance of shape (N, 1, ..., 1) = "
-                                  f"{var_shape} for x0 of shape {x0.shape})", var_shape)
+                                  f"{var_shape})", var_shape, inputs=inputs)
     return mean, var
 
 
@@ -823,7 +831,8 @@ def test_q_posterior_mean_variance_refuses_invalid_inputs(dif, t, x_t_shape, why
 def predict_x0(dif, x_t, t, eps, alpha_bars):
     result = call(dif.predict_x0_from_eps, copy.deepcopy(x_t), copy.deepcopy(t), copy.deepcopy(eps),
                   copy.deepcopy(alpha_bars), expected="the estimate of x0")
-    return array_result(result, "predict_x0_from_eps", np.shape(x_t))
+    return array_result(result, "predict_x0_from_eps", np.shape(x_t),
+                        inputs=f"x_t of shape {np.shape(x_t)} and t of shape {np.shape(t)}")
 
 
 def test_predict_x0_from_eps_docstring_example(dif):
@@ -896,7 +905,7 @@ def ddpm(dif, x_t, t, eps, sched, seed=None, rng=None, **kwargs):
         kwargs["rng"] = rng
     result = call(dif.ddpm_step, copy.deepcopy(x_t), t, copy.deepcopy(eps), copy.deepcopy(sched),
                   expected="x_{t-1}", **kwargs)
-    return array_result(result, "ddpm_step", np.shape(x_t))
+    return array_result(result, "ddpm_step", np.shape(x_t), inputs=f"x_t of shape {np.shape(x_t)} (t = {t})")
 
 
 def same_seed_same_noise(first, second, function, t):
@@ -1099,7 +1108,8 @@ def ddim(dif, x_t, t, t_prev, eps, alpha_bars, seed=None, rng=None, **kwargs):
         kwargs["rng"] = rng
     result = call(dif.ddim_step, copy.deepcopy(x_t), t, t_prev, copy.deepcopy(eps), copy.deepcopy(alpha_bars),
                   expected="x_{t_prev}", **kwargs)
-    return array_result(result, "ddim_step", np.shape(x_t))
+    return array_result(result, "ddim_step", np.shape(x_t),
+                        inputs=f"x_t of shape {np.shape(x_t)} (t = {t}, t_prev = {t_prev})")
 
 
 def ddim_det(dif, x_t, t, t_prev, eps, alpha_bars, eta, seed=0):
@@ -1250,7 +1260,7 @@ def test_ddim_step_does_not_modify_inputs(dif):
     pytest.param(-1, -2, 0.0, "t = -1, t_prev = -2", id="t-negative"),
     pytest.param(2, 1, -0.1, "eta = -0.1, outside [0, 1]", id="eta-negative"),
     pytest.param(2, 1, 1.5, "eta = 1.5, outside [0, 1]", id="eta-above-1"),
-    pytest.param(2, 1, float("nan"), "eta = nan (not in [0, 1])", id="eta-nan"),
+    pytest.param(2, 1, float("nan"), "eta = nan (NaN is outside [0, 1]: comparisons with NaN are False)", id="eta-nan"),
 ])
 def test_ddim_step_refuses_invalid_arguments(dif, t, t_prev, eta, why):
     ab = oracle_schedule(SMALL)["alpha_bars"]
