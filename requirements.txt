@@ -50,7 +50,7 @@ pynndescent==0.6.0
 # --- Reinforcement learning (ch. 26, B8) ------------------------------
 gymnasium==1.4.0
 
-# --- Hugging Face (bonus chapters B2-B4) ------------------------------
+# --- Hugging Face (bonus chapters B2-B5) ------------------------------
 transformers==5.21.0
 datasets==4.8.5
 tokenizers==0.23.3
@@ -58,6 +58,7 @@ huggingface_hub==1.33.0
 safetensors==0.8.0
 accelerate==1.15.0
 peft==0.21.2
+diffusers==0.40.0      # B5: oracle of the tests of diffusion.py (optional: skipped if absent)
 
 # --- Explainability (B6) ---------------------------------------------
 shap==0.54.1
