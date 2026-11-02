@@ -824,7 +824,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B4.14",
@@ -956,7 +956,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B4.20",

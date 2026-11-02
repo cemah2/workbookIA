@@ -1,0 +1,94 @@
+{
+ "c12": {
+  "n_prompt": 22,
+  "n_linear": 211,
+  "n_block": 3540096,
+  "words": 19,
+  "chars": 101,
+  "chat_prompt": 52,
+  "attention": 884736,
+  "mlp": 2654208,
+  "norms": 1152
+ },
+ "p19": {
+  "found": {
+   "bm25": 1,
+   "dense": 2,
+   "hybrid": 3
+  },
+  "ranks": [
+   {
+    "id": "H21",
+    "bm25": 2,
+    "dense": 7,
+    "hybrid": 1
+   },
+   {
+    "id": "H22",
+    "bm25": null,
+    "dense": 1,
+    "hybrid": 3
+   },
+   {
+    "id": "H23",
+    "bm25": null,
+    "dense": 1,
+    "hybrid": 5
+   },
+   {
+    "id": "H24",
+    "bm25": null,
+    "dense": 8,
+    "hybrid": 16
+   },
+   {
+    "id": "H25",
+    "bm25": null,
+    "dense": null,
+    "hybrid": null
+   },
+   {
+    "id": "H26",
+    "bm25": null,
+    "dense": null,
+    "hybrid": null
+   },
+   {
+    "id": "H27",
+    "bm25": null,
+    "dense": null,
+    "hybrid": null
+   },
+   {
+    "id": "H28",
+    "bm25": null,
+    "dense": 10,
+    "hybrid": 20
+   },
+   {
+    "id": "H29",
+    "bm25": null,
+    "dense": 10,
+    "hybrid": 19
+   },
+   {
+    "id": "H30",
+    "bm25": null,
+    "dense": null,
+    "hybrid": null
+   }
+  ],
+  "perturbed": [
+   [
+    1,
+    2,
+    3
+   ]
+  ],
+  "answers": {
+   "bm25_half": false,
+   "dense_half": false,
+   "hybrid_best": true
+  }
+ }
+}

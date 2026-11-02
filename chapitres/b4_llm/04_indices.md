@@ -586,4 +586,264 @@ Commence par : « Chaque e-mail client est une entrée non fiable : quelqu'un pe
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B4.12 à B4.30) seront ajoutés à la prochaine session de génération, avec le notebook.
+Les indices des exercices B4.12 à B4.21. Ceux de B4.22 à B4.30 seront ajoutés à la prochaine session de génération, avec la fin du notebook.
+
+### Ex B4.12 — Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Trois objets » et « Vitesse sur CPU » (§204.2), puis « `generate()` et ses réglages » (§204.3). `from_pretrained` prend le nom du dépôt, `revision=` et, pour le modèle, `dtype=`. La sortie de `generate()` contient le prompt **puis** les tokens générés. Pour les comptes, `print(model)` montre la structure : les blocs sont dans `model.model.layers`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `load_12` : deux `from_pretrained` sur `SMOL["repo"]` avec `revision=SMOL["revision"]`, `dtype=torch.float32` pour le modèle, puis `model.eval()` (déjà fait par `from_pretrained`, mais l'écrire ne coûte rien).
+- `complete_12` : `tok(prompt, return_tensors="pt")`, `model.generate(**enc, max_new_tokens=..., do_sample=False)` sous `torch.inference_mode()`, puis la tranche `out[0, n_prompt:]`, décodée avec `skip_special_tokens=True` ; son nombre d'éléments est `n_new`.
+- `counts_12` : `len(...)` des identifiants de `tok(PROMPT_12)` ; `isinstance(m, nn.Linear)` sur `model.modules()` ; `p.numel()` sur les paramètres du premier bloc.
+- `make_pipe_12` : `pipeline("text-generation", model=model, tokenizer=tok)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def complete_12(tok, model, prompt, max_new_tokens):
+    enc = tok(prompt, return_tensors="pt")
+    with torch.inference_mode():
+        out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False)
+    new = out[0, enc["input_ids"].shape[1]:]                 # the generated tokens only
+    return ..., int(new.shape[0])
+
+
+def counts_12(tok, model):
+    n_linear = sum(isinstance(m, nn.Linear) for m in model.modules())
+    ...                                                      # the tokens of PROMPT_12, the parameters of layers[0]
+```
+
+</details>
+
+### Ex B4.13 — Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « `generate()` et ses réglages » (§204.3) et la température du ch. 22 : diviser les logits par $T$ avant la softmax. À $T = 1$, on tire selon la distribution du modèle lui-même ; à $T < 1$, on la resserre vers le token le plus probable, sans la réduire à lui.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), une réponse identique à la gloutonne demande que **chaque** token tiré soit le plus probable, sur une quinzaine de tokens : la probabilité de la séquence entière est le produit des probabilités de ses tokens, une fois la distribution resserrée par $T = 0{,}7$. Pour b), sans filtre top-k ni top-p, toute la queue de la distribution (des dizaines de milliers de tokens peu probables) garde une part du tirage : que pèse-t-elle pour un modèle de 135 M de paramètres, à chacun des tokens qui précèdent le nom ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pose le calcul de a) : si chacun des 15 tokens de la réponse gloutonne a, après le passage à $T = 0{,}7$, une probabilité $p$, la réponse entière a la probabilité $q = p^{15}$, et le nombre de réponses identiques parmi 10 suit une loi binomiale de paramètres 10 et $q$ (ch. 2) : calcule son espérance pour $p = 0{,}9$, puis pour $p = 0{,}8$, et compare-la à 3. Pour b), demande-toi quelle part des réponses commence par une phrase qui ne mène pas au nom (« The doctor who… », « Sherlock Holmes is… ») et s'arrête à 24 tokens, ou nomme un autre personnage.
+
+</details>
+
+### Ex B4.14 — Chat template, message système, arrêt et streaming avec un modèle instruct 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Rôles et chat template » (§204.3, la réponse complète de bout en bout), « S'arrêter » et « Le streaming ». Tout part de `apply_chat_template(..., add_generation_prompt=True, return_tensors="pt", return_dict=True)` ; le reste est la tranche des tokens générés, comme en B4.12.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `chat_14` : passe à `generate()` `stop_strings` et `tokenizer=tok` (seulement s'il y a des chaînes d'arrêt) et `streamer` ; après le décodage, si la réponse finit par une des chaînes d'arrêt (`str.endswith`), retire-la.
+- `stream_14` : crée le `TextIteratorStreamer(tok, skip_prompt=True, skip_special_tokens=True)`, lance `model.generate(**enc, ..., streamer=streamer)` dans un `threading.Thread`, puis parcours le streamer dans une boucle (ou `list(streamer)`) : chaque tour rend un morceau, et la boucle s'arrête à la fin de la génération ; enfin `thread.join()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def stream_14(tok, model, messages, max_new_tokens=48):
+    enc = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)
+    streamer = TextIteratorStreamer(tok, skip_prompt=True, skip_special_tokens=True)
+    thread = threading.Thread(target=model.generate, kwargs=dict(**enc, max_new_tokens=max_new_tokens,
+                                                                 do_sample=False, streamer=streamer))
+    ...                                                      # start, collect the pieces, join
+```
+
+</details>
+
+### Ex B4.15 — Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « La sortie structurée » (§204.4 : `parse_departure`), « Zéro-shot et few-shot » (les exemples comme tours de conversation) et « Voter : l'auto-cohérence » (`Counter`). La validation se fait en trois temps : nettoyer, lire, contrôler.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `parse_json_15` : `strip()`, puis si le texte commence par trois accents graves, retire `` ```json `` ou `` ``` `` au début et `` ``` `` à la fin ; `json.loads` dans un `try` (`json.JSONDecodeError`) ; `isinstance(data, dict)` et `set(data) == set(KEYS_15)` ; pour les types, `bool` est une sous-classe de `int` en Python : teste-le d'abord.
+- `messages_15` : une liste qui commence par le message système, puis deux messages par exemple, `json.dumps(answer)` pour l'assistant, puis le texte.
+- `vote_15` : les dictionnaires ne sont pas hachables ; compte des tuples `(name, place, year)` avec un `Counter`, qui garde l'ordre de première apparition : `most_common(1)` rend alors le premier vu en cas d'égalité.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def vote_15(replies):
+    parsed = [p for p in (parse_json_15(r) for r in replies) if p is not None]
+    if not parsed:
+        return None
+    counts = Counter(tuple(p[k] for k in KEYS_15) for p in parsed)
+    ...                                                      # the most common tuple, back to a dict
+```
+
+</details>
+
+### Ex B4.16 — Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Un prompt est fragile » (§204.4) et « La variance » (§204.5). Deux sources de dispersion : la formulation (une ligne du tableau à une autre) et la graine (une colonne à une autre, dans une même ligne). On ne compare l'une à l'autre qu'avec les mêmes passages, la même température et les mêmes graines.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `accuracy_16` : une boucle sur `SNIPPETS_16` qui construit les messages avec `messages_15(texte, examples, system)`, appelle `MODEL_16.generate(...)` avec les réglages du contrat et la graine reçue, lit la réponse par `parse_json_15`, puis `score_15(prédictions, réponses attendues)["all"]`.
+- `spread_16` : `np.asarray(table, dtype=float)` ; la moyenne de tout, `table.mean(axis=1).std()` (entre les lignes) et `table.std(axis=1).mean()` (dans les lignes) ; NumPy prend `ddof=0` par défaut.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def accuracy_16(system, examples, seed):
+    predictions = []
+    for item in SNIPPETS_16:
+        reply = MODEL_16.generate(messages_15(item["text"], examples, system), max_new_tokens=40, do_sample=True,
+                                  temperature=0.7, seed=seed, cache=CACHE)
+        ...                                                  # parse, then score against the expected answers
+```
+
+</details>
+
+### Ex B4.17 — chunk_text et BM25 : découper un roman et classer ses passages 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Découper » et « De TF-IDF à BM25 » (§204.6) et ✏️ B4.5. Le découpage est une boucle de fenêtres glissantes sur une liste d'unités (des mots ou des caractères) ; BM25 se prépare dans `fit` (fréquences des termes par document, fréquence des documents, longueurs, idf) et se calcule terme par terme dans `get_scores`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `chunk_text` : vérifie d'abord les arguments ; les unités sont `text.split()` (mot) ou `list(text)` (caractère), et l'on recolle avec `" ".join` ou `"".join` ; la fenêtre commence à 0, puis avance de `chunk_size - overlap` ; on s'arrête dès qu'une fenêtre atteint la fin (`start + chunk_size >= n`), ce qui donne un seul chunk pour un texte d'exactement `chunk_size` unités ; un texte vide donne une liste vide.
+- `BM25.fit` : `Counter(doc)` pour chaque document (`term_freqs_`), la fréquence de document $n_t$ (un `Counter` sur les ensembles de termes), `doc_len_` en tableau NumPy, `avgdl_` sa moyenne, l'idf de chaque terme par la formule de la docstring.
+- `get_scores` : pour chaque terme de la requête connu du corpus, ajoute $\text{idf} \cdot f (k_1 + 1) / (f + k_1(1 - b + b\,|d|/\overline{|d|}))$ aux documents où $f > 0$ seulement : c'est ce qui évite le 0/0.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def get_scores(self, query):
+    if not hasattr(self, "idf_"):
+        raise ValueError("call fit() before get_scores()")
+    scores = np.zeros(self.n_docs_)
+    norm = self.k1 * (1 - self.b + self.b * self.doc_len_ / self.avgdl_)
+    for term in query:
+        ...                                                  # skip unknown terms; add only where f > 0
+    return scores
+```
+
+</details>
+
+### Ex B4.18 — cosine_top_k, fusion de classements (RRF), recall@k et MRR 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « La recherche dense », « La recherche hybride et la fusion RRF » et « Mesurer une recherche : recall@k et MRR » (§204.6), et ✏️ B4.2. La recherche dense est un tri de la matrice des cosinus de B2 ; la fusion, un dictionnaire de scores ; les métriques, des moyennes sur les requêtes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `cosine_top_k` : passe la requête en 2-D (`np.atleast_2d`), vérifie `k` et les dimensions, calcule `cosine_similarity_matrix(Q, D)` (B2), puis un tri **stable** de `-S` sur l'axe des documents (`np.argsort(-S, axis=1, kind="stable")`) garde le plus petit indice des ex aequo ; `np.take_along_axis` lit les similarités ; enlève l'axe des requêtes pour une requête 1-D.
+- `reciprocal_rank_fusion` : un dictionnaire `id → score`, `enumerate(ranking, start=1)` ; trie par `(-score, id)` ; `np.array(..., dtype=int)` garde des entiers, même vide.
+- `recall_at_k` : `len(set(liste[:k]) & set(pertinents)) / len(pertinents)` par requête, puis la moyenne ; `mean_reciprocal_rank` : le premier rang `r` (à partir de 1) d'un identifiant pertinent, `1 / r`, ou 0.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def reciprocal_rank_fusion(rankings, k=60):
+    if len(rankings) == 0 or k < 0:
+        raise ValueError("expected at least one ranking and k >= 0")
+    score = {}
+    for ranking in rankings:
+        for rank, doc in enumerate(ranking, start=1):
+            ...                                              # add 1 / (k + rank) to the score of int(doc)
+    return np.array(sorted(score, key=lambda d: (-score[d], d)), dtype=int)
+```
+
+</details>
+
+### Ex B4.19 — Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La recherche dense » (§204.6 : les forces s'inversent par rapport à BM25) et 🧠 Q9. Pour BM25, demande-toi ce qui reste d'une requête dont aucun mot plein n'est dans le chunk ; pour la recherche dense, ce que l'embedding d'un chunk de 120 mots résume, et ce que celui d'une question courte résume.
+
+</details>
+<details><summary>Indice 2</summary>
+
+BM25 ne peut plus compter que sur les petits mots (« the », « what », « was »), présents dans presque tous les chunks, donc d'idf faible : il classe alors d'autres chunks, qui partagent par hasard un mot plein avec la question. La recherche dense compare deux vecteurs : elle rapproche des formulations différentes d'une même idée (fiche §204.6), mais un chunk de 120 mots parle de plusieurs choses à la fois (des dialogues, des descriptions), et la question n'en vise qu'une, avec ses propres mots. Pèse les deux effets ; parmi 1 045 chunks, être dans les 5 premiers demande d'être plus proche que 1 040 autres. Pour c), la fusion additionne $1/(60 + \text{rang})$ : que gagne un chunk bien classé par une seule des deux méthodes ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour c), pose le calcul : un chunk premier pour la recherche dense et absent des 20 premiers de BM25 a le score $1/61 \approx 0{,}0164$ ; un chunk 10ᵉ dans les deux a $2/70 \approx 0{,}0286$. Lequel l'hybride met-il devant ? Déduis-en quand l'hybride retrouve une question que la meilleure des deux retrouve seule, et quand il en retrouve une qu'aucune des deux ne met dans ses 5 premiers.
+
+</details>
+
+### Ex B4.20 — Recherche dense (MiniLM, e5) contre BM25 contre hybride sur 30 questions annotées 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « La recherche dense », « La recherche hybride et la fusion RRF » et « Mesurer une recherche » (§204.6). L'expérience de B4.19 fait déjà les trois recherches pour une question : il s'agit de les ranger dans trois fonctions, puis de mesurer avec tes métriques de B4.18.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `build_index_20` : un dictionnaire ; ton `BM25().fit` sur les chunks tokenisés ; `wb.text.passage_embeddings(sentence_model, chunks, subset)`, qui calcule une fois puis relit.
+- `search_20` : pour BM25, un tri stable des scores décroissants (`np.argsort(-scores, kind="stable")`) ; pour la recherche dense, `index["model"].embed([query], kind="query")[0]` puis ton `cosine_top_k` ; pour l'hybride, les 20 premiers des deux, fusionnés par ta `reciprocal_rank_fusion`, coupés à `k`. Convertis en liste d'entiers Python (`.tolist()`).
+- `evaluate_20` : les listes de 20 résultats et les ensembles pertinents de toutes les questions, puis un appel de `recall_at_k` (à 1 et à 5) et de `mean_reciprocal_rank` ; `float(...)` pour rendre des flottants Python.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def search_20(index, query, method="hybrid", k=5):
+    R = mylearn.retrieval
+    if method not in ("bm25", "dense", "hybrid"):
+        raise ValueError(f"unknown method {method!r}")
+    bm = np.argsort(-np.asarray(index["bm25"].get_scores(tokenize(query))), kind="stable")[:max(k, DEPTH_20)]
+    ...                                                      # the dense ranking, then the method asked for
+```
+
+</details>
+
+### Ex B4.21 — Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit modèle 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Les quatre étapes » et « Le contexte » (§204.7). Le RAG est une chaîne de quatre fonctions courtes : le prompt, la lecture de la réponse, la vérification, puis l'assemblage avec ta recherche de B4.20 et le modèle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `rag_messages_21` : `"\n".join(f"[{n}] {p}" for n, p in enumerate(passages, start=1))`, puis le message système, les deux messages de l'exemple (des copies) et le message utilisateur.
+- `parse_reply_21` : `re.finditer(r"\[(\d+)\]", reply)` pour les numéros (garde le premier de chaque), `re.sub(r"\[\d+\]", " ", reply)` pour le texte, puis `" ".join(texte.split())` et `.strip(" .")`.
+- `verify_21` : `wbrag.content_words(answer)` ; rien à vérifier si la liste est vide, si un numéro sort de 1 à `len(passages)` ou si la réponse n'a aucun mot de contenu ; sinon, `any(...)` sur les passages cités, en comparant des ensembles de tokens (`<=`).
+- `rag_21` : `search_20(index, question, "hybrid", k)`, les chunks de ces identifiants, puis les trois fonctions, et un dictionnaire.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def verify_21(answer, cited, passages):
+    words = wbrag.content_words(answer)
+    if not cited or not words or any(not 1 <= n <= len(passages) for n in cited):
+        return False
+    ...                                                      # one cited passage whose tokens contain every word
+```
+
+</details>

@@ -35,7 +35,6 @@ from pathlib import Path
 
 import numpy as np
 
-from wb import datasets
 from wb import text as wbtext
 
 QA_DIR = Path(__file__).resolve().parents[2] / "data" / "qa"
@@ -226,6 +225,14 @@ class BM25Index:
         return out
 
 
+def cosine(query, docs, eps: float = 1e-12) -> np.ndarray:
+    """The cosine of a query with every row of ``docs``, in float64 (the convention of ``cosine_similarity_matrix``
+    of B2: the norms plus ``eps``, so that a row of zeros has a similarity of 0)."""
+    q = np.asarray(query, dtype=float)
+    D = np.asarray(docs, dtype=float)
+    return (D @ q) / ((np.linalg.norm(D, axis=1) + eps) * (np.linalg.norm(q) + eps))
+
+
 def top_k(scores, k: int) -> list[int]:
     """The indices of the ``k`` largest scores, best first, ties broken by the smaller index."""
     scores = np.asarray(scores, dtype=float)
@@ -262,8 +269,7 @@ class ReferenceIndex:
             return top_k(self.bm25.scores(tokenize(query)), k)
         if self.embeddings is None:
             raise ValueError("dense and hybrid search need a sentence model")
-        q = self.sm.embed([query], kind="query")[0]
-        dense = top_k(self.embeddings @ q, max(k, DEPTH))
+        dense = top_k(cosine(self.sm.embed([query], kind="query")[0], self.embeddings), max(k, DEPTH))
         if method == "dense":
             return dense[:k]
         if method != "hybrid":
@@ -311,7 +317,3 @@ class ReferenceRAG:
         return {"question": question, "ids": ids, "passages": passages, "reply": reply, "answer": answer,
                 "cited": cited, "idk": is_idk(reply), "verified": verify_citations(answer, cited, passages)}
 
-
-def cache_dir() -> Path:
-    """Where this chapter's caches go (``wb.datasets.cache_dir()``): never versioned."""
-    return datasets.cache_dir()

@@ -14,12 +14,14 @@ mylearn.embeddings), scikit-learn, transformers and peft (models built from loca
 the chat template of SmolLM2 rendered by transformers' own Jinja renderer): part 0 downloads nothing. If the tokenizer
 of SmolLM2-135M-Instruct happens to be in the local Hugging Face cache, the token counts of ✏️ B4.4 are also compared
 with it (`local_files_only=True`).
-The notebook itself (exercises B4.12 to B4.30) comes at the second generation session (NEXT_SESSION), in four
-phases: usage and prompting, retrieval and RAG, fine-tuning, delivery.
+Parts A and B (B4.12 to B4.21: usage and prompting, retrieval and the RAG) come from chB4_parts.py and chB4_code.py,
+with the replies and the calibrations precomputed by history_chB4.py; B4.22 to B4.30 (the rest of the RAG, fine-tuning,
+delivery) come at the next generation session (NEXT_SESSION).
 """
 
 from __future__ import annotations
 
+import copy
 import importlib
 import sys
 from pathlib import Path
@@ -594,18 +596,26 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "⚖️ B4.9 et B4.10, 📄 B4.11) et l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to D (exercises B4.12 to B4.30): second generation session
+# Parts A and B (exercises B4.12 to B4.21); B4.22 to B4.30 at the next generation session (NEXT_SESSION)
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB4_code  # noqa: E402,F401  (the cells; history_chB4.py reuses them)
+from chB4_parts import PARTS  # noqa: E402
+
 NEXT_SESSION = [
-    ("A", "B4.12 à B4.16", "usage et prompting : premier contact avec transformers, générations à trois températures, "
-                           "chat template et streaming, extraction en JSON validé, sensibilité au prompt"),
-    ("B", "B4.17 à B4.24", "recherche et RAG : chunk_text et BM25, cosine_top_k, RRF et métriques de ta librairie, "
-                           "BM25 contre recherche dense, RAG avec citations, quatre défauts, évaluation, injection"),
+    ("B", "B4.22 à B4.24", "suite de la recherche et du RAG : quatre défauts, évaluation et analyse des échecs, "
+                           "injection de prompt"),
     ("C", "B4.25 à B4.28", "fine-tuning : LoRA à la main contre peft, style de Holmes, rang et modules ciblés, "
                            "classification de textes"),
     ("D", "B4.29 et B4.30", "livraison : pipeline reproductible et défi RAG"),
 ]
+
+
+def part_cells_b4(part, kind: str) -> list:
+    """part_cells, with the cache of the solutions notebook: its own file, read from the precomputed replies."""
+    if kind == "solution" and chB4_code.LEARNER_CACHE in part.given:
+        part = copy.copy(part)
+        part.given = part.given.replace(chB4_code.LEARNER_CACHE, chB4_code.SOLUTION_CACHE_LINE)
+    return part_cells(part, kind)
 
 
 def header_cells(kind: str) -> list:
@@ -615,7 +625,7 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
+    if NEXT_SESSION:
         rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
                  for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
@@ -660,10 +670,10 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B4.12 à B4.30 (usage et prompting, recherche et RAG, fine-tuning, "
-             "livraison) seront ajoutés à la prochaine session de génération ; relance alors "
-             "`python tools/start_chapter.py B4` pour obtenir le notebook complet.*")
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B4.22 à B4.30 (la suite du RAG, le fine-tuning, la livraison) seront ajoutés à la "
+             "prochaine session de génération ; relance alors `python tools/start_chapter.py B4` pour obtenir le "
+             "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu dire si un modèle tient en mémoire, poids et KV cache compris, selon son dtype ?\n"
@@ -681,7 +691,7 @@ def build(kind: str) -> list:
     cells += objectives_cell()
     cells += paper_cells(kind, PAPER, PAPER_CONTEXT + LIBRARY_CHECKS, PAPER_INTRO)
     for part in PARTS:
-        cells += part_cells(part, kind)
+        cells += part_cells_b4(part, kind)
     cells += footer_cells(kind)
     return cells
 

@@ -945,6 +945,7 @@ CATALOGUE = [  # (name, loader, versioned file, kind, card)
      "photos libres et tableaux du domaine public", "images"),
     ("pretrained_cnn", "load_pretrained()", None, "réseaux pré-entraînés sur ImageNet (poids torchvision)", "pretrained"),
     ("trap_fruits", "make_trap_dataset()", None, "tabulaire généré, huit défauts plantés (audit du ch. 29)", "trap"),
+    ("qa_b4", "wb.rag.load_qa()", "qa/holmes_qa.json", "questions annotées sur Holmes et Verne (RAG, bonus B4)", "qa"),
 ]
 
 
