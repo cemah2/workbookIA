@@ -285,7 +285,7 @@
 | `t = torch.randint(0, T, (N,))` ; `ab = alpha_bars[t].view(-1, 1, 1, 1)` ; `x_t = ab.sqrt() * x0 + (1 - ab).sqrt() * eps` | bruiter un batch, un pas tiré au hasard par image : le coefficient remis en forme `(N, 1, 1, 1)` (`q_sample`) |
 | `loss = F.mse_loss(model(x_t, t), eps)` | la loss simplifiée : le réseau prédit le bruit |
 | `h = torch.cat([h, skip], dim=1)` ; `nn.Conv2d(c_dec + c_enc, c_out, 3, padding=1)` | une connexion de saut du U-Net : concaténer sur l'axe des canaux, et la convolution suivante attend leur somme |
-| `nn.GroupNorm(8, c)` | normaliser les canaux par groupes de `c // 8`, image par image (indépendant du batch) |
+| `nn.GroupNorm(8, c)` | normaliser les canaux en 8 groupes de `c // 8` canaux, image par image (indépendant du batch) |
 | `h = h + self.time(temb)[:, :, None, None]` | l'encodage du pas, passé par une couche dense, ajouté comme un biais par canal |
 | `ema = copy.deepcopy(model).requires_grad_(False)` ; `with torch.no_grad(): for pe, p in zip(ema.parameters(), model.parameters()): pe.lerp_(p, 1 - rho)` | la copie EMA des poids, mise à jour après chaque pas d'optimisation ($\theta_{\text{EMA}} \leftarrow \rho\,\theta_{\text{EMA}} + (1 - \rho)\,\theta$) ; c'est elle qui génère |
 | `eps = model(torch.cat([x, x]), torch.cat([t, t]), torch.cat([c, null]))` ; `e_c, e_u = eps.chunk(2)` ; `e = e_c + w * (e_c - e_u)` | la guidance sans classifieur en un seul batch (deux prédictions par pas) |

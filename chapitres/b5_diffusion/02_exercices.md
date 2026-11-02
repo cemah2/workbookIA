@@ -137,7 +137,7 @@ e) Dans ta `positional_encoding`, la colonne $2i$ contient : (A) le cosinus ; (B
 Ta `frechet_distance` rend le **carré** $d_F^2 = \lVert \boldsymbol{\mu}_1 - \boldsymbol{\mu}_2 \rVert^2 + \operatorname{Tr}\big(\boldsymbol{\Sigma}_1 + \boldsymbol{\Sigma}_2 - 2(\boldsymbol{\Sigma}_1\boldsymbol{\Sigma}_2)^{1/2}\big)$. Les features sont ici de dimension 1.
 
 a) Features réelles $\mathcal{N}(0, 1^2)$, features générées $\mathcal{N}(1, 2^2)$ : que vaut $d_F^2$ ?
-b) Un GAN effondré ne génère plus que des 1 et des 7. Sa distance de Fréchet, par rapport à celle du même GAN avant l'effondrement : (A) augmente : moyenne et covariance de ses features s'écartent de celles des vraies images ; (B) reste la même, puisque chaque image générée reste nette et bien formée ; (C) devient nulle.
+b) Un GAN effondré ne génère plus que des 1 et des 7. Sa distance de Fréchet, par rapport à celle du même GAN avant l'effondrement : (A) augmente, car ses features s'écartent de celles des vraies images ; (B) reste la même, puisque chaque image générée reste nette et bien formée ; (C) devient nulle, puisque les 1 et les 7 générés sont parfaits.
 c) Vrai ou faux : $d_F^2 = 0$ si et seulement si les deux gaussiennes ajustées ont la même moyenne et la même covariance.
 d) Vrai ou faux : le FID compare les images générées et les vraies images pixel par pixel.
 e) Features réelles $\mathcal{N}(0, 1^2)$ ; un générateur rend toujours la même image, dont la feature vaut exactement 0. Que vaut $d_F^2$ ?
@@ -192,7 +192,7 @@ f) Vrai ou faux : sur ce planning, l'approximation e) est à moins de 1 % de la 
 Le planning de Ho et coll. : $T = 1\,000$, $\beta$ linéaire de $10^{-4}$ à $0{,}02$.
 
 g) La somme des 1 000 valeurs de $\beta$, à 2 décimales.
-h) L'approximation de $\bar\alpha_T$ par $e^{-\sum \beta}$, **multipliée par $10^5$**, à 2 décimales.
+h) L'approximation de $\bar\alpha_T$ par $e^{-\sum \beta}$, **multipliée par $10^5$**, à 2 décimales (pour un nombre aussi petit, garde cinq chiffres significatifs, pas cinq décimales).
 i) La part de l'image qui reste au dernier pas, $\sqrt{\bar\alpha_T}$, **en pourcentage**, à 2 décimales (avec ta valeur de h).
 j) Avec les mêmes bornes mais $T = 400$, la somme des $\beta$, à 2 décimales.
 k) Avec $T = 400$ et les deux bornes multipliées par $1\,000/T$ (comme dans le code de Nichol et Dhariwal), la somme des $\beta$, à 2 décimales.
@@ -244,7 +244,7 @@ Dans ta copie : refais b) par le détour de $\hat{x}_0$ et des coefficients du p
 **Objectif :** calculer à la main l'image estimée et un pas DDIM, déterministe ou non, et le traduire en appel de ta librairie.
 **Prérequis :** Ex B5.4 · fiche §205.6 (DDIM, le paramètre η) · **Parcours :** M
 
-Planning de ✏️ B5.2. Au pas 4 (indice 3), $x_4 = -0{,}5$ et le réseau prédit $\varepsilon_\theta = -1{,}2$. Arrondis à 4 décimales.
+Planning de ✏️ B5.2. Au pas 4 (indice 3), $x_4 = -0{,}5$ et le réseau prédit $\varepsilon_\theta = -1{,}2$. Arrondis à 4 décimales. Pour g) et h), garde au moins six décimales de $\sigma^2$, et ne repars pas de ta réponse g) arrondie : $\sigma$ tombe près d'une limite d'arrondi, et h) retire $\sigma^2$ d'un nombre très proche.
 
 a) L'image estimée $\hat{x}_0$.
 b) $x_1$ obtenu en **un** pas DDIM ($\eta = 0$) du pas 4 au pas 1.
@@ -252,7 +252,7 @@ c) L'appel de ta librairie qui calcule b) : (A) `ddim_step(x, 4, 1, eps, alpha_b
 d) $x_2$ obtenu en un pas DDIM ($\eta = 0$) du pas 4 au pas 2.
 e) Vrai ou faux : si le réseau prédit encore $\varepsilon_\theta = -1{,}2$ au pas 2, un second pas DDIM du pas 2 au pas 1 redonne exactement le $x_1$ de b).
 f) Avec $\eta = 1$, du pas 4 au pas 3 : $\sigma^2$.
-g) Avec $\eta = 1$, du pas 4 au pas 1 : $\sigma$.
+g) Avec $\eta = 1$, du pas 4 au pas 1 : $\sigma$ (pas $\sigma^2$).
 h) Dans le cas g), le coefficient de $\varepsilon_\theta$, $\sqrt{1 - \bar\alpha_1 - \sigma^2}$.
 i) Vrai ou faux : dans le cas g), la plus grande part du bruit de $x_1$ vient de $\varepsilon_\theta$, et non du tirage $\sigma z$.
 
@@ -262,7 +262,7 @@ Dans ta copie : compare f) à $\tilde\beta_4$ ; que montre cette égalité ? Ave
 **Objectif :** démontrer par récurrence la forme fermée du processus direct, puis la loi d'un état sachant un état antérieur quelconque.
 **Prérequis :** Ex B5.2 · ch. 2 (variance d'une somme de variables indépendantes) · ch. 25 (reparamétrisation) · fiche §205.2 (encadré 🧮 sur la somme de deux gaussiennes, la forme fermée) · **Parcours :** M
 
-On travaille en dimension 1 : chaque pixel suit la même loi, avec les mêmes coefficients. Un pas direct s'écrit $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, où les $\varepsilon_1, \varepsilon_2, \dots$ sont des $\mathcal{N}(0, 1)$ indépendants entre eux et de $x_0$ ; $\bar\alpha_t = \alpha_1 \cdots \alpha_t$.
+On travaille en dimension 1 : chaque pixel suit la même loi, avec les mêmes coefficients. Un pas direct s'écrit $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, où les $\varepsilon_1, \varepsilon_2, \dots$ sont des $\mathcal{N}(0, 1)$ indépendants entre eux et de $x_0$ ; $\bar\alpha_t = \alpha_1 \cdots \alpha_t$. On admet qu'une variable calculée à partir de bruits indépendants de $\varepsilon_t$ (et de $x_0$) est elle-même indépendante de $\varepsilon_t$.
 
 > 🧮 **Rappel maths — le raisonnement par récurrence** — Pour démontrer qu'une propriété $P(t)$ est vraie pour tout entier $t \ge 1$, on montre deux choses : **l'initialisation**, $P(1)$ est vraie ; **l'hérédité**, si $P(t - 1)$ est vraie, alors $P(t)$ l'est aussi. Comme une rangée de dominos : le premier tombe, et chacun fait tomber le suivant. *Exemple* : $P(t)$ : « $1 + 3 + \dots + (2t - 1) = t^2$ ». $P(1)$ : $1 = 1^2$. Si $P(t - 1)$ est vraie, la somme jusqu'à $2t - 1$ vaut $(t - 1)^2 + 2t - 1 = t^2$ : $P(t)$ est vraie.
 
@@ -282,12 +282,12 @@ Réponds dans ta copie.
 
 En dimension 1, on cherche la loi de $y = x_{t-1}$ quand on connaît $x_t$ et $x_0$ (deux nombres). On note $\mathcal{N}(y;\ m, v)$ la densité d'une gaussienne de moyenne $m$ et de variance $v$, vue comme une fonction de $y$. Rappel : $\alpha_t = 1 - \beta_t$ et $\bar\alpha_t = \alpha_t\,\bar\alpha_{t-1}$. Réponds dans ta copie.
 
-1. **Bayes.** Écris $q(y \mid x_t, x_0) \propto q(x_t \mid y, x_0)\; q(y \mid x_0)$. Pourquoi $q(x_t \mid y, x_0) = q(x_t \mid y)$ ? Lequel des deux facteurs donne la forme fermée de ∂ B5.6, et que vaut-il ?
+1. **Bayes.** Écris $q(y \mid x_t, x_0) \propto q(x_t \mid y, x_0)\; q(y \mid x_0)$. Pourquoi $q(x_t \mid y, x_0) = q(x_t \mid y)$ (relis l'écriture d'un pas direct dans ∂ B5.6 : de quoi dépend $x_t$, une fois $x_{t-1}$ connu) ? Lequel des deux facteurs donne la forme fermée de ∂ B5.6, et que vaut-il ?
 2. **La vraisemblance, vue en $y$.** $q(x_t \mid y) = \mathcal{N}(x_t;\ \sqrt{\alpha_t}\,y,\ \beta_t) \propto \exp\!\left(-\frac{(x_t - \sqrt{\alpha_t}\,y)^2}{2\beta_t}\right)$. En écrivant $x_t - \sqrt{\alpha_t}\,y = -\sqrt{\alpha_t}\,(y - x_t / \sqrt{\alpha_t})$, montre que, comme fonction de $y$, elle est proportionnelle à $\mathcal{N}(y;\ x_t / \sqrt{\alpha_t},\ \beta_t / \alpha_t)$.
 3. **Les précisions.** Avec la règle du produit de l'encadré de la fiche, écris $1/\tilde\beta_t$ comme la somme de deux précisions. Montre que $\alpha_t(1 - \bar\alpha_{t-1}) + \beta_t = 1 - \bar\alpha_t$, puis que $\tilde\beta_t = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\,\beta_t$.
 4. **La moyenne.** Écris la moyenne $\tilde\mu_t$ donnée par la règle du produit, puis simplifie-la jusqu'à la forme de la fiche : $\tilde\mu_t = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\,x_0 + \frac{\sqrt{\alpha_t}\,(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\,x_t$.
 5. **Trois contrôles.** (a) Au pas $t = 1$ ($\bar\alpha_0 = 1$), que valent $\tilde\beta_1$ et les deux coefficients ? Interprète. (b) Montre que $\tilde\beta_t \le \beta_t$. (c) Si $x_t$ vaut exactement $\sqrt{\bar\alpha_t}\,x_0$ (un bruit nul), montre que $\tilde\mu_t = \sqrt{\bar\alpha_{t-1}}\,x_0$ : le posterior ne s'éloigne pas de la trajectoire sans bruit.
-6. **Application.** Avec le planning de ✏️ B5.2, au pas 2 (indice 1) : calcule les deux coefficients et $\tilde\beta_2$ à 4 décimales, puis $\tilde\mu_2$ pour $x_0 = 0{,}4$ et $x_2 = 0{,}1$.
+6. **Application.** Avec le planning de ✏️ B5.2, au pas 2 (indice 1) : calcule les deux coefficients et $\tilde\beta_2$ à 4 décimales, puis $\tilde\mu_2$, à 4 décimales aussi, avec les coefficients non arrondis, pour $x_0 = 0{,}4$ et $x_2 = 0{,}1$.
 7. **Du posterior à l'échantillonnage.** Remplace $x_0$ par $\hat{x}_0 = (x_t - \sqrt{1 - \bar\alpha_t}\,\varepsilon) / \sqrt{\bar\alpha_t}$ dans $\tilde\mu_t$, et montre que l'on obtient la moyenne de l'algorithme 2, $\frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,\varepsilon\right)$. Indication : montre d'abord que le coefficient de $x_t$ vaut $\frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t} + \frac{\beta_t}{\sqrt{\alpha_t}\,(1 - \bar\alpha_t)} = \frac{1}{\sqrt{\alpha_t}}$.
 
 ### Ex B5.8 — Fermi : coût d'échantillonnage, de MNIST sur CPU à une image 1024×1024, et ce que gagnent DDIM et l'espace latent 🧮 ★★ ⏱️ 20 min
@@ -325,10 +325,10 @@ Explique en cinq lignes au plus, à quelqu'un qui n'a jamais programmé, comment
 
 Une jeune entreprise française vend aux marques un service d'« images de campagne à la demande ». Elle adapte un modèle texte vers image à poids ouverts (licence permissive) sur trois sources : (1) 1 200 photos de produits et de logos fournies par ses clients, sous contrat ; (2) 300 portraits des salariés d'un client, pris pour une brochure interne, avec l'accord écrit de chacun « pour la brochure » ; (3) 50 000 photos collectées sur des banques d'images en ligne, dont certaines portent un filigrane visible, et dont les conditions d'utilisation interdisent la fouille de textes et de données, en toutes lettres, sans fichier `robots.txt` ni métadonnées qui le disent. L'adaptation fait 40 epochs sur ces images. Réponds dans ta copie.
 
-1. **La mémorisation.** Laquelle des trois sources est la plus exposée à la recopie, et pourquoi (pense aux résultats de Carlini et coll. et aux 40 epochs) ? Comment le vérifier avant la mise en service ? Pourquoi une distance de Fréchet n'en dit rien ?
+1. **La mémorisation.** Quelles sources sont les plus exposées à la recopie, et pourquoi (pense aux résultats de Carlini et coll. et aux 40 epochs) ? Comment le vérifier avant la mise en service ? Pourquoi une distance de Fréchet n'en dit rien ?
 2. **Les données personnelles.** L'accord des salariés couvre-t-il l'entraînement ? Quels principes du RGPD sont en jeu (finalité, base légale, droit à l'effacement), et que devient ce dernier si le modèle a mémorisé un visage ? Une image générée qui ressemble à un salarié est-elle une donnée personnelle ?
 3. **Le droit d'auteur et les marques.** La fouille de textes et de données (directive (UE) 2019/790, art. 4 ; art. L122-5-3 du Code de la propriété intellectuelle) permet-elle la source (3), sachant que la réserve n'est écrite qu'en toutes lettres dans les conditions d'utilisation ? Que disent sur ce point la cour d'appel de Hambourg (Kneschke contre LAION, 10 décembre 2025) et, sur des questions voisines, la High Court de Londres (Getty Images contre Stability AI, 4 novembre 2025) et le tribunal régional de Munich (GEMA contre OpenAI, 11 novembre 2025) ? Que risque un modèle qui reproduit le filigrane d'une banque d'images ?
-4. **La transparence.** Quelles obligations de l'article 50 de l'AI Act s'appliquent, à qui, et depuis quand ? Une image de campagne qui montre un salarié réel dans une scène qu'il n'a jamais vécue est-elle un hypertrucage ?
+4. **La transparence.** Quelles obligations de l'article 50 de l'AI Act s'appliquent, à qui, et depuis quand ? Une image de campagne qui montre un salarié réel dans une scène qu'il n'a jamais vécue est-elle un deepfake ?
 5. **La provenance.** Comment marquer les images produites (métadonnées C2PA, filigrane invisible) ? Que perd chacun des deux outils quand l'image est recadrée, compressée ou capturée à l'écran ?
 6. Rédige les cinq lignes « Données d'entraînement et limites » de la fiche du modèle adapté.
 

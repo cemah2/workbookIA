@@ -820,6 +820,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | β-VAE | β-VAE | VAE dont la KL est multipliée par $\beta$ ; $\beta > 1$ régularise davantage l'espace latent, au prix de reconstructions plus floues | 25 |
 | effondrement du posterior | posterior collapse | le VAE ignore certains latents (ou tous) : leur loi devient le prior quelle que soit l'entrée, et leur KL tombe à 0 | 25 |
 | détection d'anomalies | anomaly detection | repérer les exemples qui ne ressemblent pas aux données normales ; avec un autoencodeur, par l'erreur de reconstruction | 25 |
+| deepfake | hypertrucage (terme de la version française de l'AI Act) | image, son ou vidéo générés ou truqués qui imitent une personne, un lieu ou un événement réels, par exemple pour faire dire ou faire à une personne ce qu'elle n'a pas dit ou fait ; à signaler (AI Act, art. 50) ; le terme anglais est gardé, celui des titres publiés des ch. 25 et 27 | 25 |
 | état, transition | state, transition | l'état : les nombres qui décrivent l'environnement à un instant ; une transition : le passage d'un état au suivant après une action | 26 |
 | épisode | episode | une suite complète d'interactions, de l'état initial à un état final (une partie entière) | 26 |
 | politique | policy | règle qui associe une action, ou une loi de probabilité sur les actions, à chaque état : $a = \pi(s)$ | 26 |
@@ -874,7 +875,6 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | FID | Fréchet Inception distance | distance de Fréchet entre les features d'Inception v3 de vraies images et d'images générées ; plus petite, meilleure | 27 |
 | precision et recall génératifs | precision and recall for generative models | fidélité (part des échantillons proches de vraies données) et diversité (part des vraies données approchées par un échantillon) | 27 |
 | trace | trace | somme des éléments diagonaux d'une matrice carrée, égale à la somme de ses valeurs propres | 27 |
-| hypertrucage | deepfake | image, son ou vidéo générés ou truqués qui imitent une personne, un lieu ou un événement réels, par exemple pour faire dire ou faire à une personne ce qu'elle n'a pas dit ou fait ; à signaler (AI Act, art. 50) ; les titres des ch. 25 et 27, publiés avant le choix du terme, écrivent « deepfake » | 27 |
 | montée de gradient sur l'entrée | gradient ascent on the input | modifier les pixels d'une image, réseau gelé, pour faire monter une activation : $\mathbf{x} \leftarrow \mathbf{x} + \eta \nabla_{\mathbf{x}} a(\mathbf{x})$ | 28 |
 | visualisation de features | feature visualization | images obtenues par maximisation d'activation, régularisées (décalages, flou, octaves) pour être lisibles | 28 |
 | octave | octave | une des échelles successives d'une image (réduite puis agrandie) sur lesquelles on optimise, des grandes structures aux détails | 28 |
@@ -1074,7 +1074,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | échantillonnage ancestral | ancestral sampling | tirer chaque état à partir du précédent, de $\mathbf{x}_T$ à $\mathbf{x}_0$, un bruit neuf à chaque pas sauf au dernier (l'algorithme 2 de DDPM) | B5 |
 | échantillonneur | sampler | l'algorithme qui transforme un bruit en donnée avec un réseau entraîné (DDPM, DDIM, Euler…) ; un `scheduler` dans diffusers | B5 |
 | DDPM | denoising diffusion probabilistic model | modèle de diffusion de Ho, Jain et Abbeel (2020) : prédiction du bruit, loss simplifiée, échantillonnage ancestral en $T$ pas (`ddpm_step`) | B5 |
-| DDIM | denoising diffusion implicit model | échantillonneur de Song, Meng et Ermon (2020) : estimer $\hat{\mathbf{x}}_0$, puis le rebruiter à un pas antérieur quelconque ; déterministe avec $\eta = 0$, DDPM avec $\eta = 1$ (`ddim_step`) | B5 |
+| DDIM | denoising diffusion implicit model | échantillonneur de Song, Meng et Ermon (2020) : estimer $\hat{\mathbf{x}}_0$, puis le rebruiter à un pas antérieur quelconque ; déterministe avec $\eta = 0$, DDPM avec $\eta = 1$ pas à pas (`ddim_step`) | B5 |
 | sous-séquence de pas | timestep spacing | les indices qu'un échantillonneur parcourt (50 parmi 1 000) ; espacements « leading », « trailing », « linspace » de diffusers | B5 |
 | inversion DDIM | DDIM inversion | parcourir la trajectoire déterministe de DDIM de l'image vers le bruit, pour retrouver le « bruit » qui donne une image réelle | B5 |
 | U-Net | U-Net | réseau en U (Ronneberger et coll., 2015) : un encodeur qui réduit, un décodeur qui remonte, et des connexions de saut entre les deux à chaque résolution | B5 |

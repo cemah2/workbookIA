@@ -56890,6 +56890,8 @@
       "magnitude": 0,
       "mistakes": {
         "0c5c33a2ff00ab5225ab49d42e5261aa3dd74d26c70a7bc348e50e7d982f56b3": "garde la somme des β de g) sans l'arrondir à 10",
+        "562f6e370b4d01cfc4b17f4d3933f643f8f1ba2a2b118b771c6a692b47cfd357": "tu as arrondi e^(−Σβ) à cinq décimales : pour un si petit nombre, garde cinq chiffres significatifs",
+        "7ff229c6a3af31541cc846c6e61c4141a815a7fc9fdac32d2d65dfd261e56799": "c'est le produit exact des 1 − β : on demande l'approximation e^(−Σβ)",
         "8408c40719ab6049550df1d4cedd751000b8e7aeb91962802daaeaf0d5471b5b": "relis la question : multiplie l'approximation par 10⁵"
       },
       "sign": 1,
@@ -56902,6 +56904,7 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "24f07389493b97dc172f91fc5ddc2539b2dd8c4715c88e23bfe22d15e9266403": "c'est la racine du produit exact : l'énoncé demande celle de ta valeur de h)",
         "954f00c0a42fc5c865f8c9c040e7b3b4bc59f7a1f883fd605944a7aee26ed3e5": "relis la question : en pourcentage, donc multiplié par 100",
         "e1c067d59139ecd056a716f1f4513cb4d702706a037ec6e7504a77ebef1c89a6": "h) est multiplié par 10⁵ : reviens à ᾱ_T avant de prendre la racine"
       },
@@ -57135,6 +57138,7 @@
       "magnitude": 0,
       "mistakes": {
         "72c03ad304fa2321ca4d5c8adf6ba4ca85682f63706dbd65d50ab763746f98ca": "tu n'as pas écrêté x̂₀ dans [−1, 1]",
+        "998f3a9727a5274a7796f04d790ed97fafc4fe49a7f462351c969cfa2d15f5ee": "as-tu arrondi les coefficients du posterior à quatre décimales ? Garde-en cinq : ce chemin tombe à la limite d'un arrondi",
         "d1b0674a219c21c2863a49a45f58278e4353e0fdf75a571d2b407c98891091d2": "relis la question : on demande la moyenne, pas x̂₀ écrêté"
       },
       "sign": 1,
@@ -57249,7 +57253,8 @@
       "magnitude": -1,
       "mistakes": {
         "50b62084db1002a29a54f7e0fbf64ad6d25d21d014b66e92e7ab9c49b6cb5cd0": "relis la question : du pas 4 au pas 1, soit de l'indice 3 à l'indice 0",
-        "b905de9e1bf166e5693716e52ddeb8c8e9e780a24d68db6d93c27a56d4016f46": "on demande σ, pas σ²"
+        "b905de9e1bf166e5693716e52ddeb8c8e9e780a24d68db6d93c27a56d4016f46": "on demande σ, pas σ²",
+        "d0ddb7124a3835b441085cd78d81804d735dfe37b7a69032724d5215e2393060": "σ tombe près d'une limite d'arrondi : as-tu arrondi σ² à cinq décimales avant la racine ? Garde-en six"
       },
       "sign": 1,
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
@@ -57261,7 +57266,9 @@
       "kind": "float",
       "magnitude": -2,
       "mistakes": {
+        "16d265294957bdea6fa311f555681b40bce717bfc82810f9a2e703d09937bf77": "tu as repris σ arrondi de g) : 1 − ᾱ₁ − σ² est une petite différence, calcule σ² sans l'arrondir",
         "9754053a398c6a8cc051d5728eccd56416f640fdbeae2550dc868c92b084f92d": "prends la racine de 1 − ᾱ₁ − σ²",
+        "cc24368626d7f2dd10f9277b8aa8dd4024d9448a6364a86fee043b48eb0153cd": "1 − ᾱ₁ et σ² sont presque égaux : leur différence a perdu des chiffres ; garde six décimales de σ²",
         "da79c54a0cd5046d1e36656baa52b9665e24625bb8badaa7b0dbcbf95fa60076": "n'oublie pas de retirer σ² sous la racine"
       },
       "sign": 1,
@@ -57558,8 +57565,8 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "005f105e892c4e71059db82a82bd8ed359f3bc157d521686ba9c1e2f5c63bc86": "relis la question : trois réductions, pas deux",
-        "f67af41f399ed146b12d4a9576c0cc09f6555fd6ea35d1a4a3e013bfa10a8274": "compte les réductions : il y en a trois, chacune divise la largeur par 2"
+        "005f105e892c4e71059db82a82bd8ed359f3bc157d521686ba9c1e2f5c63bc86": "tu n'as appliqué qu'une réduction : relis l'énoncé",
+        "f67af41f399ed146b12d4a9576c0cc09f6555fd6ea35d1a4a3e013bfa10a8274": "recompte les réductions de l'énoncé : en as-tu appliqué une de moins ?"
       },
       "sign": 1,
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
@@ -57578,7 +57585,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "a6e14655a09094448176c4cb5e2331c1360d2038ca64ee7acad944d59f4fd436": "vérifie la multiplication : 1 000 passes de 0,05 s",
+        "a6e14655a09094448176c4cb5e2331c1360d2038ca64ee7acad944d59f4fd436": "vérifie la multiplication : as-tu décalé la virgule ?",
         "e6ed7d79d6ba9dcc4dbe2b5d2d89f01e7592f7120e910779d8d60bac6b2795a9": "c'est le nombre de passes : on demande des secondes"
       },
       "sign": 1,

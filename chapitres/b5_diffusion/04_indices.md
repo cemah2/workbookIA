@@ -336,7 +336,7 @@ $\mu_\theta = \frac{1}{\sqrt{\alpha_3}}\big(x_3 - \frac{\beta_3}{\sqrt{1 - \bar\
 </details>
 <details><summary>Indice 3</summary>
 
-a) $0{,}25 / \sqrt{1 - 0{,}605625} = 0{,}25 / 0{,}62799 =$ **0,3981**. Pour b), calcule $(0{,}8 - a) \times 0{,}5) / \sqrt{0{,}75}$. Pour c), calcule $\frac{1 - 0{,}8075}{1 - 0{,}605625} \times 0{,}25$. Pour d) et e), ajoute $\sigma \times (-1)$ à b), avec $\sigma = \sqrt{c)}$, puis $\sigma = \sqrt{\beta_3}$. Pour f), calcule $\hat{x}_0$, écrête-le, puis $\frac{\sqrt{\bar\alpha_2}\,\beta_3}{1 - \bar\alpha_3}\,\hat{x}_0 + \frac{\sqrt{\alpha_3}(1 - \bar\alpha_2)}{1 - \bar\alpha_3}\,x_3$. Pour g), la formule de b) avec les constantes de l'indice 0, sans $z$. Pour h), relis la docstring de `ddpm_step`. Pour i), où la variance entre-t-elle dans tes calculs ?
+a) $0{,}25 / \sqrt{1 - 0{,}605625} = 0{,}25 / 0{,}62799 =$ **0,3981**. Pour b), calcule $(0{,}8 - a) \times 0{,}5) / \sqrt{0{,}75}$. Pour c), calcule $\frac{1 - 0{,}8075}{1 - 0{,}605625} \times 0{,}25$. Pour d) et e), ajoute $\sigma \times (-1)$ à b), avec $\sigma = \sqrt{c)}$, puis $\sigma = \sqrt{\beta_3}$. Pour f), calcule $\hat{x}_0$, écrête-le, puis $\frac{\sqrt{\bar\alpha_2}\,\beta_3}{1 - \bar\alpha_3}\,\hat{x}_0 + \frac{\sqrt{\alpha_3}(1 - \bar\alpha_2)}{1 - \bar\alpha_3}\,x_3$, avec des coefficients gardés à cinq décimales. Pour g), la formule de b) avec les constantes de l'indice 0, sans $z$. Pour h), relis la docstring de `ddpm_step`. Pour i), où la variance entre-t-elle dans tes calculs ?
 
 </details>
 
@@ -354,7 +354,7 @@ $\hat{x}_0 = (x_4 - \sqrt{1 - \bar\alpha_4}\,\varepsilon_\theta)/\sqrt{\bar\alph
 </details>
 <details><summary>Indice 3</summary>
 
-a) $(-0{,}5 - 0{,}77868 \times (-1{,}2)) / 0{,}62742 =$ **0,6924**. Pour b), calcule $\sqrt{\bar\alpha_1}\,\hat{x}_0 + \sqrt{1 - \bar\alpha_1}\,\varepsilon_\theta$. Pour c), traduis « pas 4 » et « pas 1 » en indices. Pour d), la même formule avec $\bar\alpha_2$. Pour e), recalcule $\hat{x}_0$ à partir de d) et du même $\varepsilon_\theta$, puis fais le pas. Pour f) et g), applique la formule de $\sigma$ avec $\eta = 1$, $t = 4$ et $t' = 3$, puis $t' = 1$. Pour h), calcule $\sqrt{1 - 0{,}95 - \sigma^2}$ avec le $\sigma$ de g). Pour i), compare g) et h).
+a) $(-0{,}5 - 0{,}77868 \times (-1{,}2)) / 0{,}62742 =$ **0,6924**. Pour b), calcule $\sqrt{\bar\alpha_1}\,\hat{x}_0 + \sqrt{1 - \bar\alpha_1}\,\varepsilon_\theta$. Pour c), traduis « pas 4 » et « pas 1 » en indices. Pour d), la même formule avec $\bar\alpha_2$. Pour e), recalcule $\hat{x}_0$ à partir de d) et du même $\varepsilon_\theta$, puis fais le pas. Pour f) et g), applique la formule de $\sigma$ avec $\eta = 1$, $t = 4$ et $t' = 3$, puis $t' = 1$. Pour h), calcule $\sqrt{1 - 0{,}95 - \sigma^2}$ avec le $\sigma^2$ de g) gardé à six décimales : les deux termes sont proches, et la soustraction efface des chiffres. Pour i), compare g) et h).
 
 </details>
 
@@ -448,7 +448,7 @@ Prends les trois sources une par une avec trois questions : qu'est-ce que le mod
 </details>
 <details><summary>Indice 3</summary>
 
-1. Les portraits et les logos : peu d'images, vues 40 fois, souvent dupliquées (un même logo sur cent photos) ; c'est exactement ce que Carlini et coll. trouvent le plus mémorisé. Pour la suite de 1, pense aux plus proches voisins et au seuil relatif. Pour 2, compare la finalité de l'accord (une brochure) à l'usage (entraîner un modèle commercial). Pour 3, la cour de Hambourg s'est prononcée sur une réserve en langage naturel ; Getty contre Stability porte sur le modèle comme « copie contrefaisante » et sur les filigranes ; GEMA contre OpenAI, sur la mémorisation dans les poids. Pour 4, distingue fournisseur (marquage) et déployeur (hypertrucage). Pour 5, demande-toi ce que garde un fichier recadré ou capturé à l'écran. Pour 6, reprends sources, statut, exclusions et tests de recopie.
+1. Les logos et les portraits : un même logo revient sur des dizaines de photos, des portraits pris en séries de poses voisines sont presque des doublons, et 40 epochs multiplient les passages ; c'est exactement ce que Carlini et coll. trouvent le plus mémorisé. Pour la suite de 1, pense aux plus proches voisins et au seuil relatif. Pour 2, compare la finalité de l'accord (une brochure) à l'usage (entraîner un modèle commercial). Pour 3, la cour de Hambourg s'est prononcée sur une réserve en langage naturel ; Getty contre Stability porte sur le modèle comme « copie contrefaisante » et sur les filigranes ; GEMA contre OpenAI, sur la mémorisation dans les poids. Pour 4, distingue fournisseur (marquage) et déployeur (deepfake). Pour 5, demande-toi ce que garde un fichier recadré ou capturé à l'écran. Pour 6, reprends sources, statut, exclusions et tests de recopie.
 
 </details>
 
