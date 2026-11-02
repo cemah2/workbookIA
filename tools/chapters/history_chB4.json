@@ -1681,6 +1681,12 @@
     "failed": null,
     "crashed": false
    }
+  ],
+  "messages": [
+   "❌ Ex B4.22 : point 1, découpage : 2 extraits annotés sur 10 ne sont entiers dans aucun chunk (H02, H05) ; un chunk commence au milieu d'un mot : 'licate and finely\\nadjusted temperament w'… ; où passent les frontières des chunks, et que devient une phrase qui tombe dessus ?",
+   "❌ Ex B4.22 : point 2, requête : l'embedding de la question \"What was Godfrey Norton's profession?\" n'est pas celui qu'e5 calcule pour une requête (cosinus 0,9916 avec lui) ; relis la fiche modèle d'e5 (B2, 📦 B2.28) : qu'attend-il devant une requête ?",
+   "❌ Ex B4.22 : point 3, prompt : le prompt de 4 passages compte 721 tokens, le modèle n'en reçoit que 512 ; il finit par ' Baker Street, buried among his old books, and alternating from' ; où est passée la question ? Qui a coupé, et sans prévenir ?",
+   "❌ Ex B4.22 : point 4, citations : verify_22('Charing Cross', [1]) rend True avec les passages ['Holmes plays the violin in the evening.', 'The letter was posted at Charing Cross.'] ; qu'est-ce que la fonction vérifie vraiment ?"
   ]
  },
  "generations2": {
@@ -2074,5 +2080,209 @@
   ],
   "n_new": 203,
   "n_all": 625
+ },
+ "p27_full": {
+  "model": "distilgpt2",
+  "steps": 30,
+  "n_seeds": 2,
+  "lr": 0.001,
+  "base_ppl": 48.33661390436939,
+  "rows": [
+   {
+    "family": "alpha = 2r",
+    "label": "r = 1",
+    "r": 1,
+    "alpha": 2,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 18432,
+    "ppl": 40.071694057391355,
+    "seeds_std": 0.0313986767690686,
+    "per_seed": [
+     40.04029538062228,
+     40.10309273416042
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 2",
+    "r": 2,
+    "alpha": 4,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 36864,
+    "ppl": 38.84252639351296,
+    "seeds_std": 0.19394690269478332,
+    "per_seed": [
+     38.64857949081818,
+     39.036473296207745
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 4",
+    "r": 4,
+    "alpha": 8,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 73728,
+    "ppl": 37.59780125866167,
+    "seeds_std": 0.07259498002714082,
+    "per_seed": [
+     37.67039623868881,
+     37.52520627863453
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 8",
+    "r": 8,
+    "alpha": 16,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 147456,
+    "ppl": 36.626329005953636,
+    "seeds_std": 0.3213221464328626,
+    "per_seed": [
+     36.30500685952077,
+     36.9476511523865
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 16",
+    "r": 16,
+    "alpha": 32,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 294912,
+    "ppl": 35.9221917091337,
+    "seeds_std": 0.07309805942800907,
+    "per_seed": [
+     35.849093649705694,
+     35.99528976856171
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 32",
+    "r": 32,
+    "alpha": 64,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 589824,
+    "ppl": 35.10884138204743,
+    "seeds_std": 0.04914794624322738,
+    "per_seed": [
+     35.0596934358042,
+     35.157989328290654
+    ]
+   },
+   {
+    "family": "alpha = 2r",
+    "label": "r = 64",
+    "r": 64,
+    "alpha": 128,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 1179648,
+    "ppl": 34.624122404158584,
+    "seeds_std": 0.14995588373237112,
+    "per_seed": [
+     34.77407828789095,
+     34.47416652042621
+    ]
+   },
+   {
+    "family": "alpha = 8",
+    "label": "r = 1, α = 8",
+    "r": 1,
+    "alpha": 8,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 18432,
+    "ppl": 38.41375092310942,
+    "seeds_std": 0.011672574053925189,
+    "per_seed": [
+     38.425423497163344,
+     38.40207834905549
+    ]
+   },
+   {
+    "family": "alpha = 8",
+    "label": "r = 16, α = 8",
+    "r": 16,
+    "alpha": 8,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 294912,
+    "ppl": 37.45989676957896,
+    "seeds_std": 0.07225279547073171,
+    "per_seed": [
+     37.38764397410823,
+     37.53214956504969
+    ]
+   },
+   {
+    "family": "alpha = 8",
+    "label": "r = 64, α = 8",
+    "r": 64,
+    "alpha": 8,
+    "targets": [
+     "c_attn"
+    ],
+    "trainable": 1179648,
+    "ppl": 37.52953083726008,
+    "seeds_std": 0.05701941281367695,
+    "per_seed": [
+     37.47251142444641,
+     37.58655025007376
+    ]
+   },
+   {
+    "family": "modules",
+    "label": "attention (c_attn, c_proj)",
+    "r": 4,
+    "alpha": 8,
+    "targets": [
+     "c_attn",
+     "c_proj"
+    ],
+    "trainable": 202752,
+    "ppl": 35.7386961211474,
+    "seeds_std": 0.02684467815257463,
+    "per_seed": [
+     35.76554079929998,
+     35.71185144299483
+    ]
+   },
+   {
+    "family": "modules",
+    "label": "toutes (c_attn, c_proj, c_fc)",
+    "r": 4,
+    "alpha": 8,
+    "targets": [
+     "c_attn",
+     "c_proj",
+     "c_fc"
+    ],
+    "trainable": 294912,
+    "ppl": 34.926094463560325,
+    "seeds_std": 0.13556336461299168,
+    "per_seed": [
+     35.06165782817332,
+     34.79053109894733
+    ]
+   }
+  ]
  }
 }

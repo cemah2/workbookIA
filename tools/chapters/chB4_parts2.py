@@ -55,7 +55,7 @@ def _ch30_values() -> dict:
     """The constants of the challenge, from the calibration of history_chB4.py (entry "ch30"): the reference raced on
     five chunkings in each mode; goal = its worst run minus one question; the control margin covers the largest gap
     between the annotated questions and the control seen on the reference, plus 15 points, at least 20 (fast mode:
-    at least 50 points, with 4 control questions); the time limit of the reduced run leaves the reference a quarter of its time again."""
+    at least 35 points, with 4 control questions); the time limit of the reduced run leaves the reference a quarter of its time again."""
     import math
     out = {}
     for mode in ("fast", "full"):
@@ -70,7 +70,7 @@ def _ch30_values() -> dict:
         out[f"ref_{mode}_30"] = (max(goods), min(goods))
         out[f"goal_{mode}_30"] = min(goods) - 1
         margin = math.ceil(20 * (max(0.0, max(gaps)) + 0.15)) / 20
-        out[f"margin_{mode}_30"] = max(margin, 0.5) if mode == "fast" else max(margin, 0.2)
+        out[f"margin_{mode}_30"] = max(margin, 0.35) if mode == "fast" else max(margin, 0.2)
         out[f"seconds_{mode}_30"] = next(r["seconds"] for r in runs if r["cold"])
     out["limit_fast_30"] = float(10 * math.ceil(1.25 * out.get("seconds_fast_30", 100) / 10))
     out["limit_full_30"] = 600.0
