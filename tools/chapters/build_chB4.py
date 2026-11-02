@@ -39,10 +39,12 @@ FOLDER = "chapitres/b4_llm"
 # ---------------------------------------------------------------------------
 PAPER_CONTEXT = r'''# The short answers only use the numbers of their statements (02_exercices.md)
 import math
+import warnings
 from fractions import Fraction
 
 import numpy as np
 
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers)
 MB, GB = 10 ** 6, 10 ** 9                                           # the units of the chapter (decimal)
 
 # ✏️ B4.1: SmolLM2-135M-Instruct (config.json, revision 12fd25f)

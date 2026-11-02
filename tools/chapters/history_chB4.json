@@ -611,5 +611,701 @@
    ]
   ],
   "embedding_seconds": 3.0
+ },
+ "generations": {
+  "n": 422,
+  "r21_fast": [
+   {
+    "id": "H02",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "lawyer",
+    "gold": "lawyer"
+   },
+   {
+    "id": "H03",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Pawnbroker’s business [2]",
+    "gold": "pawnbroker"
+   },
+   {
+    "id": "H05",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Fleet Street [3]",
+    "gold": "The Morning Chronicle"
+   },
+   {
+    "id": "H08",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Mr. John Turner [1]",
+    "gold": "John Turner"
+   },
+   {
+    "id": "H12",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Bar of Gold [3]",
+    "gold": "the Bar of Gold"
+   },
+   {
+    "id": "H16",
+    "found": true,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "on the western border of Surrey [2]",
+    "gold": "Stoke Moran"
+   },
+   {
+    "id": "H19",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Sir George Burnwell",
+    "gold": "Sir George Burnwell"
+   },
+   {
+    "id": "H21",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "seventeen [2]",
+    "gold": "seventeen"
+   },
+   {
+    "id": "H25",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "three",
+    "gold": "thirty-nine"
+   },
+   {
+    "id": "H28",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "one penny [2]",
+    "gold": "twopence a sheet"
+   }
+  ],
+  "r21_full": [
+   {
+    "id": "H01",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "King of Bohemia in return for my assistance in the case of the Irene Adler papers.",
+    "gold": "Briony Lodge"
+   },
+   {
+    "id": "H02",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "lawyer",
+    "gold": "lawyer"
+   },
+   {
+    "id": "H03",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Pawnbroker’s business [2]",
+    "gold": "pawnbroker"
+   },
+   {
+    "id": "H04",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "Jabez Wilson's assistant is named Third Right, Fourth Left.",
+    "gold": "Vincent Spaulding"
+   },
+   {
+    "id": "H05",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Fleet Street [3]",
+    "gold": "The Morning Chronicle"
+   },
+   {
+    "id": "H06",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Leadenhall Street [3]",
+    "gold": "the gasfitters’ ball"
+   },
+   {
+    "id": "H07",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "gasfitters' ball [2]",
+    "gold": "a traveller in wines"
+   },
+   {
+    "id": "H08",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Mr. John Turner [1]",
+    "gold": "John Turner"
+   },
+   {
+    "id": "H09",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "William Crowder [2]",
+    "gold": "William Crowder"
+   },
+   {
+    "id": "H10",
+    "found": true,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "Sussex [2]",
+    "gold": "Horsham"
+   },
+   {
+    "id": "H11",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "John Openshaw",
+    "gold": "Elias"
+   },
+   {
+    "id": "H12",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Bar of Gold [3]",
+    "gold": "the Bar of Gold"
+   },
+   {
+    "id": "H13",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "1884",
+    "gold": "1884"
+   },
+   {
+    "id": "H14",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Alpha Inn [2]",
+    "gold": "the Alpha Inn"
+   },
+   {
+    "id": "H15",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "John Horner [1]",
+    "gold": "John Horner"
+   },
+   {
+    "id": "H16",
+    "found": true,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "on the western border of Surrey [2]",
+    "gold": "Stoke Moran"
+   },
+   {
+    "id": "H17",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Eyford [2]",
+    "gold": "Eyford"
+   },
+   {
+    "id": "H18",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Duke of Balmoral [1]",
+    "gold": "the Duke of Balmoral"
+   },
+   {
+    "id": "H19",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Sir George Burnwell",
+    "gold": "Sir George Burnwell"
+   },
+   {
+    "id": "H20",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Walsall [2]",
+    "gold": "Walsall"
+   },
+   {
+    "id": "H21",
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "seventeen [2]",
+    "gold": "seventeen"
+   },
+   {
+    "id": "H22",
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Swamp adder [3]",
+    "gold": "a swamp adder"
+   },
+   {
+    "id": "H23",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "giant dog",
+    "gold": "Carlo"
+   },
+   {
+    "id": "H24",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "£ 25 [3]",
+    "gold": "fifty guineas"
+   },
+   {
+    "id": "H25",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "three",
+    "gold": "thirty-nine"
+   },
+   {
+    "id": "H26",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Hanover Square [2]",
+    "gold": "San Francisco"
+   },
+   {
+    "id": "H27",
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Pacific slope [2]",
+    "gold": "Ballarat"
+   },
+   {
+    "id": "H28",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "one penny [2]",
+    "gold": "twopence a sheet"
+   },
+   {
+    "id": "H29",
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "9:00 AM to 4:00 PM",
+    "gold": "ten to two"
+   },
+   {
+    "id": "H30",
+    "found": false,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Countess of Morcar [2]",
+    "gold": "the Countess of Morcar"
+   }
+  ]
+ },
+ "p16_full": {
+  "model": "Qwen2.5-0.5B-Instruct",
+  "snippets": 8,
+  "grid_f": [
+   [
+    0.6666666666666666,
+    0.5416666666666666,
+    0.6666666666666666
+   ],
+   [
+    0.5,
+    0.5,
+    0.4583333333333333
+   ],
+   [
+    0.5416666666666666,
+    0.5416666666666666,
+    0.75
+   ],
+   [
+    0.5,
+    0.5,
+    0.5833333333333334
+   ],
+   [
+    0.4583333333333333,
+    0.5416666666666666,
+    0.5
+   ]
+  ],
+  "grid_o": [
+   [
+    0.6666666666666666,
+    0.5416666666666666,
+    0.6666666666666666
+   ],
+   [
+    0.5,
+    0.5416666666666666,
+    0.6666666666666666
+   ],
+   [
+    0.4166666666666667,
+    0.4583333333333333,
+    0.5416666666666666
+   ]
+  ]
+ },
+ "r21": {
+  "rows": [
+   {
+    "id": "H01",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "King of Bohemia in return for my assistance in the case of the Irene Adler papers."
+   },
+   {
+    "id": "H02",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "lawyer"
+   },
+   {
+    "id": "H03",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Pawnbroker’s business [2]"
+   },
+   {
+    "id": "H04",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "Jabez Wilson's assistant is named Third Right, Fourth Left."
+   },
+   {
+    "id": "H05",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Fleet Street [3]"
+   },
+   {
+    "id": "H06",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Leadenhall Street [3]"
+   },
+   {
+    "id": "H07",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "gasfitters' ball [2]"
+   },
+   {
+    "id": "H08",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Mr. John Turner [1]"
+   },
+   {
+    "id": "H09",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "William Crowder [2]"
+   },
+   {
+    "id": "H10",
+    "paraphrased": false,
+    "found": true,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "Sussex [2]"
+   },
+   {
+    "id": "H11",
+    "paraphrased": false,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "John Openshaw"
+   },
+   {
+    "id": "H12",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Bar of Gold [3]"
+   },
+   {
+    "id": "H13",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "1884"
+   },
+   {
+    "id": "H14",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Alpha Inn [2]"
+   },
+   {
+    "id": "H15",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "John Horner [1]"
+   },
+   {
+    "id": "H16",
+    "paraphrased": false,
+    "found": true,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "on the western border of Surrey [2]"
+   },
+   {
+    "id": "H17",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Eyford [2]"
+   },
+   {
+    "id": "H18",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Duke of Balmoral [1]"
+   },
+   {
+    "id": "H19",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Sir George Burnwell"
+   },
+   {
+    "id": "H20",
+    "paraphrased": false,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "Walsall [2]"
+   },
+   {
+    "id": "H21",
+    "paraphrased": true,
+    "found": true,
+    "correct": true,
+    "verified": false,
+    "idk": false,
+    "reply": "seventeen [2]"
+   },
+   {
+    "id": "H22",
+    "paraphrased": true,
+    "found": true,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Swamp adder [3]"
+   },
+   {
+    "id": "H23",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "giant dog"
+   },
+   {
+    "id": "H24",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "£ 25 [3]"
+   },
+   {
+    "id": "H25",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "three"
+   },
+   {
+    "id": "H26",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Hanover Square [2]"
+   },
+   {
+    "id": "H27",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": true,
+    "idk": false,
+    "reply": "Pacific slope [2]"
+   },
+   {
+    "id": "H28",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "one penny [2]"
+   },
+   {
+    "id": "H29",
+    "paraphrased": true,
+    "found": false,
+    "correct": false,
+    "verified": false,
+    "idk": false,
+    "reply": "9:00 AM to 4:00 PM"
+   },
+   {
+    "id": "H30",
+    "paraphrased": true,
+    "found": false,
+    "correct": true,
+    "verified": true,
+    "idk": false,
+    "reply": "Countess of Morcar [2]"
+   }
+  ],
+  "summary": {
+   "found": 16,
+   "correct": 15,
+   "verified": 14,
+   "idk": 0,
+   "correct_and_verified": 8
+  }
  }
 }

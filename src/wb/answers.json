@@ -55867,6 +55867,85 @@
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
+    "B4.12a": {
+      "fractional": "un nombre de tokens est un entier : len(tok(PROMPT_12)[\"input_ids\"])",
+      "hash": "4bec70479266130758b0950cb8c1c257c110ca97f10832a9b74be0fc288d8e20",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "29aa7c3260bf912a1843ed93ec93927f2ec620590e6b95d9e32fd3e03668bcd5": "tu comptes le prompt après le chat template : on demande les tokens de tok(PROMPT_12), le texte brut",
+        "923c1083292f8d8750561a69484866f1fa488ad07dd8c1522fe85bcd7a65b670": "c’est le nombre de caractères : compte les identifiants que rend le tokenizer",
+        "b73d644e23d4fb61cdb8df713c2031456cd7e2c8433e8d4969c26b7120038962": "c’est le nombre de mots : un token n’est pas un mot (B2)"
+      },
+      "sign": 1,
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.12b": {
+      "fractional": "un nombre de modules est un entier",
+      "hash": "0fbadfc079c8db47f3678a33b3179a18ba9ae620bc34bf82e6d48939c07d3ed4",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "c08ff09cdd894ee18edcf6d587b88329c65a64a11d4c1597e9300ca36f898e11": "la tête de sortie (lm_head) est aussi un nn.Linear, même si son poids est lié à la table des tokens",
+        "d373316fe916b4a08b8fb4ed60bcf21cd5303b24f96b33e2e4316f018d3ec6ba": "c’est le nombre de blocs : compte les nn.Linear de tout le modèle",
+        "f51a0d09211c73f8a650e41d3d56f049723d2d36f0ad5222e1eb87c49ace1f04": "c’est le nombre de couches denses d’un seul bloc : compte dans tout le modèle"
+      },
+      "sign": 1,
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.12c": {
+      "fractional": "un nombre de paramètres est un entier : additionne p.numel() sur model.model.layers[0].parameters()",
+      "hash": "27aa003c3f5ba858fb9cef840b10e2ceed21a6c820308a2eed03522de34d2fb0",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "12172f2acfe7e88389346254617138b7aef6cd77a934963d6421bf0a5b195425": "tu ne comptes que le MLP : l’attention du bloc compte aussi",
+        "eceaf822f76d1733ffc17b4cb6255ce12fa2840e52e9e934cb8ae79aee9e689e": "tu ne comptes que l’attention : le MLP du bloc compte aussi",
+        "efec7a619eecb6fa97a2e840b3d9cb5d04c84a75deb55e3fc551259aebd87697": "les deux couches de normalisation du bloc (RMSNorm) ont aussi des poids"
+      },
+      "sign": 1,
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.13a": {
+      "hash": "4fba677cdad08ee1772e4b8b4dcc73ec108ebd89b49fe9485e463ebf44948a71",
+      "kind": "bool",
+      "mistakes": {
+        "05f5091ad58c3de7a2091f8e9ffdd15d4efd21888833ac712290efe0dadbd9fc": "relis, à la température 0,7, la colonne « identiques à la réponse gloutonne »"
+      },
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.13b": {
+      "hash": "968fb04dacd6b933e7fd07824e88f0ab8ec32c54194f683aeedc9c9c73862266",
+      "kind": "bool",
+      "mistakes": {
+        "b773a91f78dc95219e04890052a7b771751515482cf6de3e309fb0a6c3ccca6e": "relis, à la température 0,7, combien des 10 réponses nomment Watson"
+      },
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.19a": {
+      "hash": "128754b2dd17dd6d4e43c8691a6f0b3f11df2ae8a68d69b495682eebde835bde",
+      "kind": "bool",
+      "mistakes": {
+        "076f4288bec0133bfd4b65bc718f9d88d95fef46fbeb5c12257798e3bea7dc90": "relis la dernière ligne : combien de questions BM25 retrouve-t-il dans ses 5 premiers résultats ?"
+      },
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.19b": {
+      "hash": "f8ca3b351d71a869dee20aca99395abd1f0ddc2653f9430746b36e4d1d2c4175",
+      "kind": "bool",
+      "mistakes": {
+        "72e9a9667393d0b3dd791a60fd7047215d772354ddcf018b46ad781e325dd5e6": "relis la dernière ligne : combien de questions la recherche dense retrouve-t-elle dans ses 5 premiers résultats ?"
+      },
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
+    "B4.19c": {
+      "hash": "7ae1cdd727087e46342556f833993c13e60655dcfd87f6b6074dc697b205ec94",
+      "kind": "bool",
+      "mistakes": {
+        "2a563789b887501ba5304889314a50c2f3c05686cc4150005ba6948f1dd0e0fb": "compare, sur la dernière ligne, le compte de l’hybride à celui de la meilleure des deux autres"
+      },
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
     "B4.Q1a": {
       "hash": "587da99447b97618dc09e245f5c97f8f08a773df86aa582d43b0809aa0743859",
       "kind": "str",

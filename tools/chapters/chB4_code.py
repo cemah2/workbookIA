@@ -15,7 +15,10 @@ TOOLS_A = r'''# Tools for the notebook exercises of part A (usage and prompting)
 import json
 import threading
 import time
+import warnings
 from collections import Counter
+
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers)
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -127,7 +130,7 @@ estimate_12 = 28.0   # ✏️ B4.1 j), by proportion of the memories (the soluti
 CHECK_12 = r'''tok_12 = model_12 = None
 calls_12 = []
 with checked("B4.12"):
-    with spy_from_pretrained(calls_12), wb.text.quiet_transformers():
+    with spy_from_pretrained(calls_12), wb.transfer.quiet_hub():
         loaded_12 = load_12()
     tok_12, model_12 = pair("B4.12", "load_12", loaded_12, names=("tok", "model"))
     seen_12 = sorted({(kind, rev) for kind, name, rev, _ in calls_12 if name == SMOL["repo"]}, key=str)
@@ -677,10 +680,11 @@ CHECK_17 = r'''with checked("B4.17"):
             "un texte d'exactement chunk_size mots donne un seul chunk, les blancs réduits à une espace.",
             f"chunk_text('un  deux\\ntrois', 3, 0) devrait rendre ['un deux trois'] ; reçu "
             f"{R.chunk_text('un  deux' + chr(10) + 'trois', chunk_size=3, overlap=0)!r}.")
-    chars_17 = R.chunk_text("ab cd\nef", chunk_size=4, overlap=1, unit="char")
-    verdict("B4.17", chars_17 == ["ab c", "cd\ne", "ef"],
-            "unité 'char' : chaque caractère compte, espaces et retours à la ligne compris.",
-            f"chunk_text('ab cd\\nef', 4, 1, unit='char') devrait rendre ['ab c', 'cd\\ne', 'ef'] ; reçu {chars_17!r}.")
+    chars_17 = R.chunk_text("ab\ncd ef", chunk_size=3, overlap=1, unit="char")
+    verdict("B4.17", chars_17 == ["ab\n", "\ncd", "d e", "ef"],
+            "unité 'char' : chaque caractère compte, espaces et retours à la ligne compris, sans rien retirer.",
+            f"chunk_text('ab\\ncd ef', 3, 1, unit='char') devrait rendre ['ab\\n', '\\ncd', 'd e', 'ef'] (aucun "
+            f"blanc retiré) ; reçu {chars_17!r}.")
     refuses("B4.17", "chunk_text(texte, chunk_size=0)", lambda: R.chunk_text("a b", chunk_size=0, overlap=0))
 
     docs_17 = ["holmes fume sa pipe", "watson lit le journal et holmes joue du violon", "le violon de holmes",
@@ -875,6 +879,11 @@ else:
                             f"search_20 ({method_20}, {q_20['id']}) : {want_20}",
                             f"search_20(index, {q_20['question']!r}, {method_20!r}, 5) devrait rendre {want_20} ; "
                             f"reçu {np.asarray(got_20).tolist()}.")
+            ties_20 = search_20(INDEX_20, "xyzzy", "bm25", 5)          # an unknown word: every score is 0
+            verdict("B4.20", list(np.asarray(ties_20).tolist()) == [0, 1, 2, 3, 4],
+                    "BM25 : à égalité de score, le plus petit identifiant d'abord.",
+                    f"search_20(index, 'xyzzy', 'bm25', 5) : tous les scores sont nuls, attendu [0, 1, 2, 3, 4] (un tri "
+                    f"stable par score décroissant) ; reçu {np.asarray(ties_20).tolist()}.")
             refuses("B4.20", "search_20 avec une méthode inconnue", lambda: search_20(INDEX_20, "x", "tfidf", 5))
         if SM_E5 is not None:                    # e5 needs « query: » before a query: Verne, chapters I to VII
             with checked("B4.20"):
