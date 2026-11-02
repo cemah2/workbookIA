@@ -648,7 +648,7 @@ Relis « Rôles et chat template » (§204.3, la réponse complète de bout en b
 </details>
 <details><summary>Indice 2</summary>
 
-- `chat_14` : passe à `generate()` `stop_strings` et `tokenizer=tok` (seulement s'il y a des chaînes d'arrêt) et `streamer` ; après le décodage, si la réponse finit par une des chaînes d'arrêt (`str.endswith`), retire-la.
+- `chat_14` : passe à `generate()` `stop_strings` et `tokenizer=tok` (seulement s'il y a des chaînes d'arrêt) et `streamer` ; après le décodage, coupe le texte avant la première occurrence de chaque chaîne d'arrêt (`texte.split(stop)[0]`) : le dernier token peut contenir plus que la chaîne.
 - `stream_14` : crée le `TextIteratorStreamer(tok, skip_prompt=True, skip_special_tokens=True)`, lance `model.generate(**enc, ..., streamer=streamer)` dans un `threading.Thread`, puis parcours le streamer dans une boucle (ou `list(streamer)`) : chaque tour rend un morceau, et la boucle s'arrête à la fin de la génération ; enfin `thread.join()`.
 
 </details>

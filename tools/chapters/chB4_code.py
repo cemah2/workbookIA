@@ -232,8 +232,8 @@ LIST_14 = [{"role": "user", "content": "Name three stories about Sherlock Holmes
 TODO_14 = r'''def chat_14(tok, model, messages, max_new_tokens=48, stop_strings=None, streamer=None):
     """Greedy reply of the chat model to `messages` (a list of {"role": ..., "content": ...}): the chat template with
     add_generation_prompt=True, generate() (do_sample=False, at most max_new_tokens new tokens, the stop strings
-    and the streamer passed on), the new tokens only, decoded without special tokens; a stop string that ends the
-    reply is removed."""
+    and the streamer passed on), the new tokens only, decoded without special tokens, cut before the first stop
+    string."""
     raise NotImplementedError("chat_14")
 
 
@@ -250,8 +250,7 @@ SOLUTION_14 = r'''def chat_14(tok, model, messages, max_new_tokens=48, stop_stri
                              tokenizer=tok if stop_strings else None, streamer=streamer)
     reply = tok.decode(out[0, enc["input_ids"].shape[1]:], skip_special_tokens=True)
     for stop in stop_strings or ():
-        if reply.endswith(stop):
-            return reply[: -len(stop)]
+        reply = reply.split(stop)[0]             # cut before the stop string (its last token may hold more)
     return reply
 
 
@@ -281,11 +280,10 @@ else:
 
 
 def expected_14(messages, stop_strings=None):
-    """The reference reply (greedy, 48 tokens), with a final stop string removed."""
+    """The reference reply (greedy, 48 tokens), cut before its first stop string."""
     reply = LLM.generate(messages, max_new_tokens=48, stop_strings=stop_strings, cache=CACHE)
     for stop in stop_strings or ():
-        if reply.endswith(stop):
-            return reply[: -len(stop)]
+        reply = reply.split(stop)[0]
     return reply
 
 
@@ -312,8 +310,9 @@ if MODEL_14 is not None:
         cut_14 = chat_14(TOK_14, MODEL_14, LIST_14, stop_strings=["\n"])
         want_cut_14 = expected_14(LIST_14, stop_strings=["\n"])
         verdict("B4.14", cut_14 == want_cut_14 and "\n" not in cut_14,
-                f"arrêt au premier retour à la ligne, chaîne d'arrêt retirée : {cut_14!r} (sans arrêt : {full_14!r})",
-                f"avec stop_strings=[\"\\n\"], attendu {want_cut_14!r} (la chaîne d'arrêt retirée) ; reçu {cut_14!r}.")
+                f"arrêt au premier retour à la ligne, coupé avant lui : {cut_14!r} (sans arrêt : {full_14!r})",
+                f"avec stop_strings=[\"\\n\"], attendu {want_cut_14!r} (le texte coupé avant la chaîne d'arrêt) ; "
+                f"reçu {cut_14!r}.")
     with checked("B4.14"):
         print("Diffusé au fil de l'eau par TextStreamer : ", end="", flush=True)
         streamed_14 = chat_14(TOK_14, MODEL_14, ONE_14,

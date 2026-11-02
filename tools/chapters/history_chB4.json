@@ -90,5 +90,526 @@
    "dense_half": false,
    "hybrid_best": true
   }
+ },
+ "p13": {
+  "rows": [
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     0,
+     9
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     10,
+     19
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     20,
+     29
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     30,
+     39
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     40,
+     49
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 3
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     50,
+     59
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 3
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     60,
+     69
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     70,
+     79
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     80,
+     89
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Name the doctor who shares rooms with Sherlock Holmes. Answer with a name.",
+    "seeds": [
+     90,
+     99
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 3
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who writes down the adventures of Sherlock Holmes? Answer with a name.",
+    "seeds": [
+     0,
+     9
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Who writes down the adventures of Sherlock Holmes? Answer with a name.",
+    "seeds": [
+     10,
+     19
+    ],
+    "0.7": {
+     "identical": 1,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Who writes down the adventures of Sherlock Holmes? Answer with a name.",
+    "seeds": [
+     20,
+     29
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 9,
+     "watson": 1
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who writes down the adventures of Sherlock Holmes? Answer with a name.",
+    "seeds": [
+     30,
+     39
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who writes down the adventures of Sherlock Holmes? Answer with a name.",
+    "seeds": [
+     40,
+     49
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who is Sherlock Holmes's friend and assistant? Answer with a name.",
+    "seeds": [
+     0,
+     9
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 5
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Who is Sherlock Holmes's friend and assistant? Answer with a name.",
+    "seeds": [
+     10,
+     19
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 5
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who is Sherlock Holmes's friend and assistant? Answer with a name.",
+    "seeds": [
+     20,
+     29
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 4
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    }
+   },
+   {
+    "prompt": "Who is Sherlock Holmes's friend and assistant? Answer with a name.",
+    "seeds": [
+     30,
+     39
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 5
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Who is Sherlock Holmes's friend and assistant? Answer with a name.",
+    "seeds": [
+     40,
+     49
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Sherlock Holmes has a loyal companion. What is his name? Answer with a name.",
+    "seeds": [
+     0,
+     9
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 1
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Sherlock Holmes has a loyal companion. What is his name? Answer with a name.",
+    "seeds": [
+     10,
+     19
+    ],
+    "0.7": {
+     "identical": 1,
+     "distinct": 10,
+     "watson": 4
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Sherlock Holmes has a loyal companion. What is his name? Answer with a name.",
+    "seeds": [
+     20,
+     29
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 2
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Sherlock Holmes has a loyal companion. What is his name? Answer with a name.",
+    "seeds": [
+     30,
+     39
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 5
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   },
+   {
+    "prompt": "Sherlock Holmes has a loyal companion. What is his name? Answer with a name.",
+    "seeds": [
+     40,
+     49
+    ],
+    "0.7": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 3
+    },
+    "1.5": {
+     "identical": 0,
+     "distinct": 10,
+     "watson": 0
+    }
+   }
+  ],
+  "answers": {
+   "identical": false,
+   "watson": false
+  },
+  "max_watson_07": 5,
+  "max_identical_07": 1
+ },
+ "e5_holmes": {
+  "rows": [
+   [
+    "bm25",
+    "30 questions",
+    {
+     "recall@1": 0.35,
+     "recall@5": 0.5333333333333333,
+     "mrr": 0.4518233618233618
+    }
+   ],
+   [
+    "bm25",
+    "20 directes",
+    {
+     "recall@1": 0.525,
+     "recall@5": 0.75,
+     "mrr": 0.6527350427350427
+    }
+   ],
+   [
+    "bm25",
+    "10 paraphrasées",
+    {
+     "recall@1": 0.0,
+     "recall@5": 0.1,
+     "mrr": 0.05
+    }
+   ],
+   [
+    "dense",
+    "30 questions",
+    {
+     "recall@1": 0.15,
+     "recall@5": 0.6333333333333333,
+     "mrr": 0.37375402031748783
+    }
+   ],
+   [
+    "dense",
+    "20 directes",
+    {
+     "recall@1": 0.225,
+     "recall@5": 0.8,
+     "mrr": 0.49095399698340875
+    }
+   ],
+   [
+    "dense",
+    "10 paraphrasées",
+    {
+     "recall@1": 0.0,
+     "recall@5": 0.3,
+     "mrr": 0.13935406698564592
+    }
+   ],
+   [
+    "hybrid",
+    "30 questions",
+    {
+     "recall@1": 0.25,
+     "recall@5": 0.5333333333333333,
+     "mrr": 0.4147895622895622
+    }
+   ],
+   [
+    "hybrid",
+    "20 directes",
+    {
+     "recall@1": 0.375,
+     "recall@5": 0.7,
+     "mrr": 0.5816287878787878
+    }
+   ],
+   [
+    "hybrid",
+    "10 paraphrasées",
+    {
+     "recall@1": 0.0,
+     "recall@5": 0.2,
+     "mrr": 0.0811111111111111
+    }
+   ]
+  ],
+  "embedding_seconds": 3.0
  }
 }
