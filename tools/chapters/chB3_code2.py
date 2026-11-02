@@ -94,7 +94,7 @@ else:
     lr_ax = ax.twinx()
     lr_ax.plot(np.arange(len(h_21["lr"])), h_21["lr"], ":", color="gray")
     lr_ax.set_ylabel("learning rate (pointillés)")
-    ax.legend(loc="upper right")
+    ax.legend(loc="center right")
 ax.set(title="(1) ton entraînement (B3.20)", xlabel="itération", ylabel="loss (nats par caractère)")
 ax.grid(alpha=0.3)
 for name, color in (("sans dropout", "tab:red"), ("dropout 0,2", "tab:green")):
@@ -313,7 +313,16 @@ with checked("B3.23"):
             f"suivants, et ni le modèle, ni un bloc, ni un module d'attention ne doivent être appelés ; vu {calls_23['whole']} "
             f"appel(s) de modèle, de bloc ou d'attention, et des appels de qkv sur {sorted(set(calls_23['qkv']))} tokens.")
     refuses("B3.23", "5 + 28 tokens pour un contexte de 32", lambda: generate_cached_23(small_23, prompt_23, 28, 2))
-    cache_ok_23 = plain_ok_23 and same_23 and used_23'''
+    # a second generation, on another prompt: the cache must start empty again
+    other_23 = prompt_23.flip(1).clone()
+    again_23 = generate_cached_23(small_23, other_23.clone(), 27, 2)
+    fresh_23 = isinstance(again_23, torch.Tensor) and torch.equal(again_23, wbgpt.generate(small_23, other_23.clone(), 27))
+    if same_23:                                    # the first call already wrong: nothing more to learn from a second one
+        verdict("B3.23", fresh_23, "un second appel, sur un autre prompt, redonne le tirage sans cache : le cache repart de zéro.",
+                "un second appel de generate_cached_23, sur un autre prompt, ne redonne pas le tirage sans cache alors que le "
+                "premier était juste : ta fonction garde-t-elle un état d'un appel à l'autre ? Chaque génération part d'un "
+                "cache vide.")
+    cache_ok_23 = plain_ok_23 and same_23 and used_23 and fresh_23'''
 
 EXPERIMENT_23 = r'''with checked("B3.23"):
     need_gpt("B3.23")
@@ -338,8 +347,13 @@ EXPERIMENT_23 = r'''with checked("B3.23"):
     for n_new, plain, cached, same_ids in rows_23:
         print(f"{n_new:>15} {fr(1000 * plain, 0) + ' ms':>12} {fr(1000 * cached, 0) + ' ms':>12} "
               f"{fr(plain / cached, 1):>6}  {same_ids}")
-    verdict("B3.23", all(r[3] for r in rows_23), "avec et sans cache, les mêmes tokens à toutes les longueurs.",
-            "à une longueur au moins, les tokens générés avec et sans cache diffèrent : relis les contrôles ci-dessus.")
+    same_all_23 = all(r[3] for r in rows_23)
+    verdict("B3.23", same_all_23, "avec et sans cache, les mêmes tokens à toutes les longueurs.",
+            "à une longueur au moins, les tokens générés avec et sans cache diffèrent alors que les contrôles ci-dessus "
+            "passent : ta fonction garde-t-elle un état d'un appel à l'autre (chaque longueur est générée trois fois) ? "
+            "Deux appels de suite doivent donner les mêmes tokens.")
+    if not same_all_23:
+        raise StopCheck
     verdict("B3.23", rows_23[-1][1] > rows_23[-1][2],
             f"à {rows_23[-1][0]} tokens, le cache va {fr(rows_23[-1][1] / rows_23[-1][2], 1)} fois plus vite (une mesure : "
             "elle dépend de la machine).",
@@ -388,15 +402,19 @@ def attention_maps_24(model, ids, n_head=N_HEAD):
 
 
 def plot_maps_24(maps, text):
-    """The (n_layer, n_head) grid of the attention maps of one sequence: a row per query, a column per key."""
+    """The (n_layer, n_head) grid of the attention maps of one sequence: a row per query, a column per key. Each map has
+    its own colour scale, from 0 to its largest weight from the 9th query on (in its title): a spread attention stays
+    readable (the first queries see a few keys only, and their weights saturate)."""
     n_layer, n_head = maps.shape[:2]
     fig, axes = plt.subplots(n_layer, n_head, figsize=(3.6 * n_head, 3.6 * n_layer))
     chars = [c if c != " " else "␣" for c in text]
     for l in range(n_layer):
         for h in range(n_head):
             ax = axes[l, h]
-            ax.imshow(maps[l, h].numpy(), cmap="viridis", vmin=0, vmax=1)
-            ax.set_title(f"bloc {l}, tête {h}", fontsize=10)
+            top = maps[l, h][8:].max().item()            # the first queries see few keys: their weights are large anyway
+            ax.imshow(maps[l, h].numpy(), cmap="magma", vmin=0, vmax=top, interpolation="nearest")
+            ax.grid(False)
+            ax.set_title(f"bloc {l}, tête {h} · poids max {fr(top, 2)}", fontsize=10)
             ax.set_xticks(range(len(chars)))
             ax.set_xticklabels(chars, fontsize=5)
             ax.set_yticks(range(len(chars)))
@@ -450,8 +468,8 @@ CHECK_24 = r'''with checked("B3.24"):
         verdict("B3.24", ok_24,
                 f"{letter} la tête ({l_24}, {h_24}) : {fr(s_24, 2)} {unit} sur 16 fenêtres de la validation, la plus forte des "
                 f"{n_layer_24 * n_head_24} (à 10 % près).",
-                f"{letter} la tête ({l_24}, {h_24}) : {fr(s_24, 2)} {unit} sur 16 fenêtres de la validation ; une autre tête "
-                "en a nettement plus : relis les cartes.")
+                f"{letter} la tête ({l_24}, {h_24}) : {fr(s_24, 2)} {unit} sur 16 fenêtres de la validation ; la plus forte "
+                f"des {n_layer_24 * n_head_24} têtes en a {fr(best_24, 2)} : relis les cartes.")
     if good_24 == 3:
         print("\nLes trois mesures, tête par tête (lignes : blocs ; colonnes : têtes) :")
         for key, (letter, unit) in what_24.items():
@@ -556,13 +574,20 @@ with checked("B3.25"):
             want_25.pop("pos_emb.weight")
         got_25 = {n: tuple(t.shape) for n, t in model.state_dict().items()}
         names_ok_25 = got_25 == want_25
-        problems_25 = [] if names_ok_25 else [f"state_dict : manquants {sorted(set(want_25) - set(got_25))[:3]}, en trop "
-                                              f"{sorted(set(got_25) - set(want_25))[:3]}"]
+        wrong_25 = [f"{n} {got_25[n]} au lieu de {want_25[n]}" for n in want_25 if n in got_25 and got_25[n] != want_25[n]]
+        problems_25 = [] if names_ok_25 else ["state_dict : " + " ; ".join(filter(None, [
+            f"manquants {sorted(set(want_25) - set(got_25))[:3]}" if set(want_25) - set(got_25) else "",
+            f"en trop {sorted(set(got_25) - set(want_25))[:3]}" if set(got_25) - set(want_25) else "",
+            f"formes {wrong_25[:2]}" if wrong_25 else ""]))]
         if forbidden_in(model):
             problems_25.append(f"modules interdits {forbidden_in(model)}")
         with torch.no_grad():
             if names_ok_25:
                 b = model.blocks[0]
+                saved_ln_25 = {k: v.clone() for k, v in b.state_dict().items() if k.startswith(("ln1.", "ln2."))}
+                for ln in (b.ln1, b.ln2):                  # γ = 1 and β = 0 would hide a layer norm too many
+                    ln.weight.normal_(1.0, 0.3)
+                    ln.bias.normal_(0.0, 0.3)
                 if name == "post_ln":
                     h = b.ln1(x_25 + b.attn(x_25))
                     want_b, rule = b.ln2(h + b.mlp(h)), "h = ln1(x + attn(x)), puis ln2(h + mlp(h))"
@@ -579,6 +604,7 @@ with checked("B3.25"):
                 ref_attn = b.attn.proj(F.scaled_dot_product_attention(q, k, v, is_causal=True).transpose(1, 2).reshape(2, 6, 16))
                 if not torch.allclose(b.attn(x_25), ref_attn, atol=1e-6):
                     problems_25.append(f"l'attention doit avoir {heads_25} tête(s)")
+                b.load_state_dict(saved_ln_25, strict=False)
             logits = model(ids_25)
             if tuple(logits.shape) != (2, 12, 88):
                 problems_25.append(f"logits {tuple(logits.shape)} au lieu de (2, 12, 88)")
@@ -593,8 +619,15 @@ with checked("B3.25"):
                 changed[:, 8] = (changed[:, 8] + 1) % 88
                 if (model(changed)[:, :8] - logits[:, :8]).abs().max().item() != 0:
                     problems_25.append("le modèle voit le futur")
-        if abs(model.tok_emb.weight.std().item() / 0.02 - 1) > 0.15 or model.head.weight is not model.tok_emb.weight:
-            problems_25.append("tête liée et initialisation de nanoGPT attendues")
+        if names_ok_25:
+            b0, resid_25 = model.blocks[0], 0.02 / math.sqrt(2 * SMALL_25["n_layer"])
+            stds_25 = {"tok_emb": (model.tok_emb.weight, 0.02), "attn.qkv": (b0.attn.qkv.weight, 0.02),
+                       "attn.proj": (b0.attn.proj.weight, resid_25), "mlp.2": (b0.mlp[2].weight, resid_25)}
+            bad_25 = [f"{k} {fr(w.std().item(), 4)} au lieu de {fr(sd, 4)}" for k, (w, sd) in stds_25.items()
+                      if abs(w.std().item() / sd - 1) > 0.2]
+            if bad_25 or model.head.weight is not model.tok_emb.weight:
+                problems_25.append("une ablation ne change qu'une chose : tête liée et initialisation de nanoGPT, comme "
+                                   "MiniGPT_19" + (f" (écarts-types : {', '.join(bad_25)})" if bad_25 else ""))
         verdict("B3.25", not problems_25, f"{LABELS_25[name]} ({name!r}) : conforme au contrat.",
                 f"{LABELS_25[name]} ({name!r}) : " + " ; ".join(problems_25) + ".")
         ok_25.append(not problems_25)
@@ -749,11 +782,22 @@ with checked("B3.26"):
     ids_26 = torch.tensor(TOK_26.encode(text_26))
     got_26 = nats_per_char_26(Uniform_26(), ids_26, TOK_26, 8)
     want_26 = math.log(VOCAB_26) * (len(ids_26) - 8) / len(TOK_26.decode(ids_26[8:].tolist()))
+    hints_26 = [   # the values of three slips, each with what it misses
+        (math.log(VOCAB_26) * (len(ids_26) - 8) / sum(len(TOK_26.decode([i])) for i in ids_26[8:].tolist()),
+         " : presque ; décode toutes les cibles d'un seul appel (un caractère de plusieurs octets peut être coupé entre "
+         "deux tokens, et chaque morceau décodé seul devient un caractère de remplacement)."),
+        (math.log(VOCAB_26) * (len(ids_26) - 8) / len(TOK_26.decode(ids_26.tolist())),
+         " : presque ; les caractères à compter sont ceux des cibles notées seulement, pas ceux de tous les ids."),
+        (math.log(VOCAB_26) * len(ids_26) / len(TOK_26.decode(ids_26[8:].tolist())),
+         " : presque ; les tokens à compter sont les cibles notées, pas tous les ids."),
+    ]
     verdict("B3.26", isinstance(got_26, float) and math.isclose(got_26, want_26, rel_tol=1e-6),
             f"nats_per_char_26 : un modèle uniforme, log 512 = {fr(math.log(VOCAB_26), 3)} nats par token, fait "
             f"{fr(want_26, 3)} nats par caractère.",
             f"un modèle uniforme fait log 512 = {fr(math.log(VOCAB_26), 3)} nats par token, donc {fr(want_26, 3)} nats par "
-            f"caractère sur ce texte (multiplié par le nombre de tokens notés, divisé par leurs caractères) ; reçu {got_26!r}.")
+            f"caractère sur ce texte (multiplié par le nombre de tokens notés, divisé par leurs caractères) ; reçu {got_26!r}"
+            + ("".join(hint for value, hint in hints_26 if isinstance(got_26, float) and math.isclose(got_26, value, rel_tol=1e-6))
+               or "."))
     conv_ok_26 = math.isclose(got_26, want_26, rel_tol=1e-6) and got_blocks_26 == blocks_26
     cpt_val_26 = chars_per_token_26(TOK_26, DATA.val_text)
     print(f"sur toute la validation de Holmes : {fr(cpt_val_26, 4)} caractères par token BPE (512 tokens)")
@@ -1094,9 +1138,12 @@ with checked("B3.28"):
         swapped_28 = x_28.clone()
         swapped_28[:, :, :7, :7], swapped_28[:, :, 21:, 21:] = x_28[:, :, 21:, 21:], x_28[:, :, :7, :7]
         moved_28 = (vit_28(swapped_28) - out_28).abs().max().item()
-    verdict("B3.28", moved_28 > 1e-6, "échanger deux patchs change la sortie : les positions apprises sont ajoutées.",
-            "échanger le premier et le dernier patch ne change pas la sortie : les positions apprises sont-elles ajoutées "
-            "aux tokens ?")
+    if sees_last_28 and sees_first_28:
+        verdict("B3.28", moved_28 > 1e-6, "échanger deux patchs change la sortie : les positions apprises sont ajoutées.",
+                "échanger le premier et le dernier patch ne change pas la sortie : les positions apprises sont-elles "
+                "ajoutées aux tokens ?")
+    else:
+        print("⏳ Ex B3.28 : le contrôle des positions attend que le [CLS] voie toute l'image.")
     seen_28 = {}
     hook_28 = vit_28.blocks[0].register_forward_hook(lambda m, inp, out: seen_28.__setitem__("in", inp[0]))
     try:
@@ -1107,15 +1154,40 @@ with checked("B3.28"):
     finally:
         hook_28.remove()
     got_in_28 = seen_28.get("in")
-    order_ok_28 = got_in_28 is not None and tuple(got_in_28.shape) == (4, 17, 64) \
-        and torch.allclose(got_in_28[:, :1], want_cls_28, atol=1e-6) and torch.allclose(got_in_28[:, 1:], want_patches_28, atol=1e-5)
+    shape_in_ok_28 = got_in_28 is not None and tuple(got_in_28.shape) == (4, 17, 64)
+    cls_in_ok_28 = shape_in_ok_28 and torch.allclose(got_in_28[:, :1], want_cls_28, atol=1e-6)
+    order_ok_28 = cls_in_ok_28 and torch.allclose(got_in_28[:, 1:], want_patches_28, atol=1e-5)
+    if not shape_in_ok_28:
+        got_desc_28 = "une entrée de forme " + (f"{tuple(got_in_28.shape)}" if got_in_28 is not None else "inconnue (le bloc 0 "
+                                                                                                         "n'a pas été appelé)")
+    elif not cls_in_ok_28:
+        got_desc_28 = "la bonne forme, mais la position 0 n'est pas cls_token + pos_emb[:, 0]"
+    else:
+        got_desc_28 = ("la bonne forme et le bon [CLS], mais les tokens 1 à 16 ne sont pas les patchs dans l'ordre de lecture, "
+                       "chacun avec sa position (un échange d'axes oublié ?)")
     verdict("B3.28", order_ok_28,
             "l'entrée du premier bloc : le [CLS] en tête, puis les 16 patchs dans l'ordre de lecture, positions ajoutées.",
             "l'entrée du premier bloc doit être (4, 17, 64) : le [CLS] en position 0, puis les 16 tokens des patchs dans "
-            "l'ordre de patch_embed(x).flatten(2).transpose(1, 2), chacun avec sa position apprise ; reçu "
-            + (f"{tuple(got_in_28.shape)}" if got_in_28 is not None else "rien") + ".")
+            f"l'ordre de patch_embed(x).flatten(2).transpose(1, 2), chacun avec sa position apprise ; reçu {got_desc_28}.")
+    # the head reads the output of the [CLS]: ln_f(output of the last block)[:, 0]
+    seen_head_28 = {}
+    hooks_28 = [vit_28.blocks[-1].register_forward_hook(lambda m, inp, out: seen_head_28.__setitem__("last", out)),
+                vit_28.head.register_forward_hook(lambda m, inp, out: seen_head_28.__setitem__("head", inp[0]))]
+    try:
+        with torch.no_grad():
+            vit_28(x_28)
+            cls_out_28 = vit_28.ln_f(seen_head_28["last"])[:, 0] if "last" in seen_head_28 else None
+    finally:
+        for hook in hooks_28:
+            hook.remove()
+    head_in_28 = seen_head_28.get("head")
+    head_ok_28 = cls_out_28 is not None and head_in_28 is not None and head_in_28.shape == cls_out_28.shape \
+        and torch.allclose(head_in_28, cls_out_28, atol=1e-6)
+    verdict("B3.28", head_ok_28, "la tête lit la sortie du [CLS] : la position 0, après ln_f.",
+            "la tête doit lire la sortie du [CLS], ln_f(sortie du dernier bloc)[:, 0] : ce qu'elle reçoit n'est pas cette "
+            "position (relis le contrat : quel token classe l'image ?).")
     refuses("B3.28", "patch_size = 5 pour des images de 28 pixels", lambda: ViT_28(patch_size=5))
-    vit_ok_28 = sees_last_28 and sees_first_28 and moved_28 > 1e-6 and order_ok_28'''
+    vit_ok_28 = sees_last_28 and sees_first_28 and moved_28 > 1e-6 and order_ok_28 and head_ok_28'''
 
 EXPERIMENT_28 = r'''if not globals().get("vit_ok_28"):
     print("⏳ Ex B3.28 : l'entraînement attend ton ViT (la cellule précédente).")
@@ -1220,6 +1292,7 @@ CHECK_29 = r'''import inspect
 if "NotImplementedError" in inspect.getsource(test_causality_29):
     print("⏳ Ex B3.29 : écris ton test de causalité.")
 else:
+    warned_29 = False
     with checked("B3.29"):
         print("Ton test, sur le bon modèle (il doit passer) :")
         good_29 = wb.run_pytest([test_causality_29], preamble=preamble_29("good"))
@@ -1237,7 +1310,11 @@ else:
                     f"ton test laisse passer un modèle {label}" + ("." if bad_29.errors == 0 else
                     f" (pytest : {bad_29.summary})."))
             for name, reason in failures_29(bad_29)[:1]:
-                print(f"   {name}\n   {reason[:300]}")'''
+                print(f"   {name}\n   {reason[:300]}")
+                bare_29 = reason.strip() in ("AssertionError", "assert False") or reason.startswith(("assert ", "AssertionError: assert "))
+                if bare_29 and not globals().get("warned_29"):
+                    warned_29 = True
+                    print("   ⚠️ ton assert n'a pas de message : écris ce qui était attendu (assert …, \"expected …\").")'''
 
 # --- 🏆 B3.30 ----------------------------------------------------------------------------------------------------------
 GIVEN_30 = r'''# The challenge: the best loss per character on the validation of Holmes, at most 1 000 000 learned values, 10 min of CPU
@@ -1335,6 +1412,7 @@ def _make_evaluate_30(data):
         before = [m for m in g.values() if isinstance(m, nn.Module)]
         pointers = {p.data_ptr() for m in before for p in m.parameters()}
         saved = {"load_text": wbtext.load_text, "load_holmes": wbtext.datasets.load_holmes, "char_data": wbgpt.char_data,
+                 "_load_text": wbtext.datasets._load_text,
                  "checkpoints_dir": wbgpt.checkpoints_dir, "reference_model": wbgpt.reference_model,
                  "load_checkpoint": wbgpt.load_checkpoint, "torch_load": torch.load,
                  "serialization_load": torch.serialization.load,
@@ -1350,6 +1428,8 @@ def _make_evaluate_30(data):
             g.update(hidden)
             wbtext.load_text = lambda text_name, _load=saved["load_text"]: learned_text if text_name == "holmes" else _load(text_name)
             wbtext.datasets.load_holmes = lambda *args, **kwargs: learned_text
+            wbtext.datasets._load_text = (lambda key, strip=True, _load=saved["_load_text"]:
+                                          learned_text if key == "holmes" else _load(key, strip))
             wbtext._TEXTS.pop("holmes", None)
             wbgpt._DATA.clear()
             wbgpt.char_data, wbgpt.reference_model, wbgpt.load_checkpoint = refused, refused, refused
@@ -1362,6 +1442,7 @@ def _make_evaluate_30(data):
         finally:
             g.update(originals)
             wbtext.load_text, wbtext.datasets.load_holmes = saved["load_text"], saved["load_holmes"]
+            wbtext.datasets._load_text = saved["_load_text"]
             wbgpt.char_data, wbgpt.reference_model = saved["char_data"], saved["reference_model"]
             wbgpt.load_checkpoint, wbgpt.checkpoints_dir = saved["load_checkpoint"], saved["checkpoints_dir"]
             torch.load, torch.serialization.load = saved["torch_load"], saved["serialization_load"]

@@ -891,7 +891,7 @@ Une ligne de carte est la distribution des poids d'**une** requête sur ses clé
 </details>
 <details><summary>Indice 2</summary>
 
-a) Le caractère précédent de la requête $i$ est la clé $i - 1$ : cherche la carte où la ligne juste sous la diagonale est la plus jaune. b) Une tête qui regarde les espaces dessine des **colonnes** claires sous les espaces (␣) de la phrase, quelle que soit la requête. c) Une attention étalée se voit à une carte sans case jaune vive, faite de nuances uniformes sur chaque ligne ; une attention concentrée, à des cases isolées très claires.
+a) Le caractère précédent de la requête $i$ est la clé $i - 1$ : cherche la carte où la ligne juste sous la diagonale est la plus jaune. b) Une tête qui regarde les espaces dessine des **colonnes** claires sous les espaces (␣) de la phrase, quelle que soit la requête. c) Chaque carte a sa propre échelle : regarde d'abord le **poids max** de son titre. Une attention étalée sur 64 clés donne des poids d'environ 0,015 en moyenne : un poids max parmi les plus petits, et des nuances régulières sur chaque ligne, sans case isolée ; une attention concentrée a un poids max proche de 1 et quelques cases très claires.
 
 </details>
 <details><summary>Indice 3</summary>

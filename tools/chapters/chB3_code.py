@@ -173,6 +173,7 @@ if maps_13 is not None:
     fig, axes = plt.subplots(1, 2, figsize=(12, 2.8))
     for ax, (title, w) in zip(axes, maps_13.items()):
         im = ax.imshow(w, cmap="viridis", vmin=0, vmax=1, aspect="auto")
+        ax.grid(False)
         ax.set_title(title)
         ax.set_xlabel("clé (0 à 5 : copies des requêtes)")
         ax.set_ylabel("requête")
@@ -517,6 +518,7 @@ else:
         w_17 = model_17.weights[0].numpy()                                 # (T, T), averaged over the 2 heads
         fig, ax = plt.subplots(figsize=(6, 5))
         ax.imshow(w_17, cmap="viridis")
+        ax.grid(False)
         ax.set_xticks(range(len(line_17) - 1), list(line_17[:-1]))
         ax.set_yticks(range(len(line_17) - 1), list(line_17[:-1]))
         ax.set_xlabel("clé")
