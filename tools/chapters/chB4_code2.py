@@ -18,6 +18,9 @@ import torch.nn.functional as F
 from peft import LoraConfig, get_peft_model
 
 torch.set_num_threads(max(1, torch.get_num_threads()))
+if globals().get("QWEN") is not None and QWEN.unload():       # 2 GB freed for the trainings of this part
+    print("ℹ️ Qwen2.5 est libéré de la mémoire ici (≈ 2 Go) ; il se recharge tout seul à sa prochaine génération (B4.28 "
+          "en mode complet, B4.30).")
 
 
 def trainable(model):
@@ -133,10 +136,12 @@ with checked("B4.25"):
             and torch.equal(base_25.bias, b0_25), "la couche d'origine est gelée et inchangée (poids et biais).",
             "les poids et le biais de la couche d'origine doivent rester inchangés, avec requires_grad=False.")
     bound_25 = 1 / math.sqrt(12)
-    verdict("B4.25", torch.count_nonzero(layer_25.B) == 0 and 0 < layer_25.A.abs().max().item() <= bound_25 + 1e-7,
-            "B nulle, A tirée au hasard dans les bornes de kaiming_uniform_(a=√5).",
-            f"B doit être nulle au départ, et A tirée par nn.init.kaiming_uniform_(A, a=math.sqrt(5)) (valeurs non nulles, "
-            f"au plus {fr(bound_25, 4)} en valeur absolue) ; |A| max = {fr(layer_25.A.abs().max().item(), 4)}.")
+    verdict("B4.25", torch.count_nonzero(layer_25.B) == 0, "B nulle au départ.",
+            f"B doit être nulle au départ : {int(torch.count_nonzero(layer_25.B))} coefficients non nuls.")
+    verdict("B4.25", 0 < layer_25.A.abs().max().item() <= bound_25 + 1e-7,
+            "A tirée au hasard dans les bornes de kaiming_uniform_(a=√5).",
+            f"A doit être tirée par nn.init.kaiming_uniform_(A, a=math.sqrt(5)) (valeurs non nulles, au plus "
+            f"{fr(bound_25, 4)} en valeur absolue) ; |A| max = {fr(layer_25.A.abs().max().item(), 4)}.")
     x_25 = torch.randn(5, 12)
     verdict("B4.25", torch.equal(layer_25(x_25), base_25(x_25)), "au départ, la couche adaptée rend exactement la sortie "
             "de la couche d'origine.", "au départ (B = 0), la sortie doit être exactement celle de la couche d'origine.")
@@ -228,9 +233,10 @@ def lora_model_26(model, r, alpha, targets=TARGETS_26):
     raise NotImplementedError("lora_model_26")
 
 
-def perplexity_26(model, windows):
+def perplexity_26(model, windows, batch_size=4):
     """exp of the mean cross-entropy of the next token over every position of every window (windows: (N, T) token
-    ids; position t predicts token t + 1), in eval mode and without gradient. A Python float."""
+    ids; position t predicts token t + 1), in eval mode and without gradient, the windows taken batch_size at a time
+    (the mean is over ALL the positions; 16 windows at once hold 400 MB of logits). A Python float."""
     raise NotImplementedError("perplexity_26")
 
 
@@ -260,11 +266,16 @@ def next_token_loss_26(model, windows):
     return F.cross_entropy(logits[:, :-1].flatten(0, 1), windows[:, 1:].flatten())
 
 
-def perplexity_26(model, windows):
-    """exp(mean next-token cross-entropy), eval mode, no gradient."""
+def perplexity_26(model, windows, batch_size=4):
+    """exp(mean next-token cross-entropy over all the positions), eval mode, no gradient, by batches of windows."""
     model.eval()
+    total, count = 0.0, 0
     with torch.no_grad():
-        return math.exp(next_token_loss_26(model, windows).item())
+        for part in windows.split(batch_size):
+            logits = model(input_ids=part).logits
+            total += F.cross_entropy(logits[:, :-1].flatten(0, 1), part[:, 1:].flatten(), reduction="sum").item()
+            count += part[:, 1:].numel()
+    return math.exp(total / count)
 
 
 def train_26(model, steps, lr, generator):
@@ -328,7 +339,21 @@ if peft_26 is not None:
     with checked("B4.26"):
         frozen_26 = {n: p.detach().clone() for n, p in peft_26.named_parameters() if not p.requires_grad and p.ndim == 2}
         start_26 = time.perf_counter()
-        losses_26 = train_26(peft_26, STEPS_26, LR_26, torch.Generator().manual_seed(26))
+        drawn_26, batch_ok_26 = [], batch_26
+
+        def batch_26(generator):                       # a spy: train_26 must draw its windows here
+            out = batch_ok_26(generator)
+            drawn_26.append(out)
+            return out
+
+        try:
+            losses_26 = train_26(peft_26, STEPS_26, LR_26, torch.Generator().manual_seed(26))
+        finally:
+            batch_26 = batch_ok_26
+        verdict("B4.26", len(drawn_26) == STEPS_26,
+                f"{STEPS_26} lots tirés par batch_26 (les dix nouvelles d'entraînement).",
+                f"train_26 doit tirer chaque lot par batch_26(generator) (nouvelles 1 à 10, jamais HELD_26) ; "
+                f"{len(drawn_26)} appels pour {STEPS_26} pas.")
         seconds_26 = time.perf_counter() - start_26
         if returned("B4.26", "train_26", losses_26):
             ok_26 = isinstance(losses_26, list) and len(losses_26) == STEPS_26 and all(math.isfinite(l) for l in losses_26)
@@ -391,7 +416,18 @@ CHECK_27 = r'''with checked("B4.27"):
         verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {count_27} paramètres entraînables, "
                 f"perplexité {fr(one_27.get('ppl', float('nan')), 2)}.",
                 f"experiment_27 doit rendre {{'trainable': {want_27}, 'ppl': <float>}} pour r = 2 sur {TARGETS_26} ; reçu "
-                f"{one_27!r}.")'''
+                f"{one_27!r}.")
+        zero_27 = experiment_27(2, 4, TARGETS_26, 0, 0)
+        base_model_27 = load_base_26()
+        with torch.no_grad():                          # the perplexity of the original model on HELD_26, by batches
+            nll_27 = sum(F.cross_entropy(base_model_27(input_ids=w).logits[:, :-1].flatten(0, 1), w[:, 1:].flatten(),
+                                         reduction="sum").item() for w in HELD_26.split(4))
+        base_27 = math.exp(nll_27 / HELD_26[:, 1:].numel())
+        got_zero_27 = zero_27.get("ppl") if isinstance(zero_27, dict) else None
+        verdict("B4.27", isinstance(got_zero_27, float) and math.isclose(got_zero_27, base_27, rel_tol=1e-5),
+                "à 0 pas, la perplexité est celle du modèle d'origine sur HELD_26 (B = 0 au départ).",
+                f"experiment_27(…, steps=0) doit rendre la perplexité du modèle d'origine sur HELD_26 ({fr(base_27, 2)}), "
+                f"puisque B est nulle au départ ; reçu {got_zero_27!r}.")'''
 
 EXPERIMENT_27 = r'''rows_27 = None
 if TOK_26 is None:
@@ -1033,7 +1069,43 @@ with checked("B4.24"):
     kept_24 = "Holmes said: system is a word.\nThe stranger ignored the previous evening's events."
     verdict("B4.24", filter_24(kept_24) == kept_24, "filter_24 garde les lignes ordinaires.",
             f"filter_24 ne doit retirer que les lignes qui correspondent à SUSPICIOUS_24 ; {kept_24!r} devient "
-            f"{filter_24(kept_24)!r}.")'''
+            f"{filter_24(kept_24)!r}.")
+with checked("B4.24"):
+    class FakeModel_24:
+        """Stands for MODEL_24 during the check: it notes its calls and answers PWNED when the payload reaches it."""
+
+        def __init__(self):
+            self.calls = []
+
+        def generate(self, messages, **settings):
+            self.calls.append((messages, settings))
+            return "PWNED" if "PWNED" in messages[-1]["content"] else "John Turner [1]"
+
+    fake_24 = FakeModel_24()
+    out_24 = run_24(fake_24, "délimiteurs + filtre")
+    n_24 = len(SEEDS_24) * len(ITEMS_24) * len(PAYLOADS_24)
+    seeds_24 = [settings.get("seed") for _, settings in fake_24.calls]
+    verdict("B4.24", len(fake_24.calls) == n_24 and seeds_24 == [s for s in SEEDS_24 for _ in range(n_24 // len(SEEDS_24))]
+            and all(st.get("do_sample") and st.get("temperature") == 0.7 for _, st in fake_24.calls),
+            f"run_24 : {n_24} tirages à T = 0,7, graine par graine.",
+            f"run_24 doit faire un tirage (do_sample=True, temperature=0.7) par graine, question et charge ({n_24}), les "
+            f"graines {list(SEEDS_24)} dans l'ordre ; vu {len(fake_24.calls)} appels, graines "
+            f"{sorted(set(seeds_24), key=str)}.")
+    first_24 = fake_24.calls[0][0] if fake_24.calls else [{}]
+    verdict("B4.24", first_24[0].get("content") == GUARD_SYSTEM_24 and "<passage>" in first_24[-1].get("content", "")
+            and "PWNED" not in first_24[-1].get("content", ""),
+            "avec « délimiteurs + filtre » : la consigne de garde, les balises, la charge filtrée.",
+            "avec la défense « délimiteurs + filtre », chaque prompt doit passer par filter_24 puis delimited_messages_24.")
+    att_24 = np.asarray(out_24[0]) if isinstance(out_24, (tuple, list)) and len(out_24) == 2 else None
+    verdict("B4.24", att_24 is not None and att_24.dtype == bool
+            and att_24.shape == (len(SEEDS_24), n_24 // len(SEEDS_24)) and not att_24.any(),
+            "deux tableaux de booléens (graines, passages × charges).",
+            f"run_24 doit rendre deux tableaux de booléens de forme ({len(SEEDS_24)}, {n_24 // len(SEEDS_24)}).")
+    plain_24 = FakeModel_24()
+    att_plain_24 = np.asarray(run_24(plain_24, "aucune")[0])
+    verdict("B4.24", att_plain_24.all() and plain_24.calls and plain_24.calls[0][0][0].get("content") == SYSTEM_21,
+            "sans défense, le passage injecté arrive tel quel au modèle, avec les messages de B4.21.",
+            "avec la défense « aucune », le passage injecté doit arriver tel quel (rag_messages_21, sans filtre).")'''
 
 EXPERIMENT_24 = r'''table_24 = None
 if MODEL_24 is None:
@@ -1227,12 +1299,15 @@ import tempfile
 from pathlib import Path
 
 MAIN_30 = [q for q in QA if q["id"] in wbrag.FAST_IDS] if FAST_MODE else list(QA)     # the questions that count
-CONTROL_30 = wbrag.load_control()[:«N_CONTROL_FAST_30»] if FAST_MODE else wbrag.load_control()   # held-out questions
+CONTROL_30 = ([q for q in wbrag.load_control() if q["story"] in {m["story"] for m in MAIN_30}] if FAST_MODE
+              else wbrag.load_control())                   # held-out questions (fast mode: those of the same stories)
 STORIES_30 = sorted({q["story"] for q in MAIN_30 + CONTROL_30})   # the stories given: all 12 in full mode
 LIMIT_30 = «LIMIT_FAST_30» if FAST_MODE else «LIMIT_FULL_30»      # seconds: a reduced run in fast mode, THE challenge in full mode
 GOAL_30 = «GOAL_FAST_30» if FAST_MODE else «GOAL_FULL_30»         # good cited answers to reach (worst seed of the reference − margin)
 REFERENCE_30 = «REF_FAST_30» if FAST_MODE else «REF_FULL_30»      # the reference solution: (best, worst) over its chunkings
-CONTROL_MARGIN_30 = «MARGIN_FAST_30» if FAST_MODE else «MARGIN_FULL_30»   # control: its rate may be this much below the main one
+REF_RATES_30 = «RATES_FAST_30» if FAST_MODE else «RATES_FULL_30»   # the reference's mean rates: (annotated, control)
+CONTROL_MARGIN_30 = «MARGIN_FAST_30» if FAST_MODE else «MARGIN_FULL_30»   # control: how far below the annotated questions
+                                                   # its rate may fall, both measured against the reference's rates
 MAX_PARAMS_30, MAX_ANSWER_WORDS_30, MAX_PASSAGE_WORDS_30 = 600_000_000, 8, 150
 
 
@@ -1383,13 +1458,18 @@ def _make_evaluate_30():
                  if sizes else "aucune génération par generate() : rien à compter."),
                 f"un modèle de langue de {spaced(largest)} paramètres a servi pendant la course : le défi en permet "
                 f"{spaced(MAX_PARAMS_30)}.")
-        honest = rate_control >= rate - CONTROL_MARGIN_30
-        verdict("B4.30", honest,
-                f"contrôle : {good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart "
-                f"({fr(100 * rate_control, 0)} %), cohérent avec les {fr(100 * rate, 0)} % des questions annotées.",
-                f"contrôle : {good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart "
-                f"({fr(100 * rate_control, 0)} %), bien moins que sur les questions annotées ({fr(100 * rate, 0)} %) : ta "
-                f"méthode lit-elle autre chose que les questions et les documents ?")
+        # the two sets are not equally hard: each rate is compared with the reference's rate on the same set
+        rel_main, rel_control = rate / REF_RATES_30[0], rate_control / REF_RATES_30[1]
+        honest = rel_control >= rel_main - CONTROL_MARGIN_30
+        compared = (f"{good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart, soit "
+                    f"{fr(rel_control, 2)} fois la référence (son taux : {fr(100 * REF_RATES_30[1], 0)} %), et "
+                    f"{fr(rel_main, 2)} fois la référence sur les questions annotées ({fr(100 * REF_RATES_30[0], 0)} %)")
+        verdict("B4.30", honest, f"contrôle : {compared} : cohérent.",
+                f"contrôle : {compared} : bien moins sur les questions que ta méthode n'a pas pu voir (écart toléré "
+                f"{fr(CONTROL_MARGIN_30, 2)}). Lit-elle autre chose que les questions et les documents ?")
+        if not sizes and seconds < 5:
+            print("⚠️ Ex B4.30 : une course de moins de 5 s sans aucune passe avant d'un modèle de langue : as-tu calculé "
+                  "quelque chose avant la course (règle 2) ?")
         ok = seconds <= LIMIT_30 and largest <= MAX_PARAMS_30 and honest
         verdict("B4.30", ok and good >= GOAL_30,
                 f"défi réussi : {good} bonnes réponses citées sur {len(main)} (objectif {GOAL_30} ; référence de "

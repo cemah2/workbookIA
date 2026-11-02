@@ -201,3 +201,23 @@ def test_smollm2_greedy_reply_is_deterministic_and_cached(tmp_path):
     assert first == again and first.strip()
     assert llm.generate("Who is Sherlock Holmes?", max_new_tokens=8, cache=cache) == first and cache.hits == 1
     assert llm.model.dtype.__str__() == "torch.float32" and not llm.model.training
+
+
+def test_unload_frees_the_weights_and_the_next_use_loads_them_again(monkeypatch):
+    """ChatLM.unload drops the weights (a notebook frees Qwen2.5 before training other models); the next use of
+    .model loads them again."""
+    import transformers
+
+    loads = []
+
+    def fake_load(*args, **kwargs):
+        loads.append(args[0])
+        return type("M", (), {"eval": lambda self: self})()
+
+    monkeypatch.setattr(transformers.AutoModelForCausalLM, "from_pretrained", fake_load)
+    llm = wbllm.ChatLM("smollm2", FakeTokenizer())
+    assert llm.unload() is False and not llm.loaded
+    llm.model  # noqa: B018
+    assert llm.loaded and llm.unload() is True and not llm.loaded
+    llm.model  # noqa: B018
+    assert len(loads) == 2 and llm.loaded

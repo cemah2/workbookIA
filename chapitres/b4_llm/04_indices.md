@@ -984,7 +984,7 @@ Relis « LoRA avec peft », le piège des `Conv1D` de GPT-2 et « Que montrer au
 - `load_base_26` : `AutoModelForCausalLM.from_pretrained(SPEC_26["repo"], revision=..., dtype=torch.float32)`, puis `.eval()`.
 - `lora_model_26` : un `LoraConfig` avec les six réglages du contrat, puis `get_peft_model`.
 - La loss du token suivant : `model(input_ids=w).logits`, les logits des positions 0 à $T - 2$ (`[:, :-1]`) contre les tokens 1 à $T - 1$ (`w[:, 1:]`), aplatis pour `F.cross_entropy`.
-- `perplexity_26` : `model.eval()` et `torch.no_grad()`, puis `math.exp(loss.item())`.
+- `perplexity_26` : `model.eval()` et `torch.no_grad()` ; parcours `windows.split(batch_size)`, additionne les cross-entropies (`reduction="sum"`) et compte les positions, puis `math.exp(total / nombre)` : la moyenne des moyennes de paquets inégaux serait fausse, et un seul paquet de 16 fenêtres tient 400 Mo de logits.
 - `train_26` : `torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=lr)`, `model.train()`, la boucle, `model.eval()`.
 
 </details>
@@ -996,10 +996,19 @@ def next_token_loss(model, windows):
     return F.cross_entropy(logits[:, :-1].flatten(0, 1), windows[:, 1:].flatten())
 
 
+def perplexity_26(model, windows, batch_size=4):
+    model.eval()
+    total, count = 0.0, 0
+    with torch.no_grad():
+        for part in windows.split(batch_size):
+            ...                                              # the summed cross-entropy of this part, its positions
+    return math.exp(total / count)
+
+
 def train_26(model, steps, lr, generator):
     optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=lr)
     model.train()
-    ...                                                      # steps × (batch, loss, zero_grad, backward, step), eval
+    ...                                                      # steps × (batch_26, loss, zero_grad, backward, step), eval
 ```
 
 </details>

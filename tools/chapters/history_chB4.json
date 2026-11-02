@@ -1312,7 +1312,8 @@
   "trainable": 832,
   "a_only": 512,
   "b_only": 320,
-  "all": 36048
+  "all": 36048,
+  "base_trainable": 6032
  },
  "lora26": {
   "fast": [
@@ -1376,8 +1377,8 @@
       20
      ],
      "good": 7,
-     "control": 2,
-     "seconds": 139.1,
+     "control": 5,
+     "seconds": 142.7,
      "cold": true
     },
     {
@@ -1386,8 +1387,8 @@
       20
      ],
      "good": 3,
-     "control": 1,
-     "seconds": 116.5,
+     "control": 4,
+     "seconds": 68.8,
      "cold": false
     },
     {
@@ -1396,8 +1397,8 @@
       20
      ],
      "good": 7,
-     "control": 2,
-     "seconds": 114.5,
+     "control": 5,
+     "seconds": 64.6,
      "cold": false
     },
     {
@@ -1406,8 +1407,8 @@
       30
      ],
      "good": 5,
-     "control": 2,
-     "seconds": 119.8,
+     "control": 4,
+     "seconds": 68.8,
      "cold": false
     },
     {
@@ -1416,19 +1417,22 @@
       25
      ],
      "good": 4,
-     "control": 2,
-     "seconds": 121.4,
+     "control": 5,
+     "seconds": 71.2,
      "cold": false
     }
    ],
    "n_main": 10,
-   "n_control": 4,
+   "n_control": 7,
    "n_stories": 7,
    "control_ids": [
     "C01",
     "C02",
     "C03",
-    "C04"
+    "C04",
+    "C06",
+    "C08",
+    "C11"
    ]
   },
   "full": {
@@ -2283,6 +2287,69 @@
      34.79053109894733
     ]
    }
+  ]
+ },
+ "ch30_fast_4controls": {
+  "runs": [
+   {
+    "chunk": [
+     120,
+     20
+    ],
+    "good": 7,
+    "control": 2,
+    "seconds": 139.1,
+    "cold": true
+   },
+   {
+    "chunk": [
+     100,
+     20
+    ],
+    "good": 3,
+    "control": 1,
+    "seconds": 116.5,
+    "cold": false
+   },
+   {
+    "chunk": [
+     140,
+     20
+    ],
+    "good": 7,
+    "control": 2,
+    "seconds": 114.5,
+    "cold": false
+   },
+   {
+    "chunk": [
+     120,
+     30
+    ],
+    "good": 5,
+    "control": 2,
+    "seconds": 119.8,
+    "cold": false
+   },
+   {
+    "chunk": [
+     110,
+     25
+    ],
+    "good": 4,
+    "control": 2,
+    "seconds": 121.4,
+    "cold": false
+   }
+  ],
+  "n_main": 10,
+  "n_control": 4,
+  "n_stories": 7,
+  "control_ids": [
+   "C01",
+   "C02",
+   "C03",
+   "C04"
   ]
  }
 }

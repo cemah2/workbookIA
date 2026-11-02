@@ -53,37 +53,43 @@ GIVEN_27 = _fill(C2.GIVEN_27, {"STEPS_27": repr(FAST27.get("steps", 20)),
                                 "FULL_27": repr(FULL27)})
 def _ch30_values() -> dict:
     """The constants of the challenge, from the calibration of history_chB4.py (entry "ch30"): the reference raced on
-    five chunkings in each mode; goal = its worst run minus one question; the control margin covers the largest gap
-    between the annotated questions and the control seen on the reference, plus 15 points, at least 20 (fast mode:
-    at least 35 points, with 4 control questions); the time limit of the reduced run leaves the reference a quarter of its time again."""
+    five chunkings in each mode; goal = its worst run minus one question. The control questions are easier than the
+    annotated ones, so each rate is divided by the reference's mean rate on the same set; the margin covers the largest
+    gap seen on the reference between these two relative rates, plus CONTROL_SLACK. The time limit of the reduced run
+    leaves the reference a quarter of its time again."""
     import math
     out = {}
     for mode in ("fast", "full"):
         runs = CH30_RAW.get(mode, {}).get("runs", [])
         if not runs:
-            out.update({f"ref_{mode}_30": (0, 0), f"goal_{mode}_30": 0, f"margin_{mode}_30": 0.5})
+            out.update({f"ref_{mode}_30": (0, 0), f"goal_{mode}_30": 0, f"margin_{mode}_30": 0.5,
+                        f"rates_{mode}_30": (0.5, 0.5)})
             continue
         n_main = CH30_RAW[mode].get("n_main", 10 if mode == "fast" else 30)
-        n_control = CH30_RAW[mode].get("n_control", 4 if mode == "fast" else 12)
+        n_control = CH30_RAW[mode].get("n_control", 12)
         goods = [r["good"] for r in runs]
-        gaps = [r["good"] / n_main - r["control"] / n_control for r in runs]
+        ref_main = sum(goods) / len(goods) / n_main
+        ref_control = sum(r["control"] for r in runs) / len(runs) / n_control
+        gaps = [r["good"] / n_main / ref_main - r["control"] / n_control / ref_control for r in runs]
         out[f"ref_{mode}_30"] = (max(goods), min(goods))
         out[f"goal_{mode}_30"] = min(goods) - 1
-        margin = math.ceil(20 * (max(0.0, max(gaps)) + 0.15)) / 20
-        out[f"margin_{mode}_30"] = max(margin, 0.35) if mode == "fast" else max(margin, 0.2)
+        out[f"rates_{mode}_30"] = (round(ref_main, 4), round(ref_control, 4))
+        out[f"margin_{mode}_30"] = math.ceil(20 * (max(0.0, max(gaps)) + CONTROL_SLACK)) / 20
         out[f"seconds_{mode}_30"] = next(r["seconds"] for r in runs if r["cold"])
     out["limit_fast_30"] = float(10 * math.ceil(1.25 * out.get("seconds_fast_30", 100) / 10))
     out["limit_full_30"] = 600.0
-    out["n_control_fast_30"] = CH30_RAW.get("fast", {}).get("n_control", 4)
+    out["n_control_fast_30"] = CH30_RAW.get("fast", {}).get("n_control", 7)
     out["n_stories_fast"] = CH30_RAW.get("fast", {}).get("n_stories", 7)
     out["control_ids"] = CH30_RAW.get("full", {}).get("control_ids", [])
     return out
 
 
+CONTROL_SLACK = 0.25          # beyond the largest gap seen on the reference (relative rates)
 CH30_RAW = HISTORY.get("ch30", {})
 CH30 = _ch30_values()
 GIVEN_30 = _fill(C2.GIVEN_30, {
-    "N_CONTROL_FAST_30": repr(CH30["n_control_fast_30"]), "LIMIT_FAST_30": repr(CH30["limit_fast_30"]),
+    "RATES_FAST_30": repr(CH30["rates_fast_30"]), "RATES_FULL_30": repr(CH30["rates_full_30"]),
+    "LIMIT_FAST_30": repr(CH30["limit_fast_30"]),
     "LIMIT_FULL_30": repr(CH30["limit_full_30"]), "GOAL_FAST_30": repr(CH30["goal_fast_30"]),
     "GOAL_FULL_30": repr(CH30["goal_full_30"]), "REF_FAST_30": repr(CH30["ref_fast_30"]),
     "REF_FULL_30": repr(CH30["ref_full_30"]), "MARGIN_FAST_30": repr(CH30["margin_fast_30"]),
@@ -95,7 +101,7 @@ def _mistakes(entries: dict) -> str:
 
 
 RECORD_25 = (
-    f'wb.record("B4.25a", {B25["trainable"]}, mistakes={_mistakes({"les couches qui ne sont pas adaptées comptent : as-tu gelé tout le modèle avant de poser les branches ?": B25["all"], "seule A compte ici : B est aussi un paramètre entraînable": B25["a_only"], "seule B compte ici : A est aussi un paramètre entraînable": B25["b_only"]})}, '
+    f'wb.record("B4.25a", {B25["trainable"]}, mistakes={_mistakes({"les couches qui ne sont pas adaptées comptent : as-tu gelé tout le modèle avant de poser les branches ?": B25["all"], "seule A compte ici : B est aussi un paramètre entraînable": B25["a_only"], "seule B compte ici : A est aussi un paramètre entraînable": B25["b_only"], "les couches adaptées elles-mêmes comptent : dans LoRALinear, le poids et le biais de la couche de base doivent rester gelés": B25.get("base_trainable", 6032)})}, '
     'fractional="un nombre de paramètres est un entier")')
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -142,7 +148,7 @@ EX_24 = Ex("B4.24", "🔬", 2, 30, "Injection de prompt cachée dans un passage 
 - `filter_24(passage)` rend le passage sans ses lignes (coupées sur `"\n"`) qui correspondent à l'un des motifs de `SUSPICIOUS_24` (`re.search`, sans tenir compte de la casse), les autres lignes recollées par `"\n"`.
 - `run_24(model, defense)` : pour chaque graine de `SEEDS_24`, chaque question de `ITEMS_24` (avec son passage) et chaque charge de `PAYLOADS_24`, dans cet ordre : le passage injecté, filtré si la défense contient « filtre », les messages de `rag_messages_21` (ou de `delimited_messages_24` si la défense contient « délimiteurs ») pour la question et ce seul passage, puis **une** réponse, `model.generate(messages, max_new_tokens=16, do_sample=True, temperature=0.7, seed=seed, cache=CACHE)`. Rend deux tableaux NumPy de booléens de forme `(len(SEEDS_24), len(ITEMS_24) * len(PAYLOADS_24))` : les attaques réussies (`attacked_24`) et les réponses qui contiennent la réponse attendue (`wbrag.answer_in`).
 
-La cellule de vérification essaie tes fonctions sur des cas visibles. L'expérience fait tourner les quatre défenses (144 générations courtes de SmolLM2 en mode rapide, environ 2 min la première fois, puis le cache) et affiche, pour chaque défense, le taux d'attaques réussies (moyenne sur les graines et son écart-type), la part de réponses justes, et le taux par charge.
+La cellule de vérification essaie tes fonctions sur des cas visibles, puis `run_24` avec un modèle factice qui note ses appels (graines, consigne de garde, balises, filtre). L'expérience fait tourner les quatre défenses (144 générations courtes de SmolLM2 en mode rapide, environ 2 min la première fois, puis le cache) et affiche, pour chaque défense, le taux d'attaques réussies (moyenne sur les graines et son écart-type), la part de réponses justes, et le taux par charge.
 
 Dans tes notes : quelle parade réduit le plus le taux d'attaques, et de combien, comparé à sa dispersion d'une graine à l'autre ? Une parade **aggrave**-t-elle une charge, pour un modèle ou pour l'autre ? Que coûte chaque parade sur les réponses justes ? Un filtre par expressions régulières résiste-t-il à une charge reformulée ? Pourquoi aucune de ces parades ne dispense de donner au modèle le moins de droits possible (fiche §204.10) ?""",
            given=GIVEN_24, todo=C2.TODO_24, check=C2.CHECK_24, solution=C2.SOLUTION_24 + "\n\n\n" + C2.CHECK_24,
@@ -156,7 +162,7 @@ PART_C = Part("C", "Fine-tuning",
               "tu mesures sa perplexité avant et après, puis tu fusionnes l'adaptateur (B4.26), tu fais varier le rang, "
               "le facteur α et les couches ciblées (B4.27), et tu compares trois façons de classer des textes (B4.28).\n\n"
               "**Sur CPU.** En mode rapide, tout tourne sur distilgpt2 (82 M de paramètres, Apache 2.0, ≈ 350 Mo à "
-              "télécharger une fois) avec 30 pas d'entraînement de 4 séquences de 128 tokens (environ 45 s sur deux cœurs), et "
+              "télécharger une fois) avec 30 pas d'entraînement de 4 séquences de 128 tokens (de 45 s à 1 min 30 sur deux cœurs, selon la charge de la machine), et "
               "MiniLM sur 1 000 messages. Les modes complets 🚀 (SmolLM2-135M, plus de pas, toutes les données) "
               "tournent mieux sur un GPU de Colab ; leurs résultats, précalculés, sont affichés à côté des tiens.\n\n"
               "La cellule suivante charge les outils de la partie : `trainable(model)` (le nombre de paramètres "
@@ -191,24 +197,24 @@ Dans tes notes : pourquoi la sortie de départ est-elle **exactement** celle de 
 **Contrat**
 - `load_base_26()` rend un modèle **neuf** `NAME_26` (`SPEC_26["repo"]` à `SPEC_26["revision"]`), en float32, en mode eval.
 - `lora_model_26(model, r, alpha, targets=TARGETS_26)` rend le `PeftModel` de `get_peft_model` : rang `r`, `lora_alpha=alpha`, les couches `targets`, `lora_dropout=0.0`, `fan_in_fan_out=FAN_IN_FAN_OUT_26` (les `Conv1D` de GPT-2, fiche §204.8), `task_type="CAUSAL_LM"`.
-- `perplexity_26(model, windows)` rend un `float` : l'exponentielle de la cross-entropy moyenne du token suivant sur toutes les positions de toutes les fenêtres (`windows` : des ids `(N, T)` ; la position $t$ prédit le token $t + 1$), en mode eval et sans gradient.
+- `perplexity_26(model, windows, batch_size=4)` rend un `float` : l'exponentielle de la cross-entropy moyenne du token suivant sur toutes les positions de toutes les fenêtres (`windows` : des ids `(N, T)` ; la position $t$ prédit le token $t + 1$), en mode eval et sans gradient, les fenêtres passées `batch_size` à la fois : la moyenne porte sur **toutes** les positions (additionne les cross-entropies, puis divise par le nombre de positions), et 16 fenêtres d'un coup tiendraient 400 Mo de logits (50 257 par position).
 - `train_26(model, steps, lr, generator)` fait `steps` pas d'AdamW (learning rate `lr`) sur les **seuls** paramètres entraînables : à chaque pas, `batch_26(generator)`, la cross-entropy moyenne du token suivant, `backward`, `step` ; le modèle en mode train pendant la boucle, en mode eval à la fin ; rend la liste des `steps` losses (des `float`).
 
-La cellule de vérification charge ton modèle (révision, float32, mode eval), compare `perplexity_26` à un calcul de référence sur deux fenêtres, pose LoRA ($r = 4$, $\alpha = 8$) et vérifie sa configuration (sans avertissement de peft), affiche le nombre de paramètres entraînables, entraîne `STEPS_26` pas (environ 45 s sur CPU en mode rapide), vérifie que les poids gelés n'ont pas bougé et compare la perplexité tenue à l'écart avant et après. Elle fusionne enfin l'adaptateur (`merge_and_unload`), compare les logits avant et après la fusion, et fait continuer une même phrase par le modèle d'origine et par le modèle adapté. En mode complet (🚀), SmolLM2-135M, `STEPS_26` pas plus longs : environ 15 min sur CPU, 1 à 2 min sur un GPU de Colab.
+La cellule de vérification charge ton modèle (révision, float32, mode eval), compare `perplexity_26` à un calcul de référence sur deux fenêtres, pose LoRA ($r = 4$, $\alpha = 8$) et vérifie sa configuration (sans avertissement de peft), affiche le nombre de paramètres entraînables, entraîne `STEPS_26` pas (de 45 s à 1 min 30 sur CPU en mode rapide, selon la charge de la machine) en notant les lots que tire `batch_26`, vérifie que les poids gelés n'ont pas bougé et compare la perplexité tenue à l'écart avant et après. Elle fusionne enfin l'adaptateur (`merge_and_unload`), compare les logits avant et après la fusion, et fait continuer une même phrase par le modèle d'origine et par le modèle adapté. En mode complet (🚀), SmolLM2-135M, `STEPS_26` pas plus longs : environ 15 min sur CPU, 1 à 2 min sur un GPU de Colab.
 
-Dans tes notes : de combien la perplexité tenue à l'écart baisse-t-elle, et que mesure-t-elle exactement (le style, le vocabulaire, les noms propres des nouvelles) ? La loss d'entraînement baisse-t-elle régulièrement d'un pas à l'autre, et pourquoi pas ? Quelle part des paramètres as-tu entraînée, et combien pèserait l'adaptateur sauvé en float32 ? Pourquoi les logits fusionnés ne sont-ils pas identiques au bit près ? Lis la continuation adaptée : le style a-t-il changé, et le contenu est-il plus vrai ?""",
+Dans tes notes : de combien la perplexité tenue à l'écart baisse-t-elle, et que mesure-t-elle exactement (le style, le vocabulaire, les noms propres des nouvelles) ? La loss d'entraînement baisse-t-elle régulièrement d'un pas à l'autre, et pourquoi pas (chaque lot est tiré ailleurs ; et le modèle est en mode train pendant la boucle : que fait son dropout à la loss) ? Quelle part des paramètres as-tu entraînée, et combien pèserait l'adaptateur sauvé en float32 ? Pourquoi les logits fusionnés ne sont-ils pas identiques au bit près ? Lis la continuation adaptée : le style a-t-il changé, et le contenu est-il plus vrai ?""",
        given=GIVEN_26, todo=C2.TODO_26, check=C2.CHECK_26, solution=C2.SOLUTION_26 + "\n\n\n" + C2.CHECK_26),
 
     Ex("B4.27", "🔬", 3, 45, "Rang, alpha et modules ciblés : perplexité contre paramètres entraînables",
        "mesurer ce que changent le rang, le facteur α et les couches ciblées sur la perplexité et sur le nombre de "
        "paramètres entraînés.",
        "Ex B4.26 · ✏️ B4.3 · ∂ B4.6 · fiche §204.8 (« LoRA », « LoRA avec peft ») · 📄 B4.11", tracks="C",
-       body=r"""✏️ B4.3 a fait compter les paramètres et ∂ B4.6 a dit le rôle du facteur $\alpha/r$ ; tu mesures ici leur effet sur la perplexité tenue à l'écart de B4.26. La cellule suivante donne `GRID_27`, les réglages du **protocole rapide** (le rang, $\alpha$ et les couches ciblées : `c_attn` seule, ou toutes les couches denses des blocs, `c_attn`, `c_proj` et `c_fc`), `STEPS_27` pas chacun, et `FULL_27`, le **protocole complet** précalculé avec la solution (plus de pas, sept rangs, deux familles de $\alpha$, plusieurs graines).
+       body=r"""✏️ B4.3 a fait compter les paramètres et ∂ B4.6 a dit le rôle du facteur $\alpha/r$ ; tu mesures ici leur effet sur la perplexité tenue à l'écart de B4.26. La cellule suivante donne `GRID_27`, les réglages du **protocole rapide** (le rang, $\alpha$ et les couches ciblées : `c_attn` seule, ou toutes les couches denses des blocs, `c_attn`, `c_proj` et `c_fc` ; le nom `c_proj` désigne **deux** couches de chaque bloc, la sortie de l'attention et celle du MLP, et peft les prend toutes les deux), `STEPS_27` pas chacun, et `FULL_27`, le **protocole complet** précalculé avec la solution (plus de pas, sept rangs, deux familles de $\alpha$, plusieurs graines).
 
 **Contrat**
 - `experiment_27(r, alpha, targets, steps, seed)` : un modèle d'origine neuf (`load_base_26`), `lora_model_26(model, r, alpha, targets)`, `train_26` pendant `steps` pas avec `torch.Generator().manual_seed(seed)` et `LR_26`, puis rend `{"trainable": le nombre de paramètres entraînables (un int), "ppl": la perplexité sur HELD_26 (un float)}`.
 
-La cellule de vérification essaie un réglage de deux pas. L'expérience fait tourner les réglages de `GRID_27` (environ 1 min 30 sur CPU en mode rapide) et trace la perplexité contre le nombre de paramètres entraînables (échelle logarithmique), à côté des courbes du protocole complet, avec l'écart-type entre graines.
+La cellule de vérification essaie un réglage de deux pas, puis de zéro pas, qui doit rendre la perplexité du modèle d'origine sur `HELD_26` ($\mathbf{B}$ est nulle au départ). L'expérience fait tourner les réglages de `GRID_27` (environ 1 min 30 sur CPU en mode rapide) et trace la perplexité contre le nombre de paramètres entraînables (échelle logarithmique), à côté des courbes du protocole complet, avec l'écart-type entre graines.
 
 Dans tes notes : la perplexité suit-elle le nombre de paramètres, ou sature-t-elle, et à partir de quel rang ? Que change $\alpha$ à rang fixé, et pourquoi Hu et coll. le fixent-ils au premier rang essayé (📄 B4.11, ∂ B4.6) ? Cibler toutes les couches vaut-il plus de paramètres que monter le rang sur `c_attn` ? Les écarts entre réglages dépassent-ils la dispersion entre graines ? Quel réglage choisirais-tu pour un adaptateur à livrer, et sur quel critère ?""",
        given=GIVEN_27, todo=C2.TODO_27, check=C2.CHECK_27, solution=C2.SOLUTION_27 + "\n\n\n" + C2.CHECK_27,
@@ -267,19 +273,19 @@ TITLE_30 = next(e["title"] for e in TITLE_30 if e["id"] == "B4.30")
 
 BODY_30 = f"""En B4.21, le RAG de référence donnait {NAIVE30} réponses justes **et** citées sur les 30 questions de Holmes ; B4.23 a montré où il perd les autres. Le défi : au moins **{GOAL30["full"]} bonnes réponses citées sur 30** ({_fr(100 * GOAL30["full"] / 30)} %), avec un générateur d'au plus **0,6 milliard de paramètres**, sur CPU, en **{_fr(LIMIT30["full"] / 60)} minutes** au plus. La solution de référence en obtient de {REF30["full"][1]} à {REF30["full"][0]} selon le découpage ; l'objectif lui laisse une marge.
 
-Écris `method_30(questions, documents)` : elle reçoit les questions (des chaînes) et les documents (les nouvelles, `[(titre, texte)]`), **et rien d'autre** ; elle indexe les documents pendant la course, puis rend, pour chaque question dans l'ordre, un couple `(réponse, passage)`. Tout est permis : ta librairie, `wb.rag`, `wb.text`, `wb.llm`, un autre découpage, d'autres modèles d'embedding, un autre prompt, plusieurs passes, une citation choisie par ton programme plutôt que par le modèle. `evaluate_30(method_30)` (cellule suivante) compte une **bonne réponse citée** quand :
+Écris `method_30(questions, documents)` : elle reçoit les questions (des chaînes) et les documents (les nouvelles, `[(titre, texte)]`), **et rien d'autre** (les modèles déjà chargés du notebook, `QWEN`, `SM_19`, `SM_E5`, et ta librairie sont permis : ce sont des outils, pas des données) ; elle indexe les documents pendant la course, puis rend, pour chaque question dans l'ordre, un couple `(réponse, passage)`. Tout est permis : ta librairie, `wb.rag`, `wb.text`, `wb.llm`, un autre découpage, d'autres modèles d'embedding, un autre prompt, plusieurs passes, une citation choisie par ton programme plutôt que par le modèle. `evaluate_30(method_30)` (cellule suivante) compte une **bonne réponse citée** quand :
 - la réponse est **courte** (au plus 8 mots une fois normalisée par `wbrag.normalize_answer`) et **juste** (la réponse attendue ou une variante y figure, en mots entiers, comme `wbrag.answer_in`) ;
 - le passage est **copié** d'un document (au plus 150 mots, les blancs peuvent différer) et **contient tous les mots de contenu** de la réponse (`wbrag.supports`, la règle de `verify_21`).
 
 Et elle vérifie quatre règles :
 1. **le générateur** : chaque modèle de langue qui sert pendant la course, par `generate()` ou par des passes avant écrites à la main (un modèle de transformers qui hérite de `GenerationMixin`), compte au plus 600 000 000 paramètres, comptés sur le modèle chargé par `model.num_parameters()`, poids liés une fois. Qwen2.5-0.5B-Instruct en compte 494 032 768 ; Qwen3-0.6B, 596 049 920 (son fichier safetensors en contient 751 632 384, lm_head rangé à part, et le Hub affiche « 0.8B »). Les modèles d'embedding ne sont pas comptés ;
-2. **à froid** : pendant la course, le cache des réponses générées ne lit ni n'écrit rien, les embeddings ne sont pas relus du cache, et les index calculés avant elle et rangés dans des variables globales (des tableaux d'embeddings ou de tokens d'au moins 100 lignes, un BM25 ajusté, `INDEX_20`…) valent un leurre : ta méthode indexe pendant la course. Le chargement des poids, fait avant la course, ne compte pas ;
-3. **rien des annotations** : ta méthode ne lit ni les réponses ni les extraits. Pendant la course, `wbrag.load_qa`, `load_unanswerable`, `load_control`, `relevant_ids`, `answer_in` et `control_correct` refusent, et les variables globales qui contiennent des questions annotées ou des réponses notées (`QA`, `QUESTIONS_21`, `rows_21`…) valent un leurre. Puis un **contrôle** : {len(CH30["control_ids"]) or 12} questions tenues à l'écart, dont les réponses ne sont nulle part en clair (`data/qa/holmes_control.json` ne garde que leurs empreintes SHA-256), sont **mélangées** aux 30 ; ta méthode doit y réussir à peu près aussi bien (au plus {_fr(100 * CH30["margin_full_30"])} points de pourcentage de moins ; {_fr(100 * CH30["margin_fast_30"])} en mode rapide, avec 4 questions de contrôle seulement) ;
+2. **à froid** : pendant la course, le cache des réponses générées ne lit ni n'écrit rien, les embeddings ne sont pas relus du cache, et les index calculés avant elle et rangés dans des variables globales (des tableaux d'embeddings ou de tokens d'au moins 100 lignes, un BM25 ajusté, `INDEX_20`…) valent un leurre : ta méthode indexe, cherche et répond **pendant** la course ; rien n'est calculé avant elle à partir des questions ou des documents (index, embeddings, réponses). Le chargement des poids, fait avant la course, ne compte pas ;
+3. **rien des annotations** : ta méthode ne lit ni les réponses ni les extraits. Pendant la course, `wbrag.load_qa`, `load_unanswerable`, `load_control`, `relevant_ids`, `answer_in` et `control_correct` refusent, et les variables globales qui contiennent des questions annotées ou des réponses notées (`QA`, `QUESTIONS_21`, `rows_21`…) valent un leurre. Puis un **contrôle** : {len(CH30["control_ids"]) or 12} questions tenues à l'écart, dont les réponses ne sont nulle part en clair (`data/qa/holmes_control.json` ne garde que leurs empreintes SHA-256), sont **mélangées** aux 30 ; ces questions directes sont plus faciles que les 30 (la référence y réussit {_fr(100 * CH30["rates_full_30"][1])} % des fois contre {_fr(100 * CH30["rates_full_30"][0])} %) : chaque taux est donc rapporté à celui de la référence sur le même jeu, et ton taux relatif sur le contrôle ne doit pas tomber à plus de {_fr(CH30["margin_full_30"], 2)} sous ton taux relatif sur les 30 ({_fr(CH30["margin_fast_30"], 2)} en mode rapide) ;
 4. **dans le temps** : {_fr(LIMIT30["full"])} s pour toute la course, indexation comprise.
 
 Elle affiche enfin, pour chaque question annotée, si la réponse est juste et citée. Règle d'honneur : les réponses annotées servent à mesurer, jamais à régler ta méthode question par question.
 
-**En mode rapide**, la course est réduite : les 10 questions de `wbrag.FAST_IDS` et {CH30["n_control_fast_30"]} questions de contrôle, sur les {CH30["n_stories_fast"]} nouvelles qui les contiennent, en {_fr(LIMIT30["fast"])} s ; objectif **{GOAL30["fast"]} sur 10** (référence {REF30["fast"][1]} à {REF30["fast"][0]}) : de quoi vérifier ta méthode. Le défi lui-même se court avec `FAST_MODE = False` (environ {_fr(CH30.get("seconds_full_30", 300) / 60)} minutes pour la référence, sur CPU, chargement des modèles non compris).
+**En mode rapide**, la course est réduite : les 10 questions de `wbrag.FAST_IDS` et les {CH30["n_control_fast_30"]} questions de contrôle des mêmes nouvelles ({CH30["n_stories_fast"]}), en {_fr(LIMIT30["fast"])} s ; objectif **{GOAL30["fast"]} sur 10** (référence {REF30["fast"][1]} à {REF30["fast"][0]}) : de quoi vérifier ta méthode. Le défi lui-même se court avec `FAST_MODE = False` (environ {_fr(CH30.get("seconds_full_30", 300) / 60)} minutes pour la référence, sur CPU, chargement des modèles non compris).
 
 Dans tes notes : tes idées, leur gain et leur coût en secondes ; ce qui reste perdu à la recherche et ce qui est perdu à la lecture (refais l'analyse de B4.23 sur ta méthode) ; ce que tu ferais d'un modèle de 7 milliards de paramètres sur GPU ; et pourquoi une citation choisie par le programme n'est honnête que si le passage contient vraiment la réponse."""
 

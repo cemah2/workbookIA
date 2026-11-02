@@ -117,6 +117,17 @@ class ChatLM:
                                      f"{type(exc).__name__} : {str(exc).strip()[:300]}") from exc
         return self._model
 
+    def unload(self) -> bool:
+        """Free the weights (they are loaded again at the next generation that the cache cannot answer); True when
+        weights were loaded. A notebook that trains other models calls it to keep its memory low."""
+        if self._model is None:
+            return False
+        import gc
+
+        self._model = None
+        gc.collect()
+        return True
+
     # -- prompts -------------------------------------------------------------------------------------------------
     @staticmethod
     def messages(prompt) -> list:
