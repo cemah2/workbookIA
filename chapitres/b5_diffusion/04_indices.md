@@ -367,7 +367,7 @@ Relis « Un pas de bruit », l'encadré 🧮 sur la somme de deux gaussiennes in
 </details>
 <details><summary>Indice 2</summary>
 
-Deux règles suffisent : $aX \sim \mathcal{N}(0, a^2)$ si $X \sim \mathcal{N}(0, 1)$, et deux gaussiennes **indépendantes** s'additionnent en additionnant leurs variances. Pour l'hérédité, remplace $x_{t-1}$ par l'hypothèse dans $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, puis regroupe le terme en $x_0$ et les deux bruits. L'identité clé : $\alpha_t(1 - \bar\alpha_{t-1}) + 1 - \alpha_t = 1 - \bar\alpha_t$.
+Deux règles suffisent : $aX \sim \mathcal{N}(0, a^2)$ si $X \sim \mathcal{N}(0, 1)$, et deux gaussiennes **indépendantes** s'additionnent en additionnant leurs variances. Pour l'indépendance de la question 3, sers-toi du fait admis dans l'énoncé : de quels bruits $\bar\varepsilon_{t-1}$ est-il fait ? Pour l'hérédité, remplace $x_{t-1}$ par l'hypothèse dans $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, puis regroupe le terme en $x_0$ et les deux bruits. L'identité clé : $\alpha_t(1 - \bar\alpha_{t-1}) + 1 - \alpha_t = 1 - \bar\alpha_t$.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -385,7 +385,7 @@ Relis la règle de Bayes (ch. 4), « Le posterior » et l'encadré 🧮 sur le p
 </details>
 <details><summary>Indice 2</summary>
 
-Les deux facteurs, vus comme des fonctions de $y$, sont des gaussiennes : $\mathcal{N}(y;\ x_t/\sqrt{\alpha_t},\ \beta_t/\alpha_t)$ et $\mathcal{N}(y;\ \sqrt{\bar\alpha_{t-1}}\,x_0,\ 1 - \bar\alpha_{t-1})$. Les précisions s'additionnent, la moyenne est la moyenne des moyennes pondérée par les précisions. L'identité $\alpha_t(1 - \bar\alpha_{t-1}) + \beta_t = 1 - \bar\alpha_t$ simplifie tout.
+Pour la question 1, la propriété de Markov admise dans l'énoncé suffit : écris $x_t$ en fonction de $y$ et de $\varepsilon_t$. Les deux facteurs, vus comme des fonctions de $y$, sont des gaussiennes : $\mathcal{N}(y;\ x_t/\sqrt{\alpha_t},\ \beta_t/\alpha_t)$ et $\mathcal{N}(y;\ \sqrt{\bar\alpha_{t-1}}\,x_0,\ 1 - \bar\alpha_{t-1})$. Les précisions s'additionnent, la moyenne est la moyenne des moyennes pondérée par les précisions. L'identité $\alpha_t(1 - \bar\alpha_{t-1}) + \beta_t = 1 - \bar\alpha_t$ simplifie tout.
 
 </details>
 <details><summary>Indice 3</summary>

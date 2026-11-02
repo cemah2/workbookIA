@@ -5213,20 +5213,20 @@ Un modèle de diffusion apprend à débruiter : on abîme les images en ajoutant
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B5.Q1 | 🧠 | Diffusion, VAE, GAN : comment chacun fabrique-t-il une image ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q2 | 🧠 | Pourquoi détruire l'image en mille petits pas de bruit plutôt qu'en un seul ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q3 | 🧠 | ᾱ_t : quelle part de l'image reste-t-il au pas t ? | ★ | 3 | — | 02 | — | RM | manual |
-| B5.Q4 | 🧠 | Prédire le bruit, l'image ou la vitesse : la même information ? | ★★ | 3 | — | 02 | — | – | manual |
-| B5.Q5 | 🧠 | Le pas de temps est une entrée du réseau : pourquoi, et comment l'encoder ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q6 | 🧠 | U-Net : à quoi servent les connexions de saut ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q7 | 🧠 | Échantillonnage DDPM : pourquoi est-il lent et aléatoire ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q8 | 🧠 | DDIM : moins de pas avec le même réseau, vrai ou faux | ★★ | 3 | — | 02 | — | R | manual |
-| B5.Q9 | 🧠 | Guidance sans classifieur : ce que règle l'échelle w | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q10 | 🧠 | Un bon FID peut-il cacher de la copie des données d'entraînement ? | ★ | 3 | — | 02 | — | R | manual |
-| B5.Q11 | 🧠 | Diffusion latente, transformers de diffusion, flow matching : ce qui a changé depuis 2020 | ★ | 3 | — | 02 | — | R | manual |
-| B5.R1 | 🔁 | L'encodage sinusoïdal des positions | ★ | 5 | — | 02 | B3 | R | manual |
-| B5.R2 | 🔁 | Ce que mesure la distance de Fréchet et l'effondrement de mode | ★ | 5 | — | 02 | 27 | R | manual |
-| B5.R3 | 🔁 | L'astuce de reparamétrisation et le terme KL du VAE | ★ | 5 | — | 02 | 25 | R | manual |
+| B5.Q1 | 🧠 | Diffusion, VAE, GAN : comment chacun fabrique-t-il une image ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q2 | 🧠 | Pourquoi détruire l'image en mille petits pas de bruit plutôt qu'en un seul ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q3 | 🧠 | ᾱ_t : quelle part de l'image reste-t-il au pas t ? | ★ | 3 | — | 02 | — | RM | wb.check |
+| B5.Q4 | 🧠 | Prédire le bruit, l'image ou la vitesse : la même information ? | ★★ | 3 | — | 02 | — | – | wb.check |
+| B5.Q5 | 🧠 | Le pas de temps est une entrée du réseau : pourquoi, et comment l'encoder ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q6 | 🧠 | U-Net : à quoi servent les connexions de saut ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q7 | 🧠 | Échantillonnage DDPM : pourquoi est-il lent et aléatoire ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q8 | 🧠 | DDIM : moins de pas avec le même réseau, vrai ou faux | ★★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q9 | 🧠 | Guidance sans classifieur : ce que règle l'échelle w | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q10 | 🧠 | Un bon FID peut-il cacher de la copie des données d'entraînement ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.Q11 | 🧠 | Diffusion latente, transformers de diffusion, flow matching : ce qui a changé depuis 2020 | ★ | 3 | — | 02 | — | R | wb.check |
+| B5.R1 | 🔁 | L'encodage sinusoïdal des positions | ★ | 5 | — | 02 | B3 | R | wb.check |
+| B5.R2 | 🔁 | Ce que mesure la distance de Fréchet et l'effondrement de mode | ★ | 5 | — | 02 | 27 | R | wb.check |
+| B5.R3 | 🔁 | L'astuce de reparamétrisation et le terme KL du VAE | ★ | 5 | — | 02 | 25 | R | wb.check |
 | B5.1 | ✏️ | Guidance sans classifieur : combiner les deux prédictions pour w = 0, 1 et 3 | ★ | 10 | — | 02 | 0B | RM | wb.check |
 | B5.2 | ✏️ | Planning linéaire : β_t, α_t et ᾱ_t pour T = 4, puis ᾱ_T pour T = 1 000 | ★★ | 20 | — | 02 | 0B | RM | wb.check |
 | B5.3 | ✏️ | Rapport signal sur bruit : à quel pas un chiffre devient-il illisible, planning linéaire ou cosinus ? | ★★ | 20 | — | 02 | B5.2 | M | wb.check |

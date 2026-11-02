@@ -21,7 +21,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 a) Pour générer une image, un VAE déjà entraîné fait : (A) une seule passe de son décodeur sur un code tiré de $\mathcal{N}(\mathbf{0}, \mathbf{I})$ ; (B) un millier de passes de débruitage, chacune partant de la sortie de la précédente ; (C) une passe de son encodeur sur une image du dataset, puis une passe de son décodeur sur le code obtenu.
 b) Vrai ou faux : le processus direct d'un modèle de diffusion a des paramètres, appris pendant l'entraînement en même temps que le réseau.
 c) Lequel des trois apprend contre un second réseau chargé de juger ses images ? (A) le modèle de diffusion ; (B) le VAE ; (C) le GAN.
-d) Vrai ou faux : un modèle de diffusion ressemble à un VAE à $T$ étages dont tous les codes $\mathbf{x}_1, \dots, \mathbf{x}_T$ ont la taille de l'image.
+d) Vrai ou faux : sur MNIST, chacun des états $\mathbf{x}_1, \dots, \mathbf{x}_T$ d'un DDPM compte 784 valeurs, alors que le code d'un VAE en compte bien moins.
 e) Un générateur en une passe met 0,02 s par image. Un DDPM dont le réseau coûte autant par passe échantillonne en 1 000 pas. Combien de secondes lui faut-il pour une image ?
 
 ### B5.Q2 — Pourquoi détruire l'image en mille petits pas de bruit plutôt qu'en un seul ? 🧠 ⏱️ 3 min
@@ -30,7 +30,7 @@ e) Un générateur en une passe met 0,02 s par image. Un DDPM dont le réseau co
 a) Un réseau entraîné par MSE à passer **en un seul coup** du bruit pur à l'image rend : (A) une image nette, tirée au hasard parmi toutes celles qui auraient pu donner ce bruit ; (B) la moyenne des images compatibles avec ce bruit, donc une image floue ; (C) l'image du dataset la plus proche du bruit, recopiée.
 b) Pour une même entrée, trois cibles sont possibles et équiprobables : $-1$, $0$ et $2$. Quelle prédiction minimise la MSE, à 2 décimales ?
 c) Et que vaut alors cette MSE, à 2 décimales ?
-d) Vrai ou faux : quand $\beta_t$ est petit, la loi du pas inverse $q(\mathbf{x}_{t-1} \mid \mathbf{x}_t)$ est presque gaussienne.
+d) Vrai ou faux : avec 1 000 pas aux $\beta_t$ minuscules, modéliser chaque pas inverse par une gaussienne dont le réseau donne la moyenne est une approximation raisonnable.
 e) Vrai ou faux : pour détruire autant l'image au bout de la chaîne, une chaîne de 2 000 pas demande des $\beta_t$ plus grands qu'une chaîne de 1 000 pas.
 
 ### B5.Q3 — ᾱ_t : quelle part de l'image reste-t-il au pas t ? 🧠 ⏱️ 3 min
@@ -50,16 +50,16 @@ e) Quand $t$ augmente : (A) $\bar\alpha_t$ croît, puisque le réseau a vu plus 
 a) Connaissant $\mathbf{x}_t$, $t$ et le **vrai** bruit $\boldsymbol{\varepsilon}$, l'image propre $\mathbf{x}_0$ se retrouve : (A) exactement, en inversant la forme fermée ; (B) seulement de façon approchée, d'autant mieux que $t$ est petit ; (C) jamais sans un réseau entraîné.
 b) $\bar\alpha_t = 0{,}64$, $x_t = 0{,}5$ et un réseau qui prédit $\varepsilon_\theta = 0{,}2$ : que vaut l'estimation $\hat{x}_0$, à 3 décimales ?
 c) Vrai ou faux : Ho et coll. obtenaient de moins bons échantillons en faisant prédire $\mathbf{x}_0$ au réseau qu'en lui faisant prédire le bruit.
-d) Le bruit est une cible commode parce que : (A) il ne dépend pas du pas, si bien que le réseau n'a plus besoin de connaître $t$ ; (B) il est plus petit que l'image à tous les pas, donc plus facile à apprendre ; (C) c'est une gaussienne standard, de la même échelle à tous les pas.
+d) Le bruit est une cible commode parce que : (A) il ne dépend pas du pas, si bien que le réseau n'a plus besoin de connaître $t$ ; (B) il est plus petit que l'image à tous les pas, donc plus facile à apprendre ; (C) sa variance vaut 1 quel que soit le pas $t$.
 e) Vrai ou faux : la $\mathbf{v}$-prédiction de Salimans et Ho et la vitesse $\mathbf{v}$ du flow matching sont la même combinaison de $\boldsymbol{\varepsilon}$ et de $\mathbf{x}_0$.
 
 ### B5.Q5 — Le pas de temps est une entrée du réseau : pourquoi, et comment l'encoder ? 🧠 ⏱️ 3 min
 *Fiche §205.4 · parcours R*
 
-a) Le réseau reçoit le pas $t$ : (A) pour choisir lequel de ses $T$ jeux de poids utiliser à ce pas ; (B) pour calculer lui-même $\bar\alpha_t$ et l'ajouter à sa sortie ; (C) pour savoir combien de bruit s'attendre à trouver dans $\mathbf{x}_t$.
+a) Le réseau reçoit le pas $t$ : (A) pour choisir lequel de ses $T$ jeux de poids utiliser à ce pas ; (B) pour calculer lui-même $\bar\alpha_t$ et l'ajouter à sa sortie ; (C) pour adapter son débruitage au niveau de bruit de $\mathbf{x}_t$.
 b) Vrai ou faux : donner $t$ brut, un flottant de 0 à 999 ajouté comme un canal de plus, marche aussi bien qu'un encodage sinusoïdal.
 c) Tu prends les lignes `t` de `positional_encoding(1000, 128)` (B3) comme encodage des pas. Combien de couples (sinus, cosinus) contient l'encodage d'un pas ?
-d) Dans le bloc résiduel de la fiche, l'encodage du pas $\mathbf{e}_t$ devient : (A) un canal de plus, concaténé à la carte d'activation ; (B) un nombre par canal, ajouté à toute la carte de ce canal ; (C) un facteur qui multiplie les poids de la première convolution.
+d) Dans le bloc résiduel de la fiche, l'encodage du pas $\mathbf{e}_t$ devient : (A) un canal de plus, concaténé à la carte d'activation ; (B) un décalage propre à chaque canal, le même en tous les pixels ; (C) un facteur qui multiplie les poids de la première convolution.
 e) Vrai ou faux : ranger les colonnes de l'encodage en deux moitiés (sinus, puis cosinus) au lieu de les alterner ne change rien pour le MLP qui le suit, si l'on garde la même convention de l'entraînement à l'échantillonnage.
 
 ### B5.Q6 — U-Net : à quoi servent les connexions de saut ? 🧠 ⏱️ 3 min
@@ -69,7 +69,7 @@ a) Une connexion de saut du U-Net : (A) concatène, sur l'axe des canaux, une ca
 b) Dans un décodeur, une convolution transposée rend 128 canaux en $14 \times 14$ ; la connexion de saut apporte la carte de l'encodeur de même taille, à 64 canaux. Combien de canaux d'entrée (`in_channels`) attend la convolution suivante ?
 c) Vrai ou faux : sans ses connexions de saut, le U-Net est un autoencodeur, dont les détails fins doivent passer par le goulot.
 d) Une image de $32 \times 32$ traverse trois réductions de taille par des convolutions de stride 2. Quelle est la largeur de la carte du bas du U ?
-e) Le U-Net de la fiche normalise par group norm plutôt que par batchnorm : (A) parce que la group norm n'a aucun paramètre appris ; (B) parce qu'elle normalise chaque pixel séparément ; (C) parce qu'elle ne dépend pas des autres images du batch.
+e) Le U-Net de la fiche normalise par group norm plutôt que par batchnorm : (A) parce que la group norm n'a aucun paramètre appris ; (B) parce qu'elle normalise chaque pixel séparément ; (C) parce qu'elle traite chaque image seule.
 
 ### B5.Q7 — Échantillonnage DDPM : pourquoi est-il lent et aléatoire ? 🧠 ⏱️ 3 min
 *Fiche §205.5, §205.6 · parcours R*
@@ -85,7 +85,7 @@ e) On remplace $\sigma_t^2 = \tilde\beta_t$ par $\sigma_t^2 = \beta_t$ dans l'é
 
 a) Vrai ou faux : pour échantillonner en 50 pas par DDIM, il faut réentraîner le réseau avec un planning de 50 pas.
 b) Vrai ou faux : avec $\eta = 0$, deux générations DDIM qui partent du même $\mathbf{x}_T$ donnent la même image.
-c) Vrai ou faux : avec $\eta = 1$ et $t' = t - 1$, un pas DDIM est un pas DDPM avec la variance $\tilde\beta_t$.
+c) Vrai ou faux : réglé à $\eta = 1$ et parcourant les 1 000 indices un par un, DDIM ajoute à chaque pas un bruit de même variance que ton `ddpm_step(..., variance="posterior")`.
 d) Vrai ou faux : un pas DDIM peut aller de l'indice $t$ à n'importe quel indice antérieur, et même directement à l'image propre.
 e) Vrai ou faux : avec un réseau bien entraîné, DDIM en 10 pas donne toujours des images aussi bonnes que DDIM en 100 pas.
 
@@ -101,7 +101,7 @@ e) Ce qui permet à **un seul** réseau de prédire avec et sans condition : (A)
 ### B5.Q10 — Un bon FID peut-il cacher de la copie des données d'entraînement ? 🧠 ⏱️ 3 min
 *Fiche §205.8 · parcours R*
 
-a) Vrai ou faux : un générateur qui recracherait des copies exactes de ses images d'entraînement pourrait avoir une excellente distance de Fréchet.
+a) Vrai ou faux : un « générateur » qui rendrait 10 000 images tirées telles quelles du dataset d'entraînement de MNIST aurait, face à ce dataset, une distance de Fréchet presque nulle.
 b) Pour chercher la mémorisation, on : (A) compare chaque échantillon à ses plus proches voisins d'entraînement ; (B) calcule la distance de Fréchet sur deux fois plus d'images, pour réduire son biais ; (C) regarde si la loss de validation remonte en fin d'entraînement.
 c) Vrai ou faux : d'après Carlini et coll., les images dupliquées dans le dataset sont celles que les modèles mémorisent le moins.
 d) Une distance de Fréchet est calculée sur 64 images générées, une autre sur 10 000, avec les mêmes features : (A) elles se comparent directement, puisque les features et le réseau qui les calcule sont les mêmes ; (B) elles ne se comparent pas : avec peu d'images, l'estimation est biaisée vers le haut ; (C) elles se comparent après avoir multiplié la première par $10\,000/64$.
@@ -113,7 +113,7 @@ e) Vrai ou faux : une distance de Fréchet basse suffit à garantir à la fois l
 a) Un autoencodeur réduit des images de $256 \times 256 \times 3$ d'un facteur $f = 4$ en largeur et en hauteur, avec 3 canaux. Combien de valeurs compte le latent d'une image ?
 b) Un transformer de diffusion (DiT) découpe le latent en : (A) patchs, comme une image dans un ViT ; (B) tokens de texte, par le tokenizer de l'encodeur de texte ; (C) pixels, un token par valeur du latent.
 c) Dans le flow matching de la fiche, $\mathbf{x}_s = (1 - s)\,\mathbf{x}_0 + s\,\boldsymbol{\varepsilon}$. La vitesse que le réseau apprend : (A) $\mathbf{x}_0 - \boldsymbol{\varepsilon}$ ; (B) $\mathbf{x}_0 + \boldsymbol{\varepsilon}$ ; (C) $\boldsymbol{\varepsilon} - \mathbf{x}_0$.
-d) Vrai ou faux : la méthode d'Euler suit exactement, en un seul pas, une trajectoire droite parcourue à vitesse constante.
+d) Vrai ou faux : si le champ de vitesses vaut $\mathbf{v} = (1 ;\ -2)$ en tout point et à tout instant, un seul pas d'Euler de $s = 1$ à $s = 0$ arrive au même point que mille petits pas.
 e) Vrai ou faux : Stable Diffusion 3 et FLUX.1 sont des U-Net de diffusion qui travaillent sur les pixels.
 
 <a id="rappels"></a>
@@ -262,7 +262,7 @@ Dans ta copie : compare f) à $\tilde\beta_4$ ; que montre cette égalité ? Ave
 **Objectif :** démontrer par récurrence la forme fermée du processus direct, puis la loi d'un état sachant un état antérieur quelconque.
 **Prérequis :** Ex B5.2 · ch. 2 (variance d'une somme de variables indépendantes) · ch. 25 (reparamétrisation) · fiche §205.2 (encadré 🧮 sur la somme de deux gaussiennes, la forme fermée) · **Parcours :** M
 
-On travaille en dimension 1 : chaque pixel suit la même loi, avec les mêmes coefficients. Un pas direct s'écrit $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, où les $\varepsilon_1, \varepsilon_2, \dots$ sont des $\mathcal{N}(0, 1)$ indépendants entre eux et de $x_0$ ; $\bar\alpha_t = \alpha_1 \cdots \alpha_t$. On admet qu'une variable calculée à partir de bruits indépendants de $\varepsilon_t$ (et de $x_0$) est elle-même indépendante de $\varepsilon_t$.
+On travaille en dimension 1 : chaque pixel suit la même loi, avec les mêmes coefficients. Un pas direct s'écrit $x_t = \sqrt{\alpha_t}\,x_{t-1} + \sqrt{1 - \alpha_t}\,\varepsilon_t$, où les $\varepsilon_1, \varepsilon_2, \dots$ sont des $\mathcal{N}(0, 1)$ indépendants entre eux et de $x_0$ ; $\bar\alpha_t = \alpha_1 \cdots \alpha_t$.
 
 > 🧮 **Rappel maths — le raisonnement par récurrence** — Pour démontrer qu'une propriété $P(t)$ est vraie pour tout entier $t \ge 1$, on montre deux choses : **l'initialisation**, $P(1)$ est vraie ; **l'hérédité**, si $P(t - 1)$ est vraie, alors $P(t)$ l'est aussi. Comme une rangée de dominos : le premier tombe, et chacun fait tomber le suivant. *Exemple* : $P(t)$ : « $1 + 3 + \dots + (2t - 1) = t^2$ ». $P(1)$ : $1 = 1^2$. Si $P(t - 1)$ est vraie, la somme jusqu'à $2t - 1$ vaut $(t - 1)^2 + 2t - 1 = t^2$ : $P(t)$ est vraie.
 
@@ -270,7 +270,7 @@ Réponds dans ta copie.
 
 1. **Un pas.** Quelle est la loi de $x_1$ sachant $x_0$ ? Vérifie que c'est la forme fermée $x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\bar\varepsilon_t$ pour $t = 1$.
 2. **Deux pas.** Écris $x_2$ en fonction de $x_0$, $\varepsilon_1$ et $\varepsilon_2$. Donne le coefficient de $x_0$, puis la loi de la somme des deux termes de bruit, avec l'encadré de la fiche. Montre que sa variance vaut $1 - \alpha_1\alpha_2$, et conclus.
-3. **La récurrence.** On suppose $x_{t-1} = \sqrt{\bar\alpha_{t-1}}\,x_0 + \sqrt{1 - \bar\alpha_{t-1}}\,\bar\varepsilon_{t-1}$, avec $\bar\varepsilon_{t-1} \sim \mathcal{N}(0, 1)$. Pourquoi $\bar\varepsilon_{t-1}$ est-il indépendant de $\varepsilon_t$ ? Montre la propriété au pas $t$, et dis à quel endroit l'indépendance sert.
+3. **La récurrence.** On suppose $x_{t-1} = \sqrt{\bar\alpha_{t-1}}\,x_0 + \sqrt{1 - \bar\alpha_{t-1}}\,\bar\varepsilon_{t-1}$, avec $\bar\varepsilon_{t-1} \sim \mathcal{N}(0, 1)$. Pourquoi $\bar\varepsilon_{t-1}$ est-il indépendant de $\varepsilon_t$ (fait à admettre : une variable calculée seulement à partir de variables indépendantes de $\varepsilon_t$ est elle-même indépendante de $\varepsilon_t$) ? Montre la propriété au pas $t$, et dis à quel endroit l'indépendance sert.
 4. **Application.** Avec le planning de ✏️ B5.2, calcule de deux façons la variance du bruit de $x_2$ : par la question 2 ($\alpha_2(1 - \alpha_1) + (1 - \alpha_2)$), puis par $1 - \bar\alpha_2$.
 5. **La variance préservée.** Si $x_0$ a une moyenne 0 et une variance 1 et qu'il est indépendant des bruits, que vaut la variance de $x_t$ pour tout $t$ ? Et si les pixels de l'image ont une variance de $0{,}5$ ? Calcule-la au pas 4 du planning de ✏️ B5.2, et dis vers quoi elle tend quand $\bar\alpha_t \to 0$.
 6. **Sans le facteur $\sqrt{1 - \beta_t}$.** Si chaque pas faisait $x_t = x_{t-1} + \sqrt{\beta_t}\,\varepsilon_t$, quelle serait la loi de $x_t$ sachant $x_0$ ? Calcule l'écart-type du bruit final pour le planning linéaire de Ho et coll. (ta réponse g) de ✏️ B5.2). Pourquoi ce choix compliquerait-il l'échantillonnage, qui part d'un bruit tiré au hasard ?
@@ -282,7 +282,7 @@ Réponds dans ta copie.
 
 En dimension 1, on cherche la loi de $y = x_{t-1}$ quand on connaît $x_t$ et $x_0$ (deux nombres). On note $\mathcal{N}(y;\ m, v)$ la densité d'une gaussienne de moyenne $m$ et de variance $v$, vue comme une fonction de $y$. Rappel : $\alpha_t = 1 - \beta_t$ et $\bar\alpha_t = \alpha_t\,\bar\alpha_{t-1}$. Réponds dans ta copie.
 
-1. **Bayes.** Écris $q(y \mid x_t, x_0) \propto q(x_t \mid y, x_0)\; q(y \mid x_0)$. Pourquoi $q(x_t \mid y, x_0) = q(x_t \mid y)$ (relis l'écriture d'un pas direct dans ∂ B5.6 : de quoi dépend $x_t$, une fois $x_{t-1}$ connu) ? Lequel des deux facteurs donne la forme fermée de ∂ B5.6, et que vaut-il ?
+1. **Bayes.** Écris $q(y \mid x_t, x_0) \propto q(x_t \mid y, x_0)\; q(y \mid x_0)$. Pourquoi $q(x_t \mid y, x_0) = q(x_t \mid y)$ (fait à admettre, la propriété de Markov : si $x_t$ s'écrit à partir de $x_{t-1}$ et d'un bruit indépendant de tout le passé, alors, sachant $x_{t-1}$, sa loi ne dépend plus de $x_0$ ; vérifie que le pas direct de ∂ B5.6 est de cette forme) ? Lequel des deux facteurs donne la forme fermée de ∂ B5.6, et que vaut-il ?
 2. **La vraisemblance, vue en $y$.** $q(x_t \mid y) = \mathcal{N}(x_t;\ \sqrt{\alpha_t}\,y,\ \beta_t) \propto \exp\!\left(-\frac{(x_t - \sqrt{\alpha_t}\,y)^2}{2\beta_t}\right)$. En écrivant $x_t - \sqrt{\alpha_t}\,y = -\sqrt{\alpha_t}\,(y - x_t / \sqrt{\alpha_t})$, montre que, comme fonction de $y$, elle est proportionnelle à $\mathcal{N}(y;\ x_t / \sqrt{\alpha_t},\ \beta_t / \alpha_t)$.
 3. **Les précisions.** Avec la règle du produit de l'encadré de la fiche, écris $1/\tilde\beta_t$ comme la somme de deux précisions. Montre que $\alpha_t(1 - \bar\alpha_{t-1}) + \beta_t = 1 - \bar\alpha_t$, puis que $\tilde\beta_t = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\,\beta_t$.
 4. **La moyenne.** Écris la moyenne $\tilde\mu_t$ donnée par la règle du produit, puis simplifie-la jusqu'à la forme de la fiche : $\tilde\mu_t = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\,x_0 + \frac{\sqrt{\alpha_t}\,(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\,x_t$.
