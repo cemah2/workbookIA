@@ -11,7 +11,6 @@ by chB4_parts2.py from history_chB4.json (calibrations and protocols precomputed
 # =====================================================================================================================
 TOOLS_C = r'''# Tools for the notebook exercises of part C (fine-tuning with LoRA)
 import copy
-import gc
 import math
 from collections import OrderedDict
 
@@ -20,12 +19,12 @@ from peft import LoraConfig, get_peft_model
 
 torch.set_num_threads(max(1, torch.get_num_threads()))
 freed_c = []                                                    # room for the trainings of this part
-if globals().get("QWEN") is not None and QWEN.unload():
-    freed_c.append("Qwen2.5 (≈ 2 Go ; il se recharge tout seul à sa prochaine génération : B4.28 en mode complet, B4.30)")
 if globals().pop("model_12", None) is not None:                 # the model of B4.12 (part A), no longer used
     globals().pop("loaded_12", None)
     freed_c.append("le modèle de B4.12 (≈ 0,5 Go)")
-gc.collect()
+if globals().get("QWEN") is not None and QWEN.unload():
+    freed_c.append("Qwen2.5 (≈ 2 Go ; il se recharge tout seul à sa prochaine génération : B4.28 en mode complet, B4.30)")
+wbllm.trim_memory()                                             # the freed memory goes back to the system
 if freed_c:
     print("ℹ️ Libérés de la mémoire ici, pour les entraînements de cette partie : " + " ; ".join(freed_c) + ".")
 
@@ -482,9 +481,7 @@ else:
     print("⏳ Ex B4.27 : l'expérience attend experiment_27 (et tes fonctions de B4.26).")'''
 
 # --- 📦 B4.28 ---------------------------------------------------------------------------------------------------------
-GIVEN_28 = r'''import gc
-
-from sklearn.feature_extraction.text import TfidfVectorizer
+GIVEN_28 = r'''from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.pipeline import Pipeline
@@ -492,7 +489,7 @@ from transformers import AutoModelForSequenceClassification
 
 for name in ("base_26", "peft_26", "merged_26", "m_26", "frozen_26", "ref_27", "base_model_27"):
     globals().pop(name, None)                                 # the models of part C's checks (≈ 0.5 GB) are freed
-gc.collect()
+wbllm.trim_memory()
 CATEGORIES_28 = ["comp.graphics", "rec.autos", "sci.med", "sci.space"]
 TOPICS_28 = ["computer", "cars", "medicine", "space"]       # the names given to the LLM: one token each (SmolLM2, Qwen2.5)
 N_TRAIN_28, N_TEST_28, N_LLM_28 = (1000, 400, 100) if FAST_MODE else (None, None, 400)   # None: every message
@@ -1513,8 +1510,8 @@ CHECK_30 = r'''with checked("B4.30"):
         print("⏳ Ex B4.30 : aucun modèle de langue n'a pu être chargé : le défi est « à valider sur Colab ».")
     elif written(lambda: method_30([], [])):
         if QWEN is not None:
-            if LLM is not None and LLM.unload():   # SmolLM2 freed (≈ 0.5 GB) for Qwen2.5; reloaded if your method uses it
-                gc.collect()
+            if LLM is not None:
+                LLM.unload()                       # SmolLM2 freed (≈ 0.5 GB) for Qwen2.5; reloaded if your method uses it
             QWEN.model                             # Qwen2.5's weights loaded before the race (loading is not timed)
         result_30 = evaluate_30(method_30)
     else:

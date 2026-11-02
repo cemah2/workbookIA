@@ -221,3 +221,22 @@ def test_unload_frees_the_weights_and_the_next_use_loads_them_again(monkeypatch)
     assert llm.loaded and llm.unload() is True and not llm.loaded
     llm.model  # noqa: B018
     assert len(loads) == 2 and llm.loaded
+
+
+def test_trim_memory_collects_and_never_raises(monkeypatch):
+    """trim_memory runs the garbage collector, then malloc_trim where glibc has it (True); without it, False."""
+    import ctypes
+    import gc
+    import platform
+
+    collected = []
+    real_collect = gc.collect
+    monkeypatch.setattr(gc, "collect", lambda *a: collected.append(1) or real_collect(*a))
+    expected = platform.system() == "Linux" and platform.libc_ver()[0] == "glibc"
+    assert wbllm.trim_memory() is expected and collected
+
+    def no_libc(name):
+        raise OSError(name)
+
+    monkeypatch.setattr(ctypes, "CDLL", no_libc)
+    assert wbllm.trim_memory() is False

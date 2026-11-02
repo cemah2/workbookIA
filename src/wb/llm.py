@@ -122,10 +122,8 @@ class ChatLM:
         weights were loaded. A notebook that trains other models calls it to keep its memory low."""
         if self._model is None:
             return False
-        import gc
-
         self._model = None
-        gc.collect()
+        trim_memory()
         return True
 
     # -- prompts -------------------------------------------------------------------------------------------------
@@ -249,6 +247,21 @@ class ChatLM:
 
 
 _LOADED: dict = {}
+
+
+def trim_memory() -> bool:
+    """Collect the garbage, then give the freed heap back to the system (``malloc_trim`` of glibc, Linux): without it,
+    the weights of an unloaded model stay counted in the process (≈ 1 GB of the 2 GB of Qwen2.5, measured). True when
+    ``malloc_trim`` was called."""
+    import ctypes
+    import gc
+
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except (OSError, AttributeError):  # not glibc (macOS, Windows): the collection is all that can be done
+        return False
+    return True
 
 
 def load_llm(name: str = "smollm2", *, dtype: str = "float32", reuse: bool = True) -> ChatLM:
