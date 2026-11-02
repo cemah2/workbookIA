@@ -794,7 +794,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.14",
@@ -839,7 +839,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.16",
@@ -957,7 +957,7 @@
     "maths",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.21",
@@ -970,7 +970,8 @@
    "file": "03",
    "prereq": [
     "B5.19",
-    "21"
+    "21",
+    "B3"
    ],
    "covers": [
     "205.4"

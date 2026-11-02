@@ -57298,7 +57298,7 @@
       "magnitude": 0,
       "mistakes": {
         "14157f3694bd6adc9572a95e29b7db1604f1dfb3b9b17ea17d96d666fcd665f7": "relis le tableau : que vaut l'accuracy au pas 600 du linéaire ?",
-        "6a02be9130a34a3b82fbc9fd8667cc9515ea888a660a0f7b59bc7f4f1b31b5c4": "relis le tableau : le linéaire au pas 300 atteint-il 70 % ? ",
+        "6a02be9130a34a3b82fbc9fd8667cc9515ea888a660a0f7b59bc7f4f1b31b5c4": "relis le tableau : compte un à un les cas à 70 % ou plus",
         "b2058ace0346fe9a0cc1b97eb964d86fb0eb1330eb029286e6534884c383e442": "relis le tableau : au pas 600, le cosinus atteint-il 70 % ?",
         "dbc0ce0dd4286d72acd47c7d59a4e1c49eafea5a9859cedf62c94d58c6756db9": "relis le tableau : le cosinus au pas 300 atteint-il 70 % ?",
         "e072bf347d9afedc5229527c6cebcc389b48d3db8556b75d2dcfded7fca5edd8": "relis le tableau : compte le pas 100 des deux plannings",

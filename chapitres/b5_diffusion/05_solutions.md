@@ -237,4 +237,230 @@ Dans ta copie : f) vaut exactement $\tilde\beta_4 = \frac{1 - \bar\alpha_3}{1 - 
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B5.12 à B5.31) seront ajoutées à la prochaine session de génération, avec le notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, $T = 400$, CPU à deux cœurs) et de `tools/chapters/history_chB5.py` (calibrage du 🔮 B5.13 sur cinq classifieurs et trois tirages du bruit, lecture de la figure de B5.15, chaînes de B5.18 pour $T = 400$ et $T = 1\,000$, protocole complet de B5.19 et B5.20 sur cinq graines et deux valeurs de $T$). Les données, les sous-ensembles et les graines sont figés : tes chiffres sont les mêmes à l'arrondi près, sauf les durées, qui dépendent de la machine. Les solutions de B5.22 à B5.31 seront ajoutées à la prochaine étape de la génération.
+
+### Ex B5.12 — linear_beta_schedule, cosine_beta_schedule et noise_schedule 🔨
+**Réponse** : les 60 tests de l'exercice passent. Avec $T = 400$, $\bar\alpha$ au dernier indice vaut $1{,}7 \times 10^{-2}$ avec les bornes par défaut, et $3{,}6 \times 10^{-5}$ avec les bornes multipliées par $1\,000/T$.
+**Démarche** :
+```python
+def _check_unit(value, name):
+    if not 0 < value < 1:                                   # False for nan: nan is refused
+        raise ValueError(f"{name} must be in (0, 1), got {value}")
+
+
+def linear_beta_schedule(n_steps, beta_start=1e-4, beta_end=0.02):
+    if n_steps < 1:
+        raise ValueError(f"n_steps must be >= 1, got {n_steps}")
+    if not 0 < beta_start <= beta_end < 1:                 # the condition that must hold (nan fails it)
+        raise ValueError(f"expected 0 < beta_start <= beta_end < 1, got {beta_start}, {beta_end}")
+    return np.linspace(beta_start, beta_end, n_steps, dtype=np.float64)
+
+
+def cosine_beta_schedule(n_steps, s=0.008, max_beta=0.999):
+    if n_steps < 1 or not s >= 0:
+        raise ValueError(f"expected n_steps >= 1 and s >= 0, got {n_steps}, {s}")
+    _check_unit(max_beta, "max_beta")
+    t = np.arange(n_steps + 1, dtype=np.float64)           # the T + 1 points t / T
+    f = np.cos((t / n_steps + s) / (1 + s) * np.pi / 2) ** 2
+    return np.minimum(1 - f[1:] / f[:-1], max_beta)
+
+
+def noise_schedule(betas):
+    b = np.asarray(betas, dtype=np.float64)
+    if b.ndim != 1 or not np.all((b > 0) & (b < 1)):
+        raise ValueError("betas must be a 1-D array of values in (0, 1) (NaN is outside (0, 1))")
+    alphas = 1.0 - b
+    ab = np.cumprod(alphas)
+    ab_prev = np.concatenate([[1.0], ab[:-1]])
+    return {"betas": b, "alphas": alphas, "alpha_bars": ab, "alpha_bars_prev": ab_prev,
+            "sqrt_alpha_bars": np.sqrt(ab), "sqrt_one_minus_alpha_bars": np.sqrt(1 - ab),
+            "posterior_variance": b * (1 - ab_prev) / (1 - ab),
+            "posterior_mean_coef1": b * np.sqrt(ab_prev) / (1 - ab),
+            "posterior_mean_coef2": (1 - ab_prev) * np.sqrt(alphas) / (1 - ab)}
+```
+`np.linspace` règle seul le cas d'un pas ; une boucle `beta_start + (beta_end − beta_start) i / (T − 1)` diviserait par 0. Le cosinus s'évalue aux $T + 1$ points $0, 1/T, \dots, 1$ : $T$ rapports de deux valeurs consécutives donnent $T$ bêtas, le dernier écrêté, puisque $f(1) \approx 0$ rend le rapport presque nul. `alpha_bars_prev[0] = 1` ($\bar\alpha_0 = 1$ : rien n'est encore bruité) annule le facteur $1 - \bar\alpha_{t-1}$ de $\tilde\beta$ : `posterior_variance[0]` vaut 0 exactement, et c'est pourquoi le dernier pas de l'échantillonnage n'ajoute aucun bruit. Le refus de `nan` vient de l'écriture de la condition : `not 0 < x < 1` est vrai pour `nan`, qui ne vérifie aucune comparaison, alors que `x <= 0 or x >= 1` est faux pour `nan` et le laisse passer. Avec $T = 400$ et les bornes par défaut, $\sum\beta = 4{,}02$ (✏️ B5.2), donc $\bar\alpha_T \approx e^{-4{,}02} \approx 0{,}018$ : il reste $\sqrt{0{,}0175} \approx 13\,\%$ de l'image au dernier indice, et un modèle échantillonné depuis un bruit pur partirait d'un état qu'il n'a jamais vu à l'entraînement. Multiplier les bornes par $1\,000/T = 2{,}5$ ramène $\sum\beta$ à 10,05, comme à $T = 1\,000$.
+**Erreurs fréquentes** : `np.arange(1, T + 1) / T` pour le cosinus (on oublie le point 0, la courbe est décalée d'un cran) ; `alpha_bars_prev = np.roll(alpha_bars, 1)`, qui met $\bar\alpha_{T-1}$ à l'indice 0 au lieu de 1 ; `np.cumsum` au lieu de `np.cumprod` ; des tableaux en float32 parce que les betas reçus l'étaient ; une condition « aucun $\beta$ n'est $\le 0$ ni $\ge 1$ » qui accepte `nan`.
+**Variante** : le cosinus à $T = 400$ finit à $\bar\alpha = 1{,}5 \times 10^{-8}$ (le dernier $\beta$ écrêté à 0,999) : il n'a pas besoin d'être adapté à $T$. Le linéaire à $T = 50$ garde $\bar\alpha_T = 0{,}603$ avec les bornes par défaut (presque toute l'image) et $7{,}7 \times 10^{-6}$ avec les bornes multipliées par 20 (de 0,002 à 0,4) : au-delà de $\beta \approx 0{,}4$, un seul pas détruit déjà une grande part de l'image, et l'hypothèse « petits pas gaussiens » de 205.3 devient fragile.
+
+### Ex B5.13 — Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus 🔮
+**Réponse** : a) **3** : le classifieur reconnaît au moins 70 % des chiffres au pas 100 des deux plannings (95,7 % et 96,3 %) et au pas 300 du cosinus (93,7 %), pas au pas 300 du linéaire (45,0 %) ni au pas 600 (12,6 % et 39,5 %). b) **`False`** : 39,5 % au pas 600 du cosinus. Sur cinq classifieurs (cinq graines d'entraînement) et trois tirages du bruit, les accuracies restent dans ces fourchettes : linéaire 300 de 30 à 45 %, cosinus 300 de 76 à 94 %, cosinus 600 de 25 à 40 % ; les deux réponses ne changent jamais.
+**Démarche** : les six SNR valent 8,7 ; 0,66 et 0,027 pour le linéaire, 34,8 ; 3,7 et 0,52 pour le cosinus. Le classifieur suit le SNR : il tient au-dessus de 3 environ et décroche sous 1, bien avant le seuil 0,1 de ta convention de ✏️ B5.3. Sur les images, ton œil reconnaît encore la plupart des chiffres au pas 300 du linéaire et au pas 600 du cosinus : un réseau entraîné sur des chiffres **propres** n'a jamais vu de grain et lit le bruit comme des traits. Quand il ne sait plus, il prédit surtout une même classe (ici le 2, pour près de 40 % des chiffres au pas 600 ; d'autres graines d'entraînement choisissent le 8) : un effondrement typique hors de la distribution d'entraînement. Le débruiteur d'un modèle de diffusion, lui, voit des images de tous les niveaux de bruit, et c'est pourquoi on lui donne le pas : il doit savoir combien de bruit retirer. La convention de lisibilité de B5.3 reste utile pour comparer des plannings (où le chiffre « disparaît » dans la chaîne), pas pour prédire ce que voit un réseau qui n'a pas appris le bruit.
+**Erreurs fréquentes** : prendre « lisible selon la convention » pour « reconnu par un réseau » ; comparer les pas de deux plannings sans passer par le SNR (le pas 600 du cosinus a un SNR proche de celui du pas 300 du linéaire, et des accuracies voisines) ; confondre le pas de l'article et l'indice du code (le pas 300 est l'indice 299).
+**Variante** : au pas 200 du linéaire (SNR 1,9), le classifieur du notebook reconnaît 79 % des chiffres, et 77 % au pas 400 du cosinus (SNR 1,8) : deux SNR presque égaux, deux accuracies presque égales, à deux endroits très différents de la chaîne.
+
+### Ex B5.14 — q_sample : bruiter un batch d'images à des pas différents 🔨
+**Réponse** : les 19 tests de l'exercice passent ; les 6 chiffres bruités aux indices 0, 1, 50, 150, 300 et 399 coïncident avec la formule.
+**Démarche** :
+```python
+def _indices(t, n, T):
+    t = np.asarray(t)
+    if t.ndim != 1 or len(t) != n:
+        raise ValueError(f"t must hold one index per sample, shape ({n},), got shape {t.shape}")
+    if not np.issubdtype(t.dtype, np.integer):
+        raise ValueError("t must hold integer indices")
+    if t.min() < 0 or t.max() >= T:
+        raise ValueError(f"every index of t must be in [0, {T}), got {t.tolist()}")
+    return t
+
+
+def q_sample(x0, t, alpha_bars, noise=None, rng=None):
+    x0 = np.asarray(x0, dtype=float)
+    ab = np.asarray(alpha_bars, dtype=float)
+    t = _indices(t, len(x0), len(ab))
+    if noise is None:
+        rng = np.random.default_rng() if rng is None else rng
+        noise = rng.standard_normal(x0.shape)
+    else:
+        noise = np.array(noise, dtype=float)
+        if noise.shape != x0.shape:
+            raise ValueError(f"noise must have the shape of x0 {x0.shape}, got {noise.shape}")
+    shape = (len(x0),) + (1,) * (x0.ndim - 1)               # (N, 1, ..., 1)
+    return np.sqrt(ab[t]).reshape(shape) * x0 + np.sqrt(1 - ab[t]).reshape(shape) * noise, noise
+```
+Toute la difficulté est dans les formes. `np.sqrt(ab[t])` a la forme `(N,)` ; multiplié tel quel par `x0` de forme `(N, 1, 28, 28)`, NumPy l'aligne sur le **dernier** axe : une erreur si $N \neq 28$, un calcul faux sans erreur si $N = 28$, ou si `x0` a la forme `(3, 1, 4, 3)` : le coefficient de l'image $n$ multiplie alors la colonne $n$ de **toutes** les images. La remise en forme `(N, 1, …, 1)` marche pour tout nombre d'axes. Le bruit est rendu parce que c'est la cible de l'entraînement : celui qui appelle `q_sample` sans `noise` n'aurait sinon aucun moyen de le connaître. Un `t` de longueur 1 pour un batch de 3 exemples est presque toujours un oubli (on voulait un pas par exemple) : NumPy le diffuserait sans rien dire.
+**Erreurs fréquentes** : la multiplication sans remise en forme ; `alpha_bars[t]` à la place de `np.sqrt(alpha_bars[t])` (l'erreur ᾱ contre $\sqrt{\bar\alpha}$ du tableau des pièges) ; indexer avant de valider (`alpha_bars[-1]` passe sans erreur) ; tirer le bruit avec `rng.normal(size=…)` puis un second tirage pour une autre raison (les tests vérifient **un** appel à `standard_normal`) ; `noise -= …` sur le bruit reçu.
+**Variante** : une version vectorisée avec `np.expand_dims` ou `ab[t][(...,) + (None,) * (x0.ndim - 1)]` est équivalente. Pour `x0` de forme `(3, 1, 4, 3)` et la multiplication sans remise en forme, le résultat a bien la forme `(3, 1, 4, 3)` : rien ne prévient l'erreur, d'où les tests « avec des tailles toutes différentes » de la fiche.
+
+### Ex B5.15 — Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings 📈
+**Réponse** : a) **S** ; b) **D** ; c) **C**.
+**Démarche** : a) avec les bornes multipliées par $1\,000/T$, la somme des $\beta$ jusqu'à une même fraction de la chaîne est la même qu'à $T = 1\,000$ : $\bar\alpha \approx e^{-\sum\beta}$ donne la même courbe (écart maximal 0,001 sur $\bar\alpha$), alors que D s'en écarte de 0,33. b) Les $\ln \operatorname{SNR}$ au dernier indice valent −4,0 pour D, −10,1 pour L, −10,2 pour S et −19,8 pour C : D garde le plus d'image, $\sqrt{0{,}0175} \approx 13\,\%$. c) Le $\ln \operatorname{SNR}$ du cosinus reste au-dessus de celui du linéaire sur 99,5 % de la chaîne : les courbes ne se croisent qu'à l'indice 995, quand le cosinus plonge vers son $\beta$ écrêté à 0,999. Sur la grille, avec L, le chiffre se devine encore à l'indice 399 et a disparu à 599 ; avec C, il reste visible jusque vers 599, et se devine encore à 699. Le linéaire passe donc la seconde moitié de la chaîne sur des images où il n'y a plus rien à voir (le constat de Nichol et Dhariwal, qui pouvaient en sauter 20 %), alors que le cosinus répartit ses pas sur toute la plage utile (✏️ B5.3 : 30 % de ses pas entre les SNR 1 et 0,1, contre 23 %). D est un piège : un modèle entraîné jusqu'à un SNR final de $e^{-4}$ n'a jamais vu de bruit pur ; échantillonné depuis $\mathcal{N}(\mathbf{0}, \mathbf{I})$, il part d'un état hors de sa distribution (le piège « un SNR final qui n'est pas nul » de la fiche).
+**Erreurs fréquentes** : lire le graphique de gauche pour b), où toutes les fins se confondent près de 0 ; comparer les plannings par l'indice plutôt que par la fraction de la chaîne ; croire que deux courbes « parallèles » sur l'échelle logarithmique sont proches en $\bar\alpha$.
+**Variante** : le SNR de S passe sous 1 à l'indice 103 (26 % de la chaîne), celui du cosinus à l'indice 496 (près de la moitié) : le même rapport que pour $T = 1\,000$ en ✏️ B5.3 (0,26 et 0,50), puisque S et L ont la même courbe.
+
+### Ex B5.16 — q_posterior_mean_variance et predict_x0_from_eps 🔨
+**Réponse** : les 29 tests de l'exercice passent ; contre le Bayes numérique, la moyenne et la variance coïncident à mieux que $10^{-6}$.
+**Démarche** :
+```python
+def q_posterior_mean_variance(x0, x_t, t, schedule):
+    x0, x_t = np.asarray(x0, dtype=float), np.asarray(x_t, dtype=float)
+    if x_t.shape != x0.shape:
+        raise ValueError(f"x_t must have the shape of x0 {x0.shape}, got {x_t.shape}")
+    t = _indices(t, len(x0), len(schedule["betas"]))       # the helper of q_sample
+    shape = (len(x0),) + (1,) * (x0.ndim - 1)
+    mean = (schedule["posterior_mean_coef1"][t].reshape(shape) * x0
+            + schedule["posterior_mean_coef2"][t].reshape(shape) * x_t)
+    return mean, schedule["posterior_variance"][t].reshape(shape)
+
+
+def predict_x0_from_eps(x_t, t, eps, alpha_bars):
+    x_t, eps, ab = (np.asarray(a, dtype=float) for a in (x_t, eps, alpha_bars))
+    if eps.shape != x_t.shape:
+        raise ValueError(f"eps must have the shape of x_t {x_t.shape}, got {eps.shape}")
+    t = _indices(t, len(x_t), len(ab))
+    shape = (len(x_t),) + (1,) * (x_t.ndim - 1)
+    return (x_t - np.sqrt(1 - ab[t]).reshape(shape) * eps) / np.sqrt(ab[t]).reshape(shape)
+```
+`noise_schedule` a déjà fait le travail de ∂ B5.7 ; il reste à indexer et à remettre en forme. À l'indice 0, `posterior_mean_coef1[0]` = $\beta_0 / (1 - \bar\alpha_0) = 1$ et `posterior_mean_coef2[0]` = 0 : la moyenne est $\mathbf{x}_0$ et la variance 0, le posterior est certain (il n'y a plus d'étape avant). Le Bayes numérique multiplie la densité de $\mathbf{x}_{t-1}$ sachant $\mathbf{x}_0$ (la forme fermée à l'indice $t - 1$) par celle de $\mathbf{x}_t$ sachant $\mathbf{x}_{t-1}$ (un pas), puis normalise sur une grille : son seul écart à la formule vient de la grille (pas de $5 \times 10^{-5}$, bornes à ±15), et diminue avec un pas plus fin. L'erreur de $\hat{\mathbf{x}}_0$ pour un bruit prédit faux de $\delta$ vaut $\delta\sqrt{1 - \bar\alpha_t}/\sqrt{\bar\alpha_t} = \delta / \sqrt{\operatorname{SNR}}$ : minuscule au début de la chaîne, énorme à la fin.
+**Erreurs fréquentes** : une variance de forme `(N,)` pour `x0` de forme `(N, 1, 28, 28)`, qui se diffuse alors sur la largeur ; diviser par $\bar\alpha_t$ au lieu de $\sqrt{\bar\alpha_t}$ dans `predict_x0_from_eps` ; accepter un `x_t` de forme diffusable ; relire `alpha_bars_prev` dans la fonction au lieu des constantes de `schedule` (le résultat est juste, mais le contrat dit d'utiliser `schedule`).
+**Variante** : avec le planning du notebook ($T = 400$), un bruit prédit faux de 0,1 décale $\hat{\mathbf{x}}_0$ de 0,009 à l'indice 9 et de 16,6 au dernier indice : c'est pourquoi l'écrêtage de $\hat{\mathbf{x}}_0$ (`clip_x0`, B5.17) sert surtout au début de l'échantillonnage.
+
+### Ex B5.17 — ddpm_step et ddim_step 🔨
+**Réponse** : les 101 tests de l'exercice passent.
+**Démarche** :
+```python
+def ddpm_step(x_t, t, eps_pred, schedule, rng=None, variance="posterior", clip_x0=None):
+    T = len(schedule["betas"])
+    if not isinstance(t, (int, np.integer)) or not 0 <= t < T:
+        raise ValueError(f"t must be an integer index in [0, {T}), got {t!r}")
+    if variance not in ("posterior", "beta"):               # checked even at t = 0
+        raise ValueError(f"variance must be 'posterior' or 'beta', got {variance!r}")
+    x_t, eps = np.asarray(x_t, dtype=float), np.asarray(eps_pred, dtype=float)
+    b, ab = schedule["betas"][t], schedule["alpha_bars"][t]
+    if clip_x0 is None:                                     # Algorithm 2 of Ho et al.
+        mean = (x_t - b / np.sqrt(1 - ab) * eps) / np.sqrt(schedule["alphas"][t])
+    else:
+        x0_hat = np.clip((x_t - np.sqrt(1 - ab) * eps) / np.sqrt(ab), -clip_x0, clip_x0)
+        mean = schedule["posterior_mean_coef1"][t] * x0_hat + schedule["posterior_mean_coef2"][t] * x_t
+    if t == 0:
+        return mean                                         # no noise at the last step
+    var = schedule["posterior_variance"][t] if variance == "posterior" else b
+    rng = np.random.default_rng() if rng is None else rng
+    return mean + np.sqrt(var) * rng.standard_normal(x_t.shape)
+
+
+def ddim_step(x_t, t, t_prev, eps_pred, alpha_bars, eta=0.0, rng=None):
+    ab_all = np.asarray(alpha_bars, dtype=float)
+    if not -1 <= t_prev < t < len(ab_all):
+        raise ValueError(f"expected -1 <= t_prev < t < T, got t = {t}, t_prev = {t_prev}")
+    if not 0 <= eta <= 1:                                   # nan fails it
+        raise ValueError(f"eta must be in [0, 1], got {eta}")
+    x_t, eps = np.asarray(x_t, dtype=float), np.asarray(eps_pred, dtype=float)
+    ab = ab_all[t]
+    ab_prev = 1.0 if t_prev == -1 else ab_all[t_prev]      # never alpha_bars[-1]
+    x0_hat = (x_t - np.sqrt(1 - ab) * eps) / np.sqrt(ab)
+    sigma = eta * np.sqrt((1 - ab_prev) / (1 - ab)) * np.sqrt(1 - ab / ab_prev)
+    out = np.sqrt(ab_prev) * x0_hat + np.sqrt(1 - ab_prev - sigma ** 2) * eps
+    if eta > 0 and sigma > 0:
+        rng = np.random.default_rng() if rng is None else rng
+        out = out + sigma * rng.standard_normal(x_t.shape)
+    return out
+```
+Au dernier pas, la variance du posterior est nulle (B5.12) : ajouter $\sigma\mathbf{z}$ y laisserait un grain de l'ordre de $\sqrt{\beta_1}$ sur l'image finale, un piège de la fiche. `alpha_bars[-1]` est un indice valide en Python : avec `t_prev = -1`, il donnerait $\bar\alpha_{T-1} \approx 4 \times 10^{-5}$, et le pas renverrait vers le bruit au lieu de l'image propre, sans erreur. Avec `eta = 1` et `t_prev = t - 1`, $\sigma^2 = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\big(1 - \frac{\bar\alpha_t}{\bar\alpha_{t-1}}\big) = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\beta_t = \tilde\beta_t$ : le pas DDIM a la variance du pas DDPM, et la même moyenne (✏️ B5.5) : DDPM est le cas $\eta = 1$ de DDIM, sans saut. Avec `eta = 0`, ne rien tirer de `rng` garde les tirages des appels suivants inchangés : deux échantillonneurs qui partagent un générateur restent reproductibles.
+**Erreurs fréquentes** : `var * z` (la variance au lieu de l'écart-type) ; le bruit ajouté à $t = 0$ ; le contrôle de `variance` après le `return` du cas $t = 0$ ; l'écrêtage à ±1 au lieu de ±`clip_x0` ; écrêter puis appliquer l'algorithme 2 (qui n'utilise pas $\hat{\mathbf{x}}_0$) ; `alpha_bars[t_prev]` pour `t_prev = -1` ; tirer $\mathbf{z}$ même quand `eta = 0` ; `eta < 0 or eta > 1`, qui laisse passer `nan`.
+**Variante** : avec le planning jouet $\beta = (0{,}1 ; 0{,}2 ; 0{,}5)$, $x_t = 0{,}5$ à l'indice 2 et $\varepsilon_\theta = 1$, un pas DDIM vers l'indice 0 donne $-0{,}1581$, et vers −1 l'estimation $\hat{x}_0 = -0{,}5$.
+
+### Ex B5.18 — Avec le vrai bruit, DDPM et DDIM retrouvent-ils x_0 ? Contrôle sur des données 2D 🔬
+**Réponse** : a) **`False`** (écart 850) ; b) **`True`** ($6 \times 10^{-15}$) ; c) **`True`** ($4{,}5 \times 10^{-14}$, et $2{,}3 \times 10^{-13}$ sur les 400 pas) ; d) **`False`** (écart 600). Les mêmes conclusions valent pour $T = 1\,000$.
+**Démarche** :
+```python
+def true_noise_18(x_t, t, x0, alpha_bars):
+    ab = float(np.asarray(alpha_bars)[t])
+    return (np.asarray(x_t, dtype=float) - math.sqrt(ab) * np.asarray(x0, dtype=float)) / math.sqrt(1 - ab)
+
+
+def ddpm_chain_18(x0, eps, schedule, rng, oracle=False):
+    ab = schedule["alpha_bars"]
+    T = len(ab)
+    x = math.sqrt(ab[T - 1]) * np.asarray(x0, dtype=float) + math.sqrt(1 - ab[T - 1]) * np.asarray(eps, dtype=float)
+    for t in range(T - 1, -1, -1):
+        eps_pred = true_noise_18(x, t, x0, ab) if oracle else eps
+        x = mylearn.diffusion.ddpm_step(x, t, eps_pred, schedule, rng=rng)
+    return x
+```
+`ddim_chain_18` est la même boucle sur la sous-séquence, suivie de −1, avec `ddim_step` et toujours le bruit initial. Avec $\eta = 0$, un pas DDIM fait de $\mathbf{x}_t = \sqrt{\bar\alpha_t}\mathbf{x}_0 + \sqrt{1 - \bar\alpha_t}\boldsymbol{\varepsilon}$ exactement $\sqrt{\bar\alpha_{t'}}\mathbf{x}_0 + \sqrt{1 - \bar\alpha_{t'}}\boldsymbol{\varepsilon}$ : le **même** bruit reste le vrai bruit tout au long de la chaîne, quelle que soit la sous-séquence, et la fin est $\mathbf{x}_0$ à l'arrondi près. Un pas DDPM, lui, ajoute $\sigma\mathbf{z}$ : dès le premier pas, le bruit de $\mathbf{x}_{t-1}$ n'est plus $\boldsymbol{\varepsilon}$, et donner encore $\boldsymbol{\varepsilon}$ comme prédiction est une erreur que la division par $\sqrt{\bar\alpha_t}$ amplifie d'un pas à l'autre (l'écart de 850). Avec le vrai bruit du $\mathbf{x}$ courant, la trajectoire DDPM reste aléatoire, mais le dernier pas ($t = 0$, sans bruit) rend $\hat{\mathbf{x}}_0$, qui vaut $\mathbf{x}_0$ puisque le bruit donné est exact : la fin est exacte quel que soit le chemin. DDIM avec $\eta = 1$ ajoute lui aussi du bruit : même échec que DDPM avec le bruit initial. Ici, un réseau « parfait » est remplacé par le vrai bruit ; avec un vrai réseau, le nombre de pas comptera, parce que chaque pas propage l'erreur de prédiction. Ce contrôle attrape tout ce qui casse l'aller-retour exact : un indice décalé, $\bar\alpha$ au lieu de $\sqrt{\bar\alpha}$, un `t_prev = -1` lu comme `alpha_bars[-1]`, un bruit ajouté au dernier pas ; pas une erreur de la variance du bruit ajouté (elle ne touche pas la chaîne avec l'oracle), que seuls les tests de B5.17 voient.
+**Erreurs fréquentes** : croire que « le vrai bruit » est une constante de la chaîne DDPM ; oublier le pas vers −1 à la fin de la chaîne DDIM ; partir de l'indice $T$ au lieu de $T - 1$ ; conclure « DDPM ne marche pas » : il ne marche pas **avec le bruit initial**, ce qui n'est pas ce que prédit un réseau.
+**Variante** : DDIM avec $\eta = 0{,}5$ et le bruit initial s'écarte de 243 ; DDIM avec $\eta = 1$ et le vrai bruit du $\mathbf{x}$ courant retrouve $\mathbf{x}_0$ à $10^{-17}$ près, pour la même raison que DDPM avec l'oracle.
+
+### Ex B5.19 — Diffusion en 2D : un MLP débruiteur conditionné par le pas de temps, entraîné puis échantillonné 📦
+**Réponse** : 3 000 itérations et l'échantillonnage en 10 s environ ; loss moyenne des 200 dernières itérations 0,232 ; 2 000 points à une distance en tranches de 0,073 de l'anneau (0,052 entre deux échantillons de l'anneau, 0,260 pour du bruit gaussien), 90,5 % sur un mode, les 8 modes atteints. Sur les cinq graines du protocole complet, la distance va de 0,046 à 0,073 ($T = 400$) et de 0,048 à 0,103 ($T = 1\,000$).
+**Démarche** :
+```python
+class Denoiser2D_19(nn.Module):
+    def __init__(self, n_positions, t_dim=32, hidden=128):
+        super().__init__()
+        table = mylearn.attention.positional_encoding(n_positions, t_dim)        # your encoding of B3
+        self.register_buffer("pe", torch.tensor(table, dtype=torch.float32), persistent=False)
+        self.net = nn.Sequential(nn.Linear(2 + t_dim, hidden), nn.SiLU(), nn.Linear(hidden, hidden), nn.SiLU(),
+                                 nn.Linear(hidden, hidden), nn.SiLU(), nn.Linear(hidden, 2))
+
+    def forward(self, x, t):
+        return self.net(torch.cat([x, self.pe[t]], dim=1))
+```
+`train_19` et `sample_19` sont dans le notebook de solutions : trois tirages par itération, dans l'ordre du contrat, la forme fermée en float32, la MSE ; puis l'algorithme 2 avec ta `ddpm_step`, une passe du réseau par pas, soit 400 passes pour 2 000 points. La loss ne descend pas vers 0, et ce n'est pas un défaut : aux petits indices, $\mathbf{x}_t$ est presque $\mathbf{x}_0$ et le bruit, multiplié par $\sqrt{1 - \bar\alpha_t} \approx 0{,}02$, ne s'y lit presque pas ; le meilleur réseau prédit alors une moyenne, et la MSE reste proche de 1 à ces pas. La loss moyenne mélange tous les pas ; on juge le modèle à ses échantillons, pas à sa loss (le piège de la fiche). Sans l'encodage du pas (des zéros à la place), le même entraînement donne une distance de 0,44, 18 % des points sur un mode et 5 modes : le réseau doit savoir combien de bruit retirer.
+**Erreurs fréquentes** : un buffer persistant (le `state_dict` contient alors `pe`) ; l'encodage avant les coordonnées (le contrat fixe l'ordre, que la vérification voit aux mêmes poids) ; les tirages dans un autre ordre ; `alpha_bars` indexé par un tenseur float ; `model(x_t, t)` hors de `torch.no_grad()` pendant l'échantillonnage (le graphe grossit à chaque pas) ; un bruit de forme `(batch_size,)`.
+**Variante** : sur le même modèle, DDIM avec $\eta = 1$ sur 50 pas (un échantillonnage ancestral avec des sauts) donne une distance de 0,084, et 0,152 sur 10 pas : la qualité de DDPM se paie en nombre de pas.
+
+### Ex B5.20 — Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler 🔬
+**Réponse** : a) **5** ; b) **`"E"`**. Ta graine : DDIM 6,81 ; 6,67 ; 0,424 ; 0,248 ; 0,171 ; 0,147 ; 0,140 et Euler 0,915 ; 0,371 ; 0,103 ; 0,081 ; 0,077 ; 0,075 ; 0,075 pour 1, 2, 5, 10, 20, 50 et 100 pas. Sur les cinq graines, Euler est au plus à 2,3 fois sa distance à 100 pas dès 5 pas, et au moins à 3,7 fois à 2 pas ; à 5 pas, DDIM est de 2,3 à 5,6 fois plus loin qu'Euler, pour $T = 400$ comme pour $T = 1\,000$.
+**Démarche** : le code est dans le notebook de solutions (la même boucle que `train_19`, avec la position `u`, l'entrée sur la ligne droite et la cible $\boldsymbol{\varepsilon} - \mathbf{x}_0$ ; un pas d'Euler $\mathbf{x} \leftarrow \mathbf{x} - \mathbf{v}/n$). À 1 ou 2 pas, DDIM rend des points à une distance de 5 à 7 : depuis l'indice $T - 1$, $\hat{\mathbf{x}}_0 = (\mathbf{x} - \sqrt{1 - \bar\alpha}\,\hat{\boldsymbol{\varepsilon}})/\sqrt{\bar\alpha}$ divise l'erreur de prédiction par $\sqrt{\bar\alpha_{T-1}} = 0{,}006$ : une erreur de 0,01 sur le bruit devient 1,7 sur le point. Euler à 1 pas rend $\mathbf{x}_1 - \mathbf{v}(\mathbf{x}_1, 1)$, où la vitesse apprise est une **moyenne** (l'encadré « la MSE apprend une moyenne ») : tous les points tombent près du centre de l'anneau. La prédiction de la vitesse ne divise par rien et reste bornée à tous les pas, d'où un net avantage aux petits nombres de pas ; à partir de 10 à 20 pas, les deux s'approchent de leur plateau, et l'écart dépend alors de la graine (à 10 pas et $T = 1\,000$, une graine sur cinq donne presque l'égalité). À 100 pas, le DDIM du modèle de B5.19 (0,140) reste loin du DDPM du même modèle (0,073) : un échantillonneur déterministe ne corrige pas les erreurs du réseau, l'aléa de l'échantillonnage ancestral les « lisse ». La comparaison ne dit rien d'autres données, d'autres réglages (un planning cosinus, une $\mathbf{v}$-prédiction pour la diffusion, une autre répartition des $s$ pour le flow matching) ni des grands modèles, où les deux se retrouvent (fiche §205.9 : un flow matching est une diffusion à une paramétrisation près).
+**Erreurs fréquentes** : un pas d'Euler dans le mauvais sens ($+\mathbf{v}$) ; `s` tiré dans $[0, 1)$ en flottant, que le MLP à positions entières ne sait pas encoder ; la cible $\mathbf{x}_0 - \boldsymbol{\varepsilon}$ (le signe de la fiche est $\boldsymbol{\varepsilon} - \mathbf{x}_0$) ; une sous-séquence DDIM qui ne commence pas à $T - 1$ ; conclure d'une seule graine.
+**Variante** : prends la vitesse au **milieu** de chaque intervalle, à la position `round(1000 * (1 - (k + 0.5) / n_steps))`, au lieu de son début : sur le modèle de ta graine, la distance passe de 0,915 à 0,222 à 1 pas, de 0,371 à 0,213 à 2 pas, de 0,103 à 0,079 à 5 pas et de 0,081 à 0,074 à 10 pas. Au début de l'intervalle ($s = 1$), la vitesse moyenne pointe vers le centre de l'anneau ; plus près des données, elle pointe déjà vers un mode.
+
+### Ex B5.21 — Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps 📦
+**Réponse** : a) **186 113** paramètres ; b) **(8, 32, 28, 28)**. Ton U-Net rend la sortie du U-Net du contrat aux mêmes poids, pour les trois réglages ; une passe sur un batch de 64 images prend environ 0,12 à 0,13 s sur deux cœurs, soit environ 50 s pour 400 pas de DDPM et 6 s pour 50 pas de DDIM.
+**Démarche** : le code est celui de la fiche (§205.4), complété par la classe ; voici le cœur :
+```python
+def forward(self, x, t, y=None):
+    temb = self.t_mlp(self.pe[t])
+    if self.n_classes is not None:
+        temb = temb + self.class_emb(torch.full_like(t, self.n_classes) if y is None else y)
+    h1 = self.d1(self.inp(x), temb)                        # (N, c1, 28, 28)
+    h2 = self.d2(self.down1(h1), temb)                     # (N, c2, 14, 14)
+    h = self.mid(self.down2(h2), temb)                     # (N, c3, 7, 7)
+    h = self.u2(torch.cat([self.up2(h), h2], dim=1), temb)  # (N, 2 c2, 14, 14) in, (N, c2, 14, 14) out
+    h = self.u1(torch.cat([self.up1(h), h1], dim=1), temb)
+    return self.out(h)
+```
+`u2` reçoit $2 c_2$ canaux, la sortie de `up2` et la carte `h2` de l'encodeur : sa première group norm, sa première convolution et sa convolution 1×1 du chemin résiduel doivent les attendre (fiche, piège « deux *skip connections* »). Sans connexions de saut, tout passerait par la carte 7 × 7 du milieu, et la prédiction du bruit, différente en chaque pixel, serait floue. La group norm normalise chaque image seule : un batch mélange des images de tous les niveaux de bruit, et des statistiques de batch les mélangeraient. `pe` se calcule à partir de `n_steps` : il n'a rien à faire dans le `state_dict`, et un buffer persistant ferait échouer le rechargement d'un modèle construit avec un autre `n_steps`. Pour b) : `up1` rend `c1 = 16` canaux à 28 × 28, `h1` en a 16 aussi, d'où 32 canaux pour 8 images.
+**Erreurs fréquentes** : `ResBlock(c2, c2)` pour `u2` (la concaténation oubliée : 171 889 paramètres en a) au lieu de 186 113, et une erreur de forme à l'exécution) ; la concaténation dans l'autre ordre (`cat([h2, up2(h)])`) : les formes passent, mais les poids ne correspondent plus à ceux du contrat ; `nn.Embedding(n_classes, …)` sans la ligne de la classe vide ; un `t_mlp` d'une seule couche (181 953 paramètres) ; la sortie du décodeur sans `out`.
+**Variante** : le U-Net conditionné de la suite, `TinyUNet_21(1000, n_classes=10)`, a 742 273 paramètres (11 lignes de 128 de plus que celui de la fiche) ; avec des canaux (64, 128, 256), il passerait à 2 775 809 paramètres, environ 3,7 fois plus, pour un coût par passe multiplié à peu près par 4.

@@ -232,7 +232,7 @@ x0_15 = DIGITS.images[0].double().numpy()
 eps_15 = np.random.default_rng(15).standard_normal(x0_15.shape)
 grid_15 = [math.sqrt(a) * x0_15 + math.sqrt(1 - a) * eps_15
            for key in ("L", "C") for a in wbd.alpha_bars(SCHEDULES_15[key][1])[idx_15]]
-show_images(np.stack(grid_15), titles=[f"{k} {i}" for k in ("L", "C") for i in idx_15], ncol=len(idx_15), size=1.1,
+show_images(np.stack(grid_15), titles=[f"{k} {i}" for k in ("L", "C") for i in idx_15], ncol=len(idx_15), size=1.35,
             suptitle="le même chiffre et le même bruit, aux indices 0 à 999 : linéaire (L), puis cosinus (C)")'''
 
 TODO_15 = r'''same_curve_15 = ...   # a) "D" or "S": which T = 400 schedule has the alpha_bar curve of L (against t / T)?
@@ -460,7 +460,7 @@ else:
     verdict("B5.18", max(ERRORS_18[k] for k in list(ERRORS_18)[1:4]) < 1e-9,
             "les trois chaînes exactes retrouvent x0 à moins de 1e-9.",
             "une chaîne qui devrait être exacte s'écarte de x0 de plus de 1e-9 : relis tes trois fonctions.")
-    fig, axes = plt.subplots(1, 3, figsize=(12, 3.8), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))         # each with its own scale
     for ax, name in zip(axes, [list(runs_18)[0], list(runs_18)[3], list(runs_18)[4]]):
         ax.scatter(*X0_18.T, s=4, alpha=0.4, label="x0")
         ax.scatter(*np.asarray(runs_18[name]).T, s=4, alpha=0.4, label="fin de la chaîne")
@@ -559,36 +559,45 @@ with checked("B5.19"):
     ref_19 = wbd.Denoiser2D(50)
     names_19 = {k: tuple(v.shape) for k, v in mine_19.state_dict().items()}
     want_19 = {k: tuple(v.shape) for k, v in ref_19.state_dict().items()}
-    verdict("B5.19", names_19 == want_19, "noms et formes des paramètres : ceux du contrat (net.0 à net.6).",
+    ok_19 = names_19 == want_19
+    verdict("B5.19", ok_19, "noms et formes des paramètres : ceux du contrat (net.0 à net.6).",
             f"le state_dict doit avoir les noms et formes {want_19} ; reçu {names_19} (le buffer pe est-il non persistant ?).")
+    if not ok_19:
+        raise StopCheck
     pe_19 = getattr(mine_19, "pe", None)
-    verdict("B5.19", pe_19 is not None and tuple(pe_19.shape) == (50, 32)
-            and np.allclose(pe_19.double().numpy(), wbd.sinusoidal_table(50, 32), atol=1e-6),
-            "le buffer pe est la table de positional_encoding(50, 32) (B3).",
+    pe_ok_19 = (pe_19 is not None and tuple(pe_19.shape) == (50, 32)
+                and np.allclose(pe_19.double().numpy(), wbd.sinusoidal_table(50, 32), atol=1e-6))
+    verdict("B5.19", pe_ok_19, "le buffer pe est la table de positional_encoding(50, 32) (B3).",
             "self.pe doit être la table positional_encoding(n_positions, t_dim) de B3, en float32.")
+    ok_19 &= pe_ok_19
     with torch.no_grad():
         for p_ in ref_19.parameters():
             p_.add_(0.3 * torch.randn(p_.shape))                    # weights far from the initialisation
     mine_19.load_state_dict(ref_19.state_dict())
     xq_19, tq_19 = torch.randn(7, 2), torch.tensor([0, 3, 9, 17, 25, 33, 49])
     with torch.no_grad():
-        same("B5.19", "sortie de ton MLP contre celle du contrat, aux mêmes poids", mine_19(xq_19, tq_19),
-             ref_19(xq_19, tq_19), rtol=1e-5, atol=1e-6)
+        ok_19 &= same("B5.19", "sortie de ton MLP contre celle du contrat, aux mêmes poids", mine_19(xq_19, tq_19),
+                      ref_19(xq_19, tq_19), rtol=1e-5, atol=1e-6)
     # 5 iterations of train_19 against the recipe of the contract (the same draws, the same model at the start)
     ab_19 = toy_schedule(np.linspace(1e-3, 0.2, 50))["alpha_bars"]
     a_19, b_19 = copy.deepcopy(ref_19), copy.deepcopy(ref_19)
     got_19 = train_19(a_19, DATA_B, ab_19, 5, 64, 1e-3, torch.Generator().manual_seed(5))
     want_l19 = wbd.train_toy(b_19, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(5), ab_19)
     if returned("B5.19", "train_19", got_19):
-        same("B5.19", "les 5 premières loss de train_19 contre la recette du contrat", got_19, want_l19, rtol=1e-5, atol=1e-6)
-        same("B5.19", "les poids après 5 itérations", a_19.net[0].weight, b_19.net[0].weight, rtol=1e-4, atol=1e-6)
+        ok_19 &= same("B5.19", "les 5 premières loss de train_19 contre la recette du contrat (mêmes tirages, dans le même ordre)", got_19, want_l19,
+                      rtol=1e-5, atol=1e-6)
+        ok_19 &= same("B5.19", "les poids après 5 itérations", a_19.net[0].weight, b_19.net[0].weight, rtol=1e-4,
+                      atol=1e-6)
+    else:
+        ok_19 = False
     sched_19 = toy_schedule(np.linspace(1e-3, 0.2, 50))
     b_19.eval()
     pts_19 = sample_19(b_19, 6, sched_19, torch.Generator().manual_seed(8), np.random.default_rng(9))
     if returned("B5.19", "sample_19", pts_19):
-        model_ok_19 = same("B5.19", "sample_19 (6 points, T = 50) contre l'échantillonnage DDPM du contrat", pts_19,
-                           wbd.sample_toy_ddpm(b_19, 6, sched_19["alpha_bars"], torch.Generator().manual_seed(8),
-                                               np.random.default_rng(9)), rtol=1e-5, atol=1e-5)'''
+        ok_19 &= same("B5.19", "sample_19 (6 points, T = 50) contre l'échantillonnage DDPM du contrat", pts_19,
+                      wbd.sample_toy_ddpm(b_19, 6, sched_19["alpha_bars"], torch.Generator().manual_seed(8),
+                                          np.random.default_rng(9)), rtol=1e-5, atol=1e-5)
+        model_ok_19 = bool(ok_19)'''
 
 EXPERIMENT_19 = r'''# Train on the ring, then 2 000 points by DDPM (≈ 10 s of training)
 MODEL_19 = None
@@ -678,11 +687,12 @@ with checked("B5.20"):
     ref_20 = wbd.Denoiser2D(wbd.FM_POSITIONS)
     a_20, b_20 = copy.deepcopy(ref_20), copy.deepcopy(ref_20)
     got_20 = train_fm_20(a_20, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(6))
-    if returned("B5.20", "train_fm_20", got_20):
-        same("B5.20", "les 5 premières loss de train_fm_20 contre la recette du contrat", got_20,
-             wbd.train_toy(b_20, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(6), flow=True), rtol=1e-5, atol=1e-6)
+    ok_20 = returned("B5.20", "train_fm_20", got_20)
+    if ok_20:
+        ok_20 = same("B5.20", "les 5 premières loss de train_fm_20 contre la recette du contrat (mêmes tirages, dans le même ordre)", got_20,
+                     wbd.train_toy(b_20, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(6), flow=True),
+                     rtol=1e-5, atol=1e-6)
     b_20.eval()
-    ok_20 = True
     for steps_c in (1, 3, 8):
         ok_20 &= same("B5.20", f"euler_20 en {steps_c} pas contre l'intégration du contrat",
                       euler_20(b_20, 5, steps_c, torch.Generator().manual_seed(7)),
@@ -900,8 +910,8 @@ with wb.attempt("B5.21"):
 EXPERIMENT_21 = r'''# The model of part C: your U-Net if it passed its checks, otherwise the U-Net of the contract (wb.diffusion)
 UNET_CLASS = TinyUNet_21 if UNET_OK_21 else wbd.TinyUNet
 if not UNET_OK_21:
-    print("ℹ️ Ex B5.21 : ton U-Net n'a pas passé ses contrôles ; la suite du chapitre prend celui du contrat "
-          "(wbd.TinyUNet). Relance cette cellule une fois le tien réparé.")
+    print("ℹ️ Ex B5.21 : ton U-Net n'est pas encore écrit, ou n'a pas passé ses contrôles ; la suite du chapitre prend "
+          "celui du contrat (wbd.TinyUNet). Relance cette cellule une fois le tien prêt.")
 net_21 = UNET_CLASS(T_STEPS).eval()
 x_21, t_21 = torch.randn(64, 1, 28, 28), torch.randint(0, T_STEPS, (64,))
 with torch.no_grad():

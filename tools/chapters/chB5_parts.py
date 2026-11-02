@@ -118,7 +118,7 @@ La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont p
                    1: "relis le tableau : compte le pas 100 des deux plannings",
                    2: "relis le tableau : le cosinus au pas 300 atteint-il 70 % ?",
                    3: "relis le tableau : le linéaire au pas 300 atteint-il 70 % ?",
-                   4: "relis le tableau : le linéaire au pas 300 atteint-il 70 % ? ",
+                   4: "relis le tableau : compte un à un les cas à 70 % ou plus",
                    5: "relis le tableau : au pas 600, le cosinus atteint-il 70 % ?",
                    6: "relis le tableau : que vaut l'accuracy au pas 600 du linéaire ?",
                }.items() if v != P13["strong"])
@@ -323,7 +323,7 @@ La cellule de vérification compare tes trois fonctions aux fonctions du contrat
 - a) `fewest_20` : le plus petit nombre de pas de `STEPS_20` à partir duquel la distance d'Euler est au plus le triple de sa distance à 100 pas ;
 - b) `better5_20` : à 5 pas, lequel a la plus petite distance : `"D"` (DDIM) ou `"E"` (Euler) ?
 
-Dans tes notes : pourquoi DDIM à 1 ou 2 pas rend-il des points aussi loin (regarde $\hat{\mathbf{x}}_0$ au dernier indice, et la division par $\sqrt{\bar\alpha_t}$) ? Et Euler à 1 pas, où envoie-t-il tous les points (fiche, encadré 🧮 « la MSE apprend une moyenne ») ? Le gagnant change-t-il avec le nombre de pas ? À 100 pas, compare le DDIM et le DDPM de B5.19 sur le même modèle : que conclus-tu de l'aléa de l'échantillonnage ancestral ? Qu'est-ce que la comparaison ne dit pas (un seul jeu de données, des réglages choisis pour l'un ou l'autre, la loss de chaque modèle) ?""",
+Dans tes notes : pourquoi DDIM à 1 ou 2 pas rend-il des points aussi loin (regarde $\hat{\mathbf{x}}_0$ au dernier indice, et la division par $\sqrt{\bar\alpha_t}$) ? Et Euler à 1 pas, où envoie-t-il tous les points (fiche, encadré 🧮 « la MSE apprend une moyenne ») ? Le gagnant change-t-il avec le nombre de pas ? À 100 pas, compare le DDIM et le DDPM de B5.19 sur le même modèle : que conclus-tu de l'aléa de l'échantillonnage ancestral ? Qu'est-ce que la comparaison ne dit pas (un seul dataset, des réglages choisis pour l'un ou l'autre, la loss de chaque modèle) ?""",
        given=GIVEN_20, todo=C.TODO_20, check=C.CHECK_20, solution=C.SOLUTION_20 + "\n\n\n" + C.CHECK_20,
        after=[("code", C.EXPERIMENT_20), ("todo", C.TODO_20B), ("check", C.CHECK_20B),
               ("solution", f'fewest_20, better5_20 = {A20["fewest"]}, "{A20["better5"]}"\n\n' + C.CHECK_20B),

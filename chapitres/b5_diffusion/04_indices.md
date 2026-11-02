@@ -568,4 +568,285 @@ Commence par : « Le rectified flow est un cousin très proche de la diffusion :
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B5.12 à B5.31) seront ajoutés à la prochaine session de génération, avec le notebook.
+Les indices des exercices B5.22 à B5.31 seront ajoutés à la prochaine étape de la génération, avec la fin du notebook.
+
+### Ex B5.12 — linear_beta_schedule, cosine_beta_schedule et noise_schedule 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Le planning linéaire de Ho et coll. », « Le planning cosinus de Nichol et Dhariwal » et « Bruiter un batch » (§205.2), et tes calculs de ✏️ B5.2 : un planning est un tableau de $T$ valeurs ; toutes les constantes s'en déduisent par des opérations élément par élément et **un** produit cumulé.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `linear_beta_schedule` : valide d'abord, puis `np.linspace(beta_start, beta_end, n_steps, dtype=np.float64)`, qui rend `[beta_start]` pour un seul pas.
+- `cosine_beta_schedule` : `t = np.arange(n_steps + 1)`, `f = np.cos((t / n_steps + s) / (1 + s) * np.pi / 2) ** 2`, puis le rapport de deux valeurs consécutives, `f[1:] / f[:-1]`, et `np.minimum(…, max_beta)`.
+- `noise_schedule` : `np.asarray(betas, dtype=np.float64)`, la validation, `alphas = 1 - betas`, `alpha_bars = np.cumprod(alphas)`, `alpha_bars_prev = np.concatenate([[1.0], alpha_bars[:-1]])`, puis les racines et les trois constantes du posterior d'après la docstring.
+- Pour refuser `nan`, écris la condition **qui doit être vraie**, `np.all((b > 0) & (b < 1))`, et lève l'erreur si elle ne l'est pas : `nan > 0` est faux, donc `nan` est refusé. La condition inverse, « un $\beta$ est $\le 0$ ou $\ge 1$ », est fausse elle aussi pour `nan` et le laisse passer. De même pour `beta_start`, `beta_end` et `max_beta`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def noise_schedule(betas):
+    b = np.asarray(betas, dtype=np.float64)
+    if b.ndim != 1 or not np.all((b > 0) & (b < 1)):
+        raise ValueError(...)
+    alphas = 1.0 - b
+    alpha_bars = np.cumprod(alphas)
+    alpha_bars_prev = np.concatenate([[1.0], alpha_bars[:-1]])
+    ...                                                   # the two square roots and the three posterior constants
+    return {"betas": b, ...}                              # the nine keys of the docstring
+```
+
+</details>
+
+### Ex B5.13 — Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus 🔮
+
+<details><summary>Indice 1</summary>
+
+Calcule d'abord les six SNR, avec la formule de §205.2 et tes $\bar\alpha$ (ou la méthode de ✏️ B5.3) : les pas 100, 300 et 600 de l'article sont les indices 99, 299 et 599. Puis demande-toi ce que le classifieur a vu pendant son entraînement : des chiffres **propres**, rien d'autre.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Un SNR de 1 veut dire que la variance du bruit égale celle de l'image ; un SNR de 0,1, que le bruit en a dix fois plus. Ta convention de ✏️ B5.3 dit ce que ton œil, qui a vu des milliers d'images bruitées, devine encore. Un réseau entraîné sans bruit n'a jamais vu de grain : il réagit à des motifs qu'il n'a pas appris. Classe les six cas du SNR le plus grand au plus petit, et place la frontière où, selon toi, un tel réseau lâche.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), range les six cas par SNR décroissant (le premier est le cosinus au pas 100, SNR ≈ 35 ; calcule les cinq autres) et place une seule frontière : au-dessus de quel SNR un réseau qui n'a vu que des chiffres propres en reconnaît-il encore 70 % ? Ta prédiction est le nombre de cas au-dessus. Pour b), compare le SNR du cosinus au pas 600 à 1 (bruit et image de même variance), pas seulement à 0,1.
+
+</details>
+
+### Ex B5.14 — q_sample : bruiter un batch d'images à des pas différents 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « La forme fermée » et « Bruiter un batch » (§205.2), avec le piège « `alpha_bars[t]` sans remise en forme » : la formule est une ligne ; le travail est de choisir le bon coefficient pour chaque exemple et de lui donner la forme `(N, 1, …, 1)`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Convertis `x0`, `t` et `alpha_bars` en tableaux (`np.asarray(x0, dtype=float)`, `np.asarray(t)`), sans jamais modifier ceux que tu reçois.
+- Vérifie que `t` est 1-D de longueur `x0.shape[0]`, d'entiers, et dans $[0, T)$ : `ValueError` sinon (teste-le toi-même avant d'indexer, sinon `alpha_bars[-1]` passerait sans erreur et `alpha_bars[T]` lèverait `IndexError`).
+- Si `noise` est donné, vérifie `noise.shape == x0.shape` ; sinon, `rng = np.random.default_rng() if rng is None else rng`, puis **un** tirage `rng.standard_normal(x0.shape)`.
+- La forme du coefficient : `(N,) + (1,) * (x0.ndim - 1)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def q_sample(x0, t, alpha_bars, noise=None, rng=None):
+    x0 = np.asarray(x0, dtype=float)
+    t = np.asarray(t)
+    ...                                                   # t: 1-D, one integer index per sample, in [0, T)
+    ...                                                   # noise: given (same shape as x0) or drawn once from rng
+    shape = (len(x0),) + (1,) * (x0.ndim - 1)
+    a = np.sqrt(alpha_bars[t]).reshape(shape)
+    return a * x0 + ..., noise
+```
+
+</details>
+
+### Ex B5.15 — Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings 📈
+
+<details><summary>Indice 1</summary>
+
+L'axe horizontal est la fraction de la chaîne, pas l'indice : c'est ce qui permet de comparer des plannings de $T$ différents. Sur le graphique de droite, l'axe vertical est un logarithme : une différence de 1 y vaut un facteur $e \approx 2{,}7$ sur le SNR.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- a) Suis la courbe L à gauche, puis les deux courbes en pointillés : laquelle se confond avec elle ? Relie ta réponse à ✏️ B5.2 : que vaut $\sum \beta$ pour chacune ?
+- b) La fin de chaque courbe, au bord droit : le $\ln \operatorname{SNR}$ du dernier indice dit quelle part de l'image il reste. Le graphique de gauche les écrase toutes près de 0 ; celui de droite les sépare.
+- c) Repère où les courbes C et L se croisent, s'il y en a un, en regardant jusqu'au bord droit.
+
+</details>
+<details><summary>Indice 3</summary>
+
+a) **S** : sa courbe (en pointillés fins) reste collée à L de bout en bout, alors que D s'en écarte dès le premier tiers ; c'est ✏️ B5.2 : avec les bornes multipliées par $1\,000/T$, la somme des $\beta$ jusqu'à une même fraction de la chaîne est la même, donc $\bar\alpha \approx e^{-\sum\beta}$ aussi. Pour b), compare les quatre valeurs de $\ln \operatorname{SNR}$ au bord droit, la plus haute garde le plus d'image. Pour c), situe le croisement de C et L sur l'axe horizontal et compare cette fraction à 0,5, 0,9 et 0,95.
+
+</details>
+
+### Ex B5.16 — q_posterior_mean_variance et predict_x0_from_eps 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Le posterior : un pas en arrière quand on connaît $\mathbf{x}_0$ » (§205.3) et ta dérivation ∂ B5.7 : `noise_schedule` a déjà calculé les deux coefficients de la moyenne et la variance ; il reste à les lire à l'indice de chaque exemple, comme dans `q_sample`. `predict_x0_from_eps` inverse la forme fermée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Les mêmes validations que `q_sample` (forme de `t`, entiers, intervalle), plus `x_t.shape == x0.shape` (et `eps.shape == x_t.shape`) **exactement**.
+- `coef1 = schedule["posterior_mean_coef1"][t].reshape(shape)`, de même pour `coef2` et `posterior_variance`, avec `shape = (N,) + (1,) * (x0.ndim - 1)` : la variance a donc autant d'axes que `x0` (forme `(N,)` en 1-D).
+- `predict_x0_from_eps` : `(x_t - sqrt(1 - ab[t]) * eps) / sqrt(ab[t])`, coefficients remis en forme.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def q_posterior_mean_variance(x0, x_t, t, schedule):
+    x0, x_t, t = np.asarray(x0, dtype=float), np.asarray(x_t, dtype=float), np.asarray(t)
+    ...                                                   # validations: t as in q_sample, x_t.shape == x0.shape
+    shape = (len(x0),) + (1,) * (x0.ndim - 1)
+    mean = schedule["posterior_mean_coef1"][t].reshape(shape) * x0 + ...
+    return mean, schedule["posterior_variance"][t].reshape(shape)
+```
+
+</details>
+
+### Ex B5.17 — ddpm_step et ddim_step 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « L'algorithme » et « Un pas à la main » (§205.5) pour DDPM, « L'idée de DDIM » et « Le paramètre η » (§205.6) pour DDIM, et refais de tête ✏️ B5.4 et B5.5 : chaque fonction est une moyenne, plus un bruit dont il faut bien choisir l'écart-type, et deux ou trois cas particuliers (le dernier pas, `t_prev = -1`, `eta = 0`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `ddpm_step` : valide `t` (un entier de $[0, T)$) et `variance` **au début**, avant tout calcul. Sans écrêtage, la moyenne de l'algorithme 2 ; avec `clip_x0`, $\hat{\mathbf{x}}_0$ (ta `predict_x0_from_eps`, ou la même formule), `np.clip(x0_hat, -clip_x0, clip_x0)`, puis la moyenne du posterior avec les coefficients de `schedule` à l'indice `t`. Si `t > 0` : `rng = np.random.default_rng() if rng is None else rng`, `z = rng.standard_normal(x_t.shape)`, et ajoute `np.sqrt(var) * z`.
+- `ddim_step` : valide, puis `ab = alpha_bars[t]` et `ab_prev = 1.0 if t_prev == -1 else alpha_bars[t_prev]` ; $\hat{\mathbf{x}}_0$, puis $\sigma$, puis la formule de la docstring. Ne tire $\mathbf{z}$ que si `eta > 0` (et alors `t_prev = -1` donne $\sigma = 0$ : rien à ajouter). Pour refuser `eta = nan`, la condition qui doit être vraie : `0 <= eta <= 1`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def ddim_step(x_t, t, t_prev, eps_pred, alpha_bars, eta=0.0, rng=None):
+    x_t, eps = np.asarray(x_t, dtype=float), np.asarray(eps_pred, dtype=float)
+    ...                                                   # -1 <= t_prev < t < T, 0 <= eta <= 1 (nan refused)
+    ab, ab_prev = alpha_bars[t], (1.0 if t_prev == -1 else alpha_bars[t_prev])
+    x0_hat = (x_t - np.sqrt(1 - ab) * eps) / np.sqrt(ab)
+    sigma = eta * np.sqrt((1 - ab_prev) / (1 - ab)) * np.sqrt(1 - ab / ab_prev)
+    out = np.sqrt(ab_prev) * x0_hat + np.sqrt(1 - ab_prev - sigma ** 2) * eps
+    ...                                                   # + sigma * z, drawn only if eta > 0
+```
+
+</details>
+
+### Ex B5.18 — Avec le vrai bruit, DDPM et DDIM retrouvent-ils x_0 ? Contrôle sur des données 2D 🔬
+
+<details><summary>Indice 1</summary>
+
+« Le vrai bruit » d'un point $\mathbf{x}_t$ est celui qui, avec $\mathbf{x}_0$, redonne $\mathbf{x}_t$ par la forme fermée : on l'obtient en l'inversant. Les deux chaînes sont des boucles qui appellent tes pas de B5.17 ; tout le reste est une question de « quel bruit donner à chaque pas ».
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `true_noise_18` : la forme fermée résolue en $\boldsymbol{\varepsilon}$, avec $\bar\alpha_t$ = `alpha_bars[t]` (un nombre : pas de remise en forme).
+- `ddpm_chain_18` : $T$ = `len(schedule["alpha_bars"])` ; le point de départ à l'indice $T - 1$ ; une boucle `for t in range(T - 1, -1, -1)` qui choisit `eps_pred` selon `oracle`, puis appelle `mylearn.diffusion.ddpm_step(x, t, eps_pred, schedule, rng=rng)`.
+- `ddim_chain_18` : la liste des indices de `timesteps`, suivie de −1 ; on parcourt les couples (indice, indice suivant) avec `zip(steps[:-1], steps[1:])`.
+- Pour les réponses, compare chaque écart du tableau à $10^{-6}$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def ddim_chain_18(x0, eps, alpha_bars, timesteps, eta=0.0, rng=None):
+    steps = [int(t) for t in timesteps] + [-1]
+    a0 = float(alpha_bars[steps[0]])
+    x = np.sqrt(a0) * np.asarray(x0, dtype=float) + np.sqrt(1 - a0) * np.asarray(eps, dtype=float)
+    for t, t_prev in zip(steps[:-1], steps[1:]):
+        x = ...                                           # your ddim_step, with eps_pred = eps
+    return x
+```
+
+a) se lit sur la première ligne du tableau : un écart de plusieurs centaines, bien au-delà de $10^{-6}$, donc `False`. Fais de même pour les lignes 2, 4 et 5 : un écart de l'ordre de $10^{-14}$ donne `True`.
+
+</details>
+
+### Ex B5.19 — Diffusion en 2D : un MLP débruiteur conditionné par le pas de temps, entraîné puis échantillonné 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Dire au réseau quel est le pas » (§205.4) et « La loss simplifiée » (§205.3) : le réseau reçoit $\mathbf{x}_t$ et l'encodage de $t$, et la loss compare sa sortie au bruit qui a servi à fabriquer $\mathbf{x}_t$. L'échantillonnage est l'algorithme 2 : ta `ddpm_step` fait tout, il suffit de lui donner la prédiction du réseau à chaque pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Le modèle : `self.register_buffer("pe", torch.tensor(mylearn.attention.positional_encoding(n_positions, t_dim), dtype=torch.float32), persistent=False)`, le `nn.Sequential` du contrat, et `torch.cat([x, self.pe[t]], dim=1)` dans `forward`.
+- L'entraînement : `alpha_bars` converti une fois en tenseur float32 ; à chaque itération les trois tirages **dans l'ordre du contrat**, chacun avec `generator=generator` ; `a = ab[t][:, None]` (forme `(B, 1)`, pour la diffusion sur les deux coordonnées) ; `loss.item()` dans la liste.
+- L'échantillonnage : sous `torch.no_grad()`, convertis $\mathbf{x}$ en float32 pour le réseau et sa sortie en float64 NumPy (`.double().numpy()`) pour `ddpm_step` ; `torch.full((n,), t, dtype=torch.long)` donne le même pas à tous les points.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_19(model, data, alpha_bars, n_iters, batch_size, lr, generator):
+    opt = torch.optim.AdamW(model.parameters(), lr=lr)
+    ab = torch.tensor(np.asarray(alpha_bars), dtype=torch.float32)
+    losses = []
+    for _ in range(n_iters):
+        x0 = data[torch.randint(len(data), (batch_size,), generator=generator)]
+        ...                                               # t, then eps, both from generator
+        loss = F.mse_loss(model(a.sqrt() * x0 + (1 - a).sqrt() * eps, t), eps)
+        ...                                               # zero_grad, backward, step, losses.append(loss.item())
+    return losses
+```
+
+</details>
+
+### Ex B5.20 — Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Flow matching et rectified flow » (§205.9) et l'encadré 🧮 « la méthode d'Euler » : l'entraînement ne change que par l'entrée ($\mathbf{x}_s$ sur la ligne droite) et la cible (la vitesse) ; la génération suit la vitesse prédite à petits pas, de $s = 1$ à $s = 0$, donc **en reculant** : chaque pas retire `v / n_steps`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `train_fm_20` : la boucle de `train_19`, avec `u = torch.randint(1, 1001, (batch_size,), generator=generator)` à la place des pas, `s = (u.float() / 1000)[:, None]`, l'entrée `(1 - s) * x0 + s * eps`, la cible `eps - x0`, et `model(x_s, u)`.
+- `euler_20` : la position du pas `k` est `round(1000 * (1 - k / n_steps))` (1 000 au premier pas, le bruit pur) ; sous `torch.no_grad()`.
+- `ddim_20` : `wbd.ddim_timesteps(len(alpha_bars), n_steps)` suivi de −1, et la même boucle que `ddim_chain_18`, avec la prédiction du réseau à la place du vrai bruit.
+- Pour a) et b), lis le tableau du protocole complet (les médianes) **et** les bandes du graphique : une réponse doit valoir pour chaque graine.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def euler_20(model, n, n_steps, generator):
+    x = torch.randn((n, 2), generator=generator)
+    with torch.no_grad():
+        for k in range(n_steps):
+            u = round(1000 * (1 - k / n_steps))
+            x = ...                                       # one Euler step backwards: minus v / n_steps
+    return x.double().numpy()
+```
+
+Pour a), commence par 1 pas : pour chaque graine, compare sa distance à 1 pas au triple de sa distance à 100 pas ; si une seule graine dépasse, 1 pas ne convient pas ; passe alors à 2, puis à 5… Pour b), compare, graine par graine, les deux distances de la colonne des 5 pas.
+
+</details>
+
+### Ex B5.21 — Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps 📦
+
+<details><summary>Indice 1</summary>
+
+Le bloc est écrit dans la fiche (§205.4, « Un bloc résiduel conditionné par le pas ») ; le U-Net suit la figure `unet.png` : deux étages qui descendent, un bloc au milieu, deux étages qui remontent, et une concaténation à chaque résolution. La seule nouveauté par rapport à la fiche : la classe, une table d'embeddings dont on ajoute la ligne à l'encodage du pas.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Les noms du contrat, dans `__init__`, dans l'ordre où le signal passe : `t_mlp`, `class_emb` (seulement si `n_classes` n'est pas `None`), `inp`, `d1`, `down1`, `d2`, `down2`, `mid`, `up2`, `u2`, `up1`, `u1`, `out`.
+- Le nombre de canaux à l'entrée de `u2` et `u1` est le double : la sortie de `up2` (`c2` canaux) **plus** `h2` (`c2` canaux), de même pour `u1`.
+- La classe vide : `torch.full_like(t, self.n_classes)` quand `y` est `None`.
+- Pour b), un *hook* de PyTorch lit l'entrée d'un module pendant un appel : `model.u1.register_forward_pre_hook(lambda mod, inp: print(inp[0].shape))` ; ou raisonne : à 28 × 28, combien de canaux sortent de `up1`, et combien en garde `h1` ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class TinyUNet_21(nn.Module):
+    def __init__(self, n_steps, channels=(32, 64, 128), t_dim=128, n_classes=None):
+        super().__init__()
+        c1, c2, c3 = channels
+        ...                                               # self.config, self.n_classes, the buffer pe, t_mlp, class_emb
+        self.u2 = ResBlock_21(2 * c2, c2, t_dim)          # up2 output + h2
+        ...
+
+    def forward(self, x, t, y=None):
+        temb = self.t_mlp(self.pe[t])
+        ...                                               # + class_emb(y or the empty class), then the U
+        h = self.u2(torch.cat([self.up2(h), h2], dim=1), temb)
+```
+
+</details>
