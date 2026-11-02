@@ -22442,5 +22442,129 @@
   ],
   "target_fast": 0.79,
   "target_full": 0.87
+ },
+ "challenge30": {
+  "fast": {
+   "runs": [
+    {
+     "loss": 1.6552207107972579,
+     "seconds": 110.56875501600007,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 2.39805383076364,
+     "control_held": 2.3648687167000664,
+     "control_seconds": 27.696052018000046,
+     "seed": 3030,
+     "failures": []
+    },
+    {
+     "loss": 1.6717871972713945,
+     "seconds": 110.45116829300241,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 2.425941952928105,
+     "control_held": 2.39180710678209,
+     "control_seconds": 27.666664167001727,
+     "seed": 3031,
+     "failures": []
+    },
+    {
+     "loss": 1.6389293653469996,
+     "seconds": 110.44534512799873,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 2.429320276569443,
+     "control_held": 2.393533001446412,
+     "control_seconds": 27.613640348001354,
+     "seed": 3032,
+     "failures": []
+    },
+    {
+     "loss": 1.6300949806968121,
+     "seconds": 110.44691654499911,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 2.4261764653480977,
+     "control_held": 2.392786357399448,
+     "control_seconds": 27.703283823000675,
+     "seed": 3033,
+     "failures": []
+    },
+    {
+     "loss": 1.6358754394654504,
+     "seconds": 110.43589628900008,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 2.433693549687443,
+     "control_held": 2.3990672628339316,
+     "control_seconds": 27.69361749300151,
+     "seed": 3034,
+     "failures": []
+    }
+   ],
+   "reference": [
+    1.6300949806968121,
+    1.6717871972713945
+   ],
+   "goal": 1.76,
+   "control_gap": [
+    0.034224726026956274,
+    0.08
+   ]
+  },
+  "full": {
+   "runs": [
+    {
+     "loss": 1.352993686854331,
+     "seconds": 552.0225548460003,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 1.5628938853183778,
+     "control_held": 1.5302120924707057,
+     "control_seconds": 138.12635428000067,
+     "seed": 3030,
+     "failures": []
+    },
+    {
+     "loss": 1.3506822918603356,
+     "seconds": 552.1423126379996,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 1.5795720133944608,
+     "control_held": 1.5397661551140398,
+     "control_seconds": 138.12479885300127,
+     "seed": 3031,
+     "failures": []
+    },
+    {
+     "loss": 1.35960226870105,
+     "seconds": 552.1195445949998,
+     "values": 820992,
+     "honest": true,
+     "ok": true,
+     "control_val": 1.587855017990352,
+     "control_held": 1.5500023517614097,
+     "control_seconds": 138.08516839300137,
+     "seed": 3032,
+     "failures": []
+    }
+   ],
+   "reference": [
+    1.3506822918603356,
+    1.35960226870105
+   ],
+   "goal": 1.43,
+   "control_gap": [
+    0.036780105785678474,
+    0.08
+   ]
+  }
  }
 }
