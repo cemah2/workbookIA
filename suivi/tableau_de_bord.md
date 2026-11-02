@@ -1503,3 +1503,42 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B3.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
 <!-- wb:end B3 -->
+
+<!-- wb:section B4 -->
+## B4 — LLM en pratique : Hugging Face, prompting, RAG et LoRA ⏱️ 21 h
+
+- [ ] B4.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] B4.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B4.1 ✏️ Mémoire d'un modèle : paramètres, dtype et KV cache — tient-il sur ton ordinateur ? ★ 15 min
+- [ ] B4.2 ✏️ Recall@k et MRR pour cinq requêtes ★ 10 min
+- [ ] B4.3 ✏️ LoRA : paramètres entraînables d'une couche 896×896 de rang 8, puis de tout un modèle ★ 15 min
+- [ ] B4.4 ✏️ Un chat template à la main : rôles, tokens spéciaux et prompt de génération ★★ 15 min
+- [ ] B4.5 ✏️ BM25 à la main : trois documents, une requête de deux mots ★★ 20 min
+- [ ] B4.6 ∂ LoRA : ΔW = BA de rang au plus r, B nulle au départ, gradients de A et de B, facteur α/r ★★★ 30 min
+- [ ] B4.7 🧮 Fermi : coût et latence d'un assistant RAG, API facturée au token contre petit modèle local ★★ 20 min
+- [ ] B4.8 🗣️ Le RAG expliqué en cinq lignes ★ 10 min
+- [ ] B4.9 ⚖️ Un assistant RH qui répond sur les salaires : données personnelles, hallucinations, injection, transparence ★★★ 35 min
+- [ ] B4.10 ⚖️ Fine-tuner sur des romans : domaine public, œuvres protégées et droit de retrait (opt-out) ★★ 20 min
+- [ ] B4.11 📄 Hu et coll. (2021) : « LoRA: Low-Rank Adaptation of Large Language Models » ★★★ 45 min
+- [ ] B4.12 📦 Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle ★★ 25 min
+- [ ] B4.13 🔮 Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 ★ 10 min
+- [ ] B4.14 📦 Chat template, message système, arrêt et streaming avec un modèle instruct ★★ 25 min
+- [ ] B4.15 📦 Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire ★★★ 45 min
+- [ ] B4.16 🔬 Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples ★★★ 40 min
+- [ ] B4.17 🔨 chunk_text et BM25 : découper un roman et classer ses passages ★★★ 45 min
+- [ ] B4.18 🔨 cosine_top_k, fusion de classements (RRF), recall@k et MRR ★★ 30 min
+- [ ] B4.19 🔮 Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? ★ 10 min
+- [ ] B4.20 📦 Recherche dense (MiniLM, e5) contre BM25 contre hybride sur 30 questions annotées ★★★ 45 min
+- [ ] B4.21 📦 Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit modèle ★★★ 60 min
+- [ ] B4.22 🐛 Le RAG qui répond à côté : quatre défauts de découpage, d'encodage et de contexte ★★ 30 min
+- [ ] B4.23 📈 Évaluer le RAG : recall@k, exactitude des réponses, « je ne sais pas » et analyse des échecs ★★ 20 min
+- [ ] B4.24 🔬 Injection de prompt cachée dans un passage : attaquer, puis atténuer et mesurer ★★ 30 min
+- [ ] B4.25 📦 LoRA from scratch : une couche LoRALinear en PyTorch, vérifiée contre peft ★★★ 40 min
+- [ ] B4.26 📦 LoRA avec peft : adapter un petit modèle au style de Holmes, perplexité avant et après, fusion ★★★ 60 min 🚀
+- [ ] B4.27 🔬 Rang, alpha et modules ciblés : perplexité contre paramètres entraînables ★★★ 45 min 🚀
+- [ ] B4.28 📦 Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique ★★★ 60 min 🚀
+- [ ] B4.29 🛠️ Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses ★★ 25 min
+- [ ] B4.30 🏆 Défi RAG : au moins 40 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU ★★★★ 120 min
+- [ ] B4.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (28 cartes)
+<!-- wb:end B4 -->

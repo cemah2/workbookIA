@@ -5133,7 +5133,7 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 | B4.27 | 🔬 | Rang, alpha et modules ciblés : perplexité contre paramètres entraînables 🚀 | ★★★ | 45 | Holmes | 03 | B4.26 | C | manual |
 | B4.28 | 📦 | Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique 🚀 | ★★★ | 60 | — | 03 | B4.26, 15 | C | manual |
 | B4.29 | 🛠️ | Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses | ★★ | 25 | Holmes/Verne | 03 | B4.21 | C | manual |
-| B4.30 | 🏆 | Défi RAG : au moins 80 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU | ★★★★ | 120 | Holmes | 03 | B4.23 | C | wb.check |
+| B4.30 | 🏆 | Défi RAG : au moins 40 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU | ★★★★ | 120 | Holmes | 03 | B4.23 | C | manual |
 | B4.E1 | 💼 | Comment réduis-tu les hallucinations d'un assistant fondé sur un LLM ? | ★★ | 10 | — | 02 | — | R | manual |
 | B4.E2 | 💼 | RAG ou fine-tuning : comment choisis-tu ? | ★★ | 10 | — | 02 | — | R | manual |
 | B4.E3 | 💼 | Explique LoRA et pourquoi c'est si économique | ★★ | 10 | — | 02 | — | R | manual |
