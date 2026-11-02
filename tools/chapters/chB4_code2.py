@@ -640,9 +640,16 @@ def diagnose_22(chunk_fn, query_fn, prompt_fn, verify_fn):
         cut = [q["id"] for q in ITEMS_22 if not wbrag.relevant_ids(chunks, q)]
         if not cut:
             return True, f"{len(chunks)} chunks ; les {len(ITEMS_22)} extraits annotés sont chacun entiers dans un chunk", ""
-        words = set(" ".join(body for _, body in DOCS_22).split())
-        broken = next((c for c in chunks if c.split() and (c.split()[0] not in words or c.split()[-1] not in words)), None)
-        shown = f" ; un chunk commence ainsi : {broken[:40]!r}…" if broken else ""
+        broken = None                                    # a chunk that starts inside a word of its story
+        for _, body in DOCS_22:
+            for c in chunk_fn(body):
+                at = body.find(c)
+                if at > 0 and c[:1].isalnum() and body[at - 1].isalnum():
+                    broken = c
+                    break
+            if broken:
+                break
+        shown = f" ; un chunk commence au milieu d'un mot : {broken[:40]!r}…" if broken else ""
         return False, (f"{len(cut)} extraits annotés sur {len(ITEMS_22)} ne sont entiers dans aucun chunk ({', '.join(cut)})"
                        f"{shown}"), "où passent les frontières des chunks, et que devient une phrase qui tombe dessus ?"
 
@@ -695,7 +702,7 @@ TODO_22 = r'''# The RAG to repair IN PLACE (same names, same signatures, same re
 def chunk_22(text):
     """Chunks of 120 words starting every 100 words (an overlap of 20 words), re-joined with single spaces: no
     evidence of 21 words or less is ever cut."""
-    return [text[i:i + 700] for i in range(0, len(text), 700)]
+    return [text[i:i + 750] for i in range(0, len(text), 750)]
 
 
 def query_22(question):

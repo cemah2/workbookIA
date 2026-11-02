@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Calibrate the predictions and precompute the generated replies of chapter B4, first half (used by Claude).
+"""Calibrate the predictions and precompute the generated replies of chapter B4 (used by Claude).
 
-    python tools/chapters/history_chB4.py                    # everything (about 35 min on a 2-core CPU)
+    python tools/chapters/history_chB4.py                    # everything (about 2 h on a 2-core CPU)
     python tools/chapters/history_chB4.py --only p13 p19      # some entries (names below)
 
 Writes tools/chapters/history_chB4.json (statistics only), which chB4_parts.py reads:
@@ -20,6 +20,16 @@ namespace, fast mode then full mode, with a cache of source "solution" in a temp
 into tools/chapters/history_chB4_generations.json (wb.llm.SOLUTION_CACHE): the frozen cache that the solutions
 notebook reads. The replies depend on the machine only through rounding; the key of each reply holds the versions of
 transformers and torch.
+
+Second half (B4.22 to B4.30):
+- "b25": 📦 B4.25, the trainable parameters of the toy block and the values of their classic mistakes;
+- "lora26", "p27_fast": the settings of 📦 B4.26 and of the fast protocol of 🔬 B4.27;
+- "p27_full": 🔬 B4.27, the full protocol (distilgpt2, 12 settings, 30 steps, two seeds; about 20 min);
+- "bug22": 🐛 B4.22 replayed on its 16 versions (the first failing point must be the first defect left);
+- "ch30": 🏆 B4.30, the reference raced by evaluate_30 on five chunkings in each mode (resumable: each run is saved);
+- "generations2": the replies of B4.22 to B4.24 in both modes, ADDED to the frozen file (the replies already there are
+  read from it, nothing is removed). Run "generations" alone and it rewrites the frozen file from the first half only:
+  run "generations2" again after it.
 """
 
 from __future__ import annotations
@@ -420,7 +430,7 @@ def bug22(_) -> dict:
     buggy = {n: ns[n] for n in ("chunk_22", "query_22", "prompt_ids_22", "verify_22")}
     run(C2.SOLUTION_22, ns)
     fixed = {n: ns[n] for n in buggy}
-    rows = []
+    rows, messages = [], []
     for mask in itertools.product([False, True], repeat=4):
         fns = [fixed[n] if m else buggy[n] for n, m in zip(buggy, mask)]
         ns["FNS_22"] = fns
@@ -430,13 +440,13 @@ def bug22(_) -> dict:
                        if line.startswith("❌ Ex B4.22 : point")), None)
         crashed = any("ton code lève" in line for line in text.splitlines())
         rows.append({"fixed": list(mask), "first_bad": first_bad, "failed": failed, "crashed": crashed})
-        if not any(mask):
-            buggy_text = text
+        if list(mask) in ([False] * 4, [True, False, False, False], [True, True, False, False], [True, True, True, False]):
+            messages.append(next(line for line in text.splitlines() if line.startswith("❌")))
         print(f"  bug22 {mask} first defect {first_bad}, failed point {failed}" + (" CRASH" if crashed else ""), flush=True)
         if failed != first_bad or crashed:
             raise SystemExit(f"❌ bug22: the version {mask} stops at {failed} (expected {first_bad}):\n{text}")
-    print("  bug22: messages of the buggy version:\n" + buggy_text, flush=True)
-    return {"versions": rows}
+    print("  bug22: the message of each first defect:\n" + "\n".join(messages), flush=True)
+    return {"versions": rows, "messages": messages}
 
 
 CH30_CHUNKS = [(120, 20), (100, 20), (140, 20), (120, 30), (110, 25)]   # the "seeds" of the reference: its chunkings

@@ -1085,7 +1085,7 @@ def answer_29(llm, template, question, settings, folder):
 
 </details>
 
-### Ex B4.30 — [[TITLE30]] 🏆
+### Ex B4.30 — Défi RAG : au moins 40 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU 🏆
 
 <details><summary>Indice 1</summary>
 

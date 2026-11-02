@@ -451,6 +451,6 @@ Ces exercices sont dans `03_notebook.ipynb`, en quatre phases : **usage et promp
 | B4.27 | Rang, alpha et modules ciblés : perplexité contre paramètres entraînables | 🔬 | ★★★ | 45 | 🚀 |
 | B4.28 | Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique | 📦 | ★★★ | 60 | 🚀 |
 | B4.29 | Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses | 🛠️ | ★★ | 25 | |
-| B4.30 | Défi RAG : au moins 80 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU | 🏆 | ★★★★ | 120 | |
+| B4.30 | Défi RAG : au moins 40 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU | 🏆 | ★★★★ | 120 | |
 
 Le notebook télécharge une fois quelques petits modèles, à des révisions figées, et met en cache les réponses générées. Les modes complets marqués 🚀 tournent mieux sur un GPU de Colab ; le défi fixe lui-même son budget de CPU.

@@ -273,6 +273,10 @@
 | `LoraConfig(r=8, lora_alpha=16, target_modules=["q_proj", "v_proj"], lora_dropout=0.0, task_type="CAUSAL_LM")` ; `model = get_peft_model(model, config)` | ajouter des branches LoRA aux couches nommées (`"all-linear"` : toutes les couches denses sauf la tête) ; `fan_in_fan_out=True` pour les `Conv1D` de GPT-2 |
 | `model.print_trainable_parameters()` ; `[p for p in model.parameters() if p.requires_grad]` | vérifier ce qui s'entraîne ; les seuls paramètres à donner à l'optimiseur |
 | `model.save_pretrained(dossier)` ; `merged = model.merge_and_unload()` | sauver l'adaptateur seul (quelques Mo) ; fusionner $\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ dans $\mathbf{W}$ et rendre un modèle ordinaire |
+| `self.A = nn.Parameter(torch.empty(r, d_in)); nn.init.kaiming_uniform_(self.A, a=math.sqrt(5))` ; `self.B = nn.Parameter(torch.zeros(d_out, r))` ; `base(x) + s * (x @ self.A.T) @ self.B.T` | une couche LoRA à la main (📦 B4.25) : $\mathbf{B}_0 = 0$, la branche calculée de droite à gauche, jamais la matrice $d \times k$ |
+| `setattr(model.get_submodule(parent), enfant, nouvelle_couche)` | remplacer une couche nommée (`"attn.q"` → `parent="attn"`, `enfant="q"`), aussi dans un `nn.ModuleDict` |
+| `AutoModelForSequenceClassification.from_pretrained(nom, revision=rev, num_labels=4)` ; `LoraConfig(..., target_modules=["query", "value"], modules_to_save=["classifier"], task_type="SEQ_CLS")` | un encodeur avec une tête de classification (« MISSING » : elle est tirée au hasard), LoRA sur l'attention et la tête entraînée en entier (📦 B4.28) |
+| `logits = model(input_ids=ids).logits[0, -1]` ; `logits[ids_des_classes].argmax()` | un LLM en zéro-shot sans génération : comparer les logits des noms de classes (un token chacun) après le prompt |
 
 ## Dataset et DataLoader
 

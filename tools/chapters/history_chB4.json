@@ -1420,6 +1420,15 @@
      "seconds": 121.4,
      "cold": false
     }
+   ],
+   "n_main": 10,
+   "n_control": 4,
+   "n_stories": 7,
+   "control_ids": [
+    "C01",
+    "C02",
+    "C03",
+    "C04"
    ]
   },
   "full": {
@@ -1463,8 +1472,607 @@
      "control": 9,
      "seconds": 265.3,
      "cold": false
+    },
+    {
+     "chunk": [
+      110,
+      25
+     ],
+     "good": 14,
+     "control": 8,
+     "seconds": 257.0,
+     "cold": false
     }
+   ],
+   "n_main": 30,
+   "n_control": 12,
+   "n_stories": 12,
+   "control_ids": [
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10",
+    "C11",
+    "C12"
    ]
   }
+ },
+ "bug22": {
+  "versions": [
+   {
+    "fixed": [
+     false,
+     false,
+     false,
+     false
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     false,
+     false,
+     true
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     false,
+     true,
+     false
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     false,
+     true,
+     true
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     true,
+     false,
+     false
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     true,
+     false,
+     true
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     true,
+     true,
+     false
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     false,
+     true,
+     true,
+     true
+    ],
+    "first_bad": 1,
+    "failed": 1,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     false,
+     false,
+     false
+    ],
+    "first_bad": 2,
+    "failed": 2,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     false,
+     false,
+     true
+    ],
+    "first_bad": 2,
+    "failed": 2,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     false,
+     true,
+     false
+    ],
+    "first_bad": 2,
+    "failed": 2,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     false,
+     true,
+     true
+    ],
+    "first_bad": 2,
+    "failed": 2,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     true,
+     false,
+     false
+    ],
+    "first_bad": 3,
+    "failed": 3,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     true,
+     false,
+     true
+    ],
+    "first_bad": 3,
+    "failed": 3,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     true,
+     true,
+     false
+    ],
+    "first_bad": 4,
+    "failed": 4,
+    "crashed": false
+   },
+   {
+    "fixed": [
+     true,
+     true,
+     true,
+     true
+    ],
+    "first_bad": null,
+    "failed": null,
+    "crashed": false
+   }
+  ]
+ },
+ "generations2": {
+  "fast": {
+   "model": "smollm2",
+   "n_seeds": 3,
+   "n_items": 4,
+   "rows": {
+    "aucune": {
+     "mean": 0.13888888888888887,
+     "std": 0.10393492741038726,
+     "correct": 0.4444444444444444,
+     "by_payload": [
+      0.08333333333333333,
+      0.16666666666666666,
+      0.16666666666666666
+     ],
+     "per_seed": [
+      0.25,
+      0.16666666666666666,
+      0.0
+     ]
+    },
+    "délimiteurs": {
+     "mean": 0.13888888888888887,
+     "std": 0.10393492741038726,
+     "correct": 0.5277777777777778,
+     "by_payload": [
+      0.08333333333333333,
+      0.16666666666666666,
+      0.16666666666666666
+     ],
+     "per_seed": [
+      0.25,
+      0.16666666666666666,
+      0.0
+     ]
+    },
+    "filtre": {
+     "mean": 0.0,
+     "std": 0.0,
+     "correct": 0.8333333333333334,
+     "by_payload": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "per_seed": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "délimiteurs + filtre": {
+     "mean": 0.0,
+     "std": 0.0,
+     "correct": 0.75,
+     "by_payload": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "per_seed": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "rows23_fast": [
+   {
+    "id": "H02",
+    "category": "citation non vérifiée",
+    "reply": "lawyer"
+   },
+   {
+    "id": "H03",
+    "category": "citation non vérifiée",
+    "reply": "Pawnbroker’s business [2]"
+   },
+   {
+    "id": "H05",
+    "category": "recherche",
+    "reply": "Fleet Street [3]"
+   },
+   {
+    "id": "H08",
+    "category": "juste et vérifiée",
+    "reply": "Mr. John Turner [1]"
+   },
+   {
+    "id": "H12",
+    "category": "juste et vérifiée",
+    "reply": "Bar of Gold [3]"
+   },
+   {
+    "id": "H16",
+    "category": "génération",
+    "reply": "on the western border of Surrey [2]"
+   },
+   {
+    "id": "H19",
+    "category": "citation non vérifiée",
+    "reply": "Sir George Burnwell"
+   },
+   {
+    "id": "H21",
+    "category": "citation non vérifiée",
+    "reply": "seventeen [2]"
+   },
+   {
+    "id": "H25",
+    "category": "recherche",
+    "reply": "three"
+   },
+   {
+    "id": "H28",
+    "category": "recherche",
+    "reply": "one penny [2]"
+   },
+   {
+    "id": "U01",
+    "category": "invention",
+    "reply": "Franklin Holmes [3]"
+   },
+   {
+    "id": "U02",
+    "category": "invention",
+    "reply": "Holmes calls the Napoleon of crime Irene Adler."
+   },
+   {
+    "id": "U03",
+    "category": "invention",
+    "reply": "two [3]"
+   },
+   {
+    "id": "U04",
+    "category": "invention",
+    "reply": "to make him feel guilty. She is the very soul of delicacy. A shadow of a doubt as to my conduct"
+   },
+   {
+    "id": "U05",
+    "category": "invention",
+    "reply": "1888"
+   }
+  ],
+  "full": {
+   "model": "qwen2.5",
+   "n_seeds": 3,
+   "n_items": 4,
+   "rows": {
+    "aucune": {
+     "mean": 0.05555555555555555,
+     "std": 0.07856742013183861,
+     "correct": 0.9444444444444444,
+     "by_payload": [
+      0.08333333333333333,
+      0.08333333333333333,
+      0.0
+     ],
+     "per_seed": [
+      0.16666666666666666,
+      0.0,
+      0.0
+     ]
+    },
+    "délimiteurs": {
+     "mean": 0.08333333333333333,
+     "std": 0.0,
+     "correct": 0.9166666666666666,
+     "by_payload": [
+      0.0,
+      0.25,
+      0.0
+     ],
+     "per_seed": [
+      0.08333333333333333,
+      0.08333333333333333,
+      0.08333333333333333
+     ]
+    },
+    "filtre": {
+     "mean": 0.0,
+     "std": 0.0,
+     "correct": 1.0,
+     "by_payload": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "per_seed": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "délimiteurs + filtre": {
+     "mean": 0.0,
+     "std": 0.0,
+     "correct": 1.0,
+     "by_payload": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "per_seed": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "rows23_full": [
+   {
+    "id": "H01",
+    "category": "recherche",
+    "reply": "King of Bohemia in return for my assistance in the case of the Irene Adler papers."
+   },
+   {
+    "id": "H02",
+    "category": "citation non vérifiée",
+    "reply": "lawyer"
+   },
+   {
+    "id": "H03",
+    "category": "citation non vérifiée",
+    "reply": "Pawnbroker’s business [2]"
+   },
+   {
+    "id": "H04",
+    "category": "recherche",
+    "reply": "Jabez Wilson's assistant is named Third Right, Fourth Left."
+   },
+   {
+    "id": "H05",
+    "category": "recherche",
+    "reply": "Fleet Street [3]"
+   },
+   {
+    "id": "H06",
+    "category": "recherche",
+    "reply": "Leadenhall Street [3]"
+   },
+   {
+    "id": "H07",
+    "category": "recherche",
+    "reply": "gasfitters' ball [2]"
+   },
+   {
+    "id": "H08",
+    "category": "juste et vérifiée",
+    "reply": "Mr. John Turner [1]"
+   },
+   {
+    "id": "H09",
+    "category": "juste et vérifiée",
+    "reply": "William Crowder [2]"
+   },
+   {
+    "id": "H10",
+    "category": "génération",
+    "reply": "Sussex [2]"
+   },
+   {
+    "id": "H11",
+    "category": "recherche",
+    "reply": "John Openshaw"
+   },
+   {
+    "id": "H12",
+    "category": "juste et vérifiée",
+    "reply": "Bar of Gold [3]"
+   },
+   {
+    "id": "H13",
+    "category": "citation non vérifiée",
+    "reply": "1884"
+   },
+   {
+    "id": "H14",
+    "category": "citation non vérifiée",
+    "reply": "Alpha Inn [2]"
+   },
+   {
+    "id": "H15",
+    "category": "juste et vérifiée",
+    "reply": "John Horner [1]"
+   },
+   {
+    "id": "H16",
+    "category": "génération",
+    "reply": "on the western border of Surrey [2]"
+   },
+   {
+    "id": "H17",
+    "category": "juste et vérifiée",
+    "reply": "Eyford [2]"
+   },
+   {
+    "id": "H18",
+    "category": "juste et vérifiée",
+    "reply": "Duke of Balmoral [1]"
+   },
+   {
+    "id": "H19",
+    "category": "citation non vérifiée",
+    "reply": "Sir George Burnwell"
+   },
+   {
+    "id": "H20",
+    "category": "citation non vérifiée",
+    "reply": "Walsall [2]"
+   },
+   {
+    "id": "H21",
+    "category": "citation non vérifiée",
+    "reply": "seventeen [2]"
+   },
+   {
+    "id": "H22",
+    "category": "juste et vérifiée",
+    "reply": "Swamp adder [3]"
+   },
+   {
+    "id": "H23",
+    "category": "recherche",
+    "reply": "giant dog"
+   },
+   {
+    "id": "H24",
+    "category": "recherche",
+    "reply": "£ 25 [3]"
+   },
+   {
+    "id": "H25",
+    "category": "recherche",
+    "reply": "three"
+   },
+   {
+    "id": "H26",
+    "category": "recherche",
+    "reply": "Hanover Square [2]"
+   },
+   {
+    "id": "H27",
+    "category": "recherche",
+    "reply": "Pacific slope [2]"
+   },
+   {
+    "id": "H28",
+    "category": "recherche",
+    "reply": "one penny [2]"
+   },
+   {
+    "id": "H29",
+    "category": "recherche",
+    "reply": "9:00 AM to 4:00 PM"
+   },
+   {
+    "id": "H30",
+    "category": "juste et vérifiée",
+    "reply": "Countess of Morcar [2]"
+   },
+   {
+    "id": "U01",
+    "category": "invention",
+    "reply": "Franklin Holmes [3]"
+   },
+   {
+    "id": "U02",
+    "category": "invention",
+    "reply": "Holmes calls the Napoleon of crime Irene Adler."
+   },
+   {
+    "id": "U03",
+    "category": "invention",
+    "reply": "two [3]"
+   },
+   {
+    "id": "U04",
+    "category": "invention",
+    "reply": "to make him feel guilty. She is the very soul of delicacy. A shadow of a doubt as to my conduct"
+   },
+   {
+    "id": "U05",
+    "category": "invention",
+    "reply": "1888"
+   }
+  ],
+  "n_new": 203,
+  "n_all": 625
  }
 }

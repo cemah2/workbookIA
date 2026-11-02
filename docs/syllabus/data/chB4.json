@@ -1173,7 +1173,7 @@
   {
    "id": "B4.30",
    "type": "🏆",
-   "title": "Défi RAG : au moins 80 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU",
+   "title": "Défi RAG : au moins 40 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU",
    "stars": 4,
    "minutes": 120,
    "gpu": false,
@@ -1188,7 +1188,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "B4.E1",

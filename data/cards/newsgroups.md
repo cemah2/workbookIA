@@ -16,7 +16,7 @@
 
 ## Biais et limites
 - **Fuite par les métadonnées** : les en-têtes (expéditeur, organisation, groupe), les signatures et les citations des messages précédents trahissent le sujet ; un classifieur y apprend des noms et des adresses, et son score est trop beau. scikit-learn recommande de les retirer (`remove=("headers", "footers", "quotes")`), ce que fait toujours `load_20newsgroups` (fiche B4, §204.9). Le retrait est heuristique : il reste des restes de signatures.
-- **Daté** : des messages publics de 1992-1993, en anglais, écrits surtout par des universitaires et des ingénieurs américains ; vocabulaire technique d'époque (formats d'image, modèles de voitures).
+- **Daté** : des messages publics de 1992-1993, en anglais, écrits surtout par des universitaires et des ingénieurs américains ; vocabulaire technique de ces années-là (formats d'image, modèles de voitures).
 - **Données personnelles** : des messages publics, mais nominatifs à l'origine ; le retrait des en-têtes en ôte la plupart des noms et adresses, pas tous.
 - **Contamination** : un dataset si répandu est dans les données d'entraînement des LLM ; un LLM en zéro-shot peut en avoir vu des messages.
 

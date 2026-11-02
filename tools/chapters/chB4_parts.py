@@ -2,7 +2,7 @@
 
 Part A: usage and prompting with transformers (B4.12 to B4.16). Part B, first half: your retrieval library and the RAG
 (B4.17 to B4.21). The second half of the chapter (B4.22 to B4.30) reuses the tools of these parts (CACHE, LLM, QWEN,
-QA, REF_CHUNKS, INDEX_20, search_20, rag_21…), see chapitres/b4_llm/EN_COURS.md.
+QA, REF_CHUNKS, INDEX_20, search_20, rag_21…): chB4_parts2.py and chB4_code2.py.
 """
 
 from __future__ import annotations
