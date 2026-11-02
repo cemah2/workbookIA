@@ -11,6 +11,7 @@ by chB4_parts2.py from history_chB4.json (calibrations and protocols precomputed
 # =====================================================================================================================
 TOOLS_C = r'''# Tools for the notebook exercises of part C (fine-tuning with LoRA)
 import copy
+import gc
 import math
 from collections import OrderedDict
 
@@ -18,9 +19,15 @@ import torch.nn.functional as F
 from peft import LoraConfig, get_peft_model
 
 torch.set_num_threads(max(1, torch.get_num_threads()))
-if globals().get("QWEN") is not None and QWEN.unload():       # 2 GB freed for the trainings of this part
-    print("ℹ️ Qwen2.5 est libéré de la mémoire ici (≈ 2 Go) ; il se recharge tout seul à sa prochaine génération (B4.28 "
-          "en mode complet, B4.30).")
+freed_c = []                                                    # room for the trainings of this part
+if globals().get("QWEN") is not None and QWEN.unload():
+    freed_c.append("Qwen2.5 (≈ 2 Go ; il se recharge tout seul à sa prochaine génération : B4.28 en mode complet, B4.30)")
+if globals().pop("model_12", None) is not None:                 # the model of B4.12 (part A), no longer used
+    globals().pop("loaded_12", None)
+    freed_c.append("le modèle de B4.12 (≈ 0,5 Go)")
+gc.collect()
+if freed_c:
+    print("ℹ️ Libérés de la mémoire ici, pour les entraînements de cette partie : " + " ; ".join(freed_c) + ".")
 
 
 def trainable(model):
@@ -351,8 +358,8 @@ if peft_26 is not None:
         finally:
             batch_26 = batch_ok_26
         verdict("B4.26", len(drawn_26) == STEPS_26,
-                f"{STEPS_26} lots tirés par batch_26 (les dix nouvelles d'entraînement).",
-                f"train_26 doit tirer chaque lot par batch_26(generator) (nouvelles 1 à 10, jamais HELD_26) ; "
+                f"{STEPS_26} batches tirés par batch_26 (les dix nouvelles d'entraînement).",
+                f"train_26 doit tirer chaque batch par batch_26(generator) (nouvelles 1 à 10, jamais HELD_26) ; "
                 f"{len(drawn_26)} appels pour {STEPS_26} pas.")
         seconds_26 = time.perf_counter() - start_26
         if returned("B4.26", "train_26", losses_26):
@@ -361,6 +368,7 @@ if peft_26 is not None:
                     f"{fr(float(np.mean(losses_26[-5:])), 3)} en moyenne sur les cinq derniers.",
                     f"train_26 doit rendre la liste des {STEPS_26} losses (des nombres finis) ; reçu {str(losses_26)[:80]}.")
             moved_26 = [n for n, p in peft_26.named_parameters() if n in frozen_26 and not torch.equal(p, frozen_26[n])]
+            del frozen_26                                  # the copy of the frozen weights (≈ 0.3 GB) is no longer needed
             verdict("B4.26", not moved_26 and not peft_26.training, "les poids gelés n'ont pas bougé ; modèle rendu en mode eval.",
                     f"après train_26, les poids gelés doivent être intacts ({len(moved_26)} ont changé) et le modèle en "
                     "mode eval.")
@@ -411,6 +419,7 @@ CHECK_27 = r'''with checked("B4.27"):
     if returned("B4.27", "experiment_27", one_27):
         ref_27 = lora_model_26(load_base_26(), 2, 4, TARGETS_26)
         want_27 = trainable(ref_27)
+        del ref_27
         ok_27 = isinstance(one_27, dict) and one_27.get("trainable") == want_27 and isinstance(one_27.get("ppl"), float)
         count_27 = f"{want_27:,}".replace(",", " ")
         verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {count_27} paramètres entraînables, "
@@ -423,6 +432,7 @@ CHECK_27 = r'''with checked("B4.27"):
             nll_27 = sum(F.cross_entropy(base_model_27(input_ids=w).logits[:, :-1].flatten(0, 1), w[:, 1:].flatten(),
                                          reduction="sum").item() for w in HELD_26.split(4))
         base_27 = math.exp(nll_27 / HELD_26[:, 1:].numel())
+        del base_model_27
         got_zero_27 = zero_27.get("ppl") if isinstance(zero_27, dict) else None
         verdict("B4.27", isinstance(got_zero_27, float) and math.isclose(got_zero_27, base_27, rel_tol=1e-5),
                 "à 0 pas, la perplexité est celle du modèle d'origine sur HELD_26 (B = 0 au départ).",
@@ -472,12 +482,17 @@ else:
     print("⏳ Ex B4.27 : l'expérience attend experiment_27 (et tes fonctions de B4.26).")'''
 
 # --- 📦 B4.28 ---------------------------------------------------------------------------------------------------------
-GIVEN_28 = r'''from sklearn.feature_extraction.text import TfidfVectorizer
+GIVEN_28 = r'''import gc
+
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.pipeline import Pipeline
 from transformers import AutoModelForSequenceClassification
 
+for name in ("base_26", "peft_26", "merged_26", "m_26", "frozen_26", "ref_27", "base_model_27"):
+    globals().pop(name, None)                                 # the models of part C's checks (≈ 0.5 GB) are freed
+gc.collect()
 CATEGORIES_28 = ["comp.graphics", "rec.autos", "sci.med", "sci.space"]
 TOPICS_28 = ["computer", "cars", "medicine", "space"]       # the names given to the LLM: one token each (SmolLM2, Qwen2.5)
 N_TRAIN_28, N_TEST_28, N_LLM_28 = (1000, 400, 100) if FAST_MODE else (None, None, 400)   # None: every message
@@ -1498,6 +1513,8 @@ CHECK_30 = r'''with checked("B4.30"):
         print("⏳ Ex B4.30 : aucun modèle de langue n'a pu être chargé : le défi est « à valider sur Colab ».")
     elif written(lambda: method_30([], [])):
         if QWEN is not None:
+            if LLM is not None and LLM.unload():   # SmolLM2 freed (≈ 0.5 GB) for Qwen2.5; reloaded if your method uses it
+                gc.collect()
             QWEN.model                             # Qwen2.5's weights loaded before the race (loading is not timed)
         result_30 = evaluate_30(method_30)
     else:

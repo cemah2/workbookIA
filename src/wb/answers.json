@@ -55958,6 +55958,7 @@
       "magnitude": 2,
       "mistakes": {
         "42c19959c06520afc7f78e39ed7e2d5b58af13c7705a87f0fd71703fd4e411bc": "les couches qui ne sont pas adaptées comptent : as-tu gelé tout le modèle avant de poser les branches ?",
+        "6fc079cc2122f049ef26f461192429f2192df90a2477c735d93830624648ef0d": "les couches adaptées elles-mêmes comptent : dans LoRALinear, le poids et le biais de la couche de base doivent rester gelés",
         "908becb3dc2e14ab55e55c87c853697337dd1d24181b606f4f48840703ddb3d9": "seule A compte ici : B est aussi un paramètre entraînable",
         "a480dca6e2533e647788b542cd7531bdab364181181e25a36cc6669f16c414fd": "seule B compte ici : A est aussi un paramètre entraînable"
       },
