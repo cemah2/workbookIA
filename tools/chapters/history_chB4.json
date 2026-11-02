@@ -1312,7 +1312,7 @@
   "trainable": 832,
   "a_only": 512,
   "b_only": 320,
-  "all": 41248
+  "all": 36048
  },
  "lora26": {
   "fast": [

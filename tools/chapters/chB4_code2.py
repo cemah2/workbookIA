@@ -378,8 +378,9 @@ CHECK_27 = r'''with checked("B4.27"):
         ref_27 = lora_model_26(load_base_26(), 2, 4, TARGETS_26)
         want_27 = trainable(ref_27)
         ok_27 = isinstance(one_27, dict) and one_27.get("trainable") == want_27 and isinstance(one_27.get("ppl"), float)
-        verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {want_27:,} paramètres entraînables, ".replace(",", " ")
-                + f"perplexité {fr(one_27.get('ppl', float('nan')), 2)}.",
+        count_27 = f"{want_27:,}".replace(",", " ")
+        verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {count_27} paramètres entraînables, "
+                f"perplexité {fr(one_27.get('ppl', float('nan')), 2)}.",
                 f"experiment_27 doit rendre {{'trainable': {want_27}, 'ppl': <float>}} pour r = 2 sur {TARGETS_26} ; reçu "
                 f"{one_27!r}.")'''
 
@@ -675,7 +676,7 @@ def diagnose_22(chunk_fn, query_fn, prompt_fn, verify_fn):
     def point4():
         passages = ["Holmes plays the violin in the evening.", "The letter was posted at Charing Cross."]
         cases = [("Charing Cross", [2], True), ("Charing Cross", [1], False), ("Fleet Street", [2], False),
-                 ("Charing Cross", [3], False), ("Charing Cross", [], False)]
+                 ("Charing Street", [2], False), ("Charing Cross", [3], False), ("Charing Cross", [], False)]
         wrong = [(a, c) for a, c, want in cases if bool(verify_fn(a, c, passages)) != want]
         if not wrong:
             return True, "une citation n'est acceptée que si le passage cité existe et contient la réponse", ""
@@ -1290,6 +1291,9 @@ def _make_evaluate_30():
             transformers.GenerationMixin.generate = saved_generate
         return out, elapsed, sizes
 
+    def spaced(n):
+        return f"{n:,}".replace(",", " ")
+
     def excerpt(passage):
         norm = " ".join(str(passage).split())
         return bool(norm) and len(norm.split()) <= MAX_PASSAGE_WORDS_30 and any(norm in t for t in texts)
@@ -1299,7 +1303,7 @@ def _make_evaluate_30():
         short = 0 < len(wbrag.normalize_answer(answer).split()) <= MAX_ANSWER_WORDS_30
         right = wbrag.answer_in(answer, item) if kind == "main" else wbrag.control_correct(answer, item)
         cited = excerpt(passage) and wbrag.supports(str(passage), answer)
-        return short and right, cited
+        return ("oui" if short and right else "non" if short else "longue"), cited
 
     def evaluate_30(method):
         """method(questions, documents) -> [(answer, passage), ...]: the rules of the statement, then the count."""
@@ -1314,21 +1318,21 @@ def _make_evaluate_30():
         for (kind, item), (answer, passage) in zip(tagged, out):
             right, cited = grade(kind, item, answer, passage)
             rows[kind].append((item["id"], right, cited, str(answer)))
-        good = sum(r and c for _, r, c, _ in rows["main"])
-        good_control = sum(r and c for _, r, c, _ in rows["control"])
+        good = sum(r == "oui" and c for _, r, c, _ in rows["main"])
+        good_control = sum(r == "oui" and c for _, r, c, _ in rows["control"])
         rate, rate_control = good / len(main), good_control / len(control)
-        print(f"{'id':4} {'juste':6} {'citée':6} réponse")
+        print(f"{'id':4} {'juste':6} {'citée':6} réponse  (longue : plus de {MAX_ANSWER_WORDS_30} mots)")
         for qid, right, cited, answer in sorted(rows["main"]):
-            print(f"{qid:4} {'oui' if right else 'non':6} {'oui' if cited else 'non':6} {answer[:70]!r}")
+            print(f"{qid:4} {right:6} {'oui' if cited else 'non':6} {answer[:70]!r}")
         print(f"\nbonnes réponses citées : {good} sur {len(main)} ({fr(100 * rate, 0)} %) ; course de "
               f"{len(tagged)} questions (dont {len(control)} de contrôle) en {fr(seconds, 1)} s.")
         largest = max(sizes, default=0)
         verdict("B4.30", seconds <= LIMIT_30, f"course en {fr(seconds, 1)} s, sous les {LIMIT_30:.0f} s.",
                 f"course en {fr(seconds, 1)} s : le défi en permet {LIMIT_30:.0f}.")
         verdict("B4.30", largest <= MAX_PARAMS_30,
-                (f"générateur de {largest:,} paramètres (model.num_parameters()), au plus 0,6 milliard.".replace(",", " ")
+                (f"générateur de {spaced(largest)} paramètres (model.num_parameters()), au plus 0,6 milliard."
                  if sizes else "aucune génération par generate() : rien à compter."),
-                f"un modèle de {largest:,} paramètres a généré : le défi en permet {MAX_PARAMS_30:,}.".replace(",", " "))
+                f"un modèle de {spaced(largest)} paramètres a généré : le défi en permet {spaced(MAX_PARAMS_30)}.")
         honest = rate_control >= rate - CONTROL_MARGIN_30
         verdict("B4.30", honest,
                 f"contrôle : {good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart "
@@ -1350,8 +1354,7 @@ def _make_evaluate_30():
 evaluate_30 = _make_evaluate_30()
 print(f"Course : {len(MAIN_30)} questions annotées et {len(CONTROL_30)} de contrôle, mélangées, sur {len(STORIES_30)} "
       f"nouvelles, en {LIMIT_30:.0f} s au plus ; objectif : au moins {GOAL_30} bonnes réponses citées sur {len(MAIN_30)}.")
-if QWEN is not None:
-    QWEN.model                                     # the weights loaded before the race (loading is not timed)'''
+'''
 
 TODO_30 = r'''def method_30(questions, documents):
     """Your RAG: `questions` (a list of strings) and `documents` (the 12 stories, [(title, text)]) ONLY. Index the
@@ -1362,6 +1365,8 @@ TODO_30 = r'''def method_30(questions, documents):
 
 CHECK_30 = r'''with checked("B4.30"):
     if written(lambda: method_30([], [])):
+        if QWEN is not None:
+            QWEN.model                             # Qwen2.5's weights loaded before the race (loading is not timed)
         result_30 = evaluate_30(method_30)
     else:
         print("⏳ Ex B4.30 : le défi attend method_30.")'''

@@ -55946,6 +55946,19 @@
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
+    "B4.25a": {
+      "fractional": "un nombre de paramètres est un entier",
+      "hash": "a79ed09fcfece4c5744d4d60481221e2cc7bac773afcbc98c692b8cfe6b7e908",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "42c19959c06520afc7f78e39ed7e2d5b58af13c7705a87f0fd71703fd4e411bc": "les couches qui ne sont pas adaptées comptent : as-tu gelé tout le modèle avant de poser les branches ?",
+        "908becb3dc2e14ab55e55c87c853697337dd1d24181b606f4f48840703ddb3d9": "seule A compte ici : B est aussi un paramètre entraînable",
+        "a480dca6e2533e647788b542cd7531bdab364181181e25a36cc6669f16c414fd": "seule B compte ici : A est aussi un paramètre entraînable"
+      },
+      "sign": 1,
+      "source": "chapitres/b4_llm/05_solutions.ipynb"
+    },
     "B4.Q1a": {
       "hash": "587da99447b97618dc09e245f5c97f8f08a773df86aa582d43b0809aa0743859",
       "kind": "str",

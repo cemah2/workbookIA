@@ -308,8 +308,9 @@ def b25(_) -> dict:
     r, mods = ns["R_25"], dict(block.named_modules())
     a_only = sum(r * mods[n].in_features for n in ns["TARGETS_25"])
     b_only = sum(r * mods[n].out_features for n in ns["TARGETS_25"])
+    targets = sum(p.numel() for n in ns["TARGETS_25"] for p in mods[n].parameters())   # frozen by LoRALinear itself
     out = {"trainable": a_only + b_only, "a_only": a_only, "b_only": b_only,
-           "all": sum(p.numel() for p in block.parameters()) + a_only + b_only}
+           "all": sum(p.numel() for p in block.parameters()) - targets + a_only + b_only}
     print(f"  b25 {out}", flush=True)
     return out
 
