@@ -199,3 +199,17 @@ def test_cifar10_download():
     assert X.shape == (50, 3, 32, 32) and X.dtype == np.uint8
     X, y = D.load_cifar10("train")
     assert X.shape == (50000, 32, 32, 3) and set(np.unique(y)) == set(range(10))
+
+
+@pytest.mark.network
+def test_load_20newsgroups_removes_metadata_and_stratifies():
+    categories = ["comp.graphics", "rec.autos", "sci.med", "sci.space"]
+    texts, labels = D.load_20newsgroups(categories, "train", n=100, seed=28)
+    assert len(texts) == 100 and labels.dtype == np.int64 and np.bincount(labels).tolist() == [25, 25, 25, 25]
+    assert not any(t.startswith(("From:", "Subject:")) for t in texts)
+    again, labels_again = D.load_20newsgroups(categories, "train", n=100, seed=28)
+    assert again == texts and np.array_equal(labels, labels_again)
+    _, test_labels = D.load_20newsgroups(categories, "test")
+    assert len(test_labels) > 1000 and set(np.unique(test_labels)) == {0, 1, 2, 3}
+    with pytest.raises(ValueError):
+        D.load_20newsgroups(categories, "valid")

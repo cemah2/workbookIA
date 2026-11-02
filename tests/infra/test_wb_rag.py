@@ -214,3 +214,33 @@ def test_reference_index_bm25_search_without_a_sentence_model():
     assert index.search("holmes violon", "bm25", 4) == [2, 1, 0, 3]
     with pytest.raises(ValueError):
         index.search("holmes", "dense", 2)
+
+
+# --------------------------------------------------------------------------------------- control questions (B4.30)
+def test_control_questions_hide_their_answers_and_cover_every_story():
+    items = rag.load_control()
+    assert [q["id"] for q in items] == [f"C{i:02d}" for i in range(1, 13)]
+    assert sorted(q["story"] for q in items) == list(range(12))
+    text = (ROOT / "data" / "qa" / rag.CONTROL_FILE).read_text(encoding="utf-8").lower()
+    for word in ("sliding panel", "leadenhall", "lone star", "breckinridge", "flora millar", "electric blue"):
+        assert word not in text, f"an answer of the control is written in clear: {word!r}"
+    annotated = {q["question"] for q in rag.load_qa("holmes")}
+    assert not annotated & {q["question"] for q in items}
+
+
+@pytest.mark.parametrize("text, qid, expected", [
+    ("Behind a sliding panel [2]", "C01", True), ("A sliding door", "C01", False),
+    ("the Lone Star.", "C05", True), ("Lone", "C05", False), ("Breckinridge", "C07", True),
+    ("Holder and Stevenson", "C11", True), ("Holder & Stevenson", "C11", True), ("Stevenson", "C11", False),
+    ("electric blue", "C12", True), ("blue", "C12", False), ("Julia", "C08", True), ("Juliana", "C08", False),
+], ids=lambda v: str(v))
+def test_control_correct_matches_whole_words_of_a_hashed_answer(text, qid, expected):
+    item = next(q for q in rag.load_control() if q["id"] == qid)
+    assert rag.control_correct(text, item) is expected
+
+
+def test_control_answers_are_in_the_stories():
+    """Every hashed answer is found, as whole words, in the text of its story (the answers were taken from it)."""
+    docs = rag.documents("holmes")
+    for item in rag.load_control():
+        assert rag.control_correct(docs[item["story"]][1], item), item["id"]

@@ -1058,6 +1058,9 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | agentivité excessive | excessive agency | un LLM qui a trop d'outils, de droits ou d'autonomie (OWASP LLM03:2026) | B4 |
 | modèle d'IA à usage général | general-purpose AI model | catégorie de l'AI Act (art. 53) : obligations du fournisseur, « risque systémique » au-delà de $10^{25}$ FLOPs d'entraînement | B4 |
 | hypertrucage | deepfake | contenu généré qui imite une personne, un lieu ou un événement réels ; à signaler (AI Act, art. 50) | B4 |
+| écriture atomique | atomic write | écrire dans un fichier temporaire du même dossier, puis le renommer d'un coup (`os.replace`) : un lecteur voit l'ancien fichier ou le nouveau, jamais un fichier à moitié écrit (🛠️ B4.29) | B4 |
+| délimiteurs (d'un prompt) | delimiters | balises qui encadrent les données dans un prompt (`<passage>…</passage>`), avec une consigne de ne jamais suivre ce qu'elles contiennent ; une parade à l'injection, qui ne suffit pas seule (🔬 B4.24) | B4 |
+| abstention | abstention | réponse « je ne sais pas » d'un système qui n'a pas l'information : juste sur une question sans réponse dans les documents, un échec (moins grave qu'une invention) sinon (📈 B4.23) | B4 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

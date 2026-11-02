@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Fichiers** | `data/qa/holmes_qa.json` (13 Ko, UTF-8) et `data/qa/verne_qa.json` (4 Ko, UTF-8) |
-| **Chargement** | `wb.rag.load_qa("holmes")` (30 questions), `wb.rag.load_unanswerable()` (5), `wb.rag.load_qa("verne")` (10) → listes de dictionnaires ; `wb.rag.documents(nom)` et `wb.rag.reference_chunks(nom)` donnent le corpus et son découpage de référence |
+| **Fichiers** | `data/qa/holmes_qa.json` (13 Ko, UTF-8), `data/qa/verne_qa.json` (4 Ko, UTF-8) et `data/qa/holmes_control.json` (5 Ko, UTF-8) |
+| **Chargement** | `wb.rag.load_qa("holmes")` (30 questions), `wb.rag.load_unanswerable()` (5), `wb.rag.load_qa("verne")` (10), `wb.rag.load_control()` (12, réponses en empreintes) → listes de dictionnaires ; `wb.rag.documents(nom)` et `wb.rag.reference_chunks(nom)` donnent le corpus et son découpage de référence |
 | **Source** | questions, réponses et extraits écrits pour le workbook le 2 novembre 2026, à partir du texte de `wb.datasets.load_holmes()` et de `wb.datasets.load_verne()` (Project Gutenberg, eBooks n° 1661 et 800 ; voir [holmes.md](holmes.md) et [verne.md](verne.md)) ; aucun jeu de questions existant n'a été repris |
 | **Licence** | questions, réponses et annotations écrites pour le workbook (aucun emprunt à un jeu existant), réutilisables pour apprendre ; les deux textes sont dans le domaine public |
-| **Empreintes** | SHA-256 de `data/qa/holmes_qa.json` : `83f44f1020e9d9f4337fd0b7169e0b0af01164d8a3e2606ed7d99f8399a9e402` ; SHA-256 de `data/qa/verne_qa.json` : `d7e2fc8d3b8050ef980b64801dd4140927b54379a7bf180241a4461a8a4eaddb` |
+| **Empreintes** | SHA-256 de `data/qa/holmes_qa.json` : `83f44f1020e9d9f4337fd0b7169e0b0af01164d8a3e2606ed7d99f8399a9e402` ; SHA-256 de `data/qa/verne_qa.json` : `d7e2fc8d3b8050ef980b64801dd4140927b54379a7bf180241a4461a8a4eaddb` ; SHA-256 de `data/qa/holmes_control.json` : `4ba8921ff96fdac91bf21beb684cb28784cb39d3822bc599a70865bcb28d6a16` |
 
 ## Contenu
 - **Holmes, 30 questions factuelles** en anglais sur les douze nouvelles de *The Adventures of Sherlock Holmes*, deux ou trois par nouvelle. Chaque question a un identifiant (`H01` à `H30`), sa **réponse** courte, des **variantes** acceptées (`aliases`), son **extrait source** (`evidence` : au plus 21 mots du texte, blancs réduits à une espace, qui contiennent la réponse), la position de cet extrait dans le texte chargé (`start`, `end`, en caractères), le numéro et le titre de sa nouvelle (`story`, `story_title`, l'ordre de `wb.text.holmes_stories()`), et le drapeau `paraphrased`.
@@ -15,9 +15,10 @@
 - **Verne, 10 questions en français** (`V01` à `V10`) sur les chapitres I à VII du *Tour du monde en quatre-vingts jours*, avec les mêmes champs (`chapter` à la place de `story`) ; le corpus est le texte qui va du titre du chapitre I à celui du chapitre VIII (`corpus_start`, `corpus_stop`).
 - Un chunk est **pertinent** pour une question quand il contient l'extrait entier (`wb.rag.relevant_ids`) : la vérité ne dépend pas du découpage. Avec des chunks de 120 mots et un recouvrement de 20 (le découpage de référence : 1 045 chunks pour Holmes, 93 pour Verne), chaque extrait est entier dans au moins un chunk.
 - `wb.rag.FAST_IDS` : les 10 questions du mode rapide (7 directes, 3 paraphrasées).
+- **12 questions de contrôle** (`C01` à `C12`, une par nouvelle, `holmes_control.json`), écrites le 2 novembre 2026 pour le contrôle du défi 🏆 B4.30 : leurs réponses ne sont **pas** dans le fichier, seulement les empreintes SHA-256 des réponses normalisées (`wb.rag.normalize_answer`) et le nombre de mots de la plus longue ; `wb.rag.control_correct(texte, item)` hache chaque suite de mots du texte normalisé pour juger une réponse. Une méthode qui lirait les 30 réponses annotées au lieu de chercher ne peut donc pas réussir le contrôle. Leurs extraits ont été vérifiés dans le texte au moment de l'écriture (script de la session, non versionné).
 
 ## Utilisation
-Bonus B4 : la recherche (🔮 B4.19 : les 10 paraphrasées ; 📦 B4.20 : BM25, recherche dense et hybride, recall@k et MRR sur les 30 questions et sur Verne), le RAG avec citations (📦 B4.21 : 10 questions en mode rapide, 30 en mode complet), et la seconde moitié du chapitre (évaluation, injection, défi).
+Bonus B4 : la recherche (🔮 B4.19 : les 10 paraphrasées ; 📦 B4.20 : BM25, recherche dense et hybride, recall@k et MRR sur les 30 questions et sur Verne), le RAG avec citations (📦 B4.21 : 10 questions en mode rapide, 30 en mode complet), puis la seconde moitié du chapitre : 🐛 B4.22 (les 10 questions des nouvelles 1, 2 et 7, dont 6 passées au RAG réparé), 📈 B4.23 (les questions de B4.21 et les 5 sans réponse : le « je ne sais pas » se mesure), 🔬 B4.24 (les chunks pertinents de H08, H12, H15 et H18, attaqués par injection), 🛠️ B4.29 (trois questions), 🏆 B4.30 (les 30 questions, ou les 10 de `FAST_IDS` en mode rapide, mélangées aux questions de contrôle).
 
 ## Biais et limites
 - **Petit** : 30 questions donnent un intervalle de confiance à 95 % d'environ ± 18 points autour d'une exactitude de 50 % (fiche §204.5) ; deux systèmes qui diffèrent de 5 points ne sont pas départagés.

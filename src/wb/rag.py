@@ -126,7 +126,7 @@ def chunk_words(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = OVERLAP)
 
 def reference_chunks(name: str = "holmes", chunk_size: int = CHUNK_SIZE, overlap: int = OVERLAP):
     """``(chunks, doc_ids)``: every document of ``documents(name)`` cut by ``chunk_words``, and the index of the
-    document of each chunk (an int64 array). Holmes: 1 045 chunks; Verne: 103."""
+    document of each chunk (an int64 array). Holmes: 1 045 chunks; Verne: 93."""
     chunks, doc_ids = [], []
     for d, (_, body) in enumerate(documents(name)):
         for chunk in chunk_words(body, chunk_size, overlap):

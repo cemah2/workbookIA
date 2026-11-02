@@ -586,7 +586,7 @@ Commence par : « Chaque e-mail client est une entrée non fiable : quelqu'un pe
 
 ## Exercices du notebook
 
-Les indices des exercices B4.12 à B4.21. Ceux de B4.22 à B4.30 seront ajoutés à la prochaine session de génération, avec la fin du notebook.
+Les indices des exercices B4.12 à B4.30, dans l'ordre du notebook.
 
 ### Ex B4.12 — Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle 📦
 
@@ -844,6 +844,276 @@ def verify_21(answer, cited, passages):
     if not cited or not words or any(not 1 <= n <= len(passages) for n in cited):
         return False
     ...                                                      # one cited passage whose tokens contain every word
+```
+
+</details>
+
+### Ex B4.22 — Le RAG qui répond à côté : quatre défauts de découpage, d'encodage et de contexte 🐛
+
+<details><summary>Indice 1</summary>
+
+Lis chaque fonction à côté de sa docstring : chacune fait **autre chose** que ce qu'elle promet, sans erreur. Puis relis le tableau « Évaluer et diagnostiquer » (§204.7) et les pièges classiques de la fiche : quatre de leurs lignes décrivent ces défauts. Corrige dans l'ordre des points : un passage coupé fausse tout ce qui suit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Point 1 : en quelle unité `chunk_22` coupe-t-il, et que partagent deux chunks voisins ? Un extrait de 21 mots doit tenir entier dans au moins un chunk (fiche §204.6, « Découper »).
+- Point 2 : e5 a été entraîné avec un préfixe différent pour une requête et pour un passage (B2) ; `SM_E5_22.embed` prend un argument `kind`.
+- Point 3 : que fait `truncation=True, max_length=512` à un prompt de quatre passages, et à quel bout ? `QWEN_22.prompt_ids` rend les tokens du prompt entier.
+- Point 4 : `verify_22` doit faire ce que fait `verify_21`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def chunk_22(text):
+    words = text.split()
+    return [" ".join(words[s:s + 120]) for s in ...]          # starts every 100 words, until the end is covered
+
+
+def query_22(question):
+    return SM_E5_22.embed([question], kind=...)[0]
+```
+Pour les points 3 et 4 : une ligne chacun, sans troncature d'un côté, et la règle de `verify_21` de l'autre.
+
+</details>
+
+### Ex B4.23 — Évaluer le RAG : recall@k, exactitude des réponses, « je ne sais pas » et analyse des échecs 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « Évaluer et diagnostiquer » (§204.7) : on regarde d'abord la recherche, puis la génération, puis la citation. `category_23` suit cet ordre à l'envers : une réponse juste se classe par sa citation, une réponse fausse par la place du bon passage.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `category_23` : une suite de `if` dans l'ordre de la docstring ; d'abord `answerable`, qui sépare les deux familles ; chaque branche rend une chaîne de `CATEGORIES_23`, recopiée telle quelle (accents compris).
+- `recall_curve_23` : les `max(ks)` premiers résultats de `search_20(INDEX_20, question, "hybrid", ...)` pour chaque question, ses chunks pertinents par `wbrag.relevant_ids`, puis ton `recall_at_k` pour chaque $k$ : une seule recherche par question suffit.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def category_23(row):
+    if not row["answerable"]:
+        return "abstention juste" if row["idk"] else "invention"
+    ...                                                      # correct → by the citation; else idk, found, retrieval
+
+
+def recall_curve_23(items, ks):
+    retrieved = [search_20(INDEX_20, item["question"], "hybrid", max(ks)) for item in items]
+    ...                                                      # the relevant sets, then one recall_at_k per k
+```
+
+</details>
+
+### Ex B4.24 — Injection de prompt cachée dans un passage : attaquer, puis atténuer et mesurer 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « L'injection de prompt » (§204.10) et « La variance » (§204.5). Une expérience d'attaque se mène comme une évaluation : un critère de réussite écrit par programme, plusieurs passages, charges et graines, et une dispersion avant toute conclusion. Ne présume pas qu'une parade aide : c'est ce que tu mesures.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `inject_24` et `attacked_24` : une ligne chacune (`.lower()` pour la casse).
+- `delimited_messages_24` : le même gabarit que `rag_messages_21`, avec `GUARD_SYSTEM_24` et `f"[{n}] <passage>{p}</passage>"`.
+- `filter_24` : `passage.split("\n")`, garde les lignes pour lesquelles **aucun** motif ne trouve rien (`re.search(motif, ligne, flags=re.IGNORECASE)`), puis `"\n".join(...)`.
+- `run_24` : trois boucles imbriquées (graine, puis question et passage avec `zip`, puis charge), deux listes de lignes, `np.array(..., dtype=bool)` à la fin.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def run_24(model, defense):
+    attacked, correct = [], []
+    for seed in SEEDS_24:
+        row_a, row_c = [], []
+        for item, passage in zip(ITEMS_24, PASSAGES_24):
+            for payload in PAYLOADS_24.values():
+                text = inject_24(passage, payload)
+                ...                                          # filter?, messages (delimited?), one draw, two booleans
+        ...
+```
+
+</details>
+
+### Ex B4.25 — LoRA from scratch : une couche LoRALinear en PyTorch, vérifiée contre peft 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « LoRA » (§204.8 : la formule, $\mathbf{B}_0 = 0$, $\alpha/r$) et l'exemple NumPy de la fiche, qui calcule déjà la branche et la matrice fusionnée pour des entrées en lignes. En PyTorch, un poids appris est un `nn.Parameter` rangé comme attribut du module ; un poids gelé garde `requires_grad=False`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `__init__` : garde `base`, passe `requires_grad_(False)` à chacun de ses paramètres, crée `A` (`torch.empty(r, base.in_features)` puis `nn.init.kaiming_uniform_`) et `B` (`torch.zeros(base.out_features, r)`), et `scaling`.
+- `forward` : `base(x)` plus la branche étroite, calculée de droite à gauche comme dans la fiche (jamais la matrice $d \times k$).
+- `merged` : un `nn.Linear` neuf, puis, sous `torch.no_grad()`, `copy_` du poids fusionné et du biais.
+- `add_lora_25` : vérifie d'abord tous les noms dans `dict(model.named_modules())`, gèle tout, puis, pour chaque nom, coupe-le en parent et enfant (`name.rpartition(".")`), et `setattr(parent, enfant, LoRALinear(...))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+class LoRALinear(nn.Module):
+    def __init__(self, base, r, alpha):
+        super().__init__()
+        self.base = base
+        for p in self.base.parameters():
+            p.requires_grad_(False)
+        self.A = nn.Parameter(torch.empty(r, base.in_features))
+        ...                                                  # its init, B (zeros), scaling
+
+    def forward(self, x):
+        return self.base(x) + self.scaling * (x @ self.A.T) @ self.B.T
+```
+
+</details>
+
+### Ex B4.26 — LoRA avec peft : adapter un petit modèle au style de Holmes, perplexité avant et après, fusion 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « LoRA avec peft », le piège des `Conv1D` de GPT-2 et « Que montrer au modèle pendant l'entraînement ? » (§204.8) : on continue l'objectif du pré-entraînement, le token suivant. La perplexité est l'exponentielle de la cross-entropy moyenne (ch. 6) ; la boucle d'entraînement est celle du ch. 20, réduite aux paramètres entraînables.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `load_base_26` : `AutoModelForCausalLM.from_pretrained(SPEC_26["repo"], revision=..., dtype=torch.float32)`, puis `.eval()`.
+- `lora_model_26` : un `LoraConfig` avec les six réglages du contrat, puis `get_peft_model`.
+- La loss du token suivant : `model(input_ids=w).logits`, les logits des positions 0 à $T - 2$ (`[:, :-1]`) contre les tokens 1 à $T - 1$ (`w[:, 1:]`), aplatis pour `F.cross_entropy`.
+- `perplexity_26` : `model.eval()` et `torch.no_grad()`, puis `math.exp(loss.item())`.
+- `train_26` : `torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=lr)`, `model.train()`, la boucle, `model.eval()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def next_token_loss(model, windows):
+    logits = model(input_ids=windows).logits
+    return F.cross_entropy(logits[:, :-1].flatten(0, 1), windows[:, 1:].flatten())
+
+
+def train_26(model, steps, lr, generator):
+    optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=lr)
+    model.train()
+    ...                                                      # steps × (batch, loss, zero_grad, backward, step), eval
+```
+
+</details>
+
+### Ex B4.27 — Rang, alpha et modules ciblés : perplexité contre paramètres entraînables 🔬
+
+<details><summary>Indice 1</summary>
+
+Une expérience = tes fonctions de B4.26 enchaînées avec d'autres réglages, sur un modèle **neuf** à chaque fois : un adaptateur entraîné ne doit pas servir de départ au suivant. Relis le rôle de $\alpha/r$ (§204.8, ∂ B4.6) avant de regarder la famille « α = 8 ».
+
+</details>
+<details><summary>Indice 2</summary>
+
+`load_base_26()`, `lora_model_26(model, r, alpha, targets)`, `train_26(model, steps, LR_26, torch.Generator().manual_seed(seed))`, puis `trainable(model)` et `perplexity_26(model, HELD_26)` dans un dictionnaire. Pour lire le graphique : à nombre de paramètres égal, compare les points, puis compare les écarts à la barre d'erreur du protocole complet.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def experiment_27(r, alpha, targets, steps, seed):
+    model = lora_model_26(load_base_26(), r, alpha, targets)
+    ...                                                      # train, then {"trainable": ..., "ppl": ...}
+```
+
+</details>
+
+### Ex B4.28 — Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique 📦
+
+<details><summary>Indice 1</summary>
+
+Relis §204.9 : trois approches sur les **mêmes** données, comparées sur l'accuracy, le F1 macro, le temps et les paramètres. La baseline est le `Pipeline` du ch. 15 ; l'encodeur, une tête de classification et LoRA (`task_type="SEQ_CLS"`) ; le LLM ne génère rien : il suffit de lire ses logits à la dernière position.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `baseline_28` : `Pipeline([...]).fit(texts, labels)`.
+- `encoder_28` : le tokenizer et `AutoModelForSequenceClassification.from_pretrained(..., num_labels=4)` à la révision de `MINILM_28`, puis `get_peft_model` avec un `LoraConfig` qui a `modules_to_save=["classifier"]`.
+- `train_encoder_28` : `torch.randperm(len(texts), generator=generator)` à chaque epoch, des tranches de `batch_size` indices, `tok([...], padding=True, truncation=True, max_length=MAX_LEN_28, return_tensors="pt")`, `F.cross_entropy(model(**enc).logits, y[idx])`.
+- `zero_shot_28` : les identifiants des quatre mots (`llm.tokenizer(mot, add_special_tokens=False)["input_ids"][0]`), puis, pour chaque texte, `llm.model(input_ids=torch.tensor([llm.prompt_ids(messages)])).logits[0, -1]` et l'`argmax` sur ces quatre identifiants.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def zero_shot_28(llm, texts):
+    topic_ids = [llm.tokenizer(t, add_special_tokens=False)["input_ids"][0] for t in TOPICS_28]
+    preds = []
+    with torch.inference_mode():
+        for text in texts:
+            messages = [{"role": "system", "content": ZERO_SHOT_SYSTEM_28},
+                        {"role": "user", "content": " ".join(text.split()[:100])}]
+            ...                                              # one forward pass, the logits of the 4 ids, argmax
+    return np.array(preds, dtype=np.int64)
+```
+
+</details>
+
+### Ex B4.29 — Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis la clé du cache de `wb.llm` (la docstring du module) : tout ce qui décide d'une réponse gloutonne y est. Ta version en garde cinq champs. L'écriture atomique est celle de `wb.llm.write_json_atomic` : un fichier temporaire du même dossier, puis `os.replace`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `prompt_version_29` : `hashlib.sha256(template.encode("utf-8")).hexdigest()[:12]`.
+- `save_prompt_29` : `Path(folder) / "prompts" / f"{version}.txt"`, `parent.mkdir(parents=True, exist_ok=True)`, `write_text(..., encoding="utf-8")`.
+- `cache_key_29` : le dictionnaire du contrat, `json.dumps(..., sort_keys=True)`, puis SHA-256.
+- `answer_29` : la version, la clé, le chemin ; s'il existe, `json.loads(path.read_text(...))["reply"]` ; sinon la génération, puis `tempfile.mkstemp(dir=path.parent, suffix=".tmp")`, l'écriture du JSON et `os.replace(tmp, path)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def answer_29(llm, template, question, settings, folder):
+    version = save_prompt_29(template, folder)
+    key = cache_key_29(llm.repo, llm.revision, version, question, settings)
+    path = Path(folder) / "cache" / f"{key}.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))["reply"]
+    ...                                                      # generate, write a temporary file, os.replace, return
+```
+
+</details>
+
+### Ex B4.30 — [[TITLE30]] 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ton analyse de B4.23 : une réponse se perd à la recherche, à la lecture ou à la citation. Trois leviers, chacun mesurable sur les 30 questions avant la course : une meilleure recherche (B4.20 : quelle combinaison de méthodes retrouve le plus de chunks pertinents dans les $k$ premiers ?), un prompt qui fait **copier** une réponse courte au lieu de la reformuler, et une citation qui ne dépend plus du numéro que choisit le modèle. Garde un œil sur le temps : l'indexation se fait pendant la course.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Indexe une seule fois pour toutes les questions : chunks, BM25 et les embeddings d'un ou deux modèles (MiniLM et e5 se complètent : fusionne leurs classements avec celui de BM25 par la RRF).
+- Donne au modèle 3 à 6 passages : au-delà, Qwen2.5-0.5B se laisse distraire (« Lost in the Middle »), en deçà, le bon passage manque plus souvent.
+- Demande « la plus courte expression **copiée mot pour mot** du passage » : une réponse recopiée contient les mots du passage, donc sa citation se vérifie.
+- La citation : parmi les passages donnés, le premier qui contient tous les mots de contenu de la réponse (`wbrag.supports`), en commençant par celui que le modèle a cité. C'est honnête, puisque le passage rendu contient vraiment la réponse.
+- Coupe une réponse trop longue (une phrase entière) avant de la rendre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def method_30(questions, documents):
+    chunks = [c for _, body in documents for c in wbrag.chunk_words(body, 120, 20)]
+    bm25 = wbrag.BM25Index([wbrag.tokenize(c) for c in chunks])
+    ...                                                      # dense embeddings of the chunks, the generator
+    out = []
+    for question in questions:
+        rankings = [wbrag.top_k(bm25.scores(wbrag.tokenize(question)), 20), ...]   # + one per dense model
+        passages = [chunks[i] for i in wbrag.rrf(rankings)[:4]]
+        ...                                                  # the reply, the answer, the first passage that supports it
+    return out
 ```
 
 </details>

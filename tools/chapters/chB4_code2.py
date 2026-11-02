@@ -378,8 +378,8 @@ CHECK_27 = r'''with checked("B4.27"):
         ref_27 = lora_model_26(load_base_26(), 2, 4, TARGETS_26)
         want_27 = trainable(ref_27)
         ok_27 = isinstance(one_27, dict) and one_27.get("trainable") == want_27 and isinstance(one_27.get("ppl"), float)
-        verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {want_27:_} paramètres entraînables, "
-                f"perplexité {fr(one_27.get('ppl', float('nan')), 2)}.".replace("_", " "),
+        verdict("B4.27", ok_27, f"experiment_27(2, 4, {TARGETS_26}, 2 pas) : {want_27:,} paramètres entraînables, ".replace(",", " ")
+                + f"perplexité {fr(one_27.get('ppl', float('nan')), 2)}.",
                 f"experiment_27 doit rendre {{'trainable': {want_27}, 'ppl': <float>}} pour r = 2 sur {TARGETS_26} ; reçu "
                 f"{one_27!r}.")'''
 
@@ -392,7 +392,8 @@ if written(lambda: experiment_27(1, 1, TARGETS_26, 0, 0)):
         print(f"protocole rapide : {len(GRID_27)} réglages de {STEPS_27} pas en {fr(time.perf_counter() - start_27, 0)} s ; "
               f"perplexité du modèle d'origine : {fr(base_ppl_27, 2)}")
         for label, out in rows_27:
-            print(f"  {label:34} {out['trainable']:>9_} paramètres entraînables   perplexité {fr(out['ppl'], 2)}".replace("_", " "))
+            count = f"{out['trainable']:,}".replace(",", " ")
+            print(f"  {label:34} {count:>9} paramètres entraînables   perplexité {fr(out['ppl'], 2)}")
         fig, axes = plt.subplots(1, 2, figsize=(11, 3.8))
         axes[0].scatter([o["trainable"] for _, o in rows_27], [o["ppl"] for _, o in rows_27])
         for label, o in rows_27:
@@ -1190,12 +1191,16 @@ else:
 # --- 🏆 B4.30 ----------------------------------------------------------------------------------------------------------
 GIVEN_30 = r'''# The challenge: good answers WITH a checked citation on the Holmes questions, a generator of at most 0.6 B parameters,
 # on CPU, within a time limit
+import tempfile
+from pathlib import Path
+
 MAIN_30 = [q for q in QA if q["id"] in wbrag.FAST_IDS] if FAST_MODE else list(QA)     # the questions that count
 CONTROL_30 = wbrag.load_control()[:«N_CONTROL_FAST_30»] if FAST_MODE else wbrag.load_control()   # held-out questions
+STORIES_30 = sorted({q["story"] for q in MAIN_30 + CONTROL_30})   # the stories given: all 12 in full mode
 LIMIT_30 = «LIMIT_FAST_30» if FAST_MODE else «LIMIT_FULL_30»      # seconds: a reduced run in fast mode, THE challenge in full mode
 GOAL_30 = «GOAL_FAST_30» if FAST_MODE else «GOAL_FULL_30»         # good cited answers to reach (worst seed of the reference − margin)
 REFERENCE_30 = «REF_FAST_30» if FAST_MODE else «REF_FULL_30»      # the reference solution: (best, worst) over its chunkings
-CONTROL_MARGIN_30 = «CONTROL_MARGIN_30»                           # control: its rate may be this much below the main one
+CONTROL_MARGIN_30 = «MARGIN_FAST_30» if FAST_MODE else «MARGIN_FULL_30»   # control: its rate may be this much below the main one
 MAX_PARAMS_30, MAX_ANSWER_WORDS_30, MAX_PASSAGE_WORDS_30 = 600_000_000, 8, 150
 
 
@@ -1211,7 +1216,8 @@ def _make_evaluate_30():
     control = [dict(q) for q in CONTROL_30]
     tagged = [("main", q) for q in main] + [("control", q) for q in control]
     random.Random(30).shuffle(tagged)                       # the control questions are mixed with the others
-    texts = [" ".join(body.split()) for _, body in DOCS]
+    documents = [DOCS[i] for i in STORIES_30]
+    texts = [" ".join(body.split()) for _, body in documents]
 
     class Hidden:
         """What a hidden global variable holds during the run: any use of it says why."""
@@ -1266,7 +1272,7 @@ def _make_evaluate_30():
             wb.transfer.cached_arrays = lambda key, compute, folder=None, verbose=True: compute()   # nor embeddings
             transformers.GenerationMixin.generate = counting_generate
             start = time.perf_counter()
-            out = method([q["question"] for _, q in tagged], [(title, body) for title, body in DOCS])
+            out = method([q["question"] for _, q in tagged], [(title, body) for title, body in documents])
             elapsed = time.perf_counter() - start
         finally:
             g.update(originals)
@@ -1313,9 +1319,9 @@ def _make_evaluate_30():
         verdict("B4.30", seconds <= LIMIT_30, f"course en {fr(seconds, 1)} s, sous les {LIMIT_30:.0f} s.",
                 f"course en {fr(seconds, 1)} s : le défi en permet {LIMIT_30:.0f}.")
         verdict("B4.30", largest <= MAX_PARAMS_30,
-                (f"générateur de {largest:_} paramètres (model.num_parameters()), au plus 0,6 milliard.".replace("_", " ")
+                (f"générateur de {largest:,} paramètres (model.num_parameters()), au plus 0,6 milliard.".replace(",", " ")
                  if sizes else "aucune génération par generate() : rien à compter."),
-                f"un modèle de {largest:_} paramètres a généré : le défi en permet {MAX_PARAMS_30:_}.".replace("_", " "))
+                f"un modèle de {largest:,} paramètres a généré : le défi en permet {MAX_PARAMS_30:,}.".replace(",", " "))
         honest = rate_control >= rate - CONTROL_MARGIN_30
         verdict("B4.30", honest,
                 f"contrôle : {good_control} bonnes réponses citées sur {len(control)} questions tenues à l'écart "
@@ -1335,8 +1341,10 @@ def _make_evaluate_30():
 
 
 evaluate_30 = _make_evaluate_30()
-print(f"Course : {len(MAIN_30)} questions annotées et {len(CONTROL_30)} de contrôle, mélangées, en {LIMIT_30:.0f} s au "
-      f"plus ; objectif : au moins {GOAL_30} bonnes réponses citées sur {len(MAIN_30)}.")'''
+print(f"Course : {len(MAIN_30)} questions annotées et {len(CONTROL_30)} de contrôle, mélangées, sur {len(STORIES_30)} "
+      f"nouvelles, en {LIMIT_30:.0f} s au plus ; objectif : au moins {GOAL_30} bonnes réponses citées sur {len(MAIN_30)}.")
+if QWEN is not None:
+    QWEN.model                                     # the weights loaded before the race (loading is not timed)'''
 
 TODO_30 = r'''def method_30(questions, documents):
     """Your RAG: `questions` (a list of strings) and `documents` (the 12 stories, [(title, text)]) ONLY. Index the
@@ -1350,3 +1358,34 @@ CHECK_30 = r'''with checked("B4.30"):
         result_30 = evaluate_30(method_30)
     else:
         print("⏳ Ex B4.30 : le défi attend method_30.")'''
+
+
+SOLUTION_30 = r'''CHUNK_30, K_30 = (120, 20), 4        # the reference: chunks of 120 words (overlap 20), 4 passages per question
+EXTRACT_SYSTEM_30 = ("You answer questions about the Sherlock Holmes stories. Use only the numbered passages. Reply with "
+                     "the shortest phrase copied word for word from the passage that answers the question (a name, a "
+                     "place, a number: at most six words), followed by the number of that passage in square brackets. "
+                     f"If no passage contains the answer, reply exactly: {wbrag.IDK}.")
+
+
+def method_30(questions, documents):
+    """The reference: a hybrid search (RRF of BM25, MiniLM and e5), an extraction prompt for Qwen2.5-0.5B, and the
+    citation given by the program: the first passage (the cited one first) that holds every word of the answer."""
+    size, overlap = CHUNK_30
+    chunks = [c for _, body in documents for c in wbrag.chunk_words(body, size, overlap)]
+    bm25 = wbrag.BM25Index([wbrag.tokenize(c) for c in chunks])
+    models = [wb.text.load_sentence_model(name) for name in ("minilm", "e5")]
+    embeddings = [wb.text.passage_embeddings(sm, chunks, "b4-30", verbose=False) for sm in models]
+    llm = wbllm.load_llm("qwen2.5")
+    out = []
+    for question in questions:
+        rankings = [wbrag.top_k(bm25.scores(wbrag.tokenize(question)), 20)]
+        rankings += [wbrag.top_k(emb @ sm.embed([question], kind="query")[0], 20) for sm, emb in zip(models, embeddings)]
+        passages = [chunks[i] for i in wbrag.rrf(rankings)[:K_30]]
+        reply = llm.generate(wbrag.rag_messages(question, passages, system=EXTRACT_SYSTEM_30), max_new_tokens=16)
+        answer, cited = wbrag.parse_reply(reply)
+        answer = answer.split("\n")[0].strip(" .\"'“”‘’")
+        if len(wbrag.normalize_answer(answer).split()) > 8:             # a sentence, not a short answer
+            answer = " ".join(answer.split()[:6])
+        order = [passages[n - 1] for n in cited if 1 <= n <= len(passages)] + passages
+        out.append((answer, next((p for p in order if wbrag.supports(p, answer)), passages[0])))
+    return out'''

@@ -438,9 +438,63 @@ def bug22(_) -> dict:
     print("  bug22: messages of the buggy version:\n" + buggy_text, flush=True)
     return {"versions": rows}
 
+
+CH30_CHUNKS = [(120, 20), (100, 20), (140, 20), (120, 30), (110, 25)]   # the "seeds" of the reference: its chunkings
+
+
+def ch30(_) -> dict:
+    """🏆 B4.30: the reference method_30, raced by evaluate_30 (cold, the rules of the statement) in fast and full mode,
+    with five chunkings. The first run of each mode is fully cold (its time is the one reported); the next ones keep a
+    memo of the generated replies (the scores do not change, only the time)."""
+    import hashlib
+
+    import chB4_code2 as C2
+    import chB4_parts2 as P2
+    from wb import llm as wbllm
+    memo_path = Path(tempfile.gettempdir()) / "wb_b4_ch30_memo.json"
+    memo = json.loads(memo_path.read_text(encoding="utf-8")) if memo_path.exists() else {}
+    original = wbllm.ChatLM._generate
+    use_memo = {"on": False}
+
+    def memo_generate(self, prompt, *, chat, seed, **settings):
+        key = hashlib.sha256(json.dumps([self.repo, prompt, chat, seed, settings], sort_keys=True,
+                                        default=str).encode()).hexdigest()
+        if use_memo["on"] and key in memo:
+            return memo[key]
+        text = original(self, prompt, chat=chat, seed=seed, **settings)
+        memo[key] = text
+        return text
+
+    wbllm.ChatLM._generate = memo_generate
+    out = {}
+    try:
+        for fast in (True, False):
+            mode = "fast" if fast else "full"
+            ns = namespace(fast, blocks=cells("TOOLS_B", "GIVEN_19", "GIVEN_20", "GIVEN_21"))
+            run(P2.GIVEN_30, ns)
+            run(C2.SOLUTION_30, ns)
+            ns["LIMIT_30"] = 10_000.0                       # the calibration measures; it does not judge the time
+            runs = []
+            for k, chunk in enumerate(CH30_CHUNKS):
+                use_memo["on"] = k > 0
+                ns["CHUNK_30"] = chunk
+                text = run("RESULT_30 = evaluate_30(method_30)", ns)
+                res = ns["RESULT_30"]
+                runs.append({"chunk": list(chunk), "good": res["good"], "control": res["control"],
+                             "seconds": round(res["seconds"], 1), "cold": k == 0})
+                print(f"  ch30 {mode} {runs[-1]}", flush=True)
+                if k == 0:
+                    print("\n".join(line for line in text.splitlines() if line[:1] in "HC✅❌")[:3000], flush=True)
+                memo_path.write_text(json.dumps(memo), encoding="utf-8")
+            out[mode] = {"runs": runs, "n_main": len(ns["MAIN_30"]), "n_control": len(ns["CONTROL_30"]),
+                         "n_stories": len(ns["STORIES_30"]), "control_ids": [q["id"] for q in ns["CONTROL_30"]]}
+    finally:
+        wbllm.ChatLM._generate = original
+    return out
+
 ENTRIES = {"c12": c12, "p13": p13, "p19": p19, "e5_holmes": e5_holmes, "generations": generations,
            "p16_full": p16_full, "r21": r21, "b25": b25, "lora26": lora26, "p27_fast": p27_fast,
-           "generations2": generations2, "p27_full": p27_full, "bug22": bug22}
+           "generations2": generations2, "p27_full": p27_full, "bug22": bug22, "ch30": ch30}
 
 
 def main(argv=None) -> int:

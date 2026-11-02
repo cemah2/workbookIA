@@ -17,7 +17,6 @@ import chB4_code2 as C2
 _HISTORY_FILE = Path(__file__).resolve().parent / "history_chB4.json"
 HISTORY = json.loads(_HISTORY_FILE.read_text(encoding="utf-8")) if _HISTORY_FILE.exists() else {}
 
-CH30 = HISTORY.get("ch30", {})
 FULL24 = HISTORY.get("p24_full", {})
 FULL27 = HISTORY.get("p27_full", {"rows": [], "base_ppl": float("nan"), "steps": 0, "n_seeds": 0})
 FAST27 = HISTORY.get("p27_fast", {})
@@ -52,9 +51,42 @@ GIVEN_26 = _fill(C2.GIVEN_26, {"FAST_26": ", ".join(map(repr, LORA26["fast"])),
 GIVEN_27 = _fill(C2.GIVEN_27, {"STEPS_27": repr(FAST27.get("steps", 20)),
                                 "GRID_27": "".join(f"    {tuple(row)!r},\n" for row in GRID_27).rstrip("\n"),
                                 "FULL_27": repr(FULL27)})
-GIVEN_30 = _fill(C2.GIVEN_30, {k: repr(CH30.get(k.lower(), d)) for k, d in (
-    ("N_CONTROL_FAST_30", 4), ("LIMIT_FAST_30", 150.0), ("LIMIT_FULL_30", 600.0), ("GOAL_FAST_30", 5),
-    ("GOAL_FULL_30", 15), ("REF_FAST_30", (6, 6)), ("REF_FULL_30", (18, 18)), ("CONTROL_MARGIN_30", 0.3))})
+def _ch30_values() -> dict:
+    """The constants of the challenge, from the calibration of history_chB4.py (entry "ch30"): the reference raced on
+    five chunkings in each mode; goal = its worst run minus one question; the control margin covers the largest gap
+    between the annotated questions and the control seen on the reference, plus 15 points (fast mode: at least 50
+    points, with 4 control questions); the time limit of the reduced run leaves the reference a quarter of its time again."""
+    import math
+    out = {}
+    for mode in ("fast", "full"):
+        runs = CH30_RAW.get(mode, {}).get("runs", [])
+        if not runs:
+            out.update({f"ref_{mode}_30": (0, 0), f"goal_{mode}_30": 0, f"margin_{mode}_30": 0.5})
+            continue
+        n_main, n_control = CH30_RAW[mode]["n_main"], CH30_RAW[mode]["n_control"]
+        goods = [r["good"] for r in runs]
+        gaps = [r["good"] / n_main - r["control"] / n_control for r in runs]
+        out[f"ref_{mode}_30"] = (max(goods), min(goods))
+        out[f"goal_{mode}_30"] = min(goods) - 1
+        margin = math.ceil(20 * (max(0.0, max(gaps)) + 0.15)) / 20
+        out[f"margin_{mode}_30"] = max(margin, 0.5) if mode == "fast" else margin
+        out[f"seconds_{mode}_30"] = next(r["seconds"] for r in runs if r["cold"])
+    out["limit_fast_30"] = float(10 * math.ceil(1.25 * out.get("seconds_fast_30", 100) / 10))
+    out["limit_full_30"] = 600.0
+    out["n_control_fast_30"] = CH30_RAW.get("fast", {}).get("n_control", 4)
+    out["n_stories_fast"] = CH30_RAW.get("fast", {}).get("n_stories", 7)
+    out["control_ids"] = CH30_RAW.get("full", {}).get("control_ids", [])
+    return out
+
+
+CH30_RAW = HISTORY.get("ch30", {})
+CH30 = _ch30_values()
+GIVEN_30 = _fill(C2.GIVEN_30, {
+    "N_CONTROL_FAST_30": repr(CH30["n_control_fast_30"]), "LIMIT_FAST_30": repr(CH30["limit_fast_30"]),
+    "LIMIT_FULL_30": repr(CH30["limit_full_30"]), "GOAL_FAST_30": repr(CH30["goal_fast_30"]),
+    "GOAL_FULL_30": repr(CH30["goal_full_30"]), "REF_FAST_30": repr(CH30["ref_fast_30"]),
+    "REF_FULL_30": repr(CH30["ref_full_30"]), "MARGIN_FAST_30": repr(CH30["margin_fast_30"]),
+    "MARGIN_FULL_30": repr(CH30["margin_full_30"])})
 
 
 def _mistakes(entries: dict) -> str:
@@ -123,7 +155,7 @@ PART_C = Part("C", "Fine-tuning",
               "tu mesures sa perplexité avant et après, puis tu fusionnes l'adaptateur (B4.26), tu fais varier le rang, "
               "le facteur α et les couches ciblées (B4.27), et tu compares trois façons de classer des textes (B4.28).\n\n"
               "**Sur CPU.** En mode rapide, tout tourne sur distilgpt2 (82 M de paramètres, Apache 2.0, ≈ 350 Mo à "
-              "télécharger une fois) avec 30 pas d'entraînement de 4 séquences de 128 tokens (environ 15 à 30 s), et "
+              "télécharger une fois) avec 30 pas d'entraînement de 4 séquences de 128 tokens (environ 45 s sur deux cœurs), et "
               "MiniLM sur 1 000 messages. Les modes complets 🚀 (SmolLM2-135M, plus de pas, toutes les données) "
               "tournent mieux sur un GPU de Colab ; leurs résultats, précalculés, sont affichés à côté des tiens.\n\n"
               "La cellule suivante charge les outils de la partie : `trainable(model)` (le nombre de paramètres "
@@ -161,7 +193,7 @@ Dans tes notes : pourquoi la sortie de départ est-elle **exactement** celle de 
 - `perplexity_26(model, windows)` rend un `float` : l'exponentielle de la cross-entropy moyenne du token suivant sur toutes les positions de toutes les fenêtres (`windows` : des ids `(N, T)` ; la position $t$ prédit le token $t + 1$), en mode eval et sans gradient.
 - `train_26(model, steps, lr, generator)` fait `steps` pas d'AdamW (learning rate `lr`) sur les **seuls** paramètres entraînables : à chaque pas, `batch_26(generator)`, la cross-entropy moyenne du token suivant, `backward`, `step` ; le modèle en mode train pendant la boucle, en mode eval à la fin ; rend la liste des `steps` losses (des `float`).
 
-La cellule de vérification charge ton modèle (révision, float32, mode eval), compare `perplexity_26` à un calcul de référence sur deux fenêtres, pose LoRA ($r = 4$, $\alpha = 8$) et vérifie sa configuration (sans avertissement de peft), affiche le nombre de paramètres entraînables, entraîne `STEPS_26` pas (environ 15 à 30 s sur CPU en mode rapide), vérifie que les poids gelés n'ont pas bougé et compare la perplexité tenue à l'écart avant et après. Elle fusionne enfin l'adaptateur (`merge_and_unload`), compare les logits avant et après la fusion, et fait continuer une même phrase par le modèle d'origine et par le modèle adapté. En mode complet (🚀), SmolLM2-135M, `STEPS_26` pas plus longs : environ 15 min sur CPU, 1 à 2 min sur un GPU de Colab.
+La cellule de vérification charge ton modèle (révision, float32, mode eval), compare `perplexity_26` à un calcul de référence sur deux fenêtres, pose LoRA ($r = 4$, $\alpha = 8$) et vérifie sa configuration (sans avertissement de peft), affiche le nombre de paramètres entraînables, entraîne `STEPS_26` pas (environ 45 s sur CPU en mode rapide), vérifie que les poids gelés n'ont pas bougé et compare la perplexité tenue à l'écart avant et après. Elle fusionne enfin l'adaptateur (`merge_and_unload`), compare les logits avant et après la fusion, et fait continuer une même phrase par le modèle d'origine et par le modèle adapté. En mode complet (🚀), SmolLM2-135M, `STEPS_26` pas plus longs : environ 15 min sur CPU, 1 à 2 min sur un GPU de Colab.
 
 Dans tes notes : de combien la perplexité tenue à l'écart baisse-t-elle, et que mesure-t-elle exactement (le style, le vocabulaire, les noms propres des nouvelles) ? La loss d'entraînement baisse-t-elle régulièrement d'un pas à l'autre, et pourquoi pas ? Quelle part des paramètres as-tu entraînée, et combien pèserait l'adaptateur sauvé en float32 ? Pourquoi les logits fusionnés ne sont-ils pas identiques au bit près ? Lis la continuation adaptée : le style a-t-il changé, et le contenu est-il plus vrai ?""",
        given=GIVEN_26, todo=C2.TODO_26, check=C2.CHECK_26, solution=C2.SOLUTION_26 + "\n\n\n" + C2.CHECK_26),
@@ -223,17 +255,39 @@ Dans tes notes : que manque-t-il encore à ta clé pour qu'une réponse soit vra
            after=[("code", C2.EXPERIMENT_29)])
 
 # ---------------------------------------------------------------------------------------------------------------------
-REF30 = {"fast": CH30.get("ref_fast_30", (6, 6)), "full": CH30.get("ref_full_30", (18, 18))}
-GOAL30 = {"fast": CH30.get("goal_fast_30", 5), "full": CH30.get("goal_full_30", 15)}
-LIMIT30 = {"fast": CH30.get("limit_fast_30", 150.0), "full": CH30.get("limit_full_30", 600.0)}
+REF30 = {"fast": CH30["ref_fast_30"], "full": CH30["ref_full_30"]}
+GOAL30 = {"fast": CH30["goal_fast_30"], "full": CH30["goal_full_30"]}
+LIMIT30 = {"fast": CH30["limit_fast_30"], "full": CH30["limit_full_30"]}
 NAIVE30 = HISTORY.get("r21", {}).get("summary", {}).get("correct_and_verified", 8)
 
-EX_30 = Ex("B4.30", "🏆", 4, 120, «TITLE_30»,
+TITLE_30 = json.loads((Path(__file__).resolve().parents[2] / "docs/syllabus/data/chB4.json").read_text(
+    encoding="utf-8"))["exercises"]
+TITLE_30 = next(e["title"] for e in TITLE_30 if e["id"] == "B4.30")
+
+BODY_30 = f"""En B4.21, le RAG de référence donnait {NAIVE30} réponses justes **et** citées sur les 30 questions de Holmes ; B4.23 a montré où il perd les autres. Le défi : au moins **{GOAL30["full"]} bonnes réponses citées sur 30** ({_fr(100 * GOAL30["full"] / 30)} %), avec un générateur d'au plus **0,6 milliard de paramètres**, sur CPU, en **{_fr(LIMIT30["full"] / 60)} minutes** au plus. La solution de référence en obtient de {REF30["full"][1]} à {REF30["full"][0]} selon le découpage ; l'objectif lui laisse une marge.
+
+Écris `method_30(questions, documents)` : elle reçoit les questions (des chaînes) et les documents (les nouvelles, `[(titre, texte)]`), **et rien d'autre** ; elle indexe les documents pendant la course, puis rend, pour chaque question dans l'ordre, un couple `(réponse, passage)`. Tout est permis : ta librairie, `wb.rag`, `wb.text`, `wb.llm`, un autre découpage, d'autres modèles d'embedding, un autre prompt, plusieurs passes, une citation choisie par ton programme plutôt que par le modèle. `evaluate_30(method_30)` (cellule suivante) compte une **bonne réponse citée** quand :
+- la réponse est **courte** (au plus 8 mots une fois normalisée par `wbrag.normalize_answer`) et **juste** (la réponse attendue ou une variante y figure, en mots entiers, comme `wbrag.answer_in`) ;
+- le passage est **copié** d'un document (au plus 150 mots, les blancs peuvent différer) et **contient tous les mots de contenu** de la réponse (`wbrag.supports`, la règle de `verify_21`).
+
+Et elle vérifie quatre règles :
+1. **le générateur** : chaque modèle qui génère par `generate()` pendant la course compte au plus 600 000 000 paramètres, comptés sur le modèle chargé par `model.num_parameters()`, poids liés une fois. Qwen2.5-0.5B-Instruct en compte 494 032 768 ; Qwen3-0.6B, 596 049 920 (son fichier safetensors en contient 751 632 384, lm_head rangé à part, et le Hub affiche « 0.8B »). Les modèles d'embedding ne sont pas comptés ;
+2. **à froid** : pendant la course, le cache des réponses générées ne lit ni n'écrit rien, et les embeddings ne sont pas relus du cache : ils se calculent. Le chargement des poids, fait avant la course, ne compte pas ;
+3. **rien des annotations** : ta méthode ne lit ni les réponses ni les extraits. Pendant la course, `wbrag.load_qa`, `load_unanswerable`, `load_control`, `relevant_ids`, `answer_in` et `control_correct` refusent, et les variables globales qui contiennent des questions annotées ou des réponses notées (`QA`, `QUESTIONS_21`, `rows_21`…) valent un leurre. Puis un **contrôle** : {len(CH30["control_ids"]) or 12} questions tenues à l'écart, dont les réponses ne sont nulle part en clair (`data/qa/holmes_control.json` ne garde que leurs empreintes SHA-256), sont **mélangées** aux 30 ; ta méthode doit y réussir à peu près aussi bien (au plus {_fr(100 * CH30["margin_full_30"])} points de pourcentage de moins ; {_fr(100 * CH30["margin_fast_30"])} en mode rapide, avec 4 questions de contrôle seulement) ;
+4. **dans le temps** : {_fr(LIMIT30["full"])} s pour toute la course, indexation comprise.
+
+Elle affiche enfin, pour chaque question annotée, si la réponse est juste et citée. Règle d'honneur : les réponses annotées servent à mesurer, jamais à régler ta méthode question par question.
+
+**En mode rapide**, la course est réduite : les 10 questions de `wbrag.FAST_IDS` et {CH30["n_control_fast_30"]} questions de contrôle, sur les {CH30["n_stories_fast"]} nouvelles qui les contiennent, en {_fr(LIMIT30["fast"])} s ; objectif **{GOAL30["fast"]} sur 10** (référence {REF30["fast"][1]} à {REF30["fast"][0]}) : de quoi vérifier ta méthode. Le défi lui-même se court avec `FAST_MODE = False` (environ {_fr(CH30.get("seconds_full_30", 300) / 60)} minutes pour la référence, sur CPU, chargement des modèles non compris).
+
+Dans tes notes : tes idées, leur gain et leur coût en secondes ; ce qui reste perdu à la recherche et ce qui est perdu à la lecture (refais l'analyse de B4.23 sur ta méthode) ; ce que tu ferais d'un modèle de 7 milliards de paramètres sur GPU ; et pourquoi une citation choisie par le programme n'est honnête que si le passage contient vraiment la réponse."""
+
+EX_30 = Ex("B4.30", "🏆", 4, 120, TITLE_30,
            "construire, avec ce que le chapitre a montré, un RAG qui donne des réponses justes et citées, nettement "
            "plus souvent que celui de B4.21, sous un budget de CPU.",
            "Ex B4.23 · Ex B4.20 à B4.22 · fiche §204.6, §204.7 · tout le chapitre", thread="Holmes", tracks="C",
-           body=«BODY_30»,
-           given=GIVEN_30, todo=C2.TODO_30, check=C2.CHECK_30, solution=«SOLUTION_30» + "\n\n\n" + C2.CHECK_30)
+           body=BODY_30, given=GIVEN_30, todo=C2.TODO_30, check=C2.CHECK_30,
+           solution=C2.SOLUTION_30 + "\n\n\n" + C2.CHECK_30)
 
 PART_D = Part("D", "Livraison",
               "Un système LLM se livre comme un logiciel : on doit pouvoir rejouer ses réponses (B4.29) et chiffrer ce "
