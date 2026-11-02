@@ -112,7 +112,7 @@ L'apprentissage en contexte ne touche pas aux poids. Les exemples se placent com
 </details>
 <details><summary>Indice 3</summary>
 
-a) **Faux** : les exemples sont dans le prompt ; les poids ne changent pas (Brown et coll., 2020). Pour b), relis ce que montrent Lu et coll. Pour c), relis la fin de « Zéro-shot et few-shot ». Pour d) et e), relis les deux réserves, une par question.
+a) **Faux** : les exemples sont dans le prompt ; les poids ne changent pas (Brown et coll., 2020). Pour b), relis ce que montrent Lu et coll. Pour c), relis la fin du premier paragraphe de « Zéro-shot et few-shot » : comment place-t-on un exemple pour un modèle de chat ? Pour d) et e), relis les deux réserves, une par question.
 
 </details>
 

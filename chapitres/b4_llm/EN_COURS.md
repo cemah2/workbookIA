@@ -82,7 +82,7 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
 
 Pour le rédacteur des exercices, des indices, des solutions et du notebook. Tout a été exécuté le 2 novembre 2026 avec `/root/venv313` (Python 3.13, transformers 5.21.0, peft 0.21.2, torch 2.11.0+cpu, NumPy 2.1.3, scikit-learn 1.6.1, datasets 4.8.5), sur deux cœurs. Scripts de vérification dans le scratchpad de la session (non versionnés).
 
-Fiche : 14 796 mots (`wc -w`, après la relecture V2 ; 14 757 avant), soit ≈ 118 min à 125 mots/min ; en-tête recopié du SYLLABUS (bonus : la durée du contrat fait foi, 21 h, lecture 2,0 h). Figures : `python tools/chapters/figures_chB4.py` (≈ 3 s, hors ligne) → `pipeline_rag.png`, `decoupage.png`, `bm25.png`, `rrf.png`, `lora.png`, `memoire.png`.
+Fiche : 14 805 mots (`wc -w`, après les relectures V2 et V3 ; 14 757 avant), soit ≈ 118 min à 125 mots/min ; en-tête recopié du SYLLABUS (bonus : la durée du contrat fait foi, 21 h, lecture 2,0 h). Figures : `python tools/chapters/figures_chB4.py` (≈ 3 s, hors ligne) → `pipeline_rag.png`, `decoupage.png`, `bm25.png`, `rrf.png`, `lora.png`, `memoire.png`.
 
 ### Révisions figées (lues par `HfApi().model_info`, 2 novembre 2026)
 

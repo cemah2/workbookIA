@@ -55421,7 +55421,8 @@
       "mistakes": {
         "2320955ed7014fa83032d82dee793c58c15965ffbb90f39e31421b5eab70b32c": "c'est la vitesse de Qwen2.5 : applique la proportion des mémoires",
         "5939d654d2ad544628e5c503dda3c9552a8a392d50724b963f1fe3c259c74d33": "un modèle plus petit va-t-il plus vite ou plus lentement ? Vérifie le sens du rapport",
-        "59bde07e65a0e0c8c9a8b2a7f837ed1707a89b43ff36876cebf50db4874d15e1": "relis la question : compare les mémoires en float32 des deux modèles"
+        "59bde07e65a0e0c8c9a8b2a7f837ed1707a89b43ff36876cebf50db4874d15e1": "relis la question : compare les mémoires en float32 des deux modèles",
+        "b1ff2efc9aaee852089f0fdb9dab3314371f3989afe36ac64bf33879e5b530bc": "relis l'énoncé : quelle mesure de Qwen2.5 prend-il ? Et arrondis à l'entier le plus proche, pas vers le bas"
       },
       "sign": 1,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
@@ -56111,7 +56112,7 @@
       "hash": "132c580c0a326998f76cf268080c225776c6a636036087744670b4aedf43b865",
       "kind": "bool",
       "mistakes": {
-        "80bc066bf4fcf60df3dad040c30093e2bdfd4479e28684e10f5f31ceac2a2bf9": "relis la fin du paragraphe « Zéro-shot et few-shot »"
+        "80bc066bf4fcf60df3dad040c30093e2bdfd4479e28684e10f5f31ceac2a2bf9": "relis « Zéro-shot et few-shot » : comment écrit-on les exemples pour un modèle de chat ?"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },

@@ -65,7 +65,7 @@ e) `top_p=0.8` garde : (A) les 80 % de tokens du vocabulaire qui ont les plus gr
 
 a) Vrai ou faux : un prompt few-shot modifie les poids du modèle le temps de la réponse.
 b) Vrai ou faux : dans un prompt few-shot, l'ordre des exemples peut changer fortement l'accuracy.
-c) Vrai ou faux : avec un modèle de chat, on écrit les exemples few-shot comme des tours de conversation, une question en `user` et sa réponse en `assistant`.
+c) Vrai ou faux : pour donner trois exemples few-shot à un modèle de chat, on peut écrire six messages avant la vraie question : trois en `user`, trois en `assistant`, en alternance.
 d) Vrai ou faux : le chain-of-thought améliore d'autant plus les réponses que le modèle est petit.
 e) Vrai ou faux : le raisonnement qu'écrit le modèle est la trace exacte du calcul qui a produit sa réponse.
 
@@ -93,7 +93,7 @@ e) Vrai ou faux : un modèle bien meilleur sur un ancien benchmark public que su
 *Fiche §204.6 · parcours R*
 
 a) Requête « Watson ». Le passage 0 contient « Watson », le passage 1 seulement « le docteur » (la même personne). BM25 trouve : (A) les deux passages, grâce à l'idf ; (B) seulement le passage 0 ; (C) aucun des deux.
-b) Vrai ou faux : pour BM25, un passage qui ne contient aucun mot de la requête a un score nul.
+b) Vrai ou faux : pour BM25, un passage qui ne contient aucun mot de la requête a toujours un score nul, quels que soient $k_1$ et $b$.
 c) Une recherche dense peut rapprocher « le docteur » de « Watson » : (A) parce que BM25 lui fournit la liste des synonymes de chaque mot de la requête ; (B) parce que leurs embeddings sont proches, ces mots apparaissant dans des contextes voisins ; (C) parce qu'elle compte les lettres communes aux deux expressions, comme une distance d'édition.
 d) Pour retrouver un numéro de contrat « AX-7731 » cité tel quel dans un document, le plus sûr : (A) BM25 ; (B) la recherche dense ; (C) les deux se valent toujours.
 e) Avec la RRF et $k = 60$, que vaut le score fusionné d'un document classé 3ᵉ dans deux classements, à 4 décimales ?
@@ -153,7 +153,7 @@ e) L'oubli catastrophique, c'est : (A) un modèle qui oublie, en fine-tuning, ce
 a) Que vaut la similarité cosinus de $\mathbf{a} = (3, 4)$ et $\mathbf{b} = (6, 8)$ ?
 b) Et leur distance euclidienne ?
 c) Deux vecteurs de norme 1 ont un cosinus de 0,82. Que vaut le carré de leur distance euclidienne, à 2 décimales ?
-d) Vrai ou faux : pour des vecteurs de norme 1, le plus proche voisin euclidien d'une requête est aussi le document de plus grand cosinus.
+d) Vrai ou faux : pour des vecteurs de norme 1, le plus proche voisin euclidien d'une requête est toujours aussi le document de plus grand cosinus.
 e) Une recherche exhaustive compare une requête à 50 000 chunks de dimension 768. Combien de multiplications pour les produits scalaires ?
 
 <a id="papier"></a>
@@ -296,7 +296,7 @@ e) Le score du doc 0.
 f) Le classement des trois documents, du meilleur au moins bon (une liste d'identifiants).
 g) Vrai ou faux : avec $b = 0$ (et toujours $k_1 = 1{,}5$), le doc 1 reste devant le doc 2.
 h) Avec $k_1 = 0$ (et $b = 0{,}75$), le score du doc 0.
-i) La forme originale de l'idf est $\ln\frac{N - n_t + 0{,}5}{n_t + 0{,}5}$, sans le « 1 + ». Vrai ou faux : avec elle, le doc 0, qui contient les deux mots de la requête, aurait un score plus bas qu'un document qui n'en contient aucun.
+i) La forme originale de l'idf est $\ln\frac{N - n_t + 0{,}5}{n_t + 0{,}5}$, sans le « 1 + ». Vrai ou faux : avec elle, sur ces trois documents, le score du doc 0, qui contient les deux mots de la requête, serait négatif, donc plus bas que le score nul d'un document qui n'en contiendrait aucun.
 
 Dans ta copie : pourquoi le doc 1, qui ne contient « nautilus » qu'une fois, devance-t-il le doc 2, qui le contient deux fois ? Que vaudrait le score du doc 2 si l'on ne gardait que des tokens de plus de deux lettres (sans « le », « un », « au ») ?
 
@@ -308,7 +308,7 @@ On reprend les notations de la fiche : $\mathbf{W} \in \mathbb{R}^{d \times k}$ 
 $$\mathbf{h} = \mathbf{W}\mathbf{x} + s\,\mathbf{B}\mathbf{A}\mathbf{x}, \qquad s = \frac{\alpha}{r}.$$
 On note $\mathbf{g} = \partial L / \partial \mathbf{h}$ le gradient de la loss par rapport à la sortie, que la rétropropagation apporte de la couche suivante.
 
-> 🧮 **Rappel maths — gradient d'un produit matrice-vecteur** — Pour $\mathbf{h} = \mathbf{M}\mathbf{u}$, avec $\mathbf{M}$ de forme $(m, n)$ et $\mathbf{u}$ de taille $n$ : $h_i = \sum_j M_{ij} u_j$, donc $\partial h_i / \partial M_{ij} = u_j$, et la règle de la chaîne donne $\partial L / \partial M_{ij} = g_i\,u_j$, soit $\frac{\partial L}{\partial \mathbf{M}} = \mathbf{g}\,\mathbf{u}^\top$ (une matrice $(m, n)$, produit d'une colonne par une ligne : de rang au plus 1). De même $\frac{\partial L}{\partial \mathbf{u}} = \mathbf{M}^\top \mathbf{g}$. C'est le gradient d'une couche dense du ch. 18, écrit avec des vecteurs colonnes ($\mathbf{h} = \mathbf{W}\mathbf{x}$, comme Hu et coll. et PyTorch) au lieu de lignes ($\mathbf{z} = \mathbf{x}\mathbf{W}$, comme ta librairie) : les deux formules sont transposées l'une de l'autre. *Exemple* : $\mathbf{g} = (1, 2)$, $\mathbf{u} = (3, 0, 1)$ donnent $\mathbf{g}\mathbf{u}^\top = \begin{pmatrix} 3 & 0 & 1 \\ 6 & 0 & 2 \end{pmatrix}$.
+> 🧮 **Rappel maths — gradient d'un produit matrice-vecteur** — Pour $\mathbf{h} = \mathbf{M}\mathbf{u}$, avec $\mathbf{M}$ de forme $(m, n)$ et $\mathbf{u}$ de taille $n$ : $h_i = \sum_j M_{ij} u_j$, donc $\partial h_i / \partial M_{ij} = u_j$, et la règle de la chaîne donne $\partial L / \partial M_{ij} = g_i\,u_j$, soit $\frac{\partial L}{\partial \mathbf{M}} = \mathbf{g}\,\mathbf{u}^\top$ (une matrice $(m, n)$, produit d'une colonne par une ligne : de rang au plus 1). De même $\frac{\partial L}{\partial \mathbf{u}} = \mathbf{M}^\top \mathbf{g}$. C'est le gradient d'une couche dense du ch. 18, écrit avec des vecteurs colonnes ($\mathbf{h} = \mathbf{W}\mathbf{x}$, comme Hu et coll. et PyTorch) au lieu de lignes ($\mathbf{z} = \mathbf{x}\mathbf{W}$, comme ta librairie) : les deux formules sont transposées l'une de l'autre. *Exemple* : $\mathbf{g} = (1, 2)$, $\mathbf{u} = (3, 0, 1)$ donnent $\mathbf{g}\mathbf{u}^\top = \begin{pmatrix} 3 & 0 & 1 \\ 6 & 0 & 2 \end{pmatrix}$. On admet deux faits : des colonnes qui sont toutes des combinaisons de $r$ mêmes vecteurs ont au plus $r$ directions indépendantes ; et la transposée d'un produit se renverse, $(\mathbf{M}\mathbf{u})^\top = \mathbf{u}^\top\mathbf{M}^\top$.
 
 Réponds dans ta copie.
 
@@ -317,7 +317,7 @@ Réponds dans ta copie.
 3. **Les gradients.** Avec le rappel, montre que
 $$\frac{\partial L}{\partial \mathbf{B}} = s\,\mathbf{g}\,(\mathbf{A}\mathbf{x})^\top, \qquad \frac{\partial L}{\partial \mathbf{A}} = s\,\mathbf{B}^\top\mathbf{g}\,\mathbf{x}^\top.$$
 Indication : pour $\mathbf{B}$, pose $\mathbf{u} = \mathbf{A}\mathbf{x}$ ; pour $\mathbf{A}$, passe d'abord par $\partial L / \partial \mathbf{u}$. Vérifie les formes : $(d, r)$ et $(r, k)$. Que vaudrait $\partial L / \partial \mathbf{W}$, que l'on ne calcule pas ?
-4. **Le premier pas.** Avec $\mathbf{B}_0 = 0$, que vaut le gradient de $\mathbf{A}$ au premier pas ? Lequel des deux facteurs bouge en premier ? Après un pas de descente de gradient simple (SGD, learning rate $\eta$), écris $\mathbf{B}_1$, puis montre que $\Delta\mathbf{W}_1 = s\,\mathbf{B}_1\mathbf{A}_0 = -\eta\,s^2\,\mathbf{g}\,\mathbf{x}^\top\mathbf{A}_0^\top\mathbf{A}_0$. Quel est son rang ?
+4. **Le premier pas.** Avec $\mathbf{B}_0 = 0$, que vaut le gradient de $\mathbf{A}$ au premier pas ? Lequel des deux facteurs bouge en premier ? Après un pas de descente de gradient simple (SGD, learning rate $\eta$), écris $\mathbf{B}_1$, puis montre que $\Delta\mathbf{W}_1 = s\,\mathbf{B}_1\mathbf{A}_0 = -\eta\,s^2\,\mathbf{g}\,\mathbf{x}^\top\mathbf{A}_0^\top\mathbf{A}_0$. Quel est son rang (si $\mathbf{g} \ne 0$ et $\mathbf{A}_0\mathbf{x} \ne 0$) ?
 5. **Application.** $d = 3$, $k = 2$, $r = 1$, $\alpha = 2$ ; $\mathbf{A}_0 = (1, -1)$ (une ligne), $\mathbf{B}_0 = 0$ ; une entrée $\mathbf{x} = (2, 1)$ et un gradient $\mathbf{g} = (1, 0, -2)$ ; $\eta = 0{,}1$. Calcule $\partial L / \partial \mathbf{B}$ et $\partial L / \partial \mathbf{A}$ au premier pas, puis $\mathbf{B}_1$, $\Delta\mathbf{W}_1$ et $\Delta\mathbf{W}_1\mathbf{x}$. Dans quelle direction la sortie a-t-elle bougé, par rapport à $\mathbf{g}$ ? Au deuxième pas, avec les mêmes $\mathbf{x}$ et $\mathbf{g}$, calcule $\partial L / \partial \mathbf{A}$.
 6. **Le facteur $\alpha/r$.** (a) Avec SGD, d'après la question 4, par combien la modification du premier pas $\Delta\mathbf{W}_1$ est-elle multipliée si l'on double $\alpha$ ? (b) Avec Adam, la mise à jour de chaque paramètre a une taille de l'ordre de $\eta$, presque indépendante de l'échelle de son gradient (ch. 19). Par combien la modification $s\,\Delta\mathbf{B}\,\mathbf{A}$ d'un pas est-elle alors multipliée quand on double $\alpha$ ? Relie ce résultat à la phrase de Hu et coll. : « tuning α is roughly the same as tuning the learning rate ». (c) La sortie de la branche est une somme de $r$ termes, $s\sum_{i=1}^{r} \mathbf{b}_i\,(\mathbf{a}_i \cdot \mathbf{x})$, $\mathbf{b}_i$ étant la colonne $i$ de $\mathbf{B}$ et $\mathbf{a}_i$ la ligne $i$ de $\mathbf{A}$. Si ces $r$ termes étaient indépendants, centrés et de même variance, comment l'écart-type de la somme grandirait-il avec $r$ ? Quel facteur le garderait constant quand $r$ change ? Compare à $\alpha/r$ et à rsLoRA.
 
@@ -328,7 +328,7 @@ Indication : pour $\mathbf{B}$, pose $\mathbf{u} = \mathbf{A}\mathbf{x}$ ; pour 
 Hypothèses de calcul (des ordres de grandeur, pas des mesures) :
 - **l'usage** : un assistant interne répond à 3 000 questions par jour ouvré, 21 jours ouvrés par mois ;
 - **le prompt** : 200 tokens de consignes, $k = 5$ passages de 200 mots, une question de 40 tokens ; le tokenizer compte 1,3 token par mot ; la réponse fait 120 tokens ;
-- **deux API** (B2, §202.6 : pages officielles d'OpenAI, d'Anthropic et de Google relevées le 1ᵉʳ novembre 2026, tarif standard) : un modèle économique à 0,10 $ par million de tokens d'entrée et 0,40 $ par million de tokens de sortie, un modèle haut de gamme à 10 $ et 50 $ ; on suppose 0,5 s avant le premier token, puis 60 tokens par seconde ;
+- **deux API fictives**, placées aux deux bornes de la fourchette relevée en B2 (§202.6 : de 0,10 $ à 10 $ par million de tokens d'entrée et de 0,40 $ à 50 $ en sortie, pages officielles d'OpenAI, d'Anthropic et de Google, le 1ᵉʳ novembre 2026, tarif standard ; ces prix changent souvent) : un modèle économique à 0,10 $ par million de tokens d'entrée et 0,40 $ par million de tokens de sortie, un modèle haut de gamme à 10 $ et 50 $ ; on suppose 0,5 s avant le premier token, puis 60 tokens par seconde ;
 - **le modèle local** : Qwen2.5-0.5B-Instruct sur un CPU de deux cœurs, mesuré une fois sur la machine du workbook : le prompt est lu (*prefill*) à environ 150 tokens par seconde, la réponse générée à environ 8 tokens par seconde ; une machine virtuelle de 8 cœurs, supposée 4 fois plus rapide, se loue environ 0,40 $ de l'heure (un ordre de grandeur, pas un prix relevé).
 
 Réponds dans ta copie, avec des ordres de grandeur ; des fourchettes sont bienvenues.
@@ -336,7 +336,7 @@ Réponds dans ta copie, avec des ordres de grandeur ; des fourchettes sont bienv
 1. Combien de tokens d'entrée et de sortie par question ? Par mois ?
 2. Le coût mensuel avec chacune des deux API. Quelle part vient de l'entrée ?
 3. La latence d'une réponse complète : avec une API ; avec le modèle local sur deux cœurs (prefill puis génération). Laquelle des deux phases domine en local ? Que change le streaming pour l'utilisateur ?
-4. Combien de questions par heure une machine de deux cœurs traite-t-elle, une à la fois ? Si les 3 000 questions se répartissent sur 8 heures, combien de machines de deux cœurs faudrait-il ? Et de machines virtuelles de 8 cœurs ? Leur coût mensuel, allumées 10 heures par jour ouvré, puis 24 heures sur 24.
+4. Combien de questions par heure une machine de deux cœurs traite-t-elle, une à la fois ? Si les 3 000 questions se répartissent sur 8 heures, combien de machines de deux cœurs faudrait-il ? Et de machines virtuelles de 8 cœurs ? Le coût mensuel de ces machines virtuelles, allumées 10 heures par jour ouvré (21 jours), puis 24 heures sur 24 tous les jours du mois (environ 730 heures).
 5. Le levier $k$ : refais 1, 2 (modèle haut de gamme) et 3 (local) avec $k = 3$ passages. Qu'y gagnes-tu, et que risques-tu (🔁 recall@k) ?
 6. Quand choisir le modèle local malgré sa latence ? Donne deux raisons qui ne sont pas des coûts.
 7. Cite trois coûts ou effets que ton estimation ne compte pas.

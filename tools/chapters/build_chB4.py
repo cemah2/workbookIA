@@ -344,7 +344,7 @@ PAPER = [
     Paper("B4.Q6", "Zéro-shot, few-shot, chain-of-thought : vrai ou faux", [
         ("a", TF, "False", r'''mistakes={"relis la définition de l'apprentissage en contexte (§204.4)": True}'''),
         ("b", TF, "True", r'''mistakes={"relis « Un prompt est fragile » : que montrent Lu et coll. ?": False}'''),
-        ("c", TF, "True", r'''mistakes={"relis la fin du paragraphe « Zéro-shot et few-shot »": False}'''),
+        ("c", TF, "True", r'''mistakes={"relis « Zéro-shot et few-shot » : comment écrit-on les exemples pour un modèle de chat ?": False}'''),
         ("d", TF, "False", r'''mistakes={"relis la première réserve sur le chain-of-thought (§204.4)": True}'''),
         ("e", TF, "False", r'''mistakes={"relis la seconde réserve sur le chain-of-thought (§204.4)": True}'''),
     ]),
@@ -476,7 +476,8 @@ PAPER = [
           fractional="on demande un nombre de conversations entières"'''),
         ("j", WHOLE, "round(SPEED_B41)", r'''mistakes={"c'est la vitesse de Qwen2.5 : applique la proportion des mémoires": round(QWEN_TOKENS / QWEN_SECONDS),
           "un modèle plus petit va-t-il plus vite ou plus lentement ? Vérifie le sens du rapport": round(QWEN_TOKENS / QWEN_SECONDS * 4 * N_B41 / QWEN_FOOTPRINT),
-          "relis la question : compare les mémoires en float32 des deux modèles": round(QWEN_TOKENS / QWEN_SECONDS * QWEN_FOOTPRINT / (2 * N_B41))},
+          "relis la question : compare les mémoires en float32 des deux modèles": round(QWEN_TOKENS / QWEN_SECONDS * QWEN_FOOTPRINT / (2 * N_B41)),
+          "relis l'énoncé : quelle mesure de Qwen2.5 prend-il ? Et arrondis à l'entier le plus proche, pas vers le bas": round(SPEED_B41) - 1},
           fractional="arrondis à l'entier le plus proche"'''),
         ("k", TF, "True", r'''mistakes={"compare ta réponse à c) à 1 Go = 1 000 Mo": False}'''),
     ]),

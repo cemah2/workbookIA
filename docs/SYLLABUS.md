@@ -5089,21 +5089,21 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B4.Q1 | 🧠 | Modèle de base, modèle instruct, modèle de chat : lequel pour quoi ? | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q2 | 🧠 | « Open weights » n'est pas « open source » : lire la licence d'un modèle | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q3 | 🧠 | dtype, device et mémoire : ce qui décide si un modèle tient sur ton ordinateur | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q4 | 🧠 | Chat template : pourquoi ne pas écrire soi-même « User: … Assistant: … » | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q5 | 🧠 | Glouton, température, top-p : lequel pour extraire une date, lequel pour écrire un poème ? | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q6 | 🧠 | Zéro-shot, few-shot, chain-of-thought : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q7 | 🧠 | Pourquoi un LLM invente : hallucination et token le plus probable | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q8 | 🧠 | Évaluer un LLM : exact match, juge LLM, contamination des benchmarks | ★★ | 3 | — | 02 | — | R | manual |
-| B4.Q9 | 🧠 | BM25 ou recherche dense : qui retrouve « Watson » et qui retrouve « le docteur » ? | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q10 | 🧠 | RAG ou fine-tuning pour ajouter des connaissances ? | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q11 | 🧠 | LoRA : ce qui est gelé, ce qui est appris, ce que l'on fusionne | ★★ | 3 | — | 02 | — | R | manual |
-| B4.Q12 | 🧠 | Injection de prompt : quand un document récupéré devient une instruction | ★ | 3 | — | 02 | — | R | manual |
-| B4.R1 | 🔁 | Ce que le masque causal et le KV cache imposent à la génération | ★ | 5 | — | 02 | B3 | R | manual |
-| B4.R2 | 🔁 | Extraction de features ou fine-tuning : que change le nombre d'exemples ? | ★ | 5 | — | 02 | B1 | R | manual |
-| B4.R3 | 🔁 | Les k plus proches voisins et le choix de la distance | ★ | 5 | — | 02 | 13 | R | manual |
+| B4.Q1 | 🧠 | Modèle de base, modèle instruct, modèle de chat : lequel pour quoi ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q2 | 🧠 | « Open weights » n'est pas « open source » : lire la licence d'un modèle | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q3 | 🧠 | dtype, device et mémoire : ce qui décide si un modèle tient sur ton ordinateur | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q4 | 🧠 | Chat template : pourquoi ne pas écrire soi-même « User: … Assistant: … » | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q5 | 🧠 | Glouton, température, top-p : lequel pour extraire une date, lequel pour écrire un poème ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q6 | 🧠 | Zéro-shot, few-shot, chain-of-thought : vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q7 | 🧠 | Pourquoi un LLM invente : hallucination et token le plus probable | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q8 | 🧠 | Évaluer un LLM : exact match, juge LLM, contamination des benchmarks | ★★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q9 | 🧠 | BM25 ou recherche dense : qui retrouve « Watson » et qui retrouve « le docteur » ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q10 | 🧠 | RAG ou fine-tuning pour ajouter des connaissances ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q11 | 🧠 | LoRA : ce qui est gelé, ce qui est appris, ce que l'on fusionne | ★★ | 3 | — | 02 | — | R | wb.check |
+| B4.Q12 | 🧠 | Injection de prompt : quand un document récupéré devient une instruction | ★ | 3 | — | 02 | — | R | wb.check |
+| B4.R1 | 🔁 | Ce que le masque causal et le KV cache imposent à la génération | ★ | 5 | — | 02 | B3 | R | wb.check |
+| B4.R2 | 🔁 | Extraction de features ou fine-tuning : que change le nombre d'exemples ? | ★ | 5 | — | 02 | B1 | R | wb.check |
+| B4.R3 | 🔁 | Les k plus proches voisins et le choix de la distance | ★ | 5 | — | 02 | 13 | R | wb.check |
 | B4.1 | ✏️ | Mémoire d'un modèle : paramètres, dtype et KV cache — tient-il sur ton ordinateur ? | ★ | 15 | — | 02 | B3 | RM | wb.check |
 | B4.2 | ✏️ | Recall@k et MRR pour cinq requêtes | ★ | 10 | — | 02 | 3 | M | wb.check |
 | B4.3 | ✏️ | LoRA : paramètres entraînables d'une couche 896×896 de rang 8, puis de tout un modèle | ★ | 15 | — | 02 | B3 | RM | wb.check |
