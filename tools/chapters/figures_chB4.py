@@ -99,8 +99,8 @@ def figure_pipeline() -> None:
     for a, b in [((1.85, 1.05), (2.45, 1.05)), ((4.35, 1.05), (5.1, 1.05)), ((7.3, 1.05), (8.05, 1.05)),
                  ((9.65, 1.05), (10.1, 1.05))]:
         arrow(ax, a, b)
-    arrow(ax, (6.2, 2.42), (3.75, 1.43), color=C[0], lw=1.2, rad=0.15)
-    ax.text(5.4, 1.95, "les plus proches", fontsize=8.4, color=C[0], ha="center")
+    arrow(ax, (5.3, 2.42), (3.75, 1.43), color=C[0], lw=1.2, rad=0.15)
+    ax.text(5.6, 1.95, "lit les deux index", fontsize=8.4, color=C[0], ha="left")
     ax.text(3.4, 0.35, "évaluer ici : recall@k, MRR", fontsize=8.6, color=C[1], ha="center")
     ax.text(11.0, 0.35, "évaluer ici : exactitude,\ncitations, « je ne sais pas »", fontsize=8.6, color=C[1],
             ha="center")
@@ -135,6 +135,7 @@ def figure_chunks() -> None:
             ov = (s, min(s + OVERLAP, n))
             ax.add_patch(Rectangle((ov[0], 0.62), ov[1] - ov[0] - 0.08, 0.1, fc=C[(c - 1) % len(C)], ec="none"))
     ax.text(n + 0.2, 0.3, f"{n} mots", fontsize=8.6, color=MUTED, va="center")
+    ax.text(n + 0.2, 0.68, "barres : mots partagés", fontsize=8.6, color=MUTED, va="center")
     ax.text(n + 0.2, 1.4, f"taille {CHUNK}, recouvrement {OVERLAP},\npas = {CHUNK} − {OVERLAP} = {step}",
             fontsize=8.8, color=INK, va="center")
     ax.set_xlim(-0.2, n + 3.6)

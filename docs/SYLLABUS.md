@@ -5073,13 +5073,13 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 **Objectifs d'apprentissage**
 
 - Charger et exécuter un LLM avec transformers en maîtrisant dtype, mémoire, décodage et chat templates
-- Concevoir, versionner et évaluer des prompts (zero-shot, few-shot, sortie structurée) sur plusieurs graines
+- Concevoir, versionner et évaluer des prompts (zéro-shot, few-shot, sortie structurée) sur plusieurs graines
 - Implémenter BM25 et les métriques de recherche, puis construire et évaluer un RAG avec citations
 - Expliquer LoRA mathématiquement, l'implémenter à la main et l'appliquer avec peft
 - Choisir entre prompting, RAG et fine-tuning pour une tâche donnée, chiffres à l'appui
 - Identifier et atténuer les risques d'un système LLM : hallucinations, injection de prompt, données personnelles, licences
 
-**Sections du chapitre** : 204.1 Panorama : modèles de base, instruct et chat ; tailles, licences, Hub ; ce que fait vraiment un LLM · 204.2 Charger et exécuter un modèle avec transformers : tokenizer, modèle, pipeline, dtype, mémoire · 204.3 Génération : generate(), décodage, arrêt, streaming ; chat templates et rôles · 204.4 Prompting : zero-shot, few-shot, instructions, sortie structurée, raisonnement pas à pas · 204.5 Évaluer un LLM : jeux de test, métriques, juge LLM, contamination, variance · 204.6 Recherche d'information : découpage, BM25, recherche dense, hybride, bases vectorielles · 204.7 RAG : récupérer, augmenter le prompt, générer, citer ; évaluer et diagnostiquer · 204.8 Fine-tuning : complet ou PEFT ; LoRA (rang, alpha, modules ciblés), QLoRA · 204.9 Classer des textes : encodeur fine-tuné, LLM en zero-shot ou baseline classique · 204.10 Usage responsable : hallucinations, injection de prompt, données, licences, coûts, AI Act
+**Sections du chapitre** : 204.1 Panorama : modèles de base, instruct et chat ; tailles, licences, Hub ; ce que fait vraiment un LLM · 204.2 Charger et exécuter un modèle avec transformers : tokenizer, modèle, pipeline, dtype, mémoire · 204.3 Génération : generate(), décodage, arrêt, streaming ; chat templates et rôles · 204.4 Prompting : zéro-shot, few-shot, instructions, sortie structurée, raisonnement pas à pas · 204.5 Évaluer un LLM : jeux de test, métriques, juge LLM, contamination, variance · 204.6 Recherche d'information : découpage, BM25, recherche dense, hybride, bases vectorielles · 204.7 RAG : récupérer, augmenter le prompt, générer, citer ; évaluer et diagnostiquer · 204.8 Fine-tuning : complet ou PEFT ; LoRA (rang, alpha, modules ciblés), QLoRA · 204.9 Classer des textes : encodeur fine-tuné, LLM en zéro-shot ou baseline classique · 204.10 Usage responsable : hallucinations, injection de prompt, données, licences, coûts, AI Act
 
 **Notions enseignées** : transformers en pratique (5.x) ; chat templates ; prompting et sortie structurée ; évaluation de LLM ; BM25 ; recherche dense et hybride ; RAG avec citations ; recall@k et MRR ; LoRA from scratch ; peft ; classification de textes ; injection de prompt ; reproductibilité d'un pipeline LLM
 
@@ -5094,7 +5094,7 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 | B4.Q3 | 🧠 | dtype, device et mémoire : ce qui décide si un modèle tient sur ton ordinateur | ★ | 3 | — | 02 | — | R | manual |
 | B4.Q4 | 🧠 | Chat template : pourquoi ne pas écrire soi-même « User: … Assistant: … » | ★ | 3 | — | 02 | — | R | manual |
 | B4.Q5 | 🧠 | Glouton, température, top-p : lequel pour extraire une date, lequel pour écrire un poème ? | ★ | 3 | — | 02 | — | R | manual |
-| B4.Q6 | 🧠 | Zero-shot, few-shot, chain-of-thought : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
+| B4.Q6 | 🧠 | Zéro-shot, few-shot, chain-of-thought : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
 | B4.Q7 | 🧠 | Pourquoi un LLM invente : hallucination et token le plus probable | ★ | 3 | — | 02 | — | R | manual |
 | B4.Q8 | 🧠 | Évaluer un LLM : exact match, juge LLM, contamination des benchmarks | ★★ | 3 | — | 02 | — | R | manual |
 | B4.Q9 | 🧠 | BM25 ou recherche dense : qui retrouve « Watson » et qui retrouve « le docteur » ? | ★ | 3 | — | 02 | — | R | manual |
@@ -5118,7 +5118,7 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 | B4.12 | 📦 | Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle | ★★ | 25 | Holmes | 03 | B3 | RC | wb.check |
 | B4.13 | 🔮 | Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 | ★ | 10 | Holmes | 03 | B4.12, B3 | C | manual |
 | B4.14 | 📦 | Chat template, message système, arrêt et streaming avec un modèle instruct | ★★ | 25 | Holmes/Verne | 03 | B4.12 | RC | manual |
-| B4.15 | 📦 | Prompting pour extraire des informations de Holmes : zero-shot, few-shot, JSON validé, vote majoritaire | ★★★ | 45 | Holmes | 03 | B4.14 | RC | manual |
+| B4.15 | 📦 | Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire | ★★★ | 45 | Holmes | 03 | B4.14 | RC | manual |
 | B4.16 | 🔬 | Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples | ★★★ | 40 | Holmes | 03 | B4.15 | C | manual |
 | B4.17 | 🔨 | chunk_text et BM25 : découper un roman et classer ses passages | ★★★ | 45 | Holmes/Verne | 03 | B4.5 | RC | pytest |
 | B4.18 | 🔨 | cosine_top_k, fusion de classements (RRF), recall@k et MRR | ★★ | 30 | Holmes/Verne | 03 | B4.2, B2 | RC | pytest |
@@ -5131,7 +5131,7 @@ Un grand modèle de langue se charge en quelques lignes, mais l'utiliser correct
 | B4.25 | 📦 | LoRA from scratch : une couche LoRALinear en PyTorch, vérifiée contre peft | ★★★ | 40 | — | 03 | B4.6, 20 | RMC | wb.check |
 | B4.26 | 📦 | LoRA avec peft : adapter un petit modèle au style de Holmes, perplexité avant et après, fusion 🚀 | ★★★ | 60 | Holmes | 03 | B4.25 | RC | manual |
 | B4.27 | 🔬 | Rang, alpha et modules ciblés : perplexité contre paramètres entraînables 🚀 | ★★★ | 45 | Holmes | 03 | B4.26 | C | manual |
-| B4.28 | 📦 | Classer des textes : encodeur fine-tuné par LoRA, LLM en zero-shot, TF-IDF + régression logistique 🚀 | ★★★ | 60 | — | 03 | B4.26, 15 | C | manual |
+| B4.28 | 📦 | Classer des textes : encodeur fine-tuné par LoRA, LLM en zéro-shot, TF-IDF + régression logistique 🚀 | ★★★ | 60 | — | 03 | B4.26, 15 | C | manual |
 | B4.29 | 🛠️ | Rendre un pipeline LLM reproductible : révision du modèle figée, prompts versionnés, cache des réponses | ★★ | 25 | Holmes/Verne | 03 | B4.21 | C | manual |
 | B4.30 | 🏆 | Défi RAG : au moins 80 % de bonnes réponses citées sur 30 questions Holmes, modèle ≤ 0,6 B sur CPU | ★★★★ | 120 | Holmes | 03 | B4.23 | C | wb.check |
 | B4.E1 | 💼 | Comment réduis-tu les hallucinations d'un assistant fondé sur un LLM ? | ★★ | 10 | — | 02 | — | R | manual |

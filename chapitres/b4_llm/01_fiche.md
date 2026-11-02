@@ -159,7 +159,7 @@ Sans argument, transformers 5 charge les poids dans le **dtype** (*type de donn�
 
 $$\text{mémoire des poids} \approx N \times \text{octets par paramètre} \qquad (4 \text{ en float32},\ 2 \text{ en bfloat16},\ \approx 0{,}5 \text{ en int4}).$$
 
-![La mémoire des poids de quatre modèles (Qwen3-0.6B, SmolLM2-1.7B, Llama 3.1 8B, Llama 3.1 70B) en float32, bfloat16, int8 et int4, en échelle logarithmique, face à 8 et 16 Go : un modèle de 8 milliards de paramètres dépasse 16 Go en bfloat16 et ne passe dessous qu'en int8 ou int4, et le 70B ne tient sur un ordinateur ordinaire dans aucun format](figures/memoire.png)
+![La mémoire des poids de quatre modèles (Qwen3-0.6B, SmolLM2-1.7B, Llama 3.1 8B, Llama 3.1 70B) en float32, bfloat16, int8 et int4, en échelle logarithmique, face à 8 et 16 Go : un modèle de 8 milliards de paramètres atteint 16 Go en bfloat16 et ne laisse de la marge à un ordinateur de 16 Go qu'en int8 ou int4, et le 70B ne tient sur un ordinateur ordinaire dans aucun format](figures/memoire.png)
 
 Ce n'est qu'un plancher (🧠 Q3, ✏️ B4.1). À la génération s'ajoutent les **activations** (petites, une position à la fois) et le **KV cache** de B3 :
 
@@ -171,7 +171,7 @@ avec $L$ couches, $T$ tokens, $n_{kv}$ têtes de clés et valeurs de taille $d_h
 
 ### Vitesse sur CPU
 
-Générer un token demande une passe avant **complète**, qui relit tous les poids : la génération est limitée par la **mémoire** (les gigaoctets lus par seconde) plus que par le calcul (B3, 203.9). Ordre de grandeur, mesuré une fois sur la machine du workbook (deux cœurs), pour Qwen2.5-0.5B-Instruct, 64 tokens générés de façon gloutonne après un prompt de 27 tokens, après une passe de chauffe : **8,4 s en float32, 7,6 s en bfloat16, soit environ 8 tokens par seconde**. Un modèle plus petit va plus vite, à peu près en proportion de ses poids ; une autre machine peut faire deux à dix fois mieux, et un GPU de Colab bien davantage.
+Générer un token demande une passe avant **complète**, qui relit tous les poids : la génération est limitée par la **mémoire** (les gigaoctets lus par seconde) plus que par le calcul (B3, 203.9). Ordre de grandeur sur la machine du workbook (deux cœurs), pour Qwen2.5-0.5B-Instruct, 64 tokens générés de façon gloutonne après une passe de chauffe : **8,4 puis 8,7 s en float32, soit environ 8 tokens par seconde**. Le bfloat16 divise la mémoire par deux, pas forcément le temps : sur ce CPU sans instructions dédiées, 7,6 puis 13,9 s. Un modèle plus petit va plus vite, à peu près en proportion de ses poids ; une autre machine peut faire deux à dix fois mieux, et un GPU de Colab bien davantage.
 
 Le `device` se choisit comme au ch. 20 : `model.to("cuda")` sur GPU, ou `device_map="auto"` (bibliothèque accelerate), qui répartit les couches entre GPU et CPU quand le modèle est trop gros. Les entrées vont sur le même device que le modèle (`.to(model.device)`), et l'inférence se fait sous `torch.inference_mode()` : sans gradient, moins de mémoire.
 
@@ -210,7 +210,7 @@ La réponse s'arrête au milieu d'une phrase : `max_new_tokens=20` a coupé. Le 
 
 Le résultat contient le **prompt suivi** des tokens générés ; on garde la fin, `out[0, n_prompt:]`, puis `tok.decode(..., skip_special_tokens=True)`.
 
-> ⚠️ **Piège classique — les réglages cachés du `generation_config.json`** — Ce que tu ne passes pas à `generate()` vient du fichier `generation_config.json` du modèle. Celui de Qwen2.5-0.5B-Instruct contient `do_sample: true`, `temperature: 0.7`, `top_k: 20`, `top_p: 0.8`, `repetition_penalty: 1.1`. Résultat : `model.generate(**enc, max_new_tokens=12)` sur « Give me a name for a cat. » a donné **quatre réponses différentes** avec quatre graines (« Luna », « Whiskers » deux fois avec deux phrases différentes, « Xiaohong »). Pour un résultat reproductible, passe `do_sample=False`, ou fixe la graine et tous les réglages ; affiche `model.generation_config` pour savoir ce qui s'applique (🧠 Q5).
+> ⚠️ **Piège classique — les réglages cachés du `generation_config.json`** — Ce que tu ne passes pas à `generate()` vient du fichier `generation_config.json` du modèle. Celui de Qwen2.5-0.5B-Instruct contient `do_sample: true`, `temperature: 0.7`, `top_k: 20`, `top_p: 0.8`, `repetition_penalty: 1.1`. Résultat : `model.generate(**enc, max_new_tokens=12)`, sans autre réglage, **tire au hasard**, et sa réponse dépend de la graine, sans que rien ne le signale. Pour un résultat reproductible, passe `do_sample=False`, ou fixe la graine et tous les réglages ; affiche `model.generation_config` pour savoir ce qui s'applique (🧠 Q5).
 
 ### S'arrêter
 
@@ -271,7 +271,7 @@ print(tok.decode(out[0, enc["input_ids"].shape[1]:], skip_special_tokens=True))
 
 Le modèle s'est arrêté seul, sur `<|im_end|>`, que `skip_special_tokens=True` retire. Pour un deuxième tour, on ajoute `{"role": "assistant", "content": réponse}` puis le nouveau message, et l'on relance : tout l'historique repasse dans le prompt. `continue_final_message=True` laisse ouvert le dernier message de l'assistant, pour que le modèle le continue (on « amorce » sa réponse, par exemple par `{`).
 
-> 🔁 **Rappel B3** — Le masque causal fait générer de gauche à droite, un token à la fois, et le KV cache évite de recalculer le prompt à chaque token (🔁 R1). C'est pour cela que le temps d'une réponse est proportionnel à sa **longueur** : une consigne « réponds en une phrase » est aussi une économie.
+> 🔗 **Lien avec B3** — Le masque causal fait générer de gauche à droite, un token à la fois, et le KV cache évite de recalculer le prompt à chaque token (🔁 R1). C'est pour cela que le temps d'une réponse est proportionnel à sa **longueur** : une consigne « réponds en une phrase » est aussi une économie.
 
 ---
 
@@ -458,6 +458,7 @@ $N = 4$, $\overline{|d|} = 19/4 = 4{,}75$. Requête : « violon », présent dan
 Même mot, même nombre d'occurrences : le document **court** gagne. Avec $b = 0$, les deux scores seraient égaux, $0{,}6931$. Pour la requête « holmes violon », on **additionne** les contributions des deux termes ; « holmes », présent dans 3 documents, pèse moins ($\operatorname{idf} = \ln(1 + 1{,}5/3{,}5) \approx 0{,}3567$), et les scores deviennent $(0{,}3840 ;\ 0{,}7485 ;\ 1{,}1301 ;\ 0)$. Le doc 3, sans aucun des deux mots, reste à 0.
 
 ```python
+import numpy as np
 from mylearn.retrieval import BM25           # your code (B4.17)
 
 docs = ["holmes fume sa pipe", "watson lit le journal et holmes joue du violon",
@@ -479,14 +480,14 @@ C'est la recherche des k plus proches voisins du ch. 13 (🔁 R3), avec le cosin
 ```python
 from mylearn.retrieval import cosine_top_k   # your code (B4.18)
 
-D = np.array([[3., 4.], [1., 0.], [0., 2.], [-1., -1.]])     # 4 document embeddings, d = 2
-idx, sims = cosine_top_k([2., 1.], D, k=3)
-print(idx, sims.round(4))                    # [0 1 2] [0.8944 0.8944 0.4472]
+D = np.array([[1., 3.], [3., 1.], [1., 0.], [-1., -1.]])     # 4 document embeddings, d = 2
+idx, sims = cosine_top_k([1., 1.], D, k=3)
+print(idx, sims.round(4))                    # [0 1 2] [0.8944 0.8944 0.7071]
 ```
 
-Les docs 0 et 1 ont exactement le même cosinus (0,8944) : la règle les range dans l'ordre de leurs indices. `NearestNeighbors(metric="cosine", algorithm="brute")` de scikit-learn rend les mêmes voisins, avec des **distances** $1 - \cos$ (0,1056), l'oracle de tes tests.
+Les docs 0 et 1, symétriques par rapport à la requête, ont exactement le même cosinus (0,8944), jusqu'au dernier bit : la règle les range dans l'ordre de leurs indices. `NearestNeighbors(metric="cosine", algorithm="brute")` de scikit-learn rend les mêmes voisins, avec des **distances** $1 - \cos$ (0,1056), l'oracle de tes tests.
 
-Les forces s'inversent par rapport à BM25 : un embedding rapproche des formulations **différentes** d'une même idée (« voiture » et « automobile »), mais connaît mal un nom propre rare, un numéro ou un code, et rapproche deux textes du même sujet dont un seul contient la réponse. Quel système gagne dépend des **requêtes** : on le mesure (📦 B4.20). Et e5 attend « query: » devant la requête et « passage: » devant chaque document, sans quoi ses résultats se dégradent sans aucun message (B2, 🐛 B4.22).
+Les forces s'inversent par rapport à BM25 : un embedding rapproche des formulations **différentes** d'une même idée (« voiture » et « automobile »), mais connaît mal un nom propre rare, un numéro ou un code, et rapproche deux textes du même sujet dont un seul contient la réponse. Quel système gagne dépend des **requêtes** : on le mesure (📦 B4.20). Et e5 attend « query: » devant la requête et « passage: » devant chaque document, sans quoi ses résultats se dégradent sans aucun message (B2).
 
 ### La recherche hybride et la fusion RRF
 
@@ -509,7 +510,7 @@ Classement fusionné : $[2, 7, 5, 9, 1, 4]$, les ex aequo départagés par le pl
 
 Comparer une requête à tous les chunks coûte $N \times d$ multiplications : pour 10 000 chunks de dimension 384, quelques millisecondes en NumPy, la recherche **exacte** de ta librairie. Au-delà de millions de vecteurs, on accepte de manquer quelques voisins pour aller bien plus vite : la **recherche approchée des plus proches voisins** (ch. 7 et 13). La méthode la plus répandue, **HNSW** (*hierarchical navigable small world*, Y. Malkov et D. Yashunin, 2016), relie chaque vecteur à quelques voisins dans un graphe à plusieurs étages, que la recherche descend en se rapprochant de la requête. Une **base de données vectorielle** (FAISS, pgvector, Qdrant…) range ces index, les met à jour et filtre par métadonnées.
 
-> 🕰️ **Mise à jour (2026) — les outils absents de l'environnement du workbook** — **Le livre :** —. · **Aujourd'hui :** un RAG ou un fine-tuning en production s'appuie souvent sur sentence-transformers (embeddings en une ligne), FAISS (index de vecteurs), RAGAS (évaluation de RAG), TRL (`SFTTrainer`, fine-tuning de modèles de chat), bitsandbytes (quantification de QLoRA, sur GPU NVIDIA) et vLLM (service de modèles, B3). Aucun n'est installé dans le workbook ; sur Colab, seul sentence-transformers est préinstallé (5.7.0). Le chapitre n'utilise que transformers, peft, PyTorch, NumPy et scikit-learn : tout ce que ces outils font ici s'écrit en quelques lignes, et tu sais ce qu'ils calculent. · **Faut-il quand même l'apprendre ?** Mention : tu les reconnaîtras dans une offre d'emploi et dans un dépôt, et tu sauras les remplacer par ton code pour comprendre un écart. · *Source :* [liste des paquets du runtime Colab, `googlecolab/backend-info`, `pip-freeze.txt` (commit `40659ef`, lu le 2 novembre 2026)](https://github.com/googlecolab/backend-info/blob/40659ef4e0277fa7704a184ace17fe16681563b5/pip-freeze.txt).
+> 🕰️ **Mise à jour (2026) — les outils absents de l'environnement du workbook** — **Le livre :** —. · **Aujourd'hui :** un RAG ou un fine-tuning en production s'appuie souvent sur sentence-transformers (embeddings en une ligne), FAISS (index de vecteurs), RAGAS (évaluation de RAG), TRL (`SFTTrainer`, fine-tuning de modèles de chat), bitsandbytes (quantification de QLoRA, sur GPU NVIDIA) et vLLM (service de modèles, B3). Aucun n'est installé dans le workbook ; sur Colab, seul sentence-transformers est préinstallé (5.7.0). Le chapitre n'utilise que transformers, peft, PyTorch, NumPy et scikit-learn : tout ce que ces outils font ici s'écrit en quelques lignes, et tu sais ce qu'ils calculent. · **Faut-il quand même l'apprendre ?** Non, pas ici : tu les reconnaîtras dans une offre d'emploi et dans un dépôt, et tu sauras les remplacer par ton code pour comprendre un écart. · *Source :* [liste des paquets du runtime Colab, `googlecolab/backend-info`, `pip-freeze.txt` (commit `40659ef`, lu le 2 novembre 2026)](https://github.com/googlecolab/backend-info/blob/40659ef4e0277fa7704a184ace17fe16681563b5/pip-freeze.txt).
 
 ### Mesurer une recherche : recall@k et MRR
 
@@ -563,7 +564,7 @@ Cite the passage you used as [n]. If the passages do not contain the answer, rep
 ### Le contexte : combien, et dans quel ordre
 
 Chaque passage ajouté coûte des tokens (prix, latence, KV cache) et peut **distraire** le modèle. Deux pièges :
-- **la troncature silencieuse** : un tokenizer appelé avec `truncation=True, max_length=...` coupe la fin du prompt sans prévenir, souvent la question elle-même (🐛 B4.22). Compte les tokens du prompt et vérifie qu'ils tiennent, avec la réponse, dans le contexte du modèle ;
+- **la troncature silencieuse** : un tokenizer appelé avec `truncation=True, max_length=...` coupe la fin du prompt sans prévenir, souvent la question elle-même. Compte les tokens du prompt et vérifie qu'ils tiennent, avec la réponse, dans le contexte du modèle ;
 - **la position** : N. Liu et ses coauteurs (« Lost in the Middle: How Language Models Use Long Contexts », TACL 2023) placent le document utile à différentes positions parmi 20 : les modèles le trouvent le mieux **au début ou à la fin** du contexte, et beaucoup moins bien **au milieu** (une courbe en U). Au milieu, GPT-3.5-Turbo répondait même moins bien que **sans aucun document** (56,1 % de bonnes réponses sans document). On met donc les meilleurs passages en tête (ou en fin), et l'on en met peu.
 
 ### Évaluer et diagnostiquer
@@ -658,19 +659,19 @@ Le modèle adapté s'entraîne avec la boucle PyTorch du ch. 20 : l'optimiseur n
 
 ### Fusionner l'adaptateur
 
-Après l'entraînement, `model.merge_and_unload()` calcule $\mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}$ dans chaque couche, retire les branches et rend un modèle **ordinaire** de transformers : plus aucun surcoût à l'inférence, l'un des arguments de l'article face aux adaptateurs séquentiels, qui ajoutent des couches. Sur distilgpt2 avec une branche LoRA de rang 4 sur `c_attn`, des matrices $\mathbf{B}$ tirées au hasard et 12 tokens, les logits avant et après fusion diffèrent d'au plus $3 \times 10^{-6}$ : l'arrondi du float32. On peut aussi **garder** les adaptateurs à part et en charger un par tâche ou par client sur le même modèle de base (🧠 Q11, 📦 B4.26).
+Après l'entraînement, `model.merge_and_unload()` calcule $\mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}$ dans chaque couche, retire les branches et rend un modèle **ordinaire** de transformers : plus aucun surcoût à l'inférence, l'un des arguments de l'article face aux adaptateurs séquentiels, qui ajoutent des couches. Sur distilgpt2 avec une branche LoRA de rang 4 sur `c_attn`, des matrices $\mathbf{B}$ tirées au hasard et 12 tokens, les logits (de l'ordre de 80) diffèrent avant et après fusion de quelques $10^{-5}$ au plus : l'arrondi du float32. On peut aussi **garder** les adaptateurs à part et en charger un par tâche ou par client sur le même modèle de base (🧠 Q11, 📦 B4.26).
 
 ### QLoRA
 
 T. Dettmers, A. Pagnoni, A. Holtzman et L. Zettlemoyer (« QLoRA: Efficient Finetuning of Quantized LLMs », 2023) gèlent le modèle de base **quantifié en 4 bits** et entraînent des adaptateurs LoRA en 16 bits par-dessus, avec trois inventions : un format 4 bits adapté aux poids de distribution normale (**NF4**), la **double quantification** (les échelles des groupes sont elles-mêmes quantifiées) et des optimiseurs **paginés**, qui déplacent leurs états en mémoire centrale lors des pics. Résultat : un modèle de 65 milliards de paramètres fine-tuné sur **un seul** GPU de 48 Go, aussi bien qu'en 16 bits sur leurs tâches. QLoRA passe par bitsandbytes, conçu pour les GPU NVIDIA, absent du workbook.
 
-> 🕰️ **Mise à jour (2026) — peft 0.21** — **Le livre :** —. · **Aujourd'hui :** peft (0.21.2, octobre 2026) est la bibliothèque de référence des adaptateurs ; `LoraConfig`, `get_peft_model`, `print_trainable_parameters` et `merge_and_unload` sont stables. Par défaut : $r = 8$, $\alpha = 8$, $\mathbf{B} = 0$ (« the LoRA adapter will be a no-op »). Variantes en une option : `use_rslora=True` ($\alpha/\sqrt{r}$), `use_dora=True` (**DoRA**, S.-Y. Liu et coll., ICML 2024 : la modification est séparée en une **norme** apprise par colonne et une **direction** apprise par LoRA), d'autres initialisations (`init_lora_weights="pissa"`, `"olora"`…). `target_modules` qui ne trouve aucune couche lève une erreur au lieu de ne rien faire. · **Faut-il quand même l'apprendre ?** Oui : LoRA est le fine-tuning par défaut des LLM, et l'écrire à la main (📦 B4.25) puis le comparer à peft montre qu'il n'y a rien de magique. · *Sources :* [documentation de peft 0.21.0, `LoraConfig`](https://huggingface.co/docs/peft/v0.21.0/en/package_reference/lora) (« Set this to True if the layer to replace stores weight like (fan_in, fan_out). For example, gpt-2 uses Conv1D ») ; [peft 0.21.2 sur PyPI](https://pypi.org/project/peft/0.21.2/) ; [Kalajdzievski, arXiv:2312.03732](https://arxiv.org/abs/2312.03732) ; [Liu et coll., DoRA, arXiv:2402.09353](https://arxiv.org/abs/2402.09353).
+> 🕰️ **Mise à jour (2026) — peft 0.21** — **Le livre :** —. · **Aujourd'hui :** peft (0.21.2, octobre 2026) est la bibliothèque de référence des adaptateurs ; `LoraConfig`, `get_peft_model`, `print_trainable_parameters` et `merge_and_unload` sont stables. Par défaut : $r = 8$, $\alpha = 8$, $\mathbf{B} = 0$ (« the LoRA adapter will be a no-op »). Variantes en une option : `use_rslora=True` ($\alpha/\sqrt{r}$), `use_dora=True` (**DoRA**, S.-Y. Liu et coll., ICML 2024 : la modification est séparée en une **norme** apprise par colonne et une **direction** apprise par LoRA), d'autres initialisations (`init_lora_weights="pissa"`, `"olora"`…). un `target_modules` qui ne trouve aucune couche lève `NoMatchingPeftModuleError`. · **Faut-il quand même l'apprendre ?** Oui : LoRA est le fine-tuning par défaut des LLM, et l'écrire à la main (📦 B4.25) puis le comparer à peft montre qu'il n'y a rien de magique. · *Sources :* [documentation de peft 0.21.0, `LoraConfig`](https://huggingface.co/docs/peft/v0.21.0/en/package_reference/lora) (« Set this to True if the layer to replace stores weight like (fan_in, fan_out). For example, gpt-2 uses Conv1D ») ; [peft 0.21.2 sur PyPI](https://pypi.org/project/peft/0.21.2/) ; [Kalajdzievski, arXiv:2312.03732](https://arxiv.org/abs/2312.03732) ; [Liu et coll., DoRA, arXiv:2402.09353](https://arxiv.org/abs/2402.09353).
 
 ### Que montrer au modèle pendant l'entraînement ?
 
 Pour adapter un **style** (📦 B4.26 : écrire comme Holmes), on continue l'objectif du pré-entraînement, le token suivant sur des passages du texte, et l'on compare la perplexité (ch. 6) avant et après sur des passages tenus à l'écart. Pour apprendre une **tâche** à un modèle instruct (SFT), chaque exemple est une conversation mise en forme par **son** chat template, et la loss ne porte que sur les tokens de la réponse (labels du prompt à −100, `ignore_index`, B3) : le modèle apprend à répondre, pas à réécrire les questions. TRL (`SFTTrainer`) automatise ces deux points ; une boucle de vingt lignes suffit.
 
-> 🔁 **Rappel B1** — Avec peu d'exemples, l'extraction de features battait souvent le fine-tuning, victime d'overfitting et d'oubli (🔁 R2). LoRA est un compromis : peu de paramètres libres (moins d'overfitting, moins d'oubli), mais placés **dans** le réseau, là où l'extraction de features n'en mettait qu'au bout.
+> 🔗 **Lien avec B1** — Avec peu d'exemples, l'extraction de features battait souvent le fine-tuning, victime d'overfitting et d'oubli (🔁 R2). LoRA est un compromis : peu de paramètres libres (moins d'overfitting, moins d'oubli), mais placés **dans** le réseau, là où l'extraction de features n'en mettait qu'au bout.
 
 ---
 
@@ -692,15 +693,14 @@ Comment choisir (🔁 R2) : sans données annotées, le LLM en zéro-shot pour d
 
 ### Les hallucinations
 
-Un LLM produit la suite **plausible**, pas la suite **vraie** (204.1), et son entraînement l'a rarement récompensé de dire « je ne sais pas ». Demande à Qwen2.5-0.5B-Instruct de résumer « le roman de Jules Verne de 1897 *The Silver Lighthouse of Brest* », qui n'existe pas :
+Un LLM produit la suite **plausible**, pas la suite **vraie** (204.1), et son entraînement l'a rarement récompensé de dire « je ne sais pas ». Demande à Qwen2.5-0.5B-Instruct, de façon gloutonne : « Summarize Jules Verne's 1897 novel "The Silver Lighthouse of Brest". » Ce roman n'existe pas :
 
 ```text
-"Jules Verne's The Silver Lighthouse of Brest" is a thrilling adventure story set against the backdrop of
-World War I, where a young sailor named Jules embarks on an epic journey to find and restore the legendary
-silver lighthouse that has been lost for centuries. …
+"Jules Verne's 'The Silver Lighthouse of Brest' is a thrilling adventure story set in the late 19th century.
+The novel follows Captain John Thompson and his crew as they embark on an epic journey to explore the depths …
 ```
 
-Le ton est assuré, l'histoire inventée (Verne est mort en 1905). Les causes : une question qui présuppose un fait faux, une connaissance absente ou arrêtée à une date, un petit modèle, une haute température. Les parades (💼 E1) :
+Le ton est assuré, l'histoire inventée. Formulée autrement (« Summarize the 1897 Jules Verne novel… »), la même question a reçu « I don't have any specific information about… » : l'invention dépend aussi de la formulation. Les causes : une question qui présuppose un fait faux, une connaissance absente ou arrêtée à une date, un petit modèle, une haute température. Les parades (💼 E1) :
 - **ancrer** les réponses dans des documents (RAG) et **exiger des citations**, vérifiées ;
 - autoriser et **demander** l'abstention : « si la réponse n'est pas dans les passages, réponds je ne sais pas » ;
 - **vérifier** ce qui peut l'être par programme (un JSON, une date, un calcul) ;
@@ -758,7 +758,7 @@ Un assistant de chat, même construit sur un petit modèle local, relève donc a
 | Piège | Exemple | Ce qu'il faut faire |
 |---|---|---|
 | Charger sans révision | un dépôt du Hub mis à jour change les réponses d'un mois sur l'autre | `revision=` avec un hash de commit, noté dans les résultats |
-| Oublier le `generation_config.json` | `generate()` sans `do_sample` tire au hasard : quatre graines, quatre réponses | `do_sample=False`, ou tous les réglages et une graine ; afficher `model.generation_config` |
+| Oublier le `generation_config.json` | `generate()` sans `do_sample` tire au hasard : la réponse dépend de la graine | `do_sample=False`, ou tous les réglages et une graine ; afficher `model.generation_config` |
 | Écrire le format de chat à la main | « User: … Assistant: … » pour un modèle ChatML | `apply_chat_template(..., add_generation_prompt=True)` ; afficher la chaîne produite |
 | Tokeniser deux fois les tokens spéciaux | `tok(apply_chat_template(..., tokenize=False))` ajoute un token de début en double | `return_dict=True` directement, ou `add_special_tokens=False` |
 | Laisser la chaîne d'arrêt | `stop_strings=["\nQ:"]` : la sortie finit par « Q: » | retirer la chaîne d'arrêt après la génération |
@@ -802,5 +802,5 @@ Ce chapitre n'a pas de lecture dans le livre : **tous les parcours lisent la fic
 - Le [cours LLM de Hugging Face, chapitre 11](https://huggingface.co/learn/llm-course/chapter11/1) : chat templates, fine-tuning supervisé, [LoRA](https://huggingface.co/learn/llm-course/chapter11/4) et évaluation, avec transformers et peft et le code de chaque étape.
 - La documentation de transformers 5.21 : « [Text generation](https://huggingface.co/docs/transformers/v5.21.0/en/llm_tutorial) » (`generate()`, réglages, pièges) et « [Chat templates](https://huggingface.co/docs/transformers/v5.21.0/en/chat_templating) » (`add_generation_prompt`, `continue_final_message`, tokens spéciaux en double).
 - S. Robertson et H. Zaragoza, « [The Probabilistic Relevance Framework: BM25 and Beyond](https://doi.org/10.1561/1500000019) », *Foundations and Trends in Information Retrieval*, 2009 : d'où viennent l'idf, la saturation et la normalisation de la longueur, et comment régler $k_1$ et $b$.
-- E. Hu et coll., « [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) », 2021 (📄 B4.11), et P. Lewis et coll., « [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401) », NeurIPS 2020 : les deux articles fondateurs du chapitre.
+- E. Hu et coll., « [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685v2) », 2021 (📄 B4.11), et P. Lewis et coll., « [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401v4) », NeurIPS 2020 : les deux articles fondateurs du chapitre.
 - OWASP, « [Top 10 for LLM Applications 2026](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) » : pour chaque risque, des scénarios d'attaque et des parades, à relire avant de mettre un LLM en production.
