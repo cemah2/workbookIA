@@ -98,6 +98,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un score BM25 `nan` pour des documents qui ne contiennent pas le terme (avec $k_1 = 0$, ou un document vide et $b = 1$) | la formule calcule $0/0$ quand $f_{t,d} = 0$ et que le dénominateur s'annule | un terme absent du document n'ajoute rien : sauter les $f_{t,d} = 0$ (fiche B4, §204.6) |
 | `ValueError: The truth value of an array with more than one element is ambiguous` dans `recall_at_k` | `if not retrieved:` sur le tableau 2-D d'indices rendu par `cosine_top_k` | tester `len(retrieved) == 0` (B4.18) |
 | « Holmes, » ne trouve pas « holmes » dans BM25 | requête et corpus tokenisés différemment (casse, ponctuation) | une seule fonction de tokenisation pour les deux (fiche B4, §204.6) |
+| `ValueError: operands could not be broadcast together with shapes (3,) (3,1,28,28)` dans `q_sample` | le coefficient `alpha_bars[t]`, de forme `(N,)`, s'aligne sur le **dernier** axe de l'image | le remettre en forme `(N, 1, …, 1)` : `coef.reshape(-1, *[1] * (x0.ndim - 1))` (fiche B5, §205.2) |
+| un bruitage faux, sans aucune erreur, quand l'image a justement $N$ colonnes | même cause : NumPy aligne le coefficient sur la largeur | même remède, et des tests avec des tailles toutes différentes (fiche B5, §205.2) |
+| `IndexError: index 1000 is out of bounds for axis 0 with size 1000` | le pas de l'article ($1$ à $T$) utilisé comme indice du code ($0$ à $T - 1$) | indices de 0 à $T - 1$ partout dans le code ; le pas $t$ est l'indice $t - 1$ (fiche B5, encadré 📐) |
+| un pas DDIM vers l'image propre (`t_prev=-1`) qui ne rend pas $\hat{\mathbf{x}}_0$, ou un `nan` dès que $\eta > 0$ | `alpha_bars[-1]` lit le **dernier** élément du tableau (le bruit presque pur), pas l'image propre | $\bar\alpha_{\text{prev}} = 1$ quand `t_prev == -1` (docstring de `ddim_step`) |
+| une validation des $\beta$ qui laisse passer `nan` | `np.any(b <= 0) or np.any(b >= 1)` est faux pour `nan` : toute comparaison avec `nan` est fausse | écrire la condition à vérifier : `np.all((b > 0) & (b < 1))` (convention du workbook, B5.12) |
 
 ## Maths et algèbre linéaire
 
@@ -347,6 +352,13 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un avertissement « fan_in_fan_out is set to False but the target module is `Conv1D` » | LoRA sur GPT-2 ou distilgpt2, dont les `Conv1D` rangent le poids transposé | `LoraConfig(..., fan_in_fan_out=True)` (fiche B4, §204.8) |
 | un modèle adapté par LoRA qui diffère du modèle d'origine avant tout entraînement | $\mathbf{B}$ initialisée au hasard (LoRA écrit à la main) | $\mathbf{B}_0 = 0$, $\mathbf{A}$ au hasard : le défaut de peft (fiche B4, §204.8) |
 | `RuntimeError: Dataset scripts are no longer supported` | un dataset du Hub fondé sur un script de chargement, avec datasets 4 | une version Parquet du dataset, ou un autre dataset (fiche B4, §204.2) |
+| un DDPM qui ne produit que des images grises, sans aucune erreur | images d'entraînement laissées dans $[0, 1]$ alors que le bruit et l'écrêtage supposent $[-1, 1]$ ; ou un décalage d'un cran entre pas et indice | `x * 2 - 1` avant l'entraînement, `(x + 1) / 2` pour afficher ; vérifier l'aller-retour avec le vrai bruit avant d'entraîner (fiche B5, §205.5) |
+| des échantillons granuleux, comme saupoudrés de sel | du bruit ajouté au dernier pas de l'échantillonnage | aucun tirage à l'indice 0 (fiche B5, §205.5) |
+| `RuntimeError: Given groups=1, weight of size [64, 128, 3, 3], expected input[64, 192, 14, 14] to have 128 channels` dans un U-Net | la convolution qui suit une connexion de saut ignore les canaux concaténés | `in_channels` = canaux du décodeur + canaux de l'encodeur (fiche B5, §205.4) |
+| les échantillons de la copie EMA restent du bruit après un court entraînement | $\rho = 0{,}9999$ moyenne sur environ 10 000 pas : la copie est encore presque l'initialisation | régler $\rho$ sur le nombre de pas de l'entraînement, et dire quels poids on évalue (fiche B5, §205.3) |
+| `DDPMScheduler.step` de diffusers ne donne pas le même résultat que ton `ddpm_step` | `clip_sample=True` par défaut : diffusers écrête $\hat{\mathbf{x}}_0$ à $\pm 1$ | `DDPMScheduler(..., clip_sample=False)` pour comparer, ou `clip_x0=1.0` de ton côté (fiche B5, §205.9) |
+| `DDIMScheduler` en 50 pas commence à l'indice 980, pas 999 | l'espacement `"leading"`, le défaut de diffusers 0.40 | `timestep_spacing="trailing"`, ou une sous-séquence construite et affichée (fiche B5, §205.6) |
+| `guidance_scale=5` ne donne pas les images de $w = 5$ | diffusers écrit `guidance_scale` $= 1 + w$ | dire la convention ; `guidance_scale=5` correspond à $w = 4$ (fiche B5, §205.7) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -508,3 +520,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | un assistant qui révèle des documents d'autres utilisateurs malgré sa consigne | le filtre des droits confié au modèle, par une consigne | filtrer dans la recherche : le modèle ne reçoit que ce que l'utilisateur peut lire (fiche B4, §204.10) |
 | un classifieur de 20 Newsgroups au score trop beau | les en-têtes, signatures et citations des messages trahissent le sujet | `fetch_20newsgroups(..., remove=("headers", "footers", "quotes"))` (fiche B4, §204.9) |
 | un modèle « de 0,8 milliard » qui en compte 0,6 une fois chargé | le fichier de poids range deux fois la table des poids liés (Qwen3-0.6B) | compter sur le modèle chargé : `model.num_parameters()` (fiche B4, §204.1) |
+| un modèle de diffusion jugé fini parce que « la loss ne baisse plus » | la loss mélange des pas tirés au hasard et plafonne vite ; elle ne dit pas la qualité des images | regarder des échantillons à bruit de départ fixé, et une distance de Fréchet (fiche B5, §205.3) |
+| un échantillonnage qui ne part pas d'un bruit pur : images trop moyennes, toujours de la même luminosité | un planning raccourci avec les mêmes bornes, ou dont $\bar\alpha_T$ n'est pas presque nul | afficher $\bar\alpha$ au dernier indice ; bornes $\times 1\,000/T$, planning cosinus ou SNR final nul (fiche B5, §205.2) |
+| « mon générateur a une excellente distance de Fréchet, il ne recopie donc rien » | la distance de Fréchet ne voit que des moyennes et des covariances de features | chercher les plus proches voisins des échantillons dans le dataset d'entraînement, avec un seuil relatif (fiche B5, §205.8) |
+| deux distances de Fréchet qui semblent dire le contraire des images | calculées sur des nombres d'images, des features ou des références différents | mêmes features, même nombre d'images, même référence (fiche B5, §205.8) |

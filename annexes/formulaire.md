@@ -805,5 +805,28 @@ Notations : en mémoire, $N$ compte des paramètres ; dans BM25, $N$ compte des 
 | fusion | $\mathbf{W} \leftarrow \mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}$, puis plus de branche | `model.merge_and_unload()` |
 | coût d'une API | entrée $\times$ prix d'entrée $+$ sortie $\times$ prix de sortie (au million de tokens) ; latence locale $\approx$ entrée / vitesse de prefill $+$ sortie / vitesse de génération | (🧮 B4.7) |
 
-### B5 à B8
+### B5 · Modèles de diffusion : un DDPM minimal
+
+Notations : dans les formules, pas $t = 1$ à $T$ (article de Ho et coll.), $\bar\alpha_0 = 1$ ; dans le code, indices de 0 à $T - 1$ (le pas $t$ est l'indice $t - 1$), l'indice $-1$ de `ddim_step` désignant l'image propre. $\boldsymbol{\varepsilon}$ est le vrai bruit, $\boldsymbol{\varepsilon}_\theta$ le bruit prédit, $\mathbf{z}$ le tirage de l'échantillonneur ; $s \in [0, 1]$ est le temps du flow matching.
+
+| Notion | Formule | En code |
+|---|---|---|
+| un pas direct | $\mathbf{x}_t = \sqrt{1 - \beta_t}\,\mathbf{x}_{t-1} + \sqrt{\beta_t}\,\boldsymbol{\varepsilon}_t$ ; $\alpha_t = 1 - \beta_t$, $\bar\alpha_t = \prod_{s \le t}\alpha_s$ | `noise_schedule(betas)` (🔨 B5.12) |
+| plannings de bruit | linéaire : $\beta$ de $10^{-4}$ à $0{,}02$ ($T = 1\,000$) ; cosinus : $\bar\alpha(u) = f(u)/f(0)$, $f(u) = \cos^2\!\big(\frac{u + s}{1 + s}\cdot\frac{\pi}{2}\big)$, $s = 0{,}008$, $\beta \le 0{,}999$ | `linear_beta_schedule(T)`, `cosine_beta_schedule(T)` (✏️ B5.2, B5.3) |
+| ce qu'il reste au bout | $\ln \bar\alpha_T \approx -\sum_t \beta_t$, donc $\bar\alpha_T \approx e^{-\sum\beta}$ (toujours un peu trop grand) ; en raccourcissant la chaîne, bornes $\times 1\,000/T$ | (✏️ B5.2) |
+| forme fermée | $\mathbf{x}_t = \sqrt{\bar\alpha_t}\,\mathbf{x}_0 + \sqrt{1 - \bar\alpha_t}\,\boldsymbol{\varepsilon}$ ; plus généralement $\mathbf{x}_t \mid \mathbf{x}_s \sim \mathcal{N}\big(\sqrt{\bar\alpha_t/\bar\alpha_s}\,\mathbf{x}_s,\ (1 - \bar\alpha_t/\bar\alpha_s)\mathbf{I}\big)$ | `q_sample(x0, t, alpha_bars, noise)` (∂ B5.6, 🔨 B5.14) |
+| rapport signal sur bruit | $\operatorname{SNR}(t) = \bar\alpha_t / (1 - \bar\alpha_t)$ ; $\operatorname{SNR} = r \iff \bar\alpha = r/(1 + r)$ | (✏️ B5.3) |
+| posterior d'un pas | $\tilde{\boldsymbol{\mu}}_t = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1 - \bar\alpha_t}\mathbf{x}_0 + \frac{\sqrt{\alpha_t}(1 - \bar\alpha_{t-1})}{1 - \bar\alpha_t}\mathbf{x}_t$, $\tilde\beta_t = \frac{1 - \bar\alpha_{t-1}}{1 - \bar\alpha_t}\beta_t \le \beta_t$ (0 au premier pas) | `q_posterior_mean_variance` (∂ B5.7, 🔨 B5.16) |
+| produit de deux gaussiennes (en $x$) | $\frac{1}{v} = \frac{1}{v_1} + \frac{1}{v_2}$, $m = v\big(\frac{m_1}{v_1} + \frac{m_2}{v_2}\big)$ | (∂ B5.7) |
+| image estimée | $\hat{\mathbf{x}}_0 = (\mathbf{x}_t - \sqrt{1 - \bar\alpha_t}\,\boldsymbol{\varepsilon}_\theta)/\sqrt{\bar\alpha_t}$ | `predict_x0_from_eps` (🔨 B5.16) |
+| loss simplifiée | $L_{\text{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \boldsymbol{\varepsilon}}\lVert \boldsymbol{\varepsilon} - \boldsymbol{\varepsilon}_\theta(\mathbf{x}_t, t) \rVert^2$ ; le terme $L_{t-1}$ de l'ELBO a le poids $\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1 - \bar\alpha_t)}$ | `F.mse_loss(model(x_t, t), eps)` |
+| pas DDPM | $\mathbf{x}_{t-1} = \frac{1}{\sqrt{\alpha_t}}\big(\mathbf{x}_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\boldsymbol{\varepsilon}_\theta\big) + \sigma_t\mathbf{z}$, $\sigma_t^2 = \tilde\beta_t$ ou $\beta_t$, $\mathbf{z} = \mathbf{0}$ au dernier pas | `ddpm_step(x_t, t, eps, schedule, rng)` (✏️ B5.4, 🔨 B5.17) |
+| pas DDIM | $\mathbf{x}_{t'} = \sqrt{\bar\alpha_{t'}}\,\hat{\mathbf{x}}_0 + \sqrt{1 - \bar\alpha_{t'} - \sigma^2}\,\boldsymbol{\varepsilon}_\theta + \sigma\mathbf{z}$, $\sigma = \eta\sqrt{\frac{1 - \bar\alpha_{t'}}{1 - \bar\alpha_t}}\sqrt{1 - \frac{\bar\alpha_t}{\bar\alpha_{t'}}}$ ; $\eta = 1$ et $t' = t - 1$ : $\sigma^2 = \tilde\beta_t$ | `ddim_step(x_t, t, t_prev, eps, alpha_bars, eta)` (✏️ B5.5, 🔨 B5.17) |
+| EMA des poids | $\theta_{\text{EMA}} \leftarrow \rho\,\theta_{\text{EMA}} + (1 - \rho)\,\theta$, mémoire d'environ $1/(1 - \rho)$ pas | |
+| guidance sans classifieur | $\tilde{\boldsymbol{\varepsilon}} = (1 + w)\,\boldsymbol{\varepsilon}_\theta(\mathbf{x}_t, c) - w\,\boldsymbol{\varepsilon}_\theta(\mathbf{x}_t, \varnothing)$ ; deux évaluations par pas | diffusers : `guidance_scale` $= 1 + w$ (✏️ B5.1) |
+| paramétrisations | $\mathbf{v} = \sqrt{\bar\alpha_t}\,\boldsymbol{\varepsilon} - \sqrt{1 - \bar\alpha_t}\,\mathbf{x}_0$ (Salimans et Ho) | |
+| flow matching (ligne droite) | $\mathbf{x}_s = (1 - s)\,\mathbf{x}_0 + s\,\boldsymbol{\varepsilon}$, vitesse $\mathbf{v} = \boldsymbol{\varepsilon} - \mathbf{x}_0$ ; $\mathbf{x}_0 = \mathbf{x}_s - s\,\mathbf{v}$ ; Euler à rebours : $\mathbf{x} \leftarrow \mathbf{x} - h\,\mathbf{v}_\theta(\mathbf{x}, s)$ | |
+| coût d'un échantillonnage | passes $=$ images $\times$ pas $\times$ (2 avec la guidance) ; transformer : $\approx 2 \times N \times$ tokens FLOP par passe ; latent : côté $/ f$, tokens $= (\text{côté latent}/p)^2$ | (🧮 B5.8) |
+
+### B6 à B8
 *(à compléter)*

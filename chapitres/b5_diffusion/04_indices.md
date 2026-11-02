@@ -148,7 +148,7 @@ DDIM ne touche pas à l'entraînement : il n'utilise que la forme fermée. Son p
 </details>
 <details><summary>Indice 3</summary>
 
-a) **Faux** : DDIM réutilise le même réseau, entraîné une fois avec ses 1 000 pas. Pour b), y a-t-il un tirage quand $\eta = 0$ ? Pour c), que vaut $\sigma^2$ quand $\eta = 1$ et $t' = t - 1$ ? Pour d), relis l'étape 2 de DDIM et le cas $t' = 0$. Pour e), relis ce que la fiche dit d'une trajectoire suivie avec trop peu de pas.
+a) **Faux** : DDIM réutilise le même réseau, entraîné une fois avec ses 1 000 pas. Pour b), y a-t-il un tirage quand $\eta = 0$ ? Pour c), que vaut $\sigma^2$ quand $\eta = 1$ et $t' = t - 1$ ? Pour d), relis l'étape 2 de DDIM et le cas $t' = 0$. Pour e), relis « Pourquoi c'est plus rapide » : de quoi dépend le nombre de pas qu'il faut pour suivre une trajectoire ?
 
 </details>
 

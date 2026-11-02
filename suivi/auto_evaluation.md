@@ -601,3 +601,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Choisir entre prompting, RAG, fine-tuning et un classifieur classique, chiffres à l'appui | |
 | Identifier et atténuer les risques d'un système LLM (hallucinations, injection, données personnelles, licences, AI Act) | |
 <!-- wb:end B4 -->
+<!-- wb:section B5 -->
+## B5 — Modèles de diffusion : un DDPM minimal
+
+| Compétence | Niveau |
+|---|:-:|
+| Dériver la forme fermée $q(\mathbf{x}_t \mid \mathbf{x}_0)$ et le posterior d'un pas, et calculer à la main un pas DDPM et un pas DDIM | |
+| Calculer un planning de bruit, ses $\bar\alpha_t$ et son rapport signal sur bruit, et choisir entre planning linéaire et cosinus | |
+| Implémenter en NumPy les plannings, le bruitage et les pas d'échantillonnage, et les contrôler par l'aller-retour avec le vrai bruit | |
+| Écrire et entraîner en PyTorch un petit U-Net conditionné par le pas de temps, avec une moyenne exponentielle des poids | |
+| Accélérer l'échantillonnage (DDIM) et mesurer le compromis entre qualité et nombre de pas | |
+| Conditionner la génération par une classe et régler la guidance sans classifieur (et sa convention dans diffusers) | |
+| Évaluer un générateur (distance de Fréchet, plus proches voisins) et le comparer au VAE et au GAN | |
+| Situer le DDPM dans le paysage actuel (diffusion latente, transformers de diffusion, flow matching) et en estimer le coût | |
+| Identifier les risques d'un générateur d'images (mémorisation, données personnelles, droits, marquage des contenus) | |
+<!-- wb:end B5 -->
