@@ -32,19 +32,21 @@ import unicodedata
 REFERENCE_FALLBACK = False   # True: if your model of B3.20 is missing, use the reference mini-GPT of wb.gpt (trained
                              # once with the recipe of B3.20, 2 to 3 min on CPU in fast mode, then reloaded)
 N_HEAD = MINI_CONFIG["n_head"]
-CKPT = wbgpt.load_checkpoint(wbgpt.learner_key(FAST_MODE))
+CKPT = wbgpt.load_checkpoint(wbgpt.learner_key(FAST_MODE, globals().get("CKPT_SOURCE_20", "learner")))
 GPT = None
 if CKPT is not None:
     try:
         GPT = wbgpt.build_from_checkpoint(MiniGPT_19, CKPT)
-        print(f"ℹ️ ton mini-GPT de B3.20, relu de {CKPT['path'].name} (wbgpt.checkpoints_dir()).")
+        where_c = ""
     except Exception:  # noqa: BLE001 - MiniGPT_19 not defined in this session (a restarted kernel), or not the contract
         GPT = wbgpt.build_from_checkpoint(wbgpt.ReferenceGPT, CKPT)
-        print(f"ℹ️ ton mini-GPT de B3.20, relu de {CKPT['path'].name} dans la classe ReferenceGPT de wb.gpt (ta classe "
-              "MiniGPT_19 n'est pas définie dans cette session : mêmes noms, mêmes poids).")
+        where_c = (" dans la classe ReferenceGPT de wb.gpt (ta classe MiniGPT_19 n'est pas définie dans cette session : "
+                   "mêmes noms, mêmes poids)")
+    print(f"ℹ️ ton mini-GPT de B3.20, sauvegardé le {CKPT['saved_at']}, relu de {CKPT['path'].name}{where_c}.")
 elif REFERENCE_FALLBACK:
     GPT, CKPT = wbgpt.reference_model(FAST_MODE)
-    print("ℹ️ ton mini-GPT de B3.20 manque : le mini-GPT de référence de wb.gpt le remplace dans la partie C.")
+    print(f"ℹ️ ton mini-GPT de B3.20 manque : le mini-GPT de RÉFÉRENCE de wb.gpt (sauvegardé le {CKPT['saved_at']}) le "
+          "remplace dans la partie C.")
 else:
     print("⏳ aucune sauvegarde de ton mini-GPT de B3.20 (" + ("mode rapide" if FAST_MODE else "mode complet") + ") : "
           "exécute les cellules de B3.19 et B3.20, ou mets REFERENCE_FALLBACK = True dans cette cellule pour prendre le "
@@ -260,10 +262,14 @@ def generate_cached_23(model, idx, n_new, n_head):
 
 CHECK_23 = r'''cache_ok_23 = False
 with checked("B3.23"):
-    # 1. a small model of wb.gpt (not your B3.19), with a large token table: well-separated logits, no near tie
+    # 1. a small model of wb.gpt (not your B3.19), with large weights: well-separated logits (no near tie), and
+    #    positions and attention that change the tokens
     torch.manual_seed(23)
     small_23 = wbgpt.ReferenceGPT(vocab_size=88, block_size=32, n_layer=2, n_head=2, d_model=16).eval()
-    nn.init.normal_(small_23.tok_emb.weight, std=1.0)
+    with torch.no_grad():
+        for module in small_23.modules():
+            if isinstance(module, (nn.Linear, nn.Embedding)):
+                nn.init.normal_(module.weight, std=0.5)
     prompt_23 = torch.randint(0, 88, (3, 5), generator=torch.Generator().manual_seed(23))
     plain_23 = generate_23(small_23, prompt_23.clone(), 40)
     if not returned("B3.23", "generate_23", plain_23):
@@ -295,7 +301,7 @@ with checked("B3.23"):
     verdict("B3.23", same_23, "generate_cached_23 : les mêmes 27 tokens que sans cache (contexte plein : 32 tokens).",
             "generate_cached_23(model, idx (3, 5), 27, 2) doit rendre les mêmes ids (3, 32) que le tirage glouton sans "
             "cache ; reçu " + (f"{tuple(cached_23.shape)}" if isinstance(cached_23, torch.Tensor) else type(cached_23).__name__)
-            + (", d'autres tokens : vérifie les positions des nouveaux tokens et le masque du prefill"
+            + (", d'autres tokens : vérifie la position de chaque nouveau token, le masque du prefill et de chaque pas, et ce que chaque bloc ajoute au chemin résiduel"
                if isinstance(cached_23, torch.Tensor) and tuple(cached_23.shape) == (3, 32) else "") + ".")
     want_calls_23 = [(sorted([5] * 2 + [1] * 2 * steps)) for steps in (26, 27)]   # per block: the prompt, then 1 token
     used_23 = calls_23["whole"] == 0 and sorted(calls_23["qkv"]) in want_calls_23     # per step (the last one optional)
@@ -420,7 +426,7 @@ CHECK_24 = r'''with checked("B3.24"):
     }
     n_layer_24, n_head_24 = scores_24["previous"].shape
     what_24 = {"previous": ("a)", "de poids moyen au caractère précédent"),
-               "spaces": ("b)", "de poids total aux espaces (les espaces font 17 % des caractères)"),
+               "spaces": ("b)", "de poids total aux espaces (les espaces font 17,5 % des caractères de ces fenêtres)"),
                "spread": ("c)", "nats d'entropie moyenne (une attention uniforme sur 64 clés : 4,16)")}
     claims_24 = {"previous": previous_24, "spaces": spaces_24, "spread": spread_24}
     good_24 = 0
@@ -857,7 +863,7 @@ with checked("B3.27"):
 
     def slow_first_27(*args, **kwargs):
         calls_27.append(1)
-        if len(calls_27) <= 2:
+        if len(calls_27) <= 3:
             time.sleep(0.05)
         return sdpa_27(*args, **kwargs)
 
@@ -874,13 +880,13 @@ with checked("B3.27"):
               "meilleur de plusieurs essais est sauté.")
         timing_ok_27 = True
     else:
-        timing_ok_27 = len(calls_27) >= 3 and probe_27 < 20
+        timing_ok_27 = len(calls_27) >= 5 and 0.01 <= probe_27 < 8
         verdict("B3.27", timing_ok_27,
                 f"attention_time_27 : le meilleur de plusieurs essais, en millisecondes ({fr(probe_27, 2)} ms à T = 64, "
-                "malgré deux premiers appels ralentis de 50 ms).",
-                f"attention_time_27 a rendu {fr(probe_27, 1)} pour T = 64 en {len(calls_27)} appel(s), alors que les deux "
-                "premiers appels étaient ralentis de 50 ms : rends le meilleur de `repeats` essais, après un premier appel "
-                "non mesuré, en millisecondes.")'''
+                "malgré trois premiers appels ralentis de 50 ms).",
+                f"attention_time_27 a rendu {probe_27:.3g} pour T = 64 en {len(calls_27)} appel(s), alors que les trois "
+                "premiers appels étaient ralentis de 50 ms (une attention de 64 tokens prend de l'ordre de 0,1 ms) : rends "
+                "le meilleur de `repeats` essais, après un premier appel non mesuré, en millisecondes.")'''
 
 EXPERIMENT_27 = r'''if not globals().get("timing_ok_27"):
     print("⏳ Ex B3.27 : la mesure attend tes deux fonctions (la cellule précédente).")
@@ -1087,8 +1093,25 @@ with checked("B3.28"):
     verdict("B3.28", moved_28 > 1e-6, "échanger deux patchs change la sortie : les positions apprises sont ajoutées.",
             "échanger le premier et le dernier patch ne change pas la sortie : les positions apprises sont-elles ajoutées "
             "aux tokens ?")
+    seen_28 = {}
+    hook_28 = vit_28.blocks[0].register_forward_hook(lambda m, inp, out: seen_28.__setitem__("in", inp[0]))
+    try:
+        with torch.no_grad():
+            vit_28(x_28)
+            want_cls_28 = (vit_28.cls_token + vit_28.pos_emb[:, :1]).expand(4, -1, -1)
+            want_patches_28 = vit_28.patch_embed(x_28).flatten(2).transpose(1, 2) + vit_28.pos_emb[:, 1:]
+    finally:
+        hook_28.remove()
+    got_in_28 = seen_28.get("in")
+    order_ok_28 = got_in_28 is not None and tuple(got_in_28.shape) == (4, 17, 64) \
+        and torch.allclose(got_in_28[:, :1], want_cls_28, atol=1e-6) and torch.allclose(got_in_28[:, 1:], want_patches_28, atol=1e-5)
+    verdict("B3.28", order_ok_28,
+            "l'entrée du premier bloc : le [CLS] en tête, puis les 16 patchs dans l'ordre de lecture, positions ajoutées.",
+            "l'entrée du premier bloc doit être (4, 17, 64) : le [CLS] en position 0, puis les 16 tokens des patchs dans "
+            "l'ordre de patch_embed(x).flatten(2).transpose(1, 2), chacun avec sa position apprise ; reçu "
+            + (f"{tuple(got_in_28.shape)}" if got_in_28 is not None else "rien") + ".")
     refuses("B3.28", "patch_size = 5 pour des images de 28 pixels", lambda: ViT_28(patch_size=5))
-    vit_ok_28 = sees_last_28 and sees_first_28 and moved_28 > 1e-6'''
+    vit_ok_28 = sees_last_28 and sees_first_28 and moved_28 > 1e-6 and order_ok_28'''
 
 EXPERIMENT_28 = r'''if not globals().get("vit_ok_28"):
     print("⏳ Ex B3.28 : l'entraînement attend ton ViT (la cellule précédente).")
@@ -1234,6 +1257,18 @@ def _make_evaluate_30(data):
 
     markers = {"validation": [marker(val_text)], "contrôle": [marker(val_text), marker(train_text[cut:])]}
 
+    class Hidden:
+        """What a hidden global variable holds during the run: any use of it says why."""
+
+        def __init__(self, name):
+            self._name = name
+
+        def _refuse(self, *args, **kwargs):
+            raise RuntimeError(f"pendant le défi, {self._name} est masqué : ta méthode ne reçoit que train_ids, "
+                               "vocab_size et seconds")
+
+        __getattr__ = __getitem__ = __call__ = __iter__ = __len__ = _refuse
+
     def hidden_globals(name):
         g, found = globals(), {}
         for n, v in list(g.items()):
@@ -1242,9 +1277,9 @@ def _make_evaluate_30(data):
             if isinstance(v, str) and any(m in v for m in markers[name]):
                 found[n] = decoy_text
             elif isinstance(v, wbgpt.CharData):
-                found[n] = None
+                found[n] = Hidden(n)
             elif isinstance(v, dict) and "state_dict" in v:                    # a checkpoint (CKPT)
-                found[n] = None
+                found[n] = Hidden(n)
             elif isinstance(v, torch.Tensor) and v.ndim >= 1 and v.numel() >= 10_000 and not v.dtype.is_floating_point:
                 found[n] = v[:0]                                                # an array of ids
             elif isinstance(v, np.ndarray) and v.ndim >= 1 and v.size >= 10_000 and np.issubdtype(v.dtype, np.integer):
@@ -1393,14 +1428,11 @@ def method_30(train_ids, vocab_size, seconds):
     model = MiniGPT_19(vocab_size, block_size=128, n_layer=4, n_head=4, d_model=128)    # 820 992 parameters
     optimizer = configure_optimizer_20(model, 5e-3, 0.1, (0.9, 0.99))
     model.train()
-    warmup, total, it = 50, None, 0
-    while total is None or it < total:
-        elapsed = time.perf_counter() - start
-        if it == 20:                                        # the speed of this machine, measured: the number of iterations
-            total = max(21, int(0.92 * seconds / (elapsed / 20)))
-        if elapsed > 0.95 * seconds:                        # a slower machine than measured: stop in time
-            break
-        lr = wbgpt.lr_at(it, total or 10**9, 5e-3, warmup, 5e-4)   # warmup, then a cosine down to the last iteration
+    budget, warmup, it = 0.92 * seconds, 50, 0          # a margin for the end of the call
+    while (elapsed := time.perf_counter() - start) < budget:
+        # a warmup over the first iterations, then a cosine over the TIME left: the schedule ends with the budget,
+        # whatever the speed of the machine
+        lr = 5e-3 * it / warmup if it < warmup else 5e-4 + 4.5e-3 * 0.5 * (1 + math.cos(math.pi * elapsed / budget))
         for group in optimizer.param_groups:
             group["lr"] = lr
         x, y = wbgpt.get_batch(train_ids, 32, 128, generator)

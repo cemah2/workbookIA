@@ -8,6 +8,7 @@ Quick reference
 >>> x, y = get_batch(data.train_ids, 32, 128, generator)   # the get_batch of the fiche (§203.8)
 >>> loss = char_loss(model, data.val_ids)    # nats per character, every target from index 128 on (sliding windows)
 >>> key = learner_key(fast=True)             # the complete key of the model trained by Ex B3.20
+>>> delete_checkpoint(key)                   # B3.20 removes the old model before training a new one
 >>> save_checkpoint(key, model, history, data.itos)   # written atomically, outside the repository
 >>> ckpt = load_checkpoint(key)              # None when absent; else {"state_dict", "config", "itos", "history", ...}
 >>> model, ckpt = reference_model(fast=True) # the reference mini-GPT, trained once (≈ 2 min on CPU), then reloaded
@@ -405,9 +406,10 @@ def checkpoint_key(config: dict, settings: dict, *, fast: bool, source: str, dat
             "settings": dict(settings), "split": data.fingerprint, "vocab": vocab, "text": data.name}
 
 
-def learner_key(fast: bool = True) -> dict:
-    """The key of the model trained and saved by Ex B3.20 (the configuration and the settings of the contract)."""
-    return checkpoint_key(mini_config(fast), train_settings(fast), fast=fast, source="learner")
+def learner_key(fast: bool = True, source: str = "learner") -> dict:
+    """The key of the model trained and saved by Ex B3.20 (the configuration and the settings of the contract).
+    The solutions notebook passes ``source="solution"``: it never writes, nor reads, the checkpoint of the learner."""
+    return checkpoint_key(mini_config(fast), train_settings(fast), fast=fast, source=source)
 
 
 def reference_key(fast: bool = True) -> dict:
@@ -459,6 +461,16 @@ def load_checkpoint(key: dict, folder: str | Path | None = None) -> dict | None:
         return None
     payload["path"] = path
     return payload
+
+
+def delete_checkpoint(key: dict, folder: str | Path | None = None) -> bool:
+    """Remove the checkpoint of ``key`` if there is one (a new training of Ex B3.20 starts by removing the old model,
+    so that a failed run never leaves the previous one in place); True when a file was removed."""
+    path = checkpoint_file(key, folder)
+    if path.exists():
+        path.unlink()
+        return True
+    return False
 
 
 def build_from_checkpoint(model_class, ckpt: dict) -> nn.Module:

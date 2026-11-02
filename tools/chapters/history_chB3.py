@@ -304,7 +304,7 @@ def _second_namespace(ns, fast: bool = True) -> dict:
     """The namespace of parts C to E: the solutions of B3.18 to B3.20, then the tools of part C."""
     import chB3_code2 as C2
     ns = _gpt_namespace(ns, fast)
-    ns["model_ok_19"], ns["probes_ok_20"] = True, True
+    ns["model_ok_19"], ns["probes_ok_20"], ns["CKPT_SOURCE_20"] = True, True, "solution"
     with contextlib.redirect_stdout(io.StringIO()):
         exec(C2.TOOLS_C, ns)
     return ns

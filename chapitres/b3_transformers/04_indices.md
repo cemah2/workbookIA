@@ -1045,7 +1045,7 @@ Relis les courbes de B3.21 : en 600 itérations, ton mini-GPT de B3.20 apprenait
 </details>
 <details><summary>Indice 2</summary>
 
-Une méthode simple : le mini-GPT de B3.20, entraîné aussi longtemps que le budget le permet, avec un warmup puis un cosinus qui finit **à la fin du budget**. Mesure la durée des premières itérations, déduis-en le nombre total d'itérations, et garde une marge (le contrôle a le quart du temps). Ensuite, B3.21 te dit si le dropout sert à ce nombre d'itérations, et B3.25 ce que coûte chaque pièce du bloc ; tu peux aussi changer $d$, le nombre de blocs, le contexte, le learning rate ou la taille des batches, en restant sous 1 000 000 de valeurs.
+Une méthode simple : le mini-GPT de B3.20, entraîné aussi longtemps que le budget le permet, avec un warmup puis un cosinus qui finit **à la fin du budget**. Le nombre d'itérations dépend de la machine : fais suivre le cosinus au **temps** écoulé plutôt qu'au numéro d'itération, arrête-toi quand le temps est écoulé, et garde une marge (le contrôle a le quart du temps). Ensuite, B3.21 te dit si le dropout sert à ce nombre d'itérations, et B3.25 ce que coûte chaque pièce du bloc ; tu peux aussi changer $d$, le nombre de blocs, le contexte, le learning rate ou la taille des batches, en restant sous 1 000 000 de valeurs.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1055,8 +1055,10 @@ def method_30(train_ids, vocab_size, seconds):
     start = time.perf_counter()
     model = MiniGPT_19(vocab_size)                        # 820 992 parameters
     optimizer = configure_optimizer_20(model, 5e-3, 0.1, (0.9, 0.99))
-    ...                                                   # after 20 iterations: total = 0.92 * seconds / (time per step)
-    ...                                                   # warmup + cosine down to `total`, clipping; stop in time
+    budget, it = 0.92 * seconds, 0
+    while (elapsed := time.perf_counter() - start) < budget:
+        lr = ...                                          # warmup over 50 iterations, then a cosine of elapsed / budget
+        ...                                               # a batch, the loss, the gradients, clipping, the step
     return model.eval()
 ```
 

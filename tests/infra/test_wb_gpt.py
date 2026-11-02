@@ -209,3 +209,14 @@ def test_reference_model_is_read_from_its_checkpoint(tmp_path, monkeypatch):
     x = torch.randint(0, 88, (1, 32))
     with torch.no_grad():
         assert torch.equal(again(x), model.eval()(x))
+
+
+def test_the_solution_and_the_learner_never_share_a_checkpoint(tmp_path):
+    learner, solution = G.learner_key(True), G.learner_key(True, source="solution")
+    assert learner != solution and G.checkpoint_file(learner, tmp_path) != G.checkpoint_file(solution, tmp_path)
+    torch.manual_seed(0)
+    model = G.ReferenceGPT(**(G.MINI_CONFIG | {"n_layer": 1, "d_model": 8, "n_head": 2}))
+    G.save_checkpoint(solution, model, {"train_loss": []}, G.char_data("holmes").itos, tmp_path)
+    assert G.load_checkpoint(learner, tmp_path) is None, "expected the learner's key not to read the solution's model"
+    assert G.delete_checkpoint(learner, tmp_path) is False
+    assert G.delete_checkpoint(solution, tmp_path) is True and G.load_checkpoint(solution, tmp_path) is None

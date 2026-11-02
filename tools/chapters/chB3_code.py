@@ -970,6 +970,9 @@ if not (globals().get("probes_ok_20") and globals().get("model_ok_19")):
     print("⏳ Ex B3.20 : l'entraînement attend ton modèle de B3.19 et les contrôles de la cellule précédente.")
 else:
     with checked("B3.20"):
+        KEY_20 = wbgpt.learner_key(FAST_MODE, globals().get("CKPT_SOURCE_20", "learner"))
+        if wbgpt.delete_checkpoint(KEY_20):                # a new training: the old model goes, even if this run fails
+            print("ℹ️ l'ancienne sauvegarde de ton mini-GPT est effacée : la suite du chapitre relira celui-ci.")
         torch.manual_seed(SEED_20)
         trained_20 = MiniGPT_19(**CONFIG_20)
         started_20 = time.perf_counter()
@@ -985,7 +988,7 @@ EXPERIMENT_20B = r'''if model_20 is None:
 else:
     with checked("B3.20"):
         val_char_20 = wbgpt.char_loss(model_20, DATA.val_ids)       # every character of the validation from index 128 on
-        path_20 = wbgpt.save_checkpoint(wbgpt.learner_key(FAST_MODE), model_20, history_20, DATA.itos,
+        path_20 = wbgpt.save_checkpoint(KEY_20, model_20, history_20, DATA.itos,
                                         extra={"char_loss": val_char_20, "seconds": seconds_20})
         print(f"modèle sauvegardé : {path_20.name}, dans wbgpt.checkpoints_dir()")
         verdict("B3.20", val_char_20 < TARGET_20,

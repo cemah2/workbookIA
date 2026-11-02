@@ -279,11 +279,11 @@ La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont p
        given=C.GIVEN_22, todo=C.TODO_22, solution=SOLUTION_22, record=RECORD_22,
        after=[("code", guarded(C.EXPERIMENT_22, ["french_22", "uniform_22"],
                                "⏳ Ex B3.22 : écris d'abord tes deux prédictions dans la cellule précédente.")),
-              ("md", "Dans tes notes : pour chaque prédiction ratée, qu'est-ce qui t'a trompé ? Que reste-t-il de "
-                     "l'anglais dans ce que le modèle sait encore prédire du français (lettres, espaces, ponctuation, "
-                     "mots communs) ? Compare, dans le tableau des positions, la loss du début et de la fin d'une "
-                     "fenêtre sur Holmes, puis sur Verne : que te dit cet écart sur ce que le modèle fait de son "
-                     "contexte ? Que faudrait-il pour qu'il continue en français ?")]),
+              ("md", "Dans tes notes : pour chaque prédiction ratée, qu'est-ce qui t'a trompé ? Compare les "
+                     "continuations des deux prompts : en quoi diffèrent-elles, et à partir de combien de caractères ? "
+                     "Qu'est-ce qu'un modèle de Holmes peut savoir qui vaille aussi pour un texte français ? Compare, dans "
+                     "le tableau des positions, la loss du début et de la fin d'une fenêtre sur Holmes, puis sur Verne : "
+                     "que te dit cet écart sur ce que le modèle fait de son contexte ?")]),
 
     Ex("B3.23", "📦", 3, 45, "Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur",
        "écrire la génération gloutonne du mini-GPT sans cache puis avec un KV cache, vérifier qu'elles donnent les mêmes "
@@ -387,7 +387,7 @@ Dans tes notes : pourquoi la loss par token du modèle BPE ne se compare-t-elle 
 - `attention_time_27(T, backend, n_head=4, d_head=32, repeats=5)` : des requêtes, clés et valeurs aléatoires de forme `(1, n_head, T, d_head)` en float32, puis, dans `with sdpa_kernel(backend):`, un premier appel causal de `F.scaled_dot_product_attention` non mesuré, puis `repeats` appels mesurés (`time.perf_counter`) ; rend **le meilleur** des `repeats` temps, en millisecondes (un float) ;
 - `weights_bytes_27(T, n_head=4, bytes_per_value=4)` : la mémoire, en octets (un int), des poids d'attention `(n_head, T, T)` d'une séquence.
 
-La cellule de vérification essaie ta formule, puis ta mesure avec une sonde : les deux premiers appels de SDPA y sont ralentis de 50 ms, et seul le meilleur de plusieurs essais les ignore. La cellule suivante affiche le noyau que PyTorch choisit par défaut sur ce CPU, essaie le troisième noyau, `EFFICIENT_ATTENTION`, puis mesure pour $T$ = 64, 128, …, 2 048 et chaque noyau le temps (ta fonction) et la plus grosse allocation d'un opérateur (`profiled_bytes_27`, le profileur de PyTorch : `tracemalloc` ne voit pas la mémoire de PyTorch), à côté de ta formule ; elle calcule la pente du temps en échelles logarithmiques au-delà de 512 tokens et trace les deux graphiques. Les temps dépendent de la machine : donne-les en fourchettes.
+La cellule de vérification essaie ta formule, puis ta mesure avec une sonde : les trois premiers appels de SDPA y sont ralentis de 50 ms, et seul le meilleur de plusieurs essais les ignore. La cellule suivante affiche le noyau que PyTorch choisit par défaut sur ce CPU, essaie le troisième noyau, `EFFICIENT_ATTENTION`, puis mesure pour $T$ = 64, 128, …, 2 048 et chaque noyau le temps (ta fonction) et la plus grosse allocation d'un opérateur (`profiled_bytes_27`, le profileur de PyTorch : `tracemalloc` ne voit pas la mémoire de PyTorch), à côté de ta formule ; elle calcule la pente du temps en échelles logarithmiques au-delà de 512 tokens et trace les deux graphiques. Les temps dépendent de la machine : donne-les en fourchettes.
 
 Dans tes notes : le noyau choisi par défaut, et ce que dit l'essai d'`EFFICIENT_ATTENTION`. Tes temps à 2 048 tokens pour les deux noyaux, en fourchette, et leur rapport. La pente du noyau MATH vaut-elle 2, et pourquoi pas tout à fait ? Que mesure le profileur pour FLASH, et pourquoi si peu ? D'après ta formule, combien de mémoire faudrait-il au noyau MATH pour 32 têtes et 131 072 tokens (fiche §203.10) ? Le noyau FLASH change-t-il le nombre de FLOPs ?""",
        given=C.GIVEN_27, todo=C.TODO_27, check=C.CHECK_27, solution=C.SOLUTION_27 + "\n\n\n" + C.CHECK_27,
@@ -413,7 +413,7 @@ PART_E = Part("E", "Un ViT, un test de causalité et le défi",
   - `forward(x)` : des images `(N, 1, 28, 28)` → des logits `(N, n_classes)` ; `ValueError` si `patch_size` ne divise pas `image_size` ;
   - ni `nn.Transformer…` ni `nn.MultiheadAttention`.
 
-La cellule suivante charge Fashion-MNIST (normalisé comme aux ch. 20 et 21), et donne `train_vit_28` (AdamW, warmup puis cosinus, clipping) et `accuracy_28`. La cellule de vérification contrôle les formes des paramètres, celle des logits, que la sortie dépende du premier **et** du dernier patch (le `[CLS]` voit toute l'image), que les positions servent (échanger deux patchs change la sortie) et un refus. La suivante entraîne ton ViT : 12 000 images et 3 epochs en mode rapide (moins d'une minute) ; 🚀 60 000 images et 12 epochs en mode complet (environ 6 min sur CPU) ; puis elle mesure l'accuracy sur les 10 000 images de test, comparée au seuil `TARGET_28`.
+La cellule suivante charge Fashion-MNIST (normalisé comme aux ch. 20 et 21), et donne `train_vit_28` (AdamW, warmup puis cosinus, clipping) et `accuracy_28`. La cellule de vérification contrôle les formes des paramètres, celle des logits, que la sortie dépende du premier **et** du dernier patch (le `[CLS]` voit toute l'image), que les positions servent (échanger deux patchs change la sortie), l'entrée du premier bloc (lue par un *hook* : le `[CLS]` en tête, puis les patchs dans l'ordre de lecture) et un refus. La suivante entraîne ton ViT : 12 000 images et 3 epochs en mode rapide (moins d'une minute) ; 🚀 60 000 images et 12 epochs en mode complet (environ 6 min sur CPU) ; puis elle mesure l'accuracy sur les 10 000 images de test, comparée au seuil `TARGET_28`.
 
 Dans tes notes : ton nombre de paramètres et ton accuracy, face au CNN du ch. 21 (le défi y demandait 92 % avec moins de 100 000 paramètres). Pourquoi un ViT manque-t-il de biais inductifs (§203.10), et qu'est-ce que cela change sur 12 000 images ? Que donnerait ton ViT si le masque causal restait dans les blocs ? Le `[CLS]` est-il indispensable, ou la moyenne des 16 tokens ferait-elle l'affaire ?""",
        given=GIVEN_28, todo=C.TODO_28, check=C.CHECK_28, solution=C.SOLUTION_28 + "\n\n\n" + C.CHECK_28,
