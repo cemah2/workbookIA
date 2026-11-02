@@ -222,6 +222,17 @@ def test_fallback_takes_earlier_modules_from_the_reference(tmp_path, capsys):
     wb.load_mylearn("ref")
 
 
+def test_fallback_line_is_printed_once_per_session(tmp_path, capsys):
+    import wb
+
+    root = _fake_repo(tmp_path)
+    for _ in range(3):                       # a notebook reloads the library before each exercise
+        module = wb.load_mylearn("learner", root=root, fallback="ref", chapter="3")
+        assert module.c.six_times(2) == 12
+    assert capsys.readouterr().out.count("la référence est utilisée") == 1
+    wb.load_mylearn("ref")
+
+
 def test_fallback_never_replaces_a_module_of_the_current_chapter(tmp_path):
     import wb
     from wb.errors import MylearnMissingError

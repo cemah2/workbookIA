@@ -220,3 +220,23 @@ def test_the_solution_and_the_learner_never_share_a_checkpoint(tmp_path):
     assert G.load_checkpoint(learner, tmp_path) is None, "expected the learner's key not to read the solution's model"
     assert G.delete_checkpoint(learner, tmp_path) is False
     assert G.delete_checkpoint(solution, tmp_path) is True and G.load_checkpoint(solution, tmp_path) is None
+
+
+def test_an_interrupted_save_keeps_the_previous_checkpoint_and_no_temporary_file(tmp_path, monkeypatch):
+    config = {"vocab_size": 88, "block_size": 16, "n_layer": 1, "n_head": 2, "d_model": 8, "dropout": 0.0}
+    torch.manual_seed(0)
+    model = G.ReferenceGPT(**config)
+    key = G.checkpoint_key(config, {"iters": 1}, fast=True, source="learner")
+    path = G.save_checkpoint(key, model, {"val_loss": [1.0]}, G.char_data().itos, tmp_path)
+    before = path.read_bytes()
+
+    def broken_save(obj, f, *args, **kwargs):
+        with open(f, "wb") as out:
+            out.write(b"half a checkpoint")
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(G.torch, "save", broken_save)
+    with pytest.raises(KeyboardInterrupt):
+        G.save_checkpoint(key, model, {"val_loss": [2.0]}, G.char_data().itos, tmp_path)
+    assert [p.name for p in tmp_path.iterdir()] == [path.name], "expected no temporary file left after the interruption"
+    assert path.read_bytes() == before and G.load_checkpoint(key, tmp_path)["history"] == {"val_loss": [1.0]}

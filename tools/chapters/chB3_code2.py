@@ -119,9 +119,10 @@ fast_21 = ...     # b) your training (graph 1): "A" the validation loss is still
 best_21 = ...     # c) full mode without dropout: the iteration of the lowest validation loss: 1000, 2500, 4000 or 5000
 early_21 = ...    # d) True or False: stopped at its best iteration, the run WITHOUT dropout would beat the run with
                   #    dropout at 5 000 iterations (a lower validation loss)
-above_21 = ...    # e) True or False: in the run WITH dropout, the training curve ends above the validation curve'''
+close_21 = ...    # e) True or False: in the run WITH dropout, the training and validation curves end less than
+                  #    0.1 nat apart'''
 
-CHECK_21 = r'''for letter, answer in zip("abcde", [vocab_21, fast_21, best_21, early_21, above_21]):
+CHECK_21 = r'''for letter, answer in zip("abcde", [vocab_21, fast_21, best_21, early_21, close_21]):
     wb.check(f"B3.21{letter}", answer)'''
 
 # --- 🔮 B3.22 ----------------------------------------------------------------------------------------------------------
@@ -887,7 +888,7 @@ with checked("B3.27"):
         verdict("B3.27", timing_ok_27,
                 f"attention_time_27 : le meilleur de plusieurs essais, en millisecondes ({fr(probe_27, 2)} ms à T = 64, "
                 "malgré trois premiers appels ralentis de 50 ms).",
-                f"attention_time_27 a rendu {probe_27:.3g} pour T = 64 en {len(calls_27)} appel(s), alors que les trois "
+                f"attention_time_27 a rendu {fr_gap(probe_27)} pour T = 64 en {len(calls_27)} appel(s), alors que les trois "
                 "premiers appels étaient ralentis de 50 ms (une attention de 64 tokens prend de l'ordre de 0,1 ms) : rends "
                 "le meilleur de `repeats` essais, après un premier appel non mesuré, en millisecondes.")'''
 
@@ -1126,7 +1127,7 @@ else:
         losses_28 = train_vit_28(model_28, X_TRAIN_28, Y_TRAIN_28, EPOCHS_28)
         seconds_28 = time.perf_counter() - t0_28
         acc_28 = accuracy_28(model_28, X_TEST_28, Y_TEST_28)
-        print(f"{EPOCHS_28} epochs en {seconds_28:.0f} s ; loss d'entraînement par epoch {[round(l, 3) for l in losses_28]} ; "
+        print(f"{EPOCHS_28} epochs en {seconds_28:.0f} s ; loss d'entraînement par epoch {' ; '.join(fr(l, 3) for l in losses_28)} ; "
               f"accuracy de test {fr(100 * acc_28, 1)} %.")
         verdict("B3.28", acc_28 >= TARGET_28, f"accuracy de test {fr(100 * acc_28, 1)} %, au-dessus de {fr(100 * TARGET_28, 0)} %.",
                 f"accuracy de test {fr(100 * acc_28, 1)} % : attendu au moins {fr(100 * TARGET_28, 0)} % ; relis les "
@@ -1134,7 +1135,7 @@ else:
 
 # --- 🛠️ B3.29 ----------------------------------------------------------------------------------------------------------
 GIVEN_29 = r'''# The models under test: your trained mini-GPT (its checkpoint, in the class ReferenceGPT of wb.gpt), or an untrained
-# mini-GPT when there is none (causality does not depend on training); and three copies whose attention sees the future
+# mini-GPT when there is none (causality does not depend on training); and four copies whose attention sees the future
 SUBJECT_29 = str(CKPT["path"]) if CKPT is not None else None
 _PREAMBLE_29 = """
 import torch
@@ -1172,6 +1173,8 @@ _RULES = {{
     "one_ahead": lambda T: torch.ones(T, T, dtype=torch.bool).tril(diagonal=1),
     "late_leak": lambda T: torch.ones(T, T, dtype=torch.bool).tril() | (torch.eye(T, dtype=torch.bool).roll(1, dims=1)
                                                                        & (torch.arange(T)[:, None] >= 100)),
+    "one_point": lambda T: torch.ones(T, T, dtype=torch.bool).tril() | ((torch.arange(T)[:, None] == T // 2 - 14)
+                                                                       & (torch.arange(T)[None, :] == T // 2 + 26)),
 }}
 MODEL = _subject() if {kind!r} == "good" else _with_mask(_subject(), _RULES[{kind!r}])
 VOCAB_SIZE, BLOCK_SIZE = MODEL.tok_emb.num_embeddings, MODEL.block_size
@@ -1226,7 +1229,8 @@ else:
             raise StopCheck
         for kind, label in (("transposed", "au masque causal transposé (triu au lieu de tril)"),
                             ("one_ahead", "dont le masque laisse voir le token suivant"),
-                            ("late_leak", "dont le masque laisse voir le token suivant à partir de la position 100 seulement")):
+                            ("late_leak", "dont le masque laisse voir le token suivant à partir de la position 100 seulement"),
+                            ("one_point", "dont une seule position, au milieu, voit un seul token plus loin")):
             bad_29 = wb.run_pytest([test_causality_29], preamble=preamble_29(kind), quiet=True)
             caught_29 = not bad_29.ok and bad_29.failed > 0
             verdict("B3.29", caught_29, f"ton test échoue sur un modèle {label} :",
@@ -1272,10 +1276,15 @@ def _make_evaluate_30(data):
 
         __getattr__ = __getitem__ = __call__ = __iter__ = __len__ = _refuse
 
+    ipython_names = re.compile(r"^(_+|_i+|_i?\d+|_[ido]h|In|Out|exit|quit|get_ipython)$")
+
     def hidden_globals(name):
+        """The global variables that could hold a measured text, a trained model or ids (of the validation, of the
+        held-out text): a text with a marker of the measured texts, the CharData, the checkpoints, the trained
+        modules, and every array or list of at least 1 000 integers (ids, BPE ids, windows)."""
         g, found = globals(), {}
         for n, v in list(g.items()):
-            if n.startswith("_") or n in ("In", "Out"):
+            if ipython_names.match(n):
                 continue
             if isinstance(v, str) and any(m in v for m in markers[name]):
                 found[n] = decoy_text
@@ -1283,18 +1292,36 @@ def _make_evaluate_30(data):
                 found[n] = Hidden(n)
             elif isinstance(v, dict) and "state_dict" in v:                    # a checkpoint (CKPT)
                 found[n] = Hidden(n)
-            elif isinstance(v, torch.Tensor) and v.ndim >= 1 and v.numel() >= 10_000 and not v.dtype.is_floating_point:
+            elif isinstance(v, nn.Module) and any(p.numel() >= 1000 for p in v.parameters()):
+                found[n] = Hidden(n)                                            # a model of the notebook (GPT…)
+            elif isinstance(v, torch.Tensor) and v.ndim >= 1 and v.numel() >= 1000 and not v.dtype.is_floating_point:
                 found[n] = v[:0]                                                # an array of ids
-            elif isinstance(v, np.ndarray) and v.ndim >= 1 and v.size >= 10_000 and np.issubdtype(v.dtype, np.integer):
+            elif isinstance(v, np.ndarray) and v.ndim >= 1 and v.size >= 1000 and np.issubdtype(v.dtype, np.integer):
                 found[n] = v[:0]
+            elif isinstance(v, (list, tuple)) and len(v) >= 1000 and all(isinstance(i, int) for i in v[:1000]):
+                found[n] = type(v)()                                            # a list of ids
         return found
 
     def count_values(model):
+        """Parameters, buffers and any other tensor that a module of the model keeps (a plain attribute, a list or
+        a dict of tensors), each tensor and each shared storage counted once."""
         seen, total = set(), 0
-        for t in list(model.parameters()) + list(model.buffers()):
-            if id(t) not in seen:
-                seen.add(id(t))
+
+        def add(t):
+            nonlocal total
+            key = (t.untyped_storage().data_ptr(), t.storage_offset(), tuple(t.shape)) if t.device.type != "meta" else id(t)
+            if id(t) not in seen and key not in seen:
+                seen.update((id(t), key))
                 total += t.numel()
+
+        for t in list(model.parameters()) + list(model.buffers()):
+            add(t)
+        for module in model.modules():
+            for value in vars(module).values():
+                items = value.values() if isinstance(value, dict) else value if isinstance(value, (list, tuple)) else [value]
+                for item in items:
+                    if isinstance(item, torch.Tensor):
+                        add(item)
         return total
 
     def run(method, name, seconds):
@@ -1309,11 +1336,14 @@ def _make_evaluate_30(data):
         pointers = {p.data_ptr() for m in before for p in m.parameters()}
         saved = {"load_text": wbtext.load_text, "load_holmes": wbtext.datasets.load_holmes, "char_data": wbgpt.char_data,
                  "checkpoints_dir": wbgpt.checkpoints_dir, "reference_model": wbgpt.reference_model,
+                 "load_checkpoint": wbgpt.load_checkpoint, "torch_load": torch.load,
+                 "serialization_load": torch.serialization.load,
                  "texts": dict(wbtext._TEXTS), "data": dict(wbgpt._DATA)}
         empty = Path(tempfile.mkdtemp(prefix="wb_b3_30_"))
 
         def refused(*args, **kwargs):
-            raise RuntimeError("pendant le défi, ta méthode ne reçoit que train_ids, vocab_size et seconds")
+            raise RuntimeError("pendant le défi, ta méthode ne reçoit que train_ids, vocab_size et seconds (ni texte, "
+                               "ni sauvegarde, ni modèle déjà entraîné)")
 
         originals = {n: g[n] for n in hidden}
         try:
@@ -1322,7 +1352,8 @@ def _make_evaluate_30(data):
             wbtext.datasets.load_holmes = lambda *args, **kwargs: learned_text
             wbtext._TEXTS.pop("holmes", None)
             wbgpt._DATA.clear()
-            wbgpt.char_data, wbgpt.reference_model = refused, refused
+            wbgpt.char_data, wbgpt.reference_model, wbgpt.load_checkpoint = refused, refused, refused
+            torch.load = torch.serialization.load = refused                     # no saved model or tensor
             wbgpt.checkpoints_dir = lambda: empty
             torch.manual_seed(3030)
             start = time.perf_counter()
@@ -1332,7 +1363,8 @@ def _make_evaluate_30(data):
             g.update(originals)
             wbtext.load_text, wbtext.datasets.load_holmes = saved["load_text"], saved["load_holmes"]
             wbgpt.char_data, wbgpt.reference_model = saved["char_data"], saved["reference_model"]
-            wbgpt.checkpoints_dir = saved["checkpoints_dir"]
+            wbgpt.load_checkpoint, wbgpt.checkpoints_dir = saved["load_checkpoint"], saved["checkpoints_dir"]
+            torch.load, torch.serialization.load = saved["torch_load"], saved["serialization_load"]
             wbtext._TEXTS.clear()
             wbtext._TEXTS.update(saved["texts"])
             wbgpt._DATA.clear()
@@ -1369,8 +1401,8 @@ def _make_evaluate_30(data):
         print(f"{values:_} valeurs apprises, contexte de {model.block_size} caractères ; entraînement en {fr(seconds, 1)} s ; "
               f"validation : {fr(loss, 4)} nats par caractère (perplexité {fr(math.exp(loss), 2)}).".replace("_", " "))
         verdict("B3.30", values <= MAX_VALUES_30, f"{values:_} valeurs apprises, au plus {MAX_VALUES_30:_}.".replace("_", " "),
-                f"{values:_} valeurs apprises (paramètres et buffers) : le défi en permet {MAX_VALUES_30:_}."
-                .replace("_", " "))
+                f"{values:_} valeurs apprises (paramètres, buffers et tenseurs gardés par le modèle) : le défi en permet "
+                f"{MAX_VALUES_30:_}.".replace("_", " "))
         verdict("B3.30", seconds <= LIMIT_30, f"entraînement en {fr(seconds, 1)} s, sous les {LIMIT_30:.0f} s.",
                 f"entraînement en {fr(seconds, 1)} s : le défi en permet {LIMIT_30:.0f} (ta méthode doit respecter seconds).")
         # the control: the same method, on the first 8/9 of the training text, with a quarter of the time
@@ -1404,6 +1436,7 @@ def _make_evaluate_30(data):
     return evaluate_30
 
 
+import re  # noqa: E402
 import tempfile  # noqa: E402
 from pathlib import Path  # noqa: E402
 

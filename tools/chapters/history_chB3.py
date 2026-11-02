@@ -9,7 +9,8 @@ Writes tools/chapters/history_chB3.json (statistics only, no weights), which chB
 - "p13": 🔮 B3.13, the median weight of the copied key over 200 queries for 10 to 100 000 keys, with and without the
   division by sqrt(d_k), for the seed of the notebook and 10 other seeds; both answers must be the same for every seed;
 - "bug17": 🐛 B3.17 replayed on its 2**3 partially fixed versions: the first point that fails must be the first error
-  left (nothing must crash); the clipping of the probe of B3.20 must act (and change the weights);
+  left (nothing must crash), and on two versions where two errors cancel out (the mask of nn.MultiheadAttention passed
+  as is: point 4); the clipping of the probe of B3.20 must act (and change the weights);
 - "gpt_fast": the mini-GPT of the solution (B3.19 and B3.20) trained in fast mode with three seeds: loss on the whole
   validation (wb.gpt.char_loss), time, history of the main seed; the threshold TARGET_20 of fast mode;
 - "gpt_full": the same in full mode (5 000 iterations, dropout 0.2, one seed, ≈ 35 min): the 🚀 row of the comparison, the
@@ -129,11 +130,32 @@ def bug17(ns) -> dict:
         text = out.getvalue()
         fails = [line for line in text.splitlines() if line.startswith("❌")]
         first = int(fails[0].split("point ")[1].split(" ")[0]) if fails else None
-        want = next((k for k in (1, 2, 3) if k not in fixed), None)
+        want = next((k for k in (1, 2, 3) if k not in fixed), None)          # point 4 passes once 1 to 3 are fixed
         rows.append({"fixed": "".join(map(str, fixed)), "first_failure": first, "expected": want,
                      "seconds": round(time.perf_counter() - start, 2), "lines": text.strip().splitlines()})
         print(f"  bug17 fixed {rows[-1]['fixed'] or '-':<4} first failing point {first} (expected {want}) "
               f"in {rows[-1]['seconds']} s", flush=True)
+        for line in text.strip().splitlines():
+            print("     ", line[:200])
+        if first != want or "Traceback" in text:
+            raise SystemExit(f"❌ bug17: version {fixed} shows {fails}")
+    # two errors that cancel out: the mask of nn.MultiheadAttention (triu(1)) passed without "~", with and without
+    # the fix of the loss; the model computes the right function, only point 4 (the docstring of the mask) sees it
+    for fixed, want in (("2b", 3), ("2b3", 4)):
+        src = C.TODO_17.replace(EDITS_17[2][0], "return torch.ones(T, T, dtype=torch.bool).triu(1)")
+        if "3" in fixed:
+            src = src.replace(EDITS_17[3][0], EDITS_17[3][1])
+        local = dict(ns)
+        exec(src, local)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            exec(C.CHECK_17, local)
+        text = out.getvalue()
+        fails = [line for line in text.splitlines() if line.startswith("❌")]
+        first = int(fails[0].split("point ")[1].split(" ")[0]) if fails else None
+        rows.append({"fixed": fixed, "first_failure": first, "expected": want, "seconds": None,
+                     "lines": text.strip().splitlines()})
+        print(f"  bug17 compensated {fixed:<4} first failing point {first} (expected {want})", flush=True)
         for line in text.strip().splitlines():
             print("     ", line[:200])
         if first != want or "Traceback" in text:

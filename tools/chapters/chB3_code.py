@@ -9,6 +9,7 @@ TOOLS_A = r'''# Tools for the notebook exercises of part A (your NumPy library a
 import copy
 import math
 import time
+import warnings
 from types import MappingProxyType
 
 import matplotlib.pyplot as plt
@@ -19,8 +20,14 @@ from torch import nn
 from wb import gpt as wbgpt
 from wb.nbtools import StopCheck, checked, filled, fr, pair, refuses, returned, run_pytest_group, same, verdict, written
 
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")    # tqdm without ipywidgets (transformers, B3.15)
 TEST_ATT = "tests/test_chb3_attention.py"      # the tests of your library attention.py
 DATA = wbgpt.char_data("holmes")              # Holmes in character ids: the frozen split of wb.text.train_val
+
+
+def fr_gap(x):
+    """A gap written the French way: 2 decimals from 0.01 on (0,15), scientific notation below (1,8e-07)."""
+    return fr(x, 2) if abs(x) >= 0.01 else f"{x:.1e}".replace(".", ",")
 
 
 def causal_np(L, S=None):
@@ -347,9 +354,9 @@ def batch_17(lines, generator, batch_size=32):
     return x, y
 
 
-def diagnose_17(model_class, loss_fn, iters=200):
-    """Three diagnoses of the small language model, in a row: the first one that fails stops the chain (one error can
-    hide another). Returns the trained model when the three pass, else None."""
+def diagnose_17(model_class, loss_fn, mask_fn, iters=200):
+    """Four diagnoses of the small language model, in a row: the first one that fails stops the chain (one error can
+    hide another). Returns the trained model when the four pass, else None."""
     torch.manual_seed(17)
     model = model_class(VOCAB_17)
     gen = torch.Generator().manual_seed(17)
@@ -385,7 +392,7 @@ def diagnose_17(model_class, loss_fn, iters=200):
             return True, (f"changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après "
                           f"{iters} itérations, la loss de validation vaut {fr(val, 2)} nats par caractère"), ""
         return False, (f"changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal "
-                       f"{gap:.2g}) ; après {iters} itérations, la loss de validation tombe à {fr(val, 2)} nat par "
+                       f"{fr_gap(gap)}) ; après {iters} itérations, la loss de validation tombe à {fr(val, 2)} nat par "
                        "caractère"), "pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?"
 
     def point3():
@@ -408,8 +415,19 @@ def diagnose_17(model_class, loss_fn, iters=200):
                        f"{fr(long_loss, 4)} une fois complété par {extra} positions de padding"), \
             "quelles positions entrent dans la moyenne ?"
 
+    def point4():
+        # two errors can cancel out: a mask in the convention of nn.MultiheadAttention, passed without conversion
+        mask = mask_fn(4)
+        want = torch.ones(4, 4, dtype=torch.bool).tril()
+        if isinstance(mask, torch.Tensor) and mask.dtype == torch.bool and torch.equal(mask, want):
+            return True, "causal_mask_17(4) est le masque causal de sa docstring", ""
+        shown = mask.int().tolist() if isinstance(mask, torch.Tensor) else repr(mask)
+        return False, (f"le modèle calcule juste, mais causal_mask_17(4) rend {shown}, qui ne suit pas sa docstring "
+                       "(convention de F.scaled_dot_product_attention : True là où la requête i peut regarder la "
+                       "clé j)"), "deux erreurs se compensent-elles ? Où le masque change-t-il de convention ?"
+
     points = [("la loss est un nombre", point1), ("le modèle ne voit pas le futur", point2),
-              ("le padding ne compte pas", point3)]
+              ("le padding ne compte pas", point3), ("le masque suit sa docstring", point4)]
     for k, (name, run) in enumerate(points, start=1):
         ok, measured, why = run()
         if ok:
@@ -419,7 +437,7 @@ def diagnose_17(model_class, loss_fn, iters=200):
             for later in range(k + 1, len(points) + 1):
                 print(f"⏳ Ex B3.17 : point {later} : corrige d'abord le point {k}.")
             return None
-    print("✅ Ex B3.17 : les trois diagnostics passent.")
+    print("✅ Ex B3.17 : les quatre diagnostics passent.")
     return model'''
 
 TODO_17 = r'''# The small language model to repair IN PLACE (same names, same signatures, same returns): the diagnostics of the
@@ -485,10 +503,10 @@ def lm_loss_17(logits, targets):
                            ignore_index=PAD_17)                                # 3. the padding is left out of the mean'''
 
 CHECK_17 = r'''with checked("B3.17"):
-    model_17 = diagnose_17(TinyLM_17, lm_loss_17)'''
+    model_17 = diagnose_17(TinyLM_17, lm_loss_17, causal_mask_17)'''
 
 EXPERIMENT_17 = r'''if globals().get("model_17") is None:
-    print("⏳ Ex B3.17 : la carte attend que les trois points de la cellule précédente passent.")
+    print("⏳ Ex B3.17 : la carte attend que les quatre points de la cellule précédente passent.")
 else:
     with checked("B3.17"):
         line_17 = "I had seen little of Holmes lately."                  # a line of the first story
@@ -608,8 +626,8 @@ with checked("B3.18"):
         torch_18, _ = mha_18(x_18, x_18, x_18, attn_mask=torch.from_numpy(~causal_np(10)), need_weights=False)
     gap_torch_18 = (y_18 - torch_18).abs().max().item()
     verdict("B3.18", gap_torch_18 < 1e-5,
-            f"ton module donne la sortie de nn.MultiheadAttention aux mêmes poids (écart maximal {gap_torch_18:.1e}).",
-            f"ton module s'écarte de {gap_torch_18:.2g} de nn.MultiheadAttention aux mêmes poids (masque causal) : vérifie "
+            f"ton module donne la sortie de nn.MultiheadAttention aux mêmes poids (écart maximal {fr_gap(gap_torch_18)}).",
+            f"ton module s'écarte de {fr_gap(gap_torch_18)} de nn.MultiheadAttention aux mêmes poids (masque causal) : vérifie "
             "l'ordre q, k, v dans qkv, le découpage en têtes (view puis transpose), le masque causal et le recollage des têtes.")
     # your NumPy version (Ex B3.14) with the same weights, in float64
     x64_18 = x_18.double().numpy()
@@ -628,7 +646,7 @@ with checked("B3.18"):
         out_np_18 = None
     if out_np_18 is not None:
         gap_18 = float(np.abs(y_18.double().numpy() - out_np_18).max())
-        print(f"écart maximal entre ton module PyTorch (float32) et ta multi_head_attention NumPy (float64) : {gap_18:.1e}")
+        print(f"écart maximal entre ton module PyTorch (float32) et ta multi_head_attention NumPy (float64) : {fr_gap(gap_18)}")
         if gap_18 >= 1e-5 and gap_torch_18 < 1e-5:
             print("❌ Ex B3.18 : ton module est d'accord avec nn.MultiheadAttention : c'est ta multi_head_attention (B3.14) "
                   "qui s'en écarte ; relance ses tests.")
@@ -639,7 +657,7 @@ with checked("B3.18"):
     with torch.no_grad():
         past_18 = (attn_18(x2_18)[:, :6] - y_18[:, :6]).abs().max().item()
     verdict("B3.18", past_18 == 0, "changer le token 6 ne change aucune sortie des tokens 0 à 5 : le module est causal.",
-            f"changer le token 6 change les sorties des tokens 0 à 5 (écart {past_18:.2g}) : le module voit le futur.")
+            f"changer le token 6 change les sorties des tokens 0 à 5 (écart {fr_gap(past_18)}) : le module voit le futur.")
     drop_18 = CausalSelfAttention_18(32, 4, dropout=0.5)
     drop_18.load_state_dict(attn_18.state_dict())
     with torch.no_grad():
@@ -786,6 +804,22 @@ with checked("B3.19"):
                 "à l'initialisation, la loss est celle d'une prédiction presque uniforme (le contrôle de départ, §203.8).",
                 f"à l'initialisation, la loss d'un batch vaut {fr(loss0_19, 2)} : loin d'une prédiction presque uniforme ; "
                 "relis le contrôle de départ (§203.8) et l'initialisation du contrat.")
+        # the whole function: a copy of your model and the reference model of wb.gpt with the same weights, moved away
+        # from the initialisation (where a model is almost linear): a layer forgotten or added, another activation
+        ref_19 = wbgpt.ReferenceGPT(**MINI_CONFIG).eval()
+        ref_19.load_state_dict(gpt_19.state_dict())
+        noise_19 = torch.Generator().manual_seed(191)
+        for p_19 in ref_19.parameters():
+            p_19.add_(0.1 * torch.randn(p_19.shape, generator=noise_19))
+        probe_19 = copy.deepcopy(gpt_19).eval()
+        probe_19.load_state_dict(ref_19.state_dict())
+        same_19 = (probe_19(x_19) - ref_19(x_19)).abs().max().item()
+        verdict("B3.19", same_19 < 1e-4,
+                f"aux mêmes poids, éloignés de l'initialisation, ton modèle calcule la fonction du contrat (écart maximal "
+                f"des logits {fr_gap(same_19)}).",
+                f"aux mêmes poids, éloignés de l'initialisation, tes logits s'écartent de {fr_gap(same_19)} de ceux du modèle "
+                "du contrat : relis forward et les modules du contrat (l'ordre des sous-couches, chaque layer norm, "
+                "l'activation du MLP).")
         repeated_19 = gpt_19(torch.zeros(1, 16, dtype=torch.long))[0]
         positions_19 = (repeated_19[1:] - repeated_19[:1]).abs().max().item() > 1e-6
         verdict("B3.19", positions_19,
@@ -797,11 +831,11 @@ with checked("B3.19"):
         changed_19[:, 100] = (changed_19[:, 100] + 1) % 88
         future_19 = (gpt_19(changed_19)[:, :100] - logits_19[:, :100]).abs().max().item()
     verdict("B3.19", future_19 == 0, "changer le caractère 100 ne change aucun logit des positions 0 à 99 : le modèle est causal.",
-            f"changer le caractère 100 change les logits des positions 0 à 99 (écart {future_19:.2g}) : le modèle voit le futur.")
+            f"changer le caractère 100 change les logits des positions 0 à 99 (écart {fr_gap(future_19)}) : le modèle voit le futur.")
     refuses("B3.19", "129 caractères pour un contexte de 128", lambda: gpt_19(torch.zeros(1, 129, dtype=torch.long)))
     model_ok_19 = all([tied_19, n_params(gpt_19) == wbgpt.count_params(MINI_CONFIG), pre_ln_19, positions_19,
                        kinds_19 == {"Block_19", "CausalSelfAttention_18"}, abs(loss0_19 - math.log(88)) < 0.1,
-                       future_19 == 0])'''
+                       same_19 < 1e-4, future_19 == 0])'''
 
 # --- 📦 B3.20 ----------------------------------------------------------------------------------------------------------
 GIVEN_20 = r'''CONFIG_20 = wbgpt.mini_config(FAST_MODE)             # the model of B3.19; dropout 0.2 in full mode
@@ -959,10 +993,21 @@ with checked("B3.20"):
         noclip_20 = copy.deepcopy(small_20)
         wbgpt.train(noclip_20, DATA.train_ids, DATA.val_ids, probe_20 | {"clip": 1e9}, torch.Generator().manual_seed(7), block_size=16)
         unclipped_20 = all(torch.allclose(a, b, rtol=1e-4, atol=1e-7) for a, b in zip(mine_20.parameters(), noclip_20.parameters()))
-        print("❌ Ex B3.20 : après 6 itérations, tes poids ne sont pas ceux de la recette du contrat : "
-              + ("ils sont ceux d'un entraînement sans clipping (la norme des gradients dépasse ici 0,05 à chaque itération)."
-                 if unclipped_20 else "vérifie l'ordre de chaque itération (learning rate, get_batch, loss, gradients, "
-                 "clipping, pas de l'optimiseur) et que l'évaluation tire ses batches avec un générateur à part."))
+        if unclipped_20:
+            why_20 = ("ils sont ceux d'un entraînement sans clipping (la norme des gradients dépasse ici 0,05 à chaque "
+                      "itération).")
+        elif not math.isclose(hist_20["val_loss"][0], want_hist_20["val_loss"][0], rel_tol=1e-5):
+            why_20 = (f"déjà la première évaluation, avant tout pas et aux mêmes poids, vaut {fr(hist_20['val_loss'][0], 5)} "
+                      f"au lieu de {fr(want_hist_20['val_loss'][0], 5)} : vérifie les batches de l'évaluation (relis le "
+                      "contrat : quel générateur, et quand est-il créé ?).")
+        elif not math.isclose(hist_20["train_loss"][0], want_hist_20["train_loss"][0], rel_tol=1e-5):
+            why_20 = (f"la loss de la 1ʳᵉ itération, aux mêmes poids et sur le même batch, vaut "
+                      f"{fr(hist_20['train_loss'][0], 5)} au lieu de {fr(want_hist_20['train_loss'][0], 5)} : vérifie le batch "
+                      "et la loss (quelles cibles pour quelles entrées ? fiche §203.8).")
+        else:
+            why_20 = ("vérifie l'ordre de chaque itération (learning rate, get_batch, loss, gradients, clipping, pas de "
+                      "l'optimiseur) et que l'évaluation tire ses batches avec un générateur à part.")
+        print("❌ Ex B3.20 : après 6 itérations, tes poids ne sont pas ceux de la recette du contrat : " + why_20)
     probes_ok_20 = all([groups_ok_20, est_ok_20, mode_ok_20, hist_ok_20, lr_ok_20, same_20])'''
 
 EXPERIMENT_20 = r'''model_20 = history_20 = val_char_20 = None

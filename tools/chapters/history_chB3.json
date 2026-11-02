@@ -9,7 +9,8 @@
     "lines": [
      "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 0 de chaque séquence ; que voit cette position dans la couche d'attention ?",
      "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 1."
     ]
    },
    {
@@ -20,7 +21,8 @@
     "lines": [
      "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 0 de chaque séquence ; que voit cette position dans la couche d'attention ?",
      "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 1."
     ]
    },
    {
@@ -31,7 +33,8 @@
     "lines": [
      "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 62 de chaque séquence ; que voit cette position dans la couche d'attention ?",
      "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 1."
     ]
    },
    {
@@ -42,52 +45,81 @@
     "lines": [
      "❌ Ex B3.17 : point 1 : la loss d'un batch vaut nan ; les logits sont nan à la position 62 de chaque séquence ; que voit cette position dans la couche d'attention ?",
      "⏳ Ex B3.17 : point 2 : corrige d'abord le point 1.",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1."
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 1.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 1."
     ]
    },
    {
     "fixed": "1",
     "first_failure": 2,
     "expected": 2,
-    "seconds": 2.4,
+    "seconds": 19.38,
     "lines": [
      "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,626).",
-     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0.15) ; après 200 itérations, la loss de validation tombe à 1,42 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2."
+     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0,15) ; après 200 itérations, la loss de validation tombe à 1,42 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 2."
     ]
    },
    {
     "fixed": "13",
     "first_failure": 2,
     "expected": 2,
-    "seconds": 1.72,
+    "seconds": 1.79,
     "lines": [
      "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,593).",
-     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0.15) ; après 200 itérations, la loss de validation tombe à 0,86 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
-     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2."
+     "❌ Ex B3.17 : point 2 : changer le caractère 40 d'une fenêtre change les logits des positions 0 à 39 (écart maximal 0,15) ; après 200 itérations, la loss de validation tombe à 0,86 nat par caractère ; pour un modèle d'une seule couche, est-ce crédible ? D'où vient l'information ?",
+     "⏳ Ex B3.17 : point 3 : corrige d'abord le point 2.",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 2."
     ]
    },
    {
     "fixed": "12",
     "first_failure": 3,
     "expected": 3,
-    "seconds": 1.6,
+    "seconds": 1.69,
     "lines": [
      "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,661).",
      "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
-     "❌ Ex B3.17 : point 3 : la loss d'un même batch de 16 lignes vaut 2,2988 sur 39 positions et 1,4963 une fois complété par 21 positions de padding ; quelles positions entrent dans la moyenne ?"
+     "❌ Ex B3.17 : point 3 : la loss d'un même batch de 16 lignes vaut 2,2988 sur 39 positions et 1,4963 une fois complété par 21 positions de padding ; quelles positions entrent dans la moyenne ?",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 3."
     ]
    },
    {
     "fixed": "123",
     "first_failure": null,
     "expected": null,
-    "seconds": 1.42,
+    "seconds": 1.82,
     "lines": [
      "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,581).",
      "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
      "✅ Ex B3.17 : point 3, le padding ne compte pas (la loss d'un même batch ne dépend pas de son padding (2,8388 sur 39 positions comme sur 60)).",
-     "✅ Ex B3.17 : les trois diagnostics passent."
+     "✅ Ex B3.17 : point 4, le masque suit sa docstring (causal_mask_17(4) est le masque causal de sa docstring).",
+     "✅ Ex B3.17 : les quatre diagnostics passent."
+    ]
+   },
+   {
+    "fixed": "2b",
+    "first_failure": 3,
+    "expected": 3,
+    "seconds": null,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,661).",
+     "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
+     "❌ Ex B3.17 : point 3 : la loss d'un même batch de 16 lignes vaut 2,2988 sur 39 positions et 1,4963 une fois complété par 21 positions de padding ; quelles positions entrent dans la moyenne ?",
+     "⏳ Ex B3.17 : point 4 : corrige d'abord le point 3."
+    ]
+   },
+   {
+    "fixed": "2b3",
+    "first_failure": 4,
+    "expected": 4,
+    "seconds": null,
+    "lines": [
+     "✅ Ex B3.17 : point 1, la loss est un nombre (la loss d'un batch à l'initialisation est un nombre, 4,581).",
+     "✅ Ex B3.17 : point 2, le modèle ne voit pas le futur (changer le caractère 40 d'une fenêtre ne change aucun logit des positions 0 à 39 ; après 200 itérations, la loss de validation vaut 2,76 nats par caractère).",
+     "✅ Ex B3.17 : point 3, le padding ne compte pas (la loss d'un même batch ne dépend pas de son padding (2,8388 sur 39 positions comme sur 60)).",
+     "❌ Ex B3.17 : point 4 : le modèle calcule juste, mais causal_mask_17(4) rend [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 0, 0, 0]], qui ne suit pas sa docstring (convention de F.scaled_dot_product_attention : True là où la requête i peut regarder la clé j) ; deux erreurs se compensent-elles ? Où le masque change-t-il de convention ?"
     ]
    }
   ],

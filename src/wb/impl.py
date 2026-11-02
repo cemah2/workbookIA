@@ -141,6 +141,11 @@ def modules_before(chapter: str | None, root: str | Path | None = None) -> set[s
     return allowed
 
 
+# The fallback modules already announced in this session, (learner folder, module name): a notebook reloads the
+# library before each exercise, and the ℹ️ line says once that the reference replaces a missing module.
+_ANNOUNCED: set[tuple[str, str]] = set()
+
+
 class _FallbackFinder(importlib.abc.MetaPathFinder):
     """Import ``alias.x`` from ``fallback`` when the learner's package has no module ``x``."""
 
@@ -170,7 +175,8 @@ class _FallbackFinder(importlib.abc.MetaPathFinder):
         if self.allowed is not None and rel_file not in self.allowed:
             return None  # a module of this chapter or a later one: never replaced
         self.used.append(fullname)
-        if self.notify and locations is None:
+        if self.notify and locations is None and (str(self.primary), fullname) not in _ANNOUNCED:
+            _ANNOUNCED.add((str(self.primary), fullname))
             owner = self.owners.get(rel_file)
             where = f" (ch. {owner})" if owner else ""
             print(f"ℹ️ {fullname} : tu n'as pas ce module{where}, "
@@ -212,7 +218,8 @@ def load_mylearn(
     prints "⏳ pas encore fait" inside ``wb.attempt`` (exercise notebooks).
     ``fallback="ref"`` (learner only): modules missing from the learner's package
     come from the reference; with ``chapter`` given, only the modules of earlier
-    chapters (see ``modules_before``). ``notify`` prints a line for each of them.
+    chapters (see ``modules_before``). ``notify`` prints a line for each of them, once
+    per session (a notebook reloads the library before each exercise).
     """
     impl = impl or os.environ.get("WB_IMPL", "learner")
     pkg_dir = Path(path) if path else mylearn_path(impl, root)

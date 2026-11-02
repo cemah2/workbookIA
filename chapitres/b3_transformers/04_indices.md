@@ -625,7 +625,7 @@ Relis ∂ B3.6 : la variance du produit scalaire de deux vecteurs aléatoires in
 </details>
 <details><summary>Indice 2</summary>
 
-Avec la division, le score de la clé copiée est $\lVert\mathbf{q}\rVert^2 / \sqrt{d_k}$, avec $\mathbb{E}\lVert\mathbf{q}\rVert^2 = d_k$ ; les scores des autres clés sont centrés, de variance 1 (∂ B3.6). Pour un score gaussien $Z$ de variance $\sigma^2$, $\mathbb{E}[e^{Z}] = e^{\sigma^2 / 2}$ (la moyenne d'une loi log-normale) : la somme des $S - 1$ autres exponentielles vaut environ $(S - 1)\,\mathbb{E}[e^{Z}]$. La clé copiée garde plus de la moitié du poids tant que son exponentielle dépasse cette somme. Sans la division, refais le raisonnement avec des scores $\sqrt{d_k}$ fois plus grands : le score copié et l'écart-type des autres changent tous les deux.
+Avec la division, le score de la clé copiée est $\lVert\mathbf{q}\rVert^2 / \sqrt{d_k}$, avec $\mathbb{E}\lVert\mathbf{q}\rVert^2 = d_k$ ; les scores des autres clés sont centrés, de variance 1 (∂ B3.6). Pour un score gaussien $Z$ de variance $\sigma^2$, $\mathbb{E}[e^{Z}] = e^{\sigma^2 / 2}$ (la moyenne d'une loi log-normale) : la somme des $S - 1$ autres exponentielles vaut environ $(S - 1)\,\mathbb{E}[e^{Z}]$. La clé copiée garde plus de la moitié du poids tant que son exponentielle dépasse cette somme. Sans la division, refais le raisonnement avec des scores $\sqrt{d_k}$ fois plus grands : le score copié et l'écart-type des autres changent tous les deux. Avec un écart-type de 8, $(S - 1)\,\mathbb{E}[e^{Z}]$ surestime beaucoup la somme typique de $S \le 10^5$ tirages (le plus grand terme domine, et il reste loin de la moyenne) ; mais une surestimation suffit ici : si même elle reste sous l'exponentielle du score copié, la vraie somme aussi.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -699,7 +699,7 @@ Relis « Pré-LN ou post-LN » et « Le bloc en équations, et sa vérification 
 </details>
 <details><summary>Indice 2</summary>
 
-Vérifie d'abord les seize paramètres (une `ValueError` pour un manquant) et lis $F$ dans `W_1.shape[1]`. Puis, dans l'ordre : `a = layer_norm(x, ln1_gamma, ln1_beta, eps=eps)` ; `h = x + multi_head_attention(a, a, a, params, n_heads, mask)[0]` ; `m = layer_norm(h, ln2_gamma, ln2_beta, eps=eps)` ; la sortie `h + gelu(m @ W_1 + b_1) @ W_2 + b_2`. Si tu recodes la layer norm : sur le dernier axe, variance biaisée (`np.var`, comme `nn.LayerNorm`), `eps` sous la racine ; la GELU exacte : $\tfrac{z}{2}\big(1 + \operatorname{erf}(z / \sqrt{2})\big)$, par exemple avec `np.vectorize(math.erf)`.
+Vérifie d'abord les seize paramètres (une `ValueError` pour un manquant) et lis $F$ dans `W_1.shape[1]`. Puis deux sous-couches, dans l'ordre : la layer norm de chaque sous-couche s'applique à **son entrée** (`x` pour l'attention, le résultat `h` de la première pour le MLP), et sa sortie s'**ajoute** à cette entrée ; `eps` va aux deux layer norms, et `mask` à l'attention. Si tu recodes la layer norm : sur le dernier axe, variance biaisée (`np.var`, comme `nn.LayerNorm`), `eps` sous la racine ; la GELU exacte : $\tfrac{z}{2}\big(1 + \operatorname{erf}(z / \sqrt{2})\big)$, par exemple avec `np.vectorize(math.erf)`.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1053,7 +1053,7 @@ Une méthode simple : le mini-GPT de B3.20, entraîné aussi longtemps que le bu
 ```python
 def method_30(train_ids, vocab_size, seconds):
     start = time.perf_counter()
-    model = MiniGPT_19(vocab_size)                        # 820 992 parameters
+    model = MiniGPT_19(vocab_size)                        # the mini-GPT of B3.19: under 1 M parameters
     optimizer = configure_optimizer_20(model, 5e-3, 0.1, (0.9, 0.99))
     budget, it = 0.92 * seconds, 0
     while (elapsed := time.perf_counter() - start) < budget:

@@ -18,8 +18,12 @@ Quick reference
 The configuration of the contract (``MINI_CONFIG``: 4 blocks, 4 heads, d = 128, context 128, characters of Holmes) and
 the training settings (``train_settings``: 600 iterations of 32 sequences in fast mode, 5 000 in full mode) are those
 of Ex B3.19 and B3.20. ``ReferenceGPT``, ``configure_optimizer``, ``estimate_loss`` and ``train`` are the reference
-solution of these two exercises (nanoGPT structure, A. Karpathy, MIT licence): the notebook only calls them when
-your own model is missing, and you read them, if you wish, once your own version works.
+solution of these two exercises: the notebook only calls them when your own model is missing, and you read them, if
+you wish, once your own version works.
+
+Credit: the structure of the model and of its training (module layout, nanoGPT initialisation, tied weights, AdamW
+groups, warmup + cosine, clipping) follows nanoGPT, https://github.com/karpathy/nanoGPT (commit 3adf61e), Copyright
+(c) 2022 Andrej Karpathy, MIT License; the code here is written again, with the names of the workbook.
 """
 
 from __future__ import annotations

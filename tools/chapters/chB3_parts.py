@@ -206,12 +206,13 @@ Ce qu'il devrait faire :
 - `TinyLM_17` : des ids `(N, T)` → des logits `(N, T, V)`, chaque position ne voyant que les caractères jusqu'à elle ; `self.weights` garde les poids d'attention (la moyenne des deux têtes) ;
 - `lm_loss_17(logits, targets)` : la cross-entropy moyenne sur les **vrais** caractères du batch ; les cibles valent `PAD_17` sur le padding.
 
-La cellule donnée prépare les données : `LINES_17` (des lignes de l'entraînement de Holmes, de 24 à 64 caractères), `batch_17` (un batch de lignes, entrées et cibles décalées d'un caractère, complétées par `PAD_17`), `VAL_17` (64 fenêtres de 64 caractères de la validation, sans padding). Elle définit aussi `diagnose_17`. La cellule de vérification lance `diagnose_17`, trois diagnostics enchaînés, chacun ne s'exécutant que si le précédent passe, car une erreur peut en cacher une autre :
+La cellule donnée prépare les données : `LINES_17` (des lignes de l'entraînement de Holmes, de 24 à 64 caractères), `batch_17` (un batch de lignes, entrées et cibles décalées d'un caractère, complétées par `PAD_17`), `VAL_17` (64 fenêtres de 64 caractères de la validation, sans padding). Elle définit aussi `diagnose_17`. La cellule de vérification lance `diagnose_17`, quatre diagnostics enchaînés, chacun ne s'exécutant que si le précédent passe, car une erreur peut en cacher une autre :
 - la loss d'un batch est-elle un nombre ?
 - le modèle voit-il le futur ? (un caractère changé, puis 200 itérations d'entraînement, quelques secondes)
 - la loss d'un batch dépend-elle de son padding ?
+- `causal_mask_17` suit-il sa docstring ?
 
-Elle tourne dès le premier « Tout exécuter » : ses messages sont ton point de départ. Une fois les trois points passés, la cellule suivante trace les poids d'attention de ta version réparée sur une ligne de Holmes.
+Elle tourne dès le premier « Tout exécuter » : ses messages sont ton point de départ. Une fois les quatre points passés, la cellule suivante trace les poids d'attention de ta version réparée sur une ligne de Holmes.
 
 Dans tes notes : les trois erreurs, et pour chacune le symptôme qu'elle produirait seule. Pourquoi les `nan` n'apparaissent-ils qu'à une seule position, et laquelle, selon que l'autre erreur de masque est encore là ou non ? Laquelle des trois erreurs fait baisser la loss d'entraînement sans que le modèle prédise mieux le texte ?""",
        given=C.GIVEN_17, todo=C.TODO_17, check=C.CHECK_17, solution=C.SOLUTION_17 + "\n\n\n" + C.CHECK_17,
@@ -281,7 +282,7 @@ Dans tes notes : quel écart maximal mesures-tu entre tes deux versions, et d'o�
   - le `state_dict` a les noms et les formes de `wbgpt.expected_state_shapes()` (affiche-le pour comparer).
 - Ni `nn.Transformer…` ni `nn.MultiheadAttention`.
 
-La cellule de vérification construit ton modèle avec la configuration du contrat (`MINI_CONFIG`) et contrôle : les noms et les formes de son `state_dict`, les poids liés, son nombre de paramètres (celui que tu as calculé en ✏️ B3.5 j ; la cellule ne le redonne pas), la présence de tes `Block_19` et `CausalSelfAttention_18`, le bloc pré-LN, l'initialisation, la forme des logits, l'usage des positions, la loss à l'initialisation (le contrôle de départ de la fiche), la causalité et le refus d'une séquence trop longue.
+La cellule de vérification construit ton modèle avec la configuration du contrat (`MINI_CONFIG`) et contrôle : les noms et les formes de son `state_dict`, les poids liés, son nombre de paramètres (celui que tu as calculé en ✏️ B3.5 j ; la cellule ne le redonne pas), la présence de tes `Block_19` et `CausalSelfAttention_18`, le bloc pré-LN, l'initialisation, la forme des logits, la loss à l'initialisation (le contrôle de départ de la fiche), toute la fonction (une copie de ton modèle et le modèle du contrat de `wb.gpt`, aux mêmes poids éloignés de l'initialisation, doivent rendre les mêmes logits), l'usage des positions, la causalité et le refus d'une séquence trop longue.
 
 Dans tes notes : mesure la loss de départ d'un modèle dont les tables gardent l'initialisation par défaut de PyTorch, $\mathcal{N}(0;\ 1)$ pour `nn.Embedding` : que se passe-t-il, et pourquoi la tête liée l'aggrave-t-elle ? Pourquoi réduire l'initialisation des deux projections résiduelles quand le nombre de blocs grandit ?""",
        todo=C.TODO_19, check=C.CHECK_19, solution=C.SOLUTION_19 + "\n\n\n" + C.CHECK_19),
