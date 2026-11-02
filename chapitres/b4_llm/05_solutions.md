@@ -235,4 +235,331 @@ Le modèle écrit juste après le dernier retour à la ligne. Avec un tokenizer 
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B4.12 à B4.30) seront ajoutées à la prochaine session de génération, avec le notebook.
+Les solutions complètes, exécutées, sont dans `05_solutions.ipynb`. Les chiffres ci-dessous viennent de ce notebook (mode rapide, CPU à deux cœurs) et de `tools/chapters/history_chB4.py` (calibrage du 🔮 B4.13 sur 25 séries de 10 graines et quatre prompts, du 🔮 B4.19 sur 20 perturbations des embeddings, e5 sur Holmes, protocole complet du 🔬 B4.16 avec Qwen2.5, RAG sur les 30 questions). Les modèles sont à des révisions figées et les décodages gloutons sont déterministes : tes réponses sont les mêmes sur la même machine ; sur une autre (Colab), un arrondi différent peut changer un token, puis toute la suite d'une génération, et les tirages aléatoires changent : les chiffres des générations sont alors voisins, pas identiques. Les durées dépendent de la machine et sont données en fourchette. Les solutions de B4.22 à B4.30 seront ajoutées à la prochaine session de génération.
+
+### Ex B4.12 — Premier contact : AutoTokenizer, AutoModelForCausalLM, generate() et pipeline sur un petit modèle 📦
+**Réponse** : a) **22** tokens ; b) **211** modules `nn.Linear` ; c) **3 540 096** paramètres dans le premier bloc. Mesure du notebook de solutions : 64 tokens en 3,55 s, soit **18 tokens par seconde**, environ 0,64 fois les 28 tokens par seconde estimés en ✏️ B4.1 j) (une mesure : 18 à 19 tokens par seconde sur deux cœurs, davantage sur une autre machine).
+**Démarche** :
+```python
+def load_12():
+    tok = AutoTokenizer.from_pretrained(SMOL["repo"], revision=SMOL["revision"])
+    model = AutoModelForCausalLM.from_pretrained(SMOL["repo"], revision=SMOL["revision"], dtype=torch.float32)
+    return tok, model.eval()
+
+
+def complete_12(tok, model, prompt, max_new_tokens):
+    enc = tok(prompt, return_tensors="pt")
+    with torch.inference_mode():
+        out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False)
+    new = out[0, enc["input_ids"].shape[1]:]                 # generate() returns the prompt, then the new tokens
+    return tok.decode(new, skip_special_tokens=True), int(new.shape[0])
+
+
+def counts_12(tok, model):
+    n_prompt = len(tok(PROMPT_12)["input_ids"])
+    n_linear = sum(isinstance(m, nn.Linear) for m in model.modules())
+    n_block = sum(p.numel() for p in model.model.layers[0].parameters())
+    return n_prompt, n_linear, n_block
+
+
+def make_pipe_12(tok, model):
+    return pipeline("text-generation", model=model, tokenizer=tok)
+```
+a) Les 19 mots de `PROMPT_12` deviennent 22 tokens (le tokenizer de SmolLM2 n'ajoute aucun token spécial à un texte brut) : un mot courant fait un token, la ponctuation et quelques mots rares en font davantage (B2). b) Chaque bloc a sept couches denses, `q_proj`, `k_proj`, `v_proj`, `o_proj` pour l'attention et `gate_proj`, `up_proj`, `down_proj` pour le MLP : $30 \times 7 = 210$, plus la tête de sortie `lm_head`, dont le poids **est** la table des tokens (poids liés, ✏️ B4.1) mais qui reste un module à part. c) Le bloc : $576^2$ pour `q_proj` et `o_proj`, $576 \times 192$ pour `k_proj` et `v_proj` (3 têtes de clés et valeurs de 64 : le GQA de B3), $3 \times 576 \times 1\,536$ pour le MLP, et deux RMSNorm de 576 poids, soit $663\,552 + 221\,184 + 2\,654\,208 + 1\,152 = 3\,540\,096$ ; $30 \times 3\,540\,096$, plus la table des tokens et la norme finale, redonne les 134 515 008 paramètres de ✏️ B4.1. La vitesse mesurée reste sous l'estimation « par proportion des mémoires » : le calcul suppose qu'un token coûte la lecture de tous les poids, et rien d'autre ; or le petit modèle a une grande table de tokens (21 % de ses paramètres, ✏️ B4.1), lue en entier par la tête de sortie à chaque token, des matrices de 576 colonnes que le CPU traite moins efficacement que de grandes, et chaque token paie aussi le surcoût fixe de `generate()` en Python (le KV cache, les processeurs de logits) sur 30 blocs : un coût fixe qui pèse plus lourd quand le calcul est petit. Le pipeline fait à ta place le chat template, la génération et le décodage : commode pour essayer, mais il cache ce qu'il envoie au modèle, ce qu'on doit pouvoir afficher, figer et versionner pour une expérience.
+**Erreurs fréquentes** : oublier `revision=` (une mise à jour du dépôt changerait les résultats sans prévenir) ; ne pas passer `dtype` (le float32 est ici plus rapide, mais un autre modèle se chargerait en bfloat16) ; décoder toute la sortie de `generate()`, prompt compris ; mesurer la première génération, qui paie la mise en route (d'où la passe de chauffe) ; oublier `lm_head` dans le compte des couches denses parce que son poids est partagé ; compter les tokens après le chat template, qui ajoute le message système par défaut et les tokens de rôle.
+**Variante** : les mêmes comptes pour Qwen2.5-0.5B-Instruct (sa configuration suffit, sur le device `meta`) donnent 21 tokens pour `PROMPT_12` (un autre vocabulaire, de 151 936 tokens), $24 \times 7 + 1 = 169$ couches denses et 14 912 384 paramètres par bloc : un bloc de Qwen2.5 pèse quatre fois celui de SmolLM2, à cause du MLP (896 → 4 864) et des biais de `q_proj`, `k_proj` et `v_proj`.
+
+### Ex B4.13 — Prédire : dix générations du même prompt à température 0, 0,7 et 1,5 🔮
+**Réponse** : a) **False** ; b) **False**. Dans l'expérience : à 0,7, **0** réponse identique à la gloutonne (« The doctor who shares rooms with Sherlock Holmes is Dr. John Watson. ») et **2** sur 10 qui nomment Watson, 10 réponses distinctes ; à 1,5, 10 réponses distinctes, 2 qui nomment Watson, des phrases sans suite.
+**Démarche** : à $T = 0$, le décodage glouton est déterministe : dix fois la même réponse. À $T = 0{,}7$, on tire dans la distribution resserrée, mais **sans filtre** : à chaque token, la queue des 49 152 tokens garde une part du tirage, et pour un modèle de 135 M de paramètres, cette distribution est plate. Reproduire la réponse gloutonne demande de tirer le token le plus probable une quinzaine de fois de suite : si chacun l'est avec une probabilité de 0,8 après le passage à 0,7, la réponse entière l'est avec $0{,}8^{15} \approx 0{,}035$, soit en moyenne 0,35 réponse sur 10 ; dès la première bifurcation, la suite diverge. Sur 25 séries de 10 graines et quatre prompts voisins, jamais plus d'une réponse identique à la gloutonne, et jamais plus de 5 réponses sur 10 qui nomment Watson (2 en moyenne avec ce prompt). Le modèle « connaît » Watson au sens où c'est son token le plus probable au bon endroit, mais la masse de probabilité qui va ailleurs (« Dr. James », « Professor Moriarty », une phrase qui s'arrête avant le nom) l'emporte sur un tirage. À 1,5, la distribution est encore aplatie : des phrases sans suite, un vocabulaire décousu.
+**Erreurs fréquentes** : penser que 0,7 est « presque glouton » parce que la température est inférieure à 1 ; confondre la probabilité d'un token et celle d'une réponse entière (un produit) ; croire que le modèle « sait » ce que dit sa réponse gloutonne, alors que le glouton ne montre que le mode de la distribution ; oublier que les réglages de Qwen2.5 (top-k 20, top-p 0,8) filtrent la queue et changent beaucoup ce tableau.
+**Variante** : avec le filtre de Qwen2.5, `top_k=20, top_p=0.8`, à 0,7, les réponses se resserrent : sur les graines 0 à 9, une réponse sur 10 reproduit la gloutonne, 9 sont distinctes, et toujours 2 nomment Watson : le filtre coupe la queue de la distribution, mais la réponse dérive encore au moment du nom, où le modèle hésite vraiment entre plusieurs candidats.
+
+### Ex B4.14 — Chat template, message système, arrêt et streaming avec un modèle instruct 📦
+**Réponse** : tes réponses sont celles de la référence pour la question seule, les deux messages système, le second tour, l'arrêt au retour à la ligne et le streaming. Les sorties du notebook : sans message système, le gabarit ajoute celui de SmolLM2 ; « Answer in one short sentence. » donne « Sherlock Holmes is a fictional character from the Arthur Conan Doyle books. » ; la consigne en français n'est pas suivie (une réponse en anglais, et Phileas Fogg devient un personnage de Robert A. Heinlein : une hallucination d'un modèle de 135 M de paramètres) ; au second tour, le modèle nomme Watson ; la liste s'arrête à « Here are three stories about Sherlock Holmes, one per line: » ; le `TextIteratorStreamer` rend 49 morceaux, souvent un mot et son espace.
+**Démarche** :
+```python
+def chat_14(tok, model, messages, max_new_tokens=48, stop_strings=None, streamer=None):
+    enc = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)
+    with torch.inference_mode():
+        out = model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False, stop_strings=stop_strings,
+                             tokenizer=tok if stop_strings else None, streamer=streamer)
+    reply = tok.decode(out[0, enc["input_ids"].shape[1]:], skip_special_tokens=True)
+    for stop in stop_strings or ():
+        reply = reply.split(stop)[0]                         # cut before the stop string
+    return reply
+
+
+def stream_14(tok, model, messages, max_new_tokens=48):
+    enc = tok.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt", return_dict=True)
+    streamer = TextIteratorStreamer(tok, skip_prompt=True, skip_special_tokens=True)
+
+    def run():
+        with torch.inference_mode():
+            model.generate(**enc, max_new_tokens=max_new_tokens, do_sample=False, streamer=streamer)
+
+    thread = threading.Thread(target=run)
+    thread.start()
+    pieces = list(streamer)                                  # each iteration waits for the next piece
+    thread.join()
+    return pieces
+```
+`apply_chat_template(..., return_dict=True)` rend `input_ids` et `attention_mask`, déjà avec les tokens spéciaux : on ne retokenise pas la chaîne. Le gabarit de SmolLM2 insère « You are a helpful AI assistant named SmolLM, trained by Hugging Face » quand la conversation n'a pas de message système (✏️ B4.4) : un produit fixe toujours le sien. La chaîne d'arrêt arrête la génération au token qui la complète ; ce token peut contenir davantage (ici « `\n\n` » pour la chaîne « `\n` »), d'où la coupure par `split` plutôt que `removesuffix`. Au second tour, toute la conversation repasse dans le prompt : le modèle n'a aucune mémoire entre deux appels, et le prefill grandit avec l'historique. Le streaming ne raccourcit pas la génération ; il fait lire la réponse pendant qu'elle s'écrit. `TextIteratorStreamer` est un itérateur bloquant : la boucle `for` (ici `list`) attend chaque morceau, d'où le fil d'exécution séparé pour `generate()`.
+**Erreurs fréquentes** : `add_generation_prompt=False`, et le modèle continue le message de l'utilisateur ; passer `stop_strings` sans `tokenizer=tok` (une `ValueError`) ; retirer la chaîne d'arrêt par `removesuffix` alors que le dernier token en contient plus ; appeler `generate()` dans le fil principal avant de lire le streamer (la boucle ne commence qu'à la fin : un seul gros morceau) ; écrire « User: … Assistant: » à la main au lieu du gabarit.
+**Variante** : avec `stop_strings=["."]` sur `ONE_14`, la réponse s'arrête à la première phrase : « Sherlock Holmes is a renowned British detective, renowned for his exceptional skills in solving mysteries and crimes », la première phrase de la réponse gloutonne, sans son point (le glouton produit le même début, avec ou sans chaîne d'arrêt).
+
+### Ex B4.15 — Prompting pour extraire des informations de Holmes : zéro-shot, few-shot, JSON validé, vote majoritaire 📦
+**Réponse** : sur les 8 passages, avec SmolLM2 : en zéro-shot, **aucun** JSON valide (du texte autour, une balise Markdown suivie de clés en trop, une année `"2020"` en chaîne) ; en few-shot avec deux exemples, 7 JSON valides sur 8 (0,88) et une précision moyenne des champs de **0,42** (name 0,38, place 0,50, year 0,38) ; le vote sur 5 tirages, 6 valides sur 8 (0,75) et 0,38.
+**Démarche** :
+```python
+def parse_json_15(reply):
+    text = reply.strip()
+    if text.startswith("```"):
+        text = text.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(data, dict) or set(data) != set(KEYS_15):
+        return None
+    if not all(data[k] is None or isinstance(data[k], str) for k in ("name", "place")):
+        return None
+    year = data["year"]
+    if year is not None and (isinstance(year, bool) or not isinstance(year, int)):
+        return None
+    return {k: data[k] for k in KEYS_15}
+
+
+def messages_15(text, examples=(), system=SYSTEM_15):
+    messages = [{"role": "system", "content": system}]
+    for example_text, answer in examples:
+        messages += [{"role": "user", "content": example_text}, {"role": "assistant", "content": json.dumps(answer)}]
+    return messages + [{"role": "user", "content": text}]
+
+
+def vote_15(replies):
+    parsed = [p for p in (parse_json_15(r) for r in replies) if p is not None]
+    if not parsed:
+        return None
+    counts = Counter(tuple(p[k] for k in KEYS_15) for p in parsed)   # keeps the order of first sight
+    return dict(zip(KEYS_15, counts.most_common(1)[0][0]))
+```
+Le zéro-shot rate la **forme** : un modèle de 135 M de paramètres annonce son JSON (« Here is the JSON response: »), l'entoure de balises, invente des clés. Deux exemples suffisent à fixer la forme, mais le modèle **recopie** leur contenu : l'année 1883 du second exemple revient quatre fois, « Spence Munro » et « Halifax » deux fois, et « Baker Street » devient un nom de personne. C'est le biais des exemples de la fiche (§204.4) : un petit modèle copie, il n'abstrait pas. Le vote ne compte que les réponses valides : il corrige un format raté par un tirage, pas une erreur que le modèle fait à chaque tirage. Avec 8 passages et 3 champs, un champ juste de plus vaut 4 points sur la moyenne : les écarts du tableau sont du même ordre que le hasard (fiche §204.5).
+**Erreurs fréquentes** : `json.loads` sans `try` (une réponse mal formée arrête tout) ; accepter des clés en plus ou en moins, ou `"1888"` comme année ; `isinstance(True, int)` vaut `True` en Python : le booléen passe si on ne l'exclut pas d'abord ; écrire les exemples few-shot dans le message système au lieu de tours `user`/`assistant` ; voter sur les chaînes brutes, où deux JSON identiques à un espace près comptent comme deux réponses ; un vote qui garde le dernier ex aequo.
+**Variante** : avec les trois exemples de `EXAMPLES_15` (l'ordre du tableau), SmolLM2 glouton passe à 0,46 (6 JSON valides sur 8) ; Qwen2.5-0.5B-Instruct fait 0,38 en zéro-shot et **0,63** en few-shot avec deux exemples (7 valides sur 8 ; il copie encore « Colonel Spence Munro » sur le dernier passage).
+
+### Ex B4.16 — Sensibilité au prompt : cinq formulations, trois graines, ordre des exemples 🔬
+**Réponse** : en mode rapide (SmolLM2, 6 passages, $T = 0{,}7$) : formulations, moyenne 0,163, écart-type entre les cinq formulations **0,036**, écart-type dû aux graines **0,136** ; ordres des exemples, moyenne 0,167, écart-type entre les trois ordres 0,091, dû aux graines 0,087. Protocole complet précalculé (Qwen2.5, 8 passages) : formulations, moyenne 0,550, entre 0,057, graines 0,050 ; ordres, moyenne 0,556, entre 0,063, graines 0,061.
+**Démarche** :
+```python
+def accuracy_16(system, examples, seed):
+    predictions = []
+    for item in SNIPPETS_16:
+        reply = MODEL_16.generate(messages_15(item["text"], examples, system), max_new_tokens=40, do_sample=True,
+                                  temperature=0.7, seed=seed, cache=CACHE)
+        predictions.append(parse_json_15(reply))
+    return score_15(predictions, [item["gold"] for item in SNIPPETS_16])["all"]
+
+
+def spread_16(table):
+    table = np.asarray(table, dtype=float)
+    return float(table.mean()), float(table.mean(axis=1).std()), float(table.std(axis=1).mean())
+```
+Avec SmolLM2 et des tirages à 0,7, la dispersion due aux graines (0,136) écrase celle entre formulations (0,036) : sur 6 passages, un tirage peut faire passer une case de 0 à 0,44. On ne peut donc rien conclure sur les formulations avec ce protocole, et c'est la première leçon : avant de comparer des prompts, on mesure le bruit de la mesure. Avec Qwen2.5, les deux dispersions sont du même ordre (0,057 contre 0,050), comme pour l'ordre des exemples (0,063 contre 0,061) : un écart de 5 à 6 points entre deux formulations, ou entre deux ordres, ne se distingue pas du hasard avec 8 passages et 3 graines (un passage vaut 4 points sur la moyenne). L'ordre des exemples compte aussi : en mode rapide, l'ordre (2, 0, 1) donne 0,278 et l'ordre (1, 2, 0) 0,056, un écart que les graines (0,087) n'expliquent qu'en partie. Pour départager, il faut davantage de passages (l'écart-type d'une moyenne baisse comme $1/\sqrt{n}$) et de graines, ou un décodage glouton, qui supprime la variance des tirages (fiche §204.5). La conclusion « le prompt compte » se chiffre ici ainsi : autant que le hasard d'un tirage, pas davantage.
+**Erreurs fréquentes** : comparer deux formulations sur une seule graine ; calculer l'écart-type entre formulations sur toutes les cases du tableau (il mélange alors les deux sources) ; `ddof=1` (le contrat demande `ddof=0`, et avec 3 graines la différence est d'un facteur $\sqrt{3/2}$) ; garder « la meilleure formulation » trouvée sur ces 6 passages, qui ont servi à la choisir (c'est un jeu de validation, pas de test : ch. 8) ; oublier que l'ordre des exemples est une variable du prompt.
+**Variante** : en glouton (sans graine), SmolLM2 obtient 0,389 ; 0,5 ; 0,389 ; 0,389 et 0,5 avec les cinq formulations sur les 6 passages : un écart-type de 0,054 entre formulations, qu'aucune graine ne brouille, et une précision bien meilleure qu'en tirant à 0,7 (0,16 en moyenne) ; pour une extraction, le glouton est le bon réglage.
+
+### Ex B4.17 — chunk_text et BM25 : découper un roman et classer ses passages 🔨
+**Réponse** : les 62 tests de l'exercice passent ; les douze nouvelles donnent les 1 045 chunks de référence ; les trois premiers passages de « violin music concert » ont les scores 6,55, 5,87 et 5,48 : chacun ne contient qu'**un** des trois mots, une seule fois (« concert » dans « The Red-Headed League », « violin » dans « The Noble Bachelor », « music » dans « The Copper Beeches »), et aucun ne parle vraiment de musique.
+**Démarche** :
+```python
+def chunk_text(text, chunk_size=200, overlap=50, unit="word"):
+    if chunk_size < 1 or overlap < 0 or overlap >= chunk_size:
+        raise ValueError(f"expected chunk_size >= 1 and 0 <= overlap < chunk_size, got {chunk_size}, {overlap}")
+    if unit == "word":
+        units, sep = text.split(), " "
+    elif unit == "char":
+        units, sep = text, ""                                 # every character, spaces and newlines included
+    else:
+        raise ValueError(f"unit must be 'word' or 'char', not {unit!r}")
+    chunks, start = [], 0
+    while start < len(units):
+        chunks.append(sep.join(units[start:start + chunk_size]))
+        if start + chunk_size >= len(units):                  # this chunk reaches the end
+            break
+        start += chunk_size - overlap
+    return chunks
+
+
+class BM25:
+    def __init__(self, k1=1.5, b=0.75):
+        self.k1, self.b = k1, b
+
+    def fit(self, corpus):
+        if self.k1 < 0 or not 0 <= self.b <= 1:
+            raise ValueError("expected k1 >= 0 and 0 <= b <= 1")
+        docs = [list(doc) for doc in corpus]
+        if not any(docs):
+            raise ValueError("the corpus is empty")
+        self.term_freqs_ = [dict(Counter(doc)) for doc in docs]
+        n_t = Counter(term for tf in self.term_freqs_ for term in tf)
+        self.n_docs_ = len(docs)
+        self.doc_len_ = np.array([len(doc) for doc in docs])
+        self.avgdl_ = float(self.doc_len_.mean())
+        self.idf_ = {t: math.log(1 + (self.n_docs_ - n + 0.5) / (n + 0.5)) for t, n in n_t.items()}
+        return self
+
+    def get_scores(self, query):
+        if not hasattr(self, "idf_"):
+            raise ValueError("call fit(corpus) before get_scores")
+        norm = self.k1 * (1 - self.b + self.b * self.doc_len_ / self.avgdl_)
+        scores = np.zeros(self.n_docs_)
+        for term in query:
+            if term not in self.idf_:
+                continue                                      # a term absent from the corpus adds 0
+            for d, tf in enumerate(self.term_freqs_):
+                f = tf.get(term, 0)
+                if f:                                         # f = 0 adds 0: never 0/0
+                    scores[d] += self.idf_[term] * f * (self.k1 + 1) / (f + norm[d])
+        return scores
+```
+Une nouvelle de $n$ mots donne $\lceil (n - 20)/100 \rceil$ chunks (fiche §204.6) : la dernière fenêtre, souvent courte, compte pour une, et chaque nouvelle a la sienne, d'où 1 045 chunks pour 104 500 mots, plus que 104 500 / 100. Une fenêtre commence tous les 100 mots et en couvre 120 : tout extrait de 21 mots au plus tient entier dans celle qui commence au dernier multiple de 100 avant lui. Pour BM25, le seul piège est le dénominateur nul : avec `k1 = 0`, ou `b = 1` et un document vide, $f + k_1(1 - b + b|d|/\overline{|d|})$ vaut 0 quand $f = 0$ ; ne calculer que pour $f > 0$ évite le 0/0, et la formule ne change pas, puisque ces termes valent 0. Le premier passage gagne par la rareté : « concert » est le mot le plus rare des trois dans le corpus, donc de plus grand idf, et ses autres mots ne comptent pas. Une requête de trois mots rares ne trouve pas un passage « sur la musique » : elle trouve des passages qui contiennent ces mots.
+**Erreurs fréquentes** : `text.split(" ")`, qui garde des chunks vides entre deux espaces et les retours à la ligne ; arrêter la boucle sur `start < len(units)` sans tester la fin, ce qui ajoute un chunk inclus dans le précédent ; normaliser les blancs en mode `"char"` ; ne compter les documents vides ni dans $N$ ni dans $\overline{|d|}$ ; l'idf original sans le « 1 + » (négatif pour un terme présent dans plus de la moitié des documents) ; `n_t` compté en occurrences au lieu de documents ; mettre la requête en minuscules dans `get_scores` (la tokenisation est celle de l'appelant) ; un second `fit` qui ajoute aux statistiques du premier.
+**Variante** : avec $k_1 = 1{,}2$ (le défaut de Lucene) au lieu de 1,5, les trois mêmes passages gardent leur rang (6,55 ; 5,83 ; 5,47) : avec une seule occurrence, la contribution d'un terme vaut $\operatorname{idf} \cdot (k_1 + 1)/(1 + k_1(1 - b + b|d|/\overline{|d|}))$, exactement l'idf quand le passage a la longueur moyenne, quel que soit $k_1$ ; $k_1$ ne joue que sur les termes répétés.
+
+### Ex B4.18 — cosine_top_k, fusion de classements (RRF), recall@k et MRR 🔨
+**Réponse** : les 67 tests de l'exercice passent ; l'exemple de la fiche redonne [0, 1, 2] et (0,8944 ; 0,8944 ; 0,7071), la fusion [2, 7, 5, 9, 1, 4], et recall@1 = 1/6, recall@3 = 0,5, MRR = 4/9.
+**Démarche** :
+```python
+def cosine_top_k(query_emb, doc_embs, k=5):
+    q = np.asarray(query_emb, dtype=float)
+    single = q.ndim == 1
+    q = np.atleast_2d(q)
+    docs = np.asarray(doc_embs, dtype=float)
+    if q.shape[1] != docs.shape[1] or not 1 <= k <= docs.shape[0]:
+        raise ValueError(f"expected the same dimension and 1 <= k <= {docs.shape[0]}")
+    sims = cosine_similarity_matrix(q, docs)                 # B2: a row of zeros has a similarity of 0
+    order = np.argsort(-sims, axis=1, kind="stable")[:, :k]  # stable: ties keep the smaller index
+    values = np.take_along_axis(sims, order, axis=1)
+    return (order[0], values[0]) if single else (order, values)
+
+
+def reciprocal_rank_fusion(rankings, k=60):
+    if len(rankings) == 0 or k < 0:
+        raise ValueError("expected at least one ranking and k >= 0")
+    score = {}
+    for ranking in rankings:
+        for rank, doc in enumerate(ranking, start=1):
+            score[int(doc)] = score.get(int(doc), 0.0) + 1 / (k + rank)
+    return np.array(sorted(score, key=lambda d: (-score[d], d)), dtype=int)
+
+
+def recall_at_k(retrieved, relevant, k):
+    if len(retrieved) == 0 or len(retrieved) != len(relevant) or k < 1:
+        raise ValueError("expected one relevant set per query and k >= 1")
+    ratios = []
+    for ids, good in zip(retrieved, relevant):
+        good = set(good)
+        if not good:
+            raise ValueError("a relevant set is empty")
+        ratios.append(len(set(list(ids)[:k]) & good) / len(good))
+    return float(np.mean(ratios))
+
+
+def mean_reciprocal_rank(retrieved, relevant):
+    if len(retrieved) == 0 or len(retrieved) != len(relevant):
+        raise ValueError("expected one relevant set per query")
+    total = 0.0
+    for ids, good in zip(retrieved, relevant):
+        good = set(good)
+        total += next((1 / r for r, doc in enumerate(ids, start=1) if doc in good), 0.0)
+    return total / len(retrieved)
+```
+Pour des vecteurs de norme 1, $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = 2 - 2\cos(\mathbf{a}, \mathbf{b})$ : trier par cosinus décroissant, c'est trier par distance croissante, ce que fait `NearestNeighbors(metric="cosine")` (avec la distance $1 - \cos$). Avec $k = 0$, la fusion de la fiche donnerait au document 2 le score $1/2 + 1/1 = 1{,}5$ et au document 7 $1 + 1/3 \approx 1{,}33$ : le premier rang pèse alors très lourd ; $k = 60$, fixé par Cormack et ses coauteurs lors d'un essai pilote, aplatit les écarts entre rangs, si bien qu'être présent dans deux listes compte plus qu'être premier dans une. Le recall@k divise par le nombre de pertinents : un ensemble vide le rendrait indéfini ; le MRR ne divise que par le rang, et une requête sans pertinent vaut naturellement 0.
+**Erreurs fréquentes** : un cosinus maison sans `eps` (NaN pour un vecteur nul) ; `np.argsort(-sims)` sans `kind="stable"`, qui ne garantit pas le plus petit indice pour les ex aequo ; `argsort(sims)[::-1]`, qui met le **plus grand** indice d'abord ; les rangs à partir de 0 dans la fusion ; `np.array([])` pour une fusion vide (des flottants) ; `if not retrieved` sur un tableau 2-D (une `ValueError` de NumPy) ; diviser le recall par $k$ (c'est la precision@k de ✏️ B4.2) ; un MRR qui ne garde pas le premier pertinent.
+**Variante** : la fusion de trois classements, [7, 2, 9, 4], [2, 5, 7, 1] et [9, 7, 3], avec $k = 60$, donne [7, 2, 9, 5, 3, 1, 4] : le document 7, présent dans les trois (rangs 1, 3 et 2), passe devant le document 2 (rangs 2 et 1), le 9 (rangs 3 et 1) devant le 5, et le 3, troisième d'une seule liste ($1/63$), devant le 1 et le 4, quatrièmes ($1/64$).
+
+### Ex B4.19 — Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? 🔮
+**Réponse** : a) **False** ; b) **False** ; c) **True**. BM25 retrouve **1** des 10 questions paraphrasées dans ses 5 premiers résultats, la recherche dense **2**, l'hybride **3**. Sur 20 perturbations des embeddings (bruit de $10^{-3}$, puis norme 1), les trois comptes ne changent pas.
+**Démarche** : sans mot-clé commun, BM25 ne voit que les petits mots de la question (« the », « what », « was »), présents dans presque tous les chunks et de faible idf : il classe d'autres chunks, qui partagent par hasard un mot plein avec la question ; il en retrouve pourtant une (H21, au rang 2). La recherche dense rapproche des paraphrases, mais pas à coup sûr : un chunk de 120 mots mêle dialogue et récit, la question emploie des mots modernes (« headpiece », « guard dog ») face à un anglais de 1892, et il faut battre 1 040 chunks pour entrer dans les 5 premiers. Elle classe le bon chunk premier pour deux questions, puis aux rangs 7, 8, 10 et 10 pour quatre autres, et au-delà de 20 pour les quatre dernières. La fusion fait mieux que les deux : la question que BM25 classe 2ᵉ et la recherche dense 7ᵉ passe 1ʳᵉ, et un chunk premier pour la seule recherche dense ($1/61 \approx 0{,}0164$) reste dans les 5 premiers quand peu de chunks sont bien classés par les deux. Mais elle ne sauve aucune question que les deux méthodes ratent : 3 sur 10 reste très loin des 7 ou 8 que l'on imagine en lisant « la recherche dense rapproche les paraphrases ».
+**Erreurs fréquentes** : croire qu'un score BM25 « nul » signifie un rang nul (les petits mots donnent encore des scores, et le bon chunk peut passer par hasard) ; attendre d'un petit modèle d'embedding qu'il comprenne des paraphrases sur un texte ancien comme sur des phrases d'aujourd'hui ; penser que la fusion est la moyenne des deux méthodes (elle peut faire mieux que la meilleure) ; conclure sur 10 questions comme sur 1 000.
+**Variante** : avec les 20 premiers résultats au lieu des 5 premiers, BM25 retrouve toujours **1** question paraphrasée, la recherche dense **6** et l'hybride **6** : la recherche dense « voit » plus de paraphrases qu'elle n'en classe en tête, et c'est le rang, pas la présence, qui manque ; un reclassement (un cross-encoder sur les 20 premiers, fiche §204.6) viserait exactement ce cas.
+
+### Ex B4.20 — Recherche dense (MiniLM, e5) contre BM25 contre hybride sur 30 questions annotées 📦
+**Réponse** : sur Holmes avec MiniLM, recall@5 de **0,533** pour BM25, **0,517** pour la recherche dense et **0,600** pour l'hybride sur les 30 questions (MRR 0,452, 0,500 et 0,523) ; sur les 20 directes, 0,750, 0,675 et 0,750 ; sur les 10 paraphrasées, 0,100, 0,200 et 0,300. Sur Verne, recall@5 de 0,8 pour BM25, 0,9 pour e5, 0,8 pour l'hybride avec e5, mais 0,5 pour MiniLM. e5 sur Holmes (précalculé) : recall@5 de 0,633 en dense, mais recall@1 de 0,150 seulement.
+**Démarche** :
+```python
+def build_index_20(chunks, sentence_model, subset):
+    R = mylearn.retrieval
+    return {"chunks": list(chunks), "bm25": R.BM25().fit([tokenize(c) for c in chunks]), "model": sentence_model,
+            "embeddings": wb.text.passage_embeddings(sentence_model, list(chunks), subset)}
+
+
+def search_20(index, query, method="hybrid", k=5):
+    R = mylearn.retrieval
+    if method not in ("bm25", "dense", "hybrid"):
+        raise ValueError(f"unknown method {method!r}")
+    depth = max(k, DEPTH_20)
+    if method in ("bm25", "hybrid"):
+        bm = np.argsort(-np.asarray(index["bm25"].get_scores(tokenize(query))), kind="stable")[:depth]
+    if method in ("dense", "hybrid"):
+        q = index["model"].embed([query], kind="query")[0]  # « query: » for e5
+        dense, _ = R.cosine_top_k(q, index["embeddings"], k=min(depth, len(index["chunks"])))
+    if method == "bm25":
+        return bm[:k].tolist()
+    if method == "dense":
+        return np.asarray(dense)[:k].tolist()
+    return np.asarray(R.reciprocal_rank_fusion([bm[:DEPTH_20], dense[:DEPTH_20]], k=60))[:k].tolist()
+
+
+def evaluate_20(index, items, method):
+    R = mylearn.retrieval
+    retrieved = [search_20(index, item["question"], method, DEPTH_20) for item in items]
+    relevant = [wbrag.relevant_ids(index["chunks"], item) for item in items]
+    return {"recall@1": float(R.recall_at_k(retrieved, relevant, 1)),
+            "recall@5": float(R.recall_at_k(retrieved, relevant, 5)),
+            "mrr": float(R.mean_reciprocal_rank(retrieved, relevant))}
+```
+Sur Holmes, l'hybride est le meilleur compromis : il garde la précision de BM25 sur les questions directes (noms propres, mots rares) et ajoute ce que la recherche dense retrouve sur les paraphrasées ; les trois méthodes restent loin de 1, car un chunk de 120 mots d'un récit à dialogues est un document difficile à résumer en un vecteur, et les questions paraphrasées sont dures par construction. Le recall@1 et le recall@5 ne classent pas toujours les méthodes de la même façon (e5 sur Holmes : le meilleur recall@5 dense, le plus faible recall@1) : le choix de $k$ fait partie du protocole, et c'est le $k$ que verra le modèle qui compte. Sur Verne, MiniLM, entraîné sur de l'anglais, découpe le français en sous-mots qu'il connaît mal : sa recherche dense s'effondre (0,5), alors qu'e5, multilingue, fait 0,9 ; BM25 n'a pas ce problème, il compare des mots. Avec 30 questions, l'écart-type d'un recall voisin de 0,5 est d'environ $\sqrt{0{,}25/30} \approx 0{,}09$ : les écarts de 7 points entre BM25 et l'hybride ne sont pas établis, ceux de 40 points entre e5 et MiniLM sur Verne le sont presque, même sur 10 questions.
+**Erreurs fréquentes** : oublier `kind="query"` avec e5 (le préfixe « query: » manque, et les résultats se dégradent sans message : le premier défaut de 🐛 B4.22 en dépend) ; tokeniser la requête autrement que le corpus ; fusionner les 5 premiers au lieu des 20 (un chunk 6ᵉ dans les deux listes disparaît) ; un tri non stable de BM25, qui change l'ordre des ex aequo d'une machine à l'autre ; mesurer le MRR sur les 5 premiers seulement ; comparer deux méthodes à moins de 10 points d'écart sur 30 questions comme si l'écart était sûr.
+**Variante** : le recall@10 de Holmes (les 30 questions) monte à 0,633 pour BM25, 0,650 pour la recherche dense et 0,667 pour l'hybride, et le recall@3, celui du RAG de B4.21, vaut 0,500, 0,517 et 0,517 : plus de passages montrés au modèle, c'est plus de chances d'y mettre le bon, au prix de tokens et de distraction (fiche §204.7).
+
+### Ex B4.21 — Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit modèle 📦
+**Réponse** : sur les 10 questions du mode rapide : le passage pertinent est parmi les 3 pour **7** questions, la réponse est juste pour **6**, la citation est vérifiée pour **3**, et **2** réponses seulement sont justes **et** vérifiées ; aucun « I don't know ». Sur les 30 questions (précalculé) : 16 passages trouvés, 15 réponses justes, 14 citations vérifiées, 8 réponses justes et vérifiées.
+**Démarche** :
+```python
+import re
+
+
+def rag_messages_21(question, passages):
+    numbered = "\n".join(f"[{n}] {p}" for n, p in enumerate(passages, start=1))
+    return ([{"role": "system", "content": SYSTEM_21}] + [dict(m) for m in EXAMPLE_21]
+            + [{"role": "user", "content": f"Passages:\n{numbered}\n\nQuestion: {question}"}])
+
+
+def parse_reply_21(reply):
+    cited = []
+    for match in re.finditer(r"\[(\d+)\]", reply):
+        if int(match.group(1)) not in cited:
+            cited.append(int(match.group(1)))
+    return " ".join(re.sub(r"\[\d+\]", " ", reply).split()).strip(" ."), cited
+
+
+def verify_21(answer, cited, passages):
+    words = wbrag.content_words(answer)
+    if not cited or not words or any(not 1 <= n <= len(passages) for n in cited):
+        return False
+    return any(words <= set(tokenize(passages[n - 1])) for n in cited)
+
+
+def rag_21(question, index, llm, k=3):
+    ids = search_20(index, question, "hybrid", k)
+    passages = [index["chunks"][i] for i in ids]
+    reply = llm.generate(rag_messages_21(question, passages), max_new_tokens=24, cache=CACHE)
+    answer, cited = parse_reply_21(reply)
+    return {"ids": ids, "passages": passages, "reply": reply, "answer": answer, "cited": cited,
+            "verified": verify_21(answer, cited, passages)}
+```
+Le tableau sépare les étapes du diagnostic (fiche §204.7). Quand le bon passage manque (H05, H25, H28), la réponse est fausse : la recherche est la première cause d'échec. Quand il est là, Qwen2.5 trouve souvent la bonne réponse, mais il **cite mal** : « seventeen [2] » cite le mauvais passage, « Pawnbroker’s business [2] » aussi, « lawyer » et « Sir George Burnwell » ne citent rien ; la vérification les refuse, à raison. À l'inverse, « Fleet Street [3] » (attendu : *The Morning Chronicle*) est **vérifiée** : le passage cité contient bien « Fleet Street », mais il ne répond pas à la question. La règle de `verify_21` ne vérifie que l'appui de la réponse dans le passage : elle refuse une réponse juste mal citée, ou reformulée (« a pawnbroker's shop » quand le passage dit « pawnbroker’s business » : « shop » n'y est pas), et accepte une réponse fausse tirée d'un passage voisin. Une citation non vérifiée ne vaut rien ; une citation vérifiée ne prouve que l'appui, pas la justesse.
+**Erreurs fréquentes** : numéroter les passages à partir de 0 alors que le modèle et la vérification comptent à partir de 1 ; mettre la question avant les passages (elle doit être la dernière chose lue, fiche §204.4) ; garder les citations dans la réponse comparée à la référence ; vérifier qu'**un** mot de la réponse est dans le passage cité (« the » suffirait) ; accepter un numéro qui ne désigne aucun passage ; juger une réponse juste sans vérifier sa citation, ou l'inverse : les deux mesures se lisent ensemble.
+**Variante** : avec $k = 5$ passages, les mêmes 10 questions donnent 5 réponses justes, 3 citations vérifiées et 2 réponses justes et vérifiées : le passage de *The Morning Chronicle* entre dans le contexte (H05 devient juste et vérifiée), mais le modèle, distrait par deux passages de plus, perd « lawyer » (il répond « hydraulic engineer ») et « Bar of Gold » (« Upper Swandam Lane »). Plus de contexte n'est pas mieux pour un modèle de 0,5 B (fiche §204.7, « Lost in the Middle »).

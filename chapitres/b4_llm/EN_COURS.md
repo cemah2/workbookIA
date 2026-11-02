@@ -6,12 +6,68 @@ Ce chapitre est généré en deux sessions. Tant que ce fichier existe, `python 
 |---|---|
 | `01_fiche.md` et `figures/` | complets (session 69, relue en V2) ; figures par `tools/chapters/figures_chB4.py` (≈ 3 s, hors ligne) |
 | `02_exercices.md`, `06_mes_reponses.md` | complets (session 69) : les 31 exercices papier (12 quiz, 3 rappels, ✏️ B4.1 à B4.5, ∂ B4.6, 🧮 B4.7, 🗣️ B4.8, ⚖️ B4.9 et B4.10, 📄 B4.11, 5 entretiens), le tableau du notebook, la copie vierge de tous les exercices (notes du notebook B4.12 à B4.30 comprises) |
-| `04_indices.md`, `05_solutions.md` | quiz, rappels, papier, réflexion et entretien (session 69) ; notebook B4.12 à B4.30 à la session 70 |
+| `04_indices.md`, `05_solutions.md` | quiz, rappels, papier, réflexion et entretien (session 69) ; notebook B4.12 à B4.21 (session 70, première moitié) ; B4.22 à B4.30 à faire |
 | `flashcards.csv` | complet (28 cartes, session 69) |
-| `03_notebook.ipynb`, `05_solutions.ipynb` | partie 0 (session 69 : 122 vérifications `wb.check` sur 20 exercices ; réponses recalculées contre `mylearn` (référence : `retrieval`, `embeddings`), scikit-learn, transformers et peft sur le device `meta` à partir de configurations écrites dans la cellule, et le chat template de SmolLM2 rendu par le moteur Jinja de transformers ; aucun téléchargement ; si le tokenizer de SmolLM2 est dans le cache local, les comptes de tokens de B4.4 sont aussi vérifiés avec lui (`local_files_only=True`), sinon une ligne ℹ️ ; chaque message `mistakes` vérifié : sa valeur déclenche bien son message, et chaque bonne réponse passe ; ≈ 10 s) ; parties A à D (B4.12 à B4.30) à la session 70 |
+| `03_notebook.ipynb`, `05_solutions.ipynb` | partie 0 (session 69 : 122 vérifications `wb.check` sur 20 exercices ; réponses recalculées contre `mylearn` (référence : `retrieval`, `embeddings`), scikit-learn, transformers et peft sur le device `meta` à partir de configurations écrites dans la cellule, et le chat template de SmolLM2 rendu par le moteur Jinja de transformers ; aucun téléchargement ; si le tokenizer de SmolLM2 est dans le cache local, les comptes de tokens de B4.4 sont aussi vérifiés avec lui (`local_files_only=True`), sinon une ligne ℹ️ ; chaque message `mistakes` vérifié : sa valeur déclenche bien son message, et chaque bonne réponse passe ; ≈ 10 s) ; partie A (B4.12 à B4.16) et partie B jusqu'à B4.21 (session 70, première moitié : `chB4_parts.py`, `chB4_code.py`, `history_chB4.py`) ; B4.22 à B4.30 à faire |
 | `mylearn` | `retrieval.py` : référence et tests (session 69 : `tests/test_chb4_retrieval.py`, 129 tests ; 80 mutants utiles tués sur 80, plus 3 équivalents ; apprenant simulé V6 à 129/129) |
-| contrat | `chB4.json` : seul le champ `check` des quiz Q1 à Q12 et des rappels R1 à R3 change (`manual` → `wb.check`, comme en B1 à B3) ; « zéro-shot » déjà aligné ; **`syllabus.py build` à lancer** (le test des documents générés échoue tant qu'il ne l'est pas) |
+| infrastructure et données | `wb.llm`, `wb.rag` (tests `tests/infra/test_wb_llm.py`, `test_wb_rag.py`), `data/qa/holmes_qa.json` et `verne_qa.json`, data card `data/cards/qa.md`, ligne B4 de `data/cards/pretrained.md` (session 70) |
+| contrat | `chB4.json` : B4.13 et B4.19 passent à `wb.check` (session 70) ; seul le champ `check` des quiz Q1 à Q12 et des rappels R1 à R3 change (`manual` → `wb.check`, comme en B1 à B3) ; « zéro-shot » déjà aligné ; **`syllabus.py build` à lancer** (le test des documents générés échoue tant qu'il ne l'est pas) |
 | annexes | glossaire (43 termes, ch. B4 ; « zéro-shot » et « few-shot » complétés pour les LLM ; « adaptateur (PEFT) » distingué de l'adaptateur d'interface du ch. 15 ; `dtype`, `bfloat16`, accès contrôlé existaient déjà), formulaire (section B4, 15 lignes), erreurs fréquentes (19 lignes : 3 en Python et NumPy, 9 en PyTorch et transformers, 7 de raisonnement), auto-évaluation (section B4), aide-mémoire PyTorch (section « LLM avec transformers et peft (bonus B4) », 10 lignes) : session 69 |
+
+## Pour la seconde moitié (B4.22 à B4.30)
+
+Session 70, première moitié faite : parties A (B4.12 à B4.16) et B jusqu'à B4.21, dans `tools/chapters/chB4_parts.py` (énoncés, `PART_A`, `PART_B`) et `tools/chapters/chB4_code.py` (cellules) ; `build_chB4.py` les assemble (`PARTS`), garde `NEXT_SESSION` pour B4.22 à B4.30 et remplace, dans le notebook de solutions, la ligne du cache de l'apprenant (`chB4_code.LEARNER_CACHE`) par celle des solutions (`SOLUTION_CACHE_LINE`, fonction `part_cells_b4`). Ajoute la suite dans `PART_B.exercises` (B4.22 à B4.24) puis de nouvelles `Part` C et D (un `chB4_parts2.py` et un `chB4_code2.py`, comme B3), et vide `NEXT_SESSION`.
+
+### Infrastructure (`src/wb/llm.py`, `src/wb/rag.py`, tests `tests/infra/test_wb_llm.py`, `test_wb_rag.py`)
+
+- **`wb.llm`** :
+  - `LLMS` : `smollm2` (SmolLM2-135M-Instruct), `smollm2-base`, `qwen2.5` (Qwen2.5-0.5B-Instruct), `qwen3` (Qwen3-0.6B ; ses poids ne sont pas dans le cache local de cette machine), `distilgpt2` ; révisions figées, aussi dans `data/cards/pretrained.md` (un test le vérifie).
+  - `load_llm(nom, dtype="float32", reuse=True)` → `ChatLM` : le tokenizer tout de suite, les **poids à la première génération que le cache ne connaît pas** (`llm.model`, `llm.loaded`) ; `try_llm(nom, id, weights=False)` → `None` et une ligne ⏳ sans réseau. **`reuse=False` pour un modèle à fine-tuner** (B4.26 à B4.28) : `load_llm` partage l'objet entre les exercices.
+  - `ChatLM.render(prompt)`, `prompt_ids(prompt, chat=True)`, `settings(**réglages)` (les réglages effectifs, complétés par le `generation_config.json` **du dépôt** : `repetition_penalty` 1,1 pour Qwen2.5 même en glouton ; en tirage, `top_k`/`top_p` du fichier, sinon 0 et 1,0), `generation_key(...)`, `generate(prompt, chat=True, max_new_tokens=64, do_sample=False, temperature=None, top_k=None, top_p=None, repetition_penalty=None, seed=None, stop_strings=None, cache=None)` → le texte des seuls tokens générés (chaîne d'arrêt laissée, comme `generate()`). Un prompt est une chaîne (un message `user`), une liste de messages, ou du texte brut avec `chat=False`. Un tirage sans graine n'est jamais mis en cache.
+  - `GenerationCache(source, folder=None, frozen=None)` : un fichier JSON par source dans `data/downloads/llm/` (Colab : `/content/wb_cache/llm/`), écrit atomiquement après chaque réponse (`write_json_atomic`) ; `frozen` = un fichier en lecture seule (le notebook de solutions : `wb.repo_root() / wbllm.SOLUTION_CACHE`, `tools/chapters/history_chB4_generations.json`) ; `get`, `put`, `hits`, `misses`, `clear()`, `with cache.disabled():` (mesure à froid, pour 🏆 B4.30). La clé contient la source : le notebook de solutions ne lit ni n'écrit jamais `generations-learner.json`.
+- **`wb.rag`** :
+  - données : `load_qa("holmes")` (30 : `id`, `question`, `answer`, `aliases`, `evidence`, `start`, `end`, `story`, `story_title`, `paraphrased`), `load_unanswerable()` (5, `kind` « absent » ou « false_premise » : pour B4.23), `load_qa("verne")` (10), `FAST_IDS` (les 10 du mode rapide : H02, H03, H05, H08, H12, H16, H19 et les paraphrasées H21, H25, H28) ; data card `data/cards/qa.md` (SHA-256 vérifiées par `test_card_fingerprints_match_the_versioned_files`) ;
+  - corpus : `documents("holmes")` (12 nouvelles), `documents("verne")` (chapitres I à VII), `chunk_words`, `reference_chunks(nom)` (120 mots, recouvrement 20 : 1 045 et 93 chunks), `relevant_ids(chunks, item)` (les chunks qui contiennent l'extrait entier) ;
+  - réponses : `tokenize`, `normalize_answer`, `answer_in(texte, item)` (réponse ou variante, en mots entiers), `is_idk` ; citations : `parse_reply`, `content_words`, `supports`, `verify_citations` ;
+  - référence : `BM25Index`, `cosine` (float64, convention de B2), `top_k`, `rrf`, `ReferenceIndex(chunks, sentence_model, subset)` (`search(q, "bm25"|"dense"|"hybrid", k)`, hybride = RRF des 20 premiers), `RAG_SYSTEM`, `RAG_EXAMPLE`, `rag_messages`, `ReferenceRAG(llm, index, k=3, max_new_tokens=24, cache=...)` (`answer(question)` → `ids`, `passages`, `reply`, `answer`, `cited`, `idk`, `verified`) : la solution de B4.20 et B4.21, et le repli explicite des exercices suivants quand ceux de l'apprenant manquent.
+
+### Ce que le notebook définit déjà (réutilisable)
+
+`CACHE`, `LLM` (SmolLM2, poids chargés), `SMOL`, `spy_from_pretrained` (partie A) ; `TEST_RET`, `QA`, `QA_FR`, `DOCS`, `DOCS_FR`, `REF_CHUNKS`, `REF_DOC`, `tokenize` (partie B) ; `SM_19` (MiniLM), `SM_E5`, `DEPTH_20`, les fonctions de l'apprenant `build_index_20`, `search_20`, `evaluate_20`, `INDEX_20` (son index des chunks de référence avec MiniLM, `None` s'il manque) ; `QWEN` (Qwen2.5, poids paresseux), `SYSTEM_21`, `EXAMPLE_21`, `QUESTIONS_21`, `rag_messages_21`, `parse_reply_21`, `verify_21`, `rag_21(question, index, llm, k=3)`, `rows_21` (le tableau de B4.21 : `id`, `found`, `correct`, `verified`, `idk`, `reply`, `gold`). Les cellules de vérification essaient toujours les fonctions de l'apprenant avant de s'en servir ; la seconde moitié doit faire de même (⏳ ou repli explicite sur `wbrag.ReferenceRAG`, avec une ligne ℹ️).
+
+### Temps mesurés (deux cœurs, machine calme, par le verrou)
+
+- Chargements float32 : SmolLM2 24 s à froid (lecture du disque), 2,2 s ensuite ; Qwen2.5 74 s à froid, 3,1 s ensuite. Import torch + transformers : 6 s.
+- Génération gloutonne : SmolLM2 18 à 19 tokens/s (64 tokens en 3,4 s) ; Qwen2.5 7,4 à 7,6 tokens/s. Prefill de 1 500 tokens : SmolLM2 509 tokens/s, Qwen2.5 173 tokens/s.
+- RAG d'une question (3 passages de 120 mots, ≈ 560 à 600 tokens de prompt, 24 tokens au plus) : ≈ 3 s avec Qwen2.5 (le prefill domine) ; 10 questions ≈ 40 s, 30 ≈ 75 s (EXPERIMENT_21 en mode complet : 73 s).
+- Embeddings : MiniLM sur les 1 045 chunks de Holmes 35 s (B4.19, à froid) ; e5 sur les 93 chunks de Verne 11 s ; e5 sur Holmes 65 s (trop pour le mode rapide : précalculé). Puis le cache `data/downloads/embeddings/` (sous-ensembles `b4-holmes-120-20` et `b4-verne-120-20`).
+- Mode complet de 🔬 B4.16 (Qwen2.5, 8 passages, 21 réglages × 3 graines) : 714 s.
+
+### Budget
+
+`05_solutions.ipynb` (partie 0 + A + B jusqu'à B4.21) : **103 s à froid** (embeddings recalculés ; cellule la plus longue : B4.19, 32 s), 54 s avec les embeddings en cache ; aucune génération n'est faite, tout est relu dans le cache figé (Qwen2.5 n'est jamais chargé, SmolLM2 l'est pour B4.12 et B4.14, dont les fonctions de la solution génèrent en direct : 18 s). **Il reste ≈ 8 min** pour B4.22 à B4.30 (le §4 : < 10 min, aucune cellule > 3 min). « Tout exécuter » à vide du 03 : 15 s.
+
+### Chiffres déjà affichés (à ne pas refaire vérifier, ni donner comme résultats nouveaux)
+
+- B4.12 : 22 tokens, 211 `nn.Linear`, 3 540 096 paramètres par bloc (réponses `wb.check`) ; 18 tokens/s mesurés.
+- B4.13 : à 0,7, 0 réponse identique à la gloutonne, 2 sur 10 qui nomment Watson.
+- B4.15 (SmolLM2, 8 passages) : zéro-shot 0 JSON valide ; few-shot 0,88 valides, précision 0,42 (il recopie les exemples) ; vote 0,75 et 0,38.
+- B4.16 : rapide, entre formulations 0,036 contre 0,136 dû aux graines ; complet (Qwen2.5) 0,057 contre 0,050, ordres 0,063 contre 0,061.
+- B4.19 : paraphrasées retrouvées dans les 5 premiers : BM25 1, dense 2, hybride 3 (réponses `wb.check`).
+- B4.20 : le tableau complet (Holmes MiniLM : recall@5 0,533 / 0,517 / 0,600, MRR 0,452 / 0,500 / 0,523 ; Verne e5 0,8 / 0,9 / 0,8, MiniLM dense 0,5 ; e5 sur Holmes précalculé, dense recall@5 0,633, recall@1 0,150).
+- B4.21 (10 questions, k = 3) : passage trouvé 7, juste 6, citation vérifiée 3, juste et vérifiée 2, « I don't know » 0. Sur les 30 (précalculé dans `history_chB4.json`, entrée `r21`, réponse par réponse) : 16, 15, 14, 8, 0. Variantes des solutions : k = 5 sur les 10 → 5 justes, 3 vérifiées, 2 les deux ; recall@3 de l'hybride 0,517.
+- **Pour 🏆 B4.30** (« 80 % de réponses justes et citées ») : la référence de B4.21 en fait **8 sur 30 (27 %)** ; la recherche plafonne (recall@3 ≈ 0,52, recall@10 ≈ 0,67 sur les 30) et Qwen2.5 cite souvent le mauvais numéro. Le seuil de 80 % du contrat paraît hors de portée d'un modèle ≤ 0,6 B sur CPU sans un gros travail (meilleure recherche, reclassement, prompt, vérification et nouvelle tentative) : à calibrer sérieusement, et à signaler au coordinateur si la référence n'y arrive pas.
+
+### État du cache
+
+- `tools/chapters/history_chB4_generations.json` (versionné, 264 Ko) : 422 réponses de source « solution », toutes celles du notebook de solutions en modes rapide et complet jusqu'à B4.21 (et les 30 questions du RAG de référence). La seconde moitié y **ajoute** les siennes : exécuter ses cellules par `history_chB4.py` (nouvelle entrée, avec la même fonction `namespace`, puis fusionner ses entrées avec celles du fichier : `generations` réécrit tout le fichier à partir de sa seule exécution, il faut donc soit l'étendre aux nouvelles cellules (`FAST_CELLS`), soit écrire une entrée qui lit le fichier et y ajoute).
+- `data/downloads/llm/generations-calibration.json` (non versionné) : les tirages du calibrage de B4.13 ; `generations-learner.json` n'existe pas sur cette machine.
+- Les clés contiennent `transformers` 5.21.0 et `torch` 2.11.0 : un changement de version invalide tout le cache figé (le notebook de solutions regénère alors, beaucoup plus lentement : à refaire par `history_chB4.py`).
+- `ReferenceIndex` calcule le cosinus en float64 (comme `cosine_top_k`) ; `r21` a été rejoué avec cette version : 0 réponse absente du cache figé.
+
+### Contrat
+
+Changé (champ `check` seulement) : B4.13 et B4.19 `manual` → `wb.check` (prédictions enregistrées). `syllabus.py build` reste à lancer en fin de chapitre.
 
 ## Pour la session 70
 
