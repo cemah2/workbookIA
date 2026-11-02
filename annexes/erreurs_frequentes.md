@@ -95,6 +95,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des poids d'attention dont les lignes ne font pas 1 | softmax sur l'axe des requêtes (`axis=0`) au lieu de celui des clés | softmax sur `axis=-1` ; vérifier `w.sum(axis=-1)` (fiche B3, §203.2) |
 | `q @ k.T` sur des tableaux à 4 axes : une forme absurde ou une erreur de forme | `.T` inverse **tous** les axes, pas seulement les deux derniers | `k.swapaxes(-1, -2)`, ou `np.einsum("nhld,nhsd->nhls", q, k)` (fiche B3, §203.2) |
 | des têtes de la bonne forme, une attention qui ne vaut rien, aucune erreur | `x.reshape(N, H, T, d_h)` direct : une tête reçoit des morceaux de tokens | `x.reshape(N, T, H, d_h).swapaxes(1, 2)` ; vérifier qu'une tête contient les features $h\,d_h$ à $(h+1)\,d_h - 1$ (fiche B3, §203.4) |
+| un score BM25 `nan` pour des documents qui ne contiennent pas le terme (avec $k_1 = 0$, ou un document vide et $b = 1$) | la formule calcule $0/0$ quand $f_{t,d} = 0$ et que le dénominateur s'annule | un terme absent du document n'ajoute rien : sauter les $f_{t,d} = 0$ (fiche B4, §204.6) |
+| `ValueError: The truth value of an array with more than one element is ambiguous` dans `recall_at_k` | `if not retrieved:` sur le tableau 2-D d'indices rendu par `cosine_top_k` | tester `len(retrieved) == 0` (B4.18) |
+| « Holmes, » ne trouve pas « holmes » dans BM25 | requête et corpus tokenisés différemment (casse, ponctuation) | une seule fonction de tokenisation pour les deux (fiche B4, §204.6) |
 
 ## Maths et algèbre linéaire
 
@@ -335,6 +338,15 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une génération avec KV cache qui suit le calcul complet sur le prompt, puis s'en écarte | le nouveau token reçoit l'embedding de la position 0 (`pos_emb(torch.arange(1))`) au lieu de la sienne | `pos_emb(torch.arange(start, start + T))`, `start` = le nombre de tokens déjà dans le cache (B3.23) |
 | un ViT dont l'accuracy reste au hasard (10 %), sans erreur | le bloc d'encodeur garde `is_causal=True` : le `[CLS]`, en tête, ne voit que lui-même | aucun masque dans un encodeur ; vérifier que la sortie change quand on modifie le dernier patch (B3.28) |
 | un temps d'attention mesuré qui varie d'un facteur 10 d'un essai à l'autre | un seul appel mesuré, ou une moyenne qui compte le premier appel (allocations) et les essais perturbés | un appel non mesuré, puis le **meilleur** de plusieurs essais avec `time.perf_counter()` (B3.27) |
+| `generate()` donne une réponse différente à chaque exécution, sans aucun réglage de tirage | les réglages par défaut viennent de `generation_config.json` (souvent `do_sample: true`) | `do_sample=False`, ou une graine et tous les réglages ; afficher `model.generation_config` (fiche B4, §204.3) |
+| `ValueError` avec `temperature=0` | une température nulle n'est pas un tirage | `do_sample=False` pour le décodage glouton (fiche B4, §204.3) |
+| la réponse finit par la chaîne d'arrêt (« Q: ») | `stop_strings` arrête la génération après la chaîne, qui reste dans la sortie | retirer la chaîne d'arrêt après le décodage (fiche B4, §204.3) |
+| un modèle instruct qui répond mal, ou écrit lui-même la suite du dialogue | le format de chat écrit à la main (« User: … Assistant: »), ou `add_generation_prompt` oublié | `tok.apply_chat_template(msgs, add_generation_prompt=True, return_dict=True, return_tensors="pt")` ; afficher la chaîne avec `tokenize=False` (fiche B4, §204.3) |
+| un token de début en double au début du prompt | `tok(chaîne)` sur une chaîne produite par `apply_chat_template(..., tokenize=False)` | `add_special_tokens=False`, ou `return_dict=True` directement (fiche B4, §204.3) |
+| `NoMatchingPeftModuleError` | un nom de `target_modules` qui ne correspond à aucune couche du modèle | lire les noms avec `print(model)` (`q_proj`, `query`, `c_attn`…) (fiche B4, §204.8) |
+| un avertissement « fan_in_fan_out is set to False but the target module is `Conv1D` » | LoRA sur GPT-2 ou distilgpt2, dont les `Conv1D` rangent le poids transposé | `LoraConfig(..., fan_in_fan_out=True)` (fiche B4, §204.8) |
+| un modèle adapté par LoRA qui diffère du modèle d'origine avant tout entraînement | $\mathbf{B}$ initialisée au hasard (LoRA écrit à la main) | $\mathbf{B}_0 = 0$, $\mathbf{A}$ au hasard : le défaut de peft (fiche B4, §204.8) |
+| `RuntimeError: Dataset scripts are no longer supported` | un dataset du Hub fondé sur un script de chargement, avec datasets 4 | une version Parquet du dataset, ou un autre dataset (fiche B4, §204.2) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -489,3 +501,10 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « sans position, le modèle perd 0,1 nat » conclu d'un seul entraînement | un écart du même ordre que la dispersion d'une graine à l'autre | plusieurs graines, l'écart graine par graine à la référence, sa moyenne et son écart-type (B3.25) |
 | « 16 Go de poids, ça tient sur un GPU de 24 Go », puis un manque de mémoire en production | le KV cache oublié : il grandit avec le contexte et le nombre de conversations | ajouter $2 \times L \times T \times n_{kv} d_h \times$ octets par séquence servie (fiche B3, §203.9) |
 | un compte de paramètres de GPT-2 small à 117 millions | le chiffre du tableau 2 de l'article de GPT-2, faux (le dépôt `openai/gpt-2` le reconnaît) | compter sur le modèle : `sum(p.numel() for p in model.parameters())` (✏️ B3.5) |
+| « mon prompt fait 84 % », puis 70 % une semaine plus tard | un seul prompt, une seule graine, une seule mesure | plusieurs formulations et graines : moyenne et écart-type ; prompts versionnés (fiche B4, §204.4) |
+| une recherche hybride pire que BM25 seul | scores BM25 (0 à 12) et cosinus (−1 à 1) additionnés : l'échelle dépend de la requête | fusionner par les rangs, avec la RRF (fiche B4, §204.6) |
+| un RAG qui répond « je ne sais pas » alors que le bon passage est retrouvé | `truncation=True, max_length=…` coupe la fin du prompt, souvent la question | compter les tokens du prompt et de la réponse ; réduire $k$ ou la taille des chunks (fiche B4, §204.7) |
+| des citations « [3] » que le passage 3 ne justifie pas | le modèle cite un numéro au hasard, et personne ne vérifie | vérifier par programme que le passage cité existe et contient la réponse (fiche B4, §204.7) |
+| un assistant qui révèle des documents d'autres utilisateurs malgré sa consigne | le filtre des droits confié au modèle, par une consigne | filtrer dans la recherche : le modèle ne reçoit que ce que l'utilisateur peut lire (fiche B4, §204.10) |
+| un classifieur de 20 Newsgroups au score trop beau | les en-têtes, signatures et citations des messages trahissent le sujet | `fetch_20newsgroups(..., remove=("headers", "footers", "quotes"))` (fiche B4, §204.9) |
+| un modèle « de 0,8 milliard » qui en compte 0,6 une fois chargé | le fichier de poids range deux fois la table des poids liés (Qwen3-0.6B) | compter sur le modèle chargé : `model.num_parameters()` (fiche B4, §204.1) |

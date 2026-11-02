@@ -783,5 +783,27 @@ Notations : $N$ séquences de $T$ tokens ; dans une attention, $L$ requêtes et 
 | calcul d'entraînement | FLOPs $\approx 6ND$ ($N$ paramètres, $D$ tokens) ; Chinchilla : $D \approx 20N$ | (🧮 B3.8) |
 | KV cache | $2 \times L \times T \times n_{kv} d_h \times$ octets par valeur, par séquence ($L$ couches, $n_{kv} d_h = d$ sans GQA) | `torch.cat([K_cache, k_new], dim=2)` (🧮 B3.8, 📦 B3.23) |
 
-### B4 à B8
+### B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA
+
+Notations : en mémoire, $N$ compte des paramètres ; dans BM25, $N$ compte des documents, $n_t$ ceux qui contiennent le terme $t$, $f_{t,d}$ ses occurrences dans le document $d$, $|d|$ sa longueur et $\overline{|d|}$ la longueur moyenne. Dans LoRA, $\mathbf{W} \in \mathbb{R}^{d \times k}$ ($k$ entrées, $d$ sorties, $\mathbf{h} = \mathbf{W}\mathbf{x}$ comme dans PyTorch), $r$ le rang, $\alpha$ le facteur. Les rangs d'un classement partent de 1 ; $\ln$ est le logarithme naturel.
+
+| Notion | Formule | En code |
+|---|---|---|
+| mémoire des poids | $\approx N \times$ octets par paramètre : 4 en float32, 2 en bfloat16, 1 en int8, $\approx 0{,}5$ en int4 (plus les échelles) | `model.get_memory_footprint()`, `model.num_parameters()` (✏️ B4.1) |
+| KV cache | $2 \times L \times T \times n_{kv} d_h \times$ octets par valeur ($L$ couches, $n_{kv}$ têtes de clés et valeurs) | `config.num_key_value_heads`, `config.head_dim` (✏️ B4.1) |
+| fine-tuning complet avec AdamW | $\approx 16$ octets par paramètre entraîné (poids et gradient en bfloat16, copie maîtresse et deux moyennes en float32), sans les activations | |
+| quantification symétrique (int8) | $s = \max\lvert w\rvert / 127$, $q = \operatorname{round}(w / s)$, relu $q\,s$ ; erreur $\le s/2$ | |
+| écart-type d'une proportion | $\sqrt{\hat{p}(1 - \hat{p})/n}$ sur $n$ questions ; intervalle à 95 % $\approx \pm 2$ écarts-types | (🧠 B4.Q8) |
+| découpage | chunks de taille $c$, recouvrement $o < c$, débuts tous les $c - o$ unités ; $\lceil (n - o)/(c - o) \rceil$ chunks pour $n > c$ unités | `chunk_text(text, chunk_size, overlap)` (🔨 B4.17) |
+| idf (toujours positive) | $\operatorname{idf}(t) = \ln\left(1 + \frac{N - n_t + 0{,}5}{n_t + 0{,}5}\right)$ | `BM25().fit(corpus).idf_` (✏️ B4.5) |
+| BM25 | $\operatorname{BM25}(d, q) = \sum_{t \in q} \operatorname{idf}(t)\,\frac{f_{t,d}\,(k_1 + 1)}{f_{t,d} + k_1\left(1 - b + b\,\frac{\lvert d \rvert}{\overline{\lvert d \rvert}}\right)}$ ; $k_1 = 0$ : présence seule ; $b = 0$ : sans normalisation de la longueur | `BM25(k1=1.5, b=0.75).fit(corpus).get_scores(query)` (✏️ B4.5, 🔨 B4.17) |
+| distance et cosinus | pour des vecteurs de norme 1, $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = 2 - 2\cos(\mathbf{a}, \mathbf{b})$ | `cosine_top_k(query_emb, doc_embs, k)` (🔁 B4.R3, 🔨 B4.18) |
+| reciprocal rank fusion | $\operatorname{RRF}(d) = \sum_r \frac{1}{k + \operatorname{rang}_r(d)}$, $k = 60$ | `reciprocal_rank_fusion(rankings, k=60)` (🔨 B4.18) |
+| recall@k et MRR | $\operatorname{recall@}k = \frac{\lvert\text{top-}k \cap \text{pertinents}\rvert}{\lvert\text{pertinents}\rvert}$ ; $\operatorname{MRR} = \frac{1}{\lvert Q\rvert}\sum_q \frac{1}{\operatorname{rang}_q}$ (0 sans pertinent retrouvé), en moyenne sur les questions | `recall_at_k(retrieved, relevant, k)`, `mean_reciprocal_rank(retrieved, relevant)` (✏️ B4.2, 🔨 B4.18) |
+| LoRA | $\mathbf{W}' = \mathbf{W} + \frac{\alpha}{r}\,\mathbf{B}\mathbf{A}$, $\mathbf{B} \in \mathbb{R}^{d \times r}$, $\mathbf{A} \in \mathbb{R}^{r \times k}$, $\mathbf{B}_0 = 0$ ; $\operatorname{rang}(\mathbf{B}\mathbf{A}) \le r$ ; $r(d + k)$ paramètres au lieu de $dk$ | `LoraConfig(r=8, lora_alpha=16, target_modules=[...])`, `get_peft_model`, `print_trainable_parameters()` (✏️ B4.3, ∂ B4.6) |
+| gradients de LoRA | avec $\mathbf{h} = \mathbf{W}\mathbf{x} + s\,\mathbf{B}\mathbf{A}\mathbf{x}$, $s = \alpha/r$, $\mathbf{g} = \partial L/\partial \mathbf{h}$ : $\frac{\partial L}{\partial \mathbf{B}} = s\,\mathbf{g}(\mathbf{A}\mathbf{x})^\top$, $\frac{\partial L}{\partial \mathbf{A}} = s\,\mathbf{B}^\top\mathbf{g}\mathbf{x}^\top$ ; rsLoRA : $s = \alpha/\sqrt{r}$ | (∂ B4.6) |
+| fusion | $\mathbf{W} \leftarrow \mathbf{W} + \frac{\alpha}{r}\mathbf{B}\mathbf{A}$, puis plus de branche | `model.merge_and_unload()` |
+| coût d'une API | entrée $\times$ prix d'entrée $+$ sortie $\times$ prix de sortie (au million de tokens) ; latence locale $\approx$ entrée / vitesse de prefill $+$ sortie / vitesse de génération | (🧮 B4.7) |
+
+### B5 à B8
 *(à compléter)*

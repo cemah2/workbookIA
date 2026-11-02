@@ -55415,13 +55415,13 @@
     },
     "B4.1j": {
       "fractional": "arrondis à l'entier le plus proche",
-      "hash": "fd6b69fd5d7c3e5fdd34b809e9bcc3cfb11942d984fd99f3fbad6222e3b66edc",
+      "hash": "76c8c778f077b907b0d9d7e40a524053323747a1e6c65f275edc1c2ffd8451f1",
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
         "2320955ed7014fa83032d82dee793c58c15965ffbb90f39e31421b5eab70b32c": "c'est la vitesse de Qwen2.5 : applique la proportion des mémoires",
         "5939d654d2ad544628e5c503dda3c9552a8a392d50724b963f1fe3c259c74d33": "un modèle plus petit va-t-il plus vite ou plus lentement ? Vérifie le sens du rapport",
-        "d3c1ce9739183874ed92cdfd3c6cd11e97d2246a29f350909b9c0592224cd1b8": "relis la question : compare les mémoires en bfloat16 des deux modèles"
+        "59bde07e65a0e0c8c9a8b2a7f837ed1707a89b43ff36876cebf50db4874d15e1": "relis la question : compare les mémoires en float32 des deux modèles"
       },
       "sign": 1,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
@@ -55887,7 +55887,7 @@
       "hash": "a364087b4aa9c846bb29559d95ad2984751c5752de7fe8f22766df98fef58239",
       "kind": "str",
       "mistakes": {
-        "21bc18e3a212e7a987baf3db89a6bfa2d6d86a0e098e215aa5cdd354096472c0": "relis le paragraphe sur les noms du Hub : que signifie « -it » chez Google ?",
+        "21bc18e3a212e7a987baf3db89a6bfa2d6d86a0e098e215aa5cdd354096472c0": "relis le paragraphe sur les noms du Hub : que signifie le suffixe « -Instruct » ?",
         "350023a5cc6c822911513c1c1f4597aa866dd3856e99a5ff344413a2e516084a": "relis le paragraphe sur les noms du Hub : Qwen3 fait l'inverse des autres"
       },
       "source": "chapitres/b4_llm/05_solutions.ipynb"

@@ -585,3 +585,19 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Générer avec un KV cache, et chiffrer sa mémoire, le coût quadratique du contexte et le calcul d'un entraînement ($6ND$) | |
 | Mener des ablations (position, résiduel, normalisation, têtes) et discuter la mémorisation des données d'entraînement | |
 <!-- wb:end B3 -->
+
+<!-- wb:section B4 -->
+## B4 — LLM en pratique : Hugging Face, prompting, RAG et LoRA
+
+| Compétence | Niveau |
+|---|:-:|
+| Estimer la mémoire d'un LLM (poids selon le dtype, KV cache) et dire s'il tient sur une machine donnée | |
+| Charger un modèle à une révision figée, générer avec `generate()` en maîtrisant le décodage, l'arrêt et le `generation_config` | |
+| Appliquer un chat template (à la main et avec `apply_chat_template`) et éviter ses pièges | |
+| Écrire et évaluer des prompts (zéro-shot, few-shot, JSON validé, vote) sur plusieurs formulations et graines | |
+| Implémenter le découpage, BM25, la recherche dense, la fusion RRF, recall@k et MRR | |
+| Construire, évaluer et diagnostiquer un RAG avec citations vérifiées | |
+| Compter, dériver et implémenter LoRA, puis l'appliquer et le fusionner avec peft | |
+| Choisir entre prompting, RAG, fine-tuning et un classifieur classique, chiffres à l'appui | |
+| Identifier et atténuer les risques d'un système LLM (hallucinations, injection, données personnelles, licences, AI Act) | |
+<!-- wb:end B4 -->

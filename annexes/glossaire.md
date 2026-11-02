@@ -914,10 +914,10 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | distance de domaine | domain gap | écart entre le genre de données du pré-entraînement et celui de la tâche cible (photos, radiographies, spectrogrammes…) ; la version « features » du décalage de distribution | B1 |
 | transfert négatif | negative transfer | partir d'un modèle pré-entraîné donne un résultat pire que partir de zéro, à budget égal ; se voit contre des baselines | B1 |
 | oubli catastrophique | catastrophic forgetting | après un fine-tuning, le modèle ne sait plus faire son ancienne tâche (M. McCloskey et N. Cohen, 1989) ; se mesure par l'accord des prédictions avec l'ancienne tête | B1 |
-| few-shot | à quelques exemples | classer avec quelques exemples étiquetés par classe (1, 5, 16), par exemple par prototypes de classe | B1 |
+| few-shot | à quelques exemples | classer avec quelques exemples étiquetés par classe (1, 5, 16), par exemple par prototypes de classe ; pour un LLM, quelques exemples placés dans le prompt (B4) | B1 |
 | prototype de classe | class prototype | moyenne des embeddings des exemples d'une classe, $\mathbf{m}_c = \frac{1}{|S_c|}\sum_{\mathbf{x} \in S_c} \phi(\mathbf{x})$ ; une image va au prototype le plus proche au sens du cosinus (J. Snell et coll., 2017) | B1 |
 | support (few-shot) | support set | l'ensemble $S_c$ des exemples étiquetés d'une classe dans un problème few-shot (à ne pas confondre avec le support d'une classe du ch. 3) | B1 |
-| zéro-shot | zero-shot | classer sans aucun exemple de la tâche cible : CLIP compare l'image à une phrase par classe | B1 |
+| zéro-shot | zero-shot | classer sans aucun exemple de la tâche cible : CLIP compare l'image à une phrase par classe ; pour un LLM, la tâche donnée dans le prompt, sans exemple (B4) | B1 |
 | gabarit (de prompt) | prompt template | phrase à trou qui fabrique une phrase par classe pour le zéro-shot : « a photo of a {classe} » | B1 |
 | ensemble de prompts | prompt ensembling | moyenne, pour chaque classe, des embeddings normalisés de plusieurs gabarits, puis renormalisation | B1 |
 | apprentissage contrastif | contrastive learning | apprendre des embeddings en rapprochant les paires qui vont ensemble (une image et sa légende) et en éloignant les autres paires du mini-batch (CLIP) | B1 |
@@ -1015,6 +1015,49 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | mémorisation (modèle de langue) | memorization | le modèle reproduit mot pour mot des passages de ses données d'entraînement ; elle croît avec la taille du modèle, les répétitions et la longueur du prompt (Carlini et coll.) | B3 |
 | canari | canary | chaîne secrète aléatoire insérée dans les données d'entraînement pour mesurer si le modèle la recrache (Carlini et coll., 2019) | B3 |
 | confidentialité différentielle (DP-SGD) | differential privacy | entraînement aux gradients rognés et bruités exemple par exemple, qui borne l'influence de chaque exemple sur le modèle | B3 |
+| modèle de base | base model | LLM après le seul pré-entraînement : il continue n'importe quel texte, sans suivre de consigne | B4 |
+| modèle instruct | instruct model | modèle de base qui a reçu un fine-tuning supervisé sur des consignes (SFT), souvent aussi un alignement : il suit des consignes | B4 |
+| modèle de chat | chat model | modèle instruct entraîné sur des conversations à rôles (système, utilisateur, assistant), marqués par des tokens spéciaux | B4 |
+| SFT | supervised fine-tuning, fine-tuning supervisé | fine-tuning sur des paires consigne-réponse mises en forme par le chat template ; la loss ne porte que sur les tokens de la réponse | B4 |
+| chat template | modèle de conversation | gabarit Jinja rangé avec le tokenizer, qui transforme une liste de messages à rôles en texte avec les tokens spéciaux du modèle (`apply_chat_template`) | B4 |
+| ChatML | — | format de conversation `<\|im_start\|>rôle … <\|im_end\|>` (Qwen, SmolLM2) ; Llama 3 a le sien | B4 |
+| `add_generation_prompt` | — | option d'`apply_chat_template` qui ajoute à la fin le début du tour de l'assistant : le modèle sait que c'est à lui d'écrire | B4 |
+| open weights | poids ouverts | poids téléchargeables sous une licence de l'éditeur, sans les données ni le code d'entraînement : pas forcément « open source » | B4 |
+| quantification | quantization | ranger chaque poids comme un entier de 8 ou 4 bits, avec une échelle commune à un groupe de poids ; erreur d'au plus la moitié de l'échelle | B4 |
+| chaîne d'arrêt | stop string | texte dont l'apparition arrête la génération (`stop_strings`, avec `tokenizer=`) ; il reste dans la sortie | B4 |
+| streaming | diffusion au fil de l'eau | afficher les tokens au fur et à mesure de la génération (`TextStreamer`, `TextIteratorStreamer`) | B4 |
+| apprentissage en contexte | in-context learning | apprendre une tâche par des exemples placés dans le prompt, sans changer les poids (GPT-3, 2020) | B4 |
+| sortie structurée | structured output | réponse dans un format lisible par programme (JSON), à valider avant de s'en servir | B4 |
+| génération contrainte | constrained decoding | masquer à chaque pas les tokens qui casseraient une grammaire ou un schéma : la sortie est toujours valide | B4 |
+| chain-of-thought | chaîne de pensée, raisonnement pas à pas | faire écrire au modèle ses étapes avant la réponse (Wei et coll., 2022) ; utile surtout aux grands modèles, et pas une preuve | B4 |
+| modèle de raisonnement | reasoning model | modèle entraîné à écrire une longue réflexion avant de répondre (le mode `<think>` de Qwen3) | B4 |
+| auto-cohérence | self-consistency | tirer plusieurs réponses et garder la plus fréquente (vote majoritaire) | B4 |
+| exact match | correspondance exacte | 1 si la réponse normalisée (minuscules, sans ponctuation ni articles) égale la référence, 0 sinon | B4 |
+| juge LLM | LLM-as-a-judge | LLM qui note les réponses d'un autre ; biais de position, de longueur et d'auto-complaisance, à valider sur des notes humaines | B4 |
+| chunk | morceau | unité de texte indexée par une recherche et montrée au modèle (fenêtre de mots, avec recouvrement) | B4 |
+| recouvrement | overlap | unités partagées par deux chunks consécutifs : ils commencent tous les $c - o$ unités | B4 |
+| BM25 | Okapi BM25 | score lexical : idf × fréquence saturée ($k_1$) et normalisée par la longueur ($b$), sommé sur les termes de la requête | B4 |
+| racinisation | stemming | ramener les formes d'un mot à une racine commune avant l'indexation (« violons » → « violon ») | B4 |
+| recherche dense | dense retrieval | recherche par cosinus entre les embeddings de la requête et des documents | B4 |
+| bi-encodeur | bi-encoder | modèle qui encode séparément requête et documents : l'index se calcule d'avance (au contraire du cross-encoder) | B4 |
+| recherche hybride | hybrid search | combiner une recherche lexicale (BM25) et une recherche dense, souvent par fusion des classements | B4 |
+| reciprocal rank fusion (RRF) | fusion par rangs réciproques | fusionner des classements par $\sum_r 1/(k + \operatorname{rang}_r(d))$, $k = 60$, rangs à partir de 1 | B4 |
+| HNSW | hierarchical navigable small world | index de recherche approchée des plus proches voisins par un graphe à plusieurs étages (Malkov et Yashunin) | B4 |
+| base de données vectorielle | vector database | logiciel qui range des embeddings dans un index (souvent approché), les met à jour et filtre par métadonnées (FAISS, pgvector, Qdrant) | B4 |
+| recall@k | rappel aux k premiers | part des documents pertinents trouvés dans les $k$ premiers résultats, en moyenne sur les questions | B4 |
+| MRR | mean reciprocal rank, rang réciproque moyen | moyenne de $1/\text{rang}$ du premier document pertinent (0 si aucun) | B4 |
+| mémoire paramétrique, non paramétrique | parametric, non-parametric memory | ce que savent les poids d'un modèle / un index de documents lisible, citable et modifiable (le RAG de Lewis et coll.) | B4 |
+| PEFT | parameter-efficient fine-tuning | fine-tuning qui n'entraîne qu'une petite partie des paramètres, ou de petits modules ajoutés ; aussi le nom de la bibliothèque `peft` | B4 |
+| adaptateur (PEFT) | adapter | petit module entraînable ajouté à un modèle gelé (LoRA en est un) ; à ne pas confondre avec l'adaptateur d'interface du ch. 15 | B4 |
+| rang (LoRA) | rank | dimension $r$ des matrices $\mathbf{A}$ et $\mathbf{B}$ ; $\Delta\mathbf{W} = \frac{\alpha}{r}\mathbf{B}\mathbf{A}$ est de rang au plus $r$ | B4 |
+| rsLoRA | rank-stabilized LoRA | LoRA avec le facteur $\alpha/\sqrt{r}$ au lieu de $\alpha/r$, pour les grands rangs (`use_rslora=True`) | B4 |
+| DoRA | weight-decomposed low-rank adaptation | LoRA qui sépare une norme apprise par colonne et une direction apprise par LoRA (`use_dora=True`) | B4 |
+| fusion d'adaptateur | merging | ajouter $\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ à $\mathbf{W}$ (`merge_and_unload`) : plus aucun surcoût à l'inférence | B4 |
+| QLoRA | quantized LoRA | LoRA sur un modèle de base gelé et quantifié en 4 bits (NF4) (Dettmers et coll., 2023) | B4 |
+| injection de prompt | prompt injection | instructions glissées dans les données d'un LLM ; **indirecte** quand elles viennent d'un document récupéré (page web, e-mail, passage) | B4 |
+| agentivité excessive | excessive agency | un LLM qui a trop d'outils, de droits ou d'autonomie (OWASP LLM03:2026) | B4 |
+| modèle d'IA à usage général | general-purpose AI model | catégorie de l'AI Act (art. 53) : obligations du fournisseur, « risque systémique » au-delà de $10^{25}$ FLOPs d'entraînement | B4 |
+| hypertrucage | deepfake | contenu généré qui imite une personne, un lieu ou un événement réels ; à signaler (AI Act, art. 50) | B4 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

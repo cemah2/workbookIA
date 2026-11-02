@@ -259,6 +259,21 @@
 | `h = module.register_forward_hook(lambda m, inp, out: saved.append(out))` ; `h.remove()` | lire la sortie (ou l'entrée, `inp[0]`) d'un sous-module à chaque passe avant, puis retirer le hook (B3.23, B3.24) |
 | `with torch.profiler.profile(activities=[ProfilerActivity.CPU], profile_memory=True) as prof:` ; `prof.key_averages()` | la mémoire allouée par chaque opérateur (`cpu_memory_usage`) ; `tracemalloc` ne voit pas les tenseurs de PyTorch (B3.27) |
 
+## LLM avec transformers et peft (bonus B4)
+
+| Code | Effet |
+|---|---|
+| `tok = AutoTokenizer.from_pretrained(nom, revision=rev)` ; `model = AutoModelForCausalLM.from_pretrained(nom, revision=rev, dtype=torch.float32)` | charger tokenizer et modèle à un commit figé ; sans `dtype`, celui de `config.json` (`torch_dtype=` est déprécié) ; le modèle est déjà en `eval()` |
+| `model.num_parameters()` ; `model.get_memory_footprint()` | les paramètres du modèle **chargé** (poids liés une fois) ; les octets des paramètres et des buffers |
+| `with torch.device("meta"): m = AutoModelForCausalLM.from_config(cfg)` | un modèle sans mémoire ni téléchargement des poids, pour compter ses paramètres ou lire ses noms de couches |
+| `enc = tok.apply_chat_template(msgs, add_generation_prompt=True, return_tensors="pt", return_dict=True)` | le prompt d'un modèle de chat, `input_ids` et `attention_mask` ; `tokenize=False` rend la chaîne, à afficher |
+| `out = model.generate(**enc, max_new_tokens=64, do_sample=False)` ; `tok.decode(out[0, enc["input_ids"].shape[1]:], skip_special_tokens=True)` | générer de façon gloutonne, puis décoder la seule réponse ; `model.generation_config` donne les réglages par défaut |
+| `generate(..., stop_strings=["\nQ:"], tokenizer=tok)` ; `streamer=TextStreamer(tok, skip_prompt=True)` | s'arrêter sur une chaîne (qui reste dans la sortie) ; afficher les tokens au fil de l'eau |
+| `pipeline("text-generation", model=model, tokenizer=tok)(msgs, max_new_tokens=40)` | tout en une ligne, pour essayer ; `out[0]["generated_text"][-1]` est le message de l'assistant |
+| `LoraConfig(r=8, lora_alpha=16, target_modules=["q_proj", "v_proj"], lora_dropout=0.0, task_type="CAUSAL_LM")` ; `model = get_peft_model(model, config)` | ajouter des branches LoRA aux couches nommées (`"all-linear"` : toutes les couches denses sauf la tête) ; `fan_in_fan_out=True` pour les `Conv1D` de GPT-2 |
+| `model.print_trainable_parameters()` ; `[p for p in model.parameters() if p.requires_grad]` | vérifier ce qui s'entraîne ; les seuls paramètres à donner à l'optimiseur |
+| `model.save_pretrained(dossier)` ; `merged = model.merge_and_unload()` | sauver l'adaptateur seul (quelques Mo) ; fusionner $\frac{\alpha}{r}\mathbf{B}\mathbf{A}$ dans $\mathbf{W}$ et rendre un modèle ordinaire |
+
 ## Dataset et DataLoader
 
 | Code | Effet |
