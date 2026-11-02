@@ -282,8 +282,165 @@ def r21(_) -> dict:
     return {"rows": rows, "summary": summary}
 
 
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Second half (session 70, B4.22 to B4.30)
+# ---------------------------------------------------------------------------------------------------------------------
+def b25(_) -> dict:
+    """📦 B4.25: the trainable parameters of TinyBlock_25 with LoRA on attn.q and attn.v, and the classic mistakes."""
+    import torch
+    import torch.nn as nn
+
+    import chB4_code2 as C2
+    ns = {"torch": torch, "nn": nn}
+    exec("import torch.nn.functional as F\n" + C2.GIVEN_25, ns)
+    block = ns["TinyBlock_25"]()
+    r, mods = ns["R_25"], dict(block.named_modules())
+    a_only = sum(r * mods[n].in_features for n in ns["TARGETS_25"])
+    b_only = sum(r * mods[n].out_features for n in ns["TARGETS_25"])
+    out = {"trainable": a_only + b_only, "a_only": a_only, "b_only": b_only,
+           "all": sum(p.numel() for p in block.parameters()) + a_only + b_only}
+    print(f"  b25 {out}", flush=True)
+    return out
+
+
+LORA26 = {"fast": [30, 4, 128, 1e-3], "full": [300, 8, 256, 5e-4]}   # steps, batch, length, learning rate
+
+
+def lora26(_) -> dict:
+    """📦 B4.26: the settings (fast: measured on 2 cores, 30 steps ≈ 45 s, held-out perplexity 48.5 → 37.4)."""
+    return dict(LORA26)
+
+
+P27_GRID = [["c_attn, r = 1, α = 2", 1, 2, ["c_attn"]], ["c_attn, r = 16, α = 32", 16, 32, ["c_attn"]],
+            ["c_attn, r = 4, α = 32", 4, 32, ["c_attn"]], ["toutes les couches, r = 4, α = 8", 4, 8, ["c_attn", "c_proj", "c_fc"]]]
+
+
+def p27_fast(_) -> dict:
+    return {"steps": 10, "grid": P27_GRID}
+
+
+def _lora_ns():
+    """The namespace of part C (fast mode: distilgpt2) with the solutions of B4.26 and B4.27."""
+    ns = namespace(True, blocks=cells("TOOLS_B"))
+    import chB4_code2 as C2
+    import chB4_parts2 as P2
+    for code in (C2.TOOLS_C, P2.GIVEN_26, C2.SOLUTION_26, P2.GIVEN_27.split("# The full protocol")[0], C2.SOLUTION_27):
+        run(code, ns)
+    return ns
+
+
+def p27_full(_) -> dict:
+    """🔬 B4.27, the full protocol (distilgpt2, P27_STEPS steps, two seeds): seven ranks with α = 2r, three with α = 8,
+    and the modules at r = 4."""
+    ns = _lora_ns()
+    steps, seeds = 40, (27, 28)
+    configs = [("alpha = 2r", f"r = {r}", r, 2 * r, ["c_attn"]) for r in (1, 2, 4, 8, 16, 32, 64)]
+    configs += [("alpha = 8", f"r = {r}, α = 8", r, 8, ["c_attn"]) for r in (1, 16, 64)]
+    configs += [("modules", "attention (c_attn, c_proj)", 4, 8, ["c_attn", "c_proj"]),
+                ("modules", "toutes (c_attn, c_proj, c_fc)", 4, 8, ["c_attn", "c_proj", "c_fc"])]
+    rows = []
+    for family, label, r, alpha, targets in configs:
+        outs = [ns["experiment_27"](r, alpha, targets, steps, s) for s in seeds]
+        ppl = [o["ppl"] for o in outs]
+        rows.append({"family": family, "label": label, "r": r, "alpha": alpha, "targets": targets,
+                     "trainable": outs[0]["trainable"], "ppl": float(np.mean(ppl)), "seeds_std": float(np.std(ppl)),
+                     "per_seed": ppl})
+        print(f"  p27 {rows[-1]}", flush=True)
+    base = ns["perplexity_26"](ns["load_base_26"](), ns["HELD_26"])
+    return {"model": "distilgpt2", "steps": steps, "n_seeds": len(seeds), "lr": ns["LR_26"], "base_ppl": base, "rows": rows}
+
+
+NEW_FAST = ("TOOLS_B", "GIVEN_19", "GIVEN_20", "E5_HOLMES_20 = []", "SOLUTION_20", "CHECK_20", "GIVEN_21", "SOLUTION_21",
+            "C2:GIVEN_22", "C2:SOLUTION_22", "C2:CHECK_22", "C2:EXPERIMENT_22", "C2:GIVEN_23", "C2:SOLUTION_23",
+            "C2:EXPERIMENT_23", "P2:GIVEN_24", "C2:SOLUTION_24", "C2:EXPERIMENT_24")
+
+
+def generations2(_) -> dict:
+    """The replies of B4.22 to B4.24 (fast and full modes), added to the frozen cache (the replies already there are
+    read from it, never generated again; nothing is removed)."""
+    import chB4_code2 as C2
+    import chB4_parts2 as P2
+    from wb import llm as wbllm
+    target = ROOT / wbllm.SOLUTION_CACHE
+    folder = tempfile.mkdtemp(prefix="wb_b4_gen2_")
+    stats = {}
+    try:
+        for fast in (True, False):
+            ns = namespace(fast, folder)
+            ns["CACHE"] = wbllm.GenerationCache("solution", folder=folder, frozen=target)
+            for name in NEW_FAST:
+                import chB4_code as C
+                if name.startswith("C2:"):
+                    code = getattr(C2, name[3:])
+                elif name.startswith("P2:"):
+                    code = getattr(P2, name[3:])
+                else:
+                    code = getattr(C, name) if hasattr(C, name) else name
+                start = time.perf_counter()
+                text = run(code, ns)
+                bad = [line for line in text.splitlines() if line.startswith("❌")]
+                print(f"  {'fast' if fast else 'full'} {name}: {time.perf_counter() - start:.0f} s"
+                      + (f" ❌ {bad[:3]}" if bad else ""), flush=True)
+            table = ns.get("table_24")
+            if table:
+                names = list(ns["PAYLOADS_24"])
+                rows = {}
+                for d, (att, cor) in table.items():
+                    per_seed = att.mean(axis=1)
+                    by = att.reshape(len(ns["SEEDS_24"]), len(ns["ITEMS_24"]), len(names)).mean(axis=(0, 1))
+                    rows[d] = {"mean": float(per_seed.mean()), "std": float(per_seed.std()), "correct": float(cor.mean()),
+                               "by_payload": [float(v) for v in by], "per_seed": [float(v) for v in per_seed]}
+                stats["fast" if fast else "full"] = {"model": ns["MODEL_24"].name, "n_seeds": len(ns["SEEDS_24"]),
+                                                     "n_items": len(ns["ITEMS_24"]), "rows": rows}
+            stats[f"rows23_{'fast' if fast else 'full'}"] = [{k: r[k] for k in ("id", "category", "reply")}
+                                                             for r in ns.get("rows_23") or []]
+        new = json.loads((Path(folder) / "generations-solution.json").read_text(encoding="utf-8"))["entries"] \
+            if (Path(folder) / "generations-solution.json").exists() else {}
+        old = json.loads(target.read_text(encoding="utf-8"))["entries"]
+        merged = {**old, **new}
+        wbllm.write_json_atomic(target, {"version": wbllm.CACHE_VERSION, "source": "solution", "entries": merged})
+        print(f"  generations2: {len(new)} new replies, {len(merged)} in all → {target.relative_to(ROOT)}", flush=True)
+        stats["n_new"], stats["n_all"] = len(new), len(merged)
+        return stats
+    finally:
+        shutil.rmtree(folder, ignore_errors=True)
+
+
+def bug22(_) -> dict:
+    """🐛 B4.22 replayed on its 16 versions (each defect fixed or not): the first point that fails must be the first
+    defect left, and no version may crash."""
+    import itertools
+
+    import chB4_code2 as C2
+    ns = namespace(True, blocks=cells("TOOLS_B", "GIVEN_19", "GIVEN_20", "GIVEN_21"))
+    run(C2.GIVEN_22, ns)
+    buggy, fixed = {}, {}
+    run(C2.TODO_22, ns)
+    buggy = {n: ns[n] for n in ("chunk_22", "query_22", "prompt_ids_22", "verify_22")}
+    run(C2.SOLUTION_22, ns)
+    fixed = {n: ns[n] for n in buggy}
+    rows = []
+    for mask in itertools.product([False, True], repeat=4):
+        fns = [fixed[n] if m else buggy[n] for n, m in zip(buggy, mask)]
+        ns["FNS_22"] = fns
+        text = run("OK_22 = None\nwith checked('B4.22'):\n    OK_22 = diagnose_22(*FNS_22)", ns)
+        first_bad = next((k for k, m in enumerate(mask, start=1) if not m), None)
+        failed = next((int(line.split("point ")[1].split(",")[0]) for line in text.splitlines()
+                       if line.startswith("❌ Ex B4.22 : point")), None)
+        crashed = any("ton code lève" in line for line in text.splitlines())
+        rows.append({"fixed": list(mask), "first_bad": first_bad, "failed": failed, "crashed": crashed})
+        if not any(mask):
+            buggy_text = text
+        print(f"  bug22 {mask} first defect {first_bad}, failed point {failed}" + (" CRASH" if crashed else ""), flush=True)
+        if failed != first_bad or crashed:
+            raise SystemExit(f"❌ bug22: the version {mask} stops at {failed} (expected {first_bad}):\n{text}")
+    print("  bug22: messages of the buggy version:\n" + buggy_text, flush=True)
+    return {"versions": rows}
+
 ENTRIES = {"c12": c12, "p13": p13, "p19": p19, "e5_holmes": e5_holmes, "generations": generations,
-           "p16_full": p16_full, "r21": r21}
+           "p16_full": p16_full, "r21": r21, "b25": b25, "lora26": lora26, "p27_fast": p27_fast,
+           "generations2": generations2, "p27_full": p27_full, "bug22": bug22}
 
 
 def main(argv=None) -> int:

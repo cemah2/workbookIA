@@ -1307,5 +1307,64 @@
    "idk": 0,
    "correct_and_verified": 8
   }
+ },
+ "b25": {
+  "trainable": 832,
+  "a_only": 512,
+  "b_only": 320,
+  "all": 41248
+ },
+ "lora26": {
+  "fast": [
+   30,
+   4,
+   128,
+   0.001
+  ],
+  "full": [
+   300,
+   8,
+   256,
+   0.0005
+  ]
+ },
+ "p27_fast": {
+  "steps": 10,
+  "grid": [
+   [
+    "c_attn, r = 1, α = 2",
+    1,
+    2,
+    [
+     "c_attn"
+    ]
+   ],
+   [
+    "c_attn, r = 16, α = 32",
+    16,
+    32,
+    [
+     "c_attn"
+    ]
+   ],
+   [
+    "c_attn, r = 4, α = 32",
+    4,
+    32,
+    [
+     "c_attn"
+    ]
+   ],
+   [
+    "toutes les couches, r = 4, α = 8",
+    4,
+    8,
+    [
+     "c_attn",
+     "c_proj",
+     "c_fc"
+    ]
+   ]
+  ]
  }
 }

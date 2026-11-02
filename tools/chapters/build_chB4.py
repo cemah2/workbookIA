@@ -14,9 +14,9 @@ mylearn.embeddings), scikit-learn, transformers and peft (models built from loca
 the chat template of SmolLM2 rendered by transformers' own Jinja renderer): part 0 downloads nothing. If the tokenizer
 of SmolLM2-135M-Instruct happens to be in the local Hugging Face cache, the token counts of ✏️ B4.4 are also compared
 with it (`local_files_only=True`).
-Parts A and B (B4.12 to B4.21: usage and prompting, retrieval and the RAG) come from chB4_parts.py and chB4_code.py,
-with the replies and the calibrations precomputed by history_chB4.py; B4.22 to B4.30 (the rest of the RAG, fine-tuning,
-delivery) come at the next generation session (NEXT_SESSION).
+Parts A and B (B4.12 to B4.21: usage and prompting, retrieval and the RAG) come from chB4_parts.py and chB4_code.py;
+the rest of part B (B4.22 to B4.24), part C (fine-tuning, B4.25 to B4.28) and part D (delivery, B4.29 and B4.30) from
+chB4_parts2.py and chB4_code2.py; the replies and the calibrations are precomputed by history_chB4.py.
 """
 
 from __future__ import annotations
@@ -598,18 +598,14 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "⚖️ B4.9 et B4.10, 📄 B4.11) et l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A and B (exercises B4.12 to B4.21); B4.22 to B4.30 at the next generation session (NEXT_SESSION)
+# Parts A to D (exercises B4.12 to B4.30)
 # ---------------------------------------------------------------------------
 import chB4_code  # noqa: E402,F401  (the cells; history_chB4.py reuses them)
-from chB4_parts import PARTS  # noqa: E402
+from chB4_parts import PART_A, PART_B  # noqa: E402
+from chB4_parts2 import PART_B_SECOND, PART_C, PART_D  # noqa: E402
 
-NEXT_SESSION = [
-    ("B", "B4.22 à B4.24", "suite de la recherche et du RAG : quatre défauts, évaluation et analyse des échecs, "
-                           "injection de prompt"),
-    ("C", "B4.25 à B4.28", "fine-tuning : LoRA à la main contre peft, style de Holmes, rang et modules ciblés, "
-                           "classification de textes"),
-    ("D", "B4.29 et B4.30", "livraison : pipeline reproductible et défi RAG"),
-]
+PART_B.exercises = PART_B.exercises[:5] + PART_B_SECOND      # B4.17 to B4.21, then B4.22 to B4.24
+PARTS = [PART_A, PART_B, PART_C, PART_D]
 
 
 def part_cells_b4(part, kind: str) -> list:
@@ -627,9 +623,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if NEXT_SESSION:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B4 · LLM en pratique : Hugging Face, prompting, RAG et LoRA — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -672,19 +665,15 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if not NEXT_SESSION else
-             "\n\n*Les exercices B4.22 à B4.30 (la suite du RAG, le fine-tuning, la livraison) seront ajoutés à la "
-             "prochaine session de génération ; relance alors `python tools/start_chapter.py B4` pour obtenir le "
-             "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu dire si un modèle tient en mémoire, poids et KV cache compris, selon son dtype ?\n"
                "2. Sais-tu appliquer à la main un chat template et compter les tokens d'un prompt ?\n"
                "3. Sais-tu calculer BM25, recall@k et MRR à la main ?\n"
                "4. Sais-tu compter les paramètres de LoRA et dériver les gradients de $\\mathbf{A}$ et $\\mathbf{B}$ ?\n\n"
-               "**Pour aller plus loin** : le cours LLM de Hugging Face et l'article de LoRA, cités dans la fiche. "
-               "La suite : le bonus B5, les modèles génératifs d'images."
-               + later)]
+               "**Pour aller plus loin** : le cours LLM de Hugging Face (chat templates, fine-tuning supervisé, "
+               "LoRA, évaluation), l'article de LoRA et celui du RAG, l'OWASP Top 10 des applications LLM, tous "
+               "cités dans la fiche. La suite : le bonus B5, les modèles génératifs d'images.")]
 
 
 def build(kind: str) -> list:

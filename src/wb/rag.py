@@ -66,6 +66,32 @@ def load_unanswerable() -> list[dict]:
     return json.loads(json.dumps(_qa_file("holmes")["unanswerable"]))
 
 
+CONTROL_FILE = "holmes_control.json"
+
+
+def load_control() -> list[dict]:
+    """12 held-out questions on Holmes (``C01`` to ``C12``, one per story), the control of the challenge B4.30: ``id``,
+    ``question``, ``story``, ``story_title``, ``max_words`` and ``answer_sha256``, the SHA-256 hashes of the
+    normalised answers (``normalize_answer``) — the answers themselves are not stored. ``control_correct`` checks a
+    reply against them."""
+    data = json.loads((QA_DIR / CONTROL_FILE).read_text(encoding="utf-8"))
+    return json.loads(json.dumps(data["questions"]))
+
+
+def control_correct(text: str, item: dict) -> bool:
+    """``answer_in`` for a control question: True when a run of consecutive words of the normalised ``text`` has the
+    hash of a normalised answer of ``item``."""
+    import hashlib
+
+    words = normalize_answer(text).split()
+    hashes = set(item["answer_sha256"])
+    for n in range(1, int(item["max_words"]) + 1):
+        for i in range(len(words) - n + 1):
+            if hashlib.sha256(" ".join(words[i:i + n]).encode("utf-8")).hexdigest() in hashes:
+                return True
+    return False
+
+
 def documents(name: str = "holmes") -> list[tuple[str, str]]:
     """``[(title, text)]``: the 12 stories of Holmes (``wb.text.holmes_stories()``), or chapters I to VII of Verne
     (the heading of each chapter is its title; the corpus of the 10 French questions)."""

@@ -1,0 +1,140 @@
+{
+ "name": "Holmes QA control (B4.30)",
+ "version": 1,
+ "description": "12 held-out questions on the twelve stories (one per story), written for the workbook: the control of the challenge B4.30. Their answers are stored only as SHA-256 hashes of the normalised answers (wb.rag.normalize_answer), so that a method cannot read them.",
+ "license": "questions written for the workbook (CC0), their answers kept as hashes only; the stories are in the public domain (Project Gutenberg eBook 1661)",
+ "questions": [
+  {
+   "id": "C01",
+   "question": "Where in her sitting-room did Irene Adler hide the photograph?",
+   "story": 0,
+   "story_title": "A Scandal in Bohemia",
+   "answer_sha256": [
+    "bcdbdca584219613340a0961dbcabb326e83d7f2fb70d10ce0229646ed031840",
+    "f5c70f9cad4ed60c17d1a2ca969e583affb2a6ee3c4ca123004f2983e577201f",
+    "0cdab9783991514b78bcc214c0098bb1eb397363b169f72726194ab9e74c1389",
+    "643a265cf18552dc0da1e5f20729eb611cf2267265d58be75f537f4ceba106e1"
+   ],
+   "max_words": 5
+  },
+  {
+   "id": "C02",
+   "question": "Which bank has a branch at Coburg near Jabez Wilson's shop?",
+   "story": 1,
+   "story_title": "The Red-Headed League",
+   "answer_sha256": [
+    "c25eb40fc5b6bec524ee965aa81824cb552edb63cbc36bd2e04d018f7468d1b0",
+    "fcb3b947f3391e73228590feab393f8923b12fd4d81f948179728c46b35b247e"
+   ],
+   "max_words": 4
+  },
+  {
+   "id": "C03",
+   "question": "In which street was Hosmer Angel a cashier?",
+   "story": 2,
+   "story_title": "A Case of Identity",
+   "answer_sha256": [
+    "cbf5caabd35023208e6bb7680850241eac89eebb40e5c89b2ee247ee094a4460",
+    "cf4b632309f1482dfe686f35f9f5645f4b401d389af9152e987b65edb0b33317"
+   ],
+   "max_words": 2
+  },
+  {
+   "id": "C04",
+   "question": "What is the first name of McCarthy's son?",
+   "story": 3,
+   "story_title": "The Boscombe Valley Mystery",
+   "answer_sha256": [
+    "119c9ae6f9ca741bd0a76f87fba0b22cab5413187afb2906aa2875c38e213603",
+    "85a1003a674af87f5e448f8946440437d324a03c2b6d3ff298c6050351e9d01e",
+    "58044c8bdeb699a9f983e0a0bf26652d74ed97f4314168769cdfd9a1ab1ffa97"
+   ],
+   "max_words": 3
+  },
+  {
+   "id": "C05",
+   "question": "What was the name of Captain James Calhoun's barque?",
+   "story": 4,
+   "story_title": "The Five Orange Pips",
+   "answer_sha256": [
+    "67c7b7b7e0a2fc7e7f66e50a650f5a9c2357274160c6888e96f9a834baf81d52"
+   ],
+   "max_words": 2
+  },
+  {
+   "id": "C06",
+   "question": "Who was the lodger of the Lascar?",
+   "story": 5,
+   "story_title": "The Man with the Twisted Lip",
+   "answer_sha256": [
+    "1fc23f2ad53ecc05078bf41ce6a61041761ccfcfe49964b3a5d7c58e1154ccfa",
+    "9aab09897bdaf8345b4cb7d290633c47ddf44332af4d640e15b3f8f680c1c597"
+   ],
+   "max_words": 2
+  },
+  {
+   "id": "C07",
+   "question": "Which salesman in Covent Garden sold the geese to the landlord of the Alpha?",
+   "story": 6,
+   "story_title": "The Blue Carbuncle",
+   "answer_sha256": [
+    "cd2e950caef9491c199e93d1f5ef48333c0ca602630982dc2d84181f091174eb"
+   ],
+   "max_words": 1
+  },
+  {
+   "id": "C08",
+   "question": "What was the first name of Helen Stoner's twin sister?",
+   "story": 7,
+   "story_title": "The Speckled Band",
+   "answer_sha256": [
+    "d277670919a94ba361be1887d39852c3f31d7eed817343cbb70fcd8910841f86",
+    "16ba05c7df3222826c3c08a249e2fc49c1bd4a795901e0488d964deadcb7392b"
+   ],
+   "max_words": 2
+  },
+  {
+   "id": "C09",
+   "question": "What name was engraved on the card of the colonel who came to see the engineer?",
+   "story": 8,
+   "story_title": "The Engineer’s Thumb",
+   "answer_sha256": [
+    "a7d8cf826070c47467c39b04672504c890eefb906a70e1b060000e86a5e1e4a7",
+    "5c196284b4d02035084497b67cb9a9a1e2f8bfd936768c711677c38f269c71d5"
+   ],
+   "max_words": 3
+  },
+  {
+   "id": "C10",
+   "question": "Which lady who had caused a disturbance was arrested?",
+   "story": 9,
+   "story_title": "The Noble Bachelor",
+   "answer_sha256": [
+    "cd4a16a1ad0f8698001ca4c954f27cc7b98986b885c0ae921d2ff35d355071e5",
+    "2a9be05e807f65ce6dccefc92c3344fd03316189bd9e7dbc68996c19c1edc5ec"
+   ],
+   "max_words": 3
+  },
+  {
+   "id": "C11",
+   "question": "Of which banking firm is Alexander Holder a partner?",
+   "story": 10,
+   "story_title": "The Beryl Coronet",
+   "answer_sha256": [
+    "2c1a7c2721b7463d7151a3e74674f45138a51806514c633ab6b053b809c56602",
+    "506a43a03044503897b68bcd91c7165d0e0cb52e39f0c997dfe6c765e9dcfce7"
+   ],
+   "max_words": 3
+  },
+  {
+   "id": "C12",
+   "question": "Which colour of dress did the governess have to wear indoors in the morning?",
+   "story": 11,
+   "story_title": "The Copper Beeches",
+   "answer_sha256": [
+    "958bde29abaa12ca4403fee1bacb1b032f5c93bf713f62a1845df7b560caa9b2"
+   ],
+   "max_words": 2
+  }
+ ]
+}

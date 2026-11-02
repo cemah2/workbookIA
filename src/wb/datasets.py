@@ -207,6 +207,48 @@ def load_california(as_frame: bool = True, return_X_y: bool = False, source: str
     return df if as_frame else df.to_numpy()
 
 
+NEWSGROUPS_REMOVE = ("headers", "footers", "quotes")   # what scikit-learn's documentation recommends removing
+
+
+def load_20newsgroups(categories, split: str = "train", n: int | None = None, seed: int = 0, min_chars: int = 20):
+    """20 Newsgroups (scikit-learn's « bydate » version, ≈ 14 Mo downloaded once into ``cache_dir() / "sklearn"``),
+    for the ``categories`` given (names such as ``"sci.space"``), **without** the headers, the signatures and the
+    quoted replies (``remove=NEWSGROUPS_REMOVE``: otherwise a classifier learns names and addresses, fiche B4 §204.9).
+
+    Messages left with fewer than ``min_chars`` characters (after ``strip``) are dropped. ``n``: a stratified
+    subsample of ``n`` messages (``seed``), in a shuffled order. Returns ``(texts, labels)``: a list of strings and an
+    int64 array of indices into ``categories`` (in their order)."""
+    import socket
+
+    from sklearn.datasets import fetch_20newsgroups
+
+    if split not in ("train", "test"):
+        raise ValueError(f"split must be 'train' or 'test', got {split!r}")
+    categories = list(categories)
+    previous_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(60)                       # never hang behind a blocking proxy
+    try:
+        bunch = fetch_20newsgroups(subset=split, categories=categories, remove=NEWSGROUPS_REMOVE, shuffle=False,
+                                   data_home=str(cache_dir() / "sklearn"))
+    finally:
+        socket.setdefaulttimeout(previous_timeout)
+    names = list(bunch.target_names)                    # sorted by scikit-learn: back to the order of `categories`
+    keep = [i for i, t in enumerate(bunch.data) if len(t.strip()) >= min_chars]
+    texts = [bunch.data[i].strip() for i in keep]
+    labels = np.array([categories.index(names[bunch.target[i]]) for i in keep], dtype=np.int64)
+    rng = np.random.default_rng(seed)
+    if n is None:
+        order = rng.permutation(len(texts))
+    else:
+        if not 0 < n <= len(texts):
+            raise ValueError(f"n must be between 1 and {len(texts)}, got {n}")
+        k = len(categories)
+        per = [n // k + (c < n % k) for c in range(k)]
+        order = np.concatenate([rng.permutation(np.flatnonzero(labels == c))[:per[c]] for c in range(k)])
+        order = rng.permutation(order)
+    return [texts[i] for i in order], labels[order]
+
+
 ADULT_NUMERIC = ["age", "fnlwgt", "education-num", "capital-gain", "capital-loss", "hours-per-week"]
 ADULT_CATEGORICAL = ["workclass", "education", "marital-status", "occupation", "relationship", "race", "sex",
                      "native-country"]
