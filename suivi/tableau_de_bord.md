@@ -1464,3 +1464,42 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B2.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (26 cartes)
 <!-- wb:end B2 -->
+
+<!-- wb:section B3 -->
+## B3 — Attention et Transformers : un mini-GPT from scratch ⏱️ 22 h
+
+- [ ] B3.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] B3.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B3.1 ✏️ L'attention à la main : trois tokens, d_k = 2, scores, softmax et sortie ★★ 20 min
+- [ ] B3.2 ✏️ Le même calcul avec un masque causal ★ 10 min
+- [ ] B3.3 ✏️ Suivre les formes dans l'attention multi-têtes et compter ses paramètres ★★ 15 min
+- [ ] B3.4 ✏️ Encodage sinusoïdal : quelques valeurs et l'effet d'un décalage de position ★★ 20 min
+- [ ] B3.5 ✏️ Compter les paramètres d'un GPT et retrouver les 124 millions de GPT-2 small ★★ 25 min
+- [ ] B3.6 ∂ Pourquoi √d_k : variance du produit scalaire de deux vecteurs aléatoires ★★ 25 min
+- [ ] B3.7 ∂ RoPE : la rotation rend q_m · k_n fonction de m − n seulement ★★★ 35 min
+- [ ] B3.8 🧮 Fermi : FLOPs d'entraînement (≈ 6 N D), ton mini-GPT sur CPU, GPT-3, et la mémoire du KV cache ★★ 20 min
+- [ ] B3.9 🗣️ L'attention expliquée en cinq lignes ★ 10 min
+- [ ] B3.10 ⚖️ Mémorisation : quand un modèle de langue recrache ses données d'entraînement ★★ 20 min
+- [ ] B3.11 📄 Vaswani et coll. (2017) : « Attention Is All You Need » ★★★ 45 min
+- [ ] B3.12 🔨 causal_mask, padding_mask et scaled_dot_product_attention ★★ 30 min
+- [ ] B3.13 🔮 Prédire la carte d'attention quand une clé copie la requête, puis quand on retire la division par √d_k ★ 10 min
+- [ ] B3.14 🔨 split_heads, merge_heads et multi_head_attention ★★★ 45 min
+- [ ] B3.15 🔨 positional_encoding et apply_rope ★★ 30 min
+- [ ] B3.16 🔨 transformer_block en NumPy, validé contre nn.TransformerEncoderLayer ★★★★ 100 min
+- [ ] B3.17 🐛 Trois masques qui mentent : convention inversée, masque transposé, padding compté dans la loss ★★ 25 min
+- [ ] B3.18 📦 De NumPy à PyTorch : un module CausalSelfAttention avec F.scaled_dot_product_attention ★★ 30 min
+- [ ] B3.19 📦 Mini-GPT caractère par caractère : embeddings de tokens et de positions, blocs pré-LN, tête liée ★★★ 60 min
+- [ ] B3.20 📦 Entraîner le mini-GPT sur Holmes : AdamW, warmup + cosinus, clipping, perplexité, face au LSTM du ch. 22 ★★★ 60 min 🚀
+- [ ] B3.21 📈 Lire les courbes d'entraînement du mini-GPT et poser un diagnostic ★★ 15 min
+- [ ] B3.22 🔮 Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne ★ 10 min
+- [ ] B3.23 📦 Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur ★★★ 45 min
+- [ ] B3.24 📈 Les cartes d'attention de chaque tête sur une phrase de Holmes ★★ 20 min
+- [ ] B3.25 🔬 Ablations : sans position, sans résiduel, post-LN, une seule tête ★★★ 60 min 🚀
+- [ ] B3.26 🔬 Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal ★★★ 45 min 🚀
+- [ ] B3.27 🔬 Temps et mémoire de l'attention selon la longueur du contexte (64 à 2 048) ★★ 25 min
+- [ ] B3.28 📦 Un Vision Transformer minuscule : Fashion-MNIST découpé en patchs ★★★ 45 min 🚀
+- [ ] B3.29 🛠️ Un test pytest qui prouve la causalité : modifier le futur ne change pas les logits passés ★★ 20 min
+- [ ] B3.30 🏆 Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU ★★★★ 120 min
+- [ ] B3.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (28 cartes)
+<!-- wb:end B3 -->

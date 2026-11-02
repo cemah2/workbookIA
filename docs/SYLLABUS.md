@@ -5003,16 +5003,16 @@ L'attention permet à chaque position d'une séquence d'aller chercher directeme
 | B3.18 | 📦 | De NumPy à PyTorch : un module CausalSelfAttention avec F.scaled_dot_product_attention | ★★ | 30 | — | 03 | B3.14, 20 | RMC | wb.check |
 | B3.19 | 📦 | Mini-GPT caractère par caractère : embeddings de tokens et de positions, blocs pré-LN, tête liée | ★★★ | 60 | Holmes | 03 | B3.18, B3.15 | RMC | manual |
 | B3.20 | 📦 | Entraîner le mini-GPT sur Holmes : AdamW, warmup + cosinus, clipping, perplexité, face au LSTM du ch. 22 🚀 | ★★★ | 60 | Holmes | 03 | B3.19, 19, 22 | RMC | manual |
-| B3.21 | 📈 | Lire les courbes d'entraînement du mini-GPT et poser un diagnostic | ★★ | 15 | Holmes | 03 | B3.20 | C | manual |
-| B3.22 | 🔮 | Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne | ★ | 10 | Holmes/Verne | 03 | B3.20 | C | manual |
+| B3.21 | 📈 | Lire les courbes d'entraînement du mini-GPT et poser un diagnostic | ★★ | 15 | Holmes | 03 | B3.20 | C | wb.check |
+| B3.22 | 🔮 | Prédire : le mini-GPT de Holmes amorcé avec une phrase de Verne | ★ | 10 | Holmes/Verne | 03 | B3.20 | C | wb.check |
 | B3.23 | 📦 | Générer vite : le KV cache, et le gain de vitesse mesuré selon la longueur | ★★★ | 45 | Holmes | 03 | B3.20 | RC | manual |
 | B3.24 | 📈 | Les cartes d'attention de chaque tête sur une phrase de Holmes | ★★ | 20 | Holmes | 03 | B3.20 | C | manual |
-| B3.25 | 🔬 | Ablations : sans position, sans résiduel, post-LN, une seule tête 🚀 | ★★★ | 60 | Holmes | 03 | B3.20 | C | manual |
-| B3.26 | 🔬 | Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal 🚀 | ★★★ | 45 | Holmes/Verne | 03 | B3.20, B2 | MC | manual |
+| B3.25 | 🔬 | Ablations : sans position, sans résiduel, post-LN, une seule tête 🚀 | ★★★ | 60 | Holmes | 03 | B3.20 | C | wb.check |
+| B3.26 | 🔬 | Tokens BPE du B2 contre caractères : perplexité par caractère à budget égal 🚀 | ★★★ | 45 | Holmes/Verne | 03 | B3.20, B2 | MC | wb.check |
 | B3.27 | 🔬 | Temps et mémoire de l'attention selon la longueur du contexte (64 à 2 048) | ★★ | 25 | — | 03 | B3.18 | C | manual |
 | B3.28 | 📦 | Un Vision Transformer minuscule : Fashion-MNIST découpé en patchs 🚀 | ★★★ | 45 | Fashion-MNIST | 03 | B3.19, 21 | C | manual |
 | B3.29 | 🛠️ | Un test pytest qui prouve la causalité : modifier le futur ne change pas les logits passés | ★★ | 20 | Holmes | 03 | B3.19 | C | manual |
-| B3.30 | 🏆 | Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU | ★★★★ | 120 | Holmes | 03 | B3.20 | C | wb.check |
+| B3.30 | 🏆 | Défi : la meilleure perplexité caractère sur Holmes avec au plus 1 M de paramètres et 10 min de CPU | ★★★★ | 120 | Holmes | 03 | B3.20 | C | manual |
 | B3.E1 | 💼 | Explique le mécanisme d'attention, de la requête à la sortie | ★★ | 10 | — | 02 | — | R | manual |
 | B3.E2 | 💼 | Quel est le coût de l'auto-attention en fonction de la longueur, et comment traite-t-on les contextes longs ? | ★★ | 10 | — | 02 | — | R | manual |
 | B3.E3 | 💼 | Encodeur, décodeur ou encodeur-décodeur : lequel pour quelle tâche ? | ★★ | 10 | — | 02 | — | R | manual |
