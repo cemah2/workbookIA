@@ -365,6 +365,7 @@ On privilégie la documentation officielle (PyTorch, scikit-learn, Hugging Face)
 | xgboost / lightgbm | **3.4.1 / 4.6.0** | 3.4.2 / 4.7.0 | 2026-09-29 |
 | umap-learn (+ numba / llvmlite / pynndescent) | **0.5.12** (0.61.2 / 0.44.0 / 0.6.0) | 0.5.12 (numba 0.67.0) | 2026-09-29 |
 | shap | **0.54.1** | | 2026-10-29 |
+| diffusers (oracle des tests de B5, facultatif) | **0.40.0** (Colab du 2026-09-30) | Colab du 2026-11-02 : 0.42.1, à revérifier au prochain checkpoint | 2026-11-02 |
 | pytest / nbformat / nbclient | **8.4.2 / 5.11.1 / 0.10.4** | 9.1.1 / 5.11.1 / 0.11.0 | 2026-09-29 |
 | jupyterlab (local uniquement) | **4.5.4** | 4.5.4 | 2026-09-29 |
 | Keras (non utilisé, §4) | Colab : 3.13.2 | 3.15.1 (2026-07-29) | 2026-09-29 |

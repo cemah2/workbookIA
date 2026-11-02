@@ -1330,7 +1330,7 @@
       "betas": "(T,) values in (0, 1)"
      },
      "returns": "dict with keys betas, alphas, alpha_bars, alpha_bars_prev (ᾱ_{t−1}, 1 at t = 0), sqrt_alpha_bars, sqrt_one_minus_alpha_bars, posterior_variance (β̃_t), posterior_mean_coef1, posterior_mean_coef2, each of shape (T,)",
-     "raises": "ValueError if a beta is outside (0, 1)",
+     "raises": "ValueError if betas is not 1-D or a beta is outside (0, 1)",
      "oracle": "explicit formulas (np.cumprod); properties: alpha_bars strictly decreasing in (0, 1), posterior_variance[0] == 0, posterior_variance <= betas",
      "exercise": "B5.12"
     },
@@ -1376,7 +1376,7 @@
       "alpha_bars": "(T,)"
      },
      "returns": "array with the shape of x_t",
-     "raises": "ValueError if shapes do not match",
+     "raises": "ValueError if an index of t is outside [0, T) or shapes do not match",
      "oracle": "property: predict_x0_from_eps(q_sample(x0, t, ᾱ, noise)[0], t, noise, ᾱ) == x0",
      "exercise": "B5.16"
     },
@@ -1412,7 +1412,7 @@
       "rng": "random generator (used only if eta > 0)"
      },
      "returns": "x_{t_prev} with the shape of x_t",
-     "raises": "ValueError if not −1 <= t_prev < t < T or eta < 0",
+     "raises": "ValueError if not −1 <= t_prev < t < T or eta is outside [0, 1]",
      "oracle": "property: with eps_pred equal to the true noise and eta = 0, ddim_step(q_sample(x0, t), t, −1, noise) == x0; with eta = 1 and t_prev = t − 1 the added variance equals β̃_t; diffusers DDIMScheduler if installed",
      "exercise": "B5.17"
     }
