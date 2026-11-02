@@ -501,6 +501,13 @@ with checked("B4.15"):
 
 EXPERIMENT_15 = r'''STRATEGIES_15 = ("zéro-shot", "few-shot (2 exemples)", "vote (5 tirages few-shot à T = 0,7)")
 results_15 = None
+
+
+def shown_15(reply):
+    """A reply, or the beginning and the end of a long one (40 tokens at most: it may stop in the middle)."""
+    return repr(reply) if len(reply) <= 100 else f"{reply[:60]!r} … {reply[-35:]!r}"
+
+
 if LLM is None:
     print("⏳ Ex B4.15 : SmolLM2 n'a pas pu être chargé : l'expérience est « à valider sur Colab ».")
 elif all(written(probe) for probe in (lambda: parse_json_15("{}"), lambda: messages_15("x"), lambda: vote_15([]))):
@@ -516,7 +523,7 @@ elif all(written(probe) for probe in (lambda: parse_json_15("{}"), lambda: messa
             predictions_15[STRATEGIES_15[0]].append(parse_json_15(zero))
             predictions_15[STRATEGIES_15[1]].append(parse_json_15(few))
             predictions_15[STRATEGIES_15[2]].append(vote_15(draws))
-            print(f"• {item['text'][:60]}…\n    zéro-shot : {zero[:90]!r}\n    few-shot  : {few[:90]!r}")
+            print(f"• {item['text'][:60]}…\n    zéro-shot : {shown_15(zero)}\n    few-shot  : {shown_15(few)}")
         results_15 = {s: score_15(predictions_15[s], golds_15) for s in STRATEGIES_15}
         print(f"\n{'stratégie':40} JSON valide   name   place   year   moyenne")
         for s, r in results_15.items():
@@ -618,21 +625,33 @@ with checked("B4.16"):
 EXPERIMENT_16 = r'''grid_f16 = grid_o16 = None
 if MODEL_16 is None:
     print("⏳ Ex B4.16 : le modèle n'a pas pu être chargé : l'expérience est « à valider sur Colab ».")
-elif written(lambda: spread_16([[0.0]])) and written(lambda: accuracy_16(SYSTEM_15, (), 0)):
-    with checked("B4.16"):
+elif written(lambda: spread_16([[0.0]])) and written(lambda: accuracy_16(FORMULATIONS_16[0], EXAMPLES_15, SEEDS_16[0])):
+    with checked("B4.16"):                        # the probe is the first case of the grid: read again from the cache
         start_16 = time.perf_counter()
         grid_f16 = np.array([[accuracy_16(f, EXAMPLES_15, s) for s in SEEDS_16] for f in FORMULATIONS_16])
+        mean_16, between_16, within_16 = spread_16(grid_f16)
+        print(f"formulations : {len(SNIPPETS_16)} passages, {len(SEEDS_16)} graines, "
+              f"{fr(time.perf_counter() - start_16, 0)} s (une mesure)\n")
+        print(f"formulation : moyenne {fr(mean_16, 3)}, écart-type entre les {len(grid_f16)} variantes "
+              f"{fr(between_16, 3)}, écart-type moyen dû aux graines {fr(within_16, 3)}")
+        for label, row in zip([f"F{i}" for i in range(len(FORMULATIONS_16))], grid_f16):
+            print(f"  {label:10} " + "  ".join(fr(v, 3) for v in row) + f"   moyenne {fr(row.mean(), 3)}")
+else:
+    print("⏳ Ex B4.16 : l'expérience attend accuracy_16 et spread_16 (et les fonctions de B4.15).")'''
+
+EXPERIMENT_16_ORDERS = r'''if globals().get("grid_f16") is None:
+    print("⏳ Ex B4.16 : les ordres des exemples attendent le tableau des formulations (cellule précédente).")
+else:
+    with checked("B4.16"):
+        start_16 = time.perf_counter()
         grid_o16 = np.array([[accuracy_16(SYSTEM_15, [EXAMPLES_15[i] for i in order], s) for s in SEEDS_16]
                              for order in ORDERS_16])
-        print(f"{len(SNIPPETS_16)} passages, {len(SEEDS_16)} graines, "
-              f"{fr(time.perf_counter() - start_16, 0)} s (une mesure)")
-        for title, grid, labels in (("formulation", grid_f16, [f"F{i}" for i in range(len(FORMULATIONS_16))]),
-                                    ("ordre des exemples", grid_o16, [str(o) for o in ORDERS_16])):
-            mean, between, within = spread_16(grid)
-            print(f"\n{title} : moyenne {fr(mean, 3)}, écart-type entre les {len(grid)} variantes {fr(between, 3)}, "
-                  f"écart-type moyen dû aux graines {fr(within, 3)}")
-            for label, row in zip(labels, grid):
-                print(f"  {label:10} " + "  ".join(fr(v, 3) for v in row) + f"   moyenne {fr(row.mean(), 3)}")
+        mean_16, between_16, within_16 = spread_16(grid_o16)
+        print(f"ordres des exemples : {fr(time.perf_counter() - start_16, 0)} s (une mesure)\n")
+        print(f"ordre des exemples : moyenne {fr(mean_16, 3)}, écart-type entre les {len(grid_o16)} variantes "
+              f"{fr(between_16, 3)}, écart-type moyen dû aux graines {fr(within_16, 3)}")
+        for label, row in zip([str(o) for o in ORDERS_16], grid_o16):
+            print(f"  {label:10} " + "  ".join(fr(v, 3) for v in row) + f"   moyenne {fr(row.mean(), 3)}")
         fig, axes = plt.subplots(1, 2, figsize=(11, 3.4), sharey=True)
         for ax, grid, labels, title in ((axes[0], grid_f16, [f"F{i}" for i in range(len(FORMULATIONS_16))], "formulation"),
                                         (axes[1], grid_o16, [str(o) for o in ORDERS_16], "ordre des exemples")):
@@ -649,9 +668,7 @@ elif written(lambda: spread_16([[0.0]])) and written(lambda: accuracy_16(SYSTEM_
             for title, key in (("formulation", "grid_f"), ("ordre des exemples", "grid_o")):
                 grid = np.array(FULL_16[key])
                 print(f"  {title} : moyenne {fr(grid.mean(), 3)}, écart-type entre les variantes "
-                      f"{fr(grid.mean(axis=1).std(), 3)}, écart-type moyen dû aux graines {fr(grid.std(axis=1).mean(), 3)}")
-else:
-    print("⏳ Ex B4.16 : l'expérience attend accuracy_16 et spread_16 (et les fonctions de B4.15).")'''
+                      f"{fr(grid.mean(axis=1).std(), 3)}, écart-type moyen dû aux graines {fr(grid.std(axis=1).mean(), 3)}")'''
 
 # --- 🔨 B4.17 and B4.18 -----------------------------------------------------------------------------------------------
 TOOLS_B = r'''# Tools for the notebook exercises of part B (retrieval and RAG)
@@ -732,7 +749,14 @@ CHECK_18 = r'''with checked("B4.18"):
             "reciprocal_rank_fusion : l'exemple de la fiche, [2, 7, 5, 9, 1, 4].",
             f"la fusion de [7, 2, 9, 4] et [2, 5, 7, 1] (k = 60) devrait rendre [2, 7, 5, 9, 1, 4] ; reçu "
             f"{np.asarray(fused_18).tolist()}.")
-    empty_18 = np.asarray(R.reciprocal_rank_fusion([[]]))
+    fused1_18 = R.reciprocal_rank_fusion([[3, 1, 2], [1, 2, 4]], k=1)        # with a small k, the ranks show
+    verdict("B4.18", np.asarray(fused1_18).tolist() == [1, 2, 3, 4],
+            "reciprocal_rank_fusion avec k = 1 : [1, 2, 3, 4] (rangs à partir de 1).",
+            f"la fusion de [3, 1, 2] et [1, 2, 4] avec k = 1 devrait rendre [1, 2, 3, 4] ; reçu "
+            f"{np.asarray(fused1_18).tolist()} : relis la formule (les rangs commencent à 1).")
+    refuses("B4.18", "reciprocal_rank_fusion avec un identifiant répété dans un classement",
+            lambda: R.reciprocal_rank_fusion([[1, 2, 1]]))
+    empty_18 =np.asarray(R.reciprocal_rank_fusion([[]]))
     verdict("B4.18", empty_18.shape == (0,) and np.issubdtype(empty_18.dtype, np.integer),
             "une fusion vide rend un tableau d'entiers de forme (0,).",
             f"reciprocal_rank_fusion([[]]) doit rendre un tableau d'entiers vide ; reçu {empty_18!r}.")
@@ -928,8 +952,14 @@ if INDEX_20 is not None and written(lambda: evaluate_20(INDEX_20, QA[:1], "bm25"
         for (corpus, method, group), r in table_20.items():
             print(f"{corpus:18} {method:8} {group:16} {fr(r['recall@1'], 3):>8} {fr(r['recall@5'], 3):>9} "
                   f"{fr(r['mrr'], 3):>6}")
-        print("\ne5 sur Holmes (précalculé, mode complet ; ≈ 1 min d'embeddings sur CPU) :")
-        for method, group, r in E5_HOLMES_20:
+        try:                                     # e5 on Holmes, precomputed by tools/chapters/history_chB4.py
+            E5_HOLMES_20 = json.loads((wb.repo_root() / "tools" / "chapters" / "history_chB4.json").read_text(
+                encoding="utf-8"))["e5_holmes"]["rows"]
+        except (OSError, KeyError, ValueError):
+            E5_HOLMES_20 = []
+        print("\ne5 sur Holmes (précalculé avec la solution ; ≈ 1 min d'embeddings sur CPU ; BM25 ne dépend pas du "
+              "modèle d'embedding : ses lignes sont celles de MiniLM) :")
+        for method, group, r in [row for row in E5_HOLMES_20 if row[0] != "bm25"]:
             print(f"{'Holmes · e5':18} {method:8} {group:16} {fr(r['recall@1'], 3):>8} {fr(r['recall@5'], 3):>9} "
                   f"{fr(r['mrr'], 3):>6}")
         labels_20 = ["bm25", "dense", "hybrid"]
@@ -1045,35 +1075,58 @@ with checked("B4.21"):
 EXPERIMENT_21 = r'''rows_21 = None
 if QWEN is None or globals().get("INDEX_20") is None:
     print("⏳ Ex B4.21 : le RAG attend Qwen2.5 et ton index de B4.20.")
-elif written(lambda: rag_21(QA[0]["question"], INDEX_20, QWEN)):
+elif written(lambda: rag_21(QUESTIONS_21[0]["question"], INDEX_20, QWEN)):   # the first question, then the cache
     with checked("B4.21"):
-        start_21 = time.perf_counter()
-        rows_21 = []
+        start_21, hits0_21, misses0_21 = time.perf_counter(), CACHE.hits, CACHE.misses
+        rows_21, outs_21 = [], []
         for item in QUESTIONS_21:
             out = rag_21(item["question"], INDEX_20, QWEN)
+            if not (isinstance(out, dict) and {"ids", "passages", "reply", "answer", "cited", "verified"} <= set(out)):
+                print("❌ Ex B4.21 : rag_21 doit rendre un dictionnaire aux clés ids, passages, reply, answer, cited, "
+                      f"verified ; reçu {str(out)[:120]}.")
+                rows_21 = None
+                raise StopCheck
+            outs_21.append(out)
             relevant = wbrag.relevant_ids(INDEX_20["chunks"], item)
+            model_answer = wbrag.parse_reply(str(out["reply"]))[0]          # what the model said, not out["answer"]
             rows_21.append({"id": item["id"], "found": bool(relevant & set(out["ids"])),
-                            "correct": wbrag.answer_in(out["answer"], item), "verified": out["verified"],
+                            "correct": wbrag.answer_in(model_answer, item), "verified": bool(out["verified"]),
                             "idk": wbrag.is_idk(out["reply"]), "reply": out["reply"], "gold": item["answer"]})
-        print(f"{len(rows_21)} questions en {fr(time.perf_counter() - start_21, 1)} s (cache : {CACHE.hits} réponses "
-              f"relues, {CACHE.misses} générées)\n")
+        print(f"{len(rows_21)} questions en {fr(time.perf_counter() - start_21, 1)} s (cache : "
+              f"{CACHE.hits - hits0_21} réponses relues, {CACHE.misses - misses0_21} générées)\n")
         print(f"{'id':4} {'trouvé':6} {'juste':6} {'citation':9} réponse  (attendu)")
         for r in rows_21:
             print(f"{r['id']:4} {'oui' if r['found'] else 'non':6} {'oui' if r['correct'] else 'non':6} "
                   f"{'vérifiée' if r['verified'] else '—':9} {r['reply']!r}  ({r['gold']})")
         n_21 = len(rows_21)
-        print(f"\nPassage pertinent dans les 3 : {sum(r['found'] for r in rows_21)}/{n_21} · réponses justes : "
-              f"{sum(r['correct'] for r in rows_21)}/{n_21} · citations vérifiées : {sum(r['verified'] for r in rows_21)}/{n_21}"
-              f" · justes et vérifiées : {sum(r['correct'] and r['verified'] for r in rows_21)}/{n_21} · « I don't know » : "
+        print(f"\nPassage pertinent parmi ceux donnés au modèle : {sum(r['found'] for r in rows_21)}/{n_21} · réponses "
+              f"justes : {sum(r['correct'] for r in rows_21)}/{n_21} · citations vérifiées : "
+              f"{sum(r['verified'] for r in rows_21)}/{n_21} · justes et vérifiées : "
+              f"{sum(r['correct'] and r['verified'] for r in rows_21)}/{n_21} · « I don't know » : "
               f"{sum(r['idk'] for r in rows_21)}/{n_21}")
+        # every question against the reference chain: the passages, the reply of the model, what is read from it
         ref_rag_21 = wbrag.ReferenceRAG(QWEN, wbrag.ReferenceIndex(REF_CHUNKS, SM_19, subset="b4-holmes-120-20"),
                                         cache=CACHE)
-        want_21 = ref_rag_21.answer(QUESTIONS_21[0]["question"])
-        got_21 = rag_21(QUESTIONS_21[0]["question"], INDEX_20, QWEN)
-        verdict("B4.21", got_21["reply"] == want_21["reply"] and got_21["verified"] == want_21["verified"],
-                "ta chaîne rend la réponse et la vérification de la référence sur la première question.",
-                f"sur {QUESTIONS_21[0]['question']!r}, la référence obtient {want_21['reply']!r} (vérifiée : "
-                f"{want_21['verified']}) ; ton RAG {got_21['reply']!r} ({got_21['verified']}) : relis le contrat "
-                "(hybride, k = 3, glouton, 24 tokens).")
+        bad_ids_21, bad_reply_21, bad_read_21 = [], [], []
+        for item, out in zip(QUESTIONS_21, outs_21):
+            want = ref_rag_21.answer(item["question"])
+            if [int(i) for i in out["ids"]] != want["ids"]:
+                bad_ids_21.append(item["id"])
+            elif out["reply"] != want["reply"]:
+                bad_reply_21.append(item["id"])
+            else:
+                answer, cited = parse_reply_21(out["reply"])
+                if (out["answer"], list(out["cited"])) != (answer, list(cited)) or list(out["passages"]) != want["passages"] \
+                        or bool(out["verified"]) != bool(verify_21(answer, cited, want["passages"])):
+                    bad_read_21.append(item["id"])
+        verdict("B4.21", not bad_ids_21, f"pour les {n_21} questions, les passages de la recherche hybride (k = 3).",
+                f"pour {', '.join(bad_ids_21)}, tes passages ne sont pas les 3 premiers de "
+                "search_20(index, question, \"hybrid\", 3) : relis le contrat de rag_21 (hybride, k = 3).")
+        verdict("B4.21", not bad_reply_21, "la réponse du modèle est celle qu'il donne au prompt du contrat.",
+                f"pour {', '.join(bad_reply_21)}, out[\"reply\"] n'est pas la réponse que le modèle donne au prompt du "
+                "contrat (rag_messages_21, glouton, 24 tokens au plus, par le cache).")
+        verdict("B4.21", not bad_read_21, "passages, answer, cited et verified viennent de cette réponse.",
+                f"pour {', '.join(bad_read_21)}, passages, answer, cited ou verified ne sont pas ceux que donnent les "
+                "chunks de out[\"ids\"], parse_reply_21 et verify_21 appliqués à la réponse du modèle (out[\"reply\"]).")
 else:
     print("⏳ Ex B4.21 : le RAG attend tes quatre fonctions.")'''

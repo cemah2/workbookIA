@@ -68,6 +68,38 @@ def test_checked_code_not_written_yet_is_pending_and_the_cell_goes_on(capsys):
     assert "❌" not in text
 
 
+def _load_file(path: Path, name: str):
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_checked_names_the_file_and_chapter_of_an_earlier_function_not_written(tmp_path, capsys):
+    """retrieval.py (B4) calls cosine_similarity_matrix of embeddings.py (B2), still a stub: the ⏳ names that file and
+    its chapter (MANIFEST.json), not the function of the exercise."""
+    package = tmp_path / "mylearn"
+    package.mkdir()
+    (package / "embeddings.py").write_text(textwrap.dedent('''
+        def cosine_similarity_matrix(A, B):
+            raise NotImplementedError("cosine_similarity_matrix() is not implemented yet")
+    '''))
+    embeddings = _load_file(package / "embeddings.py", "wb_test_embeddings")
+    (package / "retrieval.py").write_text("def cosine_top_k(q, D, k=5):\n    return cosine_similarity_matrix([q], D)\n")
+    retrieval = _load_file(package / "retrieval.py", "wb_test_retrieval")
+    retrieval.cosine_similarity_matrix = embeddings.cosine_similarity_matrix
+    with checked("B4.18"):
+        retrieval.cosine_top_k([1.0], [[1.0]])
+    with checked("B4.18"):                               # the function of the exercise itself: the usual ⏳
+        embeddings.cosine_similarity_matrix([[1.0]], [[1.0]])
+    lines = out(capsys).splitlines()
+    assert lines[0] == ("⏳ Ex B4.18 : pas encore fait : cosine_similarity_matrix() (mylearn/embeddings.py, ch. B2), "
+                        "qu'appelle ton code, n'est pas encore écrite.")
+    assert lines[1] == "⏳ Ex B4.18 : pas encore fait (cosine_similarity_matrix() is not implemented yet)."
+
+
 def test_checked_an_exception_of_the_learner_becomes_one_line(capsys):
     run_checked(raise_(IndexError("index 3 is out of bounds for axis 0 with size 3")))
     assert out(capsys) == ("❌ Ex 21.4 : ton code lève IndexError : index 3 is out of bounds for axis 0 with size 3\n"

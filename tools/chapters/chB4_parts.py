@@ -21,7 +21,6 @@ P13 = HISTORY.get("p13", {}).get("answers", {"identical": False, "watson": False
 P19 = HISTORY.get("p19", {}).get("answers", {"bm25_half": False, "dense_half": False, "hybrid_best": True})
 C12 = HISTORY.get("c12", {"n_prompt": 22, "n_linear": 211, "n_block": 3_540_096, "words": 20, "chars": 102,
                           "chat_prompt": 47, "attention": 884_736, "mlp": 2_654_208, "norms": 1_152})
-E5_HOLMES = HISTORY.get("e5_holmes", {}).get("rows", [])
 
 TEST = "tests/test_chb4_retrieval.py"
 GROUP_17 = "test_chunk_text_ or test_bm25_"
@@ -60,17 +59,17 @@ RECORD_12 = (
 
 RECORD_13 = (
     f'wb.record("B4.13a", {P13["identical"]}, mistakes={{"relis, à la température 0,7, la colonne « identiques à la '
-    f'réponse gloutonne »": {not P13["identical"]}}})\n'
+    f'réponse gloutonne »": {not P13["identical"]}}}, prediction=True)\n'
     f'wb.record("B4.13b", {P13["watson"]}, mistakes={{"relis, à la température 0,7, combien des 10 réponses nomment '
-    f'Watson": {not P13["watson"]}}})')
+    f'Watson": {not P13["watson"]}}}, prediction=True)')
 
 RECORD_19 = (
     f'wb.record("B4.19a", {P19["bm25_half"]}, mistakes={{"relis la dernière ligne : combien de questions BM25 '
-    f'retrouve-t-il dans ses 5 premiers résultats ?": {not P19["bm25_half"]}}})\n'
+    f'retrouve-t-il dans ses 5 premiers résultats ?": {not P19["bm25_half"]}}}, prediction=True)\n'
     f'wb.record("B4.19b", {P19["dense_half"]}, mistakes={{"relis la dernière ligne : combien de questions la recherche '
-    f'dense retrouve-t-elle dans ses 5 premiers résultats ?": {not P19["dense_half"]}}})\n'
+    f'dense retrouve-t-elle dans ses 5 premiers résultats ?": {not P19["dense_half"]}}}, prediction=True)\n'
     f'wb.record("B4.19c", {P19["hybrid_best"]}, mistakes={{"compare, sur la dernière ligne, le compte de l’hybride à '
-    f'celui de la meilleure des deux autres": {not P19["hybrid_best"]}}})')
+    f'celui de la meilleure des deux autres": {not P19["hybrid_best"]}}}, prediction=True)')
 
 # ---------------------------------------------------------------------------------------------------------------------
 PART_A = Part("A", "Usage et prompting",
@@ -130,7 +129,8 @@ La cellule d'expérience n'affiche rien tant que tes deux prédictions ne sont p
                                "⏳ Ex B4.13 : écris d'abord tes deux prédictions dans la cellule précédente.")),
               ("md", "Dans tes notes : pour chaque prédiction ratée, qu'est-ce qui t'a trompé ? À quelle température "
                      "écrirais-tu un résumé, une extraction de date, un slogan ? Le modèle « sait »-il que le médecin "
-                     "s'appelle Watson, si 0,7 le dit rarement ? Refais l'expérience avec `top_k=20, top_p=0.8` (les "
+                     "s'appelle Watson ? Compare ce que disent la réponse gloutonne et les tirages à 0,7, et dis ce que "
+                     "« savoir » veut dire pour un modèle qui tire ses mots. Refais l'expérience avec `top_k=20, top_p=0.8` (les "
                      "réglages de Qwen2.5, fiche §204.3) : que change le filtre ?")]),
 
     Ex("B4.14", "📦", 2, 25, "Chat template, message système, arrêt et streaming avec un modèle instruct",
@@ -165,7 +165,7 @@ Dans tes notes : quel message système le gabarit de SmolLM2 ajoute-t-il quand t
 
 La cellule de vérification essaie `parse_json_15` sur treize réponses d'essai, la structure de `messages_15` et `vote_15` sur quatre listes. L'expérience compare ensuite, sur les 8 passages : le **zéro-shot** (glouton), le **few-shot** avec les deux premiers exemples (glouton), et le **vote** sur 5 tirages few-shot à $T = 0{,}7$ (graines 0 à 4) ; 56 générations de 40 tokens au plus, environ 1 min 30 sur CPU la première fois (puis le cache).
 
-Dans tes notes : quelles erreurs de format fait le modèle en zéro-shot, et lesquelles disparaissent avec deux exemples ? Le vote corrige-t-il des erreurs de contenu, ou seulement de format ? Sur 8 passages, un écart d'une réponse vaut combien de points, et que peux-tu conclure (fiche §204.5) ? Quelle consigne ou quel exemple ajouterais-tu pour le champ qui échoue le plus ?""",
+Dans tes notes : quelles erreurs de format fait le modèle en zéro-shot, et lesquelles disparaissent avec deux exemples (regarde aussi la fin des réponses : avec 40 tokens au plus, une réponse bavarde peut s'arrêter avant la fin de son JSON) ? Le vote corrige-t-il des erreurs de contenu, ou seulement de format ? Sur 8 passages, un écart d'une réponse vaut combien de points, et que peux-tu conclure (fiche §204.5) ? Quelle consigne ou quel exemple ajouterais-tu pour le champ qui échoue le plus ?""",
        given=C.GIVEN_15, todo=C.TODO_15, check=C.CHECK_15, solution=C.SOLUTION_15 + "\n\n\n" + C.CHECK_15,
        after=[("code", C.EXPERIMENT_15)]),
 
@@ -178,11 +178,11 @@ Dans tes notes : quelles erreurs de format fait le modèle en zéro-shot, et les
 - `accuracy_16(system, examples, seed)` rend la précision moyenne des champs, `score_15(...)["all"]`, des réponses de `MODEL_16` aux passages de `SNIPPETS_16` : pour chaque passage, les messages `messages_15(texte, examples, system)` et **un** tirage, `MODEL_16.generate(messages, max_new_tokens=40, do_sample=True, temperature=0.7, seed=seed, cache=CACHE)`, lu par `parse_json_15` (tes fonctions de B4.15).
 - `spread_16(table)` reçoit un tableau `(n_variantes, n_graines)` de précisions, une ligne par variante du prompt, et rend `(mean, between, within)` : la moyenne du tableau, l'écart-type (`ddof=0`) des moyennes des lignes (la dispersion **entre** variantes), et la moyenne des écarts-types (`ddof=0`) de chaque ligne (la dispersion due aux **graines**).
 
-La cellule de vérification essaie `spread_16` sur un petit tableau, puis `accuracy_16` avec un modèle factice qui note ses appels (les messages, les réglages, le nombre d'appels) et rend un JSON fixe. L'expérience remplit deux tableaux, cinq formulations × trois graines (trois exemples dans l'ordre de `EXAMPLES_15`), puis trois ordres des exemples × trois graines (la formulation `F0`), affiche leurs dispersions et les trace : 108 générations en mode rapide, environ 3 min sur CPU la première fois ; en mode complet, Qwen2.5 sur les 8 passages, environ 10 min.
+La cellule de vérification essaie `spread_16` sur un petit tableau, puis `accuracy_16` avec un modèle factice qui note ses appels (les messages, les réglages, le nombre d'appels) et rend un JSON fixe. L'expérience remplit deux tableaux, cinq formulations × trois graines (trois exemples dans l'ordre de `EXAMPLES_15`), puis trois ordres des exemples × trois graines (la formulation `F0`), affiche leurs dispersions et les trace, en deux cellules : 126 générations en mode rapide (90 pour les formulations, environ 2 min 30 sur CPU la première fois ; 36 de plus pour les ordres, environ 1 min : l'ordre de `EXAMPLES_15` avec `F0` est déjà calculé), puis le cache ; en mode complet, Qwen2.5 sur les 8 passages, environ 10 min.
 
 Dans tes notes : l'écart entre formulations dépasse-t-il la dispersion due aux graines, et de combien ? Laquelle des deux conclusions est fragile avec 6 passages et 3 graines (combien vaut un passage sur la précision moyenne) ? Que changerais-tu au protocole pour départager deux formulations (fiche §204.5) ? Garderais-tu la meilleure formulation, ou la plus stable ?""",
        given=C.GIVEN_16, todo=C.TODO_16, check=C.CHECK_16, solution=C.SOLUTION_16 + "\n\n\n" + C.CHECK_16,
-       after=[("code", C.EXPERIMENT_16)]),
+       after=[("code", C.EXPERIMENT_16), ("code", C.EXPERIMENT_16_ORDERS)]),
 ])
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ Dans tes notes : combien de chunks donne la formule de la fiche pour une nouvell
 
 **Contrat**
 - `cosine_top_k(query_emb, doc_embs, k=5)` rend `(indices, similarities)`, deux tableaux NumPy (des entiers, des flottants), de forme `(k,)` pour une requête `(d,)` et `(q, k)` pour des requêtes `(q, d)` : les $k$ documents de plus grand cosinus, triés par similarité décroissante, les ex aequo départagés par le **plus petit** indice ; un vecteur nul a une similarité de **0** avec tout, comme dans ta `cosine_similarity_matrix` (la réutiliser évite le NaN : un cosinus maison sans `eps` échoue) ; `ValueError` si `k < 1`, si `k > n` (contrairement à `most_similar` de B2, qui tronquait) ou si les dimensions diffèrent.
-- `reciprocal_rank_fusion(rankings, k=60)` : le score de chaque identifiant est $\sum_r 1/(k + \operatorname{rang}_r)$, les rangs à partir de 1 ; rend un tableau NumPy d'identifiants **entiers**, du meilleur score au moins bon, à égalité le plus petit identifiant d'abord ; les classements peuvent avoir des longueurs différentes, être vides, ou être des tableaux NumPy (les lignes rendues par `cosine_top_k`) ; une fusion vide (`[[]]`, `[[], []]`) rend un tableau d'entiers de forme `(0,)` (`np.array([])` serait un tableau de flottants) ; `ValueError` si `rankings` est vide ou si `k < 0`.
+- `reciprocal_rank_fusion(rankings, k=60)` : le score de chaque identifiant est $\sum_r 1/(k + \operatorname{rang}_r)$, les rangs à partir de 1 ; rend un tableau NumPy d'identifiants **entiers**, du meilleur score au moins bon, à égalité le plus petit identifiant d'abord ; les classements peuvent avoir des longueurs différentes, être vides, ou être des tableaux NumPy (les lignes rendues par `cosine_top_k`) ; une fusion vide (`[[]]`, `[[], []]`) rend un tableau d'entiers de forme `(0,)` (`np.array([])` serait un tableau de flottants) ; `ValueError` si `rankings` est vide, si `k < 0` ou si un identifiant apparaît deux fois dans un même classement.
 - `recall_at_k(retrieved, relevant, k)` et `mean_reciprocal_rank(retrieved, relevant)` :
   - `retrieved` : une liste d'identifiants par requête, ou le tableau 2-D d'indices que rend `cosine_top_k` (teste `len(retrieved) == 0`, pas `not retrieved`) ; dans chaque liste, les identifiants sont distincts ; une liste peut être plus courte que `k` ;
   - `relevant` : un ensemble, une liste ou un tuple d'identifiants par requête ;
@@ -254,7 +254,7 @@ Dans tes notes : combien de chunks donne la formule de la fiche pour une nouvell
   - le MRR est la moyenne de $1/\text{rang}$ du premier pertinent, 0 quand aucun n'est retrouvé ; une requête dont l'ensemble pertinent est vide compte 0, **sans** erreur (contrairement à `recall_at_k`) ; `ValueError` si les longueurs diffèrent ;
   - les deux rendent un nombre.
 
-La première cellule de vérification essaie `cosine_top_k` sur l'exemple de la fiche, un vecteur nul et un refus, la fusion de la fiche et une fusion vide, recall@1, recall@3 et MRR de l'exemple de la fiche, puis les métriques sur un tableau rendu par `cosine_top_k` et avec un ensemble pertinent vide. La seconde lance les 67 tests de l'exercice (`-k "test_cosine_top_k_ or test_reciprocal_rank_fusion_ or test_recall_at_k_ or test_mean_reciprocal_rank_"`).
+La première cellule de vérification essaie `cosine_top_k` sur l'exemple de la fiche, un vecteur nul et un refus, la fusion de la fiche, une fusion avec $k = 1$, un identifiant répété et une fusion vide, recall@1, recall@3 et MRR de l'exemple de la fiche, puis les métriques sur un tableau rendu par `cosine_top_k` et avec un ensemble pertinent vide. La seconde lance les 67 tests de l'exercice (`-k "test_cosine_top_k_ or test_reciprocal_rank_fusion_ or test_recall_at_k_ or test_mean_reciprocal_rank_"`).
 
 Dans tes notes : pourquoi le plus grand cosinus est-il aussi le plus proche voisin euclidien pour des vecteurs de norme 1 (fiche §204.6) ? Que deviendrait la fusion de la fiche avec $k = 0$, et pourquoi Cormack et ses coauteurs prennent-ils $k = 60$ ? Pourquoi le recall@k refuse-t-il un ensemble pertinent vide, alors que le MRR l'accepte ?""",
        check=C.RELOAD + C.CHECK_18, solution=C.CHECK_18,
@@ -297,10 +297,10 @@ La cellule d'expérience n'affiche rien tant que tes prédictions ne sont pas é
   - `ValueError` pour une autre méthode.
 - `evaluate_20(index, items, method)` rend `{"recall@1", "recall@5", "mrr"}`, trois `float` Python : pour chaque question de `items`, les `DEPTH_20` premiers résultats de `search_20` et ses chunks pertinents, `wbrag.relevant_ids(index["chunks"], item)` ; puis ton `recall_at_k` (à 1 et à 5) et ton `mean_reciprocal_rank`.
 
-La cellule de vérification construit ton index des chunks de référence avec MiniLM (les embeddings de B4.19, relus du cache), compare `search_20` à la recherche de référence (`wbrag.ReferenceIndex`) sur deux questions et trois méthodes, essaie un refus, et compare `evaluate_20` à un calcul de référence sur six questions. L'expérience évalue ensuite les trois méthodes sur Holmes avec MiniLM (les 30 questions, les 20 directes, les 10 paraphrasées), puis sur Verne avec e5 et avec MiniLM (les 10 questions en français ; environ 15 s d'embeddings e5 la première fois). Elle affiche aussi, précalculés, les résultats d'e5 sur Holmes (`E5_HOLMES_20` : environ 1 min d'embeddings sur CPU).
+La cellule de vérification construit ton index des chunks de référence avec MiniLM (les embeddings de B4.19, relus du cache), compare `search_20` à la recherche de référence (`wbrag.ReferenceIndex`) sur deux questions et trois méthodes, essaie un refus, et compare `evaluate_20` à un calcul de référence sur six questions. L'expérience évalue ensuite les trois méthodes sur Holmes avec MiniLM (les 30 questions, les 20 directes, les 10 paraphrasées), puis sur Verne avec e5 et avec MiniLM (les 10 questions en français ; environ 15 s d'embeddings e5 la première fois). Elle affiche aussi les résultats d'e5 sur Holmes, précalculés avec la solution (environ 1 min d'embeddings sur CPU), lus dans `tools/chapters/history_chB4.json`.
 
 Dans tes notes : sur Holmes, quelle méthode préfères-tu, et sur quel groupe de questions la différence se joue-t-elle ? Le recall@1 et le recall@5 classent-ils les méthodes dans le même ordre ? Sur Verne, que gagne un modèle multilingue, et pourquoi MiniLM, entraîné sur de l'anglais, s'en sort-il si mal ? Avec 10 ou 30 questions, quel écart de recall@5 jugerais-tu significatif (fiche §204.5) ?""",
-       given=None, todo=C.TODO_20, check=C.CHECK_20, solution=C.SOLUTION_20 + "\n\n\n" + C.CHECK_20,
+       given=C.GIVEN_20, todo=C.TODO_20, check=C.CHECK_20, solution=C.SOLUTION_20 + "\n\n\n" + C.CHECK_20,
        after=[("code", C.EXPERIMENT_20)]),
 
     Ex("B4.21", "📦", 3, 60, "Un RAG complet sur Holmes : récupération hybride, prompt avec citations, réponse d'un petit "
@@ -316,7 +316,7 @@ Dans tes notes : sur Holmes, quelle méthode préfères-tu, et sur quel groupe d
 - `verify_21(answer, cited, passages)` rend `True` quand les citations tiennent : `cited` n'est pas vide, chaque numéro est un passage (de 1 à `len(passages)`), et au moins un passage cité contient **tous** les mots de contenu de la réponse : `wbrag.content_words(answer)`, non vide, inclus dans `set(tokenize(passage))`.
 - `rag_21(question, index, llm, k=3)` enchaîne `search_20(index, question, "hybrid", k)`, les passages (`index["chunks"]`), `rag_messages_21`, une réponse gloutonne de 24 tokens au plus par le cache (`llm.generate(messages, max_new_tokens=24, cache=CACHE)`), `parse_reply_21` et `verify_21`, et rend `{"ids", "passages", "reply", "answer", "cited", "verified"}`.
 
-La cellule de vérification compare `rag_messages_21` au prompt de référence, essaie `parse_reply_21` sur cinq réponses et `verify_21` sur huit cas. L'expérience fait tourner ton RAG sur `QUESTIONS_21` avec ton index de B4.20 (environ 40 s pour 10 questions la première fois, puis le cache) : pour chaque question, le passage pertinent est-il parmi les 3, la réponse est-elle juste (`wbrag.answer_in` : la réponse attendue ou une variante, en mots entiers), la citation est-elle vérifiée ? Elle compare enfin ta chaîne à la référence (`wbrag.ReferenceRAG`) sur la première question.
+La cellule de vérification compare `rag_messages_21` au prompt de référence, essaie `parse_reply_21` sur cinq réponses et `verify_21` sur huit cas. L'expérience fait tourner ton RAG sur `QUESTIONS_21` avec ton index de B4.20 (environ 40 s pour 10 questions la première fois, puis le cache) : pour chaque question, le passage pertinent est-il parmi les 3, la réponse est-elle juste (`wbrag.answer_in` : la réponse attendue ou une variante, en mots entiers), la citation est-elle vérifiée ? La justesse se lit sur la réponse du **modèle** (`out["reply"]`). Elle compare enfin ta chaîne à la référence (`wbrag.ReferenceRAG`) sur **chaque** question : les mêmes passages, la même réponse du modèle, et `answer`, `cited` et `verified` tirés de cette réponse par tes fonctions.
 
 Dans tes notes : combien de réponses justes ne sont pas vérifiées, et pourquoi (le numéro cité, ou les mots de la réponse) ? Une réponse juste sans le bon passage dans les 3 : d'où vient-elle (fiche §204.5, contamination) ? Que vaut une citation que l'on ne vérifie pas ? La règle de `verify_21` accepte-t-elle une réponse fausse, ou refuse-t-elle une réponse juste ? Donne un exemple de chaque.""",
        given=C.GIVEN_21, todo=C.TODO_21, check=C.CHECK_21, solution=C.SOLUTION_21 + "\n\n\n" + C.CHECK_21,
@@ -324,16 +324,11 @@ Dans tes notes : combien de réponses justes ne sont pas vérifiées, et pourquo
 ])
 
 
-def _e5_rows() -> str:
-    return "[\n" + "".join(f"    {row!r},\n" for row in (tuple(r) for r in E5_HOLMES)) + "]"
-
-
 # B4.16 shows the full protocol (Qwen2.5, 8 passages), precomputed by history_chB4.py
 PART_A.exercises[4].given = (C.GIVEN_16 + "\n# The full protocol, precomputed by tools/chapters/history_chB4.py with the "
                              "solution of this exercise\nFULL_16 = " + repr(HISTORY.get("p16_full", {})))
 
-# B4.20 shows the e5 rows on Holmes, precomputed by history_chB4.py (≈ 1 min of embeddings on CPU)
-PART_B.exercises[3].given = (C.GIVEN_20 + "\n# e5 on Holmes (precomputed by tools/chapters/history_chB4.py with the solution "
-                             "of this exercise): (method, questions, scores)\nE5_HOLMES_20 = " + _e5_rows())
+# B4.20 reads the e5 rows on Holmes from history_chB4.json in its experiment cell (written below the 🔮 B4.19, they
+# gave its answers before the run: BM25 does not depend on the embedding model)
 
 PARTS = [PART_A, PART_B]

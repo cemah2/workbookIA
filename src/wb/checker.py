@@ -405,8 +405,12 @@ def make_entry(
     source: str | None = None,
     fractional: str | None = None,
     choices: list | None = None,
+    prediction: bool = False,
 ) -> dict:
     """Build the (hash-only) answer entry for ``value``. Used by :func:`record`.
+
+    ``prediction``: the answer is a prediction of a 🔮 (written before the experiment): a classic wrong value is
+    reported as « Prédiction ratée », not as « Erreur classique » (a missed prediction is not a mistake of calculation).
 
     ``fractional`` (whole-number answers only): the hint shown when the learner types a number that is not a whole
     number, instead of the generic advice to round to the nearest integer (which is wrong when the exercise is about
@@ -443,6 +447,8 @@ def make_entry(
 
     norm = normalize(value, kind, decimals)
     entry: dict = {"kind": kind, "hash": hash_answer(ex_id, kind, norm)}
+    if prediction:
+        entry["prediction"] = True
     if decimals is not None:
         entry["decimals"] = int(decimals)
 
@@ -772,6 +778,12 @@ def _thousands_message(value, right: bool) -> str:
             f"(`2_000_000`).{verdict}")
 
 
+def _classic(entry: dict, mistake: str) -> str:
+    """The message of a classic wrong value: « Erreur classique », or « Prédiction ratée » for a 🔮."""
+    lead = "Prédiction ratée" if entry.get("prediction") else "Erreur classique"
+    return f"{lead}. Piste : {mistake}"
+
+
 def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple[bool, str, str]:
     """Compare ``value`` with a stored entry. Return (passed, status, message).
 
@@ -800,7 +812,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                                         "à l'entier le plus proche (round).")
             mistake = entry.get("mistakes", {}).get(rounded)
             if mistake:
-                return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                return False, "wrong", _classic(entry, mistake)
             return False, "wrong", "Ce n'est pas la bonne valeur (la réponse attendue est un nombre entier)."
         if kind in ("int", "float") and _looks_like_decimal_comma(value):
             return False, "type", ("Tu as écrit une virgule décimale : en Python, `0,5` est un couple de deux nombres, "
@@ -813,7 +825,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                     return True, "correct", _praise(ex_id)
                 mistake = entry.get("mistakes", {}).get(shape_hash)
                 if mistake:
-                    return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                    return False, "wrong", _classic(entry, mistake)
                 return False, "wrong", _WRONG_SHAPE
         try:
             raw = _unwrap_single(value)
@@ -843,7 +855,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             return True, "correct", _praise(ex_id)  # right up to rounding noise (e.g. float32)
         mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
         if mistake:
-            return False, "wrong", f"Erreur classique. Piste : {mistake}"
+            return False, "wrong", _classic(entry, mistake)
         return False, "wrong", _array_diagnosis(ex_id, entry, arr, computed)
 
     candidates = [norm]
@@ -856,7 +868,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
 
     mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
     if mistake:
-        return False, "wrong", f"Erreur classique. Piste : {mistake}"
+        return False, "wrong", _classic(entry, mistake)
     if kind in ("int", "float"):  # "500,000" read as 500 (French decimal comma) when 500000 was meant
         thousands = _thousands_reading(value)
         if thousands is not None and _hash_value(ex_id, entry, thousands) in accepted:
@@ -869,7 +881,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                 return True, "correct", _praise(ex_id)
             mistake = entry.get("mistakes", {}).get(bare_hash)
             if mistake:
-                return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                return False, "wrong", _classic(entry, mistake)
         # a shape or a position written "1, 2", "[1, 2]", "torch.Size([1, 2])" or "1 x 2" for "(1, 2)"
         shape = _shape_reading(value)
         if shape is not None and shape != norm:
@@ -878,7 +890,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                 return True, "correct", _praise(ex_id)
             mistake = entry.get("mistakes", {}).get(shape_hash)
             if mistake:
-                return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                return False, "wrong", _classic(entry, mistake)
         # several choice letters with separators, in the order of an ordering answer ("B, D, E, A, C") or in another
         # order for a set of letters ("E, D, B" for "BDE")
         glued = [g for g in dict.fromkeys((_glued_letters(value, keep_order=True), _glued_letters(value)))
@@ -889,7 +901,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         for glued_hash in glued_hashes:
             mistake = entry.get("mistakes", {}).get(glued_hash)
             if mistake:
-                return False, "wrong", f"Erreur classique. Piste : {mistake}"
+                return False, "wrong", _classic(entry, mistake)
     if kind in ("int", "float") and entry.get("choices") and norm not in entry["choices"]:
         offered = [_choice_text(choice) for choice in entry["choices"]]
         listed = ", ".join(offered[:-1]) + " ou " + offered[-1] if len(offered) > 1 else offered[0]
@@ -1135,6 +1147,7 @@ def record(
     source: str | None = None,
     fractional: str | None = None,
     choices: list | None = None,
+    prediction: bool = False,
 ) -> dict:
     """Record the right answer of an exercise (solutions notebooks only).
 
@@ -1143,12 +1156,14 @@ def record(
     ``fractional`` (whole-number answers only) is the hint shown for a number that
     is not a whole number, e.g. ``"arrondis log2 N à l'entier supérieur"``.
     ``choices`` lists the values a multiple-choice statement offers (numbers only).
+    ``prediction=True`` marks the prediction of a 🔮: its classic wrong value says « Prédiction ratée ».
     The function checks that the right value passes and a wrong value fails,
     then prints the ``WB_ANSWER`` line harvested by ``tools/build_answers.py``.
     """
     ex_id = str(ex_id)
     entry = make_entry(ex_id, value, decimals, kind=kind, ordered=ordered,
-                       mistakes=mistakes, source=source, fractional=fractional, choices=choices)
+                       mistakes=mistakes, source=source, fractional=fractional, choices=choices,
+                       prediction=prediction)
     ok, _, message = check_entry(ex_id, entry, value)
     if not ok:
         raise AssertionError(f"Ex {ex_id}: the right value does not pass its own check ({message})")

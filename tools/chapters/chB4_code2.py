@@ -789,7 +789,7 @@ for q in UNANSWERABLE_23:
 def rag_23(question):
     """Your RAG of B4.21 (rag_21 with your index of B4.20), else the reference RAG (wbrag.ReferenceRAG), the same
     contract: {"ids", "reply", "answer", "verified", ...}."""
-    if globals().get("INDEX_20") is not None and written(lambda: rag_21(QA[0]["question"], INDEX_20, QWEN)):
+    if globals().get("INDEX_20") is not None and written(lambda: rag_21(QUESTIONS_21[0]["question"], INDEX_20, QWEN)):
         return rag_21(question, INDEX_20, QWEN)
     return REF_RAG_23.answer(question)
 
@@ -797,7 +797,7 @@ def rag_23(question):
 REF_RAG_23 = None
 if QWEN is not None and globals().get("SM_19") is not None:
     REF_RAG_23 = wbrag.ReferenceRAG(QWEN, wbrag.ReferenceIndex(REF_CHUNKS, SM_19, subset="b4-holmes-120-20"), cache=CACHE)
-    if not (globals().get("INDEX_20") is not None and written(lambda: rag_21(QA[0]["question"], INDEX_20, QWEN))):
+    if not (globals().get("INDEX_20") is not None and written(lambda: rag_21(QUESTIONS_21[0]["question"], INDEX_20, QWEN))):
         print("ℹ️ Ex B4.23 : ton RAG de B4.21 n'est pas encore là : l'évaluation prend le RAG de référence.")'''
 
 TODO_23 = r'''def category_23(row):
@@ -1031,7 +1031,7 @@ elif written(lambda: run_24(None, "délimiteurs + filtre")):          # every fu
         for d, (att, _) in table_24.items():
             by = att.reshape(len(SEEDS_24), len(ITEMS_24), len(names_24)).mean(axis=(0, 1))
             print(f"  {d:22} " + "  ".join(f"{n} {fr(v, 2)}" for n, v in zip(names_24, by)))
-        if FULL_24:
+        if FAST_MODE and FULL_24:
             print(f"\nprotocole complet (précalculé, {FULL_24['model']}, {FULL_24['n_seeds']} graines × "
                   f"{FULL_24['n_items']} passages × {len(names_24)} charges) :")
             for d, row in FULL_24["rows"].items():
@@ -1248,12 +1248,28 @@ def _make_evaluate_30():
             return any(annotated(v, depth + 1) for v in list(value)[:50]) if depth < 2 else False
         return False
 
+    def precomputed(value, depth=0):
+        """True for an index computed before the run: an array or a tensor of at least 100 rows (embeddings, token
+        ids), or a container or an object (a fitted BM25, a ReferenceIndex) that holds one. A model is not one."""
+        import types
+
+        if isinstance(value, np.ndarray) or isinstance(value, torch.Tensor):
+            return value.ndim >= 1 and len(value) >= 100
+        if depth >= 2 or isinstance(value, (nn.Module, type, types.ModuleType, types.FunctionType, str, bytes)):
+            return False
+        if isinstance(value, dict):
+            return any(precomputed(v, depth + 1) for v in list(value.values())[:50])
+        if isinstance(value, (list, tuple)):
+            return any(precomputed(v, depth + 1) for v in list(value)[:50])
+        attributes = getattr(value, "__dict__", None)
+        return isinstance(attributes, dict) and any(precomputed(v, depth + 1) for v in list(attributes.values())[:50])
+
     ipython_names = _re.compile(r"^(_+|_i+|_i?\d+|_[ido]h|In|Out|exit|quit|get_ipython)$")
 
     def run(method, seconds):
         g = globals()
         hidden = {n: Hidden(n) for n, v in list(g.items())
-                  if not ipython_names.match(n) and not n.startswith("__") and annotated(v)}
+                  if not ipython_names.match(n) and not n.startswith("__") and (annotated(v) or precomputed(v))}
         originals = {n: g[n] for n in hidden}
 
         def refused(*args, **kwargs):
@@ -1271,6 +1287,12 @@ def _make_evaluate_30():
             sizes.append(int(self.num_parameters()))
             return saved_generate(self, *args, **kwargs)
 
+        counted = {}
+
+        def counting_forward(module, args):              # a language model called directly (a decoding by hand)
+            if isinstance(module, transformers.GenerationMixin) and id(module) not in counted:
+                counted[id(module)] = int(module.num_parameters())
+
         try:
             g.update(hidden)
             for n in saved_rag:
@@ -1279,6 +1301,7 @@ def _make_evaluate_30():
             wbllm.GenerationCache.put = lambda self, key, text: None
             wb.transfer.cached_arrays = lambda key, compute, folder=None, verbose=True: compute()   # nor embeddings
             transformers.GenerationMixin.generate = counting_generate
+            hook = torch.nn.modules.module.register_module_forward_pre_hook(counting_forward)
             start = time.perf_counter()
             out = method([q["question"] for _, q in tagged], [(title, body) for title, body in documents])
             elapsed = time.perf_counter() - start
@@ -1289,7 +1312,9 @@ def _make_evaluate_30():
             wbllm.GenerationCache.get, wbllm.GenerationCache.put = saved_cache
             wb.transfer.cached_arrays = saved_arrays
             transformers.GenerationMixin.generate = saved_generate
-        return out, elapsed, sizes
+            if "hook" in locals():
+                hook.remove()
+        return out, elapsed, sizes + list(counted.values())
 
     def spaced(n):
         return f"{n:,}".replace(",", " ")

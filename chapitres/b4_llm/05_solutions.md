@@ -449,8 +449,11 @@ def reciprocal_rank_fusion(rankings, k=60):
         raise ValueError("expected at least one ranking and k >= 0")
     score = {}
     for ranking in rankings:
-        for rank, doc in enumerate(ranking, start=1):
-            score[int(doc)] = score.get(int(doc), 0.0) + 1 / (k + rank)
+        ids = [int(doc) for doc in ranking]
+        if len(set(ids)) != len(ids):
+            raise ValueError("an id appears twice in the same ranking")
+        for rank, doc in enumerate(ids, start=1):
+            score[doc] = score.get(doc, 0.0) + 1 / (k + rank)
     return np.array(sorted(score, key=lambda d: (-score[d], d)), dtype=int)
 
 
@@ -476,7 +479,7 @@ def mean_reciprocal_rank(retrieved, relevant):
     return total / len(retrieved)
 ```
 Pour des vecteurs de norme 1, $\lVert \mathbf{a} - \mathbf{b} \rVert^2 = 2 - 2\cos(\mathbf{a}, \mathbf{b})$ : trier par cosinus décroissant, c'est trier par distance croissante, ce que fait `NearestNeighbors(metric="cosine")` (avec la distance $1 - \cos$). Avec $k = 0$, la fusion de la fiche donnerait au document 2 le score $1/2 + 1/1 = 1{,}5$ et au document 7 $1 + 1/3 \approx 1{,}33$ : le premier rang pèse alors très lourd ; $k = 60$, fixé par Cormack et ses coauteurs lors d'un essai pilote, aplatit les écarts entre rangs, si bien qu'être présent dans deux listes compte plus qu'être premier dans une. Le recall@k divise par le nombre de pertinents : un ensemble vide le rendrait indéfini ; le MRR ne divise que par le rang, et une requête sans pertinent vaut naturellement 0.
-**Erreurs fréquentes** : un cosinus maison sans `eps` (NaN pour un vecteur nul) ; `np.argsort(-sims)` sans `kind="stable"`, qui ne garantit pas le plus petit indice pour les ex aequo ; `argsort(sims)[::-1]`, qui met le **plus grand** indice d'abord ; les rangs à partir de 0 dans la fusion ; `np.array([])` pour une fusion vide (des flottants) ; `if not retrieved` sur un tableau 2-D (une `ValueError` de NumPy) ; diviser le recall par $k$ (c'est la precision@k de ✏️ B4.2) ; un MRR qui ne garde pas le premier pertinent.
+**Erreurs fréquentes** : un cosinus maison sans `eps` (NaN pour un vecteur nul) ; `np.argsort(-sims)` sans `kind="stable"`, qui ne garantit pas le plus petit indice pour les ex aequo ; `argsort(sims)[::-1]`, qui met le **plus grand** indice d'abord ; les rangs à partir de 0 dans la fusion (avec $k = 60$, l'exemple de la fiche garde le même ordre : c'est la fusion avec $k = 1$ qui le montre) ; accepter un identifiant répété dans un classement (la docstring demande une `ValueError`) ; `np.array([])` pour une fusion vide (des flottants) ; `if not retrieved` sur un tableau 2-D (une `ValueError` de NumPy) ; diviser le recall par $k$ (c'est la precision@k de ✏️ B4.2) ; un MRR qui ne garde pas le premier pertinent.
 **Variante** : la fusion de trois classements, [7, 2, 9, 4], [2, 5, 7, 1] et [9, 7, 3], avec $k = 60$, donne [7, 2, 9, 5, 3, 1, 4] : le document 7, présent dans les trois (rangs 1, 3 et 2), passe devant le document 2 (rangs 2 et 1), le 9 (rangs 3 et 1) devant le 5, et le 3, troisième d'une seule liste ($1/63$), devant le 1 et le 4, quatrièmes ($1/64$).
 
 ### Ex B4.19 — Prédire : sur des questions paraphrasées, BM25 ou recherche dense gagne-t-elle ? 🔮
@@ -737,8 +740,8 @@ La perplexité baisse d'un cinquième en 30 pas, alors que la loss d'entraîneme
 
 | Réglage | paramètres entraînables | perplexité (± écart-type entre graines) |
 |---|---|---|
-| `c_attn`, $lpha = 2r$ : $r$ = 1, 2, 4, 8, 16, 32, 64 | de 18 432 à 1 179 648 | 40,07 ; 38,84 ; 37,60 ; 36,63 ; 35,92 ; 35,11 ; 34,62 (± 0,03 à 0,32) |
-| `c_attn`, $lpha = 8$ : $r$ = 1, 16, 64 | 18 432 ; 294 912 ; 1 179 648 | 38,41 ; 37,46 ; 37,53 (± 0,01 à 0,07) |
+| `c_attn`, $\alpha = 2r$ : $r$ = 1, 2, 4, 8, 16, 32, 64 | de 18 432 à 1 179 648 | 40,07 ; 38,84 ; 37,60 ; 36,63 ; 35,92 ; 35,11 ; 34,62 (± 0,03 à 0,32) |
+| `c_attn`, $\alpha = 8$ : $r$ = 1, 16, 64 | 18 432 ; 294 912 ; 1 179 648 | 38,41 ; 37,46 ; 37,53 (± 0,01 à 0,07) |
 | `c_attn` et `c_proj` (attention et sortie du MLP), $r = 4$ | 202 752 | 35,74 (± 0,03) |
 | toutes les couches denses des blocs, $r = 4$ | 294 912 | 34,93 (± 0,14) |
 

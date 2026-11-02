@@ -3,6 +3,7 @@ retrieval (against the reference library mylearn_ref.retrieval) and the prompt o
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -131,7 +132,7 @@ def test_load_qa_returns_fresh_copies():
 # Tokens, answers, citations
 # ---------------------------------------------------------------------------
 def test_tokenize_lowercases_and_splits_on_punctuation_and_underscores():
-    assert rag.tokenize("Holmes’s pipe, 1884! _Lone Star_") == ["holmes", "s", "pipe", "1884", "lone", "star"]
+    assert rag.tokenize("Holmes’s pipe, 1884! _Gloria Scott_") == ["holmes", "s", "pipe", "1884", "gloria", "scott"]
     assert rag.tokenize("L'Éléphant") == ["l", "éléphant"]
 
 
@@ -218,25 +219,39 @@ def test_reference_index_bm25_search_without_a_sentence_model():
 
 # --------------------------------------------------------------------------------------- control questions (B4.30)
 def test_control_questions_hide_their_answers_and_cover_every_story():
+    """No answer of the control is written in clear: not in its file (no run of its words has the hash of an
+    answer), and not in this test either (the cases below use answers made up for the test)."""
     items = rag.load_control()
     assert [q["id"] for q in items] == [f"C{i:02d}" for i in range(1, 13)]
     assert sorted(q["story"] for q in items) == list(range(12))
-    text = (ROOT / "data" / "qa" / rag.CONTROL_FILE).read_text(encoding="utf-8").lower()
-    for word in ("sliding panel", "leadenhall", "lone star", "breckinridge", "flora millar", "electric blue"):
-        assert word not in text, f"an answer of the control is written in clear: {word!r}"
+    data = json.loads((ROOT / "data" / "qa" / rag.CONTROL_FILE).read_text(encoding="utf-8"))
+    for item in items:                   # the file without the questions ("James Calhoun" may name another answer)
+        rest = json.dumps({**data, "questions": [{k: v for k, v in q.items() if k != "question"}
+                                                 for q in data["questions"]]}, ensure_ascii=False)
+        assert not rag.control_correct(rest, item), f"an answer of the control is written in clear: {item['id']}"
     annotated = {q["question"] for q in rag.load_qa("holmes")}
     assert not annotated & {q["question"] for q in items}
 
 
-@pytest.mark.parametrize("text, qid, expected", [
-    ("Behind a sliding panel [2]", "C01", True), ("A sliding door", "C01", False),
-    ("the Lone Star.", "C05", True), ("Lone", "C05", False), ("Breckinridge", "C07", True),
-    ("Holder and Stevenson", "C11", True), ("Holder & Stevenson", "C11", True), ("Stevenson", "C11", False),
-    ("electric blue", "C12", True), ("blue", "C12", False), ("Julia", "C08", True), ("Juliana", "C08", False),
+def _hashed_item(*answers, max_words=None):
+    """A control item for answers made up for the test (the real ones are never written in clear)."""
+    import hashlib
+
+    norms = [rag.normalize_answer(a) for a in answers]
+    return {"answer_sha256": [hashlib.sha256(n.encode("utf-8")).hexdigest() for n in norms],
+            "max_words": max_words or max(len(n.split()) for n in norms)}
+
+
+@pytest.mark.parametrize("text, answers, expected", [
+    ("Behind a velvet curtain [2]", ("velvet curtain",), True), ("A velvet cushion", ("velvet curtain",), False),
+    ("the Red Lion.", ("Red Lion",), True), ("Red", ("Red Lion",), False),
+    ("Marsh and Pembroke", ("Marsh and Pembroke", "Marsh & Pembroke"), True),
+    ("Marsh & Pembroke", ("Marsh and Pembroke", "Marsh & Pembroke"), True),
+    ("Pembroke", ("Marsh and Pembroke", "Marsh & Pembroke"), False),
+    ("Agatha", ("Agatha",), True), ("Agathe", ("Agatha",), False), ("Agathas", ("Agatha",), False),
 ], ids=lambda v: str(v))
-def test_control_correct_matches_whole_words_of_a_hashed_answer(text, qid, expected):
-    item = next(q for q in rag.load_control() if q["id"] == qid)
-    assert rag.control_correct(text, item) is expected
+def test_control_correct_matches_whole_words_of_a_hashed_answer(text, answers, expected):
+    assert rag.control_correct(text, _hashed_item(*answers)) is expected
 
 
 def test_control_answers_are_in_the_stories():

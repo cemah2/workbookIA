@@ -17,7 +17,7 @@ import chB4_code2 as C2
 _HISTORY_FILE = Path(__file__).resolve().parent / "history_chB4.json"
 HISTORY = json.loads(_HISTORY_FILE.read_text(encoding="utf-8")) if _HISTORY_FILE.exists() else {}
 
-FULL24 = HISTORY.get("p24_full", {})
+FULL24 = HISTORY.get("p24_full") or HISTORY.get("generations2", {}).get("full", {})   # Qwen2.5, written by generations2
 FULL27 = HISTORY.get("p27_full", {"rows": [], "base_ppl": float("nan"), "steps": 0, "n_seeds": 0})
 FAST27 = HISTORY.get("p27_fast", {})
 LORA26 = HISTORY.get("lora26", {"fast": (30, 4, 128, 1e-3), "full": (300, 8, 256, 5e-4)})
@@ -272,8 +272,8 @@ BODY_30 = f"""En B4.21, le RAG de référence donnait {NAIVE30} réponses justes
 - le passage est **copié** d'un document (au plus 150 mots, les blancs peuvent différer) et **contient tous les mots de contenu** de la réponse (`wbrag.supports`, la règle de `verify_21`).
 
 Et elle vérifie quatre règles :
-1. **le générateur** : chaque modèle qui génère par `generate()` pendant la course compte au plus 600 000 000 paramètres, comptés sur le modèle chargé par `model.num_parameters()`, poids liés une fois. Qwen2.5-0.5B-Instruct en compte 494 032 768 ; Qwen3-0.6B, 596 049 920 (son fichier safetensors en contient 751 632 384, lm_head rangé à part, et le Hub affiche « 0.8B »). Les modèles d'embedding ne sont pas comptés ;
-2. **à froid** : pendant la course, le cache des réponses générées ne lit ni n'écrit rien, et les embeddings ne sont pas relus du cache : ils se calculent. Le chargement des poids, fait avant la course, ne compte pas ;
+1. **le générateur** : chaque modèle de langue qui sert pendant la course, par `generate()` ou par des passes avant écrites à la main (un modèle de transformers qui hérite de `GenerationMixin`), compte au plus 600 000 000 paramètres, comptés sur le modèle chargé par `model.num_parameters()`, poids liés une fois. Qwen2.5-0.5B-Instruct en compte 494 032 768 ; Qwen3-0.6B, 596 049 920 (son fichier safetensors en contient 751 632 384, lm_head rangé à part, et le Hub affiche « 0.8B »). Les modèles d'embedding ne sont pas comptés ;
+2. **à froid** : pendant la course, le cache des réponses générées ne lit ni n'écrit rien, les embeddings ne sont pas relus du cache, et les index calculés avant elle et rangés dans des variables globales (des tableaux d'embeddings ou de tokens d'au moins 100 lignes, un BM25 ajusté, `INDEX_20`…) valent un leurre : ta méthode indexe pendant la course. Le chargement des poids, fait avant la course, ne compte pas ;
 3. **rien des annotations** : ta méthode ne lit ni les réponses ni les extraits. Pendant la course, `wbrag.load_qa`, `load_unanswerable`, `load_control`, `relevant_ids`, `answer_in` et `control_correct` refusent, et les variables globales qui contiennent des questions annotées ou des réponses notées (`QA`, `QUESTIONS_21`, `rows_21`…) valent un leurre. Puis un **contrôle** : {len(CH30["control_ids"]) or 12} questions tenues à l'écart, dont les réponses ne sont nulle part en clair (`data/qa/holmes_control.json` ne garde que leurs empreintes SHA-256), sont **mélangées** aux 30 ; ta méthode doit y réussir à peu près aussi bien (au plus {_fr(100 * CH30["margin_full_30"])} points de pourcentage de moins ; {_fr(100 * CH30["margin_fast_30"])} en mode rapide, avec 4 questions de contrôle seulement) ;
 4. **dans le temps** : {_fr(LIMIT30["full"])} s pour toute la course, indexation comprise.
 

@@ -218,7 +218,7 @@ def e5_holmes(_) -> dict:
 # ---------------------------------------------------------------------------------------------------------------------
 FAST_CELLS = ("GIVEN_12", "SOLUTION_12", "CHECK_12", "GIVEN_13", "identical_13 = watson_13 = False", "EXPERIMENT_13",
               "GIVEN_14", "SOLUTION_14", "CHECK_14", "GIVEN_15", "SOLUTION_15", "EXPERIMENT_15", "GIVEN_16",
-              "FULL_16 = {}", "SOLUTION_16", "EXPERIMENT_16", "TOOLS_B", "GIVEN_19", "GIVEN_20",
+              "FULL_16 = {}", "SOLUTION_16", "EXPERIMENT_16", "EXPERIMENT_16_ORDERS", "TOOLS_B", "GIVEN_19", "GIVEN_20",
               "E5_HOLMES_20 = []", "SOLUTION_20", "CHECK_20", "GIVEN_21", "SOLUTION_21", "EXPERIMENT_21")
 
 
@@ -242,7 +242,7 @@ def generations(_) -> dict:
         ns = _exec_cells(True, folder, FAST_CELLS)
         r21_fast = ns.get("rows_21")
         _exec_cells(False, folder, ("GIVEN_15", "SOLUTION_15", "GIVEN_16", "FULL_16 = {}", "SOLUTION_16",
-                                    "EXPERIMENT_16"))
+                                    "EXPERIMENT_16", "EXPERIMENT_16_ORDERS"))
         full = _exec_cells(False, folder, ("TOOLS_B", "GIVEN_19", "GIVEN_20", "E5_HOLMES_20 = []", "SOLUTION_20",
                                            "CHECK_20", "GIVEN_21", "SOLUTION_21", "EXPERIMENT_21"))
         entries = json.loads((Path(folder) / "generations-solution.json").read_text(encoding="utf-8"))["entries"]

@@ -635,7 +635,7 @@ Pour a), une réponse identique à la gloutonne demande que **chaque** token tir
 </details>
 <details><summary>Indice 3</summary>
 
-Pose le calcul de a) : si chacun des 15 tokens de la réponse gloutonne a, après le passage à $T = 0{,}7$, une probabilité $p$, la réponse entière a la probabilité $q = p^{15}$, et le nombre de réponses identiques parmi 10 suit une loi binomiale de paramètres 10 et $q$ (ch. 2) : calcule son espérance pour $p = 0{,}9$, puis pour $p = 0{,}8$, et compare-la à 3. Pour b), demande-toi quelle part des réponses commence par une phrase qui ne mène pas au nom (« The doctor who… », « Sherlock Holmes is… ») et s'arrête à 24 tokens, ou nomme un autre personnage.
+Pose le calcul de a) : si chacun des 15 tokens de la réponse gloutonne a, après le passage à $T = 0{,}7$, une probabilité $p$, la réponse entière a la probabilité $q = p^{15}$, et le nombre de réponses identiques parmi 10 suit une loi binomiale de paramètres 10 et $q$ (ch. 2) : calcule son espérance pour $p = 0{,}9$, puis pour $p = 0{,}8$, et compare-la à 3. Pour b), pose le même produit sur le chemin qui mène au nom : si les 5 à 10 tokens qui le précèdent doivent chacun rester sur ce chemin, puis le token du nom être « Watson », la probabilité d'un tirage qui nomme Watson est le produit de ces probabilités ; estime la part que la queue de la distribution prend à chacun de ces tokens, puis compare l'espérance sur 10 tirages à 7.
 
 </details>
 
@@ -757,7 +757,7 @@ Relis « La recherche dense », « La recherche hybride et la fusion RRF » et �
 <details><summary>Indice 2</summary>
 
 - `cosine_top_k` : passe la requête en 2-D (`np.atleast_2d`), vérifie `k` et les dimensions, calcule `cosine_similarity_matrix(Q, D)` (B2), puis un tri **stable** de `-S` sur l'axe des documents (`np.argsort(-S, axis=1, kind="stable")`) garde le plus petit indice des ex aequo ; `np.take_along_axis` lit les similarités ; enlève l'axe des requêtes pour une requête 1-D.
-- `reciprocal_rank_fusion` : un dictionnaire `id → score`, `enumerate(ranking, start=1)` ; trie par `(-score, id)` ; `np.array(..., dtype=int)` garde des entiers, même vide.
+- `reciprocal_rank_fusion` : vérifie d'abord les arguments (au moins un classement, $k \ge 0$, aucun identifiant deux fois dans un même classement : `len(set(ids)) != len(ids)`) ; puis un dictionnaire `id → score`, `enumerate(ranking, start=1)` ; trie par `(-score, id)` ; `np.array(..., dtype=int)` garde des entiers, même vide.
 - `recall_at_k` : `len(set(liste[:k]) & set(pertinents)) / len(pertinents)` par requête, puis la moyenne ; `mean_reciprocal_rank` : le premier rang `r` (à partir de 1) d'un identifiant pertinent, `1 / r`, ou 0.
 
 </details>
@@ -769,6 +769,7 @@ def reciprocal_rank_fusion(rankings, k=60):
         raise ValueError("expected at least one ranking and k >= 0")
     score = {}
     for ranking in rankings:
+        ...                                                  # ValueError if an id appears twice in this ranking
         for rank, doc in enumerate(ranking, start=1):
             ...                                              # add 1 / (k + rank) to the score of int(doc)
     return np.array(sorted(score, key=lambda d: (-score[d], d)), dtype=int)
@@ -785,7 +786,7 @@ Relis « La recherche dense » (§204.6 : les forces s'inversent par rapport à 
 </details>
 <details><summary>Indice 2</summary>
 
-BM25 ne peut plus compter que sur les petits mots (« the », « what », « was »), présents dans presque tous les chunks, donc d'idf faible : il classe alors d'autres chunks, qui partagent par hasard un mot plein avec la question. La recherche dense compare deux vecteurs : elle rapproche des formulations différentes d'une même idée (fiche §204.6), mais un chunk de 120 mots parle de plusieurs choses à la fois (des dialogues, des descriptions), et la question n'en vise qu'une, avec ses propres mots. Pèse les deux effets ; parmi 1 045 chunks, être dans les 5 premiers demande d'être plus proche que 1 040 autres. Pour c), la fusion additionne $1/(60 + \text{rang})$ : que gagne un chunk bien classé par une seule des deux méthodes ?
+Pour BM25, demande-toi ce que valent les petits mots de la question (« the », « what », « was »), présents dans presque tous les chunks, donc d'idf faible, et quels chunks un mot plein de la question peut mettre en tête. La recherche dense compare deux vecteurs : elle rapproche des formulations différentes d'une même idée (fiche §204.6), mais un chunk de 120 mots parle de plusieurs choses à la fois (des dialogues, des descriptions), et la question n'en vise qu'une, avec ses propres mots. Pèse les deux effets ; parmi 1 045 chunks, être dans les 5 premiers demande d'être plus proche que 1 040 autres. Pour c), la fusion additionne $1/(60 + \text{rang})$ : que gagne un chunk bien classé par une seule des deux méthodes ?
 
 </details>
 <details><summary>Indice 3</summary>

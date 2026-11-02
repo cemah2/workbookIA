@@ -108,12 +108,47 @@ class StopCheck(Exception):
     """
 
 
+_MYLEARN_FILE = re.compile(r"[/\\](?:mylearn|mylearn_ref|mylearn_stubs)[/\\](.+\.py)$")
+
+
+def _chapter_of_module(rel: str) -> str:
+    """The chapter whose ``start_chapter.py`` copies the mylearn file ``rel`` (MANIFEST.json), or "?"."""
+    try:
+        from wb.impl import _manifest
+
+        for chapter, files in _manifest().get("chapters", {}).items():
+            if rel in files:
+                return chapter
+    except Exception:  # noqa: BLE001 - a message helper never fails
+        pass
+    return "?"
+
+
+def _pending_elsewhere(exc: BaseException) -> str | None:
+    """For a ``NotImplementedError`` raised in a mylearn file that another mylearn file called (``cosine_top_k`` of
+    ``retrieval.py`` calls ``cosine_similarity_matrix`` of ``embeddings.py``, chapter B2): « f() (mylearn/file.py,
+    ch. X), qu'appelle ton code, n'est pas encore écrite », so that the learner knows which file to open. None when
+    the error comes from the file of the exercise itself (or from no mylearn file)."""
+    import traceback
+
+    frames = [(frame, _MYLEARN_FILE.search(frame.filename.replace("\\", "/")))
+              for frame in traceback.extract_tb(exc.__traceback__)]
+    inside = [(frame, match.group(1)) for frame, match in frames if match]
+    if len(inside) < 2 or all(rel == inside[-1][1] for _, rel in inside[:-1]):
+        return None
+    frame, rel = inside[-1]
+    return (f"{frame.name}() (mylearn/{rel}, ch. {_chapter_of_module(rel)}), qu'appelle ton code, n'est pas encore "
+            "écrite")
+
+
 @contextlib.contextmanager
 def checked(ex_id: str):
     """Like ``wb.attempt`` (⏳ while the code is not written yet), but any other error of the learner's code
     becomes one ❌ line instead of stopping the cell, so that what follows (the tests) can say more.
 
-    - ``NotImplementedError``, a missing mylearn module: ⏳ (``wb.attempt``);
+    - ``NotImplementedError``, a missing mylearn module: ⏳ (``wb.attempt``); when the function not written yet is
+      in another mylearn file than the one that calls it (a module of an earlier chapter), the ⏳ names its file
+      and its chapter;
     - ``TypeError`` about a None used as a value: the forgotten-return message of ``wb.attempt``;
     - :class:`StopCheck`: the reason is already printed, the block stops silently;
     - any other exception: ``❌ Ex <id> : ton code lève <type> : <message>`` (never an empty message), with
@@ -123,6 +158,11 @@ def checked(ex_id: str):
     with attempt(ex_id):
         try:
             yield
+        except NotImplementedError as exc:
+            elsewhere = _pending_elsewhere(exc)
+            if elsewhere is None:
+                raise
+            print(f"⏳ Ex {ex_id} : pas encore fait : {elsewhere}.")
         except _NOT_WRITTEN:
             raise
         except StopCheck:

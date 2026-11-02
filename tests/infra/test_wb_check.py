@@ -137,6 +137,16 @@ def test_common_mistakes_are_reported():
         entry("d.6", 10.0, decimals=1, mistakes={"identique": 10.0})
 
 
+def test_a_missed_prediction_is_not_called_a_classic_mistake():
+    """The prediction of a 🔮 (prediction=True): its wrong value says « Prédiction ratée », with the same hint."""
+    e = entry("d.7", False, mistakes={"relis la dernière ligne du tableau": True}, prediction=True)
+    assert e["prediction"] is True and passes("d.7", e, False)
+    text = message("d.7", e, True)
+    assert text.startswith("Prédiction ratée. Piste : relis la dernière ligne") and "Erreur classique" not in text
+    plain = entry("d.8", False, mistakes={"relis la dernière ligne du tableau": True})
+    assert "prediction" not in plain and message("d.8", plain, True).startswith("Erreur classique.")
+
+
 # ---------------------------------------------------------------- other kinds
 def test_strings_ignore_case_accents_and_spaces():
     e = entry("s.1", "Rétropropagation du gradient")
