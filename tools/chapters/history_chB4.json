@@ -1366,5 +1366,105 @@
     ]
    ]
   ]
+ },
+ "ch30": {
+  "fast": {
+   "runs": [
+    {
+     "chunk": [
+      120,
+      20
+     ],
+     "good": 7,
+     "control": 2,
+     "seconds": 139.1,
+     "cold": true
+    },
+    {
+     "chunk": [
+      100,
+      20
+     ],
+     "good": 3,
+     "control": 1,
+     "seconds": 116.5,
+     "cold": false
+    },
+    {
+     "chunk": [
+      140,
+      20
+     ],
+     "good": 7,
+     "control": 2,
+     "seconds": 114.5,
+     "cold": false
+    },
+    {
+     "chunk": [
+      120,
+      30
+     ],
+     "good": 5,
+     "control": 2,
+     "seconds": 119.8,
+     "cold": false
+    },
+    {
+     "chunk": [
+      110,
+      25
+     ],
+     "good": 4,
+     "control": 2,
+     "seconds": 121.4,
+     "cold": false
+    }
+   ]
+  },
+  "full": {
+   "runs": [
+    {
+     "chunk": [
+      120,
+      20
+     ],
+     "good": 17,
+     "control": 8,
+     "seconds": 285.7,
+     "cold": true
+    },
+    {
+     "chunk": [
+      100,
+      20
+     ],
+     "good": 13,
+     "control": 6,
+     "seconds": 241.9,
+     "cold": false
+    },
+    {
+     "chunk": [
+      140,
+      20
+     ],
+     "good": 19,
+     "control": 9,
+     "seconds": 276.6,
+     "cold": false
+    },
+    {
+     "chunk": [
+      120,
+      30
+     ],
+     "good": 15,
+     "control": 9,
+     "seconds": 265.3,
+     "cold": false
+    }
+   ]
+  }
  }
 }

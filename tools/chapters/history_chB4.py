@@ -331,10 +331,10 @@ def _lora_ns():
 
 
 def p27_full(_) -> dict:
-    """🔬 B4.27, the full protocol (distilgpt2, P27_STEPS steps, two seeds): seven ranks with α = 2r, three with α = 8,
+    """🔬 B4.27, the full protocol (distilgpt2, 30 steps as in B4.26, two seeds): seven ranks with α = 2r, three with α = 8,
     and the modules at r = 4."""
     ns = _lora_ns()
-    steps, seeds = 40, (27, 28)
+    steps, seeds = 30, (27, 28)
     configs = [("alpha = 2r", f"r = {r}", r, 2 * r, ["c_attn"]) for r in (1, 2, 4, 8, 16, 32, 64)]
     configs += [("alpha = 8", f"r = {r}, α = 8", r, 8, ["c_attn"]) for r in (1, 16, 64)]
     configs += [("modules", "attention (c_attn, c_proj)", 4, 8, ["c_attn", "c_proj"]),
@@ -466,6 +466,7 @@ def ch30(_) -> dict:
         return text
 
     wbllm.ChatLM._generate = memo_generate
+    saved = json.loads(OUT.read_text(encoding="utf-8")).get("ch30", {}) if OUT.exists() else {}
     out = {}
     try:
         for fast in (True, False):
@@ -475,7 +476,11 @@ def ch30(_) -> dict:
             run(C2.SOLUTION_30, ns)
             ns["LIMIT_30"] = 10_000.0                       # the calibration measures; it does not judge the time
             runs = []
+            done = {tuple(r["chunk"]): r for r in saved.get(mode, {}).get("runs", [])}   # a run already measured
             for k, chunk in enumerate(CH30_CHUNKS):
+                if tuple(chunk) in done:
+                    runs.append(done[tuple(chunk)])
+                    continue
                 use_memo["on"] = k > 0
                 ns["CHUNK_30"] = chunk
                 text = run("RESULT_30 = evaluate_30(method_30)", ns)
@@ -486,6 +491,9 @@ def ch30(_) -> dict:
                 if k == 0:
                     print("\n".join(line for line in text.splitlines() if line[:1] in "HC✅❌")[:3000], flush=True)
                 memo_path.write_text(json.dumps(memo), encoding="utf-8")
+                partial = json.loads(OUT.read_text(encoding="utf-8"))          # saved after each run: resumable
+                partial.setdefault("ch30", {}).setdefault(mode, {})["runs"] = runs
+                OUT.write_text(json.dumps(partial, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
             out[mode] = {"runs": runs, "n_main": len(ns["MAIN_30"]), "n_control": len(ns["CONTROL_30"]),
                          "n_stories": len(ns["STORIES_30"]), "control_ids": [q["id"] for q in ns["CONTROL_30"]]}
     finally:
