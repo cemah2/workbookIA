@@ -55912,6 +55912,7 @@
       "mistakes": {
         "05f5091ad58c3de7a2091f8e9ffdd15d4efd21888833ac712290efe0dadbd9fc": "relis, à la température 0,7, la colonne « identiques à la réponse gloutonne »"
       },
+      "prediction": true,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
     "B4.13b": {
@@ -55920,6 +55921,7 @@
       "mistakes": {
         "b773a91f78dc95219e04890052a7b771751515482cf6de3e309fb0a6c3ccca6e": "relis, à la température 0,7, combien des 10 réponses nomment Watson"
       },
+      "prediction": true,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
     "B4.19a": {
@@ -55928,6 +55930,7 @@
       "mistakes": {
         "076f4288bec0133bfd4b65bc718f9d88d95fef46fbeb5c12257798e3bea7dc90": "relis la dernière ligne : combien de questions BM25 retrouve-t-il dans ses 5 premiers résultats ?"
       },
+      "prediction": true,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
     "B4.19b": {
@@ -55936,6 +55939,7 @@
       "mistakes": {
         "72e9a9667393d0b3dd791a60fd7047215d772354ddcf018b46ad781e325dd5e6": "relis la dernière ligne : combien de questions la recherche dense retrouve-t-elle dans ses 5 premiers résultats ?"
       },
+      "prediction": true,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
     "B4.19c": {
@@ -55944,6 +55948,7 @@
       "mistakes": {
         "2a563789b887501ba5304889314a50c2f3c05686cc4150005ba6948f1dd0e0fb": "compare, sur la dernière ligne, le compte de l’hybride à celui de la meilleure des deux autres"
       },
+      "prediction": true,
       "source": "chapitres/b4_llm/05_solutions.ipynb"
     },
     "B4.25a": {
