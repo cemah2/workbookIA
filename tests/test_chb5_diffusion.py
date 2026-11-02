@@ -899,11 +899,20 @@ def ddpm(dif, x_t, t, eps, sched, seed=None, rng=None, **kwargs):
     return array_result(result, "ddpm_step", np.shape(x_t))
 
 
+def same_seed_same_noise(first, second, function, t):
+    """Two calls with the same seed must give the same result: otherwise the noise does not come from rng."""
+    if not np.array_equal(first, second):
+        _fail(f"{function} at t = {t}, called twice with np.random.default_rng(seed) and the same seed",
+              "expected the same result twice (the noise z must be drawn from rng), got two different results")
+
+
 def ddpm_mean(dif, x_t, t, eps, sched, seed=0, **kwargs):
     """The mean of the learner's step: step(x_t, eps) - step(0, 0) with the same seed (same z)."""
     noisy = ddpm(dif, x_t, t, eps, sched, seed=seed, **kwargs)
     zero = np.zeros(np.shape(x_t))
-    return noisy - ddpm(dif, zero, t, zero, sched, seed=seed, **kwargs)
+    noise = ddpm(dif, zero, t, zero, sched, seed=seed, **kwargs)
+    same_seed_same_noise(noise, ddpm(dif, zero, t, zero, sched, seed=seed, **kwargs), "ddpm_step", t)
+    return noisy - noise
 
 
 def test_ddpm_step_docstring_example(dif):
@@ -994,6 +1003,7 @@ def test_ddpm_step_variance_choice_scales_the_same_noise(dif, t):
     sched = oracle_schedule(SMALL)
     zero = np.zeros((4, 3))
     post = ddpm(dif, zero, t, zero, sched, seed=5, variance="posterior")
+    same_seed_same_noise(post, ddpm(dif, zero, t, zero, sched, seed=5, variance="posterior"), "ddpm_step", t)
     beta = ddpm(dif, zero, t, zero, sched, seed=5, variance="beta")
     ratio = math.sqrt(sched["posterior_variance"][t] / sched["betas"][t])
     assert_close(post, ratio * beta, msg=f"ddpm_step at t = {t}, same seed: the noise with variance='posterior' "
@@ -1073,6 +1083,7 @@ def test_ddpm_step_matches_diffusers(dif, hf, variance, variance_type, clip):
         other_var = float(ddpm_float64(hf, LINEAR_1000, "fixed_large" if other == "beta" else "fixed_small")
                           ._get_variance(t))
         got = ddpm(dif, zero, t, zero, sched, seed=6, variance=variance)
+        same_seed_same_noise(got, ddpm(dif, zero, t, zero, sched, seed=6, variance=variance), "ddpm_step", t)
         base = ddpm(dif, zero, t, zero, sched, seed=6, variance=other)
         assert_close(got, math.sqrt(ref_var / other_var) * base,
                      msg=f"noise of ddpm_step at t = {t}, same seed: variance={variance!r} against "
@@ -1094,8 +1105,9 @@ def ddim(dif, x_t, t, t_prev, eps, alpha_bars, seed=None, rng=None, **kwargs):
 def ddim_det(dif, x_t, t, t_prev, eps, alpha_bars, eta, seed=0):
     """The deterministic part of the learner's step: step(x_t, eps) - step(0, 0) with the same seed."""
     zero = np.zeros(np.shape(x_t))
-    return (ddim(dif, x_t, t, t_prev, eps, alpha_bars, seed=seed, eta=eta)
-            - ddim(dif, zero, t, t_prev, zero, alpha_bars, seed=seed, eta=eta))
+    noise = ddim(dif, zero, t, t_prev, zero, alpha_bars, seed=seed, eta=eta)
+    same_seed_same_noise(noise, ddim(dif, zero, t, t_prev, zero, alpha_bars, seed=seed, eta=eta), "ddim_step", t)
+    return ddim(dif, x_t, t, t_prev, eps, alpha_bars, seed=seed, eta=eta) - noise
 
 
 def test_ddim_step_docstring_example(dif):
@@ -1174,6 +1186,7 @@ def test_ddim_step_noise_is_linear_in_eta(dif, t, t_prev):
     ab = oracle_schedule(LINEAR_1000)["alpha_bars"]
     zero = np.zeros((5, 2))
     full = ddim(dif, zero, t, t_prev, zero, ab, seed=9, eta=1.0)
+    same_seed_same_noise(full, ddim(dif, zero, t, t_prev, zero, ab, seed=9, eta=1.0), "ddim_step", t)
     half = ddim(dif, zero, t, t_prev, zero, ab, seed=9, eta=0.5)
     assert_close(half, 0.5 * full, msg=f"ddim_step from {t} to {t_prev}, same seed: the noise with eta = 0.5 must "
                                        "be half the noise with eta = 1 (sigma = eta * ...)")
