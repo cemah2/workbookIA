@@ -1,0 +1,143 @@
+{
+ "name": "verne_qa",
+ "version": 1,
+ "description": "10 factual questions in French on chapters I to VII of Le Tour du monde en quatre-vingts jours (wb.datasets.load_verne()), written for the workbook (chapter B4): a short answer, its aliases, and the evidence located by character positions in the loaded text. The corpus is the text from the heading of chapter I to the heading of chapter VIII (corpus_start, corpus_stop).",
+ "license": "questions, answers and annotations written for the workbook (CC0); the novel is in the public domain (Project Gutenberg eBook 800)",
+ "text": "wb.datasets.load_verne()",
+ "corpus_start": 3163,
+ "corpus_stop": 61651,
+ "chapters": "I à VII",
+ "questions": [
+  {
+   "id": "V01",
+   "question": "À quel numéro de Saville-row habite Phileas Fogg ?",
+   "answer": "7",
+   "aliases": [
+    "numéro 7",
+    "sept"
+   ],
+   "evidence": "la maison portant le numéro 7 de Saville-row, Burlington Gardens",
+   "start": 3302,
+   "end": 3366,
+   "chapter": "I",
+   "paraphrased": false
+  },
+  {
+   "id": "V02",
+   "question": "De quel club Phileas Fogg est-il membre ?",
+   "answer": "Reform-Club",
+   "aliases": [
+    "Reform Club"
+   ],
+   "evidence": "Phileas Fogg était membre du Reform-Club, et voilà tout.",
+   "start": 5308,
+   "end": 5364,
+   "chapter": "I",
+   "paraphrased": false
+  },
+  {
+   "id": "V03",
+   "question": "À quelle température James Forster avait-il apporté l'eau pour la barbe de son maître ?",
+   "answer": "quatre-vingt-quatre degrés Fahrenheit",
+   "aliases": [
+    "84 degrés Fahrenheit",
+    "quatre-vingt-quatre degrés",
+    "84 °F"
+   ],
+   "evidence": "de l'eau à quatre-vingt-quatre degrés Fahrenheit au lieu de quatre-vingt-six",
+   "start": 10132,
+   "end": 10208,
+   "chapter": "I",
+   "paraphrased": false
+  },
+  {
+   "id": "V04",
+   "question": "Quel est le prénom de Passepartout ?",
+   "answer": "Jean",
+   "aliases": [],
+   "evidence": "--Jean, n'en déplaise à monsieur, répondit le nouveau venu, Jean Passepartout,",
+   "start": 11066,
+   "end": 11144,
+   "chapter": "I",
+   "paraphrased": false
+  },
+  {
+   "id": "V05",
+   "question": "Quelle somme Phileas Fogg parie-t-il qu'il fera le tour de la terre en quatre-vingts jours ?",
+   "answer": "vingt mille livres",
+   "aliases": [
+    "20 000 livres",
+    "20000 livres"
+   ],
+   "evidence": "Je parie vingt mille livres contre qui voudra que je ferai le tour de la terre en quatre-vingts jours ou moins",
+   "start": 32801,
+   "end": 32911,
+   "chapter": "III",
+   "paraphrased": false
+  },
+  {
+   "id": "V06",
+   "question": "Quelle somme a été volée à la Banque d'Angleterre ?",
+   "answer": "cinquante-cinq mille livres",
+   "aliases": [
+    "55 000 livres",
+    "55000 livres"
+   ],
+   "evidence": "formant l'énorme somme de cinquante-cinq mille livres, avait été prise sur la tablette du caissier principal de la Banque d'Angleterre.",
+   "start": 24433,
+   "end": 24568,
+   "chapter": "III",
+   "paraphrased": false
+  },
+  {
+   "id": "V07",
+   "question": "Comment s'appelle le détective qui attend le paquebot à Suez ?",
+   "answer": "Fix",
+   "aliases": [],
+   "evidence": "Cet homme se nommait Fix, et c'était un de ces «détectives» ou agents de police anglais",
+   "start": 49130,
+   "end": 49217,
+   "chapter": "VI",
+   "paraphrased": false
+  },
+  {
+   "id": "V08",
+   "question": "Quel paquebot fait les voyages de Brindisi à Bombay ?",
+   "answer": "Mongolia",
+   "aliases": [],
+   "evidence": "Le _Mongolia_ faisait régulièrement les voyages de Brindisi à Bombay par le canal de Suez.",
+   "start": 47835,
+   "end": 47925,
+   "chapter": "VI",
+   "paraphrased": false
+  },
+  {
+   "id": "V09",
+   "question": "À quelle heure part le train de Douvres que prend Phileas Fogg ?",
+   "answer": "huit heures quarante-cinq",
+   "aliases": [
+    "8 h 45",
+    "20 h 45"
+   ],
+   "evidence": "Le train de Douvres part à huit heures quarante-cinq. Je le prendrai.",
+   "start": 33130,
+   "end": 33199,
+   "chapter": "III",
+   "paraphrased": false
+  },
+  {
+   "id": "V10",
+   "question": "Quelle prime promet-on aux détectives en cas de succès ?",
+   "answer": "deux mille livres",
+   "aliases": [
+    "2 000 livres",
+    "2000 livres"
+   ],
+   "evidence": "avec promesse, en cas de succès, d'une prime de deux mille livres (50 000 F)",
+   "start": 26326,
+   "end": 26402,
+   "chapter": "III",
+   "paraphrased": false
+  }
+ ]
+}

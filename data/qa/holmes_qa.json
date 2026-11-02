@@ -1,0 +1,455 @@
+{
+ "name": "holmes_qa",
+ "version": 1,
+ "description": "30 factual questions on The Adventures of Sherlock Holmes (wb.datasets.load_holmes()), written for the workbook (chapter B4): a short answer, its aliases, and the evidence, a short excerpt of the text that contains the answer, located by character positions in the loaded text (start, end). 10 questions are paraphrased: none of their keywords appears within 140 words of their evidence. Plus 5 questions without an answer in the stories (absent, false premise), kept out of the 30.",
+ "license": "questions, answers and annotations written for the workbook (CC0); the stories are in the public domain (Project Gutenberg eBook 1661)",
+ "text": "wb.datasets.load_holmes()",
+ "questions": [
+  {
+   "id": "H01",
+   "question": "What is the address of Irene Adler's house, according to the King of Bohemia?",
+   "answer": "Briony Lodge",
+   "aliases": [
+    "Briony Lodge, Serpentine Avenue",
+    "Serpentine Avenue"
+   ],
+   "evidence": "“Is Briony Lodge, Serpentine Avenue, St. John’s Wood.”",
+   "start": 19212,
+   "end": 19266,
+   "story": 0,
+   "story_title": "A Scandal in Bohemia",
+   "paraphrased": false
+  },
+  {
+   "id": "H02",
+   "question": "What was Godfrey Norton's profession?",
+   "answer": "lawyer",
+   "aliases": [],
+   "evidence": "This Godfrey Norton was evidently an important factor in the matter. He was a lawyer.",
+   "start": 23814,
+   "end": 23899,
+   "story": 0,
+   "story_title": "A Scandal in Bohemia",
+   "paraphrased": false
+  },
+  {
+   "id": "H03",
+   "question": "What business does Jabez Wilson keep at Coburg Square?",
+   "answer": "pawnbroker",
+   "aliases": [
+    "pawnbroker’s business",
+    "pawnbroking"
+   ],
+   "evidence": "I have a small pawnbroker’s business at Coburg Square, near the City.",
+   "start": 54798,
+   "end": 54867,
+   "story": 1,
+   "story_title": "The Red-Headed League",
+   "paraphrased": false
+  },
+  {
+   "id": "H04",
+   "question": "What is the name of Jabez Wilson's assistant?",
+   "answer": "Vincent Spaulding",
+   "aliases": [
+    "Spaulding"
+   ],
+   "evidence": "His name is Vincent Spaulding, and he’s not such a youth, either.",
+   "start": 55211,
+   "end": 55276,
+   "story": 1,
+   "story_title": "The Red-Headed League",
+   "paraphrased": false
+  },
+  {
+   "id": "H05",
+   "question": "In which newspaper did Jabez Wilson find the advertisement of the Red-Headed League?",
+   "answer": "The Morning Chronicle",
+   "aliases": [
+    "Morning Chronicle"
+   ],
+   "evidence": "It is _The Morning Chronicle_ of April 27, 1890.",
+   "start": 54585,
+   "end": 54633,
+   "story": 1,
+   "story_title": "The Red-Headed League",
+   "paraphrased": false
+  },
+  {
+   "id": "H06",
+   "question": "Where did Mary Sutherland first meet Mr. Hosmer Angel?",
+   "answer": "the gasfitters’ ball",
+   "aliases": [
+    "gasfitters ball",
+    "at the gasfitters’ ball"
+   ],
+   "evidence": "“I met him first at the gasfitters’ ball,” she said.",
+   "start": 106308,
+   "end": 106360,
+   "story": 2,
+   "story_title": "A Case of Identity",
+   "paraphrased": false
+  },
+  {
+   "id": "H07",
+   "question": "What was Mr. Windibank's trade?",
+   "answer": "a traveller in wines",
+   "aliases": [
+    "traveller in wines",
+    "wine traveller"
+   ],
+   "evidence": "when Mr. Windibank came he made her sell the business, for he was very superior, being a traveller in wines.",
+   "start": 104520,
+   "end": 104628,
+   "story": 2,
+   "story_title": "A Case of Identity",
+   "paraphrased": false
+  },
+  {
+   "id": "H08",
+   "question": "Who is the largest landed proprietor near Boscombe Valley?",
+   "answer": "John Turner",
+   "aliases": [
+    "Mr. John Turner",
+    "Turner"
+   ],
+   "evidence": "The largest landed proprietor in that part is a Mr. John Turner",
+   "start": 137160,
+   "end": 137223,
+   "story": 3,
+   "story_title": "The Boscombe Valley Mystery",
+   "paraphrased": false
+  },
+  {
+   "id": "H09",
+   "question": "What was the name of the game-keeper who saw McCarthy walk to Boscombe Pool?",
+   "answer": "William Crowder",
+   "aliases": [
+    "Crowder"
+   ],
+   "evidence": "the other was William Crowder, a game-keeper in the employ of Mr. Turner.",
+   "start": 138926,
+   "end": 138999,
+   "story": 3,
+   "story_title": "The Boscombe Valley Mystery",
+   "paraphrased": false
+  },
+  {
+   "id": "H10",
+   "question": "Near which town did Elias Openshaw take a small estate in Sussex?",
+   "answer": "Horsham",
+   "aliases": [],
+   "evidence": "he came back to Europe and took a small estate in Sussex, near Horsham.",
+   "start": 192534,
+   "end": 192605,
+   "story": 4,
+   "story_title": "The Five Orange Pips",
+   "paraphrased": false
+  },
+  {
+   "id": "H11",
+   "question": "What was the first name of John Openshaw's uncle?",
+   "answer": "Elias",
+   "aliases": [],
+   "evidence": "You must know that my grandfather had two sons—my uncle Elias and my father Joseph.",
+   "start": 191807,
+   "end": 191890,
+   "story": 4,
+   "story_title": "The Five Orange Pips",
+   "paraphrased": false
+  },
+  {
+   "id": "H12",
+   "question": "What is the name of the opium den in Upper Swandam Lane?",
+   "answer": "the Bar of Gold",
+   "aliases": [
+    "Bar of Gold"
+   ],
+   "evidence": "There he was to be found, she was sure of it, at the Bar of Gold, in Upper Swandam Lane.",
+   "start": 227983,
+   "end": 228071,
+   "story": 5,
+   "story_title": "The Man with the Twisted Lip",
+   "paraphrased": false
+  },
+  {
+   "id": "H13",
+   "question": "In which year did Neville St. Clair come to Lee?",
+   "answer": "1884",
+   "aliases": [
+    "May 1884",
+    "May, 1884"
+   ],
+   "evidence": "in May, 1884—there came to Lee a gentleman, Neville St. Clair by name",
+   "start": 238558,
+   "end": 238627,
+   "story": 5,
+   "story_title": "The Man with the Twisted Lip",
+   "paraphrased": false
+  },
+  {
+   "id": "H14",
+   "question": "Which inn near the Museum ran the goose club?",
+   "answer": "the Alpha Inn",
+   "aliases": [
+    "Alpha Inn",
+    "Alpha"
+   ],
+   "evidence": "There are a few of us who frequent the Alpha Inn, near the Museum",
+   "start": 296167,
+   "end": 296232,
+   "story": 6,
+   "story_title": "The Blue Carbuncle",
+   "paraphrased": false
+  },
+  {
+   "id": "H15",
+   "question": "Which plumber was charged with stealing the blue carbuncle?",
+   "answer": "John Horner",
+   "aliases": [
+    "Horner"
+   ],
+   "evidence": "John Horner, 26, plumber, was brought up upon the charge",
+   "start": 287420,
+   "end": 287476,
+   "story": 6,
+   "story_title": "The Blue Carbuncle",
+   "paraphrased": false
+  },
+  {
+   "id": "H16",
+   "question": "Where does Helen Stoner live with her stepfather?",
+   "answer": "Stoke Moran",
+   "aliases": [],
+   "evidence": "the Roylotts of Stoke Moran, on the western border of Surrey.",
+   "start": 323199,
+   "end": 323260,
+   "story": 7,
+   "story_title": "The Speckled Band",
+   "paraphrased": false
+  },
+  {
+   "id": "H17",
+   "question": "To which village in Berkshire was the hydraulic engineer summoned by the last train?",
+   "answer": "Eyford",
+   "aliases": [],
+   "evidence": "To Eyford, in Berkshire. It is a little place near the borders of Oxfordshire",
+   "start": 382798,
+   "end": 382875,
+   "story": 8,
+   "story_title": "The Engineer’s Thumb",
+   "paraphrased": false
+  },
+  {
+   "id": "H18",
+   "question": "Lord Robert St. Simon is the second son of which duke?",
+   "answer": "the Duke of Balmoral",
+   "aliases": [
+    "Duke of Balmoral",
+    "Balmoral"
+   ],
+   "evidence": "Lord Robert St. Simon, second son of the Duke of Balmoral",
+   "start": 419589,
+   "end": 419646,
+   "story": 9,
+   "story_title": "The Noble Bachelor",
+   "paraphrased": false
+  },
+  {
+   "id": "H19",
+   "question": "Which friend has such a bad influence on Arthur Holder?",
+   "answer": "Sir George Burnwell",
+   "aliases": [
+    "George Burnwell",
+    "Burnwell"
+   ],
+   "evidence": "but each time the influence of his friend, Sir George Burnwell, was enough to draw him back again.",
+   "start": 470064,
+   "end": 470162,
+   "story": 10,
+   "story_title": "The Beryl Coronet",
+   "paraphrased": false
+  },
+  {
+   "id": "H20",
+   "question": "In which town does Violet Hunter run a private school at the end of the story?",
+   "answer": "Walsall",
+   "aliases": [],
+   "evidence": "she is now the head of a private school at Walsall",
+   "start": 562091,
+   "end": 562141,
+   "story": 11,
+   "story_title": "The Copper Beeches",
+   "paraphrased": false
+  },
+  {
+   "id": "H21",
+   "question": "How many stairs go up to the lodgings where the two friends live?",
+   "answer": "seventeen",
+   "aliases": [
+    "17"
+   ],
+   "evidence": "Now, I know that there are seventeen steps, because I have both seen and observed.",
+   "start": 6952,
+   "end": 7034,
+   "story": 0,
+   "story_title": "A Scandal in Bohemia",
+   "paraphrased": true
+  },
+  {
+   "id": "H22",
+   "question": "What venomous animal kills the villain at the end?",
+   "answer": "a swamp adder",
+   "aliases": [
+    "swamp adder"
+   ],
+   "evidence": "“It is a swamp adder!” cried Holmes; “the deadliest snake in India.",
+   "start": 364827,
+   "end": 364894,
+   "story": 7,
+   "story_title": "The Speckled Band",
+   "paraphrased": true
+  },
+  {
+   "id": "H23",
+   "question": "What is the huge guard dog called?",
+   "answer": "Carlo",
+   "aliases": [],
+   "evidence": "‘It’s only Carlo, my mastiff.",
+   "start": 541278,
+   "end": 541307,
+   "story": 11,
+   "story_title": "The Copper Beeches",
+   "paraphrased": true
+  },
+  {
+   "id": "H24",
+   "question": "How much payment was promised for the late-evening job?",
+   "answer": "fifty guineas",
+   "aliases": [
+    "50 guineas"
+   ],
+   "evidence": "‘How would fifty guineas for a night’s work suit you?’ he asked.",
+   "start": 382297,
+   "end": 382361,
+   "story": 8,
+   "story_title": "The Engineer’s Thumb",
+   "paraphrased": true
+  },
+  {
+   "id": "H25",
+   "question": "How many big gems decorate the royal headpiece?",
+   "answer": "thirty-nine",
+   "aliases": [
+    "39"
+   ],
+   "evidence": "‘There are thirty-nine enormous beryls,’ said he,",
+   "start": 465459,
+   "end": 465508,
+   "story": 10,
+   "story_title": "The Beryl Coronet",
+   "paraphrased": true
+  },
+  {
+   "id": "H26",
+   "question": "In which American city did the bride's father live?",
+   "answer": "San Francisco",
+   "aliases": [],
+   "evidence": "the only daughter of Aloysius Doran. Esq., of San Francisco, Cal., U.S.A.",
+   "start": 419670,
+   "end": 419743,
+   "story": 9,
+   "story_title": "The Noble Bachelor",
+   "paraphrased": true
+  },
+  {
+   "id": "H27",
+   "question": "In which gold-mining town of the antipodes was the killer known?",
+   "answer": "Ballarat",
+   "aliases": [],
+   "evidence": "the definite conception of an Australian from Ballarat with a grey cloak.",
+   "start": 174676,
+   "end": 174749,
+   "story": 3,
+   "story_title": "The Boscombe Valley Mystery",
+   "paraphrased": true
+  },
+  {
+   "id": "H28",
+   "question": "How much did the young woman get for each typed page?",
+   "answer": "twopence a sheet",
+   "aliases": [
+    "twopence",
+    "two pence"
+   ],
+   "evidence": "It brings me twopence a sheet, and I can often do from fifteen to twenty sheets in a day.",
+   "start": 105902,
+   "end": 105991,
+   "story": 2,
+   "story_title": "A Case of Identity",
+   "paraphrased": true
+  },
+  {
+   "id": "H29",
+   "question": "At what times did the copying job start and finish?",
+   "answer": "ten to two",
+   "aliases": [
+    "10 to 2",
+    "from ten to two"
+   ],
+   "evidence": "‘What would be the hours?’ I asked. “‘Ten to two.’",
+   "start": 63813,
+   "end": 63864,
+   "story": 1,
+   "story_title": "The Red-Headed League",
+   "paraphrased": true
+  },
+  {
+   "id": "H30",
+   "question": "Which aristocratic lady had the jewel stolen from her?",
+   "answer": "the Countess of Morcar",
+   "aliases": [
+    "Countess of Morcar",
+    "Morcar"
+   ],
+   "evidence": "“Not the Countess of Morcar’s blue carbuncle!” I ejaculated.",
+   "start": 286192,
+   "end": 286252,
+   "story": 6,
+   "story_title": "The Blue Carbuncle",
+   "paraphrased": true
+  }
+ ],
+ "unanswerable": [
+  {
+   "id": "U01",
+   "question": "What is the name of Sherlock Holmes's elder brother?",
+   "kind": "absent",
+   "note": "No brother of Holmes appears in the twelve stories."
+  },
+  {
+   "id": "U02",
+   "question": "Which professor does Holmes call the Napoleon of crime?",
+   "kind": "absent",
+   "note": "No professor of crime appears in the twelve stories."
+  },
+  {
+   "id": "U03",
+   "question": "How many cups of tea does Holmes drink in A Case of Identity?",
+   "kind": "absent",
+   "note": "The story never counts them."
+  },
+  {
+   "id": "U04",
+   "question": "Why did Irene Adler shoot the King of Bohemia?",
+   "kind": "false_premise",
+   "note": "Irene Adler shoots nobody: she marries Godfrey Norton and leaves England."
+  },
+  {
+   "id": "U05",
+   "question": "In which year did Holmes move to Paris to study chemistry?",
+   "kind": "false_premise",
+   "note": "Holmes does not move to Paris in these stories."
+  }
+ ]
+}
