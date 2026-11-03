@@ -103,7 +103,7 @@ Dans tes notes : pourquoi `posterior_variance[0]` vaut-il 0, et qu'en conclure p
        "bruité, et comparer à la convention de lisibilité de ✏️ B5.3.",
        "Ex B5.12 · ✏️ B5.3 · fiche §205.2 (« Le rapport signal sur bruit ») · ch. 27 (le classifieur de la partie B)",
        tracks="R, C", hypothesis=True,
-       body=r"""En ✏️ B5.3, tu as adopté une **convention** : un chiffre reste lisible tant que son rapport signal sur bruit vaut au moins 0,1. Qu'en pense un vrai lecteur ? La cellule suivante prépare `CLF`, le petit CNN de la partie B du ch. 27 (`wbd.classifier`), entraîné une fois sur 10 000 chiffres **propres** de MNIST ; il en reconnaît environ 97 % sur les 1 000 chiffres de test. Elle donne aussi `noisy_13(planning, pas)`, qui bruite ces 1 000 chiffres par la forme fermée, au **pas de l'article** 100, 300 ou 600 (les indices 99, 299 et 599), du planning linéaire ou cosinus de $T = 1\,000$, toujours avec le même bruit.
+       body=r"""En ✏️ B5.3, tu as adopté une **convention** : un chiffre reste lisible tant que son rapport signal sur bruit vaut au moins 0,1. Qu'en pense un vrai lecteur ? La cellule suivante prépare `CLF`, le petit CNN de la partie B du ch. 27 (`wbd.classifier`), entraîné une fois sur 10 000 chiffres **propres** de MNIST ; il en reconnaît environ 96 % sur les 1 000 chiffres de test. Elle donne aussi `noisy_13(planning, pas)`, qui bruite ces 1 000 chiffres par la forme fermée, au **pas de l'article** 100, 300 ou 600 (les indices 99, 299 et 599), du planning linéaire ou cosinus de $T = 1\,000$, toujours avec le même bruit.
 
 L'expérience montre quatre chiffres à ces trois pas pour chaque planning, puis, pour chacun des six cas, le SNR et l'**accuracy** du classifieur sur les chiffres bruités. Tu peux calculer les six SNR (✏️ B5.3), pas l'accuracy. **Avant d'exécuter**, écris tes deux prédictions :
 - a) `strong_13` : dans combien des six cas (3 pas × 2 plannings) le classifieur reconnaît-il **au moins 70 %** des chiffres ? Un entier de 0 à 6 ;
@@ -281,7 +281,9 @@ PART_B = Part("B", "Jouets 2D : un MLP débruiteur, puis le flow matching",
               "grille de 1 000 valeurs, $s = u / 1\\,000$ avec $u$ entier de 1 à 1 000 (`wbd.FM_POSITIONS` = 1 001 "
               "positions). La position $p$ est encodée par la ligne $p$ de ta `positional_encoding` de B3 "
               "(`mylearn.attention`) : si tu n'as pas écrit `attention.py`, la référence la remplace (une ligne ℹ️ le "
-              "dit) ; s'il existe sans cette fonction, la vérification te le signale.\n\n"
+              "dit) ; s'il existe sans cette fonction, la vérification te le signale. La référence d'`attention.py` "
+              "s'appuie elle-même sur celles de `nn/activations.py` (ch. 17) et de `nn/regularization.py` (ch. 20) : "
+              "si tu n'as pas ces modules, deux autres lignes ℹ️ le disent, sans effet sur la partie B.\n\n"
               "`SETTINGS_B` donne le budget des deux entraînements : 3 000 itérations, des batches de 512 points, "
               "AdamW au learning rate 2e-3 (environ 10 s chacun sur un CPU à deux cœurs). `wbd` contient une solution "
               "de référence (`Denoiser2D`, `train_toy`, `sample_toy_ddpm`…) : la vérification s'en sert pour comparer "
@@ -319,7 +321,7 @@ Dans tes notes : la loss descend-elle vers 0 ? Pourquoi pas, alors que le modèl
 - `euler_20(model, n, n_steps, generator)` : $\mathbf{x}$ = `torch.randn((n, 2), generator=generator)`, puis `n_steps` pas d'Euler égaux, de $s = 1$ vers $s = 0$ : au pas $k$ (de 0 à `n_steps` − 1), la position `round(1000 * (1 - k / n_steps))` et $\mathbf{x} \leftarrow \mathbf{x} - \mathbf{v}/\text{n\_steps}$ ; sans gradient ; rend un tableau float64 `(n, 2)`.
 - `ddim_20(model, n, n_steps, alpha_bars, generator)` : $\mathbf{x}$ = `torch.randn((n, 2), generator=generator)` en float64 NumPy, puis ta `ddim_step` ($\eta = 0$) d'un indice au suivant de `wbd.ddim_timesteps(T, n_steps)` (de $T - 1$ à 0, `n_steps` indices), et du dernier à −1 ; rend un tableau float64 `(n, 2)`.
 
-La cellule de vérification compare tes trois fonctions aux fonctions du contrat (5 itérations, puis 1, 3 et 8 pas d'Euler, 1, 4 et 50 pas de DDIM). La cellule suivante (environ 15 s) entraîne le modèle de flow matching avec `SETTINGS_B`, puis mesure la distance en tranches de 2 000 points de chaque échantillonneur pour chaque nombre de pas de `STEPS_20`, avec le modèle de B5.19 pour DDIM ; elle trace les deux courbes, avec, en bandes, les **cinq graines** du protocole complet (`FULL_20`, précalculé avec les mêmes cellules ; ta graine est la première), et montre les points à 5 pas. Réponds ensuite d'après le tableau du protocole complet, **pour toutes ses graines** :
+La cellule de vérification compare tes trois fonctions aux fonctions du contrat (5 itérations, puis 1, 3 et 8 pas d'Euler, 1, 4 et 50 pas de DDIM). La cellule suivante (environ 15 s) entraîne le modèle de flow matching avec `SETTINGS_B`, puis mesure la distance en tranches de 2 000 points de chaque échantillonneur pour chaque nombre de pas de `STEPS_20`, avec le modèle de B5.19 pour DDIM ; elle trace les deux courbes, avec, en bandes, les **cinq graines** du protocole complet (`FULL_20`, précalculé avec les mêmes cellules ; ta graine est la première), et montre les points à 5 pas. Réponds ensuite d'après `FULL_20` (une liste par graine, une distance par nombre de pas de `STEPS_20` ; le tableau imprimé n'en donne que les médianes, les bandes du graphique l'étendue), **pour toutes ses graines** :
 - a) `fewest_20` : le plus petit nombre de pas de `STEPS_20` à partir duquel la distance d'Euler est au plus le triple de sa distance à 100 pas ;
 - b) `better5_20` : à 5 pas, lequel a la plus petite distance : `"D"` (DDIM) ou `"E"` (Euler) ?
 
@@ -328,12 +330,12 @@ Dans tes notes : pourquoi DDIM à 1 ou 2 pas rend-il des points aussi loin (rega
        after=[("code", C.EXPERIMENT_20), ("todo", C.TODO_20B), ("check", C.CHECK_20B),
               ("solution", f'fewest_20, better5_20 = {A20["fewest"]}, "{A20["better5"]}"\n\n' + C.CHECK_20B),
               ("record", f'wb.record("B5.20a", {A20["fewest"]}, mistakes={{'
-                         + ", ".join(f'"relis la ligne Euler du protocole complet : à {n} pas, la distance est-elle au plus '
+                         + ", ".join(f'"relis les distances d\'Euler de FULL_20 : à {n} pas, la distance est-elle au plus '
                                      f'le triple de celle à 100 pas pour toutes les graines ?": {n}'
                                      for n in STEPS_20 if n != A20["fewest"])
                          + f'}}, fractional="on demande un nombre de pas de STEPS_20", choices={list(STEPS_20)})\n'
-                         f'wb.record("B5.20b", "{A20["better5"]}", mistakes={{"relis la colonne des 5 pas du tableau '
-                         f'du protocole complet": "{"D" if A20["better5"] == "E" else "E"}"}})')]),
+                         f'wb.record("B5.20b", "{A20["better5"]}", mistakes={{"relis la colonne des 5 pas de FULL_20, '
+                         f'graine par graine": "{"D" if A20["better5"] == "E" else "E"}"}})')]),
 ])
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -358,7 +360,7 @@ PART_C = Part("C", "Le U-Net sur MNIST et Fashion-MNIST",
   - `self.config`, le dictionnaire `{"n_steps", "channels" (une liste), "t_dim", "n_classes"}` de ses arguments : il suffit à reconstruire le modèle (`TinyUNet_21(**config)`) ;
   - un buffer **non persistant** `pe` : la table `positional_encoding(n_steps, t_dim)` de B3, en float32 ; `t_mlp = nn.Sequential(nn.Linear(t_dim, t_dim), nn.SiLU(), nn.Linear(t_dim, t_dim))` ;
   - si `n_classes` est un entier : `class_emb = nn.Embedding(n_classes + 1, t_dim)`, dont la **dernière** ligne, d'indice `n_classes`, est la classe vide $\varnothing$ de la guidance sans classifieur ;
-  - `inp` (1 → `c1`, 3×3) ; l'encodeur `d1 = ResBlock_21(c1, c1)`, `down1` (convolution 3×3 de stride 2, `padding=1`, `c1` → `c1` : 28 → 14), `d2 = ResBlock_21(c1, c2)`, `down2` (`c2` → `c2`, 14 → 7) ; `mid = ResBlock_21(c2, c3)` ; le décodeur `up2` (`nn.ConvTranspose2d(c3, c2, 4, stride=2, padding=1)` : 7 → 14), `u2 = ResBlock_21(2 * c2, c2)`, `up1` (`c2` → `c1`, 14 → 28), `u1 = ResBlock_21(2 * c1, c1)` ; `out` (`c1` → 1, 3×3) ; tous les blocs reçoivent `t_dim` ;
+  - `inp` (1 → `c1`, 3×3) ; l'encodeur `d1 = ResBlock_21(c1, c1)`, `down1` (convolution 3×3 de stride 2, `padding=1`, `c1` → `c1` : 28 → 14), `d2 = ResBlock_21(c1, c2)`, `down2` (la même convolution 3×3 de stride 2, `padding=1`, `c2` → `c2` : 14 → 7) ; `mid = ResBlock_21(c2, c3)` ; le décodeur `up2` (`nn.ConvTranspose2d(c3, c2, 4, stride=2, padding=1)` : 7 → 14), `u2 = ResBlock_21(2 * c2, c2)`, `up1` (la même convolution transposée, `nn.ConvTranspose2d(c2, c1, 4, stride=2, padding=1)` : 14 → 28), `u1 = ResBlock_21(2 * c1, c1)` ; `out` (`c1` → 1, 3×3) ; tous les blocs reçoivent `t_dim` ;
   - `forward(x, t, y=None)` : `x` de forme `(N, 1, 28, 28)`, `t` des indices int64 `(N,)`, `y` des classes int64 `(N,)` de 0 à `n_classes` (la classe vide si `y` est `None`) ; `temb = t_mlp(pe[t])`, plus `class_emb(y)` si le modèle a des classes ; puis `h1 = d1(inp(x))`, `h2 = d2(down1(h1))`, `h = mid(down2(h2))`, `h = u2(cat([up2(h), h2]))`, `h = u1(cat([up1(h), h1]))` (la concaténation sur l'axe des canaux, **la sortie du décodeur d'abord**), et `out(h)` : la prédiction du bruit, `(N, 1, 28, 28)`.
 
 Puis, dans la même cellule, avec ton modèle :

@@ -285,6 +285,11 @@ CHECK_16 = r'''with checked("B5.16"):
     same("B5.16", "moyenne contre Bayes sur une grille (x0 = −0,4, x_t = 0,7, indice 2)", mean_b, [m_b], rtol=1e-6, atol=1e-6)
     same("B5.16", "variance contre Bayes sur une grille", var_b, [float(((grid - m_b) ** 2 * w_b).sum() / w_b.sum())],
          rtol=1e-6, atol=1e-6)
+    try:
+        mine_b = float(np.ravel(np.asarray(mean_b, dtype=float))[0])
+        print(f"   Bayes sur la grille : moyenne {m_b:.10f} ; ta formule : {mine_b:.10f} ; écart {fr_e(abs(m_b - mine_b))}")
+    except (TypeError, ValueError, IndexError):
+        pass
     refuses("B5.16", "x_t de forme (2, 3) pour x0 de forme (2, 2)",
             lambda: M.q_posterior_mean_variance(x0_16, np.ones((2, 3)), [0, 1], s_16))
     refuses("B5.16", "t = 3 avec T = 3", lambda: M.q_posterior_mean_variance(x0_16, xt_16, [0, 3], s_16))
@@ -441,36 +446,65 @@ with checked("B5.18"):
     ok_18 &= same("B5.18", "ddim_chain_18 sur [2, 0] (η = 0) contre la formule", ddim_chain_18(x0_c, e_c, ab_18, [2, 0]),
                   x0h, rtol=1e-6, atol=1e-6)
     chains_ok_18 = bool(ok_18)
+def upstream_18():
+    """⏳ when a function of B5.12 or B5.14 that the experiment may go through is wrong: the small checks above run on
+    a planning of 3 steps and one step for the whole batch, where these errors do not show."""
+    D = mylearn.diffusion
+    try:
+        ab_ok = np.allclose(np.asarray(D.noise_schedule(BETAS)["alpha_bars"]), toy_schedule(BETAS)["alpha_bars"],
+                            rtol=1e-9, atol=1e-12)
+    except Exception:  # noqa: BLE001 - not written, or wrong: B5.12 says which
+        ab_ok = False
+    if not ab_ok:
+        print("⏳ Ex B5.18 : l'expérience prend le planning du notebook de ta noise_schedule : elle attend une "
+              "noise_schedule juste (🔨 B5.12, relance ses vérifications).")
+        return False
+    x0_u, t_u, ab_u = np.array([[1.0, -1.0], [0.5, 0.0], [-0.5, 2.0]]), np.array([0, 1, 2]), np.array([0.9, 0.5, 0.2])
+    try:
+        got_u = np.asarray(D.q_sample(x0_u, t_u, ab_u, noise=np.ones((3, 2)))[0])
+    except NotImplementedError:
+        return True                                   # q_sample not written: your chains do not use it
+    except Exception:  # noqa: BLE001
+        got_u = None
+    if got_u is None or got_u.shape != (3, 2) or not np.allclose(got_u, np.sqrt(ab_u)[:, None] * x0_u
+                                                                  + np.sqrt(1 - ab_u)[:, None], atol=1e-6):
+        print("⏳ Ex B5.18 : si tes chaînes passent par ta q_sample, l'expérience attend une q_sample juste sur un batch "
+              "(🔨 B5.14, relance ses vérifications).")
+        return False
+    return True
+
+
 if not chains_ok_18:
     print("⏳ Ex B5.18 : l'expérience attend tes trois fonctions (et ddpm_step, ddim_step de B5.17).")
-else:
-    X0_18 = wbd.ring(500, seed=18)                                   # 500 points of the ring of 8 Gaussians
-    EPS_18 = np.random.default_rng(180).standard_normal(X0_18.shape)
-    SCHED_18 = mylearn.diffusion.noise_schedule(BETAS)
-    AB_18 = SCHED_18["alpha_bars"]
-    runs_18 = {"DDPM, bruit initial à chaque pas": ddpm_chain_18(X0_18, EPS_18, SCHED_18, np.random.default_rng(1)),
-               "DDPM, vrai bruit du x courant": ddpm_chain_18(X0_18, EPS_18, SCHED_18, np.random.default_rng(1), oracle=True),
-               f"DDIM η = 0, les {T_STEPS} pas": ddim_chain_18(X0_18, EPS_18, AB_18, np.arange(T_STEPS - 1, -1, -1)),
-               "DDIM η = 0, 10 pas": ddim_chain_18(X0_18, EPS_18, AB_18, wbd.ddim_timesteps(T_STEPS, 10)),
-               f"DDIM η = 1, les {T_STEPS} pas": ddim_chain_18(X0_18, EPS_18, AB_18, np.arange(T_STEPS - 1, -1, -1),
-                                                                eta=1.0, rng=np.random.default_rng(2))}
-    ERRORS_18 = {name: float(np.abs(np.asarray(x) - X0_18).max()) for name, x in runs_18.items()}
-    for name, err in ERRORS_18.items():
-        print(f"{name:>32} : écart maximal à x0 = {fr_e(err)}")
-    verdict("B5.18", max(ERRORS_18[k] for k in list(ERRORS_18)[1:4]) < 1e-9,
-            "les trois chaînes exactes retrouvent x0 à moins de 1e-9.",
-            "une chaîne qui devrait être exacte s'écarte de x0 de plus de 1e-9 : relis tes trois fonctions.")
-    fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))         # each with its own scale
-    for ax, name in zip(axes, [list(runs_18)[0], list(runs_18)[3], list(runs_18)[4]]):
-        ax.scatter(*X0_18.T, s=4, alpha=0.4, label="x0")
-        ax.scatter(*np.asarray(runs_18[name]).T, s=4, alpha=0.4, label="fin de la chaîne")
-        ax.set_title(name, fontsize=9)
-        ax.set_aspect("equal")
-    axes[0].legend(fontsize=8)
-    plt.show()
-    for letter, answer in zip("abcd", [ddpm_fixed_18, ddpm_oracle_18, ddim_ten_18, ddim_eta1_18]):
-        with wb.attempt("B5.18"):
-            wb.check(f"B5.18{letter}", answer)'''
+elif upstream_18():
+    with checked("B5.18"):
+        X0_18 = wbd.ring(500, seed=18)                                   # 500 points of the ring of 8 Gaussians
+        EPS_18 = np.random.default_rng(180).standard_normal(X0_18.shape)
+        SCHED_18 = mylearn.diffusion.noise_schedule(BETAS)
+        AB_18 = SCHED_18["alpha_bars"]
+        runs_18 = {"DDPM, bruit initial à chaque pas": ddpm_chain_18(X0_18, EPS_18, SCHED_18, np.random.default_rng(1)),
+                   "DDPM, vrai bruit du x courant": ddpm_chain_18(X0_18, EPS_18, SCHED_18, np.random.default_rng(1), oracle=True),
+                   f"DDIM η = 0, les {T_STEPS} pas": ddim_chain_18(X0_18, EPS_18, AB_18, np.arange(T_STEPS - 1, -1, -1)),
+                   "DDIM η = 0, 10 pas": ddim_chain_18(X0_18, EPS_18, AB_18, wbd.ddim_timesteps(T_STEPS, 10)),
+                   f"DDIM η = 1, les {T_STEPS} pas": ddim_chain_18(X0_18, EPS_18, AB_18, np.arange(T_STEPS - 1, -1, -1),
+                                                                    eta=1.0, rng=np.random.default_rng(2))}
+        ERRORS_18 = {name: float(np.abs(np.asarray(x) - X0_18).max()) for name, x in runs_18.items()}
+        for name, err in ERRORS_18.items():
+            print(f"{name:>32} : écart maximal à x0 = {fr_e(err)}")
+        verdict("B5.18", max(ERRORS_18[k] for k in list(ERRORS_18)[1:4]) < 1e-9,
+                "les trois chaînes exactes retrouvent x0 à moins de 1e-9.",
+                "une chaîne qui devrait être exacte s'écarte de x0 de plus de 1e-9 : relis tes trois fonctions.")
+        fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))         # each with its own scale
+        for ax, name in zip(axes, [list(runs_18)[0], list(runs_18)[3], list(runs_18)[4]]):
+            ax.scatter(*X0_18.T, s=4, alpha=0.4, label="x0")
+            ax.scatter(*np.asarray(runs_18[name]).T, s=4, alpha=0.4, label="fin de la chaîne")
+            ax.set_title(name, fontsize=9)
+            ax.set_aspect("equal")
+        axes[0].legend(fontsize=8)
+        plt.show()
+        for letter, answer in zip("abcd", [ddpm_fixed_18, ddpm_oracle_18, ddim_ten_18, ddim_eta1_18]):
+            with wb.attempt("B5.18"):
+                wb.check(f"B5.18{letter}", answer)'''
 
 # --- 📦 B5.19 ----------------------------------------------------------------------------------------------------------
 GIVEN_B = r'''# Part B: the ring of 8 Gaussians, the settings of the two trainings, the measures of quality
@@ -486,6 +520,80 @@ def quality(points):
     """(sliced Wasserstein distance to REAL_B, share of points on a mode, modes reached) of 2 000 points."""
     report = wbd.mode_report(points)
     return wbd.sliced_wasserstein(points, REAL_B), report["on_mode"], report["modes"]
+
+
+def first_losses_B(model, batch_size, seed, alpha_bars=None):
+    """The first loss of the recipe of the contract on DATA_B (B5.19 with alpha_bars, B5.20, flow matching, without),
+    then the first loss of the usual slips, with the same generator and the same model: [(loss, where), ...]. Before any
+    update, the first loss depends only on the draws, the input of the network and its target."""
+    def draws(order, low=1, high=1001):
+        g, out = torch.Generator().manual_seed(seed), {}
+        for what in order:
+            if what == "i":
+                out[what] = torch.randint(len(DATA_B), (batch_size,), generator=g)
+            elif what == "t":
+                out[what] = (torch.randint(0, len(alpha_bars), (batch_size,), generator=g) if alpha_bars is not None
+                             else torch.randint(low, high, (batch_size,), generator=g))
+            else:
+                out[what] = torch.randn((batch_size, 2), generator=g)
+        return DATA_B[out["i"]], out["t"], out["e"]
+
+    def loss(x_in, t, target):
+        with torch.no_grad():
+            return float(F.mse_loss(model(x_in, t), target))
+
+    rows, ab = [], None if alpha_bars is None else torch.tensor(np.asarray(alpha_bars), dtype=torch.float32)
+    for k, order in enumerate(("ite", "iet", "tie", "tei", "eit", "eti")):
+        x0, t, eps = draws(order)
+        if ab is not None:
+            a = ab[t][:, None]
+            x_t = a.sqrt() * x0 + (1 - a).sqrt() * eps
+            if k == 0:
+                rows += [(loss(x_t, t, eps), "du contrat"),
+                         (loss(x_t, t, x0), "d'une cible x₀ : relis ce que le réseau doit prédire"),
+                         (loss(a * x0 + (1 - a).sqrt() * eps, t, eps), "d'un x_t fait avec ᾱ au lieu de √ᾱ : relis la "
+                                                                       "forme fermée"),
+                         (loss(x0, t, eps), "d'un réseau qui reçoit x₀ au lieu de x_t")]
+                continue
+            rows.append((loss(x_t, t, eps), "de tirages faits dans un autre ordre : relis l'ordre du contrat (les "
+                                            "indices du batch, les pas, le bruit)"))
+        else:
+            s = (t.float() / 1000)[:, None]
+            x_s = (1 - s) * x0 + s * eps
+            if k == 0:
+                rows += [(loss(x_s, t, eps - x0), "du contrat"),
+                         (loss(x_s, t, x0 - eps), "d'une vitesse de signe opposé : relis la cible du contrat"),
+                         (loss(x_s, t, eps), "d'une cible ε : en flow matching, le réseau prédit une vitesse"),
+                         (loss(s * x0 + (1 - s) * eps, t, eps - x0), "d'une interpolation inversée : relis x_s (à s = 0, "
+                                                                     "la donnée ; à s = 1, le bruit)"),
+                         (loss(x0, t, eps - x0), "d'un réseau qui reçoit x₀ au lieu de x_s")]
+                x0b, u0, epsb = draws(order, 0, 1000)
+                s0 = (u0.float() / 1000)[:, None]
+                rows.append((loss((1 - s0) * x0b + s0 * epsb, u0, epsb - x0b), "de positions u tirées de 0 à 999 : relis "
+                                                                              "l'intervalle de u"))
+                continue
+            rows.append((loss(x_s, t, eps - x0), "de tirages faits dans un autre ordre : relis l'ordre du contrat (les "
+                                                 "indices du batch, les positions u, le bruit)"))
+    return rows
+
+
+def loss_diagnosis(ex_id, got, rows):
+    """After a ❌ on the first losses: which recipe gives the learner's first loss, in one line that says where to look."""
+    try:
+        first = float(got[0])
+    except (TypeError, ValueError, IndexError):
+        return
+    want = rows[0][0]
+    if math.isclose(first, want, rel_tol=1e-5, abs_tol=1e-7):
+        print(f"   piste : ta 1ʳᵉ loss est celle du contrat, pas les suivantes : vérifie l'optimiseur (AdamW, son learning "
+              "rate), zero_grad, un pas par itération, et que tu entraînes le modèle reçu.")
+        return
+    for value, where in rows[1:]:
+        if math.isclose(first, value, rel_tol=1e-5, abs_tol=1e-7):
+            print(f"   piste : ta 1ʳᵉ loss ({fr(first, 5)} au lieu de {fr(want, 5)}) est celle {where}.")
+            return
+    print(f"   piste : ta 1ʳᵉ loss vaut {fr(first, 5)} au lieu de {fr(want, 5)}, et n'est celle d'aucune erreur courante "
+          "(cible, entrée du réseau, ordre des tirages) : compare ta boucle au contrat, ligne par ligne.")
 
 
 print(f"distance de Wasserstein en tranches : {fr(FLOOR_B, 3)} entre deux échantillons de l'anneau, "
@@ -576,16 +684,22 @@ with checked("B5.19"):
     mine_19.load_state_dict(ref_19.state_dict())
     xq_19, tq_19 = torch.randn(7, 2), torch.tensor([0, 3, 9, 17, 25, 33, 49])
     with torch.no_grad():
-        ok_19 &= same("B5.19", "sortie de ton MLP contre celle du contrat, aux mêmes poids", mine_19(xq_19, tq_19),
-                      ref_19(xq_19, tq_19), rtol=1e-5, atol=1e-6)
+        out_ok_19 = same("B5.19", "sortie de ton MLP contre celle du contrat, aux mêmes poids", mine_19(xq_19, tq_19),
+                         ref_19(xq_19, tq_19), rtol=1e-5, atol=1e-6)
+    if not out_ok_19:
+        print("   piste : net reçoit-il les deux coordonnées, puis l'encodage self.pe[t] (dans cet ordre), et rien d'autre ?")
+    ok_19 &= out_ok_19
     # 5 iterations of train_19 against the recipe of the contract (the same draws, the same model at the start)
     ab_19 = toy_schedule(np.linspace(1e-3, 0.2, 50))["alpha_bars"]
     a_19, b_19 = copy.deepcopy(ref_19), copy.deepcopy(ref_19)
     got_19 = train_19(a_19, DATA_B, ab_19, 5, 64, 1e-3, torch.Generator().manual_seed(5))
     want_l19 = wbd.train_toy(b_19, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(5), ab_19)
     if returned("B5.19", "train_19", got_19):
-        ok_19 &= same("B5.19", "les 5 premières loss de train_19 contre la recette du contrat (mêmes tirages, dans le même ordre)", got_19, want_l19,
-                      rtol=1e-5, atol=1e-6)
+        losses_ok_19 = same("B5.19", "les 5 premières loss de train_19 contre la recette du contrat (mêmes tirages, même "
+                            "entrée, même cible)", got_19, want_l19, rtol=1e-5, atol=1e-6)
+        if not losses_ok_19:
+            loss_diagnosis("B5.19", got_19, first_losses_B(ref_19, 64, 5, ab_19))
+        ok_19 &= losses_ok_19
         ok_19 &= same("B5.19", "les poids après 5 itérations", a_19.net[0].weight, b_19.net[0].weight, rtol=1e-4,
                       atol=1e-6)
     else:
@@ -594,9 +708,13 @@ with checked("B5.19"):
     b_19.eval()
     pts_19 = sample_19(b_19, 6, sched_19, torch.Generator().manual_seed(8), np.random.default_rng(9))
     if returned("B5.19", "sample_19", pts_19):
-        ok_19 &= same("B5.19", "sample_19 (6 points, T = 50) contre l'échantillonnage DDPM du contrat", pts_19,
-                      wbd.sample_toy_ddpm(b_19, 6, sched_19["alpha_bars"], torch.Generator().manual_seed(8),
-                                          np.random.default_rng(9)), rtol=1e-5, atol=1e-5)
+        sample_ok_19 = same("B5.19", "sample_19 (6 points, T = 50) contre l'échantillonnage DDPM du contrat", pts_19,
+                            wbd.sample_toy_ddpm(b_19, 6, sched_19["alpha_bars"], torch.Generator().manual_seed(8),
+                                                np.random.default_rng(9)), rtol=1e-5, atol=1e-5)
+        if not sample_ok_19:
+            print("   piste : le départ torch.randn((n, 2), generator=generator), puis tous les indices de T − 1 à 0 (0 "
+                  "compris), chacun avec la prédiction du réseau et ta ddpm_step(x, t, eps, schedule, rng=rng).")
+        ok_19 &= sample_ok_19
         model_ok_19 = bool(ok_19)'''
 
 EXPERIMENT_19 = r'''# Train on the ring, then 2 000 points by DDPM (≈ 10 s of training)
@@ -689,22 +807,35 @@ with checked("B5.20"):
     got_20 = train_fm_20(a_20, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(6))
     ok_20 = returned("B5.20", "train_fm_20", got_20)
     if ok_20:
-        ok_20 = same("B5.20", "les 5 premières loss de train_fm_20 contre la recette du contrat (mêmes tirages, dans le même ordre)", got_20,
+        ok_20 = same("B5.20", "les 5 premières loss de train_fm_20 contre la recette du contrat (mêmes tirages, même "
+                     "entrée, même cible)", got_20,
                      wbd.train_toy(b_20, DATA_B, 5, 64, 1e-3, torch.Generator().manual_seed(6), flow=True),
                      rtol=1e-5, atol=1e-6)
+        if not ok_20:
+            loss_diagnosis("B5.20", got_20, first_losses_B(ref_20, 64, 6))
     b_20.eval()
+    euler_ok_20 = True
     for steps_c in (1, 3, 8):
-        ok_20 &= same("B5.20", f"euler_20 en {steps_c} pas contre l'intégration du contrat",
-                      euler_20(b_20, 5, steps_c, torch.Generator().manual_seed(7)),
-                      wbd.sample_toy_euler(b_20, 5, steps_c, torch.Generator().manual_seed(7)), rtol=1e-5, atol=1e-5)
+        euler_ok_20 &= same("B5.20", f"euler_20 en {steps_c} pas contre l'intégration du contrat",
+                            euler_20(b_20, 5, steps_c, torch.Generator().manual_seed(7)),
+                            wbd.sample_toy_euler(b_20, 5, steps_c, torch.Generator().manual_seed(7)), rtol=1e-5, atol=1e-5)
+    if not euler_ok_20:
+        print("   piste : au pas k, la position round(1000 * (1 - k / n_steps)) (le premier pas part du bruit pur, s = 1), "
+              "et le sens du pas : on recule de s = 1 vers s = 0.")
+    ok_20 &= euler_ok_20
     torch.manual_seed(2)
     eps_net_20 = wbd.Denoiser2D(50).eval()
     ab_20 = toy_schedule(np.linspace(1e-3, 0.2, 50))["alpha_bars"]
+    ddim_ok_20 = True
     for steps_c in (1, 4, 50):
-        ok_20 &= same("B5.20", f"ddim_20 en {steps_c} pas contre le DDIM du contrat",
-                      ddim_20(eps_net_20, 5, steps_c, ab_20, torch.Generator().manual_seed(8)),
-                      wbd.sample_toy_ddim(eps_net_20, 5, steps_c, ab_20, torch.Generator().manual_seed(8)),
-                      rtol=1e-5, atol=1e-5)
+        ddim_ok_20 &= same("B5.20", f"ddim_20 en {steps_c} pas contre le DDIM du contrat",
+                           ddim_20(eps_net_20, 5, steps_c, ab_20, torch.Generator().manual_seed(8)),
+                           wbd.sample_toy_ddim(eps_net_20, 5, steps_c, ab_20, torch.Generator().manual_seed(8)),
+                           rtol=1e-5, atol=1e-5)
+    if not ddim_ok_20:
+        print("   piste : la sous-séquence wbd.ddim_timesteps(T, n_steps), de T − 1 à 0, puis un dernier pas de 0 vers −1, "
+              "chacun avec ta ddim_step (η = 0).")
+    ok_20 &= ddim_ok_20
     fm_ok_20 = bool(ok_20)'''
 
 EXPERIMENT_20 = r'''# The flow matching model, the same MLP and the same budget as in B5.19, then both samplers from 1 to 100 steps
@@ -861,8 +992,12 @@ with checked("B5.21"):
         blk_21.load_state_dict(ref_blk.state_dict())
         xb_21, tb_21 = torch.randn(2, 16, 6, 6), torch.randn(2, 24)
         with torch.no_grad():
-            ok_21 &= same("B5.21", "ResBlock_21(16, 32, 24) contre le bloc du contrat, aux mêmes poids", blk_21(xb_21, tb_21),
-                          ref_blk(xb_21, tb_21), rtol=1e-5, atol=1e-5)
+            blk_ok_21 = same("B5.21", "ResBlock_21(16, 32, 24) contre le bloc du contrat, aux mêmes poids",
+                             blk_21(xb_21, tb_21), ref_blk(xb_21, tb_21), rtol=1e-5, atol=1e-5)
+        if not blk_ok_21:
+            print("   piste : l'ordre norm1, SiLU, conv1 ; le biais du pas, time(temb), ajouté par canal entre les deux "
+                  "convolutions ; puis norm2, SiLU, conv2 ; et le chemin résiduel skip(x) ajouté à la fin.")
+        ok_21 &= blk_ok_21
     else:
         ok_21 = False
         print(f"❌ Ex B5.21 : ResBlock_21(16, 32, 24) doit avoir les paramètres "
@@ -873,9 +1008,11 @@ with checked("B5.21"):
         shapes_r = {k: tuple(v.shape) for k, v in ref_21.state_dict().items()}
         if shapes_m != shapes_r:
             ok_21 = False
-            diff_21 = sorted(set(shapes_m.items()) ^ set(shapes_r.items()))[:4]
+            missing_21 = sorted(set(shapes_r.items()) - set(shapes_m.items()))[:3]
+            extra_21 = sorted(set(shapes_m.items()) - set(shapes_r.items()))[:3]
             print(f"❌ Ex B5.21 : TinyUNet_21({T_STEPS}, {kw_21}) : le state_dict n'a pas les noms et les formes du "
-                  f"contrat (premières différences, attendu ou reçu : {diff_21}).")
+                  f"contrat : attendu {missing_21 or 'rien de plus'}, reçu {extra_21 or 'rien de plus'} (les premières "
+                  "différences, nom et forme).")
             continue
         pe_21 = getattr(mine_21, "pe", None)
         ok_21 &= same("B5.21", f"le buffer pe ({kw_21 or 'réglage par défaut'}) : la table de positional_encoding",
@@ -889,13 +1026,22 @@ with checked("B5.21"):
         with torch.no_grad():
             if "n_classes" in kw_21:
                 y_21 = torch.tensor([3, 10, 7])
-                ok_21 &= same("B5.21", "U-Net conditionné (y donné, dont la classe vide 10) contre le contrat",
-                              mine_21(x_21, t_21, y_21), ref_21(x_21, t_21, y_21), rtol=1e-4, atol=1e-5)
-                ok_21 &= same("B5.21", "U-Net conditionné, y = None : la classe vide", mine_21(x_21, t_21),
-                              ref_21(x_21, t_21, torch.full((3,), 10)), rtol=1e-4, atol=1e-5)
+                out_ok_21 = same("B5.21", "U-Net conditionné (y donné, dont la classe vide 10) contre le contrat",
+                                 mine_21(x_21, t_21, y_21), ref_21(x_21, t_21, y_21), rtol=1e-4, atol=1e-5)
+                if not out_ok_21 and ok_21:                  # the unconditional U-Nets above were right
+                    print("   piste : class_emb(y) s'ajoute-t-il à t_mlp(pe[t]), avant tous les blocs ?")
+                none_ok_21 = same("B5.21", "U-Net conditionné, y = None : la classe vide", mine_21(x_21, t_21),
+                                  ref_21(x_21, t_21, torch.full((3,), 10)), rtol=1e-4, atol=1e-5)
+                if out_ok_21 and not none_ok_21:
+                    print("   piste : sans y, chaque image reçoit la classe vide, la ligne n_classes de class_emb.")
+                ok_21 &= out_ok_21 and none_ok_21
             else:
-                ok_21 &= same("B5.21", f"U-Net {kw_21 or '(32, 64, 128)'} contre le contrat, aux mêmes poids",
-                              mine_21(x_21, t_21), ref_21(x_21, t_21), rtol=1e-4, atol=1e-5)
+                out_ok_21 = same("B5.21", f"U-Net {kw_21 or '(32, 64, 128)'} contre le contrat, aux mêmes poids",
+                                 mine_21(x_21, t_21), ref_21(x_21, t_21), rtol=1e-4, atol=1e-5)
+                if not out_ok_21 and ok_21:                  # said once
+                    print("   piste : l'encodage du pas temb = t_mlp(pe[t]) donné à chaque bloc, et l'ordre des "
+                          "concaténations (la sortie du décodeur d'abord, la carte de l'encodeur ensuite).")
+                ok_21 &= out_ok_21
         if not kw_21:
             got_s, want_s = wbd.stage_shapes(mine_21, x_21, t_21), wbd.stage_shapes(ref_21, x_21, t_21)
             ok_21 &= got_s == want_s

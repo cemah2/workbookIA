@@ -796,7 +796,7 @@ Relis « Flow matching et rectified flow » (§205.9) et l'encadré 🧮 « la m
 - `train_fm_20` : la boucle de `train_19`, avec `u = torch.randint(1, 1001, (batch_size,), generator=generator)` à la place des pas, `s = (u.float() / 1000)[:, None]`, l'entrée `(1 - s) * x0 + s * eps`, la cible `eps - x0`, et `model(x_s, u)`.
 - `euler_20` : la position du pas `k` est `round(1000 * (1 - k / n_steps))` (1 000 au premier pas, le bruit pur) ; sous `torch.no_grad()`.
 - `ddim_20` : `wbd.ddim_timesteps(len(alpha_bars), n_steps)` suivi de −1, et la même boucle que `ddim_chain_18`, avec la prédiction du réseau à la place du vrai bruit.
-- Pour a) et b), lis le tableau du protocole complet (les médianes) **et** les bandes du graphique : une réponse doit valoir pour chaque graine.
+- Pour a) et b), lis `FULL_20` graine par graine (les médianes imprimées sous le graphique ne suffisent pas) : une réponse doit valoir pour chaque graine.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -982,13 +982,13 @@ Relis « La guidance sans classifieur » et la figure 2D de la fiche (§205.7) :
 <details><summary>Indice 2</summary>
 
 - a) Un modèle petit, entraîné peu de temps : ses images sans guidance sont-elles déjà proches des vraies ? Une forte guidance resserre chaque classe : est-ce que cela rapproche ou éloigne le nuage de celui des vraies images ?
-- b) La classe demandée n'est qu'une entrée de plus pour le réseau ; avec peu d'entraînement, la suit-il déjà vraiment ?
-- c) La diversité mesure l'étalement des features dans chaque classe demandée. Une image ambiguë, entre un pull et un manteau, ou à demi formée, étale-t-elle moins ou plus les features qu'une vraie image de la classe ?
+- b) La classe demandée n'est qu'une entrée de plus pour le réseau, qui apprend à s'en servir en même temps qu'à débruiter : à quel point un petit modèle entraîné 626 pas la suit-il ? Fixe-toi un chiffre avant de le comparer à 70 %.
+- c) La diversité mesure l'étalement des features dans chaque classe demandée : des images variées l'augmentent, mais aussi des images ambiguës (entre un pull et un manteau) ou à demi formées ; des images toutes semblables la réduisent. Lequel de ces effets attends-tu sans guidance, face à de vraies images de la classe ?
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), écris ce que tu attends de la distance à $w = 0$ (sans guidance : des images de toutes les classes mêlées, un peu floues) puis à $w = 7$ (des images très typées de chaque classe, toutes semblables) : laquelle des deux erreurs, manque de fidélité ou manque de diversité, pèse le plus dans une distance entre gaussiennes de features ? Les deux autres prédictions se raisonnent de la même façon, sans calcul.
+Pour a), écris ce que tu attends des images à $w = 0$ (que sait déjà le modèle de la classe demandée ?) puis à $w = 7$ (que fait une extrapolation forte de la différence entre les deux prédictions ?), et demande-toi laquelle des deux erreurs, manque de fidélité ou manque de diversité, pèse le plus dans une distance entre gaussiennes de features. Les deux autres prédictions se raisonnent de la même façon, sans calcul.
 
 </details>
 
@@ -1123,7 +1123,7 @@ Pars de ce qui marche déjà : le U-Net conditionné et la guidance de B5.27, l'
 - La boucle : `while time.perf_counter() - start < 0.95 * seconds`, un batch tiré au hasard (`torch.randint`) à chaque tour.
 - Une EMA qui se « réchauffe » : $\rho_k = \min(0{,}99,\ (1 + k)/(10 + k))$ au pas $k$, pour que la copie ne garde pas les poids de départ quand le nombre de pas est inconnu d'avance.
 - `generate` : ta `sample_cond_27` avec autant d'images par classe (`torch.arange(n) % 10`), puis `.clamp(-1, 1)`.
-- Essaie plusieurs $w$ sur un même modèle : la meilleure guidance pour la distance n'est ni 0 ni la plus forte (🔮 B5.26).
+- Essaie plusieurs $w$ sur un même modèle, et choisis-le sur la distance que tu mesures (relis tes mesures de 📦 B5.27) : le meilleur $w$ dépend de l'entraînement.
 
 </details>
 <details><summary>Indice 3</summary>

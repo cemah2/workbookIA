@@ -530,7 +530,7 @@ N_25 = 128 if FAST_MODE else 1000                       # images per point (the 
 for n_25 in (5, 10):
     print(f"sous-séquence de {n_25} pas, de l'indice {T_STEPS - 1} à 0 : {wbd.ddim_timesteps(T_STEPS, n_25).tolist()}")
 # The full protocol (tools/chapters/history_chB5.py): the recipe of B5.23 with the linear schedule (L, the notebook's)
-# and with the cosine schedule (C), «N_SEEDS_25» seeds each, the distance of 500 DDIM samples for each number of steps
+# and with the cosine schedule (C), «N_SEEDS_25» seeds each, the distance of 256 DDIM samples for each number of steps
 FULL_25 = «FULL_25»'''
 
 TODO_25 = r'''def fd_curve_25(model, alpha_bars, steps_list, x_T):
@@ -1268,8 +1268,16 @@ def _make_evaluate_31():
     test = wbd.image_subset("fashion", 2000, split="test")
     clf = wbd.classifier("fashion")
     test_feats = wbd.features(clf, test.images)
-    # real images that no method has seen (test images), seen from the training images: the median r of B5.28
-    real_r = float(np.median(wbd.copy_ratio(test.images[:N_31], train.images)))
+    # What real images that no method has seen look like from the training images, the yardstick of two rules: 256 test
+    # images, their median r (B5.28) against the training images, and the median ratio of their distance to the other
+    # test images over their distance to the training images (fast mode 1.09 and 1.11; full mode 1.24 for the ratio)
+    probe = test.images[:256].reshape(256, -1).double()
+    real_r = float(np.median(wbd.copy_ratio(test.images[:256], train.images)))
+    flat_train = train.images.reshape(len(train), -1).double()
+    near_train = torch.cat([torch.cdist(probe[i:i + 64], flat_train).min(dim=1).values for i in range(0, 256, 64)])
+    real_side = float(torch.median(torch.cdist(probe, test.images[256:].reshape(len(test) - 256, -1).double())
+                                   .min(dim=1).values / near_train))
+    del probe, near_train, flat_train
 
     class Hidden:
         """What a hidden global variable holds during the run: any use of it says why."""
@@ -1464,8 +1472,9 @@ def _make_evaluate_31():
         copies, median_r = float(np.mean(r < 1 / 3)), float(np.median(r))
         flat = images.reshape(N_31, -1).double()
         d_test = torch.cdist(flat, test.images.reshape(len(test), -1).double()).min(dim=1).values
-        d_train = torch.cat([torch.cdist(flat[i:i + 256], train.images.reshape(len(train), -1).double()).min(dim=1).values
-                             for i in range(0, N_31, 256)])
+        flat_train = train.images.reshape(len(train), -1).double()
+        d_train = torch.cat([torch.cdist(flat[i:i + 64], flat_train).min(dim=1).values for i in range(0, N_31, 64)])
+        del flat_train
         to_test = float(d_test.min())
         test_side = float(torch.median(d_test / d_train))
         show_images(images[:32], ncol=16, size=0.75, suptitle="32 des images générées par ta méthode")
@@ -1480,15 +1489,18 @@ def _make_evaluate_31():
                                        f"{fr(100 * COPIES_31, 0)} %, la référence plus une marge).",
                   f"contrôle des copies : {fr(100 * copies, 1)} % des images sont anormalement proches d'une image "
                   f"d'entraînement (r < 1/3 ; au plus {fr(100 * COPIES_31, 0)} %) : ta méthode recopie-t-elle ?"),
-                 (median_r >= 0.9 * real_r, f"r médian {fr(median_r, 2)} : tes images ne sont pas plus proches des images "
-                                            f"d'entraînement que des images réelles inédites ({fr(real_r, 2)}).",
-                  f"r médian {fr(median_r, 2)} : tes images sont plus proches des images d'entraînement que des images "
-                  f"réelles inédites ({fr(real_r, 2)} ; au moins {fr(0.9 * real_r, 2)}) : ta méthode recopie-t-elle ?"),
-                 (to_test > 1.0 and test_side >= 0.9, "aucune image n'est une image de test, ni plus proche du test que de "
-                                                     "l'entraînement.",
-                  f"des images générées sont plus proches des images de test que des images d'entraînement (rapport "
-                  f"médian des distances {fr(test_side, 2)}, au moins 0,9 ; plus petite distance au test "
-                  f"{fr(to_test, 2)}) : le test ne doit jamais servir.")]
+                 (median_r >= 0.9 * real_r and test_side <= 1.2 * real_side,
+                  f"tes images ne sont pas plus proches des images d'entraînement que des images réelles inédites (r médian "
+                  f"{fr(median_r, 2)}, contre {fr(real_r, 2)} ; rapport des distances test / entraînement "
+                  f"{fr(test_side, 2)}, contre {fr(real_side, 2)}).",
+                  f"tes images sont plus proches des images d'entraînement que des images réelles inédites (r médian "
+                  f"{fr(median_r, 2)}, au moins {fr(0.9 * real_r, 2)} ; rapport des distances test / entraînement "
+                  f"{fr(test_side, 2)}, au plus {fr(1.2 * real_side, 2)}) : ta méthode recopie-t-elle ?"),
+                 (to_test > 1.0 and test_side >= 0.8 * real_side, "aucune image n'est une image de test, ni plus proche "
+                                                                  "du test que ne l'est une image réelle inédite.",
+                  f"tes images sont plus proches des images de test que des images réelles inédites (rapport des distances "
+                  f"test / entraînement {fr(test_side, 2)}, au moins {fr(0.8 * real_side, 2)} ; plus petite distance au "
+                  f"test {fr(to_test, 2)}) : le test ne doit jamais servir.")]
         for ok, success, failure in rules:
             verdict("B5.31", ok, success, failure)
         ok = all(rule[0] for rule in rules)

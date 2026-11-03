@@ -910,6 +910,10 @@ def ddpm(dif, x_t, t, eps, sched, seed=None, rng=None, **kwargs):
 
 def same_seed_same_noise(first, second, function, t):
     """Two calls with the same seed must give the same result: otherwise the noise does not come from rng."""
+    if np.isnan(first).any() or np.isnan(second).any():
+        _fail(f"{function} at t = {t}: expected finite values, got nan",
+              "nan comes from the square root of a negative number: check alpha_bar_prev (t_prev = -1 means "
+              "alpha_bar_prev = 1, the clean image) and 1 - alpha_bar_prev - sigma**2")
     if not np.array_equal(first, second):
         _fail(f"{function} at t = {t}, called twice with np.random.default_rng(seed) and the same seed",
               "expected the same result twice (the noise z must be drawn from rng), got two different results")
