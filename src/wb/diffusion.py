@@ -987,3 +987,40 @@ def precomputed(name: str) -> dict:
     if name not in data:
         raise KeyError(f"no precomputed protocol {name!r} in {PROTOCOLS_FILE.name}")
     return data[name]
+
+
+def challenge_speed(images, labels, T: int = 400, repeats: int = 8) -> dict:
+    """The speed of this machine, now, for the challenge of Ex B5.31: ``step``, the seconds of one training step of its
+    reference (a conditional ``TinyUNet(T, channels=(16, 32, 64), n_classes=10)``, a batch of 32, AdamW, the EMA update),
+    and ``pass_image``, the seconds of one network pass per image (a batch of 64, without a graph); medians of
+    ``repeats`` measures after two warm-up rounds. PyTorch's global random state is not touched."""
+    torch = _torch()
+    F = torch.nn.functional
+    TinyUNet = _unet_classes()[1]
+    with torch.random.fork_rng():
+        torch.manual_seed(0)
+        net = TinyUNet(T, channels=(16, 32, 64), n_classes=10)
+        ema = TinyUNet(T, channels=(16, 32, 64), n_classes=10)
+        ema.load_state_dict(net.state_dict())
+        opt = torch.optim.AdamW(net.parameters(), lr=1e-4)
+        ab = torch.as_tensor(alpha_bars(schedule_betas("linear", T)), dtype=torch.float32)
+        x0, y = images[:32].float(), labels[:32]
+        steps, passes = [], []
+        for k in range(repeats + 2):
+            start = time.perf_counter()
+            t = torch.randint(0, T, (len(x0),))
+            eps = torch.randn(x0.shape)
+            a = ab[t].view(-1, 1, 1, 1)
+            loss = F.mse_loss(net(a.sqrt() * x0 + (1 - a).sqrt() * eps, t, y), eps)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            ema_update(ema, net, 0.99)
+            steps.append(time.perf_counter() - start)
+        xb, tb, yb = images[:64].float(), torch.zeros(len(images[:64]), dtype=torch.long), labels[:64]
+        with torch.no_grad():
+            for k in range(repeats + 2):
+                start = time.perf_counter()
+                ema(xb, tb, yb)
+                passes.append((time.perf_counter() - start) / len(xb))
+    return {"step": float(np.median(steps[2:])), "pass_image": float(np.median(passes[2:]))}

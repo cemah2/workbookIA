@@ -252,7 +252,7 @@ def train_23(model, ema, images, settings, generator, alpha_bars):
 CHECK_23 = r'''probes_ok_23 = False
 with checked("B5.23"):
     torch.manual_seed(0)
-    small_23 = wbd.TinyUNet(20, channels=(8, 8, 16), t_dim=16)            # a small U-Net of the contract
+    small_23 = wbd.TinyUNet(20, channels=(16, 16, 32), t_dim=16)          # a small U-Net of the contract
     with torch.no_grad():
         for p_ in small_23.parameters():
             p_.add_(0.1 * torch.randn(p_.shape))                            # weights far from the initialisation
@@ -285,8 +285,12 @@ with checked("B5.23"):
               f"images en batches de 4 font 4 pas ; reçu {hist_23!r:.120}.")
         raise StopCheck
     loss_ok_23 = np.allclose(losses_23, want_23["loss"], rtol=1e-4, atol=1e-6)
-    weights_ok_23 = all(torch.allclose(a, b, rtol=1e-4, atol=1e-6) for a, b in zip(m1.parameters(), m2.parameters()))
-    emaw_ok_23 = all(torch.allclose(a, b, rtol=1e-4, atol=1e-6) for a, b in zip(e1.parameters(), e2.parameters()))
+    # the networks are compared by their outputs on a fixed batch, not weight by weight: a parameter whose gradient is
+    # zero up to rounding (a bias just before a group norm of one channel per group) moves by ±lr under AdamW
+    xp_23, tp_23 = torch.randn(4, 1, 28, 28, generator=torch.Generator().manual_seed(9)), torch.tensor([0, 5, 12, 19])
+    with torch.no_grad():
+        weights_ok_23 = torch.allclose(m1(xp_23, tp_23), m2(xp_23, tp_23), rtol=1e-4, atol=1e-4)
+        emaw_ok_23 = torch.allclose(e1(xp_23, tp_23), e2(xp_23, tp_23), rtol=1e-4, atol=1e-4)
     if loss_ok_23 and weights_ok_23 and emaw_ok_23:
         print("✅ Ex B5.23 : 4 pas de train_23 (2 epochs, un dernier batch de 2 images) : les loss, les poids et la copie "
               "EMA de la recette du contrat.")
@@ -298,9 +302,11 @@ with checked("B5.23"):
         print("❌ Ex B5.23 : la 1ʳᵉ loss est juste, pas les suivantes : vérifie l'optimiseur (AdamW, son learning rate), "
               "les batches d'une epoch (le dernier fait 2 images) et l'ordre des images à chaque epoch.")
     elif not weights_ok_23:
-        print("❌ Ex B5.23 : les loss sont justes, mais pas les poids après le dernier pas : un pas d'optimisation manque-t-il ?")
+        print("❌ Ex B5.23 : les 4 loss sont justes, mais pas le réseau après le dernier pas (ses sorties sur un batch fixé "
+              "diffèrent de celles de la recette) : la loss d'un pas est mesurée avant son pas d'optimisation ; ce "
+              "dernier pas a-t-il bien lieu, avec le learning rate de settings ?")
     else:
-        print("❌ Ex B5.23 : les poids entraînés sont justes, pas la copie EMA : est-elle mise à jour après chaque pas, avec "
+        print("❌ Ex B5.23 : le réseau entraîné est juste, pas la copie EMA : est-elle mise à jour après chaque pas, avec "
               "settings['ema'] ?")
     # 3. your decay rho
     rho_ok_23 = False
@@ -750,7 +756,7 @@ def sample_cond_27(model, x_T, y, w, alpha_bars, n_steps):
 CHECK_27 = r'''cond_ok_27 = False
 with checked("B5.27"):
     torch.manual_seed(1)
-    small_27 = wbd.TinyUNet(20, channels=(8, 8, 16), t_dim=16, n_classes=3)
+    small_27 = wbd.TinyUNet(20, channels=(16, 16, 32), t_dim=16, n_classes=3)
     with torch.no_grad():
         for p_ in small_27.parameters():
             p_.add_(0.1 * torch.randn(p_.shape))
@@ -764,9 +770,14 @@ with checked("B5.27"):
     if ok_27:
         ok_27 = same("B5.27", "les 4 loss de train_cond_27 contre la recette du contrat (mêmes tirages, abandon du label "
                      "compris)", hist_27.get("loss"), want_27["loss"], rtol=1e-4, atol=1e-6)
-        ok_27 &= all(torch.allclose(a, b, rtol=1e-4, atol=1e-6) for a, b in zip(e1.parameters(), e2.parameters()))
-        verdict("B5.27", ok_27, "les poids et la copie EMA après 4 pas : ceux de la recette.",
-                "les poids ou la copie EMA après 4 pas ne sont pas ceux de la recette.")
+        xp_27 = torch.randn(4, 1, 28, 28, generator=torch.Generator().manual_seed(9))
+        tp_27, yp_27 = torch.tensor([0, 5, 12, 19]), torch.tensor([0, 1, 2, 3])
+        with torch.no_grad():                                # outputs on a fixed batch (see B5.23), not weight by weight
+            net_ok_27 = (torch.allclose(m1(xp_27, tp_27, yp_27), m2(xp_27, tp_27, yp_27), rtol=1e-4, atol=1e-4)
+                         and torch.allclose(e1(xp_27, tp_27, yp_27), e2(xp_27, tp_27, yp_27), rtol=1e-4, atol=1e-4))
+        verdict("B5.27", net_ok_27, "après 4 pas, le réseau et sa copie EMA donnent les sorties de la recette.",
+                "après 4 pas, le réseau ou sa copie EMA ne donnent pas les sorties de la recette sur un batch fixé.")
+        ok_27 &= net_ok_27
     m2.eval()
     x5_27, y5_27 = torch.randn((5, 1, 28, 28), generator=torch.Generator().manual_seed(7)), torch.tensor([0, 1, 2, 0, 3])
     for w_27, calls_27, rows_27 in ((0.0, 1, 5), (2.5, 1, 10)):
@@ -1183,12 +1194,19 @@ import subprocess
 import sys
 
 
+import os
+
+
 def run_30(*args, out="run"):
-    """Run YOUR sample.py in OUT_30 with the arguments; returns (exit code, stderr, folder of the images)."""
-    folder = OUT_30 / out
-    done = subprocess.run([sys.executable, "sample.py", *map(str, args), "--out", str(folder)], cwd=OUT_30,
-                          capture_output=True, text=True, timeout=300)
-    return done.returncode, done.stderr.strip().splitlines()[-1:] if done.stderr.strip() else [], folder
+    """Run YOUR sample.py in OUT_30 with the arguments; returns (exit code, last line of stderr, folder of the images).
+    Every path is absolute, and the process imports the same wb as this notebook."""
+    folder = (OUT_30 / out).resolve()
+    env = dict(os.environ)
+    env["PYTHONPATH"] = os.pathsep.join([str(Path(wbd.__file__).resolve().parents[1])]
+                                        + [p for p in env.get("PYTHONPATH", "").split(os.pathsep) if p])
+    done = subprocess.run([sys.executable, "sample.py", *map(str, args), "--out", str(folder)], cwd=OUT_30.resolve(),
+                          capture_output=True, text=True, timeout=300, env=env)
+    return done.returncode, (done.stderr.strip().splitlines() or [""])[-1], folder
 
 
 script_ok_30 = False
@@ -1197,7 +1215,7 @@ with checked("B5.30"):
     OUT_30.mkdir(parents=True, exist_ok=True)
     (OUT_30 / "sample.py").write_text(SAMPLE_PY_30, encoding="utf-8")
     print(f"ℹ️ ton script : {(OUT_30 / 'sample.py').resolve()}")
-    ckpt_30 = CKPT["path"]
+    ckpt_30 = Path(CKPT["path"]).resolve()
     code_30, err_30, dir_a = run_30(ckpt_30, "--steps", 10, "--seed", 1, "--n", 4, out="a")
     ok_30 = code_30 == 0
     verdict("B5.30", ok_30, "python sample.py <checkpoint> --steps 10 --seed 1 --n 4 : code de sortie 0.",
@@ -1243,12 +1261,20 @@ with checked("B5.30"):
         ok_30 &= code_f == 0 and same("B5.30", "--guidance 3 --label 7 sur le modèle de B5.27 : la guidance de la fiche "
                                       "(w = 3)", np.load(dir_f / "samples.npy") if code_f == 0 else None, want_f,
                                       rtol=1e-4, atol=1e-4)
+        code_g, _, dir_g = run_30(ckpt27_30["path"], "--steps", 5, "--seed", 4, "--n", 12, out="g")
+        want_g = wbd.sample_ddim(model27_30, torch.randn((12, 1, 28, 28), generator=torch.Generator().manual_seed(4)), AB,
+                                 5, y=torch.arange(12) % 10).clamp(-1, 1).numpy()
+        ok_30 &= code_g == 0 and same("B5.30", "sans --label, sur le modèle de B5.27 : les classes 0, 1, …, 9, 0, 1 "
+                                      "(torch.arange(n) % 10)", np.load(dir_g / "samples.npy") if code_g == 0 else None,
+                                      want_g, rtol=1e-4, atol=1e-4)
     script_ok_30 = bool(ok_30)'''
 
 # --- 🏆 B5.31 ---------------------------------------------------------------------------------------------------------
 GIVEN_31 = r'''# The challenge: the smallest Fréchet distance on Fashion-MNIST with at most 50 network passes per image
 MAX_PASSES_31 = 50
-LIMIT_31 = «LIMIT_FAST_31» if FAST_MODE else «LIMIT_FULL_31»   # seconds of training: a reduced run in fast mode, THE challenge in full mode
+LIMIT_31 = «LIMIT_FAST_31» if FAST_MODE else «LIMIT_FULL_31»   # seconds of training ON THE CALIBRATION MACHINE: a reduced
+                                                              # run in fast mode, THE challenge in full mode
+CALIB_STEP_31 = «CALIB_STEP_31»   # seconds of one step of the reference on the calibration machine (wbd.challenge_speed)
 N_31 = 256 if FAST_MODE else 1000                     # generated images, compared to 2 000 test images
 GOAL_31 = «GOAL_FAST_31» if FAST_MODE else «GOAL_FULL_31»    # the distance to reach (worst seed of the reference + 15 %)
 REFERENCE_31 = «REF_FAST_31» if FAST_MODE else «REF_FULL_31»   # the reference solution: (best, worst) of its seeds
@@ -1317,7 +1343,7 @@ def _make_evaluate_31():
         """The global variables that could hold images, features, a trained model or a checkpoint."""
         g, found = globals(), {}
         for n, v in list(g.items()):
-            if ipython_names.match(n) or n.startswith("_"):
+            if ipython_names.match(n):
                 continue
             if hideable(v):
                 found[n] = Hidden(n)
@@ -1361,8 +1387,9 @@ def _make_evaluate_31():
                 best = max(best, float(c))
         return best
 
-    def run(method, seconds):
-        """Train the method cold, then generate N_31 images, counting the passes of every network."""
+    def run(method, seconds, gen_limit):
+        """Train the method cold, then generate N_31 images (in inference mode, timed), counting the passes of every
+        network."""
         g = globals()
         if captured(method):
             print("❌ Ex B5.31 : method_31 garde, dans ses arguments par défaut ou sa fermeture, des images, des features, "
@@ -1403,7 +1430,7 @@ def _make_evaluate_31():
             if depth[0] == 0:
                 pending[0] = False
 
-        out = again = elapsed = None
+        out = again = elapsed = gen_seconds = None
         try:
             g.update(hidden)
             for cache, _ in caches:                           # the images and models kept in memory by wb
@@ -1425,12 +1452,14 @@ def _make_evaluate_31():
             handles = (nn.modules.module.register_module_forward_pre_hook(pre),
                        nn.modules.module.register_module_forward_hook(post))
             try:
-                with torch.no_grad():
+                start = time.perf_counter()
+                with torch.inference_mode():                  # no training hidden in generate
                     out = generate(N_31, torch.Generator().manual_seed(3132))
+                gen_seconds = time.perf_counter() - start
             finally:
                 for h in handles:
                     h.remove()
-            with torch.no_grad():
+            with torch.inference_mode():
                 again = generate(16, torch.Generator().manual_seed(3133))    # another generator: other images
         finally:
             g.update(originals)
@@ -1463,14 +1492,20 @@ def _make_evaluate_31():
                   f"déjà, ou ses poids viennent d'un modèle d'avant la course (corrélation médiane {fr(median_close, 2)}, "
                   "au plus 0,93).")
             return None
-        return out.float().clamp(-1, 1), elapsed, counts["passes"] / N_31
+        return out.float().clamp(-1, 1), elapsed, counts["passes"] / N_31, gen_seconds
 
     def evaluate_31(method):
         """method(images, labels, seconds) -> generate(n, generator): the rules of the statement, then the distance."""
-        result = run(method, LIMIT_31)
+        speed = wbd.challenge_speed(train.images, train.labels, T_STEPS)   # this machine, now
+        limit = LIMIT_31 * speed["step"] / CALIB_STEP_31
+        gen_limit = 4 * N_31 * MAX_PASSES_31 * speed["pass_image"] + 10
+        print(f"vitesse de cette machine : {fr(1000 * speed['step'], 0)} ms par pas de la référence (calibrage : "
+              f"{fr(1000 * CALIB_STEP_31, 0)} ms) ; temps accordé : {fr(limit, 1)} s d'entraînement (les "
+              f"{LIMIT_31:.0f} s du calibrage, à l'échelle de cette machine), au plus {fr(gen_limit, 0)} s de génération.")
+        result = run(method, limit, gen_limit)
         if result is None:
             return None
-        images, seconds, passes = result
+        images, seconds, passes, gen_seconds = result
         feats = wbd.features(clf, images)
         fd = float(mylearn.gen_metrics.frechet_distance_from_features(test_feats, feats))
         r = wbd.copy_ratio(images, train.images)
@@ -1485,11 +1520,14 @@ def _make_evaluate_31():
         show_images(images[:32], ncol=16, size=0.75, suptitle="32 des images générées par ta méthode")
         print(f"entraînement en {fr(seconds, 1)} s ; {fr(passes, 1)} passes de réseau par image ; distance de Fréchet "
               f"{fr(fd, 2)} ({N_31} images contre 2 000 images de test) ; copies (r < 1/3) : {fr(100 * copies, 1)} %.")
-        rules = [(seconds <= LIMIT_31 * 1.05 + 2, f"entraînement en {fr(seconds, 1)} s, dans les {LIMIT_31:.0f} s.",
-                  f"entraînement en {fr(seconds, 1)} s : le défi en permet {LIMIT_31:.0f} (ta méthode doit respecter seconds)."),
-                 (passes <= MAX_PASSES_31, f"{fr(passes, 1)} passes de réseau par image, au plus {MAX_PASSES_31}.",
-                  f"{fr(passes, 1)} passes de réseau par image (la guidance compte double) : le défi en permet "
-                  f"{MAX_PASSES_31}."),
+        rules = [(seconds <= limit * 1.05 + 2, f"entraînement en {fr(seconds, 1)} s, dans les {fr(limit, 1)} s.",
+                  f"entraînement en {fr(seconds, 1)} s : le défi en permet {fr(limit, 1)} (ta méthode doit respecter seconds)."),
+                 (1 <= passes <= MAX_PASSES_31, f"{fr(passes, 1)} passes de réseau par image, au plus {MAX_PASSES_31}.",
+                  f"{fr(passes, 1)} passes de réseau par image (la guidance compte double) : le défi en demande au moins 1 "
+                  f"et en permet {MAX_PASSES_31}."),
+                 (gen_seconds <= gen_limit, f"génération en {fr(gen_seconds, 1)} s, dans les {fr(gen_limit, 0)} s.",
+                  f"génération en {fr(gen_seconds, 1)} s : le défi en permet {fr(gen_limit, 0)} (4 fois 50 passes du réseau "
+                  "de la référence) : generate calcule-t-il autre chose que ses passes ?"),
                  (copies <= COPIES_31, f"contrôle des copies : {fr(100 * copies, 1)} % d'images de r < 1/3 (au plus "
                                        f"{fr(100 * COPIES_31, 0)} %, la référence plus une marge).",
                   f"contrôle des copies : {fr(100 * copies, 1)} % des images sont anormalement proches d'une image "
@@ -1513,14 +1551,16 @@ def _make_evaluate_31():
                 f"défi réussi : distance {fr(fd, 2)} (objectif {fr(GOAL_31, 1)} ; référence de {fr(REFERENCE_31[0], 1)} à "
                 f"{fr(REFERENCE_31[1], 1)}).",
                 f"pas encore : distance {fr(fd, 2)}, il en faut au plus {fr(GOAL_31, 1)} en respectant les règles.")
-        return {"fd": fd, "seconds": seconds, "passes": passes, "copies": copies, "ok": ok and fd <= GOAL_31}
+        return {"fd": fd, "seconds": seconds, "limit": limit, "passes": passes, "copies": copies,
+                "ok": ok and fd <= GOAL_31}
 
     return evaluate_31
 
 
 evaluate_31 = _make_evaluate_31()
-print(f"Course de {LIMIT_31:.0f} s d'entraînement, {MAX_PASSES_31} passes par image ; objectif : une distance de Fréchet "
-      f"d'au plus {fr(GOAL_31, 1)} sur {N_31} images.")'''
+print(f"Course de {LIMIT_31:.0f} s d'entraînement sur la machine de calibrage (à l'échelle de la tienne au moment de la "
+      f"course), {MAX_PASSES_31} passes par image ; objectif : une distance de Fréchet d'au plus {fr(GOAL_31, 1)} sur "
+      f"{N_31} images.")'''
 
 TODO_31 = r'''def method_31(images, labels, seconds):
     """Your method: build and train, in at most `seconds` seconds, a NEW model on images (float32 (N, 1, 28, 28) in

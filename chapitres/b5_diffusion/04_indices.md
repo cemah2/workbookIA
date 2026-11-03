@@ -965,7 +965,8 @@ def fd_curve_25(model, alpha_bars, steps_list, x_T):
     for n in steps_list:
         start = time.perf_counter()
         images = sample_ddim_24(model, x_T, alpha_bars, n)
-        out.append((frechet_mnist(images), time.perf_counter() - start))
+        seconds = time.perf_counter() - start             # stop the clock before the measure
+        out.append((frechet_mnist(images), seconds))
     return out
 ```
 Pour a), la première graine : divise ses cinq distances par la dernière, et regarde à partir de quelle colonne tous les rapports suivants restent sous le seuil ; fais de même pour les autres graines, puis prends le plus grand des nombres de pas trouvés.

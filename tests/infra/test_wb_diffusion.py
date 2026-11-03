@@ -401,3 +401,12 @@ def test_unet_settings_and_reference_model(tmp_path, monkeypatch):
     assert len(ckpt["history"]["loss"]) == 2 and ckpt["path"].name.startswith("ddpm-reference-fast-")
     again, _ = D.reference_model(True, folder=tmp_path, verbose=False)
     assert all(torch.equal(p, q) for p, q in zip(model.parameters(), again.parameters()))
+
+
+def test_challenge_speed_measures_a_step_and_a_pass_without_touching_the_random_state():
+    images, labels = torch.rand(64, 1, 28, 28) * 2 - 1, torch.arange(64) % 10
+    torch.manual_seed(5)
+    before = torch.get_rng_state()
+    speed = D.challenge_speed(images, labels, T=40, repeats=2)
+    assert torch.equal(torch.get_rng_state(), before)
+    assert set(speed) == {"step", "pass_image"} and speed["step"] > speed["pass_image"] > 0
