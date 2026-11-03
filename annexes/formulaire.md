@@ -828,5 +828,31 @@ Notations : dans les formules, pas $t = 1$ à $T$ (article de Ho et coll.), $\ba
 | flow matching (ligne droite) | $\mathbf{x}_s = (1 - s)\,\mathbf{x}_0 + s\,\boldsymbol{\varepsilon}$, vitesse $\mathbf{v} = \boldsymbol{\varepsilon} - \mathbf{x}_0$ ; $\mathbf{x}_0 = \mathbf{x}_s - s\,\mathbf{v}$ ; Euler à rebours : $\mathbf{x} \leftarrow \mathbf{x} - h\,\mathbf{v}_\theta(\mathbf{x}, s)$ | |
 | coût d'un échantillonnage | passes $=$ images $\times$ pas $\times$ (2 avec la guidance) ; transformer : $\approx 2 \times N \times$ tokens FLOP par passe ; latent : côté $/ f$, tokens $= (\text{côté latent}/p)^2$ | (🧮 B5.8) |
 
-### B6 à B8
+### B6 · Explicabilité, équité et éthique
+
+Notations : features numérotées de 1 à $M$ dans les formules, colonnes 0 à $M - 1$ dans le code ; $\mathbf{x}$ l'exemple expliqué, $\mathbf{b}^{(k)}$ les $B$ lignes du fond, $\bar b_j$ leur moyenne ; $\mathbf{x}'$ la ligne de référence ; $p$ un taux de base.
+
+| Notion | Formule | En code |
+|---|---|---|
+| importance par permutation | $I_j = s(\mathbf{X}_{\text{val}}) - \frac{1}{K}\sum_k s(\mathbf{X}_{\text{val}}^{(j \text{ mélangée}, k)})$ | `sklearn.inspection.permutation_importance` |
+| dépendance partielle, ICE | $\operatorname{PD}_j(v) = \frac{1}{n}\sum_i f(v, \mathbf{x}_{i,\bar j})$ ; une courbe ICE par exemple, $v \mapsto f(v, \mathbf{x}_{i,\bar j})$ | `partial_dependence(model, X, [j], kind="both")` |
+| valeur d'une coalition (interventionnelle) | $v(S) = \frac{1}{B}\sum_k f(\mathbf{x}_S, \mathbf{b}^{(k)}_{\bar S})$ ; valeur de base $v(\varnothing)$ | |
+| valeur de Shapley | $\phi_i = \sum_{S \subseteq F \setminus \{i\}} \frac{\lvert S\rvert!\,(M - \lvert S\rvert - 1)!}{M!}\,[v(S \cup \{i\}) - v(S)]$ | `shapley_values(f, x, background)` |
+| efficacité | $\sum_i \phi_i = f(\mathbf{x}) - v(\varnothing)$ | `phi.sum() + base_value` |
+| modèle linéaire | $\phi_i = w_i(x_i - \bar b_i)$, $v(\varnothing) = f(\bar{\mathbf{b}})$ | |
+| coût du calcul exact | $2^M \times B$ prédictions par exemple | garde `max_features=12` |
+| noyau de Shapley (KernelSHAP) | $\pi(S) = \frac{M - 1}{\binom{M}{\lvert S\rvert}\,\lvert S\rvert\,(M - \lvert S\rvert)}$ ; `nsamples` par défaut $\min(2M + 2\,048,\ 2^M - 2)$ | `shap.KernelExplainer` |
+| TreeSHAP | $O(TLD^2)$ par exemple (chemins), $O(TLR)$ avec un fond de $R$ lignes | `shap.TreeExplainer(model, data=bg, feature_perturbation="interventional")` |
+| gradient × entrée | $x_i\,\partial f/\partial x_i$ | |
+| gradients intégrés | $\operatorname{IG}_i = (x_i - x'_i)\int_0^1 \partial_i f\big(\mathbf{x}' + \alpha(\mathbf{x} - \mathbf{x}')\big)\,d\alpha$ ; complétude $\sum_i \operatorname{IG}_i = f(\mathbf{x}) - f(\mathbf{x}')$ | `integrated_gradients(grad_fn, x, baseline, n_steps, method)` |
+| règles d'intégration ($n$ intervalles) | left $\frac1n\sum_{k=0}^{n-1} g(\frac kn)$ ; right $k = 1..n$ ; midpoint $g(\frac{k + 1/2}{n})$ ; trapèzes $\frac1n[\frac12 g(0) + g(\frac1n) + \dots + \frac12 g(1)]$ ; le `riemann_trapezoid` de captum à $n + 1$ points vaut le trapèze $\times\,n/(n+1)$ | `method="left"`, `"right"`, `"midpoint"`, `"trapezoid"` |
+| Grad-CAM | $\alpha_c = \frac{1}{HW}\sum_{i,j} \frac{\partial y^k}{\partial A^c_{ij}}$, $L = \operatorname{ReLU}\big(\sum_c \alpha_c A^c\big)$, puis $L / \max\lvert L\rvert$ | `grad_cam(A, G)` ; hooks `register_forward_hook`, `register_hook` |
+| taux d'un groupe $g$ | base $\frac{TP + FN}{n_g}$ ; sélection $\frac{TP + FP}{n_g}$ ; TPR $\frac{TP}{TP + FN}$ ; FPR $\frac{FP}{FP + TN}$ ; precision $\frac{TP}{TP + FP}$ ; `nan` si dénominateur nul | `group_rates(y_true, y_pred, groups)` |
+| parité démographique | $\Delta_{\text{DP}} = \max_g P(\hat y = 1 \mid g) - \min_g P(\hat y = 1 \mid g)$ | `demographic_parity_difference` |
+| equalized odds | $\Delta_{\text{EO}} = \max\big(\max_g \operatorname{TPR}_g - \min_g \operatorname{TPR}_g,\ \max_g \operatorname{FPR}_g - \min_g \operatorname{FPR}_g\big)$ | `equalized_odds_difference` |
+| règle des quatre cinquièmes | $\frac{\text{sélection du groupe}}{\text{sélection du groupe le mieux servi}} < 0{,}8$ : indice d'effet défavorable | |
+| relation de Chouldechova | $\operatorname{FPR} = \frac{p}{1 - p}\cdot\frac{1 - \operatorname{PPV}}{\operatorname{PPV}}\cdot(1 - \operatorname{FNR})$ | |
+| repondération | $w(g, y) = \frac{P(g)\,P(y)}{P(g, y)}$ | `fit(X, y, sample_weight=w)` |
+
+### B7 et B8
 *(à compléter)*

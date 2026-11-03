@@ -555,7 +555,7 @@ Relis 206.6 (l'idée, la dernière couche, les quatre détails) et 206.7 (les te
 </details>
 <details><summary>Indice 2</summary>
 
-Le principe en une phrase (cartes de la dernière couche convolutive pondérées par la moyenne des gradients du score), l'usage (vérifier que le modèle regarde la lésion et pas une étiquette ou un bord d'image), les limites (résolution grossière, choix de la couche et de la classe, une carte n'est pas une preuve), et un test de santé avant de s'y fier.
+Le principe en une phrase (cartes de la dernière couche convolutive pondérées par la moyenne des gradients du score), l'usage (vérifier que le modèle regarde la lésion et pas un marqueur sur le cliché ou un bord d'image), les limites (résolution grossière, choix de la couche et de la classe, une carte n'est pas une preuve), et un test de santé avant de s'y fier.
 
 </details>
 <details><summary>Indice 3</summary>

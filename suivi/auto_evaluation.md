@@ -616,3 +616,18 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Situer le DDPM dans le paysage actuel (diffusion latente, transformers de diffusion, flow matching) et en estimer le coût | |
 | Identifier les risques d'un générateur d'images (mémorisation, données personnelles, droits, marquage des contenus) | |
 <!-- wb:end B5 -->
+<!-- wb:section B6 -->
+## B6 — Explicabilité, équité et éthique
+
+| Compétence | Niveau |
+|---|:-:|
+| Choisir une méthode d'explication selon la question posée (globale ou locale, modèle tabulaire ou réseau) | |
+| Calculer des valeurs de Shapley exactes à la main et avec ta librairie, et dire quel fond a servi | |
+| Expliquer un modèle tabulaire avec la permutation, la dépendance partielle, les courbes ICE et shap (waterfall, beeswarm, dépendance) | |
+| Calculer des gradients intégrés et une carte Grad-CAM, poser les hooks PyTorch et vérifier la complétude | |
+| Soumettre une carte d'attribution à un test de santé et dire ce qu'il prouve | |
+| Auditer un classifieur par groupe (sélection, TPR, FPR, precision) avec des intervalles, et expliquer le théorème d'impossibilité | |
+| Tester une atténuation (retrait de variables, repondération, seuils par groupe) et chiffrer son coût | |
+| Rédiger une fiche modèle avec ses rubriques explicabilité et équité | |
+| Situer un projet de scoring face au RGPD (art. 22) et à l'AI Act (haut risque, obligations, dates) | |
+<!-- wb:end B6 -->

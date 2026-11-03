@@ -293,6 +293,17 @@
 | `h = nn.modules.module.register_module_forward_pre_hook(f)` … `h.remove()` | un crochet appelé avant **chaque** passe de **tout** module : compter les passes d'un échantillonneur, quel que soit le réseau (défi B5.31) |
 | `payload = torch.load(path, map_location="cpu", weights_only=True)` | relire un checkpoint (dictionnaire de tenseurs et de types simples) sans exécuter de code, sur CPU (🛠️ B5.30) |
 
+## Explicabilité : gradients et hooks (bonus B6)
+
+| Code | Effet |
+|---|---|
+| `p = torch.tensor(points, dtype=torch.float64, requires_grad=True)` ; `f(p).sum().backward()` ; `p.grad` | le gradient de $f$ en chaque point d'un batch en une passe : chaque sortie ne dépend que de sa ligne (gradients intégrés, B6.18) |
+| `images.requires_grad_()` ; `scores.gather(1, target[:, None]).sum().backward()` ; `images.grad` | la carte de saillance du score de la classe `target` de chaque image |
+| `def save(m, inp, out): store["A"] = out.detach(); out.register_hook(lambda g: store.__setitem__("G", g))` | un hook de passe avant qui garde la sortie d'une couche et pose un hook sur son gradient ; il ne **renvoie** rien (sinon la sortie est remplacée) |
+| `h = model.layer4.register_forward_hook(save)` ; … ; `h.remove()` | accrocher le hook à la couche choisie, puis le retirer (dans un `finally`) |
+| `w = store["G"].mean(dim=(2, 3))` ; `cam = F.relu(torch.einsum("nc,nchw->nhw", w, store["A"]))` | Grad-CAM : poids = moyenne spatiale des gradients, somme pondérée des canaux, ReLU |
+| `F.interpolate(cam[:, None], size=images.shape[-2:], mode="bilinear", align_corners=False)[:, 0]` | agrandir la carte à la taille de l'image, avec la même convention `align_corners` que pour l'image |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

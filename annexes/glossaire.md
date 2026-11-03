@@ -1106,6 +1106,62 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | CLIP score | CLIP score | similarité, dans l'espace de CLIP, entre une image générée et son prompt : mesure la fidélité au texte | B5 |
 | filigrane | watermark | marque invisible inscrite dans les pixels d'une image générée, lisible par un détecteur ; résiste mieux aux copies que les métadonnées | B5 |
 | métadonnées de provenance, C2PA | content credentials, C2PA | manifeste signé, joint au fichier, qui dit quel outil a produit ou modifié le contenu (standard C2PA) ; perdu à la capture d'écran | B5 |
+| interprétable par construction | interpretable by design | modèle dont la structure est l'explication (régression à peu de features, arbre peu profond, modèle additif) : on le lit lui-même | B6 |
+| explication globale, explication locale | global, local explanation | description du modèle entier (quelles features, comment) / d'une seule prédiction (pourquoi ce score) ; l'une ne se déduit pas de l'autre | B6 |
+| méthode agnostique, méthode spécifique | model-agnostic, model-specific method | explication qui n'interroge le modèle que par ses prédictions (permutation, KernelSHAP) / qui lit l'intérieur d'une famille (TreeSHAP, Grad-CAM) | B6 |
+| dépendance partielle (PDP) | partial dependence | $\operatorname{PD}_j(v) = \frac{1}{n}\sum_i f(v, \mathbf{x}_{i,\bar j})$ : la prédiction moyenne quand on impose $v$ à la feature $j$ (Friedman, 2001) | B6 |
+| courbe ICE | individual conditional expectation | la courbe $v \mapsto f(v, \mathbf{x}_{i,\bar j})$ d'un seul exemple ; la dépendance partielle en est la moyenne (Goldstein et coll., 2015) | B6 |
+| courbe ALE | accumulated local effects | effet d'une feature calculé en ne comparant que des exemples voisins, plus sûr que la PDP quand les features sont corrélées (Apley et Zhu) | B6 |
+| valeur de Shapley | Shapley value | part d'un joueur dans un jeu coopératif : son apport moyen sur tous les ordres d'arrivée ; pour une feature, $\phi_i = \sum_{S \not\ni i} \frac{\lvert S\rvert!(M - \lvert S\rvert - 1)!}{M!}[v(S \cup \{i\}) - v(S)]$ | B6 |
+| jeu coopératif | cooperative game | des joueurs et une fonction de valeur qui dit ce que gagne chaque coalition | B6 |
+| fonction de valeur | value function | $v(S)$, le gain d'une coalition ; pour une explication, la prédiction moyenne quand seules les features de $S$ viennent de l'exemple ; autre sens que la fonction de valeur de l'apprentissage par renforcement (ch. 26) | B6 |
+| coalition | coalition | sous-ensemble de joueurs (de features) ; $M$ features ont $2^M$ coalitions | B6 |
+| contribution marginale | marginal contribution | $v(S \cup \{i\}) - v(S)$ : ce qu'apporte le joueur $i$ en rejoignant la coalition $S$ | B6 |
+| efficacité, symétrie, joueur nul, additivité | efficiency, symmetry, null player, additivity | les quatre propriétés qui caractérisent les valeurs de Shapley : tout le gain est réparti ; même apport, même part ; aucun apport, part nulle ; les parts d'une somme de jeux s'ajoutent | B6 |
+| fond | background | lignes de référence (souvent un échantillon de l'entraînement) qui remplacent les features absentes d'une coalition ; changer de fond change les valeurs SHAP | B6 |
+| valeur de base | base value | $v(\varnothing)$, la prédiction moyenne sur le fond ; $\sum_i \phi_i = f(\mathbf{x}) - v(\varnothing)$ | B6 |
+| Shapley interventionnel, observationnel | interventional, observational (conditional) Shapley | on impose les valeurs de l'exemple sur $S$ et l'on prend les autres dans le fond, sans regarder la plausibilité (fidèle au modèle) / on tire les features absentes sachant celles de $S$ (fidèle aux données) | B6 |
+| valeurs SHAP | SHapley Additive exPlanations | les valeurs de Shapley d'une espérance du modèle, définies par Lundberg et Lee (2017) comme la seule explication additive à vérifier précision locale, absence et cohérence | B6 |
+| précision locale, absence, cohérence | local accuracy, missingness, consistency | les trois propriétés de Lundberg et Lee : la somme redonne la prédiction ; une feature absente reçoit 0 ; une feature dont l'apport augmente partout ne voit pas sa part baisser | B6 |
+| KernelSHAP | Kernel SHAP | estime les valeurs SHAP de n'importe quel modèle par une régression linéaire pondérée sur des coalitions tirées ; aléatoire | B6 |
+| noyau de Shapley | Shapley kernel | $\pi(S) = \frac{M - 1}{\binom{M}{\lvert S\rvert}\lvert S\rvert(M - \lvert S\rvert)}$, les poids qui font retomber la régression de KernelSHAP sur les valeurs de Shapley | B6 |
+| TreeSHAP | Tree SHAP | calcul exact et rapide des valeurs SHAP d'un arbre, d'une forêt ou d'un gradient boosting, en parcourant les arbres ; interventionnel avec un fond | B6 |
+| masqueur (shap) | masker | objet de shap qui remplace les features absentes ; `maskers.Independent(bg, max_samples=…)` les prend dans un fond (100 lignes par défaut) | B6 |
+| waterfall | graphique en cascade | graphique d'une prédiction : de la valeur de base à $f(\mathbf{x})$, une barre par feature (`shap.plots.waterfall`) | B6 |
+| beeswarm | essaim d'abeilles | graphique de beaucoup de prédictions : un point par exemple et par feature, à sa valeur SHAP, coloré par la valeur de la feature (`shap.plots.beeswarm`) | B6 |
+| graphique de dépendance (SHAP) | dependence plot | valeur SHAP d'une feature contre sa valeur, colorée par la feature qui interagit le plus (`shap.plots.scatter`) | B6 |
+| substitut local, LIME | local surrogate, local interpretable model-agnostic explanations | expliquer une prédiction par un modèle simple ajusté sur des points tirés autour de l'exemple (Ribeiro et coll., 2016) | B6 |
+| carte de saillance | saliency map | $\lvert \partial f / \partial x_i \rvert$ pixel par pixel : où une petite retouche changerait le plus le score (Simonyan et coll., 2014) | B6 |
+| gradient × entrée | gradient × input | $x_i\,\partial f / \partial x_i$ ; exact pour un modèle linéaire, trompeur quand le modèle sature | B6 |
+| gradients intégrés | integrated gradients | $\operatorname{IG}_i = (x_i - x'_i)\int_0^1 \partial_i f(\mathbf{x}' + \alpha(\mathbf{x} - \mathbf{x}'))\,d\alpha$, le gradient accumulé le long d'un chemin depuis une ligne de référence (Sundararajan et coll., 2017) | B6 |
+| ligne de référence (d'une attribution) | baseline | l'entrée « neutre » $\mathbf{x}'$ dont partent les gradients intégrés (image noire, floutée…) ; à ne pas confondre avec la baseline, le modèle de référence (0A, ch. 13) | B6 |
+| complétude | completeness | $\sum_i \operatorname{IG}_i = f(\mathbf{x}) - f(\mathbf{x}')$ : les attributions expliquent tout l'écart à la référence | B6 |
+| sensibilité, invariance à l'implémentation | sensitivity, implementation invariance | les deux axiomes des gradients intégrés : une feature qui seule change la prédiction reçoit une attribution non nulle ; deux réseaux qui calculent la même fonction reçoivent les mêmes attributions | B6 |
+| SmoothGrad | SmoothGrad | moyenne des gradients de copies légèrement bruitées d'une image, pour des cartes moins bruitées (Smilkov et coll., 2017) | B6 |
+| Guided Grad-CAM | Guided Grad-CAM | carte Grad-CAM agrandie multipliée par une carte de guided backpropagation, plus fine ; échoue au test de randomisation (Adebayo et coll.) | B6 |
+| test de santé | sanity check | vérifier qu'une explication change quand le modèle change : randomisation des paramètres (en cascade ou indépendante) ou des labels (Adebayo et coll., 2018) | B6 |
+| randomisation en cascade, indépendante | cascading, independent randomization | randomiser les couches une à une depuis la sortie en gardant les précédentes randomisées / une seule couche à la fois | B6 |
+| interprétabilité mécaniste | mechanistic interpretability | chercher les « features » et les circuits internes d'un réseau, souvent d'un grand modèle de langue | B6 |
+| autoencodeur parcimonieux | sparse autoencoder | autoencodeur entraîné sur les activations d'une couche, qui les décompose en directions peu nombreuses à la fois, souvent lisibles (Gemma Scope) | B6 |
+| biais (équité) | bias (fairness) | écart systématique de traitement entre des groupes de personnes définis par un attribut sensible ; autre sens que le biais d'un neurone (0B) et le biais statistique (ch. 2, 9) | B6 |
+| attribut sensible | sensitive attribute, protected attribute | caractéristique d'une personne protégée contre la discrimination (sexe, âge, origine, handicap…) | B6 |
+| biais de labels, de mesure, de déploiement | label, measurement, deployment bias | la cible ne mesure pas ce qu'on croit / une feature ou la cible se mesure moins bien pour un groupe / le modèle sert une autre population ou décision que celles de son évaluation | B6 |
+| boucle de rétroaction | feedback loop | les décisions du modèle fabriquent ses futures données et le confirment (police prédictive, prêts accordés seuls observés) | B6 |
+| analyse intersectionnelle | intersectional analysis | audit sur les croisements d'attributs (femmes à peau foncée), où des écarts invisibles attribut par attribut apparaissent (Gender Shades) | B6 |
+| parité démographique | demographic parity, statistical parity | même taux de sélection dans tous les groupes ; $\Delta_{\text{DP}} = \max_g - \min_g P(\hat y = 1 \mid g)$ | B6 |
+| égalité des chances | equal opportunity | même TPR dans tous les groupes (Hardt et coll., 2016) | B6 |
+| equalized odds | égalité des taux d'erreur | même TPR et même FPR dans tous les groupes ; $\Delta_{\text{EO}}$ = le plus grand des deux écarts | B6 |
+| parité prédictive | predictive parity | même precision dans tous les groupes | B6 |
+| calibration par groupe | calibration within groups | parmi les personnes d'un groupe notées $s$, une proportion $s$ est positive, dans chaque groupe | B6 |
+| théorème d'impossibilité | impossibility theorem | quand les taux de base diffèrent, calibration (ou parité prédictive) et égalité des taux d'erreur ne tiennent ensemble que pour un classifieur parfait (Chouldechova ; Kleinberg et coll.) | B6 |
+| règle des quatre cinquièmes | four-fifths rule | aux États-Unis, un taux de sélection inférieur à 80 % de celui du groupe le mieux servi est un indice d'effet défavorable (29 CFR 1607.4 D) | B6 |
+| comparaisons multiples | multiple comparisons | avec beaucoup d'écarts testés, certains sortent de leur intervalle par hasard : on choisit les comparaisons d'avance | B6 |
+| repondération | reweighing | poids $w(g, y) = P(g)P(y)/P(g, y)$ qui rendent le groupe et le label indépendants dans l'entraînement (Kamiran et Calders) | B6 |
+| seuils par groupe | group-specific thresholds | un seuil de décision par groupe, choisi après l'entraînement pour égaliser un taux (Hardt et coll. ; `ThresholdOptimizer`) | B6 |
+| biais d'automatisation | automation bias | tendance à suivre une recommandation automatique, même fausse | B6 |
+| supervision humaine | human oversight | contrôle d'un système d'IA par une personne compétente, qui a le temps et l'autorité de ne pas le suivre (AI Act, art. 14) | B6 |
+| analyse d'impact sur les droits fondamentaux (FRIA) | fundamental rights impact assessment | analyse qu'un déployeur de certains systèmes à haut risque (dont le scoring de crédit) mène avant le déploiement (AI Act, art. 27) | B6 |
+| déployeur | deployer | dans l'AI Act, celui qui utilise un système d'IA sous sa propre autorité (la banque), par opposition au fournisseur qui le développe | B6 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 
