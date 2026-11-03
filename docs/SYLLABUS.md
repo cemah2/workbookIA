@@ -5360,7 +5360,7 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 | B6.10 | ⚖️ | Reconnaissance faciale : erreurs par sous-groupe et décision de déploiement | ★★ | 25 | — | 02 | B6.5 | R | manual |
 | B6.11 | 📄 | Lundberg et Lee (2017) : « A Unified Approach to Interpreting Model Predictions » | ★★★ | 45 | — | 02 | B6.2 | M | manual |
 | B6.12 | 📦 | Explications globales sur California : coefficients, permutation, dépendance partielle et ICE | ★★ | 30 | California | 03 | 14, 15 | RC | manual |
-| B6.13 | 🔮 | Prédire la forme des courbes ICE du revenu médian et de la latitude | ★ | 10 | California | 03 | B6.12 | C | manual |
+| B6.13 | 🔮 | Prédire la forme des courbes ICE du revenu médian et de la latitude | ★ | 10 | California | 03 | B6.12 | C | wb.check |
 | B6.14 | 🔨 | shapley_values : Shapley exact par énumération des coalitions | ★★★ | 45 | California | 03 | B6.1, B6.2 | RMC | pytest |
 | B6.15 | 📦 | SHAP sur un gradient boosting California : TreeExplainer, waterfall, beeswarm, dépendance | ★★ | 30 | California | 03 | B6.14, 14 | RC | wb.check |
 | B6.16 | 🔬 | Le fond change tout : trois fonds différents, puis une feature dupliquée | ★★★ | 40 | California | 03 | B6.15 | C | manual |
