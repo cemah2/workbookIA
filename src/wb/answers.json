@@ -57431,6 +57431,79 @@
       },
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
     },
+    "B5.25a": {
+      "choices": [
+        "5",
+        "10",
+        "20",
+        "50",
+        "100"
+      ],
+      "fractional": "on demande un nombre de pas de STEPS_25",
+      "hash": "a7edb5ec1d9f1bbbf2dd05282590dd5f7d179ac209bd54569a74db34d14a6157",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4ecfb256830351dcd297d7889f2967d82725ba9d5e2dae8846b153fe1222976f": "relis la ligne L du protocole complet : à 10 pas, toutes les graines restent-elles au plus à 1,2 fois leur distance à 100 pas, et ensuite aussi ?",
+        "725cc5d653d21de4d029a5e78521d396a7f0b4c526fdf3893dd675e9e9659180": "relis la ligne L du protocole complet : à 50 pas, toutes les graines restent-elles au plus à 1,2 fois leur distance à 100 pas, et ensuite aussi ?",
+        "9cdb0fdee5adaa5bcce3c318fff472b4fff57b21eb804cd7519d40518524dd46": "relis la ligne L du protocole complet : à 5 pas, toutes les graines restent-elles au plus à 1,2 fois leur distance à 100 pas, et ensuite aussi ?",
+        "c329e23dc7f0b4cebc7e661077f0596f8177251439987cb6a6b79105d9c419be": "relis la ligne L du protocole complet : à 100 pas, toutes les graines restent-elles au plus à 1,2 fois leur distance à 100 pas, et ensuite aussi ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.25b": {
+      "hash": "9d67ff498a558692ca0a42e490f335db95dbe435c6248f34de0844308512a76b",
+      "kind": "str",
+      "mistakes": {
+        "4991a431f4e54f696382847a479ad3a800e660fca190fd75dcf725a1accad63f": "relis la colonne des 5 pas du protocole complet, graine par graine"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.26a": {
+      "hash": "99fc93a111ced15bd097f30b02fb87801f40bbaa93cb7ec2e534eefc4cd97e3d",
+      "kind": "bool",
+      "mistakes": {
+        "f52506410d32d0e5413d65dce98fdd5639849bc148a9e1a223ca049cc68bab94": "compare la colonne des distances aux lignes w = 0 et w = 7, graine par graine"
+      },
+      "prediction": true,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.26b": {
+      "hash": "629ad344f083e8a52a8e02dd7653f86d3a8d6e4582cddd1044ac1e5305740217",
+      "kind": "bool",
+      "mistakes": {
+        "3627a0ac4d0c842fb28f3107e7b236a9c6a35e3a4c9d085473306245bc96ad77": "lis la ligne w = 0 de la colonne de la classe reconnue"
+      },
+      "prediction": true,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.26c": {
+      "hash": "7abb6c275bca711ea21c0a2993dde256637b8ee0c0a2cbb4b21b8f260b3ca011",
+      "kind": "bool",
+      "mistakes": {
+        "090a87cbc6d9f3962c1b4dec45c475277a566aa34902977243891e1ffcd55e64": "compare la ligne w = 0 de la colonne de la diversité à celle des vraies images, sous le tableau"
+      },
+      "prediction": true,
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.28a": {
+      "hash": "1dc85f1d6e40f5382ce6a749a3375ecb10bc6b5fa656f78853c943c0a47287fc",
+      "kind": "str",
+      "mistakes": {
+        "9e3962a6abc78285334efd3ed75186be2ce05eabfabfbb82b9897b9fb9cd5dd7": "relis la ligne des 500 images de FULL_28 : la part de copies y est-elle de 10 à 50 % pour toutes les graines ?",
+        "a985940bff54c599926f04a4499d811252bcef78c6370802d369eaf2b17e3dc5": "relis la ligne des 500 images de FULL_28 : la part de copies y est-elle plus de 50 % pour toutes les graines ?"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
+    "B5.28b": {
+      "hash": "a5c62e8f6b2ebd08041ac4b5dbbe0840f73e47865ef4341c3835cd0890c9d6ac",
+      "kind": "bool",
+      "mistakes": {
+        "cb29f8fd706a5162cc93919fe09987eb32bd3b4163622aa429b1f3ba8007b267": "compare les r médians des lignes 500 et 60 000 de FULL_28, graine par graine"
+      },
+      "source": "chapitres/b5_diffusion/05_solutions.ipynb"
+    },
     "B5.Q1a": {
       "hash": "41720f303bfd990d3dc5f44dff8194f5c33a30516f977bcae6615a8fd8ad206d",
       "kind": "str",

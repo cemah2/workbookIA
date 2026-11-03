@@ -367,7 +367,7 @@ else:
         x256_23 = torch.randn((256, 1, 28, 28), generator=torch.Generator().manual_seed(2324))
         FD_23 = frechet_mnist(wbd.sample_ddim(ema_23, x256_23, AB, 50))
         print(f"distance de Fréchet de 256 échantillons de la copie EMA (DDIM, 50 pas) aux 2 000 chiffres de test : "
-              f"{fr(FD_23, 1)} (deux lots de 256 vrais chiffres : environ {fr(FLOOR_23, 0)})")
+              f"{fr(FD_23, 1)} (deux échantillons de 256 vrais chiffres : environ {fr(FLOOR_23, 0)})")
         verdict("B5.23", FD_23 < GOAL_23,
                 f"la copie EMA génère des formes de chiffres : distance {fr(FD_23, 1)}, sous {GOAL_23:.0f} (la référence : de "
                 f"{fr(REF_23[0], 0)} à {fr(REF_23[1], 0)} selon la graine).",
@@ -615,7 +615,7 @@ else:
         print("pas :", "  ".join(f"{n:>6}" for n in STEPS_25))
         print(f"ta distance ({N_25} images) :", "  ".join(f"{fr(d, 1):>6}" for d, _ in CURVE_25))
         for key_25 in ("L", "C"):
-            print(f"protocole complet {key_25} (médiane, 500 images) :",
+            print(f"protocole complet {key_25} (médiane, 256 images) :",
                   "  ".join(f"{fr(v, 1):>6}" for v in np.median(np.array(FULL_25[key_25]), axis=0)))'''
 
 # --- 🔮 B5.26 and 📦 B5.27: guidance on Fashion-MNIST -------------------------------------------------------------------

@@ -954,7 +954,7 @@ Une courbe « qualité contre coût » se lit de gauche à droite : chaque point
 
 - `fd_curve_25` : une boucle sur `steps_list`, `time.perf_counter()` avant et après `sample_ddim_24`, puis `frechet_mnist(images)` **hors** du chronomètre (on mesure le coût de l'échantillonnage, pas celui de la mesure).
 - a) Pour chaque graine, divise chaque distance de la ligne L par la dernière (100 pas) ; cherche le premier nombre de pas à partir duquel tous les rapports restent sous le seuil ; la réponse vaut pour la graine la plus lente.
-- b) Compare, graine par graine, la colonne des 10 pas des lignes L et C.
+- b) Compare, graine par graine, la colonne des 5 pas des lignes L et C.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -983,7 +983,7 @@ Relis « La guidance sans classifieur » et la figure 2D de la fiche (§205.7) :
 
 - a) Un modèle petit, entraîné peu de temps : ses images sans guidance sont-elles déjà proches des vraies ? Une forte guidance resserre chaque classe : est-ce que cela rapproche ou éloigne le nuage de celui des vraies images ?
 - b) La classe demandée n'est qu'une entrée de plus pour le réseau ; avec peu d'entraînement, la suit-il déjà vraiment ?
-- c) Un pixel saturé est du noir ou du blanc presque pur ; les fonds de Fashion-MNIST sont noirs. Que fait l'écrêtage de $\hat{\mathbf{x}}_0$ à chaque pas ?
+- c) La diversité mesure l'étalement des features dans chaque classe demandée. Une image ambiguë, entre un pull et un manteau, ou à demi formée, étale-t-elle moins ou plus les features qu'une vraie image de la classe ?
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1032,7 +1032,7 @@ Un plus proche voisin en pixels, c'est une distance euclidienne entre images apl
 
 - `nearest_28` : `torch.cdist(a, b)` avec `a = samples.reshape(N, -1).double()` et `b = train.reshape(M, -1).double()`, puis `.min(dim=1)` (valeurs et indices ; à égalité, PyTorch rend le premier).
 - `copy_ratio_28` : les distances de chaque $a$ (`train[indices]`) à tout `train`, la distance de $a$ à elle-même mise à l'infini (`to_all[torch.arange(N), indices] = float("inf")`), puis le minimum de chaque ligne.
-- Pour a) et b), lis `FULL_28["copies"]` : une valeur par graine.
+- Pour a), lis `FULL_28["copies"]` ; pour b), `FULL_28["median_r"]` : une valeur par graine.
 
 </details>
 <details><summary>Indice 3</summary>
