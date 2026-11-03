@@ -58732,6 +58732,99 @@
       "sign": 1,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
+    "B6.13a": {
+      "hash": "ab3a543772b50f18bff5b5104ce673015c285d5ef045a07f03e90c29d2f78cec",
+      "kind": "str",
+      "mistakes": {
+        "0c2c51224243cf58ef4acdd8bd7e68c48018b56a69423ef6f6bfb17315c025e9": "« A » : lis la variation de la dépendance partielle de MedInc, sous la figure",
+        "318cc36a21cbee8cafffa54f4a9009c7df69af549e44b205828f28436234db17": "« D » : lis la variation de la dépendance partielle de MedInc, sous la figure",
+        "a917b24f0149200f12d1c83d6b325ba62605bb3dcc52d63e491d040cd014321f": "« B » : lis la variation de la dépendance partielle de MedInc, sous la figure"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.13b": {
+      "hash": "7533313b2b36f1c6e173ffb73f70b5fee70c8f41c1164bb46fe85a9e89458057",
+      "kind": "str",
+      "mistakes": {
+        "0662f26bf67e3ce860a06359f71b629b6ad2de4a1d26c72897ff9825d06795d5": "« A » : suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)",
+        "59220863c64962fb226a46ea245810af0809a42a9d05465508c6617237a0af83": "« B » : lis la variation de la dépendance partielle de la latitude, sous la figure"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.13c": {
+      "hash": "7934037163c6e4993db586e01d7776f15c2fa8e314d09870a7018eb0dfe2b681",
+      "kind": "str",
+      "mistakes": {
+        "408964a60ee082a49fb227f9415f089e62b10b8659497fc24bf5ce8ddeac039c": "« D » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+        "63bcc535636e0a4fd7ad73cbf657373a6755965357d16ccfb105220bf1dcecea": "« C » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+        "a03f8e56ce48030153e903d51d01ee5d803299326113ba532f5d13b27dc6cfa6": "« B » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.13d": {
+      "hash": "7ec269a38dfd7366e57f41f97445d92365e7d98beba7b980d7278db67f90e992",
+      "kind": "bool",
+      "mistakes": {
+        "7721323d85a33cb7a3bdbcae62c3d67d36c602bd44c6a9aee6cdee168bba4e4a": "compare les deux écarts-types de la variation des ICE, sous la figure"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.15a": {
+      "decimals": 4,
+      "hash": "0d2ace9c5469db2810339c543054859111607c121cc23f65d4194e51c3cdec3a",
+      "hash_coarse": "fe5c5943590633f56b278dd78af27e97eecc92b7caf4a8c5f4be9992d8816c23",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "487d555d05186929905307fd738a193faf3f599bc941442319fe60b85018fb1c": "c'est la valeur de base sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)",
+        "660f26c3f1266060af05737a1b414a4fe0a5ce3bebaf35b7f763f7bb950eddea": "c'est le gradient boosting par défaut : le contrat veut max_depth=3",
+        "e7f78662d5ab6e9f54a65a5dd34fe378cb08d9b187dbb25b324b8976afdcb47d": "c'est la moyenne des cibles d'entraînement : la valeur de base est la prédiction moyenne sur le fond",
+        "fa3559db72816093ecb0602909af9a89e582bf4fdeaba54508a7967a08d65635": "c'est la prédiction moyenne sur les districts expliqués : la valeur de base se calcule sur le fond"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.15b": {
+      "decimals": 4,
+      "hash": "f8b906799e8e95b5e3eda4e6f660e4b5658d7fcf568c8af9fd8054460159d70c",
+      "hash_coarse": "bcbd74ccbadc26dc3b16bf6b94d68462d4c11002e5d837f0511b1f0984507d4a",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "25893acf8a616ccf2e191c3d02b07e69fb0acb49962d7008396cf05c8efb3de4": "vérifie le signe",
+        "6434c5a318eaf364c07112e17a2f578adbc67b033e832aa4e539cb2059c14cd6": "c'est la valeur sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)",
+        "cca94e09933bd572cf407cab077ec79fc36fb2ddbb27f5bddc2fed46b7de7ebf": "c'est un fond de 100 lignes : le contrat en prend 50",
+        "dcdf74200041069de4cf679a0cca66596a2fa27820b6b4992f129089f892065c": "c'est le gradient boosting par défaut : le contrat veut max_depth=3"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.15c": {
+      "decimals": 4,
+      "hash": "9abe889177af3781a9a69ed3bf2b36427e57ecd2421449a2b5e879135dc674fc",
+      "hash_coarse": "5520a6208afd790f837fb2f0266cea61931c855beb96d55deb9be3d8fa4b0d31",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "00db89544dc24e3cbb50c19d1dc73f5da67859116e5331fcd44cf2e0662b0025": "c'est le gradient boosting par défaut : le contrat veut max_depth=3",
+        "3556f08061d10ccc0f50469429504f3635dd9bdba53eaff8421dca8959bebacf": "c'est la moyenne des carrés : on demande la moyenne des valeurs absolues",
+        "86c7fe60027588120f46e6fa5bbdfb278aa143c51e2529c419ed92b391d017ac": "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.15d": {
+      "hash": "d20266b3c7c3b35866da5c84a97e9d8a9c9f464344c7d32da8198f9ba1ac2e74",
+      "kind": "bool",
+      "mistakes": {
+        "dfef1e5e0b2b8995f9e69014b8ec4eb85542098def86eca57c99749e173010f7": "TreeExplainer et ta shapley_values diffèrent de plus de 1e-6 : ta fonction passe-t-elle ses tests (Ex B6.14), et garde-t-elle toutes les lignes du fond ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
     "B6.Q1a": {
       "hash": "d307e0a097e391aa7798f9e9e626ad0f7125d4d07a0b655a4b5cfc854874ecfd",
       "kind": "str",

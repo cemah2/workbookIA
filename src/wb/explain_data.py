@@ -224,6 +224,14 @@ def _freeze(model):
     return model
 
 
+def _quiet_build(make):
+    """``make()`` inside ``torch.random.fork_rng()``: building a module to load weights into draws an initialisation
+    from the global generator, which must not move (the cells after it keep their random draws)."""
+    torch = _torch()
+    with torch.random.fork_rng():
+        return make()
+
+
 def _mode(fast: bool) -> str:
     return "fast" if fast else "full"
 
@@ -312,7 +320,7 @@ def train_cnn(settings: dict, images, labels, verbose: bool = False):
                 loss.backward()
                 opt.step()
                 sched.step()
-                total += float(loss) * len(idx)
+                total += loss.item() * len(idx)
             if verbose:
                 print(f"   epoch {epoch + 1} : loss {total / len(x):.3f}", flush=True)
     return model.eval()
@@ -356,7 +364,7 @@ def cifar_cnn(fast: bool = True, folder: str | Path | None = None, verbose: bool
         payload = _read(path, key)
     elif verbose:
         print(f"ℹ️ CNN de référence relu ({path.name})")
-    model = SmallCNN(tuple(CNN_SETTINGS[_mode(fast)]["widths"]))
+    model = _quiet_build(lambda: SmallCNN(tuple(CNN_SETTINGS[_mode(fast)]["widths"])))
     model.load_state_dict(payload["state_dict"])
     info = {"source": "reference", "settings": dict(CNN_SETTINGS[_mode(fast)]), "path": path, "size": 32,
             "classes": list(datasets.CIFAR10_CLASSES), **payload["extra"]}
@@ -436,10 +444,17 @@ def train_resnet(settings: dict, images, labels, weights="DEFAULT", verbose: boo
                 opt.zero_grad()
                 loss.backward()
                 opt.step()
-                total += float(loss) * len(idx)
+                total += loss.item() * len(idx)
             if verbose:
                 print(f"   epoch {epoch + 1} : loss {total / len(X):.3f}", flush=True)
     return model.eval()
+
+
+def _resnet_shell(resnet18):
+    """A ResNet-18 without weights and with a head of 10 outputs, to load a state dict into."""
+    model = resnet18(weights=None)
+    model.fc = _torch().nn.Linear(model.fc.in_features, 10)
+    return model
 
 
 def find_b1_folder(start: str | Path | None = None) -> Path | None:
@@ -478,8 +493,7 @@ def load_b1_folder(folder: str | Path):
     if config.get("architecture") != "resnet18" or int(config.get("num_classes", 0)) != 10:
         raise ValueError(f"{config_path}: a resnet18 with 10 outputs is expected, got "
                          f"{config.get('architecture')!r} with {config.get('num_classes')!r} outputs")
-    model = resnet18(weights=None)
-    model.fc = torch.nn.Linear(model.fc.in_features, 10)
+    model = _quiet_build(lambda: _resnet_shell(resnet18))
     model.load_state_dict(load_file(str(weights_path)))
     info = _resnet_info("learner", config.get("image_size", 96), folder.resolve(),
                         {"test_accuracy": config.get("test_accuracy"), "settings": {}})
@@ -518,8 +532,7 @@ def reference_resnet(fast: bool = True, folder: str | Path | None = None, verbos
         payload = _read(path, key)
     elif verbose:
         print(f"ℹ️ ResNet-18 de référence relu ({path.name})")
-    model = resnet18(weights=None)
-    model.fc = torch.nn.Linear(model.fc.in_features, 10)
+    model = _quiet_build(lambda: _resnet_shell(resnet18))
     model.load_state_dict(payload["state_dict"])
     return _freeze(model), _resnet_info("reference", s["size"], path, {"settings": dict(s), **payload["extra"]})
 

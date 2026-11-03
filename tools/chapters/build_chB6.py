@@ -14,8 +14,9 @@ by hand formulas in the context cell of the solutions notebook, then checked aga
 row), scikit-learn (confusion_matrix) and torchvision (the layer sizes of an untrained ResNet-18): part 0 downloads
 nothing. captum is not installed: its trapezoid (✏️ B6.3 k) is computed from its rule (N points, weights 1/N halved at
 both ends), the rule the tests of explain.py checked against captum 0.9.0.
-The notebook itself (exercises B6.12 to B6.29) comes at the second generation session (NEXT_SESSION), in three phases:
-tabular models, networks, fairness.
+The notebook exercises come in three phases: A, the tabular models (B6.12 to B6.17); B, the networks (B6.18 to B6.22);
+C, fairness (B6.23 to B6.29). Session 74 writes them in two halves: B6.12 to B6.20 (chB6_parts.py, chB6_code.py,
+history_chB6.py), then B6.21 to B6.29 (NEXT_SESSION until they are written).
 """
 
 from __future__ import annotations
@@ -623,14 +624,18 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B6.12 to B6.29): second generation session
+# Parts A to C (exercises B6.12 to B6.29). Session 74, first half: part A and the start of part B (B6.12 to B6.20,
+# chB6_parts.py and chB6_code.py); the second half appends B6.21 and B6.22 to PART_B and adds part C (B6.23 to B6.29).
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import chB6_code  # noqa: E402,F401  (the cells; history_chB6.py reuses them)
+from chB6_parts import PART_B, PARTS  # noqa: E402,F401
+
+for _part in PARTS:
+    for _ex in _part.exercises:
+        check_unique_keys(_ex.record or "x = 1", _ex.id)
+
 NEXT_SESSION = [
-    ("A", "B6.12 à B6.17", "les modèles tabulaires : explications globales sur California, Shapley exact avec ta "
-                           "librairie, shap sur un gradient boosting, le rôle du fond, Penguins"),
-    ("B", "B6.18 à B6.22", "les réseaux : gradients intégrés et Grad-CAM dans ta librairie, attributions sur un CNN "
-                           "CIFAR-10, Grad-CAM par hooks sur le ResNet du B1, un Grad-CAM à réparer, le test de santé"),
+    ("B", "B6.21 et B6.22", "un Grad-CAM à réparer, le test de santé d'Adebayo"),
     ("C", "B6.23 à B6.29", "l'équité : tes indicateurs par groupe, l'audit d'Adult avec intervalles, l'effet du "
                            "retrait du sexe, l'atténuation et son coût, la fiche modèle et le défi"),
 ]
@@ -643,9 +648,8 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
+             for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B6 · Explicabilité, équité et éthique — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -687,8 +691,8 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B6.12 à B6.29 (modèles tabulaires, réseaux, équité) seront ajoutés à la "
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B6.21 à B6.29 (un Grad-CAM à réparer, le test de santé, l'équité) seront ajoutés à la "
              "prochaine session de génération ; relance alors `python tools/start_chapter.py B6` pour obtenir le "
              "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
