@@ -5333,21 +5333,21 @@ Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoi
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B6.Q1 | 🧠 | Interprétable par construction ou expliqué après coup ? | ★ | 3 | — | 02 | — | R | manual |
-| B6.Q2 | 🧠 | Explication globale ou locale : quel outil répond à quelle question ? | ★ | 3 | — | 02 | — | R | manual |
-| B6.Q3 | 🧠 | Dépendance partielle et courbes ICE : ce que montre la moyenne, ce qu'elle cache | ★★ | 3 | — | 02 | — | R | manual |
-| B6.Q4 | 🧠 | Les quatre propriétés de Shapley : efficacité, symétrie, joueur nul, additivité | ★ | 3 | — | 02 | — | RM | manual |
-| B6.Q5 | 🧠 | Changer le fond (background) change les valeurs SHAP : vrai ou faux | ★★ | 3 | — | 02 | — | R | manual |
-| B6.Q6 | 🧠 | Features corrélées : ce que SHAP répartit et ce qu'il ne dit pas | ★★ | 3 | — | 02 | — | – | manual |
-| B6.Q7 | 🧠 | Gradient, gradient × entrée, gradients intégrés : pourquoi une ligne de référence ? | ★★ | 3 | — | 02 | — | – | manual |
-| B6.Q8 | 🧠 | Grad-CAM : pourquoi la dernière couche convolutive ? | ★ | 3 | — | 02 | — | R | manual |
-| B6.Q9 | 🧠 | Une carte de saillance qui ne dépend pas du modèle : que prouve le test de randomisation ? | ★★ | 3 | — | 02 | — | R | manual |
-| B6.Q10 | 🧠 | Sources de biais : données, labels, variables de substitution, boucles de rétroaction | ★ | 3 | — | 02 | — | R | manual |
-| B6.Q11 | 🧠 | Parité démographique, égalité des chances, calibration : peut-on tout avoir ? | ★★ | 3 | — | 02 | — | R | manual |
-| B6.Q12 | 🧠 | AI Act : dans quelle catégorie de risque tombe un scoring de crédit ? | ★ | 3 | — | 02 | — | R | manual |
-| B6.R1 | 🔁 | Visualiser ce qu'a appris un CNN, et l'attaque FGSM | ★ | 5 | — | 02 | 21 | R | manual |
-| B6.R2 | 🔁 | feature_importances_ contre importance par permutation | ★ | 5 | — | 02 | 14 | R | manual |
-| B6.R3 | 🔁 | TPR, FPR et precision à partir d'une matrice de confusion | ★ | 5 | — | 02 | 3 | R | manual |
+| B6.Q1 | 🧠 | Interprétable par construction ou expliqué après coup ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q2 | 🧠 | Explication globale ou locale : quel outil répond à quelle question ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q3 | 🧠 | Dépendance partielle et courbes ICE : ce que montre la moyenne, ce qu'elle cache | ★★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q4 | 🧠 | Les quatre propriétés de Shapley : efficacité, symétrie, joueur nul, additivité | ★ | 3 | — | 02 | — | RM | wb.check |
+| B6.Q5 | 🧠 | Changer le fond (background) change les valeurs SHAP : vrai ou faux | ★★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q6 | 🧠 | Features corrélées : ce que SHAP répartit et ce qu'il ne dit pas | ★★ | 3 | — | 02 | — | – | wb.check |
+| B6.Q7 | 🧠 | Gradient, gradient × entrée, gradients intégrés : pourquoi une ligne de référence ? | ★★ | 3 | — | 02 | — | – | wb.check |
+| B6.Q8 | 🧠 | Grad-CAM : pourquoi la dernière couche convolutive ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q9 | 🧠 | Une carte de saillance qui ne dépend pas du modèle : que prouve le test de randomisation ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q10 | 🧠 | Sources de biais : données, labels, variables de substitution, boucles de rétroaction | ★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q11 | 🧠 | Parité démographique, égalité des chances, calibration : peut-on tout avoir ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| B6.Q12 | 🧠 | AI Act : dans quelle catégorie de risque tombe un scoring de crédit ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B6.R1 | 🔁 | Visualiser ce qu'a appris un CNN, et l'attaque FGSM | ★ | 5 | — | 02 | 21 | R | wb.check |
+| B6.R2 | 🔁 | feature_importances_ contre importance par permutation | ★ | 5 | — | 02 | 14 | R | wb.check |
+| B6.R3 | 🔁 | TPR, FPR et precision à partir d'une matrice de confusion | ★ | 5 | — | 02 | 3 | R | wb.check |
 | B6.1 | ✏️ | Valeurs de Shapley exactes à la main : trois features, huit coalitions | ★★ | 25 | — | 02 | 0B | RM | wb.check |
 | B6.2 | ∂ | Modèle linéaire et fond indépendant : φ_i = w_i (x_i − E[x_i]) | ★★ | 20 | — | 02 | B6.1 | M | manual |
 | B6.3 | ✏️ | Gradients intégrés à la main sur f(x) = x₁² + 3x₂ et vérification de la complétude | ★★ | 20 | — | 02 | 5 | M | wb.check |
