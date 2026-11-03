@@ -5251,13 +5251,13 @@ Un modèle de diffusion apprend à débruiter : on abîme les images en ajoutant
 | B5.22 | 🐛 | Le DDPM qui ne produit que du gris : quatre bugs d'indices, de racines et d'échelle | ★★ | 25 | MNIST | 03 | B5.21 | RC | manual |
 | B5.23 | 📦 | Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de loss 🚀 | ★★★ | 60 | MNIST | 03 | B5.21, B5.22, 19 | RC | manual |
 | B5.24 | 📦 | Échantillonner : DDPM à 1 000 pas contre DDIM à 50 pas, qualité et temps | ★★ | 30 | MNIST | 03 | B5.23 | RC | manual |
-| B5.25 | 🔬 | Nombre de pas DDIM, planning linéaire ou cosinus : distance de Fréchet contre temps de calcul 🚀 | ★★★ | 45 | MNIST | 03 | B5.24, 27 | C | manual |
-| B5.26 | 🔮 | Prédire l'effet de w = 0, 1, 3 et 7 sur la netteté et la diversité | ★ | 10 | Fashion-MNIST | 03 | B5.1 | C | manual |
-| B5.27 | 📦 | Diffusion conditionnelle et guidance sans classifieur sur Fashion-MNIST 🚀 | ★★★ | 60 | Fashion-MNIST | 03 | B5.26, B5.23 | C | manual |
-| B5.28 | 🔬 | Mémorisation : plus proches voisins des échantillons, entraînement sur 500 images contre 60 000 🚀 | ★★★ | 40 | MNIST | 03 | B5.23 | C | manual |
+| B5.25 | 🔬 | Nombre de pas DDIM, planning linéaire ou cosinus : distance de Fréchet contre temps de calcul 🚀 | ★★★ | 45 | MNIST | 03 | B5.24, 27 | C | wb.check |
+| B5.26 | 🔮 | Prédire l'effet de w = 0, 1, 3 et 7 sur la netteté et la diversité | ★ | 10 | Fashion-MNIST | 03 | B5.1 | C | wb.check |
+| B5.27 | 📦 | Diffusion conditionnelle et guidance sans classifieur sur Fashion-MNIST 🚀 | ★★★ | 60 | Fashion-MNIST | 03 | B5.26, B5.23, B5.24 | C | manual |
+| B5.28 | 🔬 | Mémorisation : plus proches voisins des échantillons, entraînement sur 500 images contre 60 000 🚀 | ★★★ | 40 | MNIST | 03 | B5.23 | C | wb.check |
 | B5.29 | 📦 | Distance de Fréchet : situer le DDPM face au VAE (ch. 25) et au DCGAN (ch. 27) sur MNIST, avec le code d'évaluation du mini-projet MP6 | ★★★ | 30 | MNIST | 03 | B5.24, 25, 27 | C | manual |
-| B5.30 | 🛠️ | Un échantillonneur autonome : sample.py avec --steps, --seed et --guidance, images et paramètres sauvegardés | ★★ | 25 | MNIST | 03 | B5.24 | C | manual |
-| B5.31 | 🏆 | Défi : la plus petite distance de Fréchet sur Fashion-MNIST en au plus 50 pas d'échantillonnage 🚀 | ★★★★ | 120 | Fashion-MNIST | 03 | B5.27, B5.29 | C | wb.check |
+| B5.30 | 🛠️ | Un échantillonneur autonome : sample.py avec --steps, --seed et --guidance, images et paramètres sauvegardés | ★★ | 25 | MNIST | 03 | B5.24, B5.27 | C | manual |
+| B5.31 | 🏆 | Défi : la plus petite distance de Fréchet sur Fashion-MNIST en au plus 50 pas d'échantillonnage 🚀 | ★★★★ | 120 | Fashion-MNIST | 03 | B5.27, B5.29 | C | manual |
 | B5.E1 | 💼 | Explique le principe d'un modèle de diffusion, de l'entraînement à la génération | ★★ | 10 | — | 02 | — | R | manual |
 | B5.E2 | 💼 | Pourquoi le réseau prédit-il le bruit plutôt que l'image ? | ★★ | 10 | — | 02 | — | R | manual |
 | B5.E3 | 💼 | Comment accélérer l'échantillonnage d'un modèle de diffusion ? | ★★ | 10 | — | 02 | — | R | manual |

@@ -1542,3 +1542,43 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B4.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
 <!-- wb:end B4 -->
+
+<!-- wb:section B5 -->
+## B5 — Modèles de diffusion : un DDPM minimal ⏱️ 21 h
+
+- [ ] B5.Q1–Q11 🧠 Quiz (11 questions, 33 min)
+- [ ] B5.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B5.1 ✏️ Guidance sans classifieur : combiner les deux prédictions pour w = 0, 1 et 3 ★ 10 min
+- [ ] B5.2 ✏️ Planning linéaire : β_t, α_t et ᾱ_t pour T = 4, puis ᾱ_T pour T = 1 000 ★★ 20 min
+- [ ] B5.3 ✏️ Rapport signal sur bruit : à quel pas un chiffre devient-il illisible, planning linéaire ou cosinus ? ★★ 20 min
+- [ ] B5.4 ✏️ Un pas DDPM à la main, en dimension 1, avec un bruit prédit donné ★★ 15 min
+- [ ] B5.5 ✏️ Un pas DDIM à la main et l'image estimée x̂_0 ★★ 15 min
+- [ ] B5.6 ∂ Forme fermée : deux pas de bruit gaussien n'en font qu'un, d'où q(x_t | x_0) ★★★ 35 min
+- [ ] B5.7 ∂ Moyenne et variance du posterior q(x_{t−1} | x_t, x_0) en dimension 1 ★★★ 45 min
+- [ ] B5.8 🧮 Fermi : coût d'échantillonnage, de MNIST sur CPU à une image 1024×1024, et ce que gagnent DDIM et l'espace latent ★★ 20 min
+- [ ] B5.9 🗣️ La diffusion expliquée en cinq lignes ★ 10 min
+- [ ] B5.10 ⚖️ Un générateur peut-il recopier ses images d'entraînement ? Mémorisation, droits et traçabilité ★★ 20 min
+- [ ] B5.11 📄 Ho, Jain et Abbeel (2020) : « Denoising Diffusion Probabilistic Models » ★★★ 45 min
+- [ ] B5.12 🔨 linear_beta_schedule, cosine_beta_schedule et noise_schedule ★★ 20 min
+- [ ] B5.13 🔮 Prédire l'allure d'un chiffre bruité aux pas 100, 300 et 600, planning linéaire puis cosinus ★ 10 min
+- [ ] B5.14 🔨 q_sample : bruiter un batch d'images à des pas différents ★★ 20 min
+- [ ] B5.15 📈 Lire ᾱ_t, le rapport signal sur bruit et la grille de bruitage des deux plannings ★ 15 min
+- [ ] B5.16 🔨 q_posterior_mean_variance et predict_x0_from_eps ★★ 30 min
+- [ ] B5.17 🔨 ddpm_step et ddim_step ★★★ 40 min
+- [ ] B5.18 🔬 Avec le vrai bruit, DDPM et DDIM retrouvent-ils x_0 ? Contrôle sur des données 2D ★★ 25 min
+- [ ] B5.19 📦 Diffusion en 2D : un MLP débruiteur conditionné par le pas de temps, entraîné puis échantillonné ★★ 30 min
+- [ ] B5.20 🔬 Flow matching en 2D : même MLP, cible « vitesse » et intégration d'Euler ★★★ 40 min
+- [ ] B5.21 📦 Un U-Net minuscule en PyTorch : blocs convolutifs, connexions de saut, encodage du pas de temps ★★★ 50 min
+- [ ] B5.22 🐛 Le DDPM qui ne produit que du gris : quatre bugs d'indices, de racines et d'échelle ★★ 25 min
+- [ ] B5.23 📦 Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de loss ★★★ 60 min 🚀
+- [ ] B5.24 📦 Échantillonner : DDPM à 1 000 pas contre DDIM à 50 pas, qualité et temps ★★ 30 min
+- [ ] B5.25 🔬 Nombre de pas DDIM, planning linéaire ou cosinus : distance de Fréchet contre temps de calcul ★★★ 45 min 🚀
+- [ ] B5.26 🔮 Prédire l'effet de w = 0, 1, 3 et 7 sur la netteté et la diversité ★ 10 min
+- [ ] B5.27 📦 Diffusion conditionnelle et guidance sans classifieur sur Fashion-MNIST ★★★ 60 min 🚀
+- [ ] B5.28 🔬 Mémorisation : plus proches voisins des échantillons, entraînement sur 500 images contre 60 000 ★★★ 40 min 🚀
+- [ ] B5.29 📦 Distance de Fréchet : situer le DDPM face au VAE (ch. 25) et au DCGAN (ch. 27) sur MNIST, avec le code d'évaluation du mini-projet MP6 ★★★ 30 min
+- [ ] B5.30 🛠️ Un échantillonneur autonome : sample.py avec --steps, --seed et --guidance, images et paramètres sauvegardés ★★ 25 min
+- [ ] B5.31 🏆 Défi : la plus petite distance de Fréchet sur Fashion-MNIST en au plus 50 pas d'échantillonnage ★★★★ 120 min 🚀
+- [ ] B5.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (26 cartes)
+<!-- wb:end B5 -->
