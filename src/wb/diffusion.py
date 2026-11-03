@@ -137,6 +137,14 @@ def subset_indices(name: str, n: int, split: str = "train") -> np.ndarray:
     return np.random.default_rng(seed).permutation(len(X))[:n]
 
 
+def raw_subset(name: str = "mnist", n: int = 500, split: str = "train"):
+    """The same ``n`` images as ``image_subset``, as they are stored: ``(images, labels)``, uint8 (n, 28, 28) in
+    [0, 255] and int64 (n,) (Ex B5.22 prepares them itself)."""
+    X, y = _raw(name, split)
+    idx = subset_indices(name, n, split)
+    return np.ascontiguousarray(X[idx]), np.asarray(y[idx], dtype=np.int64)
+
+
 def image_subset(name: str = "mnist", n: int = 10_000, split: str = "train") -> ImageSet:
     """``n`` images of MNIST (``"mnist"``) or Fashion-MNIST (``"fashion"``) in [-1, 1], in the order of the fixed
     permutation (the same images on every machine), with their labels and fingerprint."""
@@ -705,3 +713,221 @@ def trim_memory() -> bool:
     from wb.llm import trim_memory as _trim
 
     return _trim()
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Training and sampling of the U-Net (Ex B5.23 to B5.31): the reference recipe, its samplers, the reference model
+# ---------------------------------------------------------------------------------------------------------------------
+# The recipe of Ex B5.23 for each mode (``unet_settings``). Fast mode: a small U-Net (channels 16-32-64, 221 057
+# parameters) trained 4 epochs on the 10 000 images of the frozen subset, in batches of 32 (1 252 steps, about
+# 2 min on two CPU cores); the U-Net of the fiche (740 865 parameters) makes 4 times fewer steps in the same time and
+# only draws scribbles. Full mode (🚀): the U-Net of the fiche, 20 epochs on the 60 000 images, T = 1 000.
+# "ema" is the decay of the reference (the learner chooses hers in Ex B5.23).
+UNET_SETTINGS = {
+    True: {"channels": [16, 32, 64], "t_dim": 128, "epochs": 4, "batch_size": 32, "lr": 2e-3, "ema": 0.99,
+           "seed": 2300},
+    False: {"channels": [32, 64, 128], "t_dim": 128, "epochs": 20, "batch_size": 128, "lr": 1e-3, "ema": 0.9995,
+            "seed": 2300},
+}
+
+
+def unet_settings(fast: bool = True) -> dict:
+    """A copy of the training recipe of the mode (``UNET_SETTINGS``), plus ``T``, the schedule and the number of
+    training images: everything that a checkpoint key needs."""
+    s = dict(UNET_SETTINGS[bool(fast)])
+    s.update({"T": n_steps(fast), "schedule": "linear", "n_train": n_train(fast)})
+    return s
+
+
+def n_updates(n_images: int, settings: dict) -> int:
+    """The number of optimizer steps of ``train_unet``: ``epochs * ceil(n_images / batch_size)``."""
+    return int(settings["epochs"]) * math.ceil(n_images / int(settings["batch_size"]))
+
+
+def ema_update(ema, model, rho: float) -> None:
+    """One update of the exponential moving average of the weights (Ex B5.23): for each parameter,
+    ``ema <- rho * ema + (1 - rho) * model``, in place and without a graph; the buffers are copied."""
+    torch = _torch()
+    with torch.no_grad():
+        for p_ema, p in zip(ema.parameters(), model.parameters()):
+            p_ema.mul_(rho).add_(p.detach(), alpha=1.0 - rho)
+        for b_ema, b in zip(ema.buffers(), model.buffers()):
+            b_ema.copy_(b)
+
+
+def train_unet(model, ema, images, settings: dict, generator, alpha_bars, labels=None, *, time_limit=None,
+               log_every: int = 0) -> dict:
+    """The reference training of Ex B5.23 (and, with ``labels``, of Ex B5.27): ``model`` and its EMA copy ``ema``
+    are trained in place on ``images`` (float32 (N, 1, 28, 28) in [-1, 1]).
+
+    ``torch.optim.AdamW(model.parameters(), lr=settings["lr"])`` with its other defaults. For each of the
+    ``settings["epochs"]`` epochs, the order ``torch.randperm(N, generator=generator)``, cut into batches of
+    ``settings["batch_size"]`` (the last one may be smaller); for each batch, in this order: the step indices
+    ``torch.randint(0, T, (b,), generator=generator)``, the noise ``torch.randn(x0.shape, generator=generator)``
+    and, with labels, the label dropout ``torch.rand(b, generator=generator) < settings["p_uncond"]`` (a dropped label
+    becomes the empty class ``model.n_classes``); then x_t by the closed form in float32, the loss
+    ``F.mse_loss(model(x_t, t[, y]), eps)``, its gradients, one step, and ``ema_update(ema, model,
+    settings["ema"])``. ``time_limit`` (seconds) stops between two steps. Returns ``{"loss": [...], "steps",
+    "seconds"}``; both models end in eval mode."""
+    torch = _torch()
+    F = torch.nn.functional
+    ab = torch.as_tensor(np.asarray(alpha_bars, dtype=np.float64), dtype=torch.float32)
+    opt = torch.optim.AdamW(model.parameters(), lr=settings["lr"])
+    rho, bs = float(settings["ema"]), int(settings["batch_size"])
+    p_uncond = float(settings.get("p_uncond", 0.0))
+    losses, start = [], time.perf_counter()
+    model.train()
+    stop = False
+    for epoch in range(int(settings["epochs"])):
+        perm = torch.randperm(len(images), generator=generator)
+        for i in range(0, len(images), bs):
+            if time_limit is not None and time.perf_counter() - start > time_limit:
+                stop = True
+                break
+            idx = perm[i:i + bs]
+            x0 = images[idx]
+            t = torch.randint(0, len(ab), (len(idx),), generator=generator)
+            eps = torch.randn(x0.shape, generator=generator)
+            a = ab[t].view(-1, *([1] * (x0.ndim - 1)))
+            x_t = a.sqrt() * x0 + (1 - a).sqrt() * eps
+            if labels is not None:
+                drop = torch.rand(len(idx), generator=generator) < p_uncond
+                y = torch.where(drop, torch.full_like(labels[idx], model.n_classes), labels[idx])
+                pred = model(x_t, t, y)
+            else:
+                pred = model(x_t, t)
+            loss = F.mse_loss(pred, eps)
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            ema_update(ema, model, rho)
+            losses.append(float(loss.item()))
+            if log_every and len(losses) % log_every == 0:
+                print(f"  pas {len(losses)} : loss {np.mean(losses[-log_every:]):.4f} "
+                      f"({time.perf_counter() - start:.0f} s)", flush=True)
+        if stop:
+            break
+    model.eval()
+    ema.eval()
+    return {"loss": losses, "steps": len(losses), "seconds": time.perf_counter() - start}
+
+
+def predict_eps(model, x, t: int, y=None, w: float = 0.0):
+    """The noise predicted at the step index ``t`` (an int, the same for the batch), without a graph: ``model(x, t)``
+    for an unconditional model; for a conditional one, the classes ``y`` (None: the empty class) and, when ``w`` is
+    not 0, the classifier-free guidance ``(1 + w) eps(x, y) - w eps(x, ∅)``, both predictions in ONE call on a batch
+    of 2 N images (Ex B5.27)."""
+    torch = _torch()
+    with torch.no_grad():
+        tt = torch.full((len(x),), int(t), dtype=torch.long)
+        if y is None or getattr(model, "n_classes", None) is None:
+            return model(x, tt) if y is None else model(x, tt, y)
+        if w == 0:
+            return model(x, tt, y)
+        both = model(torch.cat([x, x]), torch.cat([tt, tt]), torch.cat([y, torch.full_like(y, model.n_classes)]))
+        cond, uncond = both.chunk(2)
+        return (1 + w) * cond - w * uncond
+
+
+def sample_ddpm(model, x_T, alpha_bars, rng, y=None, w: float = 0.0, clip_x0: float | None = 1.0):
+    """Ancestral DDPM sampling of the reference (Ex B5.24), in float64 NumPy around the network (float32): from
+    ``x_T`` (a tensor (N, 1, 28, 28)) at index T - 1 down to the image, ``ddpm_step`` of the reference library at each
+    step (posterior variance, x̂₀ clipped to ``[-clip_x0, clip_x0]``, ``z`` drawn by ``rng.standard_normal``, no noise
+    at index 0). Returns a float32 tensor."""
+    torch = _torch()
+    ab = np.asarray(alpha_bars, dtype=np.float64)
+    ab_prev = np.concatenate([[1.0], ab[:-1]])
+    betas = 1.0 - ab / ab_prev
+    rng = np.random.default_rng(rng)
+    x = x_T.detach().double().numpy()
+    for t in range(len(ab) - 1, -1, -1):
+        eps = predict_eps(model, torch.as_tensor(x, dtype=torch.float32), t, y, w).double().numpy()
+        if clip_x0 is None:
+            mean = (x - betas[t] / math.sqrt(1 - ab[t]) * eps) / math.sqrt(1 - betas[t])
+        else:
+            x0 = np.clip((x - math.sqrt(1 - ab[t]) * eps) / math.sqrt(ab[t]), -clip_x0, clip_x0)
+            mean = (betas[t] * math.sqrt(ab_prev[t]) * x0 + (1 - ab_prev[t]) * math.sqrt(1 - betas[t]) * x) / (1 - ab[t])
+        if t > 0:
+            mean = mean + math.sqrt(betas[t] * (1 - ab_prev[t]) / (1 - ab[t])) * rng.standard_normal(x.shape)
+        x = mean
+    return torch.as_tensor(x, dtype=torch.float32)
+
+
+def sample_ddim(model, x_T, alpha_bars, steps: int, y=None, w: float = 0.0, clip_x0: float | None = 1.0):
+    """Deterministic DDIM (eta = 0) of the reference (Ex B5.24) on ``ddim_timesteps(T, steps)``, then to index -1:
+    at each step, x̂₀ from the predicted noise, clipped to ``[-clip_x0, clip_x0]``, the noise recomputed from the
+    clipped x̂₀, ``eps = (x - sqrt(ab) x̂₀) / sqrt(1 - ab)``, then the DDIM step with it. Returns a float32 tensor."""
+    torch = _torch()
+    ab = np.asarray(alpha_bars, dtype=np.float64)
+    seq = [int(t) for t in ddim_timesteps(len(ab), steps)] + [-1]
+    x = x_T.detach().double().numpy()
+    for t, t_prev in zip(seq[:-1], seq[1:]):
+        eps = predict_eps(model, torch.as_tensor(x, dtype=torch.float32), t, y, w).double().numpy()
+        x0 = (x - math.sqrt(1 - ab[t]) * eps) / math.sqrt(ab[t])
+        if clip_x0 is not None:
+            x0 = np.clip(x0, -clip_x0, clip_x0)
+            eps = (x - math.sqrt(ab[t]) * x0) / math.sqrt(1 - ab[t])
+        a_prev = ab[t_prev] if t_prev >= 0 else 1.0
+        x = math.sqrt(a_prev) * x0 + math.sqrt(1 - a_prev) * eps
+    return torch.as_tensor(x, dtype=torch.float32)
+
+
+def ideal_denoiser(images, coef_x0, coef_eps):
+    """The exact noise predictor of a FINITE dataset (Ex B5.22): for the forward process ``x_t = coef_x0[t] * x0 +
+    coef_eps[t] * eps`` (two arrays (T,)) and the training ``images`` (N, 1, 28, 28), the function ``eps_fn(x, t)``
+    that returns ``(x - coef_x0[t] * E[x0 | x_t = x]) / coef_eps[t]``, where the posterior mean is the average of the
+    images weighted by the softmax of ``-||x - coef_x0[t] x0_i||² / (2 coef_eps[t]²)``. A network trained without end
+    on these images would learn it; sampled with it, a correct DDPM gives back training images."""
+    torch = _torch()
+    flat = torch.as_tensor(images).reshape(len(images), -1).double()
+    sq = (flat ** 2).sum(dim=1)
+    c1 = np.asarray(coef_x0, dtype=np.float64).reshape(-1)
+    c2 = np.asarray(coef_eps, dtype=np.float64).reshape(-1)
+
+    def eps_fn(x, t):
+        xf = torch.as_tensor(x).reshape(len(x), -1).double()
+        a, s = float(c1[int(t)]), float(c2[int(t)])
+        d2 = (xf ** 2).sum(dim=1, keepdim=True) - 2 * a * xf @ flat.T + a * a * sq[None]
+        weights = torch.softmax(-d2 / (2 * s * s), dim=1)
+        out = (xf - a * (weights @ flat)) / s
+        return out.reshape(tuple(x.shape)).to(torch.as_tensor(x).dtype)
+
+    return eps_fn
+
+
+# The provenance of the reference model: trained once with the recipe of Ex B5.23, read back afterwards.
+REFERENCE_SEED = 2300
+
+
+def reference_key(fast: bool = True) -> dict:
+    """The checkpoint key of the reference model of the mode (``reference_model``)."""
+    s = unet_settings(fast)
+    config = {"n_steps": s["T"], "channels": list(s["channels"]), "t_dim": s["t_dim"], "n_classes": None}
+    return checkpoint_key(config, s, fast=fast, source="reference", data=image_subset("mnist", s["n_train"]).describe())
+
+
+def reference_model(fast: bool = True, folder: str | Path | None = None, verbose: bool = True):
+    """``(model, checkpoint)``: the EMA copy of the reference U-Net of the mode, trained on MNIST with the recipe of
+    Ex B5.23 (``unet_settings``, seed ``REFERENCE_SEED``) the first time (about 2 min on two CPU cores in fast mode,
+    🚀 in full mode), then read from its checkpoint (source ``"reference"``). The model is a ``TinyUNet`` in eval
+    mode."""
+    torch = _torch()
+    TinyUNet = _unet_classes()[1]
+    key = reference_key(fast)
+    ckpt = load_checkpoint(key, folder)
+    if ckpt is None:
+        s = unet_settings(fast)
+        data = image_subset("mnist", s["n_train"])
+        if verbose:
+            print(f"ℹ️ entraînement du U-Net de référence ({n_updates(len(data), s)} pas, une seule fois)", flush=True)
+        torch.manual_seed(s["seed"])
+        model = TinyUNet(s["T"], channels=s["channels"], t_dim=s["t_dim"])
+        ema = TinyUNet(s["T"], channels=s["channels"], t_dim=s["t_dim"])
+        ema.load_state_dict(model.state_dict())
+        history = train_unet(model, ema, data.images, s, torch.Generator().manual_seed(s["seed"] + 1),
+                             alpha_bars(schedule_betas("linear", s["T"])))
+        save_checkpoint(key, model, ema=ema, history=history, folder=folder)
+        ckpt = load_checkpoint(key, folder)
+    elif verbose:
+        print(f"ℹ️ U-Net de référence relu ({ckpt['path'].name})")
+    return build_from_checkpoint(TinyUNet, ckpt, which="ema"), ckpt

@@ -594,6 +594,9 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
 # ---------------------------------------------------------------------------
 import chB5_code  # noqa: E402,F401  (the cells; history_chB5.py reuses them)
 from chB5_parts import PART_C, PARTS  # noqa: E402
+from chB5_parts2 import EXERCISES_C2  # noqa: E402
+
+PART_C.exercises += EXERCISES_C2
 
 
 def _record_21() -> str:
