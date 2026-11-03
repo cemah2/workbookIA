@@ -13,9 +13,9 @@ the context cell of the solutions notebook, then checked against the reference l
 mylearn.attention, mylearn.gen_metrics, mylearn.vae) and, if it is installed, against diffusers (DDPMScheduler and
 DDIMScheduler built from the toy schedule of ✏️ B5.2, their noise set to zero): part 0 downloads nothing.
 The notebook itself has three phases: A, the mathematics of diffusion.py and their checks (B5.12 to B5.18); B, the 2-D
-toys (B5.19, B5.20); C, the U-Net on MNIST and Fashion-MNIST (B5.21 to B5.31). Session 72 writes it in two halves:
-chB5_parts.py and chB5_code.py hold B5.12 to B5.21 (history_chB5.py precomputes their calibrations); the second half
-(B5.22 to B5.31, NEXT_SESSION until then) appends its exercises to PART_C.
+toys (B5.19, B5.20); C, the U-Net on MNIST and Fashion-MNIST (B5.21 to B5.31). Session 72 wrote it in two halves:
+chB5_parts.py and chB5_code.py hold B5.12 to B5.21, chB5_parts2.py and chB5_code2.py B5.22 to B5.31 (appended to
+PART_C); history_chB5.py precomputes the calibrations and the long protocols of both halves.
 """
 
 from __future__ import annotations
@@ -628,12 +628,6 @@ for _part in PARTS:
     for _ex in _part.exercises:
         check_unique_keys(_ex.record or "x = 1", _ex.id)
 
-NEXT_SESSION = [
-    ("C", "B5.22 à B5.31", "la suite du U-Net sur MNIST et Fashion-MNIST : quatre bugs, entraînement avec EMA, DDPM "
-                           "contre DDIM, nombre de pas, guidance, mémorisation, distance de Fréchet, script autonome "
-                           "et défi"),
-]
-DONE_IDS = {ex.id for part in PARTS for ex in part.exercises}
 
 
 def header_cells(kind: str) -> list:
@@ -643,9 +637,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if "B5.31" not in DONE_IDS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine étape de la génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B5 · Modèles de diffusion : un DDPM minimal — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -690,10 +681,6 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if "B5.31" in DONE_IDS else
-             "\n\n*Les exercices B5.22 à B5.31 (bugs, entraînement du U-Net sur MNIST, échantillonnage, guidance, "
-             "mémorisation, distance de Fréchet, script autonome et défi) seront ajoutés à la prochaine étape de la "
-             "génération ; relance alors `python tools/start_chapter.py B5` pour obtenir le notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer à la main un planning de bruit, ses $\\bar\\alpha_t$ et son rapport signal sur "
@@ -704,8 +691,7 @@ def footer_cells(kind: str) -> list:
                "4. Sais-tu estimer le coût d'un échantillonnage, et ce que gagnent DDIM, la distillation et l'espace "
                "latent ?\n\n"
                "**Pour aller plus loin** : l'article de Ho, Jain et Abbeel et le billet de L. Weng, cités dans la "
-               "fiche. La suite : le bonus B6, l'explicabilité et l'équité."
-               + later)]
+               "fiche. La suite : le bonus B6, l'explicabilité et l'équité.")]
 
 
 def build(kind: str) -> list:

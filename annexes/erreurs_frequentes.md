@@ -359,6 +359,7 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `DDPMScheduler.step` de diffusers ne donne pas le même résultat que ton `ddpm_step` | `clip_sample=True` par défaut : diffusers écrête $\hat{\mathbf{x}}_0$ à $\pm 1$ | `DDPMScheduler(..., clip_sample=False)` pour comparer, ou `clip_x0=1.0` de ton côté (fiche B5, §205.9) |
 | `DDIMScheduler` en 50 pas commence à l'indice 980, pas 999 | l'espacement `"leading"`, le défaut de diffusers 0.40 | `timestep_spacing="trailing"`, ou une sous-séquence construite et affichée (fiche B5, §205.6) |
 | `guidance_scale=5` ne donne pas les images de $w = 5$ | diffusers écrit `guidance_scale` $= 1 + w$ | dire la convention ; `guidance_scale=5` correspond à $w = 4$ (fiche B5, §205.7) |
+| DDIM en quelques pas rend des pixels à ±10 ou ±100 au lieu de $[-1, 1]$ | $\hat{\mathbf{x}}_0$ divise l'erreur du réseau par $\sqrt{\bar\alpha_t}$, minuscule aux grands indices | écrêter $\hat{\mathbf{x}}_0$ à $[-1, 1]$ et recalculer le bruit à partir de lui, à chaque pas (📦 B5.24) |
 
 ## Erreurs de raisonnement (ML)
 

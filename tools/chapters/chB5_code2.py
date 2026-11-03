@@ -361,19 +361,17 @@ else:
         ax.legend()
         plt.show()
         print(f"loss moyenne des 100 premiers pas {fr(losses_23[:100].mean(), 3)}, des 100 derniers {fr(losses_23[-100:].mean(), 3)}")
-        nets_23 = {"copie EMA": ema_23, "poids bruts": model_23}
-        for name_23, net in nets_23.items():
+        for name_23, net in (("copie EMA", ema_23), ("poids bruts", model_23)):
             show_images(wbd.sample_ddim(net, X_FIXED, AB, 50), ncol=16, size=0.75,
                         suptitle=f"{name_23} : 16 échantillons (DDIM, 50 pas) du même bruit X_FIXED")
         x256_23 = torch.randn((256, 1, 28, 28), generator=torch.Generator().manual_seed(2324))
-        FD_23 = {name: frechet_mnist(wbd.sample_ddim(net, x256_23, AB, 50)) for name, net in nets_23.items()}
-        print("distance de Fréchet de 256 échantillons (DDIM, 50 pas) aux 2 000 chiffres de test : "
-              + " ; ".join(f"{name} {fr(v, 1)}" for name, v in FD_23.items())
-              + f" (deux lots de 256 vrais chiffres : environ {fr(FLOOR_23, 0)})")
-        verdict("B5.23", FD_23["copie EMA"] < GOAL_23,
-                f"la copie EMA génère des chiffres plausibles : distance {fr(FD_23['copie EMA'], 1)}, sous {GOAL_23:.0f} "
-                f"(la référence : de {fr(REF_23[0], 0)} à {fr(REF_23[1], 0)} selon la graine).",
-                f"distance {fr(FD_23['copie EMA'], 1)} : attendu moins de {GOAL_23:.0f} (référence de {fr(REF_23[0], 0)} à "
+        FD_23 = frechet_mnist(wbd.sample_ddim(ema_23, x256_23, AB, 50))
+        print(f"distance de Fréchet de 256 échantillons de la copie EMA (DDIM, 50 pas) aux 2 000 chiffres de test : "
+              f"{fr(FD_23, 1)} (deux lots de 256 vrais chiffres : environ {fr(FLOOR_23, 0)})")
+        verdict("B5.23", FD_23 < GOAL_23,
+                f"la copie EMA génère des formes de chiffres : distance {fr(FD_23, 1)}, sous {GOAL_23:.0f} (la référence : de "
+                f"{fr(REF_23[0], 0)} à {fr(REF_23[1], 0)} selon la graine).",
+                f"distance {fr(FD_23, 1)} : attendu moins de {GOAL_23:.0f} (référence de {fr(REF_23[0], 0)} à "
                 f"{fr(REF_23[1], 0)}) ; regarde les échantillons, puis relance les contrôles de la cellule de vérification.")'''
 
 # --- Part C, second half: the trained model ---------------------------------------------------------------------------
@@ -502,29 +500,29 @@ with checked("B5.24"):
             "tes échantillonneurs ont modifié x_T, le bruit de départ.")
     samplers_ok_24 = bool(ok_24) and torch.equal(x4_24, copy4_24)'''
 
-EXPERIMENT_24 = r'''# The same 64 starting noises, sampled by DDPM (all the T steps) and by DDIM (50 steps): quality and time
+EXPERIMENT_24 = r'''# The same 32 starting noises, sampled by DDPM (all the T steps) and by DDIM (50 steps): images and time
 if not samplers_ok_24:
     print("⏳ Ex B5.24 : la comparaison attend tes deux échantillonneurs (cellule précédente sans ❌).")
 else:
     with checked("B5.24"):
-        x64_24 = torch.randn((64, 1, 28, 28), generator=torch.Generator().manual_seed(240))
+        x32_24 = torch.randn((32, 1, 28, 28), generator=torch.Generator().manual_seed(240))
         RESULTS_24 = {}
-        for name_24, run_24 in ((f"DDPM, {T_STEPS} pas", lambda: sample_ddpm_24(MODEL, x64_24, SCHED, np.random.default_rng(241))),
-                                ("DDIM, 50 pas", lambda: sample_ddim_24(MODEL, x64_24, AB, 50))):
+        for name_24, run_24 in ((f"DDPM, {T_STEPS} pas", lambda: sample_ddpm_24(MODEL, x32_24, SCHED, np.random.default_rng(241))),
+                                ("DDIM, 50 pas", lambda: sample_ddim_24(MODEL, x32_24, AB, 50))):
             start_24 = time.perf_counter()
             out_24 = run_24()
             seconds_24 = time.perf_counter() - start_24
             with torch.no_grad():
                 proba_24 = torch.softmax(CLF(out_24.clamp(-1, 1)), dim=1).max(dim=1).values
-            RESULTS_24[name_24] = {"images": out_24, "seconds": seconds_24, "fd": frechet_mnist(out_24),
+            RESULTS_24[name_24] = {"images": out_24, "seconds": seconds_24, "confidence": float(proba_24.mean()),
                                    "sure": float((proba_24 > 0.9).float().mean())}
-            show_images(out_24[:16], ncol=16, size=0.75, suptitle=f"{name_24} : les 16 premiers des 64 échantillons")
-        print(f"{'échantillonneur':<16} {'secondes':>9} {'s / image':>10} {'distance (64 images)':>21} {'reconnus à 90 %':>16}")
+            show_images(out_24[:16], ncol=16, size=0.75, suptitle=f"{name_24} : les 16 premiers des 32 échantillons")
+        print(f"{'échantillonneur':<16} {'secondes':>9} {'s / image':>10} {'confiance moyenne':>18} {'reconnus à 90 %':>16}")
         for name_24, r in RESULTS_24.items():
-            print(f"{name_24:<16} {fr(r['seconds'], 1):>9} {fr(r['seconds'] / 64, 3):>10} {fr(r['fd'], 1):>21} "
+            print(f"{name_24:<16} {fr(r['seconds'], 1):>9} {fr(r['seconds'] / 32, 3):>10} {fr(r['confidence'], 3):>18} "
                   f"{fr(100 * r['sure'], 0) + ' %':>16}")
-        print("(des mesures, pas des réponses : les durées dépendent de la machine, et une distance sur 64 images ne se "
-              "compare qu'à une autre distance sur 64 images)")'''
+        print("(des mesures, pas des réponses : les durées dépendent de la machine ; la confiance est la probabilité que "
+              "CLF donne à sa classe préférée, en moyenne sur les 32 images)")'''
 
 # --- 🔬 B5.25 ---------------------------------------------------------------------------------------------------------
 GIVEN_25 = r'''STEPS_25 = (5, 10, 20, 50, 100)                       # numbers of DDIM steps of the curve
@@ -1038,7 +1036,7 @@ with checked("B5.29"):
             real_29 = wbd.features(CLF, REAL_MNIST.images)
             want_29 = {"fd": mylearn.gen_metrics.frechet_distance_from_features(real_29, wbd.features(CLF, 2 * probe_29 - 1)),
                        "nn": float(np.median(torch.cdist(probe_29.reshape(100, -1).double(),
-                                                         TRAIN01_29[:2000].reshape(2000, -1).double()).min(dim=1).values.numpy()))}
+                                                         TRAIN01_29[:2000].reshape(len(TRAIN01_29[:2000]), -1).double()).min(dim=1).values.numpy()))}
             proba_29 = torch.softmax(CLF(2 * probe_29 - 1), dim=1).detach()
             shares_29 = np.bincount(proba_29.argmax(dim=1).numpy(), minlength=10) / 100
             nz_29 = shares_29[shares_29 > 0]

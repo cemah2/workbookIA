@@ -168,7 +168,7 @@ def n_steps(fast: bool = True) -> int:
 def schedule_betas(kind: str = "linear", T: int = 400) -> np.ndarray:
     """The betas (float64, shape (T,)) of the chapter, computed here without your library.
 
-    ``"linear"``: from ``1e-4 * 1000 / T`` to ``0.02 * 1000 / T`` (the bounds of Ho et al. scaled to T, as in the code
+    ``"linear"`` (T > 20): from ``1e-4 * 1000 / T`` to ``0.02 * 1000 / T`` (the bounds of Ho et al. scaled to T, as in the code
     of Nichol & Dhariwal: the same sum of betas, so the same final alpha_bar, about 4e-5, whatever T; with the
     default bounds and T = 400, alpha_bar_T would be 0.0175, 13 % of the image left at the last step).
     ``"cosine"``: the cosine schedule of Nichol & Dhariwal (s = 0.008, betas clipped at 0.999).
@@ -176,6 +176,8 @@ def schedule_betas(kind: str = "linear", T: int = 400) -> np.ndarray:
     if T < 2:
         raise ValueError(f"T must be at least 2, got {T}")
     if kind == "linear":
+        if T <= 20:
+            raise ValueError(f"the scaled linear schedule needs T > 20 (its last beta, 20 / T, must be below 1), got {T}")
         scale = 1000.0 / T
         return np.linspace(1e-4 * scale, 0.02 * scale, T, dtype=np.float64)
     if kind == "cosine":

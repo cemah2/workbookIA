@@ -403,7 +403,7 @@ def guidance26(ns) -> dict:
 
 
 DEFI_SEEDS = {"fast": (0, 1, 2, 3), "full": (0, 1)}
-DEFI_LIMIT = {"fast": 60.0, "full": 600.0}
+DEFI_LIMIT = {"fast": 45.0, "full": 600.0}
 DEFI_W = (1.0, 2.0, 3.0)
 
 
@@ -470,6 +470,8 @@ def defi31(ns, modes=("fast", "full")) -> dict:
                 images = wbd.sample_ddim(ema, x_T, ab, 25, y=y, w=w).clamp(-1, 1)
                 row["fd"][str(w)] = float(frechet_distance_from_features(real, wbd.features(clf, images)))
                 row["copies"][str(w)] = float(np.mean(wbd.copy_ratio(images, train.images) < 1 / 3))
+            images = wbd.sample_ddim(ema, x_T, ab, 50, y=y, w=0.0).clamp(-1, 1)      # 50 steps without guidance
+            row["fd_unguided_50"] = float(frechet_distance_from_features(real, wbd.features(clf, images)))
             rows.append(row)
             print(f"  defi31 {mode} seed {k}: {steps} steps; fd {row['fd']}; copies {row['copies']}", flush=True)
         out[mode] = rows

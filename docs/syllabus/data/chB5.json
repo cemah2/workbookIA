@@ -1069,7 +1069,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.26",
@@ -1089,7 +1089,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.27",
@@ -1102,7 +1102,8 @@
    "file": "03",
    "prereq": [
     "B5.26",
-    "B5.23"
+    "B5.23",
+    "B5.24"
    ],
    "covers": [
     "205.7"
@@ -1130,7 +1131,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B5.29",
@@ -1164,7 +1165,8 @@
    "thread": "MNIST",
    "file": "03",
    "prereq": [
-    "B5.24"
+    "B5.24",
+    "B5.27"
    ],
    "covers": [
     "205.6"
@@ -1194,7 +1196,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "B5.E1",

@@ -290,6 +290,8 @@
 | `ema = copy.deepcopy(model).requires_grad_(False)` ; `with torch.no_grad(): for pe, p in zip(ema.parameters(), model.parameters()): pe.lerp_(p, 1 - rho)` | la copie EMA des poids, mise à jour après chaque pas d'optimisation ($\theta_{\text{EMA}} \leftarrow \rho\,\theta_{\text{EMA}} + (1 - \rho)\,\theta$) ; c'est elle qui génère |
 | `eps = model(torch.cat([x, x]), torch.cat([t, t]), torch.cat([c, null]))` ; `e_c, e_u = eps.chunk(2)` ; `e = e_c + w * (e_c - e_u)` | la guidance sans classifieur en un seul batch (deux prédictions par pas) |
 | `DDPMScheduler(beta_schedule="linear", clip_sample=False)` ; `DDIMScheduler(..., timestep_spacing="trailing")` ; `sched.set_timesteps(50)` | les échantillonneurs de diffusers 0.40 : écrêtage de $\hat{\mathbf{x}}_0$ activé par défaut, espacement `"leading"` par défaut |
+| `h = nn.modules.module.register_module_forward_pre_hook(f)` … `h.remove()` | un crochet appelé avant **chaque** passe de **tout** module : compter les passes d'un échantillonneur, quel que soit le réseau (défi B5.31) |
+| `payload = torch.load(path, map_location="cpu", weights_only=True)` | relire un checkpoint (dictionnaire de tenseurs et de types simples) sans exécuter de code, sur CPU (🛠️ B5.30) |
 
 ## Dataset et DataLoader
 

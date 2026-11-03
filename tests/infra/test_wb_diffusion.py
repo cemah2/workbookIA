@@ -264,7 +264,7 @@ def test_train_unet_follows_its_recipe_and_stops():
     """Two steps written by hand (same draws, same order) against train_unet; max_steps and the label dropout."""
     F = torch.nn.functional
     images = torch.rand(6, 1, 28, 28) * 2 - 1
-    ab = D.alpha_bars(D.schedule_betas("linear", 12))
+    ab = D.alpha_bars(np.linspace(1e-3, 0.2, 12))
     settings = {"epochs": 1, "batch_size": 4, "lr": 1e-3, "ema": 0.5}
     a, ea, b, eb = (_small_unet() for _ in range(4))
     hist = D.train_unet(a, ea, images, settings, torch.Generator().manual_seed(3), ab)
@@ -315,7 +315,7 @@ def test_samplers_follow_the_reference_library():
     clipped, the noise recomputed, then ddim_step."""
     ref = _reference("diffusion")
     net = _small_unet()
-    betas = D.schedule_betas("linear", 12)
+    betas = np.linspace(1e-3, 0.2, 12)
     ab = D.alpha_bars(betas)
     sched = ref.noise_schedule(betas)
     x_T = torch.randn(3, 1, 28, 28, generator=torch.Generator().manual_seed(1))
@@ -383,6 +383,12 @@ def test_precomputed_protocol_of_the_guidance():
     assert all(len(v) == table["n_seeds"] for row in table["by_w"].values() for v in row.values())
     with pytest.raises(KeyError):
         D.precomputed("nothing")
+
+
+def test_linear_schedule_refuses_a_too_short_chain():
+    with pytest.raises(ValueError, match="T > 20"):
+        D.schedule_betas("linear", 20)
+    assert D.schedule_betas("linear", 21)[-1] < 1
 
 
 def test_unet_settings_and_reference_model(tmp_path, monkeypatch):
