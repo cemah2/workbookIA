@@ -541,7 +541,7 @@ TODO_25 = r'''def fd_curve_25(model, alpha_bars, steps_list, x_T):
 
 enough_25 = ...     # a) full protocol, linear schedule: the smallest number of steps of STEPS_25 from which the distance
                     #    is at most «RATIO_TEXT_25» times its distance at 100 steps, for every seed
-better10_25 = ...   # b) full protocol, at 10 steps: which schedule has the smaller distance for every seed, "L" or "C"?'''
+better5_25 = ...    # b) full protocol, at 5 steps: which schedule has the smaller distance for every seed, "L" or "C"?'''
 
 SOLUTION_25 = r'''def fd_curve_25(model, alpha_bars, steps_list, x_T):
     """For each number of steps n of steps_list: (frechet_mnist of sample_ddim_24(model, x_T, alpha_bars, n), the
@@ -575,7 +575,7 @@ with checked("B5.25"):
 with wb.attempt("B5.25"):
     wb.check("B5.25a", enough_25)
 with wb.attempt("B5.25"):
-    wb.check("B5.25b", better10_25)'''
+    wb.check("B5.25b", better5_25)'''
 
 EXPERIMENT_25 = r'''# Your linear model: distance against time for each number of DDIM steps, over the bands of the full protocol
 CURVE_25 = None
@@ -862,7 +862,8 @@ def copy_ratio_28(samples, train):
 
 copies500_28 = ...   # a) full protocol, 500 images: the share of samples with r < 1/3, for every seed:
                      #    "A" less than 10 %, "B" from 10 to 50 %, "C" more than 50 %
-copies60k_28 = ...   # b) full protocol, 60 000 images: the same choice'''
+closer500_28 = ...   # b) full protocol: is the median r of the models trained on 500 images SMALLER than that of the
+                     #    models trained on 60 000 images, seed by seed? True or False'''
 
 SOLUTION_28 = r'''def nearest_28(samples, train):
     """For each sample (N, 1, 28, 28), its nearest image of train (M, 1, 28, 28) in pixels: (distances, indices), two
@@ -903,7 +904,7 @@ with checked("B5.28"):
 with wb.attempt("B5.28"):
     wb.check("B5.28a", copies500_28)
 with wb.attempt("B5.28"):
-    wb.check("B5.28b", copies60k_28)'''
+    wb.check("B5.28b", closer500_28)'''
 
 EXPERIMENT_28 = r'''# Your model (B5.23) and the perfect denoiser of 500 images (B5.22): how close are their samples to their training images?
 if not ratio_ok_28:

@@ -109,15 +109,17 @@ def _answers_25() -> dict:
     """a) the smallest number of steps from which every linear seed is within RATIO_25 of its distance at 100 steps;
     b) at 10 steps, the schedule with the smaller distance for every seed (None when the seeds disagree)."""
     if not U:
-        return {"enough": 20, "better10": "C", "margins": {}}
+        return {"enough": 20, "better5": "C"}
     enough = []
     for row in U["L"]:
         ok = [n for n, v in zip(STEPS_25, row) if v <= RATIO_25 * row[-1]]
         enough.append(min(n for n in ok if all(v <= RATIO_25 * row[-1] for v in row[STEPS_25.index(n):])))
-    i10 = STEPS_25.index(10)
-    lin, cos = [r[i10] for r in U["L"]], [r[i10] for r in U["C"]]
-    better = "C" if max(cos) < min(lin) else "L" if max(lin) < min(cos) else None
-    return {"enough": max(enough), "enough_per_seed": enough, "better10": better, "lin10": lin, "cos10": cos}
+    i5 = STEPS_25.index(5)
+    lin, cos = [r[i5] for r in U["L"]], [r[i5] for r in U["C"]]
+    per_seed = {"C" if c < l else "L" for l, c in zip(lin, cos)}
+    if len(per_seed) != 1:
+        raise ValueError(f"B5.25 b): the seeds disagree at 5 steps: {lin} {cos}")
+    return {"enough": max(enough), "enough_per_seed": enough, "better5": per_seed.pop(), "lin5": lin, "cos5": cos}
 
 
 A25 = _answers_25()
@@ -141,22 +143,22 @@ EX_25 = Ex("B5.25", "🔬", 3, 45, "Nombre de pas DDIM, planning linéaire ou co
 
 Puis, d'après le tableau `FULL_25`, **pour toutes ses graines** :
 - a) `enough_25` : le plus petit nombre de pas de `STEPS_25` à partir duquel la distance du planning linéaire reste au plus """ + str(RATIO_25).replace(".", ",") + r""" fois sa distance à 100 pas ;
-- b) `better10_25` : à 10 pas, quel planning a la plus petite distance, `"L"` ou `"C"` ?
+- b) `better5_25` : à 5 pas, quel planning a la plus petite distance, graine par graine, `"L"` ou `"C"` ?
 
 La cellule de vérification compare `fd_curve_25` à DDIM du contrat sur 80 images et 2 et 4 pas, puis vérifie tes deux réponses. La suivante trace la courbe distance contre secondes de **ton** modèle (`N_25` images, environ 20 s en mode rapide), et, à côté, les bandes du protocole complet pour les deux plannings. 🚀 En mode complet, elle entraîne aussi un modèle au planning cosinus avec ta `train_23` (aussi long que B5.23) et trace sa courbe.
 
 Dans tes notes : à partir de combien de pas la courbe de ton modèle se met-elle à plat, et combien de secondes coûte chaque point ? Pourquoi la distance remonte-t-elle parfois un peu quand on ajoute des pas ? Pourquoi les distances de ton modèle ne se comparent-elles pas directement à celles du protocole complet (nombre d'images) ? Le planning cosinus rend-il le petit nombre de pas moins coûteux en qualité ? Relie la réponse à la répartition des pas « utiles » de ✏️ B5.3 et 📈 B5.15.""",
            given=fill(C.GIVEN_25, {"N_SEEDS_25": str(len(U.get("L", [])) or 3), "FULL_25": _full_25()}),
            todo=fill(C.TODO_25, {"RATIO_TEXT_25": str(RATIO_25)}), check=C.CHECK_25,
-           solution=C.SOLUTION_25 + "\n\n\n" + f'enough_25, better10_25 = {A25["enough"]}, "{A25["better10"]}"' + "\n\n\n"
+           solution=C.SOLUTION_25 + "\n\n\n" + f'enough_25, better5_25 = {A25["enough"]}, "{A25["better5"]}"' + "\n\n\n"
            + C.CHECK_25,
            record=(f'wb.record("B5.25a", {A25["enough"]}, mistakes={{'
                    + ", ".join(f'"relis la ligne L du protocole complet : à {n} pas, toutes les graines restent-elles au plus à '
                                f'{str(RATIO_25).replace(".", ",")} fois leur distance à 100 pas, et ensuite aussi ?": {n}'
                                for n in STEPS_25 if n != A25["enough"])
                    + f'}}, fractional="on demande un nombre de pas de STEPS_25", choices={list(STEPS_25)})\n'
-                   f'wb.record("B5.25b", "{A25["better10"]}", mistakes={{"relis la colonne des 10 pas du protocole complet, '
-                   f'graine par graine": "{"L" if A25["better10"] == "C" else "C"}"}})'),
+                   f'wb.record("B5.25b", "{A25["better5"]}", mistakes={{"relis la colonne des 5 pas du protocole complet, '
+                   f'graine par graine": "{"L" if A25["better5"] == "C" else "C"}"}})'),
            after=[("code", C.EXPERIMENT_25)])
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -254,8 +256,25 @@ def _category(shares) -> str | None:
     return cats.pop() if len(cats) == 1 else None
 
 
-A28 = {"500": _category(M28["copies"]["500"]) if M28 else "C",
-       "60000": _category(M28["copies"]["60000"]) if M28 else "A"}
+def _answers_28() -> dict:
+    """a) the category of the share of copies for 500 images; b) the median r of 500 images below that of 60 000 images,
+    seed by seed (with a margin of 3 %)."""
+    if not M28:
+        return {"500": "A", "closer": True}
+    cat = _category(M28["copies"]["500"])
+    r500, r60k = M28["median_r"]["500"], M28["median_r"]["60000"]
+    if all(a < 0.97 * b for a, b in zip(r500, r60k)):
+        closer = True
+    elif all(a > 1.03 * b for a, b in zip(r500, r60k)):
+        closer = False
+    else:
+        raise ValueError(f"B5.28 b): the median ratios are too close: {r500} {r60k}")
+    if cat is None:
+        raise ValueError(f"B5.28 a): the shares of copies straddle a bound: {M28['copies']['500']}")
+    return {"500": cat, "closer": closer}
+
+
+A28 = _answers_28()
 
 
 def _full_28() -> str:
@@ -281,25 +300,23 @@ où $b$ est l'image d'entraînement la plus proche de $a$ (autre que $a$). Un é
 - `nearest_28(samples, train)` : pour chaque image de `samples` `(N, 1, 28, 28)`, son plus proche voisin dans `train` `(M, 1, 28, 28)` en pixels : le couple (distances, indices), deux tableaux NumPy `(N,)` ; la distance euclidienne des images aplaties ; à égalité, le premier indice.
 - `copy_ratio_28(samples, train)` : le $r$ de chaque échantillon, un tableau float64 `(N,)`.
 
-Puis, d'après `FULL_28`, pour **toutes** les graines, la part des échantillons de $r < 1/3$ : `"A"` moins de 10 %, `"B"` de 10 à 50 %, `"C"` plus de 50 % :
-- a) `copies500_28` : pour les modèles entraînés sur 500 images ;
-- b) `copies60k_28` : pour ceux entraînés sur 60 000 images.
+Puis, d'après `FULL_28` :
+- a) `copies500_28` : pour les modèles entraînés sur 500 images, la part des échantillons de $r < 1/3$, pour **toutes** les graines : `"A"` moins de 10 %, `"B"` de 10 à 50 %, `"C"` plus de 50 % ;
+- b) `closer500_28` : le $r$ médian des modèles entraînés sur 500 images est-il **plus petit** que celui des modèles entraînés sur 60 000 images, graine par graine ? `True` ou `False`.
 
 La cellule de vérification essaie tes deux fonctions sur quatre points du plan (où tu peux refaire les calculs à la main) et sur 5 chiffres à peine bruités, puis vérifie tes réponses. La suivante génère 128 échantillons (DDIM, 50 pas) de ton U-Net de B5.23 et du débruiteur parfait des 500 premières images de `DATA_23`, montre pour chacun les 8 échantillons de plus petit $r$ et leur voisin, et trace les deux distributions de $r$ (environ 15 s en mode rapide). 🚀 En mode complet, elle entraîne aussi ton U-Net sur ces 500 images avec le même nombre de pas que B5.23, et le mesure.
 
 Dans tes notes : que vaut $r$ pour le débruiteur parfait, et pourquoi ? Ton U-Net copie-t-il ? Que change la taille du dataset, à nombre de pas égal (combien de fois chaque image est-elle vue) ? Pourquoi la distance de Fréchet ne verrait-elle rien (🧠 Q10) ? Pourquoi comparer en pixels, et que changerait une comparaison dans l'espace des features de `CLF` ? Que t'apprennent Somepalli et coll., et Kadkhodaie et coll. (2024), qui étudient la même question (cherche leurs articles) ?""",
            given=fill(C.GIVEN_28, {"N_SEEDS_28": "deux", "FULL_28": _full_28()}),
            todo=C.TODO_28, check=C.CHECK_28,
-           solution=C.SOLUTION_28 + "\n\n\n" + f'copies500_28, copies60k_28 = "{A28["500"]}", "{A28["60000"]}"' + "\n\n\n"
+           solution=C.SOLUTION_28 + "\n\n\n" + f'copies500_28, closer500_28 = "{A28["500"]}", {A28["closer"]}' + "\n\n\n"
            + C.CHECK_28,
            record=(f'wb.record("B5.28a", "{A28["500"]}", mistakes={{'
                    + ", ".join(f'"relis la ligne des 500 images de FULL_28 : la part de copies y est-elle {_CAT_MSG[c]} pour '
                                f'toutes les graines ?": "{c}"' for c in "ABC" if c != A28["500"])
                    + '})\n'
-                   f'wb.record("B5.28b", "{A28["60000"]}", mistakes={{'
-                   + ", ".join(f'"relis la ligne des 60 000 images de FULL_28 : la part de copies y est-elle {_CAT_MSG[c]} pour '
-                               f'toutes les graines ?": "{c}"' for c in "ABC" if c != A28["60000"])
-                   + '})'),
+                   f'wb.record("B5.28b", {A28["closer"]}, mistakes={{"compare les r médians des lignes 500 et 60 000 de '
+                   f'FULL_28, graine par graine": {not A28["closer"]}}})'),
            after=[("code", C.EXPERIMENT_28)])
 
 EX_29 = Ex("B5.29", "📦", 3, 30, "Distance de Fréchet : situer le DDPM face au VAE (ch. 25) et au DCGAN (ch. 27) sur MNIST, avec le "
