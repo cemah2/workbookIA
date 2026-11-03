@@ -379,7 +379,7 @@ TOOLS_C2 = r'''# The model of the rest of part C: your U-Net trained by B5.23, r
 REFERENCE_FALLBACK = False   # True: if your model of B5.23 is missing, use the reference U-Net of wb.diffusion (trained
                              # once with the recipe of B5.23, about 2 min on CPU in fast mode, then reloaded)
 MODEL = CKPT = None
-if filled(globals().get("RHO_23")):
+if isinstance(globals().get("RHO_23"), (int, float)) and 0 < RHO_23 < 1:
     CKPT = wbd.load_checkpoint(key_23(RHO_23, globals().get("CKPT_SOURCE_23", "learner")))
 if CKPT is not None:
     try:
