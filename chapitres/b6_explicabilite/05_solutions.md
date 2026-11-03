@@ -654,7 +654,7 @@ Les paires `(y, p)` se tirent ensemble, sinon on casse le lien entre un label et
 | sans `sex` | 0,8747 | 0,175 [0,156 ; 0,194] | 0,105 [0,058 ; 0,177] | 0,347 | 0,401 | 0,57 / 0,68 | 0,017 / 0,082 |
 | sans `sex`, `relationship`, `marital-status` | 0,8487 | 0,113 [0,092 ; 0,133] | 0,081 [0,019 ; 0,158] | 0,313 | 0,454 | 0,45 / 0,53 | 0,034 / 0,055 |
 | repondération (sexe × label) | 0,8731 | 0,106 [0,085 ; 0,124] | 0,118 [0,061 ; 0,178] | 0,318 | 0,359 | 0,73 / 0,61 | 0,035 / 0,060 |
-| seuils par sexe (même TPR) | 0,8757 | 0,135 [0,115 ; 0,155] | 0,068 [0,038 ; 0,130] | 0,347 | 0,401 | 0,72 / 0,65 | 0,030 / 0,075 |
+| seuils par sexe (même TPR visé sur `CAL_27`) | 0,8757 | 0,135 [0,115 ; 0,155] | 0,068 [0,038 ; 0,130] | 0,347 | 0,401 | 0,72 / 0,65 | 0,030 / 0,075 |
 
 Aucune stratégie ne divise ΔEO par sexe de façon nette : leurs intervalles se recouvrent tous.
 **Démarche** :

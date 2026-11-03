@@ -58736,9 +58736,9 @@
       "hash": "ab3a543772b50f18bff5b5104ce673015c285d5ef045a07f03e90c29d2f78cec",
       "kind": "str",
       "mistakes": {
-        "0c2c51224243cf58ef4acdd8bd7e68c48018b56a69423ef6f6bfb17315c025e9": "« A » : lis la variation de la dépendance partielle de MedInc, sous la figure",
-        "318cc36a21cbee8cafffa54f4a9009c7df69af549e44b205828f28436234db17": "« D » : lis la variation de la dépendance partielle de MedInc, sous la figure",
-        "a917b24f0149200f12d1c83d6b325ba62605bb3dcc52d63e491d040cd014321f": "« B » : lis la variation de la dépendance partielle de MedInc, sous la figure"
+        "0c2c51224243cf58ef4acdd8bd7e68c48018b56a69423ef6f6bfb17315c025e9": "lis la variation de la dépendance partielle de MedInc, sous la figure",
+        "318cc36a21cbee8cafffa54f4a9009c7df69af549e44b205828f28436234db17": "lis la variation de la dépendance partielle de MedInc, sous la figure",
+        "a917b24f0149200f12d1c83d6b325ba62605bb3dcc52d63e491d040cd014321f": "lis la variation de la dépendance partielle de MedInc, sous la figure"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58747,8 +58747,8 @@
       "hash": "7533313b2b36f1c6e173ffb73f70b5fee70c8f41c1164bb46fe85a9e89458057",
       "kind": "str",
       "mistakes": {
-        "0662f26bf67e3ce860a06359f71b629b6ad2de4a1d26c72897ff9825d06795d5": "« A » : suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)",
-        "59220863c64962fb226a46ea245810af0809a42a9d05465508c6617237a0af83": "« B » : lis la variation de la dépendance partielle de la latitude, sous la figure"
+        "0662f26bf67e3ce860a06359f71b629b6ad2de4a1d26c72897ff9825d06795d5": "suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)",
+        "59220863c64962fb226a46ea245810af0809a42a9d05465508c6617237a0af83": "lis la variation de la dépendance partielle de la latitude, sous la figure"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58757,9 +58757,9 @@
       "hash": "7934037163c6e4993db586e01d7776f15c2fa8e314d09870a7018eb0dfe2b681",
       "kind": "str",
       "mistakes": {
-        "408964a60ee082a49fb227f9415f089e62b10b8659497fc24bf5ce8ddeac039c": "« D » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
-        "63bcc535636e0a4fd7ad73cbf657373a6755965357d16ccfb105220bf1dcecea": "« C » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
-        "a03f8e56ce48030153e903d51d01ee5d803299326113ba532f5d13b27dc6cfa6": "« B » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure"
+        "408964a60ee082a49fb227f9415f089e62b10b8659497fc24bf5ce8ddeac039c": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+        "63bcc535636e0a4fd7ad73cbf657373a6755965357d16ccfb105220bf1dcecea": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+        "a03f8e56ce48030153e903d51d01ee5d803299326113ba532f5d13b27dc6cfa6": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58796,6 +58796,7 @@
       "magnitude": -2,
       "mistakes": {
         "25893acf8a616ccf2e191c3d02b07e69fb0acb49962d7008396cf05c8efb3de4": "vérifie le signe",
+        "2d731fc0b81b47f07336c841d708c0335d1eb06fcf0098e46ff1c31299ffab89": "c'est le mode « chemins de l'arbre » (feature_perturbation=\"tree_path_dependent\"), même avec un fond : relis les deux modes de TreeExplainer (§206.4)",
         "6434c5a318eaf364c07112e17a2f578adbc67b033e832aa4e539cb2059c14cd6": "c'est la valeur sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)",
         "cca94e09933bd572cf407cab077ec79fc36fb2ddbb27f5bddc2fed46b7de7ebf": "c'est un fond de 100 lignes : le contrat en prend 50",
         "dcdf74200041069de4cf679a0cca66596a2fa27820b6b4992f129089f892065c": "c'est le gradient boosting par défaut : le contrat veut max_depth=3"
@@ -58813,7 +58814,8 @@
         "00db89544dc24e3cbb50c19d1dc73f5da67859116e5331fcd44cf2e0662b0025": "c'est le gradient boosting par défaut : le contrat veut max_depth=3",
         "3556f08061d10ccc0f50469429504f3635dd9bdba53eaff8421dca8959bebacf": "c'est la moyenne des carrés : on demande la moyenne des valeurs absolues",
         "633353b43684a75c4c53c21b9cf680f95317448ce90400302fe9ddbe078ff014": "c'est la valeur sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)",
-        "86c7fe60027588120f46e6fa5bbdfb278aa143c51e2529c419ed92b391d017ac": "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues"
+        "86c7fe60027588120f46e6fa5bbdfb278aa143c51e2529c419ed92b391d017ac": "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues",
+        "c3dab1b86b0387242134d1cf46af792adc63d8bf14afcaf33c208d6e71380e8d": "c'est le mode « chemins de l'arbre » (feature_perturbation=\"tree_path_dependent\"), même avec un fond : relis les deux modes de TreeExplainer (§206.4)"
       },
       "sign": 1,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58822,7 +58824,7 @@
       "hash": "d20266b3c7c3b35866da5c84a97e9d8a9c9f464344c7d32da8198f9ba1ac2e74",
       "kind": "bool",
       "mistakes": {
-        "dfef1e5e0b2b8995f9e69014b8ec4eb85542098def86eca57c99749e173010f7": "TreeExplainer et ta shapley_values diffèrent de plus de 1e-6 : ta fonction passe-t-elle ses tests (Ex B6.14), et garde-t-elle toutes les lignes du fond ?"
+        "dfef1e5e0b2b8995f9e69014b8ec4eb85542098def86eca57c99749e173010f7": "TreeExplainer interventionnel et ta shapley_values diffèrent de plus de 1e-6 : ta fonction passe-t-elle ses tests (Ex B6.14), et garde-t-elle toutes les lignes du fond ?"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -58830,11 +58832,11 @@
       "hash": "18670a9391de7a8a972ccdde0e3be75cd11aa9dedfcc626ae9db9801fd688589",
       "kind": "str",
       "mistakes": {
-        "137dabb98f3ad8cfaffd5088e4365afbe6f65aeeb3e7ccc7535d3e63a29b2e6e": "« D » : suis la colonne du TPR, tranche par tranche",
-        "4ffd58338fe3299c411e096d3ab0242fd01b8518c1e44633240598c1dcebe7c2": "« B » : suis la colonne du TPR, tranche par tranche",
-        "ba7e5f913984db36263d6f56ac7e1da9027619678c3b987a6300fdcba145c176": "« E » : suis la colonne du TPR, tranche par tranche",
-        "bb4a4bc2bcbae5b13dc47b9893f3249a03048d22db76d05075236d85332e5dd1": "« F » : suis la colonne du TPR, tranche par tranche",
-        "c2b9d28edaf85841185aec39d907fc2b8b743b99e2954ff9245098de2a92b9c9": "« C » : suis la colonne du TPR, tranche par tranche"
+        "137dabb98f3ad8cfaffd5088e4365afbe6f65aeeb3e7ccc7535d3e63a29b2e6e": "suis la colonne du TPR, tranche par tranche",
+        "4ffd58338fe3299c411e096d3ab0242fd01b8518c1e44633240598c1dcebe7c2": "suis la colonne du TPR, tranche par tranche",
+        "ba7e5f913984db36263d6f56ac7e1da9027619678c3b987a6300fdcba145c176": "suis la colonne du TPR, tranche par tranche",
+        "bb4a4bc2bcbae5b13dc47b9893f3249a03048d22db76d05075236d85332e5dd1": "suis la colonne du TPR, tranche par tranche",
+        "c2b9d28edaf85841185aec39d907fc2b8b743b99e2954ff9245098de2a92b9c9": "suis la colonne du TPR, tranche par tranche"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -58853,11 +58855,11 @@
       "hash": "f1abfe66130c48b241b34824e9f5785e22c2b1872dd8e26618ebc01f066951cb",
       "kind": "str",
       "mistakes": {
-        "25de577cdac6b172920eec5207ec0faec9dec3617b9f68a9d4bce9ae8fbb0681": "« A » : relis la question : on cherche parmi les cinq autres tranches que celle de a)",
-        "518545c0d2c2e104939e4fb8192add1519284162901f6e00470be4c883dce2cb": "« E » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
-        "60387b94401d48b107fd848461d8df0fae596ccd2aa6e569b6233130d1dc795b": "« C » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
-        "a99696558d6cebddf269d58c524153c4df2bc72548ace0336b3bdb10ea508b95": "« D » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
-        "fdb81f8b074360b0d1931292fff30983d2fd5025fe33433d7bc673f3c4c8dc26": "« B » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches"
+        "25de577cdac6b172920eec5207ec0faec9dec3617b9f68a9d4bce9ae8fbb0681": "relis la question : on cherche parmi les cinq autres tranches que celle de a)",
+        "518545c0d2c2e104939e4fb8192add1519284162901f6e00470be4c883dce2cb": "compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "60387b94401d48b107fd848461d8df0fae596ccd2aa6e569b6233130d1dc795b": "compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "a99696558d6cebddf269d58c524153c4df2bc72548ace0336b3bdb10ea508b95": "compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "fdb81f8b074360b0d1931292fff30983d2fd5025fe33433d7bc673f3c4c8dc26": "compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -58881,9 +58883,9 @@
       "hash": "2fd62d4a52c6711544aa5a6792f53668a96d2863f2cce6959af31253e4cb5772",
       "kind": "str",
       "mistakes": {
-        "578e5c2da5c57dbb53038c42444189232cf8f84299f8438a7e144917ca8f6f55": "« A » : des intervalles qui se chevauchent prouvent-ils l'égalité ? Regarde l'intervalle de l'écart",
-        "d6c84d7f49f21bdfa0a8e2ad90b8aa93a4c8a06ff802116a4605ec9299bc4b4f": "« B » : un écart de sélection suit aussi les taux de base : le tableau dit-il qu'il faut les égaliser ?",
-        "fb45f32ad8cf700a81bb1e80de07046ae76d9b5729124a2163ef2c61b110bf63": "« D » : lis l'intervalle des écarts par sexe : 0 y est-il ?"
+        "578e5c2da5c57dbb53038c42444189232cf8f84299f8438a7e144917ca8f6f55": "des intervalles qui se chevauchent prouvent-ils l'égalité ? Regarde l'intervalle de l'écart",
+        "d6c84d7f49f21bdfa0a8e2ad90b8aa93a4c8a06ff802116a4605ec9299bc4b4f": "un écart de sélection suit aussi les taux de base : le tableau dit-il qu'il faut les égaliser ?",
+        "fb45f32ad8cf700a81bb1e80de07046ae76d9b5729124a2163ef2c61b110bf63": "lis l'intervalle des écarts par sexe : 0 y est-il ?"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -58891,9 +58893,9 @@
       "hash": "8dc2ad2462729a1b150c9aa2ba08f2126782f10e4a1cc26958f64da5e5627fa5",
       "kind": "str",
       "mistakes": {
-        "3eb9fffd179d18f687b884878b8647a3465f8f9927f2244efbde100ef84f4128": "« B » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features",
-        "642f3a001946ce4d88ca706df221e5e75808bef61c23d06416f6644f8d615231": "« C » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features",
-        "a3504dbaae226ddbfa72adc591911926fa6de1c8619ebf3f04946c998872b42b": "« A » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features"
+        "3eb9fffd179d18f687b884878b8647a3465f8f9927f2244efbde100ef84f4128": "lis la ROC-AUC du modèle qui prédit le sexe à partir des 11 autres features",
+        "642f3a001946ce4d88ca706df221e5e75808bef61c23d06416f6644f8d615231": "lis la ROC-AUC du modèle qui prédit le sexe à partir des 11 autres features",
+        "a3504dbaae226ddbfa72adc591911926fa6de1c8619ebf3f04946c998872b42b": "lis la ROC-AUC du modèle qui prédit le sexe à partir des 11 autres features"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58902,9 +58904,9 @@
       "hash": "9502f117799c5f608f3bb4640556d2280e1bdc53c70a7180e10a6bffb7b25b5b",
       "kind": "str",
       "mistakes": {
-        "3b550ff4da998514a0dc4dcc91401635caa053264b9e2918df9131e8a82f33af": "« D » : lis la ROC-AUC sans relationship ni marital-status",
-        "d3d6be0c198ca8f21b4d0d349826c0f81fd852f2dfe546bc3747f8a92863951b": "« A » : lis la ROC-AUC sans relationship ni marital-status",
-        "e702b201230cee003c18ee02d1b7343d605657ac9346a035c956c9998dc7f40a": "« B » : lis la ROC-AUC sans relationship ni marital-status"
+        "3b550ff4da998514a0dc4dcc91401635caa053264b9e2918df9131e8a82f33af": "lis la ROC-AUC sans relationship ni marital-status",
+        "d3d6be0c198ca8f21b4d0d349826c0f81fd852f2dfe546bc3747f8a92863951b": "lis la ROC-AUC sans relationship ni marital-status",
+        "e702b201230cee003c18ee02d1b7343d605657ac9346a035c956c9998dc7f40a": "lis la ROC-AUC sans relationship ni marital-status"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58913,8 +58915,8 @@
       "hash": "f2d892de28bad98237da028619b7403fb7e51e5ac33edc82945ec561cdf6e8b0",
       "kind": "str",
       "mistakes": {
-        "0155661cdda282584326154e033eeeaadebd691d2f4456b7711ef5afa3d4793e": "« A » : lis le rapport des deux ΔEO, sous le tableau",
-        "16b758492be25e3368ad11dd77d9014f138f2560ece36238856e4391cf48850c": "« C » : lis le rapport des deux ΔEO, sous le tableau"
+        "0155661cdda282584326154e033eeeaadebd691d2f4456b7711ef5afa3d4793e": "lis le rapport des deux ΔEO, sous le tableau",
+        "16b758492be25e3368ad11dd77d9014f138f2560ece36238856e4391cf48850c": "lis le rapport des deux ΔEO, sous le tableau"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -58923,9 +58925,9 @@
       "hash": "c8efccc67a4fc58fa36302ca21a85a7a38038fc1ca954ca5ec01843c7a220ddc",
       "kind": "str",
       "mistakes": {
-        "1e0424143f52eba6ab85f8cd9dc2789b9a9a34b3ef3f92daef631d7da23706ee": "« D » : lis la colonne F / M du modèle sans sex",
-        "ad57aaca9aeab210ad95387d68b281ff78665fb61139dbdb447e17a8d4573f43": "« B » : lis la colonne F / M du modèle sans sex",
-        "cd44d429e8dae0611d1f6de0eb92c15428eb416d2157a13461f843411ffe78cb": "« C » : lis la colonne F / M du modèle sans sex"
+        "1e0424143f52eba6ab85f8cd9dc2789b9a9a34b3ef3f92daef631d7da23706ee": "lis la colonne F / M du modèle sans sex",
+        "ad57aaca9aeab210ad95387d68b281ff78665fb61139dbdb447e17a8d4573f43": "lis la colonne F / M du modèle sans sex",
+        "cd44d429e8dae0611d1f6de0eb92c15428eb416d2157a13461f843411ffe78cb": "lis la colonne F / M du modèle sans sex"
       },
       "prediction": true,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"

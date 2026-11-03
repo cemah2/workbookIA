@@ -355,8 +355,22 @@ with checked("B6.22"):
                 print(f"❌ Ex B6.22 : sanity_22 doit rendre un tableau (3, 4) (une ligne par partie, une colonne par image), "
                       f"reçu la forme {arr_22.shape}.")
                 raise StopCheck
+            pearson_22 = np.array([[np.corrcoef(*(np.abs(np.stack([a.ravel(), b.ravel()])) if absolute_22
+                                                  else np.stack([a.ravel(), b.ravel()])))[0, 1]
+                                    for a, b in zip(ref_maps_22, probe_22(randomize_22(
+                                        CNN, names_22[:k + 1] if mode_22 == "cascade" else [names_22[k]], seed=5)))]
+                                   for k in range(len(names_22))])
+            if np.allclose(arr_22, pearson_22, atol=1e-9) and not np.allclose(arr_22, want_22, atol=1e-9):
+                print("❌ Ex B6.22 : sanity_22 rend la corrélation de Pearson des valeurs : le contrat veut une corrélation "
+                      "de rangs (Spearman).")
+                raise StopCheck
             if not same("B6.22", f"sanity_22, mode {mode_22}, absolute={absolute_22}", arr_22, want_22, rtol=1e-9, atol=1e-9):
                 raise StopCheck
+    flat_22 = sanity_22(CNN, lambda m: np.zeros((2, 4, 4)), ["fc"], mode="independent", seed=0)
+    verdict("B6.22", np.shape(flat_22) == (1, 2) and bool(np.isnan(np.asarray(flat_22, dtype=float)).all()),
+            "une carte constante donne nan.",
+            "une carte constante (toute nulle, comme un Grad-CAM éteint par la ReLU) doit donner nan, pas un nombre : la "
+            "corrélation de rangs n'y est pas définie, et un 0 se confondrait avec « aucune ressemblance ».")
     ok_22["sanity"] = True'''
 
 EXPERIMENT_22 = r'''# The sanity checks of Adebayo et al. on the small CNN (16 images, the true class): four maps, cascading and independent
@@ -709,7 +723,8 @@ with checked("B6.24"):
             raise StopCheck
         want_24 = {k: {c: r[c] for c in ("n", "positives", "selection_rate", "tpr", "fpr")}
                    for k, r in sk_audit(YA_VAL, PRED_VAL, groups_24)[0].items()}
-        bad_24 = [f"{c}[{k}] = {table_24.loc[k, c]} au lieu de {fr(float(v), 4)}" for k, w in want_24.items()
+        shown_24 = lambda c, v: str(int(v)) if c in ("n", "positives") else fr(float(v), 4)
+        bad_24 = [f"{c}[{k}] = {shown_24(c, table_24.loc[k, c])} au lieu de {shown_24(c, v)}" for k, w in want_24.items()
                   for c, v in w.items() if not np.isclose(float(table_24.loc[k, c]), float(v))]
         if bad_24:
             print(f"❌ Ex B6.24 : audit_24 ({name_24}) : " + " ; ".join(bad_24[:3]) + ".")
@@ -729,8 +744,8 @@ with checked("B6.24"):
         verdict("B6.24", not outside_24 and not odd_24,
                 f"audit_24 ({name_24}) : taux de scikit-learn, intervalles qui les contiennent et de la largeur attendue.",
                 f"audit_24 ({name_24}) : les taux sont justes, mais les intervalles de {(outside_24 + odd_24)[:3]} "
-                + ("ne contiennent pas leur taux" if outside_24 else "n'ont pas la largeur attendue (approximation normale "
-                   "± 30 %) : tires-tu dans les lignes du groupe, et gardes-tu les centiles 2,5 et 97,5 ?") + ".")
+                + ("ne contiennent pas leur taux." if outside_24 else "n'ont pas la largeur attendue (approximation normale "
+                   "± 30 %) : tires-tu dans les lignes du groupe, et gardes-tu les centiles 2,5 et 97,5 ?"))
         if not outside_24 and not odd_24:
             ok_24[name_24] = table_24
     again_24 = audit_24(YA_VAL.copy(), PRED_VAL.copy(), SEX_VAL.copy(), n_boot=N_BOOT_24, seed=0)
@@ -768,6 +783,23 @@ with checked("B6.24"):
                 f"gap_ci_24 (« {kind_24} ») : {fr(gk_24[0], 3)}, dans son intervalle.",
                 f"gap_ci_24 (« {kind_24} ») rend {[fr(v, 3) for v in gk_24]} ; attendu l'écart de ta fonction de B6.23 "
                 f"({fr(float(want_k_24), 3)}, celui de scikit-learn), dans son intervalle.")
+    for kind_24 in ("tpr", "fpr"):                 # six age bands: the largest minus the smallest, over every group
+        want_age_24 = sk_audit(YA_VAL, PRED_VAL, AGE_VAL)[1][kind_24]
+        got_age_24 = float(gap_ci_24(YA_VAL.copy(), PRED_VAL.copy(), AGE_VAL.copy(), kind_24, n_boot=20, seed=0)[0])
+        verdict("B6.24", math.isclose(got_age_24, want_age_24),
+                f"gap_ci_24 (« {kind_24} », six tranches d'âge) : {fr(got_age_24, 3)}, le plus grand moins le plus petit.",
+                f"gap_ci_24 (« {kind_24} ») par tranche d'âge rend {fr(got_age_24, 3)} au lieu de {fr(want_age_24, 3)} : "
+                "l'écart est le plus grand moins le plus petit taux, sur tous les groupes.")
+    small_g_24 = np.array(["a"] * 3 + ["b"] * 200)         # a group of 3 people: in every draw if each group is drawn
+    small_y_24, small_p_24 = np.array([1, 0, 1] + [1, 0] * 100), np.array([1, 0, 0] + [1, 1] * 100)
+    try:
+        small_24 = [float(v) for v in gap_ci_24(small_y_24, small_p_24, small_g_24, "dp", n_boot=200, seed=0)]
+        small_ok_24 = bool(np.isfinite(small_24).all())
+    except ValueError:
+        small_ok_24 = False
+    verdict("B6.24", small_ok_24, "gap_ci_24 tire chaque groupe dans ses lignes : un groupe de 3 personnes est dans chaque tirage.",
+            "gap_ci_24 échoue ou rend nan avec un groupe de 3 personnes et un de 200 : un tirage dans toutes les lignes perd "
+            "parfois le petit groupe ; le contrat tire avec remise dans chaque groupe, autant de lignes qu'il en a.")
     twin_gap_24 = [float(v) for v in gap_ci_24(TWIN_Y_24.copy(), TWIN_P_24.copy(), TWIN_G_24.copy(), "tpr", n_boot=50, seed=0)]
     verdict("B6.24", twin_gap_24[2] > 0, "deux groupes identiques reçoivent des tirages différents (un seul générateur).",
             "gap_ci_24 : sur deux groupes identiques, tous tes tirages donnent un écart nul : chaque groupe repart-il de "
@@ -1019,7 +1051,7 @@ if len(ok_27) == 3:
         "sans sex": (nosex_27.predict_proba(XA_VAL)[:, 1] >= 0.5).astype(int),
         "sans sex, relationship, marital-status": (noproxy_27.predict_proba(XA_VAL)[:, 1] >= 0.5).astype(int),
         "repondération (sexe × label)": (reweighed_27.predict_proba(XA_VAL)[:, 1] >= 0.5).astype(int),
-        "seuils par sexe (même TPR)": np.asarray(decide_27(P_VAL, SEX_VAL, thr_27)).astype(int),
+        "seuils par sexe (même TPR visé sur CAL_27)": np.asarray(decide_27(P_VAL, SEX_VAL, thr_27)).astype(int),
     }
     print("seuils par sexe, choisis sur CAL_27 pour un TPR de", fr(target_27, 3), ":",
           ", ".join(f"{k} {fr(v, 3)}" for k, v in thr_27.items()))
@@ -1111,7 +1143,7 @@ def check_card_28(card):
         text = {t: found[w] for t, w in zip(REQUIRED_28, wanted)}
         if "hors" not in _plain_28(text["Usage prévu"]):
             problems.append("« Usage prévu » doit aussi dire les usages hors périmètre (le mot « hors »).")
-        if not re.search(r"0[.,]5\b", text["Métriques"]):
+        if not re.search(r"(?<![\d.,])0[.,]50*(?![\d])", text["Métriques"]):
             problems.append("« Métriques » doit donner le seuil de décision (0,5).")
         acc = FACTS_28["accuracy (validation)"]
         if not re.search(rf"0[.,]{str(acc)[2:]}", card):
@@ -1354,9 +1386,12 @@ def _make_evaluate_29():
                 setattr(wbx, name, f)
             for name, f in saved_data.items():
                 setattr(wbdata, name, f)
-        if whole.shape != (len(X_te),) or not np.isin(whole, (0, 1)).all():
-            return None, (f"decide(X) doit rendre un tableau de 0 et de 1 de forme ({len(X_te)},) ; reçu la forme "
-                          f"{whole.shape}.")
+        if whole.shape != (len(X_te),):
+            return None, f"decide(X) doit rendre un tableau de forme ({len(X_te)},) ; reçu la forme {whole.shape}."
+        if not np.isin(whole, (0, 1)).all():
+            odd = whole[~np.isin(whole, (0, 1))][0]
+            return None, (f"decide(X) doit rendre des décisions 0 ou 1 ; reçu aussi {odd} : des scores ? Une décision "
+                          "applique un seuil.")
         if not (np.array_equal(alone.astype(int), whole[:200].astype(int))
                 and np.array_equal(first_rows.astype(int), whole[:200].astype(int))):
             return None, ("decide ne décide pas chaque personne seule : sur les 200 premières, décider une ligne à la fois "
@@ -1419,11 +1454,11 @@ def _make_evaluate_29():
         verdict("B6.29", ok,
                 f"défi réussi : ΔEO {fr(results['test du MP3']['eo'], 3)} et {fr(results['contrôle']['eo'], 3)} (objectif "
                 f"sous {fr(goal, 2)}) ; accuracy : {change(results['test du MP3']['loss'])} et "
-                f"{change(results['contrôle']['loss'])} (perte permise : moins de {fr(100 * max_loss, 0)} points) ; référence : "
+                f"{change(results['contrôle']['loss'])} (baisse permise : moins de {fr(100 * max_loss, 0)} points) ; référence : "
                 f"ΔEO de {fr(reference['eo'][0], 3)} à {fr(reference['eo'][1], 3)}.",
                 "pas encore : " + " ; ".join(
                     f"{n} : ΔEO {fr(r['eo'], 3)} (sous {fr(goal, 2)}), accuracy {change(r['loss'])} "
-                    f"(perte permise : moins de {fr(100 * max_loss, 0)} points)" for n, r in results.items()) + ".")
+                    f"(baisse permise : moins de {fr(100 * max_loss, 0)} points)" for n, r in results.items()) + ".")
         return {"results": results, "shuffled": shuffled, "ok": ok}
 
     return evaluate_29

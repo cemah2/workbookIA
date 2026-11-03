@@ -142,7 +142,8 @@ with checked("B6.12"):
             print("❌ Ex B6.12 : ton StandardScaler ne centre pas ou ne réduit pas (with_mean="
                   f"{scaler_12.with_mean}, with_std={scaler_12.with_std}) : le contrat veut ses réglages par défaut, "
                   "pour des coefficients qui mesurent l'effet d'un écart-type.")
-        elif scaler_12 is not None and getattr(scaler_12, "mean_", None) is not None:
+            raise StopCheck
+        if scaler_12 is not None and getattr(scaler_12, "mean_", None) is not None:
             verdict("B6.12", np.allclose(scaler_12.mean_, X_TRAIN.mean().to_numpy()),
                     "le StandardScaler a appris les moyennes de X_TRAIN.",
                     "le StandardScaler n'a pas appris les moyennes de X_TRAIN : sur quelles lignes est-il ajusté ?")
@@ -364,7 +365,7 @@ def tree_shap_15(model, background, rows):
     return explainer(rows)'''
 
 CHECK_15 = r'''SV_15 = MODEL_15 = None
-BASE_OK_15 = False
+BASE_OK_15 = TREE_OK_15 = False
 with checked("B6.15"):
     if shap is None:
         print("⏳ Ex B6.15 : cet exercice a besoin de shap (wb.ensure('shap')).")
@@ -405,6 +406,8 @@ with checked("B6.15"):
             f"efficacité : somme des valeurs SHAP + valeur de base s'écarte de la prédiction de {gap_eff_15:.2g} : "
             "l'explication porte-t-elle sur ce modèle et sur ces lignes ?")
     BASE_OK_15 = bool(abs(float(np.ravel(sv_15.base_values)[0]) - float(model_15.predict(BG_15).mean())) < 1e-6)
+    TREE_OK_15 = BASE_OK_15 and bool(np.allclose(sv_15.values[:5], shap.TreeExplainer(
+        model_15, data=BG_15, feature_perturbation="interventional")(ROWS_15.iloc[:5]).values, rtol=1e-6, atol=1e-8))
     verdict("B6.15", BASE_OK_15, "la valeur de base est la prédiction moyenne de ton modèle sur les 50 lignes de BG_15.",
             "la valeur de base n'est pas la prédiction moyenne de ton modèle sur les 50 lignes de BG_15 : tree_shap_15 "
             "reçoit-il tout le fond, en mode interventionnel ?")
@@ -415,9 +418,9 @@ with checked("B6.15"):
 with checked("B6.15"):
     if SV_15 is None:
         raise StopCheck
-    if not BASE_OK_15:
-        print("⏳ Ex B6.15d : corrige d'abord tree_shap_15 (sa valeur de base, ci-dessus) : la comparaison à ta "
-              "shapley_values se fait avec le même fond de 50 lignes.")
+    if not TREE_OK_15:
+        print("⏳ Ex B6.15d : corrige d'abord tree_shap_15 (ci-dessus) : la comparaison à ta shapley_values suppose les "
+              "valeurs de TreeSHAP interventionnel, avec le même fond de 50 lignes.")
         raise StopCheck
     if not shapley_ready("B6.15d"):
         raise StopCheck
@@ -488,8 +491,8 @@ wb.record("B6.15c", mean_r_15, decimals=4, mistakes=distinct_15(mean_r_15, {
     "c'est le gradient boosting par défaut : le contrat veut max_depth=3": float(np.mean(np.abs(default_15.values[:, MEDINC]))),
     PATH_BG_15: float(np.mean(np.abs(path_bg_15.values[:, MEDINC])))}))
 wb.record("B6.15d", True, mistakes={
-    "TreeExplainer et ta shapley_values diffèrent de plus de 1e-6 alors que tree_shap_15 a la bonne valeur de base : ta "
-    "fonction passe-t-elle ses tests (Ex B6.14), et garde-t-elle toutes les lignes du fond ?": False})'''
+    "TreeExplainer interventionnel et ta shapley_values diffèrent de plus de 1e-6 : ta fonction passe-t-elle ses tests "
+    "(Ex B6.14), et garde-t-elle toutes les lignes du fond ?": False})'''
 
 # --- 🔬 B6.16 ---------------------------------------------------------------------------------------------------------
 GIVEN_16 = r'''# the district to explain: the validation district closest to the 75th percentile of MedInc
@@ -676,6 +679,7 @@ with checked("B6.17"):
     if returned("B6.17", "fit_forest_17", rf_17):
         same("B6.17", "probabilités de fit_forest_17 sur le test", rf_17.predict_proba(XP_TEST), RF_17.predict_proba(XP_TEST))
 
+LOGIT_OK_17 = False
 with checked("B6.17"):
     f_p_17, f_l_17 = class_output_17(LR_17, 2, "proba"), class_output_17(LR_17, 2, "logit")
     if not (callable(f_p_17) and callable(f_l_17)):
@@ -690,7 +694,8 @@ with checked("B6.17"):
               "(decision_function) d'une quantité qui change d'un manchot à l'autre, le log de la somme des "
               "exponentielles des trois logits.")
     else:
-        same("B6.17", "class_output_17(LR, 2, 'logit') sur le test", out_l_17, LR_17.decision_function(XP_TEST)[:, 2])
+        LOGIT_OK_17 = same("B6.17", "class_output_17(LR, 2, 'logit') sur le test", out_l_17,
+                           LR_17.decision_function(XP_TEST)[:, 2])
 
 RESULTS_17 = {}
 ORDERS_17 = [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]   # the other orders of the three classes
@@ -714,14 +719,20 @@ with checked("B6.17"):
         raise StopCheck
     scaler_17, logreg_17 = LR_17[0], LR_17[-1]
     linear_17 = logreg_17.coef_ / scaler_17.scale_ * (GENTOO_17 - XP_TRAIN.mean(axis=0))   # w_ki (x_i - mean_i), ∂ B6.2
-    if shifted_17(phi_l_17, linear_17):
+    if not LOGIT_OK_17:
+        print("⏳ Ex B6.17 : les valeurs de Shapley des logits attendent class_output_17(..., 'logit') (ci-dessus).")
+    elif shifted_17(phi_l_17, linear_17):
         print("❌ Ex B6.17 : tes lignes sont celles d'autres classes : la ligne k doit expliquer la classe "
               "model.classes_[k] (SPECIES[k]).")
         raise StopCheck
-    if same("B6.17", "logits : phi = w_ki (x_i − moyenne du fond), le cas linéaire", phi_l_17, linear_17, rtol=1e-6, atol=1e-8):
+    elif same("B6.17", "logits : phi = w_ki (x_i − moyenne du fond), le cas linéaire", phi_l_17, linear_17, rtol=1e-6, atol=1e-8):
         RESULTS_17["régression logistique, logit"] = np.asarray(phi_l_17)
     phi_p_17, base_p_17 = pair("B6.17", "shap_by_class_17", shap_by_class_17(LR_17, GENTOO_17.copy(), XP_TRAIN.copy(), "proba"),
                                names=("phi", "base"))
+    if shifted_17(base_p_17, LR_17.predict_proba(XP_TRAIN).mean(axis=0)):
+        print("❌ Ex B6.17 : tes lignes sont celles d'autres classes : la ligne k doit expliquer la classe "
+              "model.classes_[k] (SPECIES[k]).")
+        raise StopCheck
     ok_p_17 = same("B6.17", "probabilités : efficacité de chaque classe", np.sum(phi_p_17, axis=1) + base_p_17,
                    LR_17.predict_proba(G_17)[0], rtol=1e-6, atol=1e-8)
     ok_p_17 &= same("B6.17", "probabilités : valeurs de base = probabilités moyennes sur le fond", base_p_17,
@@ -1149,7 +1160,7 @@ with checked("B6.20"):
             raise StopCheck
     if same("B6.20", f"cam_20 : cartes agrandies à {SIZE_20} × {SIZE_20}", arr_cam_20, want_cam_20, rtol=1e-4, atol=1e-5):
         ok_20["cam"] = True
-wbx.clear_hooks(RESNET)'''
+_ = wbx.clear_hooks(RESNET)                            # no hook stays on RESNET for the cells that follow'''
 
 EXPERIMENT_20 = r'''if len(ok_20) == 3:
     labels_20 = POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])]
