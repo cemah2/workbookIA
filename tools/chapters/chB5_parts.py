@@ -190,7 +190,7 @@ Dans tes notes : avec L, à partir de quelle colonne de la grille ne distingues-
 
 La première cellule de vérification essaie tes deux fonctions sur les exemples des docstrings, les formes de la variance en 4-D et en 1-D, un **Bayes numérique** en dimension 1 (le produit des deux densités gaussiennes de ∂ B5.7, normalisé sur une grille de 600 001 points, dont on lit la moyenne et la variance), l'aller-retour avec le vrai bruit et quatre refus. La seconde lance les 29 tests de l'exercice (`-k "test_q_posterior_mean_variance_ or test_predict_x0_from_eps_"`).
 
-Dans tes notes : à l'indice 0, que valent la moyenne et la variance du posterior, et pourquoi ? D'où vient l'écart entre la moyenne du Bayes numérique et ta formule, et que faudrait-il pour le réduire ? Que devient l'erreur de $\hat{\mathbf{x}}_0$ quand le bruit prédit se trompe de 0,1, au pas 10 puis au dernier pas du planning du notebook ?""",
+Dans tes notes : à l'indice 0, que valent la moyenne et la variance du posterior, et pourquoi ? À combien près la moyenne du Bayes numérique et ta formule s'accordent-elles (la ligne sous les vérifications), et pourquoi une grille suffit-elle ici ? Que devient l'erreur de $\hat{\mathbf{x}}_0$ quand le bruit prédit se trompe de 0,1, au pas 10 puis au dernier pas du planning du notebook ?""",
        check=C.RELOAD + C.CHECK_16, solution=C.CHECK_16,
        after=tests_after("B5.16", "mylearn.diffusion.predict_x0_from_eps([0.0], [0], [0.0], [0.5])",
                          "test_q_posterior_mean_variance_ or test_predict_x0_from_eps_", 29)),

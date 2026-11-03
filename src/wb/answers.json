@@ -57391,12 +57391,12 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "a88bdad8b402104f01b863ecf5d3223fa602939e757c703cce3a570939eeaa43": "relis la ligne Euler du protocole complet : à 1 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
-        "b65c438cc9d746c88a6a35d8747b954b92f730230b060216dfc3e71cfeb700b3": "relis la ligne Euler du protocole complet : à 2 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
-        "d231a4b49fa78d99d9579d48b9af85d1c24ebdbd7501b77bad4864bc6cde54f6": "relis la ligne Euler du protocole complet : à 10 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
-        "e1fe5fd447661b1d8ac651b32ca95432cb58b180140a3e5474a35a28e71b6cab": "relis la ligne Euler du protocole complet : à 50 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
-        "e2ebd9bc5a2d89c7ae68d091793faf09504d9fd728ced79ce6908e146f45d032": "relis la ligne Euler du protocole complet : à 100 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
-        "f34191b9ef2966f90e0416ed6979e487ccab6022749da1f338f5c89811ab0a12": "relis la ligne Euler du protocole complet : à 20 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?"
+        "a88bdad8b402104f01b863ecf5d3223fa602939e757c703cce3a570939eeaa43": "relis les distances d'Euler de FULL_20 : à 1 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "b65c438cc9d746c88a6a35d8747b954b92f730230b060216dfc3e71cfeb700b3": "relis les distances d'Euler de FULL_20 : à 2 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "d231a4b49fa78d99d9579d48b9af85d1c24ebdbd7501b77bad4864bc6cde54f6": "relis les distances d'Euler de FULL_20 : à 10 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "e1fe5fd447661b1d8ac651b32ca95432cb58b180140a3e5474a35a28e71b6cab": "relis les distances d'Euler de FULL_20 : à 50 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "e2ebd9bc5a2d89c7ae68d091793faf09504d9fd728ced79ce6908e146f45d032": "relis les distances d'Euler de FULL_20 : à 100 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?",
+        "f34191b9ef2966f90e0416ed6979e487ccab6022749da1f338f5c89811ab0a12": "relis les distances d'Euler de FULL_20 : à 20 pas, la distance est-elle au plus le triple de celle à 100 pas pour toutes les graines ?"
       },
       "sign": 1,
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
@@ -57405,7 +57405,7 @@
       "hash": "989f32cf24bb69a3c8f0af29de188d0853496bdd6a02fa9e7ccebedc6f7ea17b",
       "kind": "str",
       "mistakes": {
-        "d69857d66c1d2845618ea39c7247eb5a08034261ea95d7c2b0d641be724a5d8d": "relis la colonne des 5 pas du tableau du protocole complet"
+        "d69857d66c1d2845618ea39c7247eb5a08034261ea95d7c2b0d641be724a5d8d": "relis la colonne des 5 pas de FULL_20, graine par graine"
       },
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
     },

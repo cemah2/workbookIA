@@ -1261,6 +1261,7 @@ def _make_evaluate_31():
     import gc
     import re
     import tempfile
+    import warnings
     from pathlib import Path
     from wb import datasets as wbdata
 
@@ -1338,10 +1339,12 @@ def _make_evaluate_31():
         """Every floating-point tensor of the session before the run (parameters, buffers, copies kept anywhere), by
         shape, and their memory addresses: a network of the run must not start from one of them."""
         by_shape, pointers = {}, set()
-        for obj in gc.get_objects():
-            if isinstance(obj, torch.Tensor) and obj.is_floating_point() and 1000 < obj.numel() <= 4_000_000:
-                by_shape.setdefault(tuple(obj.shape), []).append(obj)
-                pointers.add(obj.data_ptr())
+        with warnings.catch_warnings():               # isinstance on every object wakes deprecated torch aliases
+            warnings.simplefilter("ignore")
+            for obj in gc.get_objects():
+                if isinstance(obj, torch.Tensor) and obj.is_floating_point() and 1000 < obj.numel() <= 4_000_000:
+                    by_shape.setdefault(tuple(obj.shape), []).append(obj)
+                    pointers.add(obj.data_ptr())
         return by_shape, pointers
 
     def from_before(p, by_shape, pointers):
@@ -1366,7 +1369,9 @@ def _make_evaluate_31():
                   "un modèle ou une sauvegarde du notebook : elle ne doit utiliser que images, labels et seconds.")
             return None
         hidden = hidden_globals()
-        modules_before = {id(m): m for m in gc.get_objects() if isinstance(m, nn.Module)}   # kept alive: ids stay unique
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            modules_before = {id(m): m for m in gc.get_objects() if isinstance(m, nn.Module)}   # kept alive: ids stay unique
         by_shape, pointers = tensors_alive()
         saved = {name: getattr(wbd, name) for name in ("image_subset", "raw_subset", "_raw", "load_checkpoint",
                                                         "reference_model", "classifier", "features", "predict",
