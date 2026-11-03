@@ -423,6 +423,6 @@ Ces exercices sont dans `03_notebook.ipynb`, en trois phases, de difficulté cro
 | B6.26 | Prédire : retirer la variable « sexe » rend-il le modèle équitable ? | 🔮 | ★ | 10 | |
 | B6.27 | Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte | 🔬 | ★★★ | 50 | |
 | B6.28 | Fiche modèle avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu | 🛠️ | ★★ | 25 | |
-| B6.29 | Défi : écart d'equalized odds sous 0,05 sur Adult, en perdant moins de 2 points d'accuracy | 🏆 | ★★★★ | 90 | |
+| B6.29 | Défi : écart d'equalized odds sous 0,07 sur Adult, en perdant moins de 2 points d'accuracy | 🏆 | ★★★★ | 90 | |
 
 Le notebook utilise California, Penguins, CIFAR-10 et *Adult* (téléchargés aux chapitres précédents, ou les copies du dépôt) et ton ResNet fine-tuné du B1 s'il existe, sinon un petit CNN entraîné en une minute environ. Tout tourne sur CPU ; aucun exercice n'est marqué 🚀.

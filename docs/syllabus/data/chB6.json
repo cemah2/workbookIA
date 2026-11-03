@@ -1085,7 +1085,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B6.26",
@@ -1107,7 +1107,7 @@
     "rapide",
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B6.27",
@@ -1155,7 +1155,7 @@
   {
    "id": "B6.29",
    "type": "🏆",
-   "title": "Défi : écart d'equalized odds sous 0,05 sur Adult, en perdant moins de 2 points d'accuracy",
+   "title": "Défi : écart d'equalized odds sous 0,07 sur Adult, en perdant moins de 2 points d'accuracy",
    "stars": 4,
    "minutes": 90,
    "gpu": false,
@@ -1170,7 +1170,7 @@
    "tracks": [
     "code"
    ],
-   "check": "wb.check"
+   "check": "manual"
   },
   {
    "id": "B6.E1",

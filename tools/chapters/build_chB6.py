@@ -15,8 +15,8 @@ row), scikit-learn (confusion_matrix) and torchvision (the layer sizes of an unt
 nothing. captum is not installed: its trapezoid (✏️ B6.3 k) is computed from its rule (N points, weights 1/N halved at
 both ends), the rule the tests of explain.py checked against captum 0.9.0.
 The notebook exercises come in three phases: A, the tabular models (B6.12 to B6.17); B, the networks (B6.18 to B6.22);
-C, fairness (B6.23 to B6.29). Session 74 writes them in two halves: B6.12 to B6.20 (chB6_parts.py, chB6_code.py,
-history_chB6.py), then B6.21 to B6.29 (NEXT_SESSION until they are written).
+C, fairness (B6.23 to B6.29). Session 74 wrote them in two halves: B6.12 to B6.20 (chB6_parts.py, chB6_code.py), then
+B6.21 to B6.29 (chB6_parts2.py, chB6_code2.py); history_chB6.py precomputes the calibrations of both.
 """
 
 from __future__ import annotations
@@ -624,22 +624,16 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B6.12 to B6.29). Session 74, first half: part A and the start of part B (B6.12 to B6.20,
-# chB6_parts.py and chB6_code.py); the second half appends B6.21 and B6.22 to PART_B and adds part C (B6.23 to B6.29).
+# Parts A to C (exercises B6.12 to B6.29): part A and the start of part B (B6.12 to B6.20, chB6_parts.py and
+# chB6_code.py); chB6_parts2.py appends B6.21 and B6.22 to PART_B and adds part C (B6.23 to B6.29, chB6_code2.py).
 # ---------------------------------------------------------------------------
 import chB6_code  # noqa: E402,F401  (the cells; history_chB6.py reuses them)
 from chB6_parts import PART_B, PARTS  # noqa: E402,F401
+import chB6_parts2  # noqa: E402,F401  (B6.21 and B6.22 into PART_B, part C into PARTS)
 
 for _part in PARTS:
     for _ex in _part.exercises:
         check_unique_keys(_ex.record or "x = 1", _ex.id)
-
-NEXT_SESSION = [
-    ("B", "B6.21 et B6.22", "un Grad-CAM à réparer, le test de santé d'Adebayo"),
-    ("C", "B6.23 à B6.29", "l'équité : tes indicateurs par groupe, l'audit d'Adult avec intervalles, l'effet du "
-                           "retrait du sexe, l'atténuation et son coût, la fiche modèle et le défi"),
-]
-
 
 def header_cells(kind: str) -> list:
     rel = f"{FOLDER}/{'03_notebook' if kind == 'exercise' else '05_solutions'}.ipynb"
@@ -648,8 +642,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-             for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B6 · Explicabilité, équité et éthique — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -691,10 +683,6 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if not NEXT_SESSION else
-             "\n\n*Les exercices B6.21 à B6.29 (un Grad-CAM à réparer, le test de santé, l'équité) seront ajoutés à la "
-             "prochaine session de génération ; relance alors `python tools/start_chapter.py B6` pour obtenir le "
-             "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer à la main les valeurs de Shapley d'un petit jeu, avec un fond, et dire ce que "
@@ -705,8 +693,7 @@ def footer_cells(kind: str) -> list:
                "expliquer pourquoi tous les critères ne peuvent pas tenir ensemble ?\n"
                "4. Sais-tu dire ce qu'un scoring de crédit implique au regard du RGPD et de l'AI Act ?\n\n"
                "**Pour aller plus loin** : l'article de Lundberg et Lee et le livre en ligne de C. Molnar, cités dans "
-               "la fiche. La suite : le bonus B7, le MLOps."
-               + later)]
+               "la fiche. La suite : le bonus B7, le MLOps.")]
 
 
 def build(kind: str) -> list:

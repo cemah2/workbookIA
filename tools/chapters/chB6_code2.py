@@ -296,15 +296,17 @@ with checked("B6.22"):
     before_22 = {k: v.clone() for k, v in CNN.state_dict().items()}
     rng_22 = torch.get_rng_state()
     copy_22 = randomize_22(CNN, ["fc", "features.17"], seed=3)
+    changed_22 = [k for k, v in CNN.state_dict().items() if not torch.equal(v, before_22[k])]
+    if changed_22:
+        CNN.load_state_dict(before_22)                 # the CNN of the following cells stays the trained one
+        CNN.eval().requires_grad_(False)
     if not returned("B6.22", "randomize_22", copy_22):
         raise StopCheck
     if copy_22 is CNN:
         print("❌ Ex B6.22 : randomize_22 rend le modèle reçu lui-même : le contrat veut une copie (copy.deepcopy).")
         raise StopCheck
-    changed_22 = [k for k, v in CNN.state_dict().items() if not torch.equal(v, before_22[k])]
     if changed_22:
         print(f"❌ Ex B6.22 : randomize_22 a modifié le modèle reçu ({changed_22[0]}…) : travaille sur une copie.")
-        CNN.load_state_dict(before_22)
         raise StopCheck
     verdict("B6.22", torch.equal(torch.get_rng_state(), rng_22), "le générateur aléatoire global n'a pas bougé.",
             "randomize_22 a déplacé le générateur aléatoire global : tire les poids dans torch.random.fork_rng().")
@@ -320,6 +322,14 @@ with checked("B6.22"):
     verdict("B6.22", all(torch.equal(new_22[k], old_22[k]) for k in outside_22),
             "les autres parties (et les batchnorms) sont intactes.",
             "une autre partie que fc et features.17 a changé (" + next((k for k in outside_22 if not torch.equal(new_22[k], old_22[k])), "") + ").")
+    block_22 = randomize_22(RESNET, ["layer4.1"], seed=3).state_dict()     # a block: two convolutions, two batchnorms
+    old_r_22 = RESNET.state_dict()
+    bn_22 = [k for k in old_r_22 if k.startswith("layer4.1.bn")]
+    verdict("B6.22", all(torch.equal(block_22[k], old_r_22[k]) for k in bn_22)
+            and not torch.equal(block_22["layer4.1.conv1.weight"], old_r_22["layer4.1.conv1.weight"]),
+            "dans un bloc du ResNet (layer4.1), les convolutions changent, les batchnorms restent.",
+            "dans le bloc layer4.1 du ResNet, seules les Conv2d (et les Linear) doivent reprendre leur reset_parameters() : "
+            "les batchnorms gardent leurs poids et leurs statistiques.")
     again_22 = randomize_22(CNN, ["fc", "features.17"], seed=3).state_dict()
     other_22 = randomize_22(CNN, ["fc", "features.17"], seed=4).state_dict()
     verdict("B6.22", all(torch.equal(again_22[k], new_22[k]) for k in new_22)
@@ -498,8 +508,8 @@ print(f"Adult : {len(XA_TRAIN)} personnes d'entraînement, {len(XA_VAL)} de vali
       f"seuil 0,5, ROC-AUC {fr(roc_auc_score(YA_VAL, P_VAL), 4)}.")'''
 
 # --- 🔨 B6.23 ---------------------------------------------------------------------------------------------------------
-CHECK_23 = r'''E = mylearn.explain
-with checked("B6.23"):
+CHECK_23 = r'''with checked("B6.23"):
+    E = mylearn.explain                        # inside the block: a library not created yet gives ⏳
     y_23, p_23, g_23 = [1, 0, 1, 0, 1, 1, 0, 0], [1, 0, 0, 1, 1, 1, 0, 0], ["a"] * 4 + ["b"] * 4     # the docstring
     r_23 = E.group_rates(list(y_23), list(p_23), list(g_23))
     if returned("B6.23", "group_rates", r_23):
@@ -516,6 +526,7 @@ with checked("B6.23"):
                 f"l'exemple de la docstring donne {got_23} au lieu de (4, 0.5, 0.5, 4, 1.0, 0.0) (n, TPR, FPR des groupes a et b).")
 
 with checked("B6.23"):     # three groups of different sizes, labels drawn at random: every rate against scikit-learn
+    E = mylearn.explain                        # inside the block: a library not created yet gives ⏳
     rng_23 = np.random.default_rng(23)
     g3_23 = np.repeat([30, 10, 20], [40, 25, 35])                    # integer groups, not sorted
     y3_23, p3_23 = rng_23.integers(0, 2, 100), rng_23.integers(0, 2, 100)
@@ -541,6 +552,7 @@ with checked("B6.23"):     # three groups of different sizes, labels drawn at ra
             print("✅ Ex B6.23 : trois groupes entiers non triés : les sept taux de chaque groupe sont ceux de scikit-learn.")
 
 with checked("B6.23"):     # a group without positives: nan for its TPR, and no crash
+    E = mylearn.explain                        # inside the block: a library not created yet gives ⏳
     r4_23 = E.group_rates([0, 0, 0, 1, 0, 1], [0, 1, 0, 1, 0, 0], ["p", "p", "p", "q", "q", "q"])
     if returned("B6.23", "group_rates", r4_23):
         tpr_p_23 = r4_23["p"]["tpr"]
@@ -548,7 +560,24 @@ with checked("B6.23"):     # a group without positives: nan for its TPR, and no 
                 "un groupe sans positif : TPR nan, FPR 1/3.",
                 f"le groupe p n'a aucun positif : son TPR vaut nan (dénominateur nul) et son FPR 1/3, reçu {tpr_p_23} et "
                 f"{r4_23['p']['fpr']}.")
+with checked("B6.23"):     # a group whose labels AND predictions are all 0: a 1 x 1 matrix without labels=[0, 1]
+    E = mylearn.explain                        # inside the block: a library not created yet gives ⏳
+    try:
+        r5_23 = E.group_rates([0, 0, 1, 0], [0, 0, 1, 1], ["q", "q", "r", "r"])
+    except ValueError as exc_23:
+        if "unpack" in str(exc_23):
+            print("❌ Ex B6.23 : un groupe dont les labels et les prédictions valent tous 0 fait échouer ta fonction ("
+                  + str(exc_23) + ") : sa matrice de confusion n'a qu'une case ; relis le contrat : labels=[0, 1].")
+            raise StopCheck
+        raise
+    if returned("B6.23", "group_rates", r5_23):
+        q_23 = r5_23["q"]
+        verdict("B6.23", q_23["n"] == 2 and math.isnan(q_23["tpr"]) and q_23["fpr"] == 0 and math.isnan(q_23["precision"]),
+                "un groupe sans positif ni sélectionné : TPR et precision nan, FPR 0.",
+                f"le groupe q (labels et prédictions tous à 0) doit avoir n = 2, un TPR et une precision nan, un FPR 0 ; "
+                f"reçu {q_23}.")
 with checked("B6.23"):
+    E = mylearn.explain                        # inside the block: a library not created yet gives ⏳
     dp_23 = E.demographic_parity_difference([1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0], ["x"] * 4 + ["y"] * 4 + ["z"] * 4)
     eo_23 = E.equalized_odds_difference([1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0], [1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1],
                                         ["x"] * 4 + ["y"] * 4 + ["z"] * 4)
@@ -789,13 +818,13 @@ print(GAPS_25.to_string())'''
 
 TODO_25 = r'''lowest_tpr_25 = ...    # a) the letter of the AGE band with the smallest TPR: "A" <25, "B" 25-34, "C" 35-44, "D" 45-54, "E" 55-64, "F" 65+
 positives_25 = ...     # b) on how many positives of the validation part does this TPR rest? (a whole number)
-widest_25 = ...        # c) the letter of the age band whose TPR interval is the WIDEST (same letters)
+widest_25 = ...        # c) among the FIVE OTHER age bands, the letter of the one whose TPR interval is the WIDEST
 tpr_sex_25 = ...       # d) does the 95 % interval of the TPR gap between the sexes exclude 0? True or False
-fpr_age_25 = ...       # e) does the 95 % interval of the FPR gap between the age bands exclude 0? True or False
+overlap_25 = ...       # e) do the TPR intervals of the women and of the men overlap? True or False
 conclusion_25 = ...    # f) the letter of the conclusion that the table supports (statement)'''
 
 SOLUTION_25 = r'''lowest_tpr_25, positives_25, widest_25 = "«A25»", «B25», "«C25»"
-tpr_sex_25, fpr_age_25, conclusion_25 = «D25», «E25», "«F25»"'''
+tpr_sex_25, overlap_25, conclusion_25 = «D25», «E25», "«F25»"'''
 
 CHECK_25 = r'''with wb.attempt("B6.25a"):
     wb.check("B6.25a", lowest_tpr_25)
@@ -806,7 +835,7 @@ with wb.attempt("B6.25c"):
 with wb.attempt("B6.25d"):
     wb.check("B6.25d", tpr_sex_25)
 with wb.attempt("B6.25e"):
-    wb.check("B6.25e", fpr_age_25)
+    wb.check("B6.25e", overlap_25)
 with wb.attempt("B6.25f"):
     wb.check("B6.25f", conclusion_25)'''
 
@@ -945,7 +974,9 @@ EXPERIMENT_27 = r'''# Five strategies, measured on EVAL_27: accuracy, the gaps b
 # the gaps by age band, re-audited after each correction
 if len(ok_27) == 3:
     start_27 = time.perf_counter()
-    nosex_27 = globals().get("NOSEX_26") or adult_pipeline(drop=("sex",)).fit(XA_TRAIN, YA_TRAIN)
+    nosex_27 = globals().get("NOSEX_26")                                  # the model of B6.26, if it ran
+    if nosex_27 is None:
+        nosex_27 = adult_pipeline(drop=("sex",)).fit(XA_TRAIN, YA_TRAIN)
     noproxy_27 = adult_pipeline(drop=("sex", "relationship", "marital-status")).fit(XA_TRAIN, YA_TRAIN)
     w_27 = reweigh_27(XA_TRAIN["sex"].to_numpy(), YA_TRAIN)
     reweighed_27 = adult_pipeline().fit(XA_TRAIN, YA_TRAIN, model__sample_weight=w_27)
@@ -1002,6 +1033,9 @@ FACTS_28 = {
     "groupes": {k: {"n": r["n"], "TPR": round(float(r["tpr"]), 2), "FPR": round(float(r["fpr"]), 2)}
                 for k, r in {**rates_sex_28, **rates_age_28}.items()},
 }
+perm_28 = permutation_importance(HGB_C, XA_VAL, YA_VAL, n_repeats=3, random_state=0, scoring="accuracy")
+PERM_28 = pd.Series(perm_28.importances_mean, index=XA_VAL.columns).sort_values(ascending=False)
+FACTS_28["permutation (validation, baisse d'accuracy, 3 répétitions)"] = {k: round(float(v), 4) for k, v in PERM_28.head(5).items()}
 REQUIRED_28 = ["Détails du modèle", "Usage prévu", "Facteurs", "Métriques", "Données d'évaluation",
                "Données d'entraînement", "Analyses quantitatives", "Explicabilité", "Équité", "Considérations éthiques",
                "Mises en garde et recommandations"]
@@ -1031,7 +1065,10 @@ def check_card_28(card):
         return ["CARD_28 doit être une chaîne de caractères (du Markdown)."]
     problems, found = [], sections_28(card)
     titles = list(found)
-    wanted = [" ".join(_plain_28(t)) for t in REQUIRED_28]
+    wanted = []
+    for title in REQUIRED_28:                       # a title may go on: "## Usage prévu (et hors périmètre)"
+        words = " ".join(_plain_28(title))
+        wanted.append(next((t for t in titles if t == words or t.startswith(words + " ")), words))
     missing = [t for t, w in zip(REQUIRED_28, wanted) if w not in found]
     if missing:
         problems.append(f"il manque les sections (titres « ## … ») : {', '.join(missing)}.")
@@ -1064,8 +1101,9 @@ def check_card_28(card):
             problems.append("« Équité » doit parler des intervalles (bootstrap) de ses écarts.")
         if not set(_plain_28(text["Explicabilité"])) & {"shap", "shapley", "permutation", "dependance", "ice"}:
             problems.append("« Explicabilité » doit nommer une méthode (SHAP, permutation, dépendance partielle, ICE…).")
-        if "fond" not in _plain_28(text["Explicabilité"]):
-            problems.append("« Explicabilité » doit dire quel fond a servi (le mot « fond »).")
+        if not {"fond", "validation"} & set(_plain_28(text["Explicabilité"])):
+            problems.append("« Explicabilité » doit dire sur quelles données l'explication est calculée (la validation, "
+                            "ou le fond d'une valeur SHAP).")
     if len(re.findall(r"\w+", card)) < 300:
         problems.append(f"la fiche fait {len(re.findall(r'\w+', card))} mots : il en faut au moins 300.")
     return problems
@@ -1079,6 +1117,7 @@ print("sections, dans cet ordre (REQUIRED_28) :", " · ".join(REQUIRED_28))'''
 TODO_28 = r'''CARD_28 = ...   # your model card, in Markdown: a title "# ...", then the eleven sections of REQUIRED_28 ("## ...")'''
 
 SOLUTION_28 = r'''_g = FACTS_28["groupes"]
+_perm = ", ".join(f"`{k}` {fr(v, 4)}" for k, v in PERM_28.head(4).items())
 _rows = "\n".join(f"| {k} | {v['n']} | {v['TPR']:.2f} | {v['FPR']:.2f} |".replace(".", ",") for k, v in _g.items())
 CARD_28 = f"""# Fiche modèle : revenu supérieur à 50 000 $ (Adult), gradient boosting audité (workbook, B6)
 
@@ -1096,7 +1135,10 @@ personne réelle (crédit, embauche, logement, aide sociale), et toute populatio
 ## Facteurs
 Le sexe (deux valeurs dans les données), la tranche d'âge (six tranches du MP3), et, à auditer ensuite, la catégorie
 raciale et le pays d'origine, aux effectifs très inégaux. Les performances varient d'abord avec le taux de base de chaque
-groupe : 0,11 pour les femmes, 0,31 pour les hommes, 0,01 pour les moins de 25 ans.
+groupe (validation) : {fr(rates_sex_28["Female"]["positives"] / rates_sex_28["Female"]["n"], 3)} pour les femmes,
+{fr(rates_sex_28["Male"]["positives"] / rates_sex_28["Male"]["n"], 3)} pour les hommes,
+{fr(rates_age_28["<25"]["positives"] / rates_age_28["<25"]["n"], 3)} pour les moins de 25 ans
+({rates_age_28["<25"]["positives"]} positifs sur {rates_age_28["<25"]["n"]}).
 
 ## Métriques
 Accuracy au seuil 0,5 et ROC-AUC sur la validation ; par groupe : taux de sélection, TPR, FPR et precision ; écarts :
@@ -1120,19 +1162,21 @@ Validation : accuracy {str(FACTS_28["accuracy (validation)"]).replace(".", ",")}
 {_rows}
 
 ## Explicabilité
-Importance par permutation sur la validation et valeurs SHAP (TreeSHAP interventionnel) avec un fond de 100
-personnes tirées de l'entraînement ; le fond est dit sous chaque graphique, car il change la valeur de base et le signe
-des contributions. Limites : des explications corrélées se partagent l'information (`relationship` et `sex`), et une
-contribution n'est pas une cause.
+Importance par permutation sur la validation (baisse d'accuracy, 3 répétitions) : {_perm}. Une valeur SHAP
+par personne demanderait de dire son fond (la valeur de base et les signes en dépendent, 🔬 B6.16). Limites : des
+features corrélées se partagent l'information (`relationship`, `marital-status` et `sex`), et une importance n'est pas
+une cause.
 
 ## Équité
 Critère retenu : l'equalized odds par sexe, parce qu'une erreur de classement fausse les statistiques publiées d'un
 groupe dans les deux sens (faux positifs et faux négatifs). Au seuil 0,5, ΔEO par sexe vaut
 {fr(gaps_sex_28["eo"], 3)} et ΔDP {fr(gaps_sex_28["dp"], 3)} ; les intervalles bootstrap (B6.24) excluent 0 pour
-l'écart de TPR. Corrections essayées (B6.27) : retirer `sex` change peu les écarts (d'autres colonnes le portent, AUC
-de plus de 0,9) ; retirer aussi ses substituts coûte environ deux points d'accuracy ; des seuils par sexe rapprochent
-les TPR, mais utilisent l'attribut dans la décision (risque juridique, 206.10). Les écarts par âge viennent surtout des
-taux de base, très différents.
+l'écart de TPR. Corrections essayées (B6.27, moitié d'évaluation de la validation) : retirer `sex` ne réduit pas les
+écarts (les autres colonnes prédisent le sexe avec une ROC-AUC de 0,93) ; retirer aussi `relationship` et
+`marital-status` coûte 2,5 points d'accuracy et réduit ΔDP, pas ΔEO ; des seuils par sexe choisis pour un même TPR
+le dépassent chez les femmes sur d'autres personnes (175 positives par moitié de validation, c'est peu), et utilisent
+l'attribut dans la décision (risque juridique, 206.10). Les écarts de sélection par âge suivent surtout les taux de
+base, très différents d'une tranche à l'autre.
 
 ## Considérations éthiques
 Le sexe et l'âge sont des attributs protégés ; les catégories du recensement de 1994 (sexe binaire, catégories
@@ -1164,7 +1208,7 @@ GIVEN_29 = r'''# The challenge: ΔEO by sex below GOAL_EO_29 on the test of the 
 # the reference gradient boosting (no correction, threshold 0.5) on the same test; the same on a control split
 GOAL_EO_29 = «GOAL_29»
 MAX_LOSS_29 = 0.02
-REFERENCE_29 = «REF_29»       # the reference solution on «N_CAL_29» splits and seeds: ΔEO (best, worst), loss (smallest, largest)
+REFERENCE_29 = «REF_29»       # the reference solution on «N_CAL_29» splits and seeds: ΔEO (best, worst), drop of accuracy (smallest, largest)
 CONTROL_SEED_29 = «CONTROL_29»   # the control split: wbx.adult(seed=CONTROL_SEED_29), whose test rows are other people
 MAX_BALANCED_29 = 0.56        # balanced accuracy allowed to a method trained on shuffled labels (chance: 0.5)
 
@@ -1306,8 +1350,8 @@ def _make_evaluate_29():
         if first is None:
             globals()["FIRST_29"] = first = dict(results["test du MP3"])
         for name, r in results.items():
-            print(f"{name} : accuracy {fr(r['accuracy'], 4)} (référence sans correction {fr(base[name], 4)}, perte "
-                  f"{fr(100 * r['loss'], 2)} point{'s' if abs(r['loss']) >= 0.02 else ''}) ; ΔEO par sexe {fr(r['eo'], 3)} "
+            print(f"{name} : accuracy {fr(r['accuracy'], 4)} (référence sans correction {fr(base[name], 4)}, "
+                  f"{fr(100 * r['loss'], 2)} point{'s' if abs(r['loss']) >= 0.02 else ''} de moins) ; ΔEO par sexe {fr(r['eo'], 3)} "
                   f"(écart de TPR {fr(r['tpr_gap'], 3)}, de FPR {fr(r['fpr_gap'], 3)}) ; ajustement en {fr(r['seconds'], 1)} s.")
         if first["eo"] != results["test du MP3"]["eo"] or first["accuracy"] != results["test du MP3"]["accuracy"]:
             print(f"ℹ️ le test du MP3 a déjà été révélé dans cette session : ΔEO {fr(first['eo'], 3)}, accuracy "
@@ -1328,12 +1372,12 @@ def _make_evaluate_29():
         ok = all(rule[0] for rule in rules) and all(goals.values())
         verdict("B6.29", ok,
                 f"défi réussi : ΔEO {fr(results['test du MP3']['eo'], 3)} et {fr(results['contrôle']['eo'], 3)} (objectif "
-                f"sous {fr(GOAL_EO_29, 2)}), pertes {fr(100 * results['test du MP3']['loss'], 2)} et "
-                f"{fr(100 * results['contrôle']['loss'], 2)} point (sous {fr(100 * MAX_LOSS_29, 0)}) ; référence : ΔEO de "
+                f"sous {fr(GOAL_EO_29, 2)}), accuracy en baisse de {fr(100 * results['test du MP3']['loss'], 2)} et "
+                f"{fr(100 * results['contrôle']['loss'], 2)} point (moins de {fr(100 * MAX_LOSS_29, 0)}) ; référence : ΔEO de "
                 f"{fr(REFERENCE_29['eo'][0], 3)} à {fr(REFERENCE_29['eo'][1], 3)}.",
                 "pas encore : " + " ; ".join(
-                    f"{n} : ΔEO {fr(r['eo'], 3)} (sous {fr(GOAL_EO_29, 2)}), perte {fr(100 * r['loss'], 2)} point "
-                    f"(sous {fr(100 * MAX_LOSS_29, 0)})" for n, r in results.items()) + ".")
+                    f"{n} : ΔEO {fr(r['eo'], 3)} (sous {fr(GOAL_EO_29, 2)}), accuracy en baisse de {fr(100 * r['loss'], 2)} point "
+                    f"(moins de {fr(100 * MAX_LOSS_29, 0)})" for n, r in results.items()) + ".")
         return {"results": results, "shuffled": shuffled, "ok": ok}
 
     return evaluate_29
@@ -1342,8 +1386,8 @@ def _make_evaluate_29():
 evaluate_29 = _make_evaluate_29()
 print(f"Objectif : ΔEO par sexe sous {fr(GOAL_EO_29, 2)} et moins de {fr(100 * MAX_LOSS_29, 0)} points d'accuracy perdus, sur "
       f"le test du MP3 et sur le découpage de contrôle (seed={CONTROL_SEED_29}) ; référence : ΔEO de "
-      f"{fr(REFERENCE_29['eo'][0], 3)} à {fr(REFERENCE_29['eo'][1], 3)}, perte de {fr(100 * REFERENCE_29['loss'][0], 2)} à "
-      f"{fr(100 * REFERENCE_29['loss'][1], 2)} point.")'''
+      f"{fr(REFERENCE_29['eo'][0], 3)} à {fr(REFERENCE_29['eo'][1], 3)}, accuracy en baisse de "
+      f"{fr(100 * REFERENCE_29['loss'][0], 2)} à {fr(100 * REFERENCE_29['loss'][1], 2)} point.")'''
 
 TODO_29 = r'''def method_29(X_train, y_train, X_val, y_val):
     """Your method: fit a NEW model on these data only (X_*: DataFrames of the 14 columns of Adult, sex included;

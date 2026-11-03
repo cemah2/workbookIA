@@ -58826,6 +58826,110 @@
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
+    "B6.25a": {
+      "hash": "18670a9391de7a8a972ccdde0e3be75cd11aa9dedfcc626ae9db9801fd688589",
+      "kind": "str",
+      "mistakes": {
+        "137dabb98f3ad8cfaffd5088e4365afbe6f65aeeb3e7ccc7535d3e63a29b2e6e": "« D » : suis la colonne du TPR, tranche par tranche",
+        "4ffd58338fe3299c411e096d3ab0242fd01b8518c1e44633240598c1dcebe7c2": "« B » : suis la colonne du TPR, tranche par tranche",
+        "ba7e5f913984db36263d6f56ac7e1da9027619678c3b987a6300fdcba145c176": "« E » : suis la colonne du TPR, tranche par tranche",
+        "bb4a4bc2bcbae5b13dc47b9893f3249a03048d22db76d05075236d85332e5dd1": "« F » : suis la colonne du TPR, tranche par tranche",
+        "c2b9d28edaf85841185aec39d907fc2b8b743b99e2954ff9245098de2a92b9c9": "« C » : suis la colonne du TPR, tranche par tranche"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.25b": {
+      "fractional": "un nombre de personnes est un entier : lis la colonne des positifs",
+      "hash": "055d80279eafceb6e0675c18c483601da74604134fc6523bac51768afb1beeed",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "6063dd80b3e57991f5837d94246da2ee0c7c3bf9a9c386a14c2bbc39c3cd1c0d": "relis la question : on demande les positifs (y = 1), pas tout l'effectif de la tranche"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.25c": {
+      "hash": "f1abfe66130c48b241b34824e9f5785e22c2b1872dd8e26618ebc01f066951cb",
+      "kind": "str",
+      "mistakes": {
+        "25de577cdac6b172920eec5207ec0faec9dec3617b9f68a9d4bce9ae8fbb0681": "« A » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "518545c0d2c2e104939e4fb8192add1519284162901f6e00470be4c883dce2cb": "« E » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "60387b94401d48b107fd848461d8df0fae596ccd2aa6e569b6233130d1dc795b": "« C » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "a99696558d6cebddf269d58c524153c4df2bc72548ace0336b3bdb10ea508b95": "« D » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "fdb81f8b074360b0d1931292fff30983d2fd5025fe33433d7bc673f3c4c8dc26": "« B » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.25d": {
+      "hash": "5b608cc3ed3a07b3962326cd027f98c3d5cd643554338a35e9561110e161e3d9",
+      "kind": "bool",
+      "mistakes": {
+        "4f7ca35c822d2f721861ec5b14435890453bc4713012d297dd62e20bd2f6def4": "lis les deux bornes de l'intervalle de l'écart de TPR par sexe : 0 est-il entre elles ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.25e": {
+      "hash": "6fe1a7a76887b2caf9fb70f5b75cf8a4b75747c7e1f82bb80053995c9569b1b6",
+      "kind": "bool",
+      "mistakes": {
+        "a9617d2b4af4315531055cf46dc1c43c368be5dd9166628af019719b3aaf5917": "compare la borne haute de l'un et la borne basse de l'autre, dans la colonne du TPR"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.25f": {
+      "hash": "2fd62d4a52c6711544aa5a6792f53668a96d2863f2cce6959af31253e4cb5772",
+      "kind": "str",
+      "mistakes": {
+        "578e5c2da5c57dbb53038c42444189232cf8f84299f8438a7e144917ca8f6f55": "« A » : des intervalles qui se chevauchent prouvent-ils l'égalité ? Regarde l'intervalle de l'écart",
+        "d6c84d7f49f21bdfa0a8e2ad90b8aa93a4c8a06ff802116a4605ec9299bc4b4f": "« B » : un écart de sélection suit aussi les taux de base : le tableau dit-il qu'il faut les égaliser ?",
+        "fb45f32ad8cf700a81bb1e80de07046ae76d9b5729124a2163ef2c61b110bf63": "« D » : lis l'intervalle des écarts par sexe : 0 y est-il ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.26a": {
+      "hash": "8dc2ad2462729a1b150c9aa2ba08f2126782f10e4a1cc26958f64da5e5627fa5",
+      "kind": "str",
+      "mistakes": {
+        "3eb9fffd179d18f687b884878b8647a3465f8f9927f2244efbde100ef84f4128": "« B » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features",
+        "642f3a001946ce4d88ca706df221e5e75808bef61c23d06416f6644f8d615231": "« C » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features",
+        "a3504dbaae226ddbfa72adc591911926fa6de1c8619ebf3f04946c998872b42b": "« A » : lis la ROC-AUC du modèle qui prédit le sexe à partir des 10 autres features"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.26b": {
+      "hash": "9502f117799c5f608f3bb4640556d2280e1bdc53c70a7180e10a6bffb7b25b5b",
+      "kind": "str",
+      "mistakes": {
+        "3b550ff4da998514a0dc4dcc91401635caa053264b9e2918df9131e8a82f33af": "« D » : lis la ROC-AUC sans relationship ni marital-status",
+        "d3d6be0c198ca8f21b4d0d349826c0f81fd852f2dfe546bc3747f8a92863951b": "« A » : lis la ROC-AUC sans relationship ni marital-status",
+        "e702b201230cee003c18ee02d1b7343d605657ac9346a035c956c9998dc7f40a": "« B » : lis la ROC-AUC sans relationship ni marital-status"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.26c": {
+      "hash": "f2d892de28bad98237da028619b7403fb7e51e5ac33edc82945ec561cdf6e8b0",
+      "kind": "str",
+      "mistakes": {
+        "0155661cdda282584326154e033eeeaadebd691d2f4456b7711ef5afa3d4793e": "« A » : lis le rapport des deux ΔEO, sous le tableau",
+        "16b758492be25e3368ad11dd77d9014f138f2560ece36238856e4391cf48850c": "« C » : lis le rapport des deux ΔEO, sous le tableau"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.26d": {
+      "hash": "c8efccc67a4fc58fa36302ca21a85a7a38038fc1ca954ca5ec01843c7a220ddc",
+      "kind": "str",
+      "mistakes": {
+        "1e0424143f52eba6ab85f8cd9dc2789b9a9a34b3ef3f92daef631d7da23706ee": "« D » : lis la colonne F / M du modèle sans sex",
+        "ad57aaca9aeab210ad95387d68b281ff78665fb61139dbdb447e17a8d4573f43": "« B » : lis la colonne F / M du modèle sans sex",
+        "cd44d429e8dae0611d1f6de0eb92c15428eb416d2157a13461f843411ffe78cb": "« C » : lis la colonne F / M du modèle sans sex"
+      },
+      "prediction": true,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
     "B6.Q1a": {
       "hash": "d307e0a097e391aa7798f9e9e626ad0f7125d4d07a0b655a4b5cfc854874ecfd",
       "kind": "str",
