@@ -320,14 +320,17 @@ with checked("B6.22"):
     verdict("B6.22", all(torch.equal(_chk_new_22[k], _chk_old_22[k]) for k in _chk_outside_22),
             "les autres parties (et les batchnorms) sont intactes.",
             "une autre partie que fc et features.17 a changé (" + next((k for k in _chk_outside_22 if not torch.equal(_chk_new_22[k], _chk_old_22[k])), "") + ").")
-    _chk_block_22 = randomize_22(RESNET, ["layer4.1"], seed=3).state_dict()     # a block: two convolutions, two batchnorms
-    _chk_old_r_22 = RESNET.state_dict()
-    _chk_bn_22 = [k for k in _chk_old_r_22 if k.startswith("layer4.1.bn")]
-    verdict("B6.22", all(torch.equal(_chk_block_22[k], _chk_old_r_22[k]) for k in _chk_bn_22)
-            and not torch.equal(_chk_block_22["layer4.1.conv1.weight"], _chk_old_r_22["layer4.1.conv1.weight"]),
-            "dans un bloc du ResNet (layer4.1), les convolutions changent, les batchnorms restent.",
-            "dans le bloc layer4.1 du ResNet, seules les Conv2d (et les Linear) doivent reprendre leur reset_parameters() : "
-            "les batchnorms gardent leurs poids et leurs statistiques.")
+    if wbx.is_missing(RESNET):
+        print("⏳ Ex B6.22 : l'essai sur un bloc du ResNet attend RESNET (B6.20), qui n'a pas pu être chargé.")
+    else:
+        _chk_block_22 = randomize_22(RESNET, ["layer4.1"], seed=3).state_dict()   # a block: two convolutions, two batchnorms
+        _chk_old_r_22 = RESNET.state_dict()
+        _chk_bn_22 = [k for k in _chk_old_r_22 if k.startswith("layer4.1.bn")]
+        verdict("B6.22", all(torch.equal(_chk_block_22[k], _chk_old_r_22[k]) for k in _chk_bn_22)
+                and not torch.equal(_chk_block_22["layer4.1.conv1.weight"], _chk_old_r_22["layer4.1.conv1.weight"]),
+                "dans un bloc du ResNet (layer4.1), les convolutions changent, les batchnorms restent.",
+                "dans le bloc layer4.1 du ResNet, seules les Conv2d (et les Linear) doivent reprendre leur "
+                "reset_parameters() : les batchnorms gardent leurs poids et leurs statistiques.")
     _chk_again_22 = randomize_22(CNN, ["fc", "features.17"], seed=3).state_dict()
     _chk_other_22 = randomize_22(CNN, ["fc", "features.17"], seed=4).state_dict()
     verdict("B6.22", all(torch.equal(_chk_again_22[k], _chk_new_22[k]) for k in _chk_new_22)
@@ -400,9 +403,10 @@ if len(ok_22) == 2:
         for mode_22 in ("cascade", "independent"):
             RESULTS_22[method_22, mode_22] = np.stack([sanity_22(CNN, explain_22, NAMES_22, mode=mode_22, seed=s,
                                                                  absolute=absolute_22) for s in SEEDS_22])
-    names_r_22 = wbx.cascade_layers(RESNET)
-    resnet_cam_22 = lambda m: wbx.grad_cam(m, m.layer4, X_20, POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])])
-    RESNET_22 = np.stack([sanity_22(RESNET, resnet_cam_22, names_r_22, mode="cascade", seed=s) for s in SEEDS_22])
+    if not wbx.is_missing(RESNET):                  # the ResNet of B6.20, when it could be loaded
+        names_r_22 = wbx.cascade_layers(RESNET)
+        resnet_cam_22 = lambda m: wbx.grad_cam(m, m.layer4, X_20, POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])])
+        RESNET_22 = np.stack([sanity_22(RESNET, resnet_cam_22, names_r_22, mode="cascade", seed=s) for s in SEEDS_22])
 
     fig_22, axes_22 = plt.subplots(1, 3, figsize=(15, 4))
     for ax_22, mode_22 in zip(axes_22[:2], ("cascade", "independent")):
@@ -417,14 +421,19 @@ if len(ok_22) == 2:
         ax_22.set_ylim(-0.6, 1.05)
         ax_22.set_title(f"petit CNN, randomisation {'en cascade (jusqu’à la partie)' if mode_22 == 'cascade' else 'indépendante (cette partie seule)'}", fontsize=9)
         ax_22.set_ylabel("corrélation de Spearman (médiane, quartiles)")
-    rho_r_22 = RESNET_22.transpose(1, 0, 2).reshape(len(names_r_22), -1)
-    axes_22[2].plot(range(len(names_r_22)), np.nanmedian(rho_r_22, axis=1), marker="o", color="C0", label="Grad-CAM (layer4)")
-    axes_22[2].fill_between(range(len(names_r_22)), np.nanpercentile(rho_r_22, 25, axis=1),
-                            np.nanpercentile(rho_r_22, 75, axis=1), color="C0", alpha=0.15)
-    axes_22[2].set_xticks(range(len(names_r_22)), names_r_22, rotation=45, ha="right", fontsize=8)
-    axes_22[2].axhline(0, color="gray", lw=0.5)
-    axes_22[2].set_ylim(-0.6, 1.05)
-    axes_22[2].set_title("ResNet de B6.20, randomisation en cascade (16 images)", fontsize=9)
+    if wbx.is_missing(RESNET):
+        axes_22[2].set_axis_off()
+        axes_22[2].set_title("ResNet de B6.20 : pas chargé (⏳)", fontsize=9)
+    else:
+        rho_r_22 = RESNET_22.transpose(1, 0, 2).reshape(len(names_r_22), -1)
+        axes_22[2].plot(range(len(names_r_22)), np.nanmedian(rho_r_22, axis=1), marker="o", color="C0",
+                        label="Grad-CAM (layer4)")
+        axes_22[2].fill_between(range(len(names_r_22)), np.nanpercentile(rho_r_22, 25, axis=1),
+                                np.nanpercentile(rho_r_22, 75, axis=1), color="C0", alpha=0.15)
+        axes_22[2].set_xticks(range(len(names_r_22)), names_r_22, rotation=45, ha="right", fontsize=8)
+        axes_22[2].axhline(0, color="gray", lw=0.5)
+        axes_22[2].set_ylim(-0.6, 1.05)
+        axes_22[2].set_title("ResNet de B6.20, randomisation en cascade (16 images)", fontsize=9)
     axes_22[0].legend(fontsize=7)
     plt.tight_layout()
     plt.show()
@@ -442,11 +451,14 @@ if len(ok_22) == 2:
                                 f"{fr(np.nanpercentile(v_22, 75), 2)}] ({fr(per_seed_22.min(), 2)} à {fr(per_seed_22.max(), 2)})"
                                 + (f", {int(np.isnan(v_22).sum())} nan" if np.isnan(v_22).any() else ""))
             print(f"  {method_22}, {mode_22} : " + " · ".join(cells_22))
-    for k_22 in (0, 1, 2, len(names_r_22) - 1):
-        v_22 = RESNET_22[:, k_22, :]
-        print(f"  ResNet, Grad-CAM, cascade jusqu'à {names_r_22[k_22]} : {fr(np.nanmedian(v_22), 2)} "
-              f"[{fr(np.nanpercentile(v_22, 25), 2)} ; {fr(np.nanpercentile(v_22, 75), 2)}]"
-              + (f", {int(np.isnan(v_22).sum())} nan" if np.isnan(v_22).any() else ""))
+    if wbx.is_missing(RESNET):
+        print("⏳ Ex B6.22 : le test sur le ResNet de B6.20 attend RESNET, qui n'a pas pu être chargé.")
+    else:
+        for k_22 in (0, 1, 2, len(names_r_22) - 1):
+            v_22 = RESNET_22[:, k_22, :]
+            print(f"  ResNet, Grad-CAM, cascade jusqu'à {names_r_22[k_22]} : {fr(np.nanmedian(v_22), 2)} "
+                  f"[{fr(np.nanpercentile(v_22, 25), 2)} ; {fr(np.nanpercentile(v_22, 75), 2)}]"
+                  + (f", {int(np.isnan(v_22).sum())} nan" if np.isnan(v_22).any() else ""))
     print(f"ℹ️ {time.perf_counter() - start_22:.0f} s")
 else:
     print("⏳ Ex B6.22 : l'expérience attend tes deux fonctions (cellule précédente).")'''
@@ -1514,3 +1526,10 @@ with checked("B6.29"):
     start_29 = time.perf_counter()
     result_29 = evaluate_29(method_29)
     print(f"ℹ️ {time.perf_counter() - start_29:.0f} s")'''
+
+
+from chB6_code import needs_resnet  # noqa: E402
+
+GIVEN_21 = needs_resnet(GIVEN_21, "B6.21")
+CHECK_21 = needs_resnet(CHECK_21, "B6.21")
+EXPERIMENT_21 = needs_resnet(EXPERIMENT_21, "B6.21")

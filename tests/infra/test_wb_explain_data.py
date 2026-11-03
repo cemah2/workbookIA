@@ -356,3 +356,43 @@ def test_the_solutions_notebook_never_reads_the_learner_model_of_b1():
     assert "B1_FOLDER = None" in sources["05_solutions"] and "find_b1_folder(" not in sources["05_solutions"]
     assert "load_b1_folder(" not in sources["05_solutions"]
     assert "B1_FOLDER = wbx.find_b1_folder()" in sources["03_notebook"]
+
+
+def test_without_network_the_reference_resnet_is_a_missing_model_with_a_pending_line(tmp_path, monkeypatch, capsys):
+    """No network and no cache the first time (as chapter B1): a ⏳ line, a MissingModel whose attributes are itself
+    (a cell that only defines still runs) and whose call says why, instead of a crash."""
+    _tiny_data(monkeypatch, [])
+
+    def offline(weights=None):
+        raise OSError("<urlopen error [Errno -3] Temporary failure in name resolution>")
+
+    monkeypatch.setattr("torchvision.models.resnet18", offline)
+    with pytest.raises(X.ModelUnavailable, match="poids ImageNet"):
+        X.train_resnet(X.RESNET_SETTINGS["fast"], np.zeros((2, 32, 32, 3), np.uint8), np.arange(2))
+    monkeypatch.setattr(X, "cache_folder", lambda: tmp_path)            # no reference model on this disk
+    model, info = X.try_b1_resnet(True, folder=None, ex_id="B6.20")
+    out = capsys.readouterr().out
+    assert "⏳ Ex B6.20" in out and "réseau une première fois" in out and "Colab" in out
+    assert X.is_missing(model) and info["source"] == "missing" and info["size"] is None
+    assert model.layer4 is model and model.layer2 is model
+    with pytest.raises(X.ModelUnavailable, match="poids ImageNet"):
+        model(torch.zeros(1, 3, 32, 32))
+    with pytest.raises(AttributeError):
+        model._forward_hooks                                            # private names are not faked
+    assert not list(tmp_path.iterdir())                                 # nothing written
+    assert not X.is_missing(nn.Linear(2, 2))
+
+
+def test_the_resnet_cells_of_b6_wait_for_a_missing_model():
+    """Every cell of B6.20 to B6.22 that uses RESNET either is wrapped by needs_resnet or tests wbx.is_missing."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools" / "chapters"))
+    import chB6_code as C
+    import chB6_code2 as C2
+
+    for name, code in (("CHECK_20", C.CHECK_20), ("EXPERIMENT_20", C.EXPERIMENT_20), ("GIVEN_21", C2.GIVEN_21),
+                       ("CHECK_21", C2.CHECK_21), ("EXPERIMENT_21", C2.EXPERIMENT_21)):
+        assert code.startswith("if wbx.is_missing(RESNET):"), name
+    for name, code in (("LOAD_20", C.LOAD_20), ("CHECK_22", C2.CHECK_22), ("EXPERIMENT_22", C2.EXPERIMENT_22)):
+        assert "wbx.is_missing(RESNET)" in code, name

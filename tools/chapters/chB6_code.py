@@ -1082,15 +1082,18 @@ def cam_20(model, layer, images, target, size):
     cams = torch.as_tensor(mylearn.explain.grad_cam(A, G), dtype=torch.float32)
     return F.interpolate(cams[:, None], size=(size, size), mode="bilinear", align_corners=False)[:, 0].numpy()'''
 
-LOAD_20 = r'''RESNET, RESNET_INFO = wbx.b1_resnet(FAST_MODE, folder=B1_FOLDER)   # frozen, in eval() mode
+LOAD_20 = r'''RESNET, RESNET_INFO = wbx.try_b1_resnet(FAST_MODE, folder=B1_FOLDER)   # frozen, in eval() mode
 SIZE_20 = RESNET_INFO["size"]                                          # the side of its input images (96 in fast mode)
 POOL_20 = X_CIFAR[:200], Y_CIFAR[:200]                                 # 200 test images (20 per class)
-PRED_20 = wbx.predict(RESNET, POOL_20[0], RESNET_INFO).argmax(axis=1)
-RIGHT_20 = np.flatnonzero(PRED_20 == POOL_20[1])[:8]                   # 8 well-classified images
-WRONG_20 = np.flatnonzero(PRED_20 != POOL_20[1])[:8]                   # 8 errors
-X_20 = wbx.model_input(POOL_20[0][np.concatenate([RIGHT_20, WRONG_20])], RESNET_INFO)   # (16, 3, SIZE_20, SIZE_20)
-print(f"ResNet-18 {'de référence' if RESNET_INFO['source'] == 'reference' else 'du B1 (le tien)'} : {SIZE_20} pixels, layer4 en {SIZE_20 // 32} × {SIZE_20 // 32} ; accuracy sur "
-      f"les 200 images : {pct(np.mean(PRED_20 == POOL_20[1]), 1)} ; 8 bonnes prédictions et 8 erreurs retenues.")'''
+if wbx.is_missing(RESNET):                     # no network the first time (⏳ above): the cells of RESNET say ⏳
+    PRED_20 = RIGHT_20 = WRONG_20 = X_20 = None
+else:
+    PRED_20 = wbx.predict(RESNET, POOL_20[0], RESNET_INFO).argmax(axis=1)
+    RIGHT_20 = np.flatnonzero(PRED_20 == POOL_20[1])[:8]               # 8 well-classified images
+    WRONG_20 = np.flatnonzero(PRED_20 != POOL_20[1])[:8]               # 8 errors
+    X_20 = wbx.model_input(POOL_20[0][np.concatenate([RIGHT_20, WRONG_20])], RESNET_INFO)   # (16, 3, SIZE_20, SIZE_20)
+    print(f"ResNet-18 {'de référence' if RESNET_INFO['source'] == 'reference' else 'du B1 (le tien)'} : {SIZE_20} pixels, layer4 en {SIZE_20 // 32} × {SIZE_20 // 32} ; accuracy sur "
+          f"les 200 images : {pct(np.mean(PRED_20 == POOL_20[1]), 1)} ; 8 bonnes prédictions et 8 erreurs retenues.")'''
 
 CHECK_20 = r'''ok_20 = {}
 wbx.clear_hooks(RESNET)                                # hooks left on RESNET by an earlier run of your code
@@ -1197,3 +1200,16 @@ EXPERIMENT_20 = r'''if len(ok_20) == 3:
         print("cartes nulles (la ReLU a tout éteint) :", ", ".join(empty_20))
 else:
     print("⏳ Ex B6.20 : l'expérience attend tes deux fonctions (cellules précédentes).")'''
+
+
+def needs_resnet(code: str, ex_id: str) -> str:
+    """A cell that needs RESNET, wrapped: while the ResNet could not be loaded (no network the first time, a
+    wbx.MissingModel), it prints a ⏳ line instead of running (the behaviour of chapter B1)."""
+    body = "\n".join(("    " + line) if line.strip() else "" for line in code.splitlines())
+    message = (f"⏳ Ex {ex_id} : cette cellule attend RESNET, le ResNet-18 de B6.20, qui n'a pas pu être chargé (la "
+               "cellule de chargement de B6.20 dit pourquoi) : il faut le réseau une première fois, ou Colab.")
+    return f"if wbx.is_missing(RESNET):\n    print({message!r})\nelse:\n{body}"
+
+
+CHECK_20 = needs_resnet(CHECK_20, "B6.20")
+EXPERIMENT_20 = needs_resnet(EXPERIMENT_20, "B6.20")

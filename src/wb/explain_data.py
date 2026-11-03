@@ -9,6 +9,7 @@ Quick reference
 >>> cnn, info = cifar_cnn(fast=True)        # the small CNN of Ex B6.19: trained once (about 35 s), then read back
 >>> net, info = b1_resnet(fast=True)        # ResNet-18 fine-tuned with the recipe of Ex B1.17 (layer4 + head)
 >>> net, info = b1_resnet(fast=True, folder=find_b1_folder())   # or the learner's model published in Ex B1.27
+>>> net, info = try_b1_resnet(fast=True)   # without network the first time: a MissingModel and a ⏳ line (is_missing)
 >>> x = model_input(images_uint8, info)     # the float tensor the model expects (size, mean and std of `info`)
 >>> A, G, logits = activations_and_gradients(net, net.layer4, x, target)   # the reference extractor
 >>> g = input_gradients(cnn, x, target)     # d logit[target] / d input, (N, 3, H, W)
@@ -74,6 +75,39 @@ def _torch():
     import torch
 
     return torch
+
+
+class ModelUnavailable(RuntimeError):
+    """A model of this module cannot be built here: the ImageNet weights it starts from do not download (no network,
+    no cache) and no copy of it is on the disk."""
+
+
+class MissingModel:
+    """Stands for a model that could not be loaded (:func:`try_b1_resnet`): any public attribute is the stand-in
+    itself, so that a cell that only defines (``LAYER_21 = RESNET.layer2``) still runs; calling it raises
+    :class:`ModelUnavailable` with the reason. :func:`is_missing` tells it apart from a model."""
+
+    def __init__(self, reason: str):
+        self.reason = reason
+
+    def __getattr__(self, name):
+        if name.startswith("_"):
+            raise AttributeError(name)
+        return self
+
+    def __call__(self, *args, **kwargs):
+        raise ModelUnavailable(self.reason)
+
+    def __iter__(self):
+        raise ModelUnavailable(self.reason)
+
+    def __repr__(self) -> str:
+        return f"MissingModel({self.reason!r})"
+
+
+def is_missing(model) -> bool:
+    """True for the stand-in of a model that could not be loaded (:class:`MissingModel`)."""
+    return isinstance(model, MissingModel)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -418,7 +452,11 @@ def train_resnet(settings: dict, images, labels, weights="DEFAULT", verbose: boo
     w = ResNet18_Weights.IMAGENET1K_V1 if weights == "DEFAULT" else weights
     with torch.random.fork_rng():
         torch.manual_seed(settings["seed"])
-        model = resnet18(weights=w)
+        try:
+            model = resnet18(weights=w)
+        except Exception as exc:  # noqa: BLE001 - no network and no cache of the weights: say why, the caller falls back
+            raise ModelUnavailable(f"les poids ImageNet de ResNet-18 ({w}) ne se chargent pas : {type(exc).__name__} : "
+                                   f"{str(exc).strip()[:200]}") from exc
         model.fc = nn.Linear(model.fc.in_features, 10)
         for p in model.parameters():
             p.requires_grad_(False)
@@ -554,6 +592,19 @@ def b1_resnet(fast: bool = True, folder: str | Path | None = None, verbose: bool
     elif verbose:
         print("ℹ️ pas de modèle publié par Ex B1.27 : le ResNet-18 de référence (recette de B1.17) le remplace.")
     return reference_resnet(fast, verbose=verbose)
+
+
+def try_b1_resnet(fast: bool = True, folder: str | Path | None = None, ex_id: str = "B6.20", verbose: bool = True):
+    """:func:`b1_resnet`, or ``(MissingModel, info)`` with a ⏳ line when the reference ResNet is not on the disk yet and
+    its ImageNet weights cannot be downloaded (``info["source"]`` is "missing", ``info["size"]`` None): the cells that
+    need the model then say so (⏳) instead of crashing, as in chapter B1."""
+    try:
+        return b1_resnet(fast, folder=folder, verbose=verbose)
+    except ModelUnavailable as exc:
+        print(f"⏳ Ex {ex_id} : le ResNet-18 de référence n'est pas encore sur ce disque, et {exc}. Il faut le réseau une "
+              "première fois (ou Colab), ou ton modèle publié en B1.27 : les cellules qui s'en servent (B6.20 à B6.22) "
+              "afficheront ⏳ ; le reste du notebook continue.")
+        return MissingModel(str(exc)), {"source": "missing", "size": None, "reason": str(exc)}
 
 
 # ---------------------------------------------------------------------------------------------------------------------
