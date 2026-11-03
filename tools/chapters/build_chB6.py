@@ -230,6 +230,7 @@ assert float(E.integrated_gradients(grad_min, [3.0], baseline=[2.0], n_steps=10)
 # ✏️ B6.4: grad_cam, with and without the ReLU
 assert np.allclose(E.grad_cam(A_B64[None], G_B64[None])[0], NORM_B64)
 assert math.isclose(float(E.grad_cam(A_B64[None], G_B64[None], relu=False)[0, 0, 2]), NORELU_TOPRIGHT_B64)
+assert np.allclose(E.grad_cam(10 * A_B64[None], G_B64[None])[0], NORM_B64)
 assert np.allclose(E.grad_cam(A_B64[None], 10 * G_B64[None])[0], NORM_B64)
 assert np.allclose(E.grad_cam(A_B64[None], G_B64[None], relu=False, normalize=False)[0], RAW_B64)
 
@@ -390,7 +391,7 @@ PAPER = [
           "relis la question : la référence a changé": 3}'''),
         ("d", TF, "True", r'''mistakes={"pour f = wᵀx, le gradient est le même en tout point : calcule les deux attributions": False}'''),
         ("e", LETTER, '"A"', letters("A", {"B": "un pixel égal à sa référence a-t-il un x_i − x′_i non nul ? Relis la formule des gradients intégrés",
-                                           "C": "relis la formule des gradients intégrés : que vaut le facteur x_i − x′_i pour un pixel du chat ?"})),
+                                           "C": "relis la formule des gradients intégrés : que vaut le facteur x_i − x′_i pour un pixel du fond ?"})),
     ]),
     Paper("B6.Q8", "Grad-CAM : pourquoi la dernière couche convolutive ?", [
         ("a", WHOLE, "Q8A", r'''mistakes={"c'est la taille de layer3, qui divise par 16 : relis les quatre détails de « Avec PyTorch : deux hooks »": 160 // 16,
@@ -573,7 +574,7 @@ PAPER = [
         ("h", LETTER, f'"{MAX_OTHER_B64}"', letters(MAX_OTHER_B64, {"A": "calcule −0,5 A¹ + A² case par case : que vaut-elle en haut à gauche ?",
                                                                      "B": "calcule −0,5 A¹ + A² case par case : que vaut-elle en bas à gauche ?",
                                                                      "C": "calcule −0,5 A¹ + A² case par case : que vaut-elle en haut à droite ?"})),
-        ("i", TF, "False", r'''mistakes={"multiplier les gradients par 10 multiplie les α, donc toute la carte : que fait la division par le maximum ?": True}'''),
+        ("i", TF, "False", r'''mistakes={"multiplier les activations par 10 multiplie toute la somme pondérée : que fait la division par le maximum ?": True}'''),
         ("j", WHOLE, "round(SHIFT_B64)", r'''mistakes={"c'est la taille d'un pixel de la couche : on demande un demi-pixel": 24,
           "relis l'énoncé : la carte fait 3 × 3 et l'image 72 × 72": 36}'''),
     ]),

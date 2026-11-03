@@ -58578,7 +58578,7 @@
       "hash": "25c01cf3e8079e1ff9cc802925380802992b8dadebd8fcf6245f4d1599edf1f8",
       "kind": "bool",
       "mistakes": {
-        "21b0f2bfecb77639ee1d1f838612344693ef7c89325023bc6c5571d5d9c8d5c4": "multiplier les gradients par 10 multiplie les α, donc toute la carte : que fait la division par le maximum ?"
+        "21b0f2bfecb77639ee1d1f838612344693ef7c89325023bc6c5571d5d9c8d5c4": "multiplier les activations par 10 multiplie toute la somme pondérée : que fait la division par le maximum ?"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -59085,7 +59085,7 @@
       "hash": "590c7ab53cd861d62a2bf49b0c6f52888a6352c8f97b7bba45ca54a0c3cf10bf",
       "kind": "str",
       "mistakes": {
-        "aab2b8dcf5ce56795d4bbfc6cdd011dee5b11daea14dc8e770f7f79fcda40eaf": "relis la formule des gradients intégrés : que vaut le facteur x_i − x′_i pour un pixel du chat ?",
+        "aab2b8dcf5ce56795d4bbfc6cdd011dee5b11daea14dc8e770f7f79fcda40eaf": "relis la formule des gradients intégrés : que vaut le facteur x_i − x′_i pour un pixel du fond ?",
         "acc706c060d2509ce5aedc08a51602540a80f5ed320a16d31e5c9df6a266b446": "un pixel égal à sa référence a-t-il un x_i − x′_i non nul ? Relis la formule des gradients intégrés"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"

@@ -130,7 +130,7 @@ $f(x) = \min(x, 1)$ a une pente de 1 sous 1 et de 0 au-delà. $\operatorname{IG}
 </details>
 <details><summary>Indice 3</summary>
 
-a) $x = 3$ est au-delà de 1, où $f$ est plate : $f'(3) = 0$. Pour b), le chemin de 0 à 3 passe un tiers de son parcours sous 1 : multiplie 3 par la pente moyenne, ou utilise la complétude. Pour c), sur quelle partie de $f$ se trouve le chemin de 2 à 3 ? Pour d), le gradient d'un modèle linéaire est-il le même en tout point du chemin ? Pour e), que vaut $x_i - x'_i$ pour un pixel du chat ?
+a) $x = 3$ est au-delà de 1, où $f$ est plate : $f'(3) = 0$. Pour b), le chemin de 0 à 3 passe un tiers de son parcours sous 1 : multiplie 3 par la pente moyenne, ou utilise la complétude. Pour c), sur quelle partie de $f$ se trouve le chemin de 2 à 3 ? Pour d), le gradient d'un modèle linéaire est-il le même en tout point du chemin ? Pour e), que vaut $x_i - x'_i$ pour un pixel du fond ?
 
 </details>
 
@@ -336,7 +336,7 @@ $\nabla f = (2x_1, 3)$. Le long du chemin depuis $\mathbf{0}$, au point $\alpha\
 </details>
 <details><summary>Indice 3</summary>
 
-a) $\nabla f(2, -1) = (2 \times 2,\ 3) =$ **[4, 3]**. Pour b), multiplie chaque composante par $x_i$. Pour c), calcule $f(2, -1) - f(0, 0)$. Pour d), intègre $2\alpha x_1$ de 0 à 1, multiplie par $x_1$ ; la seconde vaut $3 \times x_2$. Pour e), les points $\alpha = 0 ;\ 0{,}2 ;\ 0{,}4 ;\ 0{,}6 ;\ 0{,}8$, la moyenne de $4\alpha$, multipliée par 2. Pour f), les points $0{,}2$ à $1$. Pour g), la moyenne de e) et de f) est-elle la règle des trapèzes ? Vérifie-le avec les poids. Pour h), écris l'erreur de la règle de gauche en fonction de $n$ et résous « erreur $\le 0{,}01$ ». Pour i), intègre $2(1 + \alpha)$ de 0 à 1, multiplie par $x_1 - x'_1$. Pour j), la complétude donne la somme. Pour k), six points $0, 0{,}2, \dots, 1$, poids $\frac16$ divisés par deux aux extrémités, puis multiplie par $x_1$. Pour l), `n_steps` compte des intervalles.
+a) $\nabla f(2, -1) = (2 \times 2,\ 3) =$ **[4, 3]**. Pour b), multiplie chaque composante par $x_i$. Pour c), calcule $f(2, -1) - f(0, 0)$. Pour d), intègre $2\alpha x_1$ de 0 à 1, multiplie par $x_1$ ; la seconde vaut $3 \times x_2$. Pour e), les points $\alpha = 0 ;\ 0{,}2 ;\ 0{,}4 ;\ 0{,}6 ;\ 0{,}8$, la moyenne de $4\alpha$, multipliée par 2. Pour f), les points $0{,}2$ à $1$. Pour g), la moyenne de e) et de f) est-elle la règle des trapèzes ? Vérifie-le avec les poids. Pour h), écris l'erreur de la règle de gauche en fonction de $n$ et résous « erreur $\le 0{,}03$ ». Pour i), intègre $2(1 + \alpha)$ de 0 à 1, multiplie par $x_1 - x'_1$. Pour j), la complétude donne la somme. Pour k), six points $0, 0{,}2, \dots, 1$, poids $\frac16$ divisés par deux aux extrémités, puis multiplie par $x_1$. Pour l), `n_steps` compte des intervalles.
 
 </details>
 
@@ -354,7 +354,7 @@ $\alpha_c$ est la **moyenne** des neuf gradients du canal $c$. La carte est $\al
 </details>
 <details><summary>Indice 3</summary>
 
-a) La somme des neuf gradients du canal 1 vaut $0 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 0 = 9$, donc $\alpha_1 = 9/9 = 1{,}0$. Pour b), fais de même avec le canal 2 (attention aux signes). Pour c), calcule $\alpha_1 \times 0 + \alpha_2 \times 2$. Pour d), écris la carte entière et compte ses cases négatives. Pour e), divise la case du centre par le maximum de la carte après ReLU. Pour f), compare les trois coins. Pour g), même calcul que c), divisé par la plus grande valeur absolue de la carte **sans** ReLU. Pour h), calcule $-0{,}5\,A^1 + A^2$ dans les trois coins. Pour i), que deviennent les $\alpha_c$, la carte et son maximum ? Pour j), divise 72 par 3, puis par 2.
+a) La somme des neuf gradients du canal 1 vaut $0 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 0 = 9$, donc $\alpha_1 = 9/9 = 1{,}0$. Pour b), fais de même avec le canal 2 (attention aux signes). Pour c), calcule $\alpha_1 \times 0 + \alpha_2 \times 2$. Pour d), écris la carte entière et compte ses cases négatives. Pour e), divise la case du centre par le maximum de la carte après ReLU. Pour f), compare les trois coins. Pour g), même calcul que c), divisé par la plus grande valeur absolue de la carte **sans** ReLU. Pour h), calcule $-0{,}5\,A^1 + A^2$ dans les trois coins. Pour i), les $\alpha_c$ ne lisent que les gradients : que deviennent-ils, puis la carte et son maximum ? Pour j), divise 72 par 3, puis par 2.
 
 </details>
 

@@ -81,7 +81,7 @@ a) Que vaut le gradient $f'(x)$ en $x = 3$ ?
 b) Que vaut l'attribution des gradients intégrés avec la référence $x' = 0$ ?
 c) Et avec la référence $x' = 2$ ?
 d) Vrai ou faux : pour un modèle linéaire $f(\mathbf{x}) = \mathbf{w}^\top\mathbf{x}$ et la référence $\mathbf{0}$, gradient × entrée et gradients intégrés donnent les mêmes attributions.
-e) La photo d'un chat noir (pixels du chat à 0) sur un fond blanc, référence noire. Les gradients intégrés : (A) n'attribuent rien aux pixels du chat ; (B) attribuent le plus aux pixels du chat ; (C) attribuent la même valeur à tous les pixels.
+e) Une radiographie montre une lésion blanche (pixels à 1) sur un fond gris uniforme (pixels à 0,5) ; la référence est l'image uniforme à 0,5. Les gradients intégrés : (A) n'attribuent rien aux pixels du fond ; (B) attribuent le plus aux pixels du fond ; (C) attribuent la même valeur à tous les pixels.
 
 ### B6.Q8 — Grad-CAM : pourquoi la dernière couche convolutive ? 🧠 ⏱️ 3 min
 *Fiche §206.6 · parcours R*
@@ -246,10 +246,10 @@ e) La valeur de la carte normalisée (après ReLU) dans la case du centre, à 2 
 f) Où est le maximum de la carte de la classe $k$ ? (A) en haut à gauche ; (B) en bas à gauche ; (C) en haut à droite.
 g) Sans le ReLU (`relu=False`), la carte normalisée dans la case en haut à droite, à 2 décimales.
 h) Pour une autre classe $k'$, les poids valent $\alpha'_1 = -0{,}5$ et $\alpha'_2 = 1$. Où est le maximum de sa carte ? (A) en haut à gauche ; (B) en bas à gauche ; (C) en haut à droite.
-i) Vrai ou faux : si l'on multiplie tous les gradients de la classe $k$ par 10, la carte normalisée change.
+i) Vrai ou faux : si l'on multiplie les activations $A^1$ et $A^2$ par 10, sans toucher aux gradients, la carte normalisée change.
 j) La carte de 3 × 3 est agrandie à une image de 72 × 72 pixels. Une convention d'alignement (`align_corners`) différente pour la carte et pour l'image décale la carte d'un demi-pixel de la couche : combien de pixels de l'image ?
 
-Dans ta copie : dessine les deux cartes (classes $k$ et $k'$). Que fait le canal 2 pour la classe $k$ ? Pourquoi multiplier tous les gradients par 10 ne change-t-il rien après normalisation, mais changerait la carte non normalisée ? Comment s'écrirait `A` pour ta `grad_cam` (sa forme) ?
+Dans ta copie : dessine les deux cartes (classes $k$ et $k'$). Que fait le canal 2 pour la classe $k$ ? Pourquoi multiplier les activations par 10 ne change-t-il rien après normalisation, mais changerait la carte non normalisée ? Comment s'écrirait `A` pour ta `grad_cam` (sa forme) ?
 
 ### Ex B6.5 — Audit à la main : deux groupes, deux matrices de confusion, cinq indicateurs ✏️ ★★ ⏱️ 20 min
 **Objectif :** calculer à la main les taux d'un audit par groupe, les écarts de parité démographique et d'equalized odds et la règle des quatre cinquièmes, et voir ce qu'un seuil par groupe changerait.

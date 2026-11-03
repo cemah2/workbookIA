@@ -560,7 +560,7 @@ Ces critères se contredisent dès que les **taux de base diffèrent**. A. Choul
 
 $$\operatorname{FPR} = \frac{p}{1 - p}\cdot\frac{1 - \operatorname{PPV}}{\operatorname{PPV}}\cdot(1 - \operatorname{FNR}).$$
 
-Si deux groupes ont la **même** PPV (parité prédictive) et le **même** FNR (même TPR), leurs FPR sont dans le rapport de $\frac{p}{1-p}$ : ils ne peuvent être égaux que si leurs taux de base le sont. Exemple : avec PPV = 0,7 et FNR = 0,25 dans les deux groupes, un groupe de taux de base 0,2 a un FPR de $0{,}25 \times \frac{0{,}3}{0{,}7} \times 0{,}75 = 0{,}080$, un groupe de taux de base 0,4 un FPR de $\frac{0{,}4}{0{,}6} \times \frac{0{,}3}{0{,}7} \times 0{,}75 = 0{,}214$. La démonstration de l'identité, à partir des définitions et de la règle de Bayes, est ∂ B6.6.
+Si deux groupes ont la **même** PPV (parité prédictive) et le **même** FNR (même TPR), leurs FPR sont dans le rapport de $\frac{p}{1-p}$ : tant que la PPV est inférieure à 1, ils ne peuvent être égaux que si leurs taux de base le sont. Exemple : avec PPV = 0,7 et FNR = 0,25 dans les deux groupes, un groupe de taux de base 0,2 a un FPR de $0{,}25 \times \frac{0{,}3}{0{,}7} \times 0{,}75 = 0{,}080$, un groupe de taux de base 0,4 un FPR de $\frac{0{,}4}{0{,}6} \times \frac{0{,}3}{0{,}7} \times 0{,}75 = 0{,}214$. La démonstration de l'identité, à partir des définitions et de la règle de Bayes, est ∂ B6.6.
 
 ![La courbe du FPR imposé en fonction du taux de base p, à PPV = 0,7 et FNR = 0,25 fixés : elle croît de presque 0 à plus de 0,6 quand p va de 0,02 à 0,65 ; deux points marqués, le groupe A (p = 0,2, FPR = 0,080) et le groupe B (p = 0,4, FPR = 0,214)](figures/impossibilite.png)
 
