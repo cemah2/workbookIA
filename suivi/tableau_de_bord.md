@@ -1582,3 +1582,41 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B5.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (26 cartes)
 <!-- wb:end B5 -->
+
+<!-- wb:section B6 -->
+## B6 — Explicabilité, équité et éthique ⏱️ 19 h
+
+- [ ] B6.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] B6.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B6.1 ✏️ Valeurs de Shapley exactes à la main : trois features, huit coalitions ★★ 25 min
+- [ ] B6.2 ∂ Modèle linéaire et fond indépendant : φ_i = w_i (x_i − E[x_i]) ★★ 20 min
+- [ ] B6.3 ✏️ Gradients intégrés à la main sur f(x) = x₁² + 3x₂ et vérification de la complétude ★★ 20 min
+- [ ] B6.4 ✏️ Grad-CAM à la main : deux cartes 3×3 et leurs gradients ★★ 15 min
+- [ ] B6.5 ✏️ Audit à la main : deux groupes, deux matrices de confusion, cinq indicateurs ★★ 20 min
+- [ ] B6.6 ∂ Impossibilité : taux de base différents, calibration et égalité des erreurs incompatibles ★★★ 40 min
+- [ ] B6.7 🧮 Fermi : coût de Shapley exact, de KernelSHAP et de TreeSHAP pour 10, 20 et 50 features ★★ 15 min
+- [ ] B6.8 🗣️ Expliquer une valeur SHAP à un client dont le prêt est refusé, en cinq lignes ★ 10 min
+- [ ] B6.9 ⚖️ Scoring de crédit : le code postal est-il une variable de substitution ? Droits du client, obligations de l'entreprise ★★★ 35 min
+- [ ] B6.10 ⚖️ Reconnaissance faciale : erreurs par sous-groupe et décision de déploiement ★★ 25 min
+- [ ] B6.11 📄 Lundberg et Lee (2017) : « A Unified Approach to Interpreting Model Predictions » ★★★ 45 min
+- [ ] B6.12 📦 Explications globales sur California : coefficients, permutation, dépendance partielle et ICE ★★ 30 min
+- [ ] B6.13 🔮 Prédire la forme des courbes ICE du revenu médian et de la latitude ★ 10 min
+- [ ] B6.14 🔨 shapley_values : Shapley exact par énumération des coalitions ★★★ 45 min
+- [ ] B6.15 📦 SHAP sur un gradient boosting California : TreeExplainer, waterfall, beeswarm, dépendance ★★ 30 min
+- [ ] B6.16 🔬 Le fond change tout : trois fonds différents, puis une feature dupliquée ★★★ 40 min
+- [ ] B6.17 📦 Penguins : SHAP par classe pour une régression logistique et une forêt aléatoire ★★ 25 min
+- [ ] B6.18 🔨 integrated_gradients et grad_cam ★★ 30 min
+- [ ] B6.19 📦 Saillance, gradient × entrée et gradients intégrés sur un CNN CIFAR-10 ★★ 30 min
+- [ ] B6.20 📦 Grad-CAM par hooks sur le ResNet fine-tuné du B1 : bonnes prédictions et erreurs ★★★ 45 min
+- [ ] B6.21 🐛 Grad-CAM à l'envers : mauvaise couche, mauvaise classe, ReLU oubliée, carte mal alignée ★★ 25 min
+- [ ] B6.22 🔬 Test de santé d'Adebayo : randomiser les poids couche par couche, la carte change-t-elle ? ★★★ 40 min
+- [ ] B6.23 🔨 group_rates, demographic_parity_difference et equalized_odds_difference ★★ 25 min
+- [ ] B6.24 📦 Audit d'équité sur Adult : indicateurs par sexe et par âge, intervalles de confiance bootstrap ★★★ 45 min
+- [ ] B6.25 📈 Lire un tableau d'audit : où est l'écart, est-il significatif, que conclure ? ★★ 15 min
+- [ ] B6.26 🔮 Prédire : retirer la variable « sexe » rend-il le modèle équitable ? ★ 10 min
+- [ ] B6.27 🔬 Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte ★★★ 50 min
+- [ ] B6.28 🛠️ Fiche modèle avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu ★★ 25 min
+- [ ] B6.29 🏆 Défi : écart d'equalized odds sous 0,07 sur Adult, en perdant moins de 2 points d'accuracy ★★★★ 90 min
+- [ ] B6.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (28 cartes)
+<!-- wb:end B6 -->
