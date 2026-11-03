@@ -9,19 +9,19 @@
   "title_en": null,
   "pages": null
  },
- "summary": "Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoir être expliqué et audité. Tu construis des explications globales (permutation, dépendance partielle) et locales (valeurs de Shapley, calculées exactement puis avec la bibliothèque shap), tu produis des cartes d'attribution pour les réseaux (gradients intégrés, Grad-CAM) et tu testes leur fiabilité. Tu mesures ensuite l'équité d'un classifieur par groupe, tu comprends pourquoi tous les critères ne peuvent pas être satisfaits à la fois, tu testes des corrections et tu documentes le tout dans une model card conforme aux attentes réglementaires (RGPD, AI Act).",
+ "summary": "Un modèle qui décide d'un prêt, d'un diagnostic ou d'une embauche doit pouvoir être expliqué et audité. Tu construis des explications globales (permutation, dépendance partielle) et locales (valeurs de Shapley, calculées exactement puis avec la bibliothèque shap), tu produis des cartes d'attribution pour les réseaux (gradients intégrés, Grad-CAM) et tu testes leur fiabilité. Tu mesures ensuite l'équité d'un classifieur par groupe, tu comprends pourquoi tous les critères ne peuvent pas être satisfaits à la fois, tu testes des corrections et tu documentes le tout dans une fiche modèle (model card) conforme aux attentes réglementaires (RGPD, AI Act).",
  "objectives": [
   "Choisir une méthode d'explication selon la question posée (globale ou locale, modèle tabulaire ou réseau)",
   "Calculer des valeurs de Shapley exactes, les relier à SHAP et interpréter waterfall, beeswarm et dépendance",
   "Produire et critiquer des cartes d'attribution (gradients intégrés, Grad-CAM) et appliquer un test de santé",
   "Mesurer l'équité d'un classifieur par groupe avec intervalles de confiance et expliquer les impossibilités",
   "Tester des stratégies d'atténuation et chiffrer leur coût",
-  "Rédiger une model card qui documente explicabilité, équité, limites et usage prévu, en lien avec le RGPD et l'AI Act"
+  "Rédiger une fiche modèle qui documente explicabilité, équité, limites et usage prévu, en lien avec le RGPD et l'AI Act"
  ],
  "sections": [
   {
    "ref": "206.1",
-   "title": "Pourquoi expliquer : déboguer, faire confiance, se conformer ; interprétable ou post-hoc, global ou local"
+   "title": "Pourquoi expliquer : déboguer, faire confiance, se conformer ; interprétable ou post hoc, global ou local"
   },
   {
    "ref": "206.2",
@@ -61,11 +61,11 @@
   },
   {
    "ref": "206.11",
-   "title": "Éthique et régulation en pratique : model cards, supervision humaine, RGPD, AI Act"
+   "title": "Éthique et régulation en pratique : fiches modèles, supervision humaine, RGPD, AI Act"
   }
  ],
  "concepts": [
-  "interprétabilité par construction, explication post-hoc",
+  "interprétabilité par construction, explication post hoc",
   "explication globale ou locale",
   "importance par permutation",
   "dépendance partielle (PDP), courbes ICE",
@@ -92,7 +92,7 @@
   "calibration par groupe",
   "théorème d'impossibilité",
   "repondération, seuils par groupe",
-  "model card",
+  "fiche modèle",
   "supervision humaine",
   "RGPD art. 22 (décision automatisée)",
   "AI Act : niveaux de risque"
@@ -185,7 +185,7 @@
   "indicateurs d'équité par groupe",
   "théorème d'impossibilité",
   "atténuation des biais",
-  "model card équité et explicabilité",
+  "fiche modèle équité et explicabilité",
   "RGPD et AI Act appliqués"
  ],
  "requires": [
@@ -222,7 +222,7 @@
    "from": "CP3"
   },
   {
-   "notion": "model card, data card",
+   "notion": "fiche modèle, data card",
    "from": "29"
   },
   {
@@ -240,7 +240,7 @@
  ],
  "updates": [
   {
-   "topic": "explicabilité post-hoc",
+   "topic": "explicabilité post hoc",
    "book": "le livre (ch. 20) oppose explication complète et explication satisfaisante, sans outil",
    "today": "SHAP (TreeSHAP, KernelSHAP), dépendance partielle/ICE dans sklearn.inspection, gradients intégrés, Grad-CAM ; interprétabilité mécaniste pour les LLM (autoencodeurs parcimonieux)",
    "keep": "oui",
@@ -1133,7 +1133,7 @@
   {
    "id": "B6.28",
    "type": "🛠️",
-   "title": "Model card avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu",
+   "title": "Fiche modèle avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu",
    "stars": 2,
    "minutes": 25,
    "gpu": false,
@@ -1376,7 +1376,7 @@
   "Grad-CAM",
   "Retirer la variable sensible ne suffit pas"
  ],
- "pro_skill": "Rédiger une model card qui documente explicabilité, équité (indicateurs par groupe), limites et usage prévu",
+ "pro_skill": "Rédiger une fiche modèle qui documente explicabilité, équité (indicateurs par groupe), limites et usage prévu",
  "flashcards": 28,
  "reading_minutes": 110,
  "generation_sessions": 2,
