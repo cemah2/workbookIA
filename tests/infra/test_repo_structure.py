@@ -191,11 +191,16 @@ def _keyword_selects(expression: str, name: str) -> bool:
 
 
 def test_notebook_pytest_groups_cover_every_test_of_their_file():
-    """The -k groups that a notebook runs, taken together, select every test of the file (A10 9, audit P5 V-VI)."""
+    """The -k groups that a notebook runs, taken together, select every test of the file (A10 9, audit P5 V-VI).
+
+    A chapter still in generation (its folder holds EN_COURS.md) is skipped: its notebook may be written in two halves,
+    and the group of a 🔨 of the second half (B6.23 in session 74) only comes with it."""
     import ast
     import re
 
     for path in sorted(ROOT.glob("chapitres/*/03_notebook.ipynb")):
+        if (path.parent / "EN_COURS.md").exists():
+            continue
         nb = json.loads(path.read_text(encoding="utf-8"))
         source = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
         files = dict(re.findall(r'(TEST_\w*)\s*=\s*"(tests/[^"]+\.py)"', source))

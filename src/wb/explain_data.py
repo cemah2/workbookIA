@@ -481,7 +481,6 @@ def load_b1_folder(folder: str | Path):
     (architecture resnet18, ``num_classes``, ``image_size``, ``mean``, ``std``) and its ``model.safetensors``, frozen
     and in eval() mode; ``info["source"]`` is "learner". Raises ValueError when the folder does not hold such a
     model."""
-    torch = _torch()
     from safetensors.torch import load_file
     from torchvision.models import resnet18
 
@@ -511,7 +510,6 @@ def reference_resnet(fast: bool = True, folder: str | Path | None = None, verbos
     ``test_accuracy`` (50 test images per class), ``seconds``, ``settings``, ``path``."""
     from torchvision.models import resnet18
 
-    torch = _torch()
     key = resnet_key(fast)
     path = cache_file(key, folder)
     payload = _read(path, key)
