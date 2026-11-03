@@ -394,7 +394,7 @@ EX_31 = Ex("B5.31", "🏆", 4, 120, "Défi : la plus petite distance de Fréchet
 - **à froid** et sans fuite : pendant la course, les variables du notebook qui contiennent des images, des features, un modèle ou une sauvegarde sont masquées, les chargeurs de `wb` (`wbd.image_subset`, `wb.datasets`), les sauvegardes, `torch.load` et le classifieur des mesures sont neutralisés ; `generate` doit appeler un réseau entraîné pendant la course, pas un modèle du notebook ;
 - **pas de copie** : la part des images générées anormalement proches d'une image d'entraînement ($r < 1/3$, 🔬 B5.28) ne dépasse pas `COPIES_31` (celle de la référence plus une marge), et aucune n'est une image de test.
 
-La cellule suivante donne `evaluate_31`, `LIMIT_31`, `N_31`, `GOAL_31`, `REFERENCE_31` (la meilleure et la pire graine de la solution de référence) et `COPIES_31`. L'objectif est la pire graine de la référence plus 15 % : un U-Net conditionné de canaux (16, 32, 64), entraîné pendant le temps donné, avec une EMA, et échantillonné par DDIM guidé. Tu peux reprendre tes fonctions du chapitre, ou faire autrement (un autre planning, une autre paramétrisation, un réseau plus petit ou plus gros, moins de pas mais une guidance différente…).
+La cellule suivante donne `evaluate_31`, `LIMIT_31`, `N_31`, `GOAL_31`, `REFERENCE_31` (la meilleure et la pire graine de la solution de référence) et `COPIES_31`. L'objectif est la pire graine de la référence plus 15 % : un U-Net conditionné de canaux (16, 32, 64), entraîné pendant le temps donné, avec une EMA, et échantillonné par DDIM guidé en 25 pas. Tu peux reprendre tes fonctions du chapitre, ou faire autrement (un autre planning, une autre paramétrisation, un réseau plus petit ou plus gros, moins de pas mais une guidance différente…).
 
 Dans tes notes : ta méthode, ce que tu as essayé, ce qui a aidé et ce qui n'a rien changé, et ta distance. Combien de pas d'optimisation ta méthode fait-elle dans le temps donné ? À 50 passes, vaut-il mieux 50 pas sans guidance ou 25 pas guidés ? Et la course réduite du mode rapide, prédit-elle le classement du défi complet ? La réussite est affichée ; elle n'est pas enregistrée : c'est une règle d'honneur.""",
            given=fill(C.GIVEN_31, {"LIMIT_FAST_31": "45.0", "LIMIT_FULL_31": "600.0",
@@ -403,6 +403,6 @@ Dans tes notes : ta méthode, ce que tu as essayé, ce qui a aidé et ce qui n'a
                                    "COPIES_FAST_31": repr(V31["fast"]["copies"]),
                                    "COPIES_FULL_31": repr(V31["full"]["copies"])}),
            todo=C.TODO_31, check=C.CHECK_31,
-           solution=fill(C.SOLUTION_31, {"W_31": repr(_W_31), "STEPS_31": "25"}) + "\n\n\n" + C.CHECK_31)
+           solution=fill(C.SOLUTION_31, {"W_31": f'{V31["fast"]["w"]!r} if FAST_MODE else {V31["full"]["w"]!r}', "STEPS_31": "25"}) + "\n\n\n" + C.CHECK_31)
 
 EXERCISES_C2 = [EX_22, EX_23, EX_24, EX_25, EX_26, EX_27, EX_28, EX_29, EX_30, EX_31]

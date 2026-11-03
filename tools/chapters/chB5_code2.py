@@ -1426,7 +1426,8 @@ TODO_31 = r'''def method_31(images, labels, seconds):
     raise NotImplementedError("method_31")'''
 
 SOLUTION_31 = r'''SEED_31 = 3100          # the seed of the reference (history_chB5.py calibrates the goal on several seeds)
-W_31, STEPS_31 = «W_31», «STEPS_31»     # guidance and DDIM steps: 2 passes per step with guidance, so 25 steps = 50 passes
+W_31 = «W_31»          # the guidance of the reference (history_chB5.py: the best worst seed)
+STEPS_31 = «STEPS_31»   # DDIM steps: 2 passes per step with guidance, so 25 steps = 50 passes
 
 
 def method_31(images, labels, seconds):
