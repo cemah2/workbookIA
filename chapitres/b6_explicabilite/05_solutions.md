@@ -242,4 +242,226 @@ Avec $M = 3$, les poids valent $\frac{0!\,2!}{3!} = \frac13$ (taille 0 ou 2) et 
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B6.12 à B6.29) seront ajoutées à la prochaine session de génération, avec le notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.
+### Ex B6.12 — Explications globales sur California : coefficients, permutation, dépendance partielle et ICE 📦
+**Réponse** : coefficients standardisés : `MedInc` 0,86, `Latitude` −0,87, `Longitude` −0,84, `AveBedrms` 0,28, `AveRooms` −0,26, `HouseAge` 0,12, `AveOccup` −0,04, `Population` −0,01 (R² de validation de la régression : 0,584) ; importances par permutation du gradient boosting (R² 0,825) sur la validation : `Latitude` 0,727, `Longitude` 0,624, `MedInc` 0,538, `AveOccup` 0,157, `AveRooms` 0,049, `HouseAge` 0,039, `Population` et `AveBedrms` 0,006. La dépendance partielle de `AveOccup` descend de 2,67 à 1,74 entre 1,9 et 4,4 occupants par logement, presque toute la baisse avant 3 occupants (1,94 à 3) ; celle de `HouseAge` ne bouge que de 0,32 sur toute sa grille.
+**Démarche** :
+```python
+def linear_12(X, y):
+    return make_pipeline(StandardScaler(), LinearRegression()).fit(X, y)
+
+
+def coefs_12(pipeline):
+    return pd.Series(pipeline[-1].coef_, index=pipeline.feature_names_in_)
+
+
+def boosting_12(X, y):
+    return HistGradientBoostingRegressor(random_state=0).fit(X, y)
+
+
+def permutation_12(model, X, y):
+    result = permutation_importance(model, X, y, n_repeats=5, random_state=0)
+    return pd.Series(result.importances_mean, index=X.columns).sort_values(ascending=False)
+
+
+def pd_ice_12(model, X, feature):
+    result = partial_dependence(model, X, [feature], kind="both", grid_resolution=50)
+    return {"grid": result["grid_values"][0], "average": result["average"][0], "individual": result["individual"][0]}
+```
+Les trois explications ne répondent pas à la même question. Les coefficients décrivent la **régression**, un modèle qui n'explique que 58 % de la variance : ils disent ce que vaut un écart-type de chaque feature, les autres fixées, dans un monde linéaire. `AveBedrms` et `AveRooms` y ont des coefficients de signes opposés, deux features corrélées que la régression oppose ; le gradient boosting, lui, s'en sert à peine. La permutation décrit le **gradient boosting**, sur des districts qu'il n'a pas vus : la position (latitude et longitude, qui ne servent qu'ensemble) passe devant le revenu, parce que les arbres découpent la carte en zones, ce qu'une droite ne sait pas faire. Les courbes ICE de `AveOccup` ont presque toutes la même forme (une baisse, puis un plateau), à des hauteurs différentes : la dépendance partielle les résume bien pour la forme, pas pour le niveau. Au-delà du 95ᵉ centile (4,4 occupants), peu de districts : la grille s'arrête là, et une courbe prolongée n'y dirait que ce que les arbres ont appris ailleurs.
+**Erreurs fréquentes** : comparer des coefficients de features brutes (celui de `Population` vaut $-10^{-5}$ par habitant, celui de `AveBedrms` 0,82 par chambre : l'unité décide) ; calculer la permutation sur l'entraînement ; oublier `random_state=0` dans `permutation_importance`, qui change alors à chaque exécution ; lire une dépendance partielle comme un effet causal (« ajouter un occupant fait baisser le prix »).
+**Variante** : la même permutation sur les districts d'**entraînement** donne `Latitude` 0,770, `Longitude` 0,636, `MedInc` 0,585, `AveOccup` 0,170, `AveRooms` 0,062, `HouseAge` 0,051, `Population` 0,016, `AveBedrms` 0,014 : toutes plus grandes, parce que le modèle connaît ces districts (il y perd plus quand on les brouille), et `Population` et `AveBedrms` changent de rang : la différence entre entraînement et validation mesure ce que le modèle a appris par cœur.
+
+### Ex B6.13 — Prédire la forme des courbes ICE du revenu médian et de la latitude 🔮
+**Réponse** : a) **`"C"`** : la dépendance partielle de `MedInc` monte de 1,94 (de 1,38 à 3,32) ; b) **`"C"`** : celle de `Latitude` descend de 1,82, de 3,20 au sud à 1,38 au nord ; c) **`"A"`** : aucune des 500 courbes ICE de la latitude ne finit plus haut qu'elle ne commence ; d) **`True`** : l'écart-type de la variation des courbes ICE vaut 0,60 pour la latitude, 0,45 pour le revenu. Sur cinq découpages de California et deux graines du modèle (`tools/chapters/history_chB6.py`), les quatre réponses ne changent jamais : la montée du revenu va de 1,80 à 2,03, la descente de la latitude de 1,54 à 1,82, aucune courbe ICE de la latitude ne monte, et le rapport des deux écarts-types va de 1,3 à 2,0.
+**Démarche** : toutes les courbes ICE du revenu montent, à peu près parallèles : un district plus riche vaut plus cher, quel que soit l'endroit. La latitude surprend : on attend souvent une bosse vers la baie de San Francisco (37,5° à 38°), et la courbe moyenne y est presque plate, puis descend encore vers le nord. C'est l'effet de la longitude **fixée** : déplacer un district de Los Angeles (34°, −118°) vers le nord sans changer sa longitude le fait entrer dans les terres (la vallée centrale, la Sierra), où les logements sont moins chers ; la baie est plus à l'ouest. Les courbes ICE de la latitude descendent toutes, mais pas de la même hauteur ni au même endroit : elles portent l'interaction avec la longitude, que la dépendance partielle moyenne efface. Une courbe ICE reste une question posée au modèle (« que prédirais-tu si ce district était plus au nord ? »), souvent sur des combinaisons qui n'existent pas, et non l'effet d'un déménagement.
+**Erreurs fréquentes** : lire la latitude comme une variable indépendante de la longitude (la carte n'est pas un axe) ; attendre une bosse pour San Francisco sans fixer la longitude ; confondre la variation moyenne (la dépendance partielle) et sa dispersion d'un district à l'autre (les ICE).
+**Variante** : pour la longitude (d'ouest en est), la dépendance partielle descend de 1,55 ; aucune courbe ICE ne monte ; l'écart-type de leur variation vaut 0,49 : la même lecture, la côte contre l'intérieur.
+
+### Ex B6.14 — shapley_values : Shapley exact par énumération des coalitions 🔨
+**Réponse** : les 33 tests de l'exercice passent ; sur California, 8 features et un fond de 50 lignes, la fonction rend les valeurs de `shap.explainers.Exact` en 0,06 s, avec un seul appel à `f` sur les 12 800 lignes.
+**Démarche** :
+```python
+def shapley_values(f, x, background, max_features=12):
+    x = np.array(x, dtype=float)
+    bg = np.array(background, dtype=float)
+    if x.ndim != 1:
+        raise ValueError(f"x must be 1-D, got shape {x.shape}")
+    if bg.ndim != 2 or bg.shape[1] != len(x):
+        raise ValueError(f"background must be 2-D with {len(x)} columns, got shape {bg.shape}")
+    M, B = len(x), len(bg)
+    if M > max_features:
+        raise ValueError(f"{M} features > max_features = {max_features}")
+    masks = list(itertools.product((False, True), repeat=M))
+    blocks = []
+    for mask in masks:
+        rows = bg.copy()
+        rows[:, list(mask)] = x[list(mask)]
+        blocks.append(rows)
+    out = np.asarray(f(np.concatenate(blocks)), dtype=float).reshape(len(masks), B)
+    values = dict(zip(masks, out.mean(axis=1)))              # v(S): f first, then the mean over the background
+    phi = np.zeros(M)
+    for mask, value in values.items():
+        size = sum(mask)
+        for i in range(M):
+            if not mask[i]:
+                weight = math.factorial(size) * math.factorial(M - size - 1) / math.factorial(M)
+                phi[i] += weight * (values[mask[:i] + (True,) + mask[i + 1:]] - value)
+    return phi, float(values[(False,) * M])
+```
+Chaque coalition est un masque booléen ; son $v(S)$ remplace les colonnes de $S$ dans une copie du fond et fait la moyenne de $f$ sur les $B$ lignes, **une** fois. Les $2^M$ blocs de $B$ lignes sont ici concaténés pour un seul appel à `f` : un `predict` de 12 800 lignes coûte à peine plus qu'un `predict` de 50, et bien moins que 256 appels. Le poids $\frac{|S|!\,(M - |S| - 1)!}{M!}$ compte les ordres d'arrivée où $i$ suit exactement $S$ ; leur somme sur les coalitions sans $i$ vaut 1. Le modèle linéaire à 5 features vérifie $\phi_i = w_i(x_i - \bar b_i)$ (∂ B6.2), l'efficacité tient à $10^{-12}$ près, et `shap.explainers.Exact`, avec `max_samples` égal à la taille du fond, rend les mêmes nombres.
+**Erreurs fréquentes** : moyenner le fond **avant** `f` (on explique alors $f$ en une ligne moyenne, et non la moyenne de $f$ : faux dès que le modèle n'est pas linéaire) ; prendre `f` sur la ligne moyenne pour valeur de base ; énumérer les $M!$ ordres sans garder les $v(S)$ (les tests l'arrêtent) ; appeler `f` sur une ligne 1-D ; oublier la coalition vide ou la pleine ; modifier le fond en place (`bg[:, mask] = ...` sans copie).
+**Variante** : la définition par les ordres, $\phi_i = \frac{1}{M!}\sum_{\text{ordres}} [v(S_{\prec i} \cup \{i\}) - v(S_{\prec i})]$, avec un dictionnaire des $v(S)$ : les mêmes valeurs à $10^{-13}$ près, en 0,5 s au lieu de 0,06 s pour $M = 8$ (40 320 ordres de 8 contributions chacun) ; à $M = 12$, 479 millions d'ordres : la formule par coalitions n'en lit que 4 096 valeurs.
+
+### Ex B6.15 — SHAP sur un gradient boosting California : TreeExplainer, waterfall, beeswarm, dépendance 📦
+**Réponse** : a) valeur de base **1,9641** (la prédiction moyenne du modèle sur les 50 lignes du fond) ; b) valeur SHAP de `MedInc` pour le premier district **−0,0743** ; c) moyenne des $\lvert\phi_{\text{MedInc}}\rvert$ sur les 1 000 districts **0,5050** ; d) **`True`** : ta `shapley_values` redonne TreeSHAP à $6 \cdot 10^{-9}$ près sur le premier district, et l'efficacité tient à $3 \cdot 10^{-8}$ près sur les 1 000. TreeSHAP explique les 1 000 districts en 0,7 s environ ; ta fonction, à 0,045 s par district, en prendrait 45.
+**Démarche** :
+```python
+def fit_15(X, y):
+    return HistGradientBoostingRegressor(max_depth=3, random_state=0).fit(X, y)
+
+
+def tree_shap_15(model, background, rows):
+    return shap.TreeExplainer(model, data=background, feature_perturbation="interventional")(rows)
+```
+Avec un fond, TreeSHAP interventionnel calcule exactement le $v(S)$ de 206.3 en parcourant les arbres, pour un coût en $O(TLR)$ ($T$ arbres de $L$ feuilles, $R$ lignes de fond) au lieu de $2^M \times B$ prédictions. La valeur de base est la prédiction moyenne **sur le fond** : ni la moyenne des cibles (2,0659), ni la prédiction moyenne des districts expliqués (2,0735). Le premier district (Berkeley : 37,85°, −122,26°, des logements de 52 ans, un revenu médian de 3,27) est prédit 2,70 : son occupation moyenne basse (+0,66), sa longitude (+0,48) et l'âge du bâti (+0,18) le font monter, sa latitude (−0,48) le fait descendre, et un revenu un peu inférieur à celui du fond (3,27 contre 3,50 en moyenne) retire 0,07. Sur le beeswarm, les features se rangent par moyenne des $\lvert\phi\rvert$ : `MedInc` 0,505, `Latitude` 0,486, `Longitude` 0,402, `AveOccup` 0,219, puis moins de 0,07 ; un grand revenu (rouge) pousse vers le haut. Le graphique de dépendance de `MedInc` monte presque en ligne droite jusqu'à un revenu de 8 environ, puis plafonne (la cible l'est, à 5) ; à revenu égal, la dispersion verticale est faible, et shap colore les points par `AveOccup`, la feature qui interagit le plus avec le revenu : les courbes ICE de B6.13, presque parallèles, le disaient autrement.
+**Erreurs fréquentes** : appeler `TreeExplainer(model)` sans fond (le mode « chemins de l'arbre » rend une valeur de base de 2,0664 et $\phi_{\text{MedInc}} = -0{,}172$ pour le premier district : une autre question) ; garder le modèle par défaut au lieu de `max_depth=3` ; rendre `explainer.shap_values(rows)`, un tableau sans valeur de base ; oublier que shap ne garde que 100 lignes d'un fond plus grand.
+**Variante** : sur les données d'origine en float64 (sans l'arrondi de `wbx.california`), le même calcul rend des valeurs SHAP dont la somme s'écarte de la prédiction (de l'ordre de 0,2 avec `max_depth=3`, jusqu'à 0,5 avec le gradient boosting par défaut, mesuré sur 200 districts) et shap lève une erreur d'additivité : TreeSHAP parcourt les arbres en float32, et des seuils posés exactement sur des valeurs répétées de la latitude et de la longitude changent de côté.
+
+### Ex B6.16 — Le fond change tout : trois fonds différents, puis une feature dupliquée 🔬
+**Réponse** : le district expliqué (revenu 4,78, près de Long Beach : 33,74°, −118,10°) est prédit 3,80. Fond « population » : valeur de base 1,82, $\phi_{\text{MedInc}} = +0{,}64$ ; fond « riches » : 3,92 et **−0,67** ; fond « ligne type » : 2,16 et +0,56. Avec cinq tirages des fonds, $\phi_{\text{MedInc}}$ reste entre +0,49 et +0,64 contre la population, entre −0,70 et −0,66 contre les riches. La copie : exacte (bruit 0), elle reçoit 0 sur toutes les graines ; avec un bruit de 0,01 écart-type, la part de `MedInc` dans la somme va de 0,23 à 0,74 selon la graine (dix graines), mais la somme des deux reste entre 0,363 et 0,388, contre 0,390 sans copie ; avec un bruit de 0,1, la copie, moins fiable, ne reçoit que 6 à 19 %.
+**Démarche** :
+```python
+def explain_16(model, x, background):
+    explanation = shap.TreeExplainer(model, data=background, feature_perturbation="interventional")(x.to_frame().T)
+    return explanation.values[0], float(np.ravel(explanation.base_values)[0])
+```
+(et `copy_experiment_16` comme son contrat : le même `rng`, le modèle sur `A`, TreeSHAP sur `V`, les moyennes de valeurs absolues). Un revenu de 4,78 est au-dessus de la moyenne de la population, au-dessous de celle des districts riches : la même feature, du même district, pour le même modèle, pousse vers le haut ou vers le bas selon la question posée. La valeur de base suit le fond, et l'efficacité répartit toujours $f(\mathbf{x})$ moins elle : contre les riches, il y a moins à expliquer, et le revenu en « retire ». La ligne type répond à « pourquoi ce district plutôt qu'un district médian ? », une question plus simple à dire, mais d'une seule ligne : les interactions y sont évaluées en un seul point. Pour la copie, les arbres de `HistGradientBoosting` départagent deux colonnes au gain égal par leur ordre : la copie exacte, placée après `MedInc`, n'est jamais choisie, et le Shapley interventionnel, fidèle au modèle, lui donne 0. Avec un bruit minuscule, chaque nœud choisit l'une ou l'autre selon le hasard des valeurs : le partage change d'une graine à l'autre, la somme non (🧠 Q6). Avec un bruit plus grand, la copie est moins informative et le modèle revient à `MedInc`.
+**Erreurs fréquentes** : comparer des valeurs SHAP calculées avec des fonds différents sans le dire ; conclure d'un $\phi = 0$ qu'une feature est inutile dans les données (la copie exacte porte la même information) ; rapporter l'importance de l'une des deux copies au lieu de leur somme ; croire que le partage est une propriété des données, alors qu'il dépend de l'entraînement.
+**Variante** : avec pour fond 50 districts du sud de la Californie (latitude inférieure à 34,5°, tirés avec `random_state=0`), la valeur de base vaut 2,17, $\phi_{\text{MedInc}} = +0{,}46$ et $\phi_{\text{Latitude}}$ tombe de +0,55 (population) à +0,12 : contre des districts du sud, la latitude de Long Beach n'a presque plus rien de particulier.
+
+### Ex B6.17 — Penguins : SHAP par classe pour une régression logistique et une forêt aléatoire 📦
+**Réponse** : le premier Gentoo du test (bec de 45,1 mm de long et 14,5 mm de haut, nageoire de 207 mm, 5 050 g) est classé Gentoo à 0,990 par la régression logistique et à 0,80 par la forêt (accuracies de test 98,8 % et 97,6 %). Logit de la classe Gentoo : valeur de base −0,42 ; hauteur du bec **+2,25**, masse +1,16, nageoire +0,47, longueur du bec +0,08. Probabilité Gentoo (régression logistique) : base 0,357 ; hauteur du bec +0,332, masse +0,151, longueur du bec +0,078, nageoire +0,071. Forêt : base 0,357 ; +0,239, +0,109, +0,069, +0,027. Les sommes sur les trois classes valent 0 pour chaque mesure, en probabilité comme en logit.
+**Démarche** :
+```python
+def class_output_17(model, k, kind="proba"):
+    if kind == "proba":
+        return lambda X: model.predict_proba(X)[:, k]
+    if kind == "logit":
+        return lambda X: model.decision_function(X)[:, k]
+    raise ValueError(f"kind must be 'proba' or 'logit', got {kind!r}")
+
+
+def shap_by_class_17(model, x, background, kind="proba"):
+    results = [mylearn.explain.shapley_values(class_output_17(model, k, kind), x, background)
+               for k in range(len(model.classes_))]
+    return np.array([phi for phi, _ in results]), np.array([base for _, base in results])
+```
+(`fit_logistic_17` et `fit_forest_17` sont un `make_pipeline(...).fit(X, y)` et un `RandomForestClassifier(...).fit(X, y)`.) Le logit d'une régression logistique est linéaire dans les mesures standardisées : ses valeurs de Shapley sont $w_{ki}(x_i - \bar b_i)$ (∂ B6.2), et sa valeur de base, l'ordonnée à l'origine de la classe (−0,42), parce que le fond est l'entraînement sur lequel le scaler a appris (ses mesures standardisées sont de moyenne nulle). La probabilité passe par la softmax : ses valeurs ne sont plus proportionnelles à celles du logit, et l'ordre change (la longueur du bec passe devant la nageoire). La somme des trois probabilités vaut 1 pour tout manchot, une fonction constante dont chaque feature est un joueur nul : par additivité, les trois explications d'une même mesure s'annulent, ce qu'elle apporte à Gentoo est retiré à Adelie et à Chinstrap. Pour les logits, la somme est nulle aussi, mais pour une autre raison : la pénalité L2 de scikit-learn centre les coefficients sur les classes ($\sum_k w_{ki} = 0$). La forêt s'appuie sur les mêmes mesures, dans le même ordre, avec des parts plus modestes : elle est moins sûre d'elle (0,80).
+**Erreurs fréquentes** : expliquer `predict` (une classe, pas un nombre) ; mélanger les classes (l'ordre est celui de `model.classes_`) ; comparer des valeurs de logit et de probabilité comme si elles avaient la même unité ; laisser `TreeExplainer` sous-échantillonner le fond à 100 lignes (un écart de 0,05 avec ta fonction).
+**Variante** : la sortie Adelie (logit) du même manchot : longueur du bec −0,51, hauteur −1,71, nageoire −0,21, masse +0,30 : son bec bas l'éloigne d'Adelie ; sa masse, à autres mesures fixées, l'en rapproche un peu (la même masse retire 1,46 au logit de Chinstrap), et la valeur de base vaut l'ordonnée à l'origine d'Adelie, +0,49.
+
+### Ex B6.18 — integrated_gradients et grad_cam 🔨
+**Réponse** : les 111 tests de l'exercice passent (99, et 12 ignorés sans captum) ; sur $x_0x_1 + x_2^3$ en $(1, 2, -1)$ avec 6 intervalles, les quatre règles donnent $(0{,}833 ; 0{,}833 ; -0{,}764)$ à gauche, $(1{,}167 ; 1{,}167 ; -1{,}264)$ à droite, $(1 ; 1 ; -0{,}993)$ au milieu et $(1 ; 1 ; -1{,}014)$ en trapèzes, pour des valeurs exactes $(1, 1, -1)$ ; la complétude sur la sigmoïde de 206.5 tient à $10^{-5}$ près avec 200 intervalles.
+**Démarche** :
+```python
+METHODS = ("left", "right", "midpoint", "trapezoid")
+
+
+def integrated_gradients(grad_fn, x, baseline=None, n_steps=50, method="trapezoid"):
+    x = np.asarray(x, dtype=float)
+    ref = np.zeros_like(x) if baseline is None else np.asarray(baseline, dtype=float)
+    if ref.shape != x.shape:
+        raise ValueError(f"baseline must have the shape of x {x.shape}, got {ref.shape}")
+    if isinstance(n_steps, bool) or not isinstance(n_steps, (int, np.integer)) or n_steps < 1:
+        raise ValueError(f"n_steps must be an integer >= 1, got {n_steps!r}")
+    if method not in METHODS:
+        raise ValueError(f"method must be one of {METHODS}, got {method!r}")
+    n = int(n_steps)
+    if method == "trapezoid":
+        alphas = np.arange(n + 1) / n
+        weights = np.full(n + 1, 1.0 / n)
+        weights[[0, -1]] /= 2
+    else:
+        k = np.arange(n)
+        alphas = {"left": k / n, "right": (k + 1) / n, "midpoint": (k + 0.5) / n}[method]
+        weights = np.full(n, 1.0 / n)
+    points = ref[None] + alphas.reshape((-1,) + (1,) * x.ndim) * (x - ref)[None]
+    grads = np.asarray(grad_fn(points), dtype=float)
+    return (x - ref) * np.tensordot(weights, grads, axes=1)
+
+
+def grad_cam(activations, gradients, relu=True, normalize=True):
+    A, G = np.asarray(activations, dtype=float), np.asarray(gradients, dtype=float)
+    if A.ndim != 4 or A.shape != G.shape:
+        raise ValueError(f"activations and gradients must be 4-D with the same shape, got {A.shape} and {G.shape}")
+    cam = np.einsum("nc,nchw->nhw", G.mean(axis=(2, 3)), A)
+    if relu:
+        cam = np.maximum(cam, 0.0)
+    if normalize:
+        peak = np.abs(cam).max(axis=(1, 2), keepdims=True)
+        cam = np.divide(cam, peak, out=np.zeros_like(cam), where=peak > 0)
+    return cam
+```
+Le chemin, les poids et **un** appel à `grad_fn` sur tout le batch de points : la règle n'est qu'un choix d'$\alpha$ et de poids. Sur $x_0x_1 + x_2^3$, le gradient le long du chemin vaut $(\alpha x_1, \alpha x_0, 3\alpha^2 x_2^2)$ : linéaire en $\alpha$ pour les deux premières features, que le milieu et les trapèzes intègrent exactement ; quadratique pour la troisième, où le trapèze surestime de $1/(6n^2)$ et le milieu sous-estime de $1/(12n^2)$, d'où −1,014 et −0,993. La complétude est un test d'implémentation : une erreur d'indice, un $\mathbf{x} - \mathbf{x}'$ oublié ou des poids qui ne somment pas à 1 la cassent. Grad-CAM : des poids par canal (la moyenne spatiale), une somme pondérée, une seule ReLU, puis chaque carte divisée par son propre maximum ; la fonction ne voit que des tableaux, ce qui la rend testable sans réseau, et laisse l'extraction (les hooks) à PyTorch.
+**Erreurs fréquentes** : appeler `grad_fn` sur un point 1-D ; compter `n_steps` en points ; oublier de diviser les extrémités du trapèze par deux ; diffuser une ligne de référence de mauvaise forme ; sommer au lieu de moyenner les gradients ; appliquer la ReLU par canal avant la somme ; normaliser par le maximum de tout le batch ; diviser par 0 une carte nulle (NaN).
+**Variante** : le `riemann_trapezoid` de captum, à 7 points (son `n_steps` compte les points), rend sur le même exemple $(0{,}857 ; 0{,}857 ; -0{,}869)$, ta règle des trapèzes multipliée par $6/7$ : ses poids somment à $6/7$ (fiche, 🕰️ de 206.6).
+
+### Ex B6.19 — Saillance, gradient × entrée et gradients intégrés sur un CNN CIFAR-10 📦
+**Réponse** : sur les 6 premières images (le CNN de référence, 65,6 % d'accuracy de test, en prédit 4 justes), la somme des gradients intégrés depuis l'image noire, avec 50 intervalles, colle à $f(\mathbf{x}) - f(\mathbf{x}')$ à 4,3 % près au pire (0,970 contre 1,014), à 1,3 % près ailleurs ; depuis l'image floutée, à 1,8 % près. La somme de gradient × entrée n'a rien à voir avec l'écart (−0,42 contre 3,96 pour la première grenouille, −3,13 contre 0,96 pour la deuxième). Avec 200 intervalles, l'écart de la complétude tombe à 0,7 % au pire sur 16 images.
+**Démarche** :
+```python
+def class_gradient_19(model, images, target):
+    x = torch.as_tensor(np.asarray(images), dtype=torch.float32).clone().requires_grad_(True)
+    t = torch.as_tensor(np.asarray(target)).long().reshape(-1)
+    model(x).gather(1, t[:, None]).sum().backward()      # each logit depends on its own image only
+    return x.grad.numpy()
+
+
+def saliency_19(gradients):
+    return np.abs(np.asarray(gradients)).max(axis=1)
+
+
+def grad_times_input_19(gradients, images):
+    return (np.asarray(gradients) * np.asarray(images)).sum(axis=1)
+
+
+def integrated_19(model, image, target, baseline, n_steps=50):
+    grad_fn = lambda points: class_gradient_19(model, points, [target] * len(points))
+    return mylearn.explain.integrated_gradients(grad_fn, np.asarray(image, dtype=float),
+                                                np.asarray(baseline, dtype=float), n_steps=n_steps)
+```
+Le gradient se prend par rapport à l'entrée, sur le **logit** de la classe demandée : la probabilité sature (son gradient s'éteint quand le réseau est sûr de lui) et mélange les classes. La saillance est la plus bruitée : elle dit où une petite retouche changerait le score, pas ce qui a compté, et s'allume aussi sur le fond. Gradient × entrée et les gradients intégrés depuis le noir s'éteignent là où l'image est sombre (le facteur $x_i - x'_i$ y est petit) et se concentrent davantage sur l'objet. Un CNN à ReLU est linéaire par morceaux : le long du chemin, ses régions changent, et 50 intervalles suffisent ici pour approcher l'intégrale à quelques % près ; gradient × entrée, une seule pente en $\mathbf{x}$, ne vérifie aucune complétude. La référence floutée garde les couleurs et les grandes formes : $f(\mathbf{x}')$ y est souvent déjà élevé (le chien : 1,32 seulement à expliquer, contre 3,74 depuis le noir), et seuls les détails fins reçoivent une attribution. Pour un objet noir sur fond clair, l'image noire attribuerait 0 à l'objet : une référence floutée ou moyenne convient mieux.
+**Erreurs fréquentes** : dériver la probabilité au lieu du logit ; prendre le gradient de la classe prédite (ou de la somme des 10 logits) quand on demande une autre classe ; remettre le modèle en `train()` (ses batchnorms changent alors le calcul) ; réutiliser un tenseur dont le `.grad` s'accumule d'un appel à l'autre ; faire la moyenne des canaux pour la saillance (le maximum est la convention de Simonyan et coll.) ; oublier le facteur $\mathbf{x} - \mathbf{x}'$.
+**Variante** : avec 10 intervalles seulement, l'écart de la complétude depuis l'image noire vaut 4 % en médiane et 21 % au pire sur 16 images ; avec 200, 0,16 % en médiane et 0,7 % au pire : les auteurs conseillent 20 à 300 pas, et de vérifier la complétude.
+
+### Ex B6.20 — Grad-CAM par hooks sur le ResNet fine-tuné du B1 : bonnes prédictions et erreurs 📦
+**Réponse** : avec le ResNet-18 de référence (recette de B1.17 à 96 pixels, 79,6 % sur 500 images de test, 75,0 % sur les 200 du réservoir), les cartes de `layer4` (3 × 3, agrandies à 96 × 96) tombent sur l'objet pour la plupart des bonnes prédictions. Les 8 erreurs retenues : grenouille → cheval, avion → cheval, automobile → avion, cheval → cerf, chien → cerf, chat → chien, chien → chat, oiseau → chat ; la corrélation entre la carte de la classe prédite et celle de la vraie classe vaut 0,96 et 0,97 pour les confusions chat/chien, 0,59 et 0,44 pour cheval → cerf et chien → cerf, −0,23 et −0,78 pour l'avion et l'automobile ; pour la grenouille, la carte de la vraie classe est nulle (la ReLU a tout éteint).
+**Démarche** :
+```python
+def activations_and_gradients_20(model, layer, images, target):
+    store = {}
+
+    def save(module, inputs, output):                     # returns None: the output is left unchanged
+        store["A"] = output.detach()
+        output.register_hook(lambda grad: store.__setitem__("G", grad.detach()))
+
+    x = torch.as_tensor(images, dtype=torch.float32).clone().requires_grad_(True)   # frozen model: the input needs grad
+    t = torch.as_tensor(np.asarray(target)).long().reshape(-1)
+    handle = layer.register_forward_hook(save)
+    try:
+        model(x).gather(1, t[:, None]).sum().backward()
+    finally:
+        handle.remove()
+    return store["A"].numpy(), store["G"].numpy()
+
+
+def cam_20(model, layer, images, target, size):
+    A, G = activations_and_gradients_20(model, layer, images, target)
+    cams = torch.as_tensor(mylearn.explain.grad_cam(A, G), dtype=torch.float32)
+    return F.interpolate(cams[:, None], size=(size, size), mode="bilinear", align_corners=False)[:, 0].numpy()
+```
+Le modèle est gelé : sans une entrée qui demande son gradient, la sortie de `layer4` n'est reliée à aucun tenseur qui en demande un, et `register_hook` lève une erreur. Le hook de passe avant ne rend rien (sinon il remplacerait la sortie) et se retire dans un `finally`. Sur une confusion entre deux classes voisines (chat et chien), les deux cartes regardent au même endroit : le réseau a vu l'animal, il s'est trompé d'espèce. Pour l'automobile prise pour un avion, la carte d'« avion » s'allume sur le ciel, celle d'« automobile » sur la voiture et la route : une erreur de **contexte** ; pour l'avion pris pour un cheval, les deux cartes regardent aussi des régions différentes. Une carte nulle pour la vraie classe veut dire qu'aucune région n'augmente son score : le réseau n'y a rien vu de cette classe. À 3 × 3, une carte ne dit guère plus que « en haut à gauche » ou « au centre » ; `layer3` (6 × 6) localiserait plus finement, mais avec des notions moins liées aux classes (🐛 B6.21). Et une carte qui tombe sur l'objet ne prouve pas que le modèle a raison pour de bonnes raisons : il faut encore vérifier qu'elle dépend du modèle (🔬 B6.22).
+**Erreurs fréquentes** : oublier `requires_grad_` sur l'entrée d'un modèle gelé ; laisser un hook posé (chaque passe suivante le déclenche encore) ; prendre le gradient de la classe prédite quand on étudie la vraie ; agrandir la carte avec une autre convention que l'image (`align_corners=True`, ou `nearest`) ; enlever la ReLU de Grad-CAM ; viser `layer4` à 32 pixels (une carte de 1 × 1).
+**Variante** : sur les 8 bonnes prédictions, la carte de la **deuxième** classe la plus probable ressemble souvent à celle de la prédite : corrélations 0,85 (grenouille et oiseau), 0,98 (chien et chat), −0,15 (camion et avion), 0,48, 0,72, −0,06, 0,30 et 0,66 : quand deux classes partagent l'objet (deux animaux), leurs cartes se confondent ; Grad-CAM dit où se trouve ce qui fait monter un score, pas ce qui distingue deux classes.
+
+*Les solutions de B6.21 à B6.29 seront ajoutées à la prochaine session de génération, avec la fin du notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.*

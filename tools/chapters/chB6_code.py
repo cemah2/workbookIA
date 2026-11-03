@@ -254,23 +254,11 @@ wb.check("B6.13d", spread_13)'''
 # --- 🔨 B6.14 ---------------------------------------------------------------------------------------------------------
 CHECK_14 = r'''with checked("B6.14"):
     E = mylearn.explain
-    w_14 = np.array([2.0, -1.0, 0.5])
-    bg_14 = np.array([[0.0, 0.0, 0.0], [2.0, 2.0, 2.0]])
-    phi_14, base_14 = pair("B6.14", "shapley_values", E.shapley_values(lambda X: X @ w_14, [3.0, 1.0, 1.0], bg_14.copy()),
-                           names=("phi", "base_value"), floats=("base_value",))
-    same("B6.14", "phi du modèle linéaire de la docstring", phi_14, [4.0, 0.0, 0.0])
-    same("B6.14", "base_value du modèle linéaire de la docstring", base_14, 1.5)
-    same("B6.14", "le produit x0 x1 de la docstring : l'interaction partagée",
-         E.shapley_values(lambda X: X[:, 0] * X[:, 1], [1.0, 1.0], [[0.0, 0.0]])[0], [0.5, 0.5])
-
     rng_14 = np.random.default_rng(14)                 # a linear model on a random background: w_i (x_i - mean_i)
     w5_14, x5_14, bg5_14 = rng_14.normal(size=5), rng_14.normal(size=5), rng_14.normal(size=(20, 5))
-    same("B6.14", "modèle linéaire à 5 features, fond de 20 lignes : w_i (x_i − moyenne du fond)",
-         E.shapley_values(lambda X: X @ w5_14 + 1.0, x5_14, bg5_14)[0], w5_14 * (x5_14 - bg5_14.mean(axis=0)),
-         rtol=1e-8, atol=1e-10)
     shapes_14 = []
 
-    def spy_14(X):
+    def spy_14(X):                                     # first: what does f receive?
         shapes_14.append(np.shape(X))
         return np.asarray(X, dtype=float) @ w5_14
 
@@ -281,6 +269,18 @@ CHECK_14 = r'''with checked("B6.14"):
     rows_14 = sum(s[0] for s in shapes_14 if len(s) == 2)
     print(f"ℹ️ f a été appelée {len(shapes_14)} fois, sur {rows_14} lignes en tout (2**5 coalitions × 20 lignes = "
           f"{2 ** 5 * 20}).")
+    w_14 = np.array([2.0, -1.0, 0.5])
+    bg_14 = np.array([[0.0, 0.0, 0.0], [2.0, 2.0, 2.0]])
+    phi_14, base_14 = pair("B6.14", "shapley_values", E.shapley_values(lambda X: X @ w_14, [3.0, 1.0, 1.0], bg_14.copy()),
+                           names=("phi", "base_value"), floats=("base_value",))
+    same("B6.14", "phi du modèle linéaire de la docstring", phi_14, [4.0, 0.0, 0.0])
+    same("B6.14", "base_value du modèle linéaire de la docstring", base_14, 1.5)
+    same("B6.14", "le produit x0 x1 de la docstring : l'interaction partagée",
+         E.shapley_values(lambda X: X[:, 0] * X[:, 1], [1.0, 1.0], [[0.0, 0.0]])[0], [0.5, 0.5])
+
+    same("B6.14", "modèle linéaire à 5 features, fond de 20 lignes : w_i (x_i − moyenne du fond)",
+         E.shapley_values(lambda X: X @ w5_14 + 1.0, x5_14, bg5_14)[0], w5_14 * (x5_14 - bg5_14.mean(axis=0)),
+         rtol=1e-8, atol=1e-10)
 
     X0_14, BG_14 = X_VAL.iloc[0].to_numpy(), X_TRAIN.iloc[:50].to_numpy()
     copies_14 = (X0_14.copy(), BG_14.copy())
@@ -357,8 +357,14 @@ with checked("B6.15"):
                 ref_15.predict(X_VAL.iloc[:200]), rtol=1e-9, atol=1e-9):
         raise StopCheck
     MODEL_15 = model_15
+    start_15 = time.perf_counter()
     sv_15 = tree_shap_15(model_15, BG_15.copy(), ROWS_15.copy())
+    print(f"ℹ️ tree_shap_15 sur les 1 000 districts : {fr(time.perf_counter() - start_15, 1)} s.")
     if not returned("B6.15", "tree_shap_15", sv_15):
+        raise StopCheck
+    if isinstance(sv_15, np.ndarray):
+        print("❌ Ex B6.15 : tree_shap_15 rend un tableau NumPy : le contrat veut le shap.Explanation de explainer(rows) "
+              "(avec .base_values et .feature_names), pas explainer.shap_values(rows).")
         raise StopCheck
     if np.shape(getattr(sv_15, "values", None)) != (len(ROWS_15), len(FEATURES)):
         print("❌ Ex B6.15 : tree_shap_15 doit rendre un shap.Explanation dont .values a la forme (1000, 8), reçu "
@@ -434,7 +440,10 @@ wb.record("B6.15b", phi_r_15, decimals=4, mistakes=distinct_15(phi_r_15, {
     "c'est le gradient boosting par défaut : le contrat veut max_depth=3": float(default_15.values[0, MEDINC]),
     "c'est un fond de 100 lignes : le contrat en prend 50": float(bg100_15.values[0, MEDINC]),
     "vérifie le signe": -phi_r_15}))
+tree_path_all_15 = shap.TreeExplainer(MODEL_15)(ROWS_15)
 wb.record("B6.15c", mean_r_15, decimals=4, mistakes=distinct_15(mean_r_15, {
+    "c'est la valeur sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)":
+        float(np.mean(np.abs(tree_path_all_15.values[:, MEDINC]))),
     "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues":
         float(np.mean(SV_15.values[:, MEDINC])),
     "c'est la moyenne des carrés : on demande la moyenne des valeurs absolues": float(np.mean(SV_15.values[:, MEDINC] ** 2)),
@@ -676,7 +685,8 @@ if len(RESULTS_17) == 3:
     plt.tight_layout()
     plt.show()
     for title_17, phi_17 in RESULTS_17.items():
-        print(f"{title_17:>36} : somme sur les classes de chaque feature " + ", ".join(fr(v, 4) for v in phi_17.sum(axis=0)))'''
+        print(f"{title_17:>36} : somme sur les classes de chaque feature "
+              + ", ".join(fr(0.0 if abs(v) < 5e-5 else v, 4) for v in phi_17.sum(axis=0)))'''
 
 # =====================================================================================================================
 # Part B · networks
@@ -852,6 +862,10 @@ with checked("B6.19"):
     t_19 = np.array([(p + 3) % 10 for p in PRED_19[:4]])     # classes that the CNN does NOT predict
     want_19 = wbx.input_gradients(CNN, x_19, t_19)
     g_19 = class_gradient_19(CNN, x_19.clone(), t_19.copy())
+    if CNN.training or any(p.requires_grad for p in CNN.parameters()):
+        print("❌ Ex B6.19 : après class_gradient_19, le modèle n'est plus gelé ou n'est plus en mode eval() (ses "
+              "batchnorms changent alors le calcul) : ta fonction ne doit pas le changer.")
+        raise StopCheck
     if not returned("B6.19", "class_gradient_19", g_19):
         raise StopCheck
     arr_19 = np.asarray(g_19.detach() if torch.is_tensor(g_19) else g_19, dtype=float)
@@ -876,9 +890,9 @@ with checked("B6.19"):
     again_19 = np.asarray(class_gradient_19(CNN, x_19.clone(), t_19.copy()), dtype=float)
     verdict("B6.19", np.allclose(again_19, arr_19, rtol=1e-6, atol=1e-8), "un second appel rend le même gradient (rien ne s'accumule).",
             "un second appel ne rend pas le même gradient : un .grad s'accumule-t-il d'un appel à l'autre ?")
-    verdict("B6.19", not CNN.training and not any(p.requires_grad for p in CNN.parameters()),
-            "le modèle reste gelé, en mode eval().", "le modèle n'est plus gelé ou n'est plus en mode eval() : ta fonction ne doit pas le changer.")
+    print("✅ Ex B6.19 : le modèle reste gelé, en mode eval().")
     ok_19["grad"] = True
+CNN.eval().requires_grad_(False)                       # restored for the cells that follow, whatever your code did
 
 with checked("B6.19"):
     if not ok_19:
@@ -987,10 +1001,11 @@ PRED_20 = wbx.predict(RESNET, POOL_20[0], RESNET_INFO).argmax(axis=1)
 RIGHT_20 = np.flatnonzero(PRED_20 == POOL_20[1])[:8]                   # 8 well-classified images
 WRONG_20 = np.flatnonzero(PRED_20 != POOL_20[1])[:8]                   # 8 errors
 X_20 = wbx.model_input(POOL_20[0][np.concatenate([RIGHT_20, WRONG_20])], RESNET_INFO)   # (16, 3, SIZE_20, SIZE_20)
-print(f"ResNet-18 ({RESNET_INFO['source']}) : {SIZE_20} pixels, layer4 en {SIZE_20 // 32} × {SIZE_20 // 32} ; accuracy sur "
+print(f"ResNet-18 {'de référence' if RESNET_INFO['source'] == 'reference' else 'du B1 (le tien)'} : {SIZE_20} pixels, layer4 en {SIZE_20 // 32} × {SIZE_20 // 32} ; accuracy sur "
       f"les 200 images : {pct(np.mean(PRED_20 == POOL_20[1]), 1)} ; 8 bonnes prédictions et 8 erreurs retenues.")'''
 
 CHECK_20 = r'''ok_20 = {}
+RESNET.layer4._forward_hooks.clear()                   # hooks left by an earlier run of your code
 with checked("B6.20"):
     x_20 = X_20[[0, 1, 8, 9]]
     true_20 = POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])][[0, 1, 8, 9]]
@@ -1006,8 +1021,10 @@ with checked("B6.20"):
         raise
     A_20, G_20 = pair("B6.20", "activations_and_gradients_20", got_20, names=("A", "G"))
     if RESNET.layer4._forward_hooks:
-        print("❌ Ex B6.20 : un hook reste posé sur layer4 après l'appel : retire-le (handle.remove(), dans un finally).")
+        print("❌ Ex B6.20 : un hook reste posé sur layer4 après l'appel : retire-le (handle.remove(), dans un finally) ; "
+              "sinon chaque passe avant suivante le déclenche encore.")
         RESNET.layer4._forward_hooks.clear()
+        raise StopCheck
     if same("B6.20", "A : la sortie de layer4", A_20, A_ref_20, rtol=1e-5, atol=1e-6):
         ok_20["A"] = True
     if np.shape(G_20) == G_ref_20.shape and not np.allclose(np.asarray(G_20, dtype=float), G_ref_20, rtol=1e-4, atol=1e-7):
@@ -1019,6 +1036,8 @@ with checked("B6.20"):
             raise StopCheck
     if same("B6.20", "G : le gradient du logit de target[n] par rapport à A", G_20, G_ref_20, rtol=1e-4, atol=1e-7):
         ok_20["G"] = True
+RESNET.eval().requires_grad_(False)                    # restored for the cells that follow, whatever your code did
+RESNET.layer4._forward_hooks.clear()
 
 with checked("B6.20"):
     if len(ok_20) < 2:
@@ -1037,7 +1056,8 @@ with checked("B6.20"):
             print("❌ Ex B6.20 : la carte a des valeurs négatives : grad_cam garde-t-il sa ReLU (relu=True par défaut) ?")
             raise StopCheck
     if same("B6.20", f"cam_20 : cartes agrandies à {SIZE_20} × {SIZE_20}", arr_cam_20, want_cam_20, rtol=1e-4, atol=1e-5):
-        ok_20["cam"] = True'''
+        ok_20["cam"] = True
+RESNET.layer4._forward_hooks.clear()'''
 
 EXPERIMENT_20 = r'''if len(ok_20) == 3:
     labels_20 = POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])]

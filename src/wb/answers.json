@@ -58812,6 +58812,7 @@
       "mistakes": {
         "00db89544dc24e3cbb50c19d1dc73f5da67859116e5331fcd44cf2e0662b0025": "c'est le gradient boosting par défaut : le contrat veut max_depth=3",
         "3556f08061d10ccc0f50469429504f3635dd9bdba53eaff8421dca8959bebacf": "c'est la moyenne des carrés : on demande la moyenne des valeurs absolues",
+        "633353b43684a75c4c53c21b9cf680f95317448ce90400302fe9ddbe078ff014": "c'est la valeur sans fond (mode « chemins de l'arbre ») : relis les deux modes de TreeExplainer (§206.4)",
         "86c7fe60027588120f46e6fa5bbdfb278aa143c51e2529c419ed92b391d017ac": "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues"
       },
       "sign": 1,

@@ -586,4 +586,266 @@ Commence par : « Non : retirer la variable n'empêche pas le modèle de retrouv
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B6.12 à B6.29) seront ajoutés à la prochaine session de génération, avec le notebook.
+### Ex B6.12 — Explications globales sur California : coefficients, permutation, dépendance partielle et ICE 📦
+
+<details><summary>Indice 1</summary>
+
+Relis 206.2 : trois questions différentes. Un coefficient dit de combien la prédiction d'un modèle **linéaire** bouge pour un écart-type de plus (si les features sont standardisées) ; la permutation, ce que **ce** modèle perd quand une feature ne porte plus d'information, sur des données qu'il n'a pas vues ; la dépendance partielle et les ICE, **comment** la prédiction varie avec une feature. Chaque fonction est un ou deux appels à scikit-learn (`sklearn.pipeline`, `sklearn.inspection`), en respectant les réglages du contrat.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `linear_12` : `make_pipeline(StandardScaler(), LinearRegression())`, puis `.fit(X, y)` ; `fit` rend le pipeline lui-même.
+- `coefs_12` : la dernière étape d'un pipeline est `pipeline[-1]` ; ses coefficients, `.coef_` ; les noms des colonnes vues à l'ajustement, `pipeline.feature_names_in_`.
+- `permutation_12` : `permutation_importance` rend un objet dont `.importances_mean` est le tableau des baisses moyennes ; une `pd.Series` indexée par `X.columns`, puis `.sort_values(ascending=False)`.
+- `pd_ice_12` : `partial_dependence(..., kind="both")` rend un dictionnaire dont `"grid_values"`, `"average"` et `"individual"` sont des listes (une entrée par feature demandée) : prends l'élément 0 de chacun.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def permutation_12(model, X, y):
+    result = permutation_importance(model, X, y, n_repeats=5, random_state=0)
+    return pd.Series(result.importances_mean, index=X.columns).sort_values(ascending=False)
+
+
+def pd_ice_12(model, X, feature):
+    result = partial_dependence(model, X, [feature], kind="both", grid_resolution=50)
+    return {"grid": ..., "average": ..., "individual": ...}   # element 0 of each list
+```
+
+</details>
+
+### Ex B6.13 — Prédire la forme des courbes ICE du revenu médian et de la latitude 🔮
+
+<details><summary>Indice 1</summary>
+
+Une courbe ICE fixe toutes les features d'un district sauf une, et fait varier celle-ci sur la grille. Pense à ce que la feature représente dans le monde : le revenu des habitants d'un district, sa position du sud au nord. Puis à ce qu'un gradient boosting, qui voit **aussi** la longitude, peut faire de la latitude seule, longitude fixée.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), situe la grille de `MedInc` (du 5ᵉ au 95ᵉ centile : environ 1,6 à 7, en dizaines de milliers de dollars) et l'échelle de la cible (des centaines de milliers de dollars, plafonnée à 5) : quel écart de prix entre un district pauvre et un district riche te paraît plausible, toutes choses égales par ailleurs ? Pour b) et c), place sur une carte de la Californie les grandes zones chères et bon marché, puis demande-toi ce que devient un district qu'on « déplace » vers le nord **sans changer sa longitude**. Pour d), une feature qui interagit avec d'autres donne des courbes ICE qui diffèrent d'un district à l'autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), estime l'écart de prix moyen entre le 5ᵉ et le 95ᵉ centile du revenu, puis range-le dans l'une des quatre classes. Pour b), compare la prédiction moyenne à 33° et à 39°, longitude fixée. Pour c), demande-toi si un même déplacement vers le nord peut faire monter le prix de certains districts. Pour d), compare la force des interactions de chaque feature : le revenu agit-il de la même façon partout, et la latitude ?
+
+</details>
+
+### Ex B6.14 — shapley_values : Shapley exact par énumération des coalitions 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Les features comme joueurs » et « Un exemple à deux features » (§206.3), et ta copie de ✏️ B6.1 : une coalition est un masque booléen de longueur $M$ ; $v(S)$ remplace, dans **une copie** du fond, les colonnes de $S$ par celles de `x`, puis fait la moyenne de `f` sur les $B$ lignes. Calcule les $2^M$ valeurs une fois, puis combine-les avec les poids de Shapley.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Valide d'abord : `x = np.asarray(x, dtype=float)` 1-D, `background` 2-D à `len(x)` colonnes, `M <= max_features` ; `ValueError` sinon.
+- Énumère les coalitions par `itertools.product((False, True), repeat=M)` (ou les entiers de 0 à $2^M - 1$, bit $j$ = feature $j$) ; pour chacune, `rows = bg.copy()`, `rows[:, mask] = x[mask]`, `v[mask] = float(np.mean(f(rows)))`, dans un dictionnaire.
+- Pour chaque feature $i$ et chaque masque sans $i$ : le poids $\frac{|S|!\,(M - |S| - 1)!}{M!}$ (`math.factorial`, ou `1 / (M * math.comb(M - 1, k))`) fois $v(S \cup \{i\}) - v(S)$.
+- `base_value = v[(False,) * M]`, converti en `float` ; ne modifie jamais `x` ni `background` (travaille sur des copies).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def shapley_values(f, x, background, max_features=12):
+    x, bg = np.asarray(x, dtype=float), np.asarray(background, dtype=float)
+    ...                                                   # the checks of the contract (ValueError)
+    M = len(x)
+    values = {}
+    for mask in itertools.product((False, True), repeat=M):
+        rows = bg.copy()
+        rows[:, list(mask)] = x[list(mask)]
+        values[mask] = float(np.mean(f(rows)))            # v(S): f first, then the mean
+    phi = np.zeros(M)
+    ...                                                   # for each i, each mask without i: weight * (v(S + i) - v(S))
+    return phi, values[(False,) * M]
+```
+
+</details>
+
+### Ex B6.15 — SHAP sur un gradient boosting California : TreeExplainer, waterfall, beeswarm, dépendance 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « L'API de shap » (§206.4) : `TreeExplainer` a deux modes ; avec un fond (`data=`), le mode interventionnel calcule **exactement** le $v(S)$ de ta `shapley_values`. Un explainer de shap s'appelle comme une fonction sur les lignes à expliquer et rend un `shap.Explanation`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `fit_15` : un `HistGradientBoostingRegressor` avec les deux réglages du contrat, puis `.fit(X, y)`.
+- `tree_shap_15` : construis l'explainer avec le modèle, le fond et `feature_perturbation="interventional"`, puis appelle-le sur `rows` (un DataFrame : les noms des features suivent). `explainer.shap_values(rows)` rendrait un simple tableau, sans valeur de base ni noms.
+- Les graphiques prennent l'`Explanation` : une ligne (`sv[0]`) pour le waterfall, tout `sv` pour le beeswarm, une colonne (`sv[:, 0]`) pour la dépendance.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def tree_shap_15(model, background, rows):
+    explainer = shap.TreeExplainer(model, data=background, feature_perturbation="interventional")
+    return ...                                            # the explainer called on rows
+```
+
+</details>
+
+### Ex B6.16 — Le fond change tout : trois fonds différents, puis une feature dupliquée 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Le fond fait partie de la question » (§206.3) : $\phi_i$ répond à « pourquoi ce score plutôt que le score moyen **du fond** ? » ; changer de fond change la question. Puis « Features corrélées : ce que SHAP répartit » (§206.4) : le Shapley interventionnel ne crédite que ce que le modèle **lit** ; entre deux colonnes presque identiques, tout dépend de la façon dont les arbres les départagent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `explain_16` : ta `shapley_values` sur `model.predict`, avec `x.to_numpy()` et `background.to_numpy()`, ou `shap.TreeExplainer` interventionnel sur `x.to_frame().T` (un DataFrame d'une ligne) ; rends `(phi, float(base))`.
+- `copy_experiment_16` : suis l'ordre du contrat (le même `rng`, d'abord l'entraînement, puis la validation), ajuste le modèle sur `A`, explique les `n_rows` premières lignes de `V` avec les 50 premières lignes de `A` pour fond ; repère les deux colonnes par leur position dans `A.columns`.
+- Pour lire l'expérience, compare chaque fois la valeur de base, puis les $\phi$ ; pour la copie, la part de `MedInc` dans la somme des deux, et la somme elle-même, d'une graine à l'autre.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def copy_experiment_16(noise, seed, n_rows=200):
+    rng = np.random.default_rng(seed)
+    A, V = add_copy_16(X_TRAIN, noise, rng), add_copy_16(X_VAL, noise, rng)
+    model = HistGradientBoostingRegressor(random_state=seed).fit(A, Y_TRAIN)
+    values = ...                                          # TreeExplainer (interventional, A.iloc[:50]) on V.iloc[:n_rows]
+    i, j = list(A.columns).index("MedInc"), list(A.columns).index("MedInc_copy")
+    return {"MedInc": ..., "MedInc_copy": ..., "sum": ...}   # means of absolute values, as floats
+```
+
+</details>
+
+### Ex B6.17 — Penguins : SHAP par classe pour une régression logistique et une forêt aléatoire 📦
+
+<details><summary>Indice 1</summary>
+
+Ta `shapley_values` n'explique qu'**une** sortie, une fonction `(n, M) -> (n,)`. Un classifieur à trois classes en a trois (une colonne de `predict_proba`, ou de `decision_function`) : explique-les une par une, avec le même fond.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `class_output_17` : rends une fonction (une `lambda` ou un `def` interne) qui appelle `model.predict_proba(X)` ou `model.decision_function(X)` et garde la colonne `k`.
+- `shap_by_class_17` : une boucle sur `range(len(model.classes_))`, un appel à `mylearn.explain.shapley_values(class_output_17(model, k, kind), x, background)` par classe ; empile les `phi` en `(3, 4)` (`np.array` d'une liste, une ligne par classe) et les valeurs de base en `(3,)`.
+- Pour les notes : la somme des trois probabilités vaut 1 pour tout manchot ; que vaut la valeur de Shapley d'une feature pour une fonction constante (joueur nul), et que dit l'additivité de la somme des trois explications ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def class_output_17(model, k, kind="proba"):
+    if kind == "proba":
+        return lambda X: model.predict_proba(X)[:, k]
+    ...                                                   # the logit: decision_function
+
+
+def shap_by_class_17(model, x, background, kind="proba"):
+    results = [mylearn.explain.shapley_values(class_output_17(model, k, kind), x, background)
+               for k in range(len(model.classes_))]
+    return ..., ...                                       # (3, 4) and (3,)
+```
+
+</details>
+
+### Ex B6.18 — integrated_gradients et grad_cam 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « En pratique : une somme à la place de l'intégrale » (§206.5) et l'encadré 🧮 sur les rectangles et les trapèzes, puis « Un exemple à la main » (§206.6) et ta copie de ✏️ B6.3 et B6.4. Les gradients intégrés : des points sur le chemin, leurs gradients par **un** appel à `grad_fn`, une moyenne pondérée, un produit par $\mathbf{x} - \mathbf{x}'$. Grad-CAM : une moyenne, une somme pondérée, une ReLU, une division.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `integrated_gradients` : valide `n_steps` (un entier ≥ 1 ; `isinstance(n_steps, (int, np.integer))` et pas un booléen), `method` et la forme de la ligne de référence ; puis les $\alpha$ et les poids de la règle (`np.arange(n) / n`, `np.arange(1, n + 1) / n`, `(np.arange(n) + 0.5) / n`, ou `np.arange(n + 1) / n` avec les poids des deux extrémités divisés par deux).
+- Les points : `ref[None] + alphas.reshape((-1,) + (1,) * x.ndim) * (x - ref)[None]`, de forme `(len(alphas), *x.shape)` ; `grads = np.asarray(grad_fn(points), dtype=float)` ; la moyenne pondérée, `np.tensordot(weights, grads, axes=1)`.
+- `grad_cam` : `weights = G.mean(axis=(2, 3))`, de forme `(N, C)` ; la carte `np.einsum("nc,nchw->nhw", weights, A)` ; la ReLU `np.maximum(cam, 0)` ; la normalisation, image par image, par `np.abs(cam).max(axis=(1, 2), keepdims=True)`, sans diviser là où ce maximum vaut 0 (`np.divide(..., out=np.zeros_like(cam), where=peak > 0)`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def integrated_gradients(grad_fn, x, baseline=None, n_steps=50, method="trapezoid"):
+    x = np.asarray(x, dtype=float)
+    ref = np.zeros_like(x) if baseline is None else np.asarray(baseline, dtype=float)
+    ...                                                   # the checks of the contract (ValueError)
+    alphas, weights = ...                                 # the rule of the docstring, n_steps intervals
+    points = ref[None] + alphas.reshape((-1,) + (1,) * x.ndim) * (x - ref)[None]
+    grads = np.asarray(grad_fn(points), dtype=float)
+    return (x - ref) * np.tensordot(weights, grads, axes=1)
+```
+
+</details>
+
+### Ex B6.19 — Saillance, gradient × entrée et gradients intégrés sur un CNN CIFAR-10 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Le gradient comme explication » (§206.5) et l'extrait de code de « En pratique » : la `grad_fn` de la sigmoïde est le modèle de ta `class_gradient_19`. Le gradient se prend par rapport à l'**entrée** (un tenseur qui demande son gradient), pas aux poids, qui sont gelés.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `class_gradient_19` : `x = torch.as_tensor(np.asarray(images), dtype=torch.float32).clone().requires_grad_(True)` ; les logits `model(x)`, de forme `(N, 10)` ; le logit de la classe de chaque image par `gather` (ou une multiplication par un one-hot) ; la somme sur les images, puis `.backward()` ou `torch.autograd.grad` : chaque logit ne dépend que de son image, donc la somme donne tous les gradients d'un coup. Ne touche pas au mode du modèle.
+- `saliency_19` : la valeur absolue, puis le maximum sur l'axe des canaux (l'axe 1).
+- `grad_times_input_19` : le produit élément par élément, puis la somme sur l'axe 1.
+- `integrated_19` : ta `integrated_gradients` reçoit des points de forme `(n, 3, 32, 32)` ; la `grad_fn` appelle `class_gradient_19` sur ces points avec la même classe pour tous.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def class_gradient_19(model, images, target):
+    x = torch.as_tensor(np.asarray(images), dtype=torch.float32).clone().requires_grad_(True)
+    t = torch.as_tensor(np.asarray(target)).long().reshape(-1)
+    ...                                                   # the logit of the class of each image, summed, then backward
+    return x.grad.numpy()
+
+
+def integrated_19(model, image, target, baseline, n_steps=50):
+    grad_fn = lambda points: class_gradient_19(model, points, [target] * len(points))
+    return ...                                            # your integrated_gradients, rule 'trapezoid'
+```
+
+</details>
+
+### Ex B6.20 — Grad-CAM par hooks sur le ResNet fine-tuné du B1 : bonnes prédictions et erreurs 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Avec PyTorch : deux hooks » (§206.6) et ses quatre détails : un hook de passe avant garde la sortie de la couche ; un hook posé **sur ce tenseur** garde son gradient pendant la passe arrière. Le dernier détail dit ce qui se passe quand tous les poids sont gelés, comme ici.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Dans `activations_and_gradients_20` : un dictionnaire `store` ; une fonction `save(module, inputs, output)` qui range `output.detach()` et appelle `output.register_hook(...)` pour ranger le gradient, et qui ne rend **rien** ; `handle = layer.register_forward_hook(save)`.
+- Une copie de l'entrée qui demande son gradient (`.clone().requires_grad_(True)`) : sans elle, rien dans le graphe ne demande de gradient (les poids sont gelés) et `register_hook` lève une erreur.
+- La passe avant, le logit de `target[n]` pour chaque image (`gather`), la somme, `backward()` ; `handle.remove()` dans un `finally`, pour qu'un hook ne reste jamais posé.
+- `cam_20` : `mylearn.explain.grad_cam(A, G)`, puis `F.interpolate(torch.as_tensor(cams)[:, None], size=(size, size), mode="bilinear", align_corners=False)[:, 0]`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def activations_and_gradients_20(model, layer, images, target):
+    store = {}
+
+    def save(module, inputs, output):                     # returns None: the output is left unchanged
+        store["A"] = output.detach()
+        output.register_hook(lambda grad: store.__setitem__("G", grad.detach()))
+
+    x = torch.as_tensor(images, dtype=torch.float32).clone().requires_grad_(True)
+    handle = layer.register_forward_hook(save)
+    try:
+        ...                                               # forward, the logit of target[n], sum, backward
+    finally:
+        handle.remove()
+    return store["A"].numpy(), store["G"].numpy()
+```
+
+</details>
+
+*Les indices de B6.21 à B6.29 seront ajoutés à la prochaine session de génération, avec la fin du notebook.*
