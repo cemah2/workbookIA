@@ -756,7 +756,7 @@ def ema_update(ema, model, rho: float) -> None:
 
 
 def train_unet(model, ema, images, settings: dict, generator, alpha_bars, labels=None, *, time_limit=None,
-               log_every: int = 0) -> dict:
+               max_steps: int | None = None, log_every: int = 0) -> dict:
     """The reference training of Ex B5.23 (and, with ``labels``, of Ex B5.27): ``model`` and its EMA copy ``ema``
     are trained in place on ``images`` (float32 (N, 1, 28, 28) in [-1, 1]).
 
@@ -767,7 +767,7 @@ def train_unet(model, ema, images, settings: dict, generator, alpha_bars, labels
     and, with labels, the label dropout ``torch.rand(b, generator=generator) < settings["p_uncond"]`` (a dropped label
     becomes the empty class ``model.n_classes``); then x_t by the closed form in float32, the loss
     ``F.mse_loss(model(x_t, t[, y]), eps)``, its gradients, one step, and ``ema_update(ema, model,
-    settings["ema"])``. ``time_limit`` (seconds) stops between two steps. Returns ``{"loss": [...], "steps",
+    settings["ema"])``. ``time_limit`` (seconds) and ``max_steps`` stop between two steps. Returns ``{"loss": [...], "steps",
     "seconds"}``; both models end in eval mode."""
     torch = _torch()
     F = torch.nn.functional
@@ -781,7 +781,8 @@ def train_unet(model, ema, images, settings: dict, generator, alpha_bars, labels
     for epoch in range(int(settings["epochs"])):
         perm = torch.randperm(len(images), generator=generator)
         for i in range(0, len(images), bs):
-            if time_limit is not None and time.perf_counter() - start > time_limit:
+            if (time_limit is not None and time.perf_counter() - start > time_limit) or \
+                    (max_steps is not None and len(losses) >= max_steps):
                 stop = True
                 break
             idx = perm[i:i + bs]
@@ -931,3 +932,56 @@ def reference_model(fast: bool = True, folder: str | Path | None = None, verbose
     elif verbose:
         print(f"ℹ️ U-Net de référence relu ({ckpt['path'].name})")
     return build_from_checkpoint(TinyUNet, ckpt, which="ema"), ckpt
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Memorization, cached baselines and the precomputed protocols (Ex B5.26 to B5.31)
+# ---------------------------------------------------------------------------------------------------------------------
+def copy_ratio(samples, train, batch_size: int = 256) -> np.ndarray:
+    """The reference of Ex B5.28: for each sample, ``r = d(sample, a) / d(a, b)``, where ``a`` is its nearest image of
+    ``train`` in pixels (Euclidean distance of the flattened images, the first one on ties) and ``b`` the nearest image
+    of ``train`` other than ``a``. A sample much closer to ``a`` than ``a`` is to its own neighbours (r < 1/3) is
+    "anormalement proche": a copy, in the spirit of Carlini et al. Computed by blocks (float64), float64 (N,)."""
+    torch = _torch()
+    flat = torch.as_tensor(train).reshape(len(train), -1).double()
+    queries = torch.as_tensor(samples).reshape(len(samples), -1).double()
+    out = []
+    for i in range(0, len(queries), batch_size):
+        d, idx = torch.cdist(queries[i:i + batch_size], flat).min(dim=1)
+        to_all = torch.cdist(flat[idx], flat)
+        to_all[torch.arange(len(idx)), idx] = float("inf")
+        out.append((d / to_all.min(dim=1).values).numpy())
+    return np.concatenate(out) if out else np.zeros(0)
+
+
+def cached_module(key: dict, build, train, folder: str | Path | None = None, verbose: bool = True):
+    """A module trained once and kept in ``checkpoints_dir()``: ``build()`` makes an untrained module (to load the
+    weights into), ``train()`` builds and trains one; the file is named after the SHA-256 of the complete ``key``
+    (model, settings, data) and written atomically. Returns the module in eval mode."""
+    base = Path(folder) if folder is not None else checkpoints_dir()
+    full = {"version": CHECKPOINT_VERSION, "kind": "cached", **key}
+    path = base / f"cached-{key.get('model', 'module')}-{hashlib.sha256(_canonical(full).encode()).hexdigest()[:16]}.pt"
+    payload = _read(path, full)
+    if payload is not None:
+        module = build()
+        module.load_state_dict(payload["state_dict"])
+        return module.eval()
+    if verbose:
+        print(f"ℹ️ entraînement de {key.get('model', 'module')} (une seule fois)", flush=True)
+    module = train()
+    state = {k: v.detach().cpu().clone() for k, v in module.state_dict().items()}
+    _atomic_save({"key": _canonical(full), "state_dict": state, "__complete__": True}, path)
+    return module.eval()
+
+
+PROTOCOLS_FILE = Path(__file__).with_name("diffusion_protocols.json")
+
+
+def precomputed(name: str) -> dict:
+    """A table of a precomputed protocol of chapter B5 (``tools/chapters/history_chB5.py`` writes them into
+    ``diffusion_protocols.json``), read at run time: the experiment of the 🔮 B5.26 shows it only after the
+    predictions."""
+    data = json.loads(PROTOCOLS_FILE.read_text(encoding="utf-8")) if PROTOCOLS_FILE.exists() else {}
+    if name not in data:
+        raise KeyError(f"no precomputed protocol {name!r} in {PROTOCOLS_FILE.name}")
+    return data[name]

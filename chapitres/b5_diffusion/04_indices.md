@@ -568,8 +568,6 @@ Commence par : « Le rectified flow est un cousin très proche de la diffusion :
 
 ## Exercices du notebook
 
-Les indices des exercices B5.22 à B5.31 seront ajoutés à la prochaine étape de la génération, avec la fin du notebook.
-
 ### Ex B5.12 — linear_beta_schedule, cosine_beta_schedule et noise_schedule 🔨
 
 <details><summary>Indice 1</summary>
@@ -847,6 +845,303 @@ class TinyUNet_21(nn.Module):
         temb = self.t_mlp(self.pe[t])
         ...                                               # + class_emb(y or the empty class), then the U
         h = self.u2(torch.cat([self.up2(h), h2], dim=1), temb)
+```
+
+</details>
+
+### Ex B5.22 — Le DDPM qui ne produit que du gris : quatre bugs d'indices, de racines et d'échelle 🐛
+
+<details><summary>Indice 1</summary>
+
+Lis le message du premier point en échec, et lui seul : les points suivants n'ont de sens qu'une fois celui-ci réparé. Chacun mesure une propriété que la fiche énonce : l'échelle des images que supposent le bruit et l'écrêtage, la forme fermée (§205.2), l'aller-retour avec le vrai bruit (🔬 B5.18). Relis aussi le tableau des pièges de la fiche.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Point 1 : un octet de 0 à 255 doit devenir un nombre de −1 à 1 ; que donne la division seule ?
+- Point 2 : `t` est déjà un indice de 0 à $T - 1$ (relis les conventions de la fiche) ; que lit `alpha_bars[t - 1]` pour `t = 0` ?
+- Point 3 : dans la forme fermée, les **carrés** des deux coefficients font 1.
+- Point 4 : à quel indice l'algorithme 2 n'ajoute-t-il pas de bruit, et pourquoi ?
+- Quand les quatre points passent, compare les images à celles du début : le débruiteur parfait ne montrait que le bug d'échelle.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le point 1, réparé :
+```python
+def prepare_22(raw):
+    return torch.as_tensor(np.asarray(raw), dtype=torch.float32)[:, None] / 127.5 - 1
+```
+Pour les trois autres, une ligne chacun : l'indice lu dans `alpha_bars` (point 2), le coefficient de `x0` (point 3), une condition sur `t` avant d'ajouter le bruit (point 4).
+
+</details>
+
+### Ex B5.23 — Entraîner un DDPM sur MNIST : boucle, moyenne exponentielle des poids (EMA), courbe de loss 📦
+
+<details><summary>Indice 1</summary>
+
+La boucle est l'algorithme 1 de la fiche (§205.3, « La loss simplifiée ») : tirer des pas et du bruit, bruiter par la forme fermée, régresser le bruit. Pour $\rho$ : après $N$ pas, la copie EMA garde $\rho^N$ des poids de départ (des poids aléatoires) et moyenne environ $1/(1 - \rho)$ pas ; cherche le plus grand $\rho$ qui respecte les deux conditions de l'énoncé, puis prends une valeur simple en dessous.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `ema_update_23` : sous `torch.no_grad()`, `p_ema.mul_(rho).add_(p, alpha=1 - rho)` pour chaque couple de `zip(ema.parameters(), model.parameters())`, puis `b_ema.copy_(b)` pour les buffers ; jamais `p_ema = …` (un nouvel objet, que l'optimiseur et le modèle ne voient pas).
+- `train_23` : `order = torch.randperm(len(images), generator=generator)` au début de **chaque** epoch, puis `order[i:i + bs]` pour `i` de 0 à `len(images)` par pas de `bs` ; dans chaque batch, `torch.randint` **puis** `torch.randn`, tous deux avec `generator` ; le coefficient `alpha_bars[t]` remis en forme `(b, 1, 1, 1)` (fiche, piège « `alpha_bars[t]` sans remise en forme ») ; l'EMA **après** `opt.step()`.
+- La loss d'un pas : `loss.item()`, un float Python.
+- Pour $\rho$ : $\rho^{N} \le 0{,}01$ donne $\rho \le 0{,}01^{1/N}$.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_23(model, ema, images, settings, generator, alpha_bars):
+    ab = torch.tensor(np.asarray(alpha_bars), dtype=torch.float32)
+    opt = torch.optim.AdamW(model.parameters(), lr=settings["lr"])
+    losses, bs = [], settings["batch_size"]
+    model.train()
+    for _ in range(settings["epochs"]):
+        order = torch.randperm(len(images), generator=generator)
+        for i in range(0, len(images), bs):
+            x0 = images[order[i:i + bs]]
+            ...                                           # t, eps (in this order), x_t, the loss, one step, the EMA
+    ...                                                   # eval mode for both, then the history
+```
+Avec $N = 1\,252$ pas en mode rapide, $0{,}01^{1/1252} \approx 0{,}9963$ : un $\rho$ juste en dessous respecte la première condition ; vérifie la seconde.
+
+</details>
+
+### Ex B5.24 — Échantillonner : DDPM à 1 000 pas contre DDIM à 50 pas, qualité et temps 📦
+
+<details><summary>Indice 1</summary>
+
+Tes deux pas existent déjà (🔨 B5.17) : il reste à les enchaîner avec la prédiction du réseau. DDPM parcourt tous les indices de $T - 1$ à 0 ; DDIM parcourt la sous-séquence, puis va vers −1. L'écrêtage de $\hat{\mathbf{x}}_0$ (fiche §205.5) évite les valeurs qui divergent quand le réseau se trompe aux grands indices.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Une fonction d'aide qui rend la prédiction du réseau en float64 : `model(torch.as_tensor(x, dtype=torch.float32), torch.full((len(x),), t))` sous `torch.no_grad()`, puis `.double().numpy()`.
+- DDPM : `x = mylearn.diffusion.ddpm_step(x, t, eps, schedule, rng=rng, clip_x0=clip_x0)` pour `t` de $T - 1$ à 0.
+- DDIM : `steps = list(wbd.ddim_timesteps(T, n_steps)) + [-1]`, puis les couples `zip(steps[:-1], steps[1:])` ; $\hat{\mathbf{x}}_0$ par `predict_x0_from_eps(x, np.full(len(x), t), eps, alpha_bars)`.
+- Le tenseur rendu : `torch.as_tensor(x, dtype=torch.float32)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def sample_ddim_24(model, x_T, alpha_bars, n_steps, clip_x0=1.0):
+    D = mylearn.diffusion
+    x = x_T.double().numpy()
+    steps = [int(t) for t in wbd.ddim_timesteps(len(alpha_bars), n_steps)] + [-1]
+    for t, t_prev in zip(steps[:-1], steps[1:]):
+        eps = ...                                         # the network's noise, float64
+        if clip_x0 is not None:
+            x0 = np.clip(D.predict_x0_from_eps(x, np.full(len(x), t), eps, alpha_bars), -clip_x0, clip_x0)
+            eps = ...                                     # the noise that goes with the clipped x0
+        x = D.ddim_step(x, t, t_prev, eps, alpha_bars)
+    return torch.as_tensor(x, dtype=torch.float32)
+```
+
+</details>
+
+### Ex B5.25 — Nombre de pas DDIM, planning linéaire ou cosinus : distance de Fréchet contre temps de calcul 🔬
+
+<details><summary>Indice 1</summary>
+
+Une courbe « qualité contre coût » se lit de gauche à droite : chaque point coûte plus cher que le précédent ; on cherche où elle cesse de descendre (fiche §205.8, « La distance de Fréchet »). Pour a) et b), lis le tableau `FULL_25` graine par graine, pas seulement les médianes.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `fd_curve_25` : une boucle sur `steps_list`, `time.perf_counter()` avant et après `sample_ddim_24`, puis `frechet_mnist(images)` **hors** du chronomètre (on mesure le coût de l'échantillonnage, pas celui de la mesure).
+- a) Pour chaque graine, divise chaque distance de la ligne L par la dernière (100 pas) ; cherche le premier nombre de pas à partir duquel tous les rapports restent sous le seuil ; la réponse vaut pour la graine la plus lente.
+- b) Compare, graine par graine, la colonne des 10 pas des lignes L et C.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def fd_curve_25(model, alpha_bars, steps_list, x_T):
+    out = []
+    for n in steps_list:
+        start = time.perf_counter()
+        images = sample_ddim_24(model, x_T, alpha_bars, n)
+        out.append((frechet_mnist(images), time.perf_counter() - start))
+    return out
+```
+Pour a), la première graine : divise ses cinq distances par la dernière, et regarde à partir de quelle colonne tous les rapports suivants restent sous le seuil ; fais de même pour les autres graines, puis prends le plus grand des nombres de pas trouvés.
+
+</details>
+
+### Ex B5.26 — Prédire l'effet de w = 0, 1, 3 et 7 sur la netteté et la diversité 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La guidance sans classifieur » et la figure 2D de la fiche (§205.7) : la guidance extrapole la différence entre la prédiction conditionnée et la prédiction sans condition. Pense séparément à chacune des quatre mesures : la distance de Fréchet compare des nuages de features à ceux des vraies images (fidélité **et** diversité), la classe reconnue ne regarde que la fidélité.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- a) Un modèle petit, entraîné peu de temps : ses images sans guidance sont-elles déjà proches des vraies ? Une forte guidance resserre chaque classe : est-ce que cela rapproche ou éloigne le nuage de celui des vraies images ?
+- b) La classe demandée n'est qu'une entrée de plus pour le réseau ; avec peu d'entraînement, la suit-il déjà vraiment ?
+- c) Un pixel saturé est du noir ou du blanc presque pur ; les fonds de Fashion-MNIST sont noirs. Que fait l'écrêtage de $\hat{\mathbf{x}}_0$ à chaque pas ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), écris ce que tu attends de la distance à $w = 0$ (sans guidance : des images de toutes les classes mêlées, un peu floues) puis à $w = 7$ (des images très typées de chaque classe, toutes semblables) : laquelle des deux erreurs, manque de fidélité ou manque de diversité, pèse le plus dans une distance entre gaussiennes de features ? Les deux autres prédictions se raisonnent de la même façon, sans calcul.
+
+</details>
+
+### Ex B5.27 — Diffusion conditionnelle et guidance sans classifieur sur Fashion-MNIST 📦
+
+<details><summary>Indice 1</summary>
+
+Rien de neuf dans la boucle : c'est celle de B5.23, avec un troisième tirage qui remplace parfois le label par la classe vide (fiche §205.7, « La guidance sans classifieur ») ; et à l'échantillonnage, ta `sample_ddim_24`, où le bruit du réseau devient le bruit guidé.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `train_cond_27` : après `eps`, `drop = torch.rand(len(x0), generator=generator) < settings["p_uncond"]`, puis `y = torch.where(drop, torch.full_like(y, model.n_classes), y)` ; le modèle reçoit `(x_t, t, y)`.
+- `guided_eps_27` : `torch.cat([x, x])`, `torch.cat([tt, tt])` et `torch.cat([y, torch.full_like(y, model.n_classes)])`, un appel, puis `.chunk(2)` : la première moitié est la prédiction conditionnée.
+- `sample_cond_27` : copie `sample_ddim_24`, en remplaçant l'appel du réseau par `guided_eps_27(model, torch.as_tensor(x, dtype=torch.float32), t, y, w)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def guided_eps_27(model, x, t, y, w):
+    tt = torch.full((len(x),), t, dtype=torch.long)
+    with torch.no_grad():
+        if w == 0:
+            return model(x, tt, y)
+        both = model(torch.cat([x, x]), torch.cat([tt, tt]), torch.cat([y, torch.full_like(y, model.n_classes)]))
+    cond, uncond = both.chunk(2)
+    return ...                                            # the formula of the fiche, with w
+```
+
+</details>
+
+### Ex B5.28 — Mémorisation : plus proches voisins des échantillons, entraînement sur 500 images contre 60 000 🔬
+
+<details><summary>Indice 1</summary>
+
+Un plus proche voisin en pixels, c'est une distance euclidienne entre images aplaties, calculée pour toutes les paires (ch. 13) ; `torch.cdist` le fait en une fois. Pour $r$, il faut un second plus proche voisin : celui de l'image $a$ dans son propre dataset, en excluant $a$ elle-même.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `nearest_28` : `torch.cdist(a, b)` avec `a = samples.reshape(N, -1).double()` et `b = train.reshape(M, -1).double()`, puis `.min(dim=1)` (valeurs et indices ; à égalité, PyTorch rend le premier).
+- `copy_ratio_28` : les distances de chaque $a$ (`train[indices]`) à tout `train`, la distance de $a$ à elle-même mise à l'infini (`to_all[torch.arange(N), indices] = float("inf")`), puis le minimum de chaque ligne.
+- Pour a) et b), lis `FULL_28["copies"]` : une valeur par graine.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def copy_ratio_28(samples, train):
+    d, idx = nearest_28(samples, train)
+    flat = torch.as_tensor(train).reshape(len(train), -1).double()
+    to_all = torch.cdist(flat[idx], flat)
+    ...                                                   # inf on the distance of each a to itself
+    return d / ...                                        # the nearest OTHER image of each a
+```
+Sur les points de la vérification, le premier : $(0 ; 0{,}5)$ a pour voisin $a = (0 ; 0)$ à 0,5, et $a$ a pour voisin $(3 ; 0)$ à 3 : $r = 0{,}5/3$. Fais les deux autres de même.
+
+</details>
+
+### Ex B5.29 — Distance de Fréchet : situer le DDPM face au VAE (ch. 25) et au DCGAN (ch. 27) sur MNIST, avec le code d'évaluation du mini-projet MP6 📦
+
+<details><summary>Indice 1</summary>
+
+Tout est déjà écrit dans `genbench.evaluate` : la fonction n'a qu'à assembler quatre appels, toujours avec le même classifieur et la même référence. Lis les docstrings de `classifier_features`, `class_report` et `nearest_neighbors` (`help(gb_eval.class_report)`).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Les vraies images de référence : `(REAL_MNIST.images + 1) / 2`, dans $[0, 1]$ comme `images01`.
+- `gb_eval.classifier_features(CLF01, …)` pour les deux ensembles, puis `gb_eval.frechet_distance(real, fake)`.
+- `report = gb_eval.class_report(CLF01, images01)` donne `report["entropy"]` et `report["confidence"]`.
+- `distances, _ = gb_eval.nearest_neighbors(images01, train01)`, puis `float(np.median(distances))`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def evaluate_29(images01, train01):
+    real = gb_eval.classifier_features(CLF01, (REAL_MNIST.images + 1) / 2)
+    fake = ...
+    report = gb_eval.class_report(CLF01, images01)
+    distances, _ = ...
+    return {"fd": ..., "entropy": report["entropy"], "confidence": ..., "nn": float(np.median(distances))}
+```
+
+</details>
+
+### Ex B5.30 — Un échantillonneur autonome : sample.py avec --steps, --seed et --guidance, images et paramètres sauvegardés 🛠️
+
+<details><summary>Indice 1</summary>
+
+Un script en ligne de commande : `argparse` pour les options, une fonction `main(argv=None)` qui rend un code de sortie, et `sys.exit(main())` en bas. Tout ce qui fait les images (le checkpoint, la graine, les pas, la guidance) doit pouvoir se relire dans `params.json`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `argparse.ArgumentParser` : un argument positionnel `checkpoint` (`type=Path`), puis `--steps`, `--seed`, `--guidance`, `--label`, `--n`, `--out` avec leurs types et défauts.
+- `payload = torch.load(path, map_location="cpu", weights_only=True)` ; `config = payload["config"]` ; `settings = json.loads(payload["key"])["settings"]`.
+- Les refus : `print(message, file=sys.stderr)` puis `return 2`, **avant** de générer.
+- L'empreinte : `hashlib.sha256(path.read_bytes()).hexdigest()`.
+- Une grille d'images : `matplotlib.use("Agg")` avant `pyplot` (aucun écran dans un terminal), puis `fig.savefig(...)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def main(argv=None):
+    args = parse_args(argv)
+    payload = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
+    settings, config = json.loads(payload["key"])["settings"], payload["config"]
+    if not 1 <= args.steps <= config["n_steps"]:
+        print(f"sample.py: --steps must be in [1, {config['n_steps']}]", file=sys.stderr)
+        return 2
+    ...                                                   # the other refusals, the model (EMA weights), x_T, y
+    images = wbd.sample_ddim(model, x_T, alpha_bars, args.steps, y=y, w=args.guidance).clamp(-1, 1)
+    ...                                                   # samples.npy, samples.png, params.json
+    return 0
+```
+
+</details>
+
+### Ex B5.31 — Défi : la plus petite distance de Fréchet sur Fashion-MNIST en au plus 50 pas d'échantillonnage 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de ce qui marche déjà : le U-Net conditionné et la guidance de B5.27, l'EMA de B5.23, DDIM. Le budget est un **temps** : une boucle qui s'arrête quand le temps est écoulé plutôt qu'un nombre d'epochs. À 50 passes par image, tu choisis entre 50 pas sans guidance et 25 pas guidés : mesure les deux.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- La boucle : `while time.perf_counter() - start < 0.95 * seconds`, un batch tiré au hasard (`torch.randint`) à chaque tour.
+- Une EMA qui se « réchauffe » : $\rho_k = \min(0{,}99,\ (1 + k)/(10 + k))$ au pas $k$, pour que la copie ne garde pas les poids de départ quand le nombre de pas est inconnu d'avance.
+- `generate` : ta `sample_cond_27` avec autant d'images par classe (`torch.arange(n) % 10`), puis `.clamp(-1, 1)`.
+- Essaie plusieurs $w$ sur un même modèle : la meilleure guidance pour la distance n'est ni 0 ni la plus forte (🔮 B5.26).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def method_31(images, labels, seconds):
+    start = time.perf_counter()
+    model = UNET_CLASS(T_STEPS, channels=(16, 32, 64), n_classes=10)
+    ema = copy.deepcopy(model)
+    opt = torch.optim.AdamW(model.parameters(), lr=2e-3)
+    step = 0
+    while time.perf_counter() - start < 0.95 * seconds:
+        ...                                               # one step of train_cond_27 on a random batch, then the EMA
+        step += 1
+
+    def generate(n, generator):
+        ...                                               # x_T from generator, the classes, sample_cond_27 (25 steps)
+    return generate
 ```
 
 </details>

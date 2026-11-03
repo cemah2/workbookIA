@@ -238,3 +238,160 @@ def test_toy_reference_training_and_samplers_follow_the_library():
     with torch.no_grad():
         want = (start - flow(start, torch.full((6,), 1000))).double().numpy()
     np.testing.assert_allclose(D.sample_toy_euler(flow, 6, 1, torch.Generator().manual_seed(6)), want, rtol=1e-6)
+
+
+# ------------------------------------------------------------------------------- training and sampling of the U-Net
+def _small_unet(n_classes=None, seed=0):
+    torch.manual_seed(seed)
+    net = D.TinyUNet(12, channels=(8, 8, 16), t_dim=16, n_classes=n_classes)
+    with torch.no_grad():
+        for p in net.parameters():
+            p.add_(0.1 * torch.randn(p.shape))
+    return net.eval()
+
+
+def test_ema_update_is_the_formula_in_place():
+    ema, model = _small_unet(seed=0), _small_unet(seed=1)
+    before = [p.detach().clone() for p in ema.parameters()]
+    ids = [id(p) for p in ema.parameters()]
+    D.ema_update(ema, model, 0.9)
+    assert [id(p) for p in ema.parameters()] == ids
+    for new, old, p in zip(ema.parameters(), before, model.parameters()):
+        assert torch.allclose(new, 0.9 * old + 0.1 * p)
+
+
+def test_train_unet_follows_its_recipe_and_stops():
+    """Two steps written by hand (same draws, same order) against train_unet; max_steps and the label dropout."""
+    F = torch.nn.functional
+    images = torch.rand(6, 1, 28, 28) * 2 - 1
+    ab = D.alpha_bars(D.schedule_betas("linear", 12))
+    settings = {"epochs": 1, "batch_size": 4, "lr": 1e-3, "ema": 0.5}
+    a, ea, b, eb = (_small_unet() for _ in range(4))
+    hist = D.train_unet(a, ea, images, settings, torch.Generator().manual_seed(3), ab)
+    assert hist["steps"] == 2 and len(hist["loss"]) == 2 and all(isinstance(v, float) for v in hist["loss"])
+    gen = torch.Generator().manual_seed(3)
+    opt = torch.optim.AdamW(b.parameters(), lr=1e-3)
+    abt = torch.tensor(ab, dtype=torch.float32)
+    b.train()
+    perm = torch.randperm(6, generator=gen)
+    for idx in (perm[:4], perm[4:]):
+        t = torch.randint(0, 12, (len(idx),), generator=gen)
+        eps = torch.randn((len(idx), 1, 28, 28), generator=gen)
+        x_t = abt[t].sqrt().view(-1, 1, 1, 1) * images[idx] + (1 - abt[t]).sqrt().view(-1, 1, 1, 1) * eps
+        loss = F.mse_loss(b(x_t, t), eps)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        D.ema_update(eb, b, 0.5)
+    for p, q in zip(list(a.parameters()) + list(ea.parameters()), list(b.parameters()) + list(eb.parameters())):
+        assert torch.allclose(p, q, atol=1e-6)
+    c, ec = _small_unet(), _small_unet()
+    assert D.train_unet(c, ec, images, settings | {"epochs": 5}, torch.Generator().manual_seed(3), ab, max_steps=3)["steps"] == 3
+    m, em = _small_unet(n_classes=3), _small_unet(n_classes=3)
+    labels = torch.tensor([0, 1, 2, 0, 1, 2])
+    hist = D.train_unet(m, em, images, settings | {"p_uncond": 0.5}, torch.Generator().manual_seed(3), ab, labels=labels)
+    assert hist["steps"] == 2 and not m.training and not em.training
+
+
+def test_predict_eps_guidance_is_one_batched_call():
+    net = _small_unet(n_classes=3)
+    x, y = torch.randn(2, 1, 28, 28), torch.tensor([0, 2])
+    calls = []
+    handle = net.register_forward_pre_hook(lambda mod, args: calls.append(int(args[0].shape[0])))
+    try:
+        guided = D.predict_eps(net, x, 5, y, w=2.0)
+    finally:
+        handle.remove()
+    assert calls == [4]
+    t = torch.full((2,), 5)
+    with torch.no_grad():
+        want = 3 * net(x, t, y) - 2 * net(x, t, torch.full((2,), 3))
+    assert torch.allclose(guided, want, atol=1e-5)
+    assert torch.allclose(D.predict_eps(net, x, 5, y, w=0.0), net(x, t, y).detach(), atol=1e-6)
+
+
+def test_samplers_follow_the_reference_library():
+    """sample_ddpm: a loop of ddpm_step (posterior variance, clipped x̂₀, z from the same rng); sample_ddim: x̂₀
+    clipped, the noise recomputed, then ddim_step."""
+    ref = _reference("diffusion")
+    net = _small_unet()
+    betas = D.schedule_betas("linear", 12)
+    ab = D.alpha_bars(betas)
+    sched = ref.noise_schedule(betas)
+    x_T = torch.randn(3, 1, 28, 28, generator=torch.Generator().manual_seed(1))
+
+    def eps(x, t):
+        with torch.no_grad():
+            return net(torch.as_tensor(x, dtype=torch.float32), torch.full((len(x),), t)).double().numpy()
+
+    x, rng = x_T.double().numpy(), np.random.default_rng(4)
+    for t in range(11, -1, -1):
+        x = ref.ddpm_step(x, t, eps(x, t), sched, rng=rng, clip_x0=1.0)
+    assert np.allclose(D.sample_ddpm(net, x_T, ab, np.random.default_rng(4)).numpy(), x, atol=1e-5)
+    x = x_T.double().numpy()
+    seq = list(D.ddim_timesteps(12, 4)) + [-1]
+    for t, t_prev in zip(seq[:-1], seq[1:]):
+        e = eps(x, t)
+        x0 = np.clip(ref.predict_x0_from_eps(x, np.full(3, t), e, ab), -1, 1)
+        e = (x - np.sqrt(ab[t]) * x0) / np.sqrt(1 - ab[t])
+        x = ref.ddim_step(x, t, t_prev, e, ab)
+    assert np.allclose(D.sample_ddim(net, x_T, ab, 4).numpy(), x, atol=1e-5)
+    unclipped = D.sample_ddim(net, x_T, ab, 4, clip_x0=None)
+    assert unclipped.shape == (3, 1, 28, 28)
+
+
+def test_ideal_denoiser_is_the_posterior_mean_of_a_finite_dataset():
+    images = torch.tensor([[1.0, -1.0], [-1.0, 1.0]]).reshape(2, 1, 1, 2)
+    c1, c2 = np.array([0.6]), np.array([0.8])
+    eps_fn = D.ideal_denoiser(images, c1, c2)
+    x = torch.tensor([[0.5, 0.1]]).reshape(1, 1, 1, 2)
+    d = [((x.reshape(-1) - 0.6 * img.reshape(-1)) ** 2).sum() for img in images]
+    w = torch.softmax(-torch.tensor(d) / (2 * 0.64), dim=0)
+    x0 = w[0] * images[0].reshape(-1) + w[1] * images[1].reshape(-1)
+    assert torch.allclose(eps_fn(x, 0).reshape(-1), (x.reshape(-1) - 0.6 * x0) / 0.8, atol=1e-6)
+    far = 100 * images[:1]                       # x_t far on the side of the first image: its noise exactly
+    assert torch.allclose(eps_fn(far, 0).reshape(-1), (far.reshape(-1) - 0.6 * images[0].reshape(-1)) / 0.8, atol=1e-4)
+
+
+def test_copy_ratio_on_points_of_the_plane():
+    train = torch.tensor([[0.0, 0.0], [3.0, 0.0], [3.0, 4.0], [10.0, 10.0]]).reshape(4, 1, 1, 2)
+    queries = torch.tensor([[0.0, 0.5], [3.0, 3.0], [9.0, 9.0]]).reshape(3, 1, 1, 2)
+    assert np.allclose(D.copy_ratio(queries, train, batch_size=2), [0.5 / 3, 1 / 4, np.sqrt(2) / np.sqrt(85)])
+
+
+def test_cached_module_trains_once(tmp_path):
+    calls = []
+
+    def train():
+        calls.append(1)
+        net = torch.nn.Linear(2, 2)
+        with torch.no_grad():
+            net.weight.fill_(0.5)
+        return net
+
+    key = {"model": "toy", "settings": {"a": 1}}
+    first = D.cached_module(key, lambda: torch.nn.Linear(2, 2), train, folder=tmp_path, verbose=False)
+    second = D.cached_module(key, lambda: torch.nn.Linear(2, 2), train, folder=tmp_path, verbose=False)
+    assert calls == [1] and torch.equal(first.weight, second.weight) and not second.training
+    D.cached_module(key | {"settings": {"a": 2}}, lambda: torch.nn.Linear(2, 2), train, folder=tmp_path, verbose=False)
+    assert calls == [1, 1]
+
+
+def test_precomputed_protocol_of_the_guidance():
+    table = D.precomputed("guidance_26")
+    assert set(table["by_w"]) == {"0", "1", "3", "7"}
+    assert all(len(v) == table["n_seeds"] for row in table["by_w"].values() for v in row.values())
+    with pytest.raises(KeyError):
+        D.precomputed("nothing")
+
+
+def test_unet_settings_and_reference_model(tmp_path, monkeypatch):
+    assert D.unet_settings(True)["T"] == 400 and D.unet_settings(False)["n_train"] == 60_000
+    assert D.n_updates(10_000, D.unet_settings(True)) == 4 * 313
+    monkeypatch.setitem(D.UNET_SETTINGS, True, D.UNET_SETTINGS[True] | {"epochs": 1, "channels": [8, 8, 16], "t_dim": 16})
+    monkeypatch.setattr(D, "n_train", lambda fast=True: 64)
+    model, ckpt = D.reference_model(True, folder=tmp_path, verbose=False)
+    assert not model.training and ckpt["config"]["channels"] == [8, 8, 16]
+    assert len(ckpt["history"]["loss"]) == 2 and ckpt["path"].name.startswith("ddpm-reference-fast-")
+    again, _ = D.reference_model(True, folder=tmp_path, verbose=False)
+    assert all(torch.equal(p, q) for p, q in zip(model.parameters(), again.parameters()))

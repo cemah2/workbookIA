@@ -38,7 +38,7 @@ where = ["src"]
 include = ["wb*"]
 
 [tool.setuptools.package-data]
-wb = ["answers.json"]
+wb = ["answers.json", "diffusion_protocols.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
