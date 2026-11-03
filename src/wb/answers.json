@@ -58175,6 +58175,1348 @@
       },
       "source": "chapitres/b5_diffusion/05_solutions.ipynb"
     },
+    "B6.1a": {
+      "hash": "f58d4b2bc337b00439d9b22391ae3b71a395b9f5006dbd1676c27608765eeb6f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5e1a405ae8f3d5bc5642289c032237d994a27332480bb45a6203ba4565e3e446": "tu as calculé f sur la ligne moyenne du fond : v(∅) est la moyenne de f sur les deux lignes",
+        "6af629807b890022e94ab62b31582de3b3f748726aa692f61487f1ed08647f6e": "relis la question : v(∅) n'a aucune feature du client",
+        "f11a358b26539e304a5fd18e14f02bb35fce96f9c0fe30d93ba952cf6d01de2b": "tu as additionné les deux lignes : v(S) est une moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1b": {
+      "hash": "ce32d6a7efeee5480b7e73730b89d8f4cba2f9aa82955a4beecf43058631b58a",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "484ec8905ec483b6d9d60fdb296e044512ac04682c546b479a4bedce7eee0d35": "relis la question : v({1}) garde x₂ et x₃ du fond",
+        "7988c915d55a3af63871c4cf097318c3732cdf84afde8cde0214f1ce9c2d7809": "dans v({1}), seule la feature 1 vient du client : as-tu inversé le masque ?",
+        "dccb895308b2bf4b52025ed5da686119dac595d7bd3e6b8bf1bb62ca24b1aa8f": "tu as additionné les deux lignes : v(S) est une moyenne"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1c": {
+      "hash": "e9160d41d13102f6630fb40f24cacd0617898002eef5e3cfc42bfc6fd0c09b0d",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "4c4bd19c0e26c62f183308116f1a0ad9bb65fe7c2b2062a43587a8a6ed9efefc": "tu as additionné les deux lignes : v(S) est une moyenne",
+        "fe2871c171c7d73e6061e5db3a67c998214d268aee8c1b2dd683d08fa13b188b": "dans v({1, 3}), les features 1 et 3 viennent du client : as-tu inversé le masque ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1d": {
+      "decimals": 2,
+      "hash": "0e50e07dee2dd7544c0bc2030cc185a8acca3fb1f88644879de2541287d2afb7",
+      "hash_coarse": "0f913551f4e4c81fa45cee6a1aa7b30a1f795dec6383a69a4b5939041c2aa40c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "3026acc4ecfb42464c955676e0b9202dab87659a48929a47919dd719c1c72ab9": "les poids ne sont pas uniformes sur les quatre coalitions sans la feature 1 : relis la formule",
+        "3936352a785a81a03cdc85963c72e966090e075d26d6f1adc639fbbc38aa528c": "les poids ne sont pas uniformes sur les huit coalitions : relis la formule",
+        "81cd4b34fa7f113b4a271e23dc6af369b2d778351cb7e767f8029c07e10168cc": "c'est le poids des coalitions de taille 0 ou 2 : {3} a un membre"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1e": {
+      "decimals": 1,
+      "hash": "4e65dc1bc9d1db9091f62a82c2cb36b7b24c0bb3dc396c7539ab86fe8afbd4ea",
+      "hash_coarse": "32a8884fd12ac265dec1fd49fd9fce7249e5b223059754584486f18c49889931",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "13d0d6e19bac530759d8f17201eb683ebdf5913e31a7843e63424eefc80c87d2": "tu n'as gardé que l'apport de la feature 1 à la coalition vide (ou le seul terme 2x₁) : il y a quatre coalitions sans elle",
+        "712d2256b6d3b07979ddd42eb9b5d66b005f69ec2d4f7e2f07a810287683bead": "tu n'as gardé que son apport quand elle arrive la dernière : il y a quatre coalitions sans elle"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1f": {
+      "hash": "f62eed2159ae07f525f347b999be0d1b87978ee730c68c91912d8ee6605e4eb9",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "5279da50fe8dede872cf035ed4c58c8da8e6b7f70aaf5098cc9df26adb7b3ee7": "x₂ entre dans f : un joueur nul n'apporte jamais rien, est-ce le cas ?",
+        "6462a04ffc943a2c87d95f478b07f568cda63fd43157906e9484dbdac08675bf": "vérifie le signe : x₂ est plus petit que ses valeurs du fond"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1g": {
+      "alt_coarse": [
+        "91412ff5ef8a7c49a9e9d15bff40629981767908f5af03185034cce78fb8b90d"
+      ],
+      "decimals": 1,
+      "hash": "55b85415f37d9fa4962873b50db7fecf9c4bffec65f9270ef2753d67b3d445aa",
+      "hash_coarse": "e337b43900ca8f6477b2944931d59b3765229d98c4f6c3c3b1caf0aa38a6d3fb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0fdfb06712b9a64c62adc2b99d05fc2a117c6f6fc09977623739a9afa59e5fbe": "tu n'as gardé que l'apport de la feature 3 à la coalition vide",
+        "1c52e073f1cb56b248dd4cb0904e9498af577347316ff399d7eb3193901179b7": "tu n'as gardé que son apport quand elle arrive la dernière",
+        "6202c7ab44660da019aed9d093efe6699358c74629b6f0bb16e4dd1d1bf48b66": "as-tu pris pour valeur de base f sur la ligne moyenne du fond ? Relis a)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1h": {
+      "hash": "55fa3a4b6e3928de59813bc7002caf383505eaa7694dd071306a9c6172d34738",
+      "kind": "bool",
+      "mistakes": {
+        "acaab35e0d47086bcf885d387ec0b7f9fc76a6936ac52e1c5935cfd437bfe2cf": "calcule ce que l'interaction apporte à φ₁ (retire le terme 2(x₁ − moyenne)) et compare à φ₃"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1i": {
+      "hash": "e2a2cae050f378b36b9c8f2c1733e5d75a5e53557a41bd424ea0596eb87704a5",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "26f3818ae9230a9a6a56337527673f71709840fa49eb004d0a35b3ad4822ef5d": "chaque v(S) demande une évaluation par ligne du fond : il y en a deux",
+        "36259e02860924489dcbd6ccb0e50cae101e229b926e27e5c4d15f3cc2462fd6": "chaque v(S) se calcule une fois et sert aux trois features",
+        "c8351ddb74389bcc4a8c5293fa24893dcc9d632c5bd70879c60eeb582a3b728a": "compte toutes les coalitions, la vide et la pleine comprises"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1j": {
+      "decimals": 1,
+      "hash": "43c8fe08b39f47383e419b40e8455b125e6fefdb4d94529d54349305b55316e1",
+      "hash_coarse": "1076e4b52f280029e5edc3ff90e16a43612c66b8d5a030daf67f97e6f8747c92",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "87f2a930dd497d96d5e8068e6e87bd38c1fdf9e6912b4a6bfa7b7253fae54fac": "tu n'as gardé que le terme 2x₁ : la feature 1 entre aussi dans l'interaction",
+        "f2d06031bb78e846d27c917400ff7d1c05df8d2d21b14e3b4476889708802263": "relis la question : le fond n'a plus qu'une ligne, recalcule les v(S)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.1k": {
+      "hash": "1650374fba240f344d04f4db8f561190854aa470c516cf0f10a285c107932d12",
+      "kind": "str",
+      "mistakes": {
+        "418e3986702a4fc09795ba99bd4854ba2c4dd3e0d5f8a7ae4e4c6cb238626d29": "relis l'encadré 📐 de la fiche : la feature 1 est la colonne 0",
+        "fbe17c31f4a0ebe0a76b1260002b92209e8c3a345e865c9a23265f2abb1061d9": "relis la signature de shapley_values : que rend-elle à part phi ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3a": {
+      "decimals": 1,
+      "element_hashes": [
+        "7542e16b37ec52198a1423281a3dd748dfa524dd1afe31e397eae15313414a59",
+        "54573c89c85d45da89c20e57e05f95a0f7facca3c13c3a97ac6cd5493050b8b1"
+      ],
+      "hash": "013c2532476dde14890d3533cfa53c5b745457c954a0df8bf988d4ebaa249ba4",
+      "kind": "array",
+      "mistakes": {
+        "7e410381a4b1dd7502dff2894e08a1e3e63b75f3d08205928f85500fabd044cb": "la dérivée de 3x₂ par rapport à x₂ ne dépend pas de x₂",
+        "bc5b5c34c77e781f43caeeffed1e557a25997dbd395bde4887f1fd60c7f972c9": "la dérivée de x₁² est 2x₁"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3b": {
+      "decimals": 1,
+      "element_hashes": [
+        "f8a102ac9cf6dddde00f12656f771eb73e0fa5e958bbb960dbc46453722508f6",
+        "a3d7b2e456e0696602b406d7ba635bd5ab92c6aa5d08fa867bfcd5a48d501c01"
+      ],
+      "hash": "676f37d19116d6a7aebb0235a37d2c3f801a96c7281582be4689a505ed0a4879",
+      "kind": "array",
+      "mistakes": {
+        "605a4f94dd9a8193f06fa46ecc5ab515eb270d041ad670e144d92b974662943c": "vérifie le signe : x₂ = −1",
+        "c26e95e61e3cf96127dd731101c3838fdb346cfa78607c1ec77229aa0a10ad26": "multiplie chaque dérivée par la valeur de sa feature"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3c": {
+      "hash": "768b15274f42976e076976a31d9475adc13182caa431d53c5c85fdcdc8facfe4",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2248847bd8e99cd9be953503e7dd1deecf6ebf7f363877afa276804bd63ee7fe": "c'est la somme de gradient × entrée : on demande l'écart de prédiction f(x) − f(x′)",
+        "33cdbb864babcb66aa0f360107aff94e5a57256918d7d6fc32a1ac5465b44da1": "vérifie le signe de 3x₂ : x₂ = −1",
+        "6b6a065adf914be71eb918bbff299af18888e17a05dc8fc9abec4cf14d3d2cee": "vérifie le sens de la soustraction : f(x) − f(x′)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3d": {
+      "decimals": 1,
+      "element_hashes": [
+        "094db637ce48e7d0c72b1b72e659897e4fcd51f9a7b32895974cf7be3ddceae6",
+        "ab85acee86fd6d671ad1468976507e3714362d397aae3e7fadc72c3f204be134"
+      ],
+      "hash": "c65ffa1d35a177381917103415d22f01d6373eba4bd1ea7ae6b7b3468095941c",
+      "kind": "array",
+      "mistakes": {
+        "1589730e607f68a65b6a6b477e6f697761ab1b75c6507ed222a50e6462e2b9fd": "multiplie l'intégrale par x_i − x′_i",
+        "41e3f75ed9f28ef2fc68ca34848df41e246b7ca9817623b618977c3aaef1bba2": "vérifie le signe de la seconde attribution : x₂ = −1",
+        "4adb18670af55752e35ccc3731b6cfdbb93a9892440bb51a4650f669298262e8": "c'est gradient × entrée : intègre la dérivée le long du chemin"
+      },
+      "shape": [
+        2
+      ],
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3e": {
+      "decimals": 1,
+      "hash": "e049a80d748fa64313e1bc19efff08d384fea50663aaae57ae5a273106c71581",
+      "hash_coarse": "cf943c47964bb57d48f77a81b6f1ea05a5b2c7cba05572fa769564038b950c28",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "114f82b03ce5b13503ec0e56dc9347b0b2e42b88a396f9a712f13eec72b78265": "multiplie la moyenne des gradients par x₁ − x′₁",
+        "183b7e0bf1fbde203861aec9c30986b30afc21b6cc8081cdbcc7a19ec2dbcbad": "n = 5 intervalles : les points 0 ; 0,2 ; 0,4 ; 0,6 ; 0,8",
+        "43412ec9f4c9703b0b5e53178e6452494f0ab49bffdc79239d9a931795ec41ea": "relis la question : la règle de gauche, avec n = 5",
+        "e472f3f3e6b77a0394dcdcda6e4f9e832728daffb4c5d37d99a78e4659869ec6": "c'est la règle 'right' : 'left' prend les points k/n pour k = 0 à n − 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3f": {
+      "decimals": 1,
+      "hash": "dbfd2e21b484f80499e3b9855ef81b69bc302dea4f06e04d0f3607561668d818",
+      "hash_coarse": "52042893645301713133ab17c7d437bff746c90a858c95bf7416800195e638bd",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0e79c37cd5fb74ec14a2879c16fdb690a6c3fa3456c7433c1c411875cf21e8ec": "relis la question : la règle de droite, avec n = 5",
+        "485d108cc21ebe0c9bcd82fcafe6516c43e24a4f4e65857fcde20a7ae01af2e9": "c'est la règle 'left' : 'right' prend les points k/n pour k = 1 à n",
+        "bfed3788f031ec22494bfb6b8fd05b26a653447c72ea206cc46bb47909cf719e": "multiplie la moyenne des gradients par x₁ − x′₁"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3g": {
+      "decimals": 1,
+      "hash": "7a8bac54955e70d727aea26ecb7cd971fc903b9b9968736ada6751b5d6aeed00",
+      "hash_coarse": "5a410e65edd766f5b15bcf017b7082494cab7a6613051088d7e5467c5d714c9c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "6a0d8d9ae8416f0fd6751be19f760747c909078cb4fceed6225d8cc62ccb67ef": "les poids valent 1/n, divisés par deux aux extrémités : relis l'énoncé",
+        "73a0ec0ab83128e138598c02a327e10fa5bbfb6ba55497a7f6608d73bb243c79": "relis la question : la règle des trapèzes, dont les deux extrémités comptent pour moitié",
+        "9d5bb8f644b1b60aeb174a8ec68447b6c226803d524d0ccf56360c172b60f58b": "multiplie la somme pondérée par x₁ − x′₁"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3h": {
+      "fractional": "le nombre d'intervalles est entier : prends le plus petit n qui convient",
+      "hash": "0e6457aecee0e7c35c60499e7698bd187af275703d6033cc7c0e8e7899f2794a",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "314dcc10810ad841e1841c053ae58af260f946d46ff8c40e5a70652fbe8cca8b": "l'erreur de la règle de gauche sur IG₁ dépend de x₁² : recalcule-la",
+        "bbb2bbdf3a25ab40cbcf1ed834a37202b67412ad3cbdc14427cbdaf31c6bd7a8": "« au plus 0,01 » : l'égalité est permise",
+        "c5145c4531379e7cac191bec75469a8aebf3748fb9d23f3b932d61310c8c24c7": "écris l'erreur de la règle de gauche en fonction de n : elle vaut x₁²/n"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3i": {
+      "hash": "ab603956113838ae6d12b02c1bb56d82c8784ce22f66bde05cf560baea133133",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "182874e7fcbd72b35ed3ae8daec60f3fd966ba5439931a4ec4fb8a339ecdaae4": "relis la question : la référence a changé ; un gradient pris en x seul ne suffit pas non plus",
+        "67f162da85f528d3ed04596c5b9f2e5b0f4348a39a227f6f6f87f62694771bd2": "le chemin part de x′ : son point est x′ + α(x − x′)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3j": {
+      "hash": "ab63c5406c7f77931afe591634174351aa706486e7bb8ad75952fbfd969b22f6",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "296cf82993109f06138d8ec31840a7dcb0b49803da77e5138a0efff24a27760c": "relis la question : avec cette référence, la somme vaut f(x) − f(x′)",
+        "b57a48e0288422ad616648ff8aad9084edee1531c2f3208e7d8839fed9d6c783": "c'est la seconde attribution seule : ajoute IG₁",
+        "e1540ee576e09151323894967ea3cc41572264bb36ef702d6d1a6dd4dbe75cc2": "relis la question : on demande la somme des deux attributions"
+      },
+      "sign": 0,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3k": {
+      "decimals": 2,
+      "hash": "5de906a7079c4b9ce69e76078ee554d107e66a6e013e2474a7dd7a5a389d0f3f",
+      "hash_coarse": "31aff5ee87c4b0719fe521a2d16fc4c183f6133a5d943870456b4a0b53b76ac3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "46643efd9c9cca6996c27110590246b09e316faec77b01fac7d74e242b82259a": "6 points font 5 intervalles, pas 6 : relis l'énoncé",
+        "958efd9a0576dde0bbfc4bcf3ce219e51d6d253c9582b206e796ddb2d3ad82ef": "le facteur est n/(n + 1), pas (n + 1)/n : relis l'encadré 🕰️ de 206.6",
+        "f4d75d5a066479e8bb1f185bf2f6b74bdb2901caf41b9d710859f9800f8bf43d": "c'est le trapèze de ta docstring : relis l'encadré 🕰️ de 206.6 sur captum"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.3l": {
+      "hash": "67816ceacfa6015030b199dbbd2c33e56bf48a7299a95068d24da15718825ca4",
+      "kind": "str",
+      "mistakes": {
+        "4ee3dac12f3f15721be8e039c7557072fa69cf33d99349f4605ab82c5f7d654f": "relis la question : e) utilise la règle 'left'",
+        "5d23f9fff39dfc7c8fa07623847bf17abeff61f11300f2e2f83e36f045ac7bd4": "n_steps compte les intervalles dans ta librairie, pas les points"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4a": {
+      "decimals": 1,
+      "hash": "d5d3424fe18930e6f715254358fdd8f8bb5408345f451e0b333a105545c87b99",
+      "hash_coarse": "92d3c0901681b8b530c7163fa4fc78b5bae40122489b167bc401c0e8001a722b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0d1ca3a40e34fed6f4e45d20f6dbd680079a1a35b16e8dd115cda68042f59116": "α_c est la moyenne des gradients, pas leur somme",
+        "cf972a8a744fac3f3466f2645ad1b9ea130ce4f7263050e37b761a9d10328e81": "α_c est la moyenne des gradients seuls, sans les multiplier par les activations"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4b": {
+      "alt_coarse": [
+        "61e491c54dcc27b3e31caf91bb1d059c1d4289f516abbb3e1d5437ca6c811e77"
+      ],
+      "decimals": 1,
+      "hash": "8111e9bf2824e5e9cda30d9fdafb8c14e1ecff18b66e7ee9b1de2e524b25a081",
+      "hash_coarse": "c461c85c8eeb9d1aca6ac8f17659504c664fafde08bd9f5ae0e6cd9d8163dcf0",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1b2e4e8ab1569bffd336678f4e2b26367dbd5e8c8e6c8b050e6d2fd7e622af23": "α_c est la moyenne des gradients, pas leur somme",
+        "8947dde12524edd33ae10e4634eef9a6f83bc2a4c5b2818ea72c84a66cd5909d": "vérifie le signe : les gradients du canal 2 sont négatifs ou nuls",
+        "fd0a76a58c120ac533a8c44379ef9365f958b3823c58e61145e1d6a960ccc25a": "α_c est la moyenne des gradients seuls, sans les multiplier par les activations"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4c": {
+      "decimals": 1,
+      "hash": "9f860584b6fbc0de831da04132687c4acc1eeff29669624ca98d9aa35c9ae9a2",
+      "hash_coarse": "f7d796b71ee049d18ed87ca96948a6656259ff08a5fb43659047246d9086983b",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2a0bf0fa44f7ffda6e9ebb3c515c01cc7f11e338886bfb6c2f8bd85bca5f7e77": "relis la case : en haut à droite, A¹ vaut 0 et A² vaut 2",
+        "691549d9b70f50927f734ece947113a6d86eeb68a2b64a41c238af020ae21301": "relis la question : avant le ReLU",
+        "9bd228e8b3be324cd487b8884d5f720d080ba7924d5d43cfd202834a199d2a0a": "vérifie le signe de α₂"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4d": {
+      "hash": "082cdf7a784adbb670bac85c536e50330302c342dc6c796d8e165993e6992607",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "6e660ad7c5e79b36e421376f5cd42e3ace0197d1e253f00aad56e8c2cef06a75": "compte aussi les cases dont la somme pondérée est négative mais proche de 0",
+        "d2424d609026e548113fe3c9c5e1ab6f2bf8ec68c1483717b60127db25aa1eb0": "une case positive n'est pas mise à 0 : compte les cases négatives de la somme pondérée"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4e": {
+      "decimals": 2,
+      "hash": "b09f9af7e063a433200cbb45710d3fccf089512aad426c010914e793273e1181",
+      "hash_coarse": "3cd322a9afc5b196a09fb96eaf781577098dff301d5e16c71204a86e615929ff",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "472324b60c4666764d1a29daa14da696f117c9dbba007b69853c6f7d28f2094f": "n'oublie pas de diviser par la plus grande valeur de la carte",
+        "6900760382be03f31250f580d1e428b43378ab9b74376d1b75ae32eeede31f73": "on divise par la plus grande valeur absolue, pas par la somme de la carte"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4f": {
+      "hash": "77bdfc76455f038c17653fd7e3d8d96e855c7aaebaffa69f03151f945d4c3514",
+      "kind": "str",
+      "mistakes": {
+        "0b64a7cbd6fa03e09748b3b55b1323d3559d2eb1ebcbf40e999ed29ca1add5fa": "cherche la plus grande valeur de α₁A¹ + α₂A² après le ReLU",
+        "5b337e891940fafc05f45dc7deea8e3b76e1338d0a1c823c964115f4fba8df60": "en haut à droite, quel est le signe de la somme pondérée ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4g": {
+      "decimals": 2,
+      "hash": "1ad0fa90a4207c6e5e867fd33d3506dab4842075025112754be09f42f25e51d2",
+      "hash_coarse": "19b5550fd97455f6e0242c188eb12b2070ccb5200cb064f3c0da377af98c7f14",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0dca770e7f4018a41d8a032f30b7f5b2005464a5c25f9758778a038d7ee5ecec": "n'oublie pas de diviser par la plus grande valeur absolue",
+        "19b962c43f7f8af4e43cdf2a6a7e0fa5fd365e65e0312670d5d43b04227e84f3": "relis la question : sans le ReLU, la case n'est pas mise à 0",
+        "375d9825ee01fa120c887768e823444ff63b948892ce71d7b9d2c8a775bcad82": "sans le ReLU, la case garde son signe"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4h": {
+      "hash": "b29c2f7ce0020cb920277ee520e28a40d02df3770c4262a7264e75ac936261cd",
+      "kind": "str",
+      "mistakes": {
+        "bc0d58f0f5cab71c242861d28ef4ec445696ba4bc55846516b81924f30f8092f": "calcule −0,5 A¹ + A² case par case : que vaut-elle en haut à gauche ?",
+        "ee8d99d59baa06d904247e6b26c7b643f84e561a7e67d0d6e0ae9787873734c5": "calcule −0,5 A¹ + A² case par case : que vaut-elle en bas à gauche ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4i": {
+      "hash": "25c01cf3e8079e1ff9cc802925380802992b8dadebd8fcf6245f4d1599edf1f8",
+      "kind": "bool",
+      "mistakes": {
+        "21b0f2bfecb77639ee1d1f838612344693ef7c89325023bc6c5571d5d9c8d5c4": "multiplier les gradients par 10 multiplie les α, donc toute la carte : que fait la division par le maximum ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.4j": {
+      "hash": "e2cfe573cdaffc28e8a99345966422807d2f8606f4a381a8051bd663a1e9359c",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "353169f7d9eb8334bd744c24ca02d1e063ccc7ec381bdfb4186519f2aacb3499": "relis l'énoncé : la carte fait 3 × 3 et l'image 72 × 72",
+        "e5f8eaa147499e828c007ffe6d59e1c1916dd74a4ab193395838ef82cb4f8ec5": "c'est la taille d'un pixel de la couche : on demande un demi-pixel"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5a": {
+      "decimals": 2,
+      "hash": "257ab8e6ecf3999b7af489e6c7b9a8c0587de64d467ef12bd2f247b1a3dca3c8",
+      "hash_coarse": "98ad7fc0d5097ff1486284db0abc688b681eb3fb041ee747aa3cae1097b23b76",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4cd31025b5f4d7abe3dae51bce5a526f74c144d0b0674a8349308110bf0592a6": "relis la question : on demande la part de positifs réels (TP + FN)",
+        "b14f68378f3e67239b18e4c0638776b7b7c6ab80f316d576f9ce126ac5d93bec": "le taux de base divise par tout le groupe, pas par les négatifs"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5b": {
+      "decimals": 3,
+      "hash": "a5f6e396d9cc4bd1c6bdef77291c3320a31883b46d0964f074c3489637eeaae8",
+      "hash_coarse": "de90351fa35b36f6f37c52dfee95bd63bdbdbf5c368bfe7be7d47972bbf4f6da",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1c0f7ddc8f212a04f1b6f15d8ba3cfe293856c32e744fc7f31918547c175aab9": "relis la question : on demande la part sélectionnée (TP + FP)",
+        "55da6d627fab51450c5c5235f97b06842fd0346f337eb65788e75205707c9f50": "le taux de sélection compte tous les sélectionnés, TP et FP"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5c": {
+      "decimals": 2,
+      "hash": "1137bfaf67f127df14ab4b70f133186a2d4df2da5da2c0ff17cc32b98f666a33",
+      "hash_coarse": "9666be3aabe14d6c2837c7aba7a21a30223d56a3d7fc5fcf9bd0385e7ea8dd4f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "076c757c260458f543c803e1db567df57263bfd66cd5fe1a52536110a99672cf": "c'est le FNR : le TPR divise TP par les positifs réels",
+        "a2cb699584020f72d5c6478f3e69e77da93546e8c06db1cb2af25b42e4cd39d2": "le TPR divise par les positifs réels, pas par tout le groupe",
+        "b36f8b833ff7b1528f2ac7322870043e267d0eda3110d57b525a21ad4f7444a2": "c'est la precision : le TPR divise par les positifs réels, pas par les sélectionnés"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5d": {
+      "alt_coarse": [
+        "b6c49bbe22e4b4250e46d60c4605f9dc17db9f3d8c00b8dbdacd210a5fe7c06c"
+      ],
+      "decimals": 3,
+      "hash": "1e53e931e88cea58dde802a4cb60e3bcb062f0e16bddbf30e19db46bdc1c7412",
+      "hash_coarse": "f893bf6f0513c1387c8d352e9b0eef6544fa9700481cbd5d8a31c66e3bfe9b1a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "117f15534d83be3d52a12a0c50e2f93554b6419cb79f8e63d69d03616bf6ca00": "le FPR divise par les négatifs réels, pas par tout le groupe",
+        "4e3cecf5006373b7eb6c9f6402f1ee1d04d442d0b342ae9dd8e66cfcc3062e08": "le FPR divise par les négatifs réels (FP + TN), pas par les sélectionnés",
+        "f5cf4f5a76473e35fcfd92d1463d440a2d5d34b4bfdbdfe860d28ffd32b20a31": "c'est la part de vrais négatifs : le FPR compte les faux positifs"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5e": {
+      "decimals": 3,
+      "hash": "d668991f9aa5a4f70cdadda7be7f75e3676060c6ab6800f630e29639b7a4ffe5",
+      "hash_coarse": "b210d0c7189415e9dee18a74b36a406c1fbad41a8e695429e52ffd8e5274b3e4",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "b1c7a7f32c1090deaa513e28567d84e73c4c540e1f34c07c61cb028b32b43df8": "la precision divise TP par les sélectionnés (TP + FP)",
+        "f7c56c2dbe53a27dd144e116ad1c763c71a3248d59fac185334e664f6d4fb4b5": "c'est la part de faux positifs parmi les sélectionnés : on demande la precision"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5f": {
+      "decimals": 2,
+      "hash": "45e3d7d448b23d522421f349f23c282fe65f2a3a501db3e2fc2dd4d1c91b0851",
+      "hash_coarse": "318d735152c5826a4f181c9bb4b295e6b5b9bfd97b79e26e00beec168f02e60b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "75f5297de87894aed33b8490e7954d9a8a51c1ba178714fc5fc658bea1d0a1f9": "c'est l'écart des taux de base : la parité démographique compare les taux de sélection",
+        "7a692a164e4bd6d0d1e92131f50445594c9688f8a8e0396703c08c9d4a0ab99d": "relis la question : la parité démographique compare les taux de sélection",
+        "fb0f3a7e378c6838cf41538411d30e256665dc218ec6780d6c29596d7de2d91c": "les taux de sélection divisent TP + FP par l'effectif du groupe"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5g": {
+      "decimals": 2,
+      "hash": "0c48ef99f76caaee9056e73d60d0e9cc6ad7547275ff97ef96d85259e6a8c4dd",
+      "hash_coarse": "e06db687dedd8e74613d9bc1c722e68dd71e774286c35537ef858a700f7f2c9c",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "27d4acbac0bfb410ee309129da5c54515dd4fa6c2e732ad1a681ea5c61308988": "l'equalized odds prend le plus grand des deux écarts, pas leur moyenne",
+        "6257bd28ad08b8e3a5e321165a609b4a5703f5b467efb95c9b59f759156289d4": "l'equalized odds prend le plus grand des deux écarts, TPR et FPR",
+        "a5ca60708466f68b4063151006ee334845d2be518c5a3ae5416015117a620be0": "l'equalized odds prend le plus grand des deux écarts, pas leur somme"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5h": {
+      "decimals": 2,
+      "hash": "5f6d130641d9a71a78d575516177d88cdc0defb8b01a9d42cf8e52921975a366",
+      "hash_coarse": "b5de68285107e05ade51227ab055a67ebe8b49cecaf0b671d964dba2845ea87d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2395e8f3373f929ef7ddf870347fbb6c8934884b85a4715d0ec94d66b490ba28": "relis la question : on demande le rapport, pas son complément",
+        "3fda71cf0f6cb468a7ad5a074c9d0f7ca2972804697233bf34494a8a4d8ad13e": "relis la question : le taux des femmes divisé par celui des hommes"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5i": {
+      "hash": "895988a1c119d1e696ef10ab103d92a457a7fdad9bf7ced8b44a4f3cf7f458b1",
+      "kind": "bool",
+      "mistakes": {
+        "258f93fcdc3d959f55fdbc8ddb9fef6f47642c228079b3e0c821faaa915ca084": "compare ton rapport h) à 4/5 = 0,8"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5j": {
+      "hash": "cbcf32f03d8bfbcf779c1704559c11ef076d0e11aa8692b86cdd6badd3ae65ca",
+      "kind": "bool",
+      "mistakes": {
+        "155714239efa6cb949160c52905979d06ac7931cde1472b1849352e42124e7cb": "calcule l'accuracy (TP + TN) / n de chaque groupe"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.5k": {
+      "hash": "e5a84ac41964c0e5db7c8800d0d53caf0e68d77876e010d5f0842367d37e6c4e",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "9778e13420966c4f032610c9ddccf62071cf9f017b6ad03318dfa59918750429": "relis l'énoncé : le TPR à atteindre est celui des hommes",
+        "e18d840bc90bbf1173f99bb5dcaa64659bfce1538bf1182394164025b9912dc5": "c'est le nombre total de qualifiées sélectionnées : on demande combien de plus",
+        "e5276a34978e18f4df460349ddc157e8c7c1478e7881216c3dfc0cdf90c650f0": "le TPR des hommes s'applique aux 120 candidates qualifiées, pas à toutes"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q1a": {
+      "hash": "d307e0a097e391aa7798f9e9e626ad0f7125d4d07a0b655a4b5cfc854874ecfd",
+      "kind": "str",
+      "mistakes": {
+        "aab24fcb0223aa17921f4001e524f48aaa4069357ee46ae56506ea678e5ce8ba": "une carte de saillance est-elle le modèle, ou une explication ajoutée ? Relis 206.1",
+        "aba54b0fc3893e53492c55cdc2e8cfc819c20c47d41b369e195be2a32215377c": "relis « Interprétable par construction, ou expliqué après coup » (§206.1) : la forêt se lit-elle elle-même, ou faut-il TreeSHAP ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q1b": {
+      "hash": "888df880ca75b060eb3390fe7949b4d0338af128fdd5dc96142a769ce53bc394",
+      "kind": "bool",
+      "mistakes": {
+        "d6ebe05f27bacb858c5a38d34d734fe71c2250e85dd36bd2b46eab873f6c80e2": "relis la définition de l'explication post hoc (§206.1) : est-elle la règle du modèle ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q1c": {
+      "hash": "077f54c8fb60d28dfffe255fc5dbf1cc6a015d7c29fd19c83da5cf603483cc64",
+      "kind": "str",
+      "mistakes": {
+        "1aa58ba4f38b76e9374a4ed58551ecb33c3cd40e0eb4f518817193c6cce5ac80": "Grad-CAM se contente-t-il des prédictions ? Relis la phrase sur les méthodes spécifiques (§206.1)",
+        "ccbfb87afa31912b8fd3bbcb7ce6a693fc3162049c0666b1be122a46c6653cf9": "Grad-CAM change-t-il le modèle ? Relis « Interprétable par construction, ou expliqué après coup »"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q1d": {
+      "hash": "c84924b0be54bb066f4d280f0bcce6d100f1eb382e9a042a3b132402603f31b0",
+      "kind": "bool",
+      "mistakes": {
+        "391f9e231ecd0f258d37a93765cb082bd781e07a7ed8345bb015d0b63c227d88": "relis 206.1 : de quoi l'importance par permutation a-t-elle besoin ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q1e": {
+      "hash": "65888d92f98c875210c4b19372c68068cf568392a5461e46f6888bbfffce248a",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "8cb93ad2e1c2d9cdc58e8e13e615ecc32f24008d619d2352c45d3e359eab8dc8": "c'est le nombre total de nœuds : on demande les feuilles",
+        "bd94a1d5a0fd68b89c90cfd7183b345a510ebcbd36dfa1786b8ddf64e50a7307": "c'est la profondeur : on demande le nombre de feuilles",
+        "d2c389a0ecabbc01ee0e97af4b2ea6d0d9464eb754b9fb2aa79595d9cbfe5460": "c'est le nombre de nœuds internes : on demande les feuilles",
+        "d6d878106bfa1f385eedc574fe82819afe134e51655755fb01258efaf88e79a9": "c'est le nombre de feuilles d'un arbre de profondeur 3"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q2a": {
+      "hash": "987051d19ffe9e58c2c1215b10e88812cc7a6d2b7d4a619100d878d416b7fd28",
+      "kind": "str",
+      "mistakes": {
+        "0ddcbf07a3d8ab2298113a0fc67151a4f0631fc713ab194f0e32d37de7b84aa3": "la question porte-t-elle sur tout le modèle ou sur un dossier ? Relis « Global ou local » (§206.1)",
+        "21dc7ef786832d7c6c15ce5ef4b51274ad7480b2645ed2f777fd65393fd2900c": "la question compare-t-elle des groupes ? Relis le tableau de « Global ou local »"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q2b": {
+      "hash": "68308a003cc4a62b849548f141375c7c808076ac0a79370f59883963ddd60647",
+      "kind": "str",
+      "mistakes": {
+        "1fc295f487388870b01a78c4ad6dae9c4bab6c775c2b7fb180d3aea7db493d7e": "une courbe ICE d'un seul client dit-elle ce que le modèle utilise en tout ? Relis 206.2",
+        "21935d1d96b1f50c2a8bd7f67bf2d5726845597eda3efe5552053de0a2680d30": "un waterfall explique combien de prédictions ? Relis le tableau de « Global ou local »"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q2c": {
+      "hash": "5688f5151115e62696b31e36703a0761b7a715d71176a62e319138be8ef1b06c",
+      "kind": "bool",
+      "mistakes": {
+        "68b9728a84dda2582be25777a3a84357c330e59be0ca8d8c366e377000029657": "relis la fin de « Global ou local » (§206.1) : une importance moyenne dit-elle tout d'un cas particulier ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q2d": {
+      "hash": "fda091c1a1b37bf5dc44c97024f954ff20d138d02eca03c7f1dc107f37e6a703",
+      "kind": "str",
+      "mistakes": {
+        "30d3f51bd22acee7af8ce85112ad8d2a875282cd35a5579adeeda59a75dac8b2": "la moyenne des |φ_i| mélange-t-elle une colonne ? Relis la puce sur le beeswarm (§206.4)",
+        "c5f6fc2645fe8ac01e304ab6ad69faf28b648d613d66d4bd0e98473927dc06e9": "une moyenne sur 1 000 clients explique-t-elle encore un client ? Relis la puce sur le beeswarm (§206.4)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q2e": {
+      "decimals": 2,
+      "hash": "dc39cb6e81645e4070aa24c5e8c43d74c984ae64abe3d853c504f9118ab98021",
+      "hash_coarse": "c7ceecc0e628d6e61c60fdcd6497a0ddb706758cf3aa3ba4f9d32be2425c449d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "44ce02da4d592dd2579d2814715eb42efe5d39d981fe079426ad1c2ad99aefd1": "vérifie le sens de la soustraction",
+        "89ad20ad114111b9b16f12e537c7d97483b2c8c8e6c0eff6601be219b59c190b": "c'est le score après mélange : l'importance est une baisse",
+        "bb43c60666122dbe052b5099d9d2fd22393d00bd0080b6cbcc2d76acf67773e1": "fais la moyenne des cinq mélanges avant de soustraire"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q3a": {
+      "hash": "b2c19e700fda3040689b8136cd689d0743c3e2869c886dbbd3165e42b319e582",
+      "kind": "str",
+      "mistakes": {
+        "20f8338c9a62ffa334f6f81c30dc472c0f3d395650470834b4e3d77e9f1abe32": "relis la formule de PD_j(v) : on moyenne v · x₂ sur tous les exemples ; que vaut la moyenne de x₂ ?",
+        "c5b1ddded7fda984795b86ac3d86b490d1b20fe5743081f46876fde8f4d23e76": "fais la moyenne de v · x₂ sur tous les exemples : que vaut la moyenne de x₂ ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q3b": {
+      "hash": "db095900c78223a3f157b58f86d65fce3780263c1f24ba4032623aed1dd0efb7",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "056e1a805897a185a32561f16071972160a81f1e02e0c7c15fc46f9e0b8dae97": "chaque exemple a sa courbe ICE : quelles pentes prennent-elles selon x₂ ?",
+        "7a62308115ea6765c0321391f7e0edbae01a470a757fd877e03ab5b08e4602e6": "une courbe ICE de ce modèle est une droite : combien de valeurs de x₂ donnent-elles des pentes différentes ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q3c": {
+      "decimals": 2,
+      "hash": "7f4307706bb80fe142983079d5541c6fa9ff807ef14471fe359dc1c447b06191",
+      "hash_coarse": "d288e33bae2755ba01bc27df54e1c0ce8df8b41bbda45abbc168f19b75816dcb",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "45d34109bb15d8888b6eebf7220a9ebdb7d57f19f10c248f34c9990466fa8a46": "tu as mis la moyenne de x₂ au carré : la dépendance partielle fait la moyenne des prédictions",
+        "edf8cb59b34568e725299573fca8fb4bda9af91d1911b20a99d88e19923f0f3b": "fais la moyenne de x₂² sur les trois valeurs, pas leur somme",
+        "f05a9d8ddb947341cb4a3ae09d2aec4809ac78c21d9d3061873fa5edcd8d3a70": "relis la question : on impose v = 2 à x₁ ; n'oublie pas le terme x₂²"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q3d": {
+      "hash": "8294982bc1904bad2a8c2e9b8170155116b14103c008ef12b5f29965cb296ab0",
+      "kind": "bool",
+      "mistakes": {
+        "fc58467e4daa681efad6b9c8d2f301608ddb95a5d2fca28eeaca77e4d0537d0c": "relis le paragraphe qui suit le code de 206.2 : que fait centered=True à chaque courbe ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q3e": {
+      "hash": "29e534c6214e4cc09555326cf7591fea3593bcec93d5da8716f31aaa66c4cb39",
+      "kind": "str",
+      "mistakes": {
+        "25e84367a02a7b8b5f7cf19cf5296011c815a60259e7c5a66d9ccbecf838e4a6": "relis la formule de PD_j(v) : sur quels exemples fait-on la moyenne ?",
+        "53fcfcbfa6e49805a6871d7cdeee6f025f51c3114abf439f4ccedf9004018ad4": "relis le piège classique « une dépendance partielle hors des données » (§206.2)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q4a": {
+      "decimals": 2,
+      "hash": "76e832763baf317b93f361f0ef891887d03136c2a06f02d8e0b0703b2cd78d08",
+      "hash_coarse": "27cf2e8bc322a323c61c19a2b8d40b6628e5952a9f758a85c07a35178914222e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1267fec5f0661ff70dec900872dbc80acc913b48c019279c30a681fab8bb8b7f": "vérifie le signe de φ₂ : il est négatif",
+        "30a1bc89e93871d22b6e6112761ec2be8f190da4bc3481f5c2b03d63e156ea5e": "c'est l'écart à répartir entre les trois features : retire les deux valeurs connues",
+        "4bf4aa8d295086cc127848f9791c8e275c311a4717634a8a90c3bfd91f92ffd5": "l'efficacité répartit f(x) moins la valeur de base, pas f(x)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q4b": {
+      "hash": "d48253a44bdd2894d3199fa9cbf1350b0ac70a6e67d61a980788f2b519f884bd",
+      "kind": "str",
+      "mistakes": {
+        "82ede411c6b75aac65b47f4fd8ea9ac486e8338e07e8bed5e5d7c83fe935e7f5": "l'efficacité porte sur la somme des parts : relis les quatre propriétés (§206.3)",
+        "8d585e3dcc41fa88d189ec2b0cb89c8362d8bf4532279ae7505dd563ad7b31fc": "la symétrie compare deux joueurs : relis les quatre propriétés (§206.3)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q4c": {
+      "decimals": 1,
+      "hash": "2b6d63a57c23e7f2b48b8731daf8006516620981034c23cadade2b0e889eb8df",
+      "hash_coarse": "6916eda3bfa66056b07933ecf3a05ae3176fadfdb91c8794b7e049f5ffc31233",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "84218f30ab79d34872a56f654e4ce1695462ba3492c8fc78a1a66a7f1ba4d043": "relis l'additivité : les parts s'ajoutent, elles ne se moyennent pas",
+        "8b07906a3841bc8605151bc4fb6b1bdee67dbf9a0f34a7092970b9443324d279": "vérifie le signe de la part de h"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q4d": {
+      "hash": "feb2210abe0dca61c5d2721f34a390625a37c8c36d35b193174a543e6ad33d08",
+      "kind": "bool",
+      "mistakes": {
+        "e86765c9feb8f6aae8090a1dd665a302873e333c8e0859dd3e5ecf7f4ecd48c2": "la symétrie exige que les deux joueurs apportent la même chose à toute coalition : avec x₁ = 1 et x₂ = 5, est-ce le cas ? Essaie f = x₁ + x₂"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q4e": {
+      "hash": "c17d1e3ada4a43cf2e891fa470c8987ca074d25d51f565bcf46f2fcc2e855160",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "04f2e7372338260235f89d2a9762df6efbd0f5d747d1e9c7725355449df3519c": "relis l'encadré 🧮 de 206.3 : un ensemble de m éléments a 2^m sous-ensembles",
+        "7f0bf5bb62c3ea7b9441c82af3b587fdaed4587a702681782ebde1878d6d2dbb": "c'est le nombre de toutes les coalitions : retire celles qui contiennent i",
+        "e39ae2b175cfc93c7f4fc78cd443c048f2187c54d821fbebc84b4fbd98100685": "c'est le nombre d'ordres d'arrivée des cinq features"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5a": {
+      "hash": "83937823056dccc30526dc397fb2b82798ff2d711b8e47ec366852b596f0e082",
+      "kind": "bool",
+      "mistakes": {
+        "b94aae08d70594877ae1908eca7bec3b2e4aa9c4c9a25ebcada3b43ba78fa98e": "relis l'efficacité avec un fond (§206.3) : de quoi dépend la somme des φ_i ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5b": {
+      "hash": "9a625fef37a247135a768dff5c8cc47f3c965dfa6e667193c9ace9038e655940",
+      "kind": "str",
+      "mistakes": {
+        "82c5d6bf137a77b1dd0fdc1b8b45048c06ae6daf2e96d6a36c8e907067159867": "relis la définition de la valeur de base (§206.3) : sur quelles lignes la moyenne est-elle prise ?",
+        "ad4797969c8d0003d2fc6a7e234be83da75e03d5e1829b5843d22ac57303fe0a": "relis la définition de la valeur de base (§206.3) : v(∅) est-il nul ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5c": {
+      "hash": "f7329948bd7ec9075d4e1b6b563ae80a348a5abbfa5ef8c21cbb384c7e412c9e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1b66b189aecb1f1df91a7531f708b846a01803a002a1f1ce8217ec9e2330babd": "n'oublie pas le coefficient w₁ = 2",
+        "d41f5cf95f1ff587e7fb45eafe6e70b55bccd871f69f23d3cd671d3e5f6ec806": "vérifie le sens (x₁ moins la moyenne du fond) et le fond utilisé : le fond A"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5d": {
+      "hash": "36f8171e24e2684ba98a31c998f50f634dba0bae888015aed4093f85179ae5fc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "c312b76715e1df202cfc41f988f7c08b1eb3be0579f55616820204758533424d": "vérifie le sens (x₁ moins la moyenne du fond) et le fond utilisé : le fond B",
+        "f9bb71730a6186581ff123ee7f34da08209b97d27c08d8b0d290878fdbf49005": "n'oublie pas le coefficient w₁ = 2"
+      },
+      "sign": -1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5e": {
+      "hash": "feb177be6c71a4092102db0dacfb7b6f5e881f80df2ac7acf0999b10e1428bf7",
+      "kind": "bool",
+      "mistakes": {
+        "dc1a8491e39cd9040a6e7d99c578f3f9832f12fee0a60cda1fd369283570cdf8": "relis les deux modes de TreeExplainer (§206.4) : répondent-ils à la même question ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q5f": {
+      "hash": "b586ee2b1af8204982cc8d944afb08284e17a0144650394549806ad0380c58ed",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "b72d1f73d083b794ce6f8cce504b397a04ec5bdb7e95891fd993b9003e6b9848": "relis le paragraphe qui suit le code de shap (§206.3) : que fait max_samples par défaut ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q6a": {
+      "hash": "164b90b2fa07b6e4b937d60f5f34eaddf9bfb77ac6f3b718fa86cb0610e61505",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7a471a0b00af967f000fa31a86860d4ea8b9ff5cae7432c7ebc4da0829606f8a": "relis le cas linéaire : φ₁ = w₁ (x₁ − moyenne), avec w₁ = 2",
+        "e8073e4d86670137e5bc1172f12ef54c28bc223f9624394f2254ca8b239d5d8b": "n'oublie pas de retirer la moyenne du fond"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q6b": {
+      "hash": "2ac4feb0441c2a24c31d0d79b0367ed6dc8c040cff923ac4e5ab661defaac0b9",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "9871a8c8caf5fd7516960e2a4168d5c0825d4fc5828a3c0a3abdbe6f3925213b": "le modèle B lit-il x₂ ? Relis « Features corrélées : ce que SHAP répartit »",
+        "ba2f62670d10596b9043c96bbc2518509f8bea799b5d69743b5848c3684350c2": "le modèle B lit-il x₂ ? Relis le cas linéaire"
+      },
+      "sign": 0,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q6c": {
+      "hash": "f4ef9ddceac6c8d1c54d3fc2573f765d6792b52c61a7941937087835c9e638a4",
+      "kind": "bool",
+      "mistakes": {
+        "138624d647df46e9b76bbd979da5fc55b92e1fa49418888a75ba05cc72956395": "calcule φ₁ + φ₂ pour les deux modèles, avec la formule du cas linéaire"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q6d": {
+      "hash": "40a822dd193b0296a6e70ddcd99c361b78d1b23b31cbb493a04e1b27fcd6e3c9",
+      "kind": "str",
+      "mistakes": {
+        "4efa7e886feb937a97f2536a2dc57b82328b2e6018e2104030fd62c4ca28c271": "relis « Features corrélées : ce que SHAP répartit » : pour qui le Shapley observationnel a-t-il été conçu ?",
+        "bda7383258c54ab8609e9f4309c2c062bcedd56da4d6d78ca57d10d953ec3c73": "relis « Features corrélées : ce que SHAP répartit » : le Shapley observationnel est-il fidèle au modèle ou aux données ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q6e": {
+      "hash": "760a193f8f440adf25d8577e496fb0d5a3121fda5544e679051e538da7307c3e",
+      "kind": "str",
+      "mistakes": {
+        "07ea60d62fc02d5e4fa0dde0dcf8f1b448a2845ca0abb874cb1eef028a69c35a": "la répartition entre deux copies est-elle stable ? Relis la fin de « Features corrélées »",
+        "301426175430d31da18e1d8a18d983810d9c723e20058b03070565efeab8460d": "la plus grande des deux dépend du modèle choisi : relis la fin de « Features corrélées »"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q7a": {
+      "hash": "073b012e8dfbf6570edb638cea2f28b08d566e57ca374504f067016b30200298",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "c6867804ba0ffa1c1c56ba0c3d659373749d40c436a846642aff64e0a116765d": "relis la question : on demande la dérivée, pas la valeur de f",
+        "f1513c5af6f865527a5c0c7e3623f713b550b5c41b8f21ee7b65b01cbd8b199e": "au-delà de 1, f vaut toujours 1 : quelle est sa pente ?"
+      },
+      "sign": 0,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q7b": {
+      "hash": "b5e7baf49ceb0fe0d0506e299d91053d913171a46d33e985a2d4b7e234b29778",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "083d7c76afed677c2e6f106a8113cd9afe4b1032656769ba356f63a7e8f39865": "c'est x − x′ : multiplie par la moyenne de la pente le long du chemin",
+        "bc3606b3a12a73cce6b9872878d2376cbb39acd4fc9bb945b41899e85e4d5fd1": "le gradient est nul en x, mais pas tout le long du chemin depuis 0 : relis la formule des gradients intégrés"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q7c": {
+      "hash": "68de81d042d98b77ab2d8a676ac07363aa2a8228b80d936baf5c42c756b67e94",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "bd696c02d5bca77e544ca15c0a51f95cbedb52d429088195459994ccf4413bd7": "le chemin va de 2 à 3 : quelle est la pente de f sur ce segment ?",
+        "dad8b1e8df8b5dfc22301e4a278ded6cb90539f9dfc631df4fc4f96fac07ad99": "relis la question : la référence a changé"
+      },
+      "sign": 0,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q7d": {
+      "hash": "fe377f20090c01ae6dbe1d1bd70dbe45c9b8e04f459b6e47963ec3d03782bccf",
+      "kind": "bool",
+      "mistakes": {
+        "1327eb0b61e5efcec27dad50c81b4c4739111e65b2bec3aec6d9063bb9f902bf": "pour f = wᵀx, le gradient est le même en tout point : calcule les deux attributions"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q7e": {
+      "hash": "590c7ab53cd861d62a2bf49b0c6f52888a6352c8f97b7bba45ca54a0c3cf10bf",
+      "kind": "str",
+      "mistakes": {
+        "aab2b8dcf5ce56795d4bbfc6cdd011dee5b11daea14dc8e770f7f79fcda40eaf": "relis la formule des gradients intégrés : que vaut le facteur x_i − x′_i pour un pixel du chat ?",
+        "acc706c060d2509ce5aedc08a51602540a80f5ed320a16d31e5c9df6a266b446": "un pixel égal à sa référence a-t-il un x_i − x′_i non nul ? Relis la formule des gradients intégrés"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q8a": {
+      "hash": "ea16ef9493c4f7015cf90b8d7026b811cd61cdc929e6d1a1474cfb0bd72e49d2",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "92e379ffd9d8af1e3380e9467076983130439688621498d834c514cff2970dd1": "c'est la taille de layer1 : relis la question",
+        "b98232444f3d19733d2466b5dfc7ed767ad82bec659f5473964eb731b5a8d70b": "c'est une division par 8 : de combien layer4 divise-t-il la taille de l'image ?",
+        "e220f71964d6826dc1379414d2c63e575138676a347afcd8f0742c6196566fc7": "c'est la taille de layer3, qui divise par 16 : relis les quatre détails de « Avec PyTorch : deux hooks »"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q8b": {
+      "hash": "90ac7bc1ded65071349ef3e44a1b3fd83f0f7c76649b10222150e52f031d65a0",
+      "kind": "str",
+      "mistakes": {
+        "116f2f8eb264adc0f3c97c79e22776571c79ecba21aa2f92b3ae9a8bff1c5531": "une softmax rend un vecteur de probabilités, sans position : relis « Pourquoi la dernière couche convolutive ? »",
+        "ab91eb640cf4a7c1c11c9d27a5dbb879940bcb423413f3abaabf7dfa1bd9579a": "relis « Pourquoi la dernière couche convolutive ? » (§206.6) : que vient-il après elle ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q8c": {
+      "hash": "384a630ea0f9751c59b4eed3cd22b6b2b71ec745c7c8fdbfd9d8c9b94e7003ba",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "91491eb223aceffa98b4101a9d7680845e9946c9cbc970d246668d1cd45befe3": "c'est la taille de layer4 à 224 pixels : relis la question",
+        "d5a3db39b33c8d8c571cbf2fb8c71ffb213d9e57993eecda9ebad72f8f6f0472": "relis l'énoncé : layer1 divise par 4, pas par 2",
+        "d7d607d3e41476ae76f10c81af2a9d610b65ea340f062abb1c11ae9c94c47e0f": "relis l'énoncé : layer1 divise par 4"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q8d": {
+      "hash": "371052dd4cf5163c5658bf3f5e6b1d1ecacfc02a2d178f2dacaeb4d86c51ab00",
+      "kind": "bool",
+      "mistakes": {
+        "fe984299d0c2be4f4638cc5a807cd88d2bebd7a5f967f01950f8d77d9a0c1e74": "un poids α_c peut-il être négatif ? Relis l'exemple à la main de 206.6"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q8e": {
+      "hash": "3f93e683926afbaca5cd4a3a994c5e84584e248322ff60bea101abf78587cbe0",
+      "kind": "str",
+      "mistakes": {
+        "1704dc05de418dae769d1f515421e643bf01b254bd00147a99efcf3cdbb1b50d": "relis la phrase qui suit la formule de Grad-CAM (§206.6) : de quel score prend-on le gradient ?",
+        "31a880e7279df2daae6382165e994c3146d79cca64b9bf4b551db25f63d3a3b3": "relis la phrase qui suit la formule de Grad-CAM (§206.6) : avant ou après la softmax ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q9a": {
+      "hash": "e1c36fb877bc0e08a330ab5827d8e1d84968583285016b96fa3c44333eb407e1",
+      "kind": "str",
+      "mistakes": {
+        "21ea56fb3e0f78896e6529f5e263adfd55f673e6c1c36545075ba176773fe5cb": "le test de randomisation mesure-t-il la robustesse aux attaques ? Relis 206.7",
+        "be221d27e2a843d29c32e665bf589a3e1e1375ed0c5d1ce9e2c2fbf1520dc216": "relis « Les tests de santé » (§206.7) : qu'exige-t-on d'une explication quand le modèle change ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q9b": {
+      "hash": "5c5a791c21648bc02a2ee4c6664f6a51442e2bfd72e7f9fbdccd7a5fa84d159c",
+      "kind": "bool",
+      "mistakes": {
+        "5b58d67d76e93b32d6f101a2b4708be078806bf6447f4b910fde1404a37a6d8a": "relis le paragraphe « Ce que prouve un test de santé réussi » (§206.7)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q9c": {
+      "hash": "f8fd2a56516a1b1021a213957a65eca3246c723b4e5858b2f877648e2bba12db",
+      "kind": "str",
+      "mistakes": {
+        "44b864ea4d714828b68258bfedc3e7342c349372bbd37d8140dd437a09d3bb2b": "c'est la randomisation indépendante : relis les deux variantes (§206.7)",
+        "f4e3046c6de66dd420ff7ef1f8e78eacb0b80ca80f4cb0cca6e7d8cabb82e128": "c'est la randomisation des données : relis les deux tests (§206.7)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q9d": {
+      "hash": "214d19de03a33ba9c5b3928e0172c21519ef57032a093fd4be9655ff06bb2de8",
+      "kind": "bool",
+      "mistakes": {
+        "cfc5c848462f46e003cee3af48ecf83ef61b1a019270c32611e3cab5c4972c52": "une corrélation de rangs compare l'ordre des pixels : deux cartes peuvent-elles avoir le même ordre et des valeurs différentes ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q9e": {
+      "decimals": 1,
+      "hash": "08e5bd09df3867e4d08de32f4f601876d098cce51b912720ef856abc0ad84bed",
+      "hash_coarse": "8ce6c05518afcf7a05fab21d31c8707e6498b6c41e9c19b64f0c98e3090a4150",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2c1dc6fba6791e96b90015cd91469c7c2f58d3ed2c302fc6aaa0253022e9451c": "c'est l'accuracy d'entraînement d'un réseau qui apprend par cœur : relis la question, on demande le test",
+        "f188f06de44eb49ccc57b606236baf2b949f319d289a66a061462de471edc70a": "un réseau qui répond au hasard a-t-il une accuracy nulle ?",
+        "fa7dec892e7cbad34befced83e92703c2ef7e4f9fc4804434b51adc80c886212": "relis l'énoncé : CIFAR-10 a dix classes, et les labels du test ne sont pas mélangés"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q10a": {
+      "hash": "1c53b2cdf5b24fcd37720ce299fc427a9d5198375b0f23157e5c3c1fc5cb4d69",
+      "kind": "str",
+      "mistakes": {
+        "bca4c37888c1e1cc4740410fcf08edb9501b628be68167012a2d73872abb7bf8": "les transcriptions sont-elles fausses ? Relis les puces de « D'où vient un biais » (§206.8)",
+        "ebf36763d20b7a2295b5ef38cc74413458f6f005c0e3b03691237aed59c61886": "les décisions du modèle fabriquent-elles ses données ? Relis les puces de « D'où vient un biais » (§206.8)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q10b": {
+      "hash": "3fb573d6edace8e9a5720ff43d249311f1dfa85171d738965224f469cfd00ca4",
+      "kind": "str",
+      "mistakes": {
+        "07d439caa861990657a800f9bde6e60a73091da94540e3e6fea1dd0e5b11a761": "la note des managers est-elle une feature ou la cible ? Relis 206.8",
+        "b381cf6bb3f0637e4c1fd43ac44a59e250e75590e2d91e9d4dd5945174f7dc9c": "le modèle sert-il une autre population que celle de son évaluation ? Relis 206.8"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q10c": {
+      "hash": "222a1319b667b3463918145d64f38fa5b18b9f234bc0ecafb9ca6b383fcf9e94",
+      "kind": "str",
+      "mistakes": {
+        "02ebd821e604f89c47b02775dbd9cd6c22d6d422be7eaec2cec83e54f008a9e4": "qui choisit les dossiers contrôlés ? Relis les puces de « D'où vient un biais »",
+        "ac69f486dc60e43507e452400f6e82720b3cc9f7b7c6b4de097d1382acc228f3": "une colonne porte-t-elle un attribut sensible à sa place ? Relis la question : qui choisit les contrôles ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q10d": {
+      "hash": "0ed4205cb03195fbb0db964ce85c00400419547975a740c9d90e6d19373799e4",
+      "kind": "bool",
+      "mistakes": {
+        "18a8d50da7a12f0d64219a327c02fb5acb389e18c14cbc5e8892116c071653b3": "relis la puce sur les variables de substitution (§206.8)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q10e": {
+      "hash": "06e41e46299727555ef29fa13e38f513606639fe29a160d64bae7c93bf54497f",
+      "kind": "str",
+      "mistakes": {
+        "17ee7c2e66b59d9ad98678326b3c6bffb8d068291193211e800057d8b968a486": "le modèle sert-il une autre population ? Relis les puces de 206.8 : qu'est-ce qui est mal mesuré ?",
+        "fbcfcb71c9755a41289c1ef6a4cc38fd690d1d0d704b13e5e6729fff27313cea": "les décisions du modèle changent-elles le capteur ? Relis les puces de 206.8"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q11a": {
+      "alt_coarse": [
+        "4bfdd93a5db25683a6c6ef76d80c87a8e916819b2ece1a59cb217df8fa0e16a6"
+      ],
+      "decimals": 2,
+      "hash": "15e622ba2989402651cb3d364c6c13f65e02b673dce4a27ccb2a8ed2b1ee8f7d",
+      "hash_coarse": "ffb415078ce75fe1764041e52a2a0819ce148291452f2e31467c65ecfadb6e58",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "46cf0e5cfbec76bb67259e14c9f162de7e425d2a3f437fff26624da7ca1da7f9": "un classifieur parfait sélectionne-t-il tout le monde ? Son taux de sélection vaut le taux de base",
+        "5c631a6f1d297641a32ed1f2c8bdcf5f84cacd68a22c4382ff887cecb92f2b8b": "relis la définition de Δ_DP : la différence des taux de sélection, pas leur rapport"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q11b": {
+      "hash": "a206040ccc70f897a12598003f328fe83247055de73fb05b44acecc2010a9f8b",
+      "kind": "bool",
+      "mistakes": {
+        "27b3bff27f8ff9321bbc7de656b44719a251c93ebc61b3256395611e07f0f4b5": "calcule le TPR et le FPR d'un classifieur parfait dans chaque groupe"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q11c": {
+      "hash": "16f7756d7fb4f57842d7c5bfdd6e9ce053d0a50f2907f9d46cda4b128faaabad",
+      "kind": "bool",
+      "mistakes": {
+        "ac4eca3a5fd40ae07f52bd04295d78db7b1c65d034a3106dda388c63e760b452": "calcule la precision d'un classifieur parfait dans chaque groupe"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q11d": {
+      "decimals": 2,
+      "hash": "fb3cf227f6414b7c55448c5825a03668d83b4c8528b3d372459af5096dbeee4c",
+      "hash_coarse": "24f866b22ca851295c851ec551da433d258a5bb747cff8be40ee5df069301b55",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "642c2435c8059716d4b5bbdd50337b5759a98fbdd7cd03196d133e7cb08caa5b": "relis la relation de Chouldechova : le dernier facteur est 1 − FNR",
+        "86c98d956827ebfd2c3540b9fce0df9fda29bf395bf8bcbfc6f1bf11a74cd5ee": "relis la relation : (1 − PPV) / PPV, pas PPV / (1 − PPV)",
+        "9441015e6bf127b2736f02851baaf99201efe641bdaec66da98f7a6bc99ee056": "relis la relation : le premier facteur est p / (1 − p)"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q11e": {
+      "hash": "b6531919821d7020172595d774f492544b955e01c69974f924fbb199824f11d8",
+      "kind": "str",
+      "mistakes": {
+        "82bf39c99e460c5f06fab8fefd6fe2f8af2537db46deb99847377ed4f4f65533": "la parité démographique tient-elle compte de qui rembourserait ? Relis « Les critères » (§206.9)",
+        "e25df3ded34edfd8252159bd41d7fcc86ed785bfccfdfaed433512b2ec39d124": "un faux positif est ici un prêt accordé à qui ne rembourserait pas : est-ce l'erreur la plus coûteuse pour les demandeurs ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12a": {
+      "hash": "e97b77884b2a335e11a55d033c9d53f2805eb3c6bcd4a71d5eb1494fe8aed0c8",
+      "kind": "str",
+      "mistakes": {
+        "172a4c1802d2b21a8ea4aa71b3a943814141270caea477dd5b8942b8b66cc7b3": "le scoring de crédit figure-t-il parmi les pratiques interdites ? Relis « L'AI Act » (§206.11)",
+        "23b5bb6f1541a005393a7f8f744b540358e757fb3943fa770ec3e44602728e7b": "relis la puce « haut risque » de « L'AI Act » (§206.11) : que vise le point 5 b) ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12b": {
+      "hash": "c413ec9c2b1138c725b5db22eee74918c5c95d5baf16f427c715f6efa2537d88",
+      "kind": "str",
+      "mistakes": {
+        "2728cb6cfe0649c54ec5cf5d66ffff069c3bf17f0af1527e4470dda14bc576ac": "relis le point 5 b) cité en 206.11 : quelle exception contient-il ?",
+        "db24199bd13f6d873494dbcd676d55187709eb54630b3dd92243df812fc282ff": "la détection de fraude figure-t-elle à l'article 5 ? Relis « L'AI Act »"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12c": {
+      "hash": "dda00d3c2dfbb967f50f9057d67db20199175bcb0a47a4c75249f1c736dd8726",
+      "kind": "str",
+      "mistakes": {
+        "5aa9048cfd97e79e04c78b6aed90afbe9c3eb204e5983c6be79b588dcd3c73cc": "l'article 50 parle de transparence envers l'utilisateur : relis la puce « risque inacceptable »",
+        "b1492f827c021f7f9fcba5828d226a8e1b2e4a9ee28563977de4345cbff06214": "relis la puce « risque inacceptable » de « L'AI Act » (§206.11)"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12d": {
+      "hash": "884f08063da3e6fd1f7fb8c7341001b9bac28b599e46785c038103240f96040d",
+      "kind": "bool",
+      "mistakes": {
+        "c20b1f15b7ece0cb0cc3ec1a8716b9c689489106b9fed9e4c28c6caa60e541a3": "relis l'encadré 🕰️ sur la régulation (§206.11) : quelles dates le règlement 2026/1744 a-t-il fixées ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12e": {
+      "hash": "5c5966e8b482e4f90e1b35e44d8b16a9ae98d95535578d2d70cc32257ec15d93",
+      "kind": "str",
+      "mistakes": {
+        "946c260718b58cfa1d88129673fbfd651cef0026d85892f2b7a164edc38c0cc6": "relis le dernier paragraphe de « L'AI Act » : qui, du fournisseur ou du déployeur, réalise l'analyse d'impact ?",
+        "df536a444d7513756cfe150489ae76e83d643faea9eaced9f5e7900de1250b11": "relis le dernier paragraphe de « L'AI Act » : l'article 27 s'adresse à qui ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.Q12f": {
+      "hash": "616c61b194323d740a4646f8e13253b94f1bd7957f2abe8856d15d346a8e5c1a",
+      "kind": "bool",
+      "mistakes": {
+        "0cb9ac90456adb9f7ebfb078d4fc3d5eae7915731bda9b2026eda6dfe87b8b6f": "relis le texte du point 5 b) cité en 206.11 : de quelles personnes évalue-t-il la solvabilité ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R1a": {
+      "decimals": 2,
+      "element_coarse": [
+        [
+          "c0b85774ed5c4e847a92f87116e1f9c0b1baa654c62f3817119c440643c34d48"
+        ],
+        [
+          "63ed4448f93bb8b386f1686976b4b29e54e69e250da18279d41c84a1b2976c52"
+        ],
+        [
+          "ac1dac572f321071b666f23f720b75f7f214f62152cb05c006d19b77b70c5a1a"
+        ]
+      ],
+      "element_hashes": [
+        "bd3a6d3f8c5d2376459be79908fb3e07dcdf5ac2dd481ea6b8a3c5dda0e64487",
+        "23df0cfdfb518ab4ce4ce752a5a4875480eb16b40aac95281c0bae92c675dba3",
+        "bd81390edde7c131ffd78360c74dd015825da1b612e992c12f1818a8e30efc24"
+      ],
+      "hash": "9863be79db9ae7084a2d9ab6679411a63be1e60ab7d5519359168408f02b0df3",
+      "kind": "array",
+      "mistakes": {
+        "25782b259235d052ea075f23ceaa0e8fbcded345133780117fa4c69be37cb564": "vérifie le signe : FGSM monte la loss, x + ε sign(∇L)",
+        "45c2ef4b5494939e99d166c813bc5d6f1b0ce4e295788dda089767887dea1a3f": "ramène chaque pixel dans [0, 1] après le pas",
+        "8eb6ffb01fa01460736963791fb0987ad23251303128ade45210909661b1e6b4": "le signe de 0 vaut 0 : le troisième pixel ne bouge pas",
+        "d3137444c7ef50a6b3e75d7d2e89b1d2fa522882d3361aa285a86409d023f653": "FGSM ajoute ε fois le signe du gradient, pas ε fois le gradient"
+      },
+      "shape": [
+        3
+      ],
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R1b": {
+      "hash": "295bcd17baf718c39634d0881711c3a120852a00d8e5993c60b8ca5f9f106c02",
+      "kind": "bool",
+      "mistakes": {
+        "6c4956a7723fd90d04b516dbb4bd4568647da5a84cd323a98bd620bfbfe2ac49": "relis le début de 206.5 et la section FGSM du ch. 21 : par rapport à quoi dérive-t-on ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R1c": {
+      "hash": "b386522939b210cfa7f3b05ee0164c0e60e4a7d22f5c5e1f35c8fc931703396a",
+      "kind": "str",
+      "mistakes": {
+        "a2e1865d19c6c2d292e40c3724e3b9966a43808a4c582f65c6b4628056a4e90b": "relis le rappel maths « le gradient par rapport à l'entrée » du ch. 21 : les poids bougent-ils ?",
+        "ee8a225ba6b4ed44ace154e613664c480fee11354274ce06147745117e409f2a": "la maximisation d'activation a-t-elle besoin de labels ? Relis le ch. 21"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R1d": {
+      "decimals": 2,
+      "hash": "e2bb4cc3d6a1bc93c115368d5fa897a74e6e53381d572de8aa3ba1e71fdfa419",
+      "hash_coarse": "0dfef700410dbc5981a6d2276bf5c0d139d8f25c4f9753640ae361c4b4840754",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "574a82585184955d45a56b6e6c9478924edcd5b33cbf71e5567097b2096adb15": "relis la formule ε Σ|w_j| du ch. 21 : il manque un facteur",
+        "67c01b9b63bc03ebad2c0d6de811a84e33717cd5d2aa288274168c0c9702e749": "relis l'énoncé : ε = 0,01 et |w_j| = 0,01",
+        "9d9a032eea3caaaa2617e4d56b88521579f708245665728577889e5c7f61aebc": "c'est ε fois le nombre de pixels : n'oublie pas |w_j|"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R1e": {
+      "hash": "c3c2cf7fc31b61f6aa53f9758559d393eaa68e14a388097380b2f1bfb0c0c248",
+      "kind": "bool",
+      "mistakes": {
+        "63b3858ff48e5a1b84323b5779e63787e399202b853026551842429f0ab06a65": "relis le rappel maths du ch. 21 : la montée de gradient cherche-t-elle un minimum ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R2a": {
+      "hash": "1e04cefd87cdae3468b2fd5dd0e7900b604686406f294808b7d0daab4a5a278b",
+      "kind": "str",
+      "mistakes": {
+        "d497dbfc691b90c2017409a972ea6c59bb885bc4f5db6a30d77c4ebb8c27bb15": "une baisse d'impureté peut-elle être négative ? Relis le ch. 14",
+        "eeb8b46b7a2755cf169dafca8c7fa209c03ea1199fad5e24b7768f92dface7ec": "relis l'importance des features au ch. 14 : qu'arrive-t-il aux features à forte cardinalité ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R2b": {
+      "hash": "2a10c396a6b0cebe63a83863cb311850a37b1847f8703facdaf2d176d3b1cf31",
+      "kind": "bool",
+      "mistakes": {
+        "0c536f712973823907d97a1f7b2030cc69017b81d5a90282dc1a1b613acd8199": "relis le ch. 14 : sur quelles données l'importance MDI est-elle calculée ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R2c": {
+      "hash": "2e06fe06d2688aae53efcef0bbe89b9680ef720e445705f3f2a78e66a4ee0a89",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "cda0c3fa689342cb1e6d1c30df833632b9c737328b8824291a629c41e4725c0f": "relis le ch. 14 : les importances MDI sont normalisées"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R2d": {
+      "hash": "9f1b5c3c25c2602407d1b6fce0675f55af74794231cf337ee05abedc001a6ba2",
+      "kind": "str",
+      "mistakes": {
+        "d661eeaaef61e23d467375f8144df35d11ee3a15c6d446c2e91ebb4c1bf44751": "mélanger un identifiant fait-il perdre quelque chose sur des exemples jamais vus ? Relis le ch. 14",
+        "e1da017e36752af9338d704d1634dd284570f933f52d476e193a926bf163beba": "une importance par permutation fortement négative voudrait dire que le mélange aide beaucoup : est-ce plausible ?"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R2e": {
+      "hash": "8b3348238704e61122461395bab6dff7e1ee627111ba43c07dedf20e65a5f708",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "7839e877092a9931321be685a661aaa7e115fe737935ef31bafbbb8809cab5fd": "vérifie l'ordre de grandeur : 2 points de 400 exemples",
+        "9964decaa41c0405b95f0d4e549d1e436ecca14b418bbb9b31199e90bec7d15c": "c'est la baisse d'accuracy : multiplie-la par le nombre d'exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R3a": {
+      "decimals": 2,
+      "hash": "cd85fa2c3af82613f6d2ce7f2f5635f8f05670c646dfa5415536020ae41d9468",
+      "hash_coarse": "e82a7e7a8e620c5e1eb09052937601f2399c5ceb221a2e97b91b050a2309da98",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "857292a4a0e75bade5e8143c630a47a0a70d5500cf192a11c62aaeb2a6ddb2df": "le TPR divise TP par les positifs réels (la ligne 1), pas par les sélectionnés",
+        "b369d8cddb255e82855649cd540058f3f5b2211a31b875cbc330cf61a8440ace": "le TPR divise par les positifs réels, pas par tous les exemples"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R3b": {
+      "decimals": 2,
+      "hash": "b791dd0c4df9b6a1288c50a6c5ba8168b9789dc34fefb46b0beea231cc5c9800",
+      "hash_coarse": "8bd62e18b8f3459e2ad6bd3d5d2740cffc66cbc99f0ff28e742eb65da385043d",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5b321aad69e7c89faaa16efb93b32ed7b5a16f2e33559aa6fd08ec5878318ecc": "c'est la part de faux positifs parmi les sélectionnés : le FPR divise par les négatifs réels",
+        "7c56de1a3fc482e518edbf2eba05714c312264c0e3f2d34774ff646d17ce1e96": "le FPR divise par les négatifs réels, pas par tous les exemples",
+        "bda843625d8b70866100a4541d9f785760d5810f6c35be30b81016d95a491921": "relis la disposition : la case [0, 1] contient quoi ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R3c": {
+      "decimals": 3,
+      "hash": "96f7c6b33bef47c5226ef99652e624d51119d167a520076a940ed5693f67e752",
+      "hash_coarse": "72d0c55c6dc5349b0617b535fc08c196f2c8bac00e7abac2e84d2272cc6ca2e7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4d0ea720a6ea86394046b4a141e6fcff663bbf41a852c3a4df8f5d8e935d4317": "la precision divise TP par les sélectionnés (la colonne 1), pas par les positifs réels",
+        "981522dc1bb4e3a4f8c248d4ba35ea43d7cafe227fe7822ebe26cb8c8afe8822": "c'est la part de faux positifs parmi les sélectionnés : on demande la part de vrais positifs"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R3d": {
+      "decimals": 3,
+      "hash": "affd438c6477d36ff6a3c1d2865e52072ca26aa378f30a414c680b23347f2977",
+      "hash_coarse": "e3ccef7e2d110717623f49503ef9597f0f3057d47d4319ad5afaa039919f4679",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "068393838b3aee391de86f50ce0cc660a1127d2758ffcd3475ec895cc09f01f2": "c'est la part de positifs réels (la ligne 1) : on demande la part de prédictions positives",
+        "e0a66b4866d9fbb795b885f67f6f9995c84a333a2a0d409a4874b10c30fb80a0": "le taux de sélection divise par tous les exemples, pas par les négatifs réels"
+      },
+      "sign": 1,
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
+    "B6.R3e": {
+      "hash": "6c92fad912620e5aca8ac67d377dc1fd932a5d85432f5d5a8b0eb1e96a0b59b5",
+      "kind": "str",
+      "mistakes": {
+        "4fedbda35166e59d0c98b38ea20db3144786bbae965cae1be113bc3bd39b5694": "relis la disposition : la ligne 0 est la vérité 0",
+        "ea66a6e372abac4bf3798f31343a64a251e00a270e8df59f028e7fd863c8b6a4": "relis la disposition : la ligne 0 est la vérité 0, la colonne 1 la prédiction 1"
+      },
+      "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

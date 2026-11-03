@@ -270,7 +270,7 @@ def figure_audit() -> None:
 
 
 def figure_impossibility() -> None:
-    p = np.linspace(0.02, 0.8, 300)
+    p = np.linspace(0.02, 0.66, 300)                                  # FPR reaches 0.6 near p = 0.65
     fpr = p / (1 - p) * (1 - PPV) / PPV * (1 - FNR)
     fig, ax = plt.subplots(figsize=(6.0, 3.7))
     ax.plot(p, fpr, color=C[0], lw=2)
@@ -282,6 +282,7 @@ def figure_impossibility() -> None:
     ax.set_xlabel("taux de base p du groupe")
     ax.set_ylabel("FPR imposé")
     ax.set_ylim(0, 0.6)
+    ax.set_xlim(0, 0.7)
     ax.set_title(f"Même PPV ({french(PPV, 1)}) et même FNR ({french(FNR, 2)}) : le FPR suit le taux de base",
                  fontsize=9.5)
     for s in ("top", "right"):

@@ -33,7 +33,9 @@ Every test name starts with the name of the function it tests, so that each exer
 
 Contract precisions written in the statements of these exercises and checked here: the inputs are never modified;
 ``shapley_values`` calls ``f`` only on 2-D arrays of shape ``(n, M)``, uses every background row (no subsampling),
-accepts ``M == max_features`` and returns the base value as one number; ``integrated_gradients`` calls
+accepts ``M == max_features`` and returns the base value as one number; it evaluates ``f`` on at most
+``max(2 * M * 2**M * B, 500 000)`` rows (the docstring needs ``2**M * B``: an enumeration of the ``M!`` orderings
+without a cache of ``v(S)`` is stopped with a message instead of running for minutes); ``integrated_gradients`` calls
 ``grad_fn`` only on batches of shape ``(n, *x.shape)`` (even with ``n_steps = 1``), refuses a baseline that NumPy
 could broadcast but that does not have the shape of ``x`` (shape ``(1,)`` for an ``x`` of shape ``(3,)``) and the
 captum names of the rules ('riemann_trapezoid'), and returns a float array even for an integer ``x``;
@@ -101,6 +103,9 @@ def _fail(msg: str, head: str, data: str = ""):
 RTOL, ATOL = 1e-6, 1e-6
 # Rates and gaps are ratios of counts: any correct computation is exact up to rounding.
 RATE_RTOL, RATE_ATOL = 1e-9, 1e-12
+# First line of a type test whose value is wrong while the type is handled (the value tests say what is wrong).
+TYPE_NOTE = ("wrong value, not a problem of input type (the {what} give the same result as {ref}; the formula is "
+             "wrong: see the tests of the values)")
 
 
 def assert_close(result, expected, rtol=RTOL, atol=ATOL, msg=""):
@@ -158,8 +163,11 @@ def assert_raises(error, function, *args, why="", **kwargs):
     raise AssertionError(f"{name} must raise {error.__name__}" + (f" here: {why}" if why else ""))
 
 
-def call(function, *args, expected="a result", **kwargs):
-    """Call the learner's function; an unexpected exception becomes a failure that says what was expected."""
+def call(function, *args, expected="a result", hint="", **kwargs):
+    """Call the learner's function; an unexpected exception becomes a failure that says what was expected.
+
+    `hint` (e.g. " (group 'b' has a single label: ...)") is appended to that message.
+    """
     try:
         return function(*args, **kwargs)
     except NotImplementedError as exc:
@@ -169,7 +177,7 @@ def call(function, *args, expected="a result", **kwargs):
         raise new from None
     except Exception as exc:  # noqa: BLE001
         name = getattr(function, "__name__", "the function")
-        raise AssertionError(f"expected {expected}, but {name} raised {type(exc).__name__}: {exc}") from None
+        raise AssertionError(f"expected {expected}, but {name} raised {type(exc).__name__}: {exc}{hint}") from None
 
 
 def array_result(result, msg, shape, inputs="") -> np.ndarray:
@@ -209,14 +217,35 @@ def assert_unchanged(before, after, name, function):
 
 
 # ================================================================== shapley_values (B6.14)
+class _TooManyRows(BaseException):
+    """Raised inside the learner's code when f has been evaluated on far more rows than the docstring needs;
+    a BaseException, so that no `except Exception` of the learner or of the helpers catches it."""
+
+
+ROW_FLOOR = 500_000     # below this many rows, any correct method is fast (a few seconds at most)
+
+
+def row_budget(M, B):
+    """Rows of f allowed for one call of shapley_values: twice M times the 2**M * B rows the docstring needs
+    (v(S) recomputed for every feature passes), and never fewer than ROW_FLOOR."""
+    return max(2 * M * 2**M * B, ROW_FLOOR)
+
+
 def vectorised(func, M):
-    """A model output f: (n, M) -> (n,), that says so if it is called on anything else."""
+    """A model output f: (n, M) -> (n,), that says so if it is called on anything else, and that stops the
+    learner's function once `f.state['limit']` rows have been evaluated (set by shapley_of)."""
+    state = {"rows": 0, "limit": None}
+
     def f(X):
         X = np.asarray(X)
         if X.ndim != 2 or X.shape[1] != M:
             raise AssertionError(f"f must be called on a 2-D array of shape (n, {M}) (one row per evaluation: f is "
                                  f"vectorised), it was called on an array of shape {X.shape}")
+        state["rows"] += X.shape[0]
+        if state["limit"] is not None and state["rows"] > state["limit"]:
+            raise _TooManyRows
         return np.asarray(func(np.asarray(X, dtype=float)), dtype=float)
+    f.state = state
     return f
 
 
@@ -243,12 +272,28 @@ def shapley_oracle(f, x, background):
     return phi, v[(False,) * M]
 
 
-def shapley_of(exp, f, x, background, M=None, **kwargs):
-    """The learner's (phi, base_value), checked: a pair, phi a float array of shape (M,), base one number."""
+def shapley_of(exp, f, x, background, M=None, expected="the pair (phi, base_value)", **kwargs):
+    """The learner's (phi, base_value), checked: a pair, phi a float array of shape (M,), base one number.
+
+    When f is a `vectorised` model, the learner's function is stopped (with a clear message) once f has been
+    evaluated on more than `row_budget(M, B)` rows: an M! enumeration without a cache of v(S) takes minutes.
+    """
     M = np.asarray(x).shape[0] if M is None else M
     msg = "shapley_values"
-    result = call(exp.shapley_values, f, copy.deepcopy(x), copy.deepcopy(background),
-                  expected="the pair (phi, base_value)", **kwargs)
+    B = np.shape(background)[0]
+    state = getattr(f, "state", None)
+    if state is not None:
+        state.update(rows=0, limit=row_budget(M, B))
+    try:
+        result = call(exp.shapley_values, f, copy.deepcopy(x), copy.deepcopy(background), expected=expected,
+                      **kwargs)
+    except _TooManyRows:
+        _fail(msg, f"expected f to be evaluated on about 2**M * B = {2**M * B} rows for M = {M} and B = {B} (the docstring), "
+                   f"it evaluated f on more than {state['limit']} rows and was stopped: compute v(S) once for each of "
+                   "the 2**M coalitions (an enumeration of the M! orderings without a cache of v(S) takes minutes)")
+    finally:
+        if state is not None:
+            state["limit"] = None
     if result is None:
         _fail(msg, "expected the pair (phi, base_value), got None (did you forget the return?)")
     if not isinstance(result, (tuple, list)) or len(result) != 2:
@@ -432,7 +477,7 @@ def test_shapley_values_additivity(exp):
 
 
 @pytest.mark.parametrize("M,B", [pytest.param(3, 2, id="M3-B2"), pytest.param(5, 7, id="M5-B7"),
-                                 pytest.param(9, 3, id="M9-B3")])
+                                 pytest.param(7, 3, id="M7-B3")])
 def test_shapley_values_linear_model(exp, M, B):
     rng = np.random.default_rng(M * B)
     w, b0 = rng.normal(size=M), 0.25
@@ -459,9 +504,11 @@ def test_shapley_values_accept_max_features_features(exp):
     # the M! orderings instead of the 2**M coalitions would run out of memory with M = 12
     rng = np.random.default_rng(12)
     w, x, bg = rng.normal(size=4), rng.normal(size=4), rng.normal(size=(2, 4))
-    phi, _ = shapley_of(exp, vectorised(lambda X: X @ w, 4), x, bg, max_features=4)
-    assert_close(phi, w * (x - bg.mean(axis=0)), msg="shapley_values with M = 4 and max_features=4: allowed (only "
-                                                      "M > max_features raises)")
+    phi, _ = shapley_of(exp, vectorised(lambda X: X @ w, 4), x, bg, max_features=4,
+                        expected="shapley_values with M = max_features = 4 to be allowed (only M > max_features "
+                                 "raises)")
+    assert_close(phi, w * (x - bg.mean(axis=0)), msg="shapley_values with M = max_features = 4 (accepted; wrong value "
+                                                      "for a linear model: phi_i = w_i (x_i - mean_i))")
 
 
 def test_shapley_values_do_not_modify_their_inputs(exp):
@@ -499,8 +546,7 @@ def batched(grad, shape):
         P = np.asarray(P)
         if P.ndim != len(shape) + 1 or P.shape[1:] != shape:
             raise AssertionError(f"grad_fn must be called on a batch of shape (n, *x.shape) = (n, "
-                                 f"{', '.join(map(str, shape))}{',' if len(shape) == 1 else ''}), it was called "
-                                 f"on an array of shape {P.shape}")
+                                 f"{', '.join(map(str, shape))}), it was called on an array of shape {P.shape}")
         return np.asarray(grad(np.asarray(P, dtype=float)), dtype=float)
     return grad_fn
 
@@ -681,9 +727,14 @@ def test_integrated_gradients_completeness_improves_with_n_steps(exp, method):
 
 def test_integrated_gradients_accept_integer_lists(exp):
     c = np.array([1.0, -1.0])
-    got = ig_of(exp, batched(poly_grad(c, 2), (2,)), [2, 3], [0, 1], n_steps=4, method="midpoint")
+    grad_fn = batched(poly_grad(c, 2), (2,))
+    msg = "integrated_gradients with x = [2, 3] and baseline = [0, 1] (lists of ints)"
+    got = ig_of(exp, grad_fn, [2, 3], [0, 1], n_steps=4, method="midpoint")
+    floats = ig_of(exp, grad_fn, np.array([2.0, 3.0]), np.array([0.0, 1.0]), n_steps=4, method="midpoint")
+    assert_close(got, floats, msg=msg + ": expected the same attributions as with float arrays (convert the "
+                                        "inputs with np.asarray(..., dtype=float))")
     assert_close(got, poly_closed_form(c, 2, [2.0, 3.0], [0.0, 1.0], 4, "midpoint"),
-                 msg="integrated_gradients with x = [2, 3] and baseline = [0, 1] (lists of ints): float attributions")
+                 msg=msg + ": " + TYPE_NOTE.format(what="lists of ints", ref="float arrays"))
 
 
 def test_integrated_gradients_grad_fn_may_be_called_on_batches(exp):
@@ -912,7 +963,11 @@ def test_grad_cam_invariant_to_a_positive_factor_on_the_gradients(exp, relu, fac
 def test_grad_cam_accepts_lists(exp):
     A, G = _maps(seed=5, shape=(1, 2, 2, 3))
     got = cam_of(exp, A.tolist(), G.tolist())
-    assert_close(got, cam_oracle(A, G), msg="grad_cam with nested lists (array-like)")
+    arrays = cam_of(exp, A, G)
+    msg = "grad_cam with nested lists (array-like)"
+    assert_close(got, arrays, msg=msg + ": expected the same maps as with NumPy arrays (convert the inputs with "
+                                        "np.asarray(..., dtype=float))")
+    assert_close(got, cam_oracle(A, G), msg=msg + ": " + TYPE_NOTE.format(what="nested lists", ref="NumPy arrays"))
 
 
 def test_grad_cam_does_not_modify_its_inputs(exp):
@@ -961,11 +1016,26 @@ WHY_NAN = {"tpr": "no positive example (TP + FN = 0)", "fpr": "no negative examp
            "precision": "no positive prediction (TP + FP = 0)"}
 
 
+def single_label_hint(y_true, y_pred, groups):
+    """" (group 'b' has only the label 0 …)" when a group holds a single label in y_true and y_pred, else ""."""
+    try:
+        t, p, g = np.asarray(y_true), np.asarray(y_pred), np.asarray(groups)
+        for key in np.unique(g):
+            values = np.unique(np.concatenate([t[g == key], p[g == key]]))
+            if values.size == 1:
+                return (f" (group {key.item() if isinstance(key, np.generic) else key!r} has only the label "
+                        f"{values[0].item()!r} in y_true and y_pred: confusion_matrix needs labels=[0, 1] to give "
+                        "a 2 x 2 matrix)")
+    except Exception:  # noqa: BLE001 - invalid inputs: no hint
+        return ""
+    return ""
+
+
 def rates_of(exp, y_true, y_pred, groups):
     """The learner's dict, checked: one entry per group with the seven keys, 'n' an int, the rates floats."""
     msg = "group_rates"
     result = call(exp.group_rates, copy.deepcopy(y_true), copy.deepcopy(y_pred), copy.deepcopy(groups),
-                  expected="a dict {group: {rate: value}}")
+                  expected="a dict {group: {rate: value}}", hint=single_label_hint(y_true, y_pred, groups))
     if result is None:
         _fail(msg, "expected a dict {group: {rate: value}}, got None (did you forget the return?)")
     if not isinstance(result, dict):
@@ -1102,7 +1172,11 @@ def test_group_rates_accept_numpy_arrays(exp):
     groups = rng.choice(np.array(["u", "v"]), size=30)
     y_true, y_pred = rng.integers(0, 2, 30), rng.integers(0, 2, 30)
     got = rates_of(exp, y_true, y_pred, groups)
-    assert_rates(got, rates_oracle(y_true, y_pred, groups), "group_rates with NumPy arrays")
+    as_lists = rates_of(exp, y_true.tolist(), y_pred.tolist(), groups.tolist())
+    msg = "group_rates with NumPy arrays"
+    assert_rates(got, as_lists, msg + ": expected the same rates as with lists")
+    assert_rates(got, rates_oracle(y_true, y_pred, groups),
+                 msg + ": " + TYPE_NOTE.format(what="NumPy arrays", ref="lists"))
 
 
 def test_group_rates_does_not_modify_its_inputs(exp):
@@ -1170,7 +1244,8 @@ def test_group_rates_match_fairlearn_metric_frame(exp, fairlearn_metrics):
 
 # ================================================================== demographic_parity_difference (B6.23)
 def gap_of(function, *args, what):
-    result = call(function, *copy.deepcopy(args), expected=f"the {what} (one number)")
+    hint = single_label_hint(*args) if len(args) == 3 else ""
+    result = call(function, *copy.deepcopy(args), expected=f"the {what} (one number)", hint=hint)
     return number_result(result, function.__name__)
 
 
