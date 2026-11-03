@@ -1258,6 +1258,7 @@ COPIES_31 = «COPIES_FAST_31» if FAST_MODE else «COPIES_FULL_31»   # largest 
 def _make_evaluate_31():
     """evaluate_31, with the test images and their features kept here only (the global variables that hold images,
     models or checkpoints are replaced by a decoy while your method runs)."""
+    import gc
     import re
     import tempfile
     from pathlib import Path
@@ -1267,6 +1268,8 @@ def _make_evaluate_31():
     test = wbd.image_subset("fashion", 2000, split="test")
     clf = wbd.classifier("fashion")
     test_feats = wbd.features(clf, test.images)
+    # real images that no method has seen (test images), seen from the training images: the median r of B5.28
+    real_r = float(np.median(wbd.copy_ratio(test.images[:N_31], train.images)))
 
     class Hidden:
         """What a hidden global variable holds during the run: any use of it says why."""
@@ -1282,34 +1285,81 @@ def _make_evaluate_31():
 
     ipython_names = re.compile(r"^(_+|_i+|_i?\d+|_[ido]h|In|Out|exit|quit|get_ipython)$")
 
+    def hideable(v, level=0):
+        """True for what could hold images, features, a trained model or a checkpoint (also inside a list, a tuple,
+        a set or a dict, up to three levels down)."""
+        if isinstance(v, wbd.ImageSet):
+            return True
+        if isinstance(v, nn.Module):
+            return any(p.numel() >= 1000 for p in v.parameters())
+        if isinstance(v, torch.Tensor):
+            return v.numel() >= 784 * 10
+        if isinstance(v, np.ndarray):
+            return v.size >= 784 * 10
+        if isinstance(v, dict):
+            if "state_dict" in v or "ema_state_dict" in v:
+                return True
+            return level < 3 and any(hideable(x, level + 1) for x in list(v.values())[:10_000])
+        if isinstance(v, (list, tuple, set, frozenset)):
+            return level < 3 and any(hideable(x, level + 1) for x in list(v)[:10_000])
+        return False
+
     def hidden_globals():
         """The global variables that could hold images, features, a trained model or a checkpoint."""
         g, found = globals(), {}
         for n, v in list(g.items()):
             if ipython_names.match(n) or n.startswith("_"):
                 continue
-            if isinstance(v, wbd.ImageSet):
-                found[n] = Hidden(n)
-            elif isinstance(v, dict) and ("state_dict" in v or "ema_state_dict" in v):
-                found[n] = Hidden(n)
-            elif isinstance(v, nn.Module) and any(p.numel() >= 1000 for p in v.parameters()):
-                found[n] = Hidden(n)
-            elif isinstance(v, torch.Tensor) and v.numel() >= 784 * 10:
-                found[n] = Hidden(n)
-            elif isinstance(v, np.ndarray) and v.size >= 784 * 10:
+            if hideable(v):
                 found[n] = Hidden(n)
         return found
+
+    def captured(method):
+        """What method keeps in its default arguments or its closure that a hidden variable would hold."""
+        kept = list(getattr(method, "__defaults__", None) or ()) + list((getattr(method, "__kwdefaults__", None)
+                                                                          or {}).values())
+        kept += [cell.cell_contents for cell in (getattr(method, "__closure__", None) or ())
+                 if not isinstance(cell.cell_contents, type(method))]
+        return any(hideable(v) for v in kept)
 
     def refused(*args, **kwargs):
         raise RuntimeError("pendant le défi, ta méthode ne reçoit que images, labels et seconds (ni données du workbook, "
                            "ni sauvegarde, ni modèle déjà entraîné, ni classifieur des mesures)")
 
+    def tensors_alive():
+        """Every floating-point tensor of the session before the run (parameters, buffers, copies kept anywhere), by
+        shape, and their memory addresses: a network of the run must not start from one of them."""
+        by_shape, pointers = {}, set()
+        for obj in gc.get_objects():
+            if isinstance(obj, torch.Tensor) and obj.is_floating_point() and 1000 < obj.numel() <= 4_000_000:
+                by_shape.setdefault(tuple(obj.shape), []).append(obj)
+                pointers.add(obj.data_ptr())
+        return by_shape, pointers
+
+    def from_before(p, by_shape, pointers):
+        """The largest correlation of a parameter with a tensor of the same shape that existed before the run (1 for
+        the same memory): about 0.96 for a model of the notebook fine-tuned 400 steps, below 0.91 for a new model,
+        even with the seed and the initialisation of a model of the notebook (history of session 72)."""
+        if p.data_ptr() in pointers:
+            return 1.0
+        x = p.detach().flatten().double()
+        best = 0.0
+        for q in by_shape.get(tuple(p.shape), []):
+            c = torch.corrcoef(torch.stack([x, q.detach().flatten().double()]))[0, 1]
+            if torch.isfinite(c):
+                best = max(best, float(c))
+        return best
+
     def run(method, seconds):
         """Train the method cold, then generate N_31 images, counting the passes of every network."""
         g = globals()
+        if captured(method):
+            print("❌ Ex B5.31 : method_31 garde, dans ses arguments par défaut ou sa fermeture, des images, des features, "
+                  "un modèle ou une sauvegarde du notebook : elle ne doit utiliser que images, labels et seconds.")
+            return None
         hidden = hidden_globals()
-        before = [m for m in list(g.values()) if isinstance(m, nn.Module)]
-        old_params = [p.detach() for m in before for p in m.parameters() if p.numel() > 1000]
+        modules_before = {id(m): m for m in gc.get_objects() if isinstance(m, nn.Module)}   # kept alive: ids stay unique
+        by_shape, pointers = tensors_alive()
         saved = {name: getattr(wbd, name) for name in ("image_subset", "raw_subset", "_raw", "load_checkpoint",
                                                         "reference_model", "classifier", "features", "predict",
                                                         "checkpoints_dir")}
@@ -1318,18 +1368,29 @@ def _make_evaluate_31():
         empty = Path(tempfile.mkdtemp(prefix="wb_b5_31_"))
         originals = {n: g[n] for n in hidden}
         caches = [(cache, dict(cache)) for cache in (wbd._RAW, wbd._CLASSIFIERS, wbdata._ARRAYS)]
-        counts, depth, used = {"passes": 0}, [0], []
+        counts, depth, used, pending = {"passes": 0}, [0], [], [False]
 
         def pre(module, args):
-            if depth[0] == 0 and args and torch.is_tensor(args[0]):
-                counts["passes"] += int(args[0].shape[0])
+            # a pass: one call of a network from outside any network, as many passes as images in its batch (the first
+            # tensor among its positional arguments; for a call by keywords, the batch of its first inner module)
+            first = next((a for a in args if torch.is_tensor(a) and a.ndim > 0), None)
+            if depth[0] == 0:
                 used.append(module)
+                if first is not None:
+                    counts["passes"] += int(first.shape[0])
+                else:
+                    pending[0] = True
+            elif pending[0] and first is not None:
+                counts["passes"] += int(first.shape[0])
+                pending[0] = False
             depth[0] += 1
 
         def post(module, args, output):
             depth[0] -= 1
+            if depth[0] == 0:
+                pending[0] = False
 
-        out = elapsed = None
+        out = again = elapsed = None
         try:
             g.update(hidden)
             for cache, _ in caches:                           # the images and models kept in memory by wb
@@ -1340,6 +1401,7 @@ def _make_evaluate_31():
             for name in saved_data:
                 setattr(wbdata, name, refused)
             torch.load = torch.serialization.load = refused
+            clf.forward = clf.features = refused              # the classifier of the measures, wherever it is kept
             torch.manual_seed(3131)
             start = time.perf_counter()
             generate = method(train.images.clone(), train.labels.clone(), seconds)
@@ -1355,6 +1417,8 @@ def _make_evaluate_31():
             finally:
                 for h in handles:
                     h.remove()
+            with torch.no_grad():
+                again = generate(16, torch.Generator().manual_seed(3133))    # another generator: other images
         finally:
             g.update(originals)
             for cache, content in caches:
@@ -1365,16 +1429,26 @@ def _make_evaluate_31():
             for name, f in saved_data.items():
                 setattr(wbdata, name, f)
             torch.load, torch.serialization.load = saved_torch
+            for name in ("forward", "features"):
+                clf.__dict__.pop(name, None)
         if not (torch.is_tensor(out) and tuple(out.shape) == (N_31, 1, 28, 28) and torch.isfinite(out).all()):
             print(f"❌ Ex B5.31 : generate(n, generator) doit rendre un tenseur fini de forme ({N_31}, 1, 28, 28) ; reçu "
                   f"{type(out).__name__} {tuple(getattr(out, 'shape', ()))}.")
             return None
-        reused = any(any(m is b for b in before) for m in used) or any(
-            p.numel() > 1000 and any(q.shape == p.shape and torch.equal(q, p.detach()) for q in old_params)
-            for m in used for p in m.parameters())
-        if reused:
+        if not counts["passes"]:
+            print("❌ Ex B5.31 : generate n'a appelé aucun réseau : les images doivent venir d'un réseau entraîné pendant "
+                  "la course, appelé comme une fonction, model(x, …).")
+            return None
+        if torch.is_tensor(again) and again.shape == out[:16].shape and torch.allclose(again.float(), out[:16].float()):
+            print("❌ Ex B5.31 : generate rend les mêmes images avec deux generators différents : le bruit de départ doit "
+                  "être tiré du generator reçu.")
+            return None
+        params = [p for m in used for p in m.parameters() if p.numel() > 1000]
+        median_close = float(np.median([from_before(p, by_shape, pointers) for p in params])) if params else 0.0
+        if any(id(m) in modules_before for m in used) or median_close > 0.93:
             print("❌ Ex B5.31 : generate doit utiliser un modèle neuf, entraîné pendant la course : un réseau appelé existait "
-                  "déjà, ou il a les poids d'un modèle du notebook.")
+                  f"déjà, ou ses poids viennent d'un modèle d'avant la course (corrélation médiane {fr(median_close, 2)}, "
+                  "au plus 0,93).")
             return None
         return out.float().clamp(-1, 1), elapsed, counts["passes"] / N_31
 
@@ -1387,8 +1461,13 @@ def _make_evaluate_31():
         feats = wbd.features(clf, images)
         fd = float(mylearn.gen_metrics.frechet_distance_from_features(test_feats, feats))
         r = wbd.copy_ratio(images, train.images)
-        copies = float(np.mean(r < 1 / 3))
-        to_test = float(torch.cdist(images.reshape(N_31, -1).double(), test.images.reshape(len(test), -1).double()).min())
+        copies, median_r = float(np.mean(r < 1 / 3)), float(np.median(r))
+        flat = images.reshape(N_31, -1).double()
+        d_test = torch.cdist(flat, test.images.reshape(len(test), -1).double()).min(dim=1).values
+        d_train = torch.cat([torch.cdist(flat[i:i + 256], train.images.reshape(len(train), -1).double()).min(dim=1).values
+                             for i in range(0, N_31, 256)])
+        to_test = float(d_test.min())
+        test_side = float(torch.median(d_test / d_train))
         show_images(images[:32], ncol=16, size=0.75, suptitle="32 des images générées par ta méthode")
         print(f"entraînement en {fr(seconds, 1)} s ; {fr(passes, 1)} passes de réseau par image ; distance de Fréchet "
               f"{fr(fd, 2)} ({N_31} images contre 2 000 images de test) ; copies (r < 1/3) : {fr(100 * copies, 1)} %.")
@@ -1401,8 +1480,15 @@ def _make_evaluate_31():
                                        f"{fr(100 * COPIES_31, 0)} %, la référence plus une marge).",
                   f"contrôle des copies : {fr(100 * copies, 1)} % des images sont anormalement proches d'une image "
                   f"d'entraînement (r < 1/3 ; au plus {fr(100 * COPIES_31, 0)} %) : ta méthode recopie-t-elle ?"),
-                 (to_test > 1.0, "aucune image n'est une image de test.",
-                  "une image générée est une image de test, à moins de 1 en distance de pixels.")]
+                 (median_r >= 0.9 * real_r, f"r médian {fr(median_r, 2)} : tes images ne sont pas plus proches des images "
+                                            f"d'entraînement que des images réelles inédites ({fr(real_r, 2)}).",
+                  f"r médian {fr(median_r, 2)} : tes images sont plus proches des images d'entraînement que des images "
+                  f"réelles inédites ({fr(real_r, 2)} ; au moins {fr(0.9 * real_r, 2)}) : ta méthode recopie-t-elle ?"),
+                 (to_test > 1.0 and test_side >= 0.9, "aucune image n'est une image de test, ni plus proche du test que de "
+                                                     "l'entraînement.",
+                  f"des images générées sont plus proches des images de test que des images d'entraînement (rapport "
+                  f"médian des distances {fr(test_side, 2)}, au moins 0,9 ; plus petite distance au test "
+                  f"{fr(to_test, 2)}) : le test ne doit jamais servir.")]
         for ok, success, failure in rules:
             verdict("B5.31", ok, success, failure)
         ok = all(rule[0] for rule in rules)
