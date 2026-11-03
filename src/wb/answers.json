@@ -58280,6 +58280,7 @@
       "mistakes": {
         "26f3818ae9230a9a6a56337527673f71709840fa49eb004d0a35b3ad4822ef5d": "chaque v(S) demande une évaluation par ligne du fond : il y en a deux",
         "36259e02860924489dcbd6ccb0e50cae101e229b926e27e5c4d15f3cc2462fd6": "chaque v(S) se calcule une fois et sert aux trois features",
+        "a6348810aedd09fc8f069b5dc79284e5f44f285cf710de38f4ad9fb4e1929de0": "la coalition pleine se calcule aussi sur les deux lignes du fond, comme les autres",
         "c8351ddb74389bcc4a8c5293fa24893dcc9d632c5bd70879c60eeb582a3b728a": "compte toutes les coalitions, la vide et la pleine comprises"
       },
       "sign": 1,
@@ -58416,13 +58417,13 @@
     },
     "B6.3h": {
       "fractional": "le nombre d'intervalles est entier : prends le plus petit n qui convient",
-      "hash": "0e6457aecee0e7c35c60499e7698bd187af275703d6033cc7c0e8e7899f2794a",
+      "hash": "5ff6c0ad72452e5ebcb0f87bd5c807cdb3a96a81faf4cd2c9969c6fdae238024",
       "kind": "int",
       "magnitude": 2,
       "mistakes": {
-        "314dcc10810ad841e1841c053ae58af260f946d46ff8c40e5a70652fbe8cca8b": "l'erreur de la règle de gauche sur IG₁ dépend de x₁² : recalcule-la",
-        "bbb2bbdf3a25ab40cbcf1ed834a37202b67412ad3cbdc14427cbdaf31c6bd7a8": "« au plus 0,01 » : l'égalité est permise",
-        "c5145c4531379e7cac191bec75469a8aebf3748fb9d23f3b932d61310c8c24c7": "écris l'erreur de la règle de gauche en fonction de n : elle vaut x₁²/n"
+        "273ef581515796f334059314cbf1707f0252482ba6253855f8fa177dc002227c": "recalcule l'erreur de la règle de gauche en fonction de n : où intervient x₁ ?",
+        "5070e7527778f4e3f1f706589ce1a0d0342fbb2e5300700c499e3e52b613743f": "l'erreur de la règle de gauche sur IG₁ dépend de x₁² : recalcule-la",
+        "cb231df85e7e23586886c5c876dbb183350a240564eb159fe9bfd266552b4dd7": "avec ce n, l'erreur dépasse encore un peu 0,03 : prends le plus petit entier qui convient"
       },
       "sign": 1,
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
@@ -59218,7 +59219,7 @@
       "hash": "0ed4205cb03195fbb0db964ce85c00400419547975a740c9d90e6d19373799e4",
       "kind": "bool",
       "mistakes": {
-        "18a8d50da7a12f0d64219a327c02fb5acb389e18c14cbc5e8892116c071653b3": "relis la puce sur les variables de substitution (§206.8)"
+        "18a8d50da7a12f0d64219a327c02fb5acb389e18c14cbc5e8892116c071653b3": "une colonne qui n'est pas le sexe peut-elle en porter une part de l'information ? Relis la puce sur les variables de substitution (§206.8)"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },
@@ -59373,7 +59374,7 @@
       "hash": "295bcd17baf718c39634d0881711c3a120852a00d8e5993c60b8ca5f9f106c02",
       "kind": "bool",
       "mistakes": {
-        "6c4956a7723fd90d04b516dbb4bd4568647da5a84cd323a98bd620bfbfe2ac49": "relis le début de 206.5 et la section FGSM du ch. 21 : par rapport à quoi dérive-t-on ?"
+        "6c4956a7723fd90d04b516dbb4bd4568647da5a84cd323a98bd620bfbfe2ac49": "relis le début de 206.5 et la section FGSM du ch. 21 : les deux calculs dérivent-ils par rapport à la même chose, avec la même passe arrière ?"
       },
       "source": "chapitres/b6_explicabilite/05_solutions.ipynb"
     },

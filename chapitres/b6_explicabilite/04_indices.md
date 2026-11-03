@@ -184,7 +184,7 @@ Pour chaque cas, demande-toi **où** est le défaut : dans la composition des do
 </details>
 <details><summary>Indice 3</summary>
 
-a) **A** : 90 % de voix d'hommes, c'est un groupe mal représenté dans les données d'entraînement. Pour b), la note des managers est-elle une feature ou la cible ? Pour c), qui choisit les dossiers qui entrent dans l'entraînement ? Pour d), un prénom porte-t-il une information sur le sexe ou l'origine ? Pour e), qu'est-ce qui est faux : l'instrument, la population, ou les décisions ?
+a) **A** : 90 % de voix d'hommes, c'est un groupe mal représenté dans les données d'entraînement. Pour b), la note des managers est-elle une feature ou la cible ? Pour c), qui choisit les dossiers qui entrent dans l'entraînement ? Pour d), une colonne qui n'est pas le sexe peut-elle en porter l'information ? Pour e), qu'est-ce qui est faux : l'instrument, la population, ou les décisions ?
 
 </details>
 
@@ -220,7 +220,7 @@ Quatre niveaux : pratiques interdites (art. 5), haut risque (annexe III, dont le
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : le point 5 b) vise l'évaluation de « la solvabilité des personnes physiques ». Pour b), relis l'exception que contient ce même point. Pour c), la notation sociale est-elle dans la liste de l'art. 5 ? Pour d), quelle date l'encadré 🕰️ donne-t-il pour l'annexe III ? Pour e), relis qui l'art. 27 désigne. Pour f), relis les mots exacts du point 5 b) : « personnes physiques ».
+a) **B** : le point 5 b) vise l'évaluation de « la solvabilité des personnes physiques ». Pour b), relis l'exception que contient ce même point. Pour c), la notation sociale est-elle dans la liste de l'art. 5 ? Pour d), quelle date l'encadré 🕰️ donne-t-il pour l'annexe III ? Pour e), relis qui l'art. 27 désigne. Pour f), relis les mots exacts du point 5 b) : de quelles personnes évalue-t-il la solvabilité ?
 
 </details>
 
@@ -242,7 +242,7 @@ FGSM : $\mathbf{x}_{\text{adv}} = \mathbf{x} + \varepsilon\,\operatorname{sign}(
 </details>
 <details><summary>Indice 3</summary>
 
-a) $0{,}40 - 0{,}03 = 0{,}37$ ; $0{,}98 + 0{,}03 = 1{,}01$, ramené à $1{,}00$ ; $\operatorname{sign}(0) = 0$, donc $0{,}10$ ne bouge pas : **[0.37, 1.0, 0.1]**. Pour b), par rapport à quoi dérive-t-on dans les deux cas ? Pour c), qu'est-ce qui reste figé pendant la visualisation ? Pour d), calcule $0{,}01 \times 3\,072 \times 0{,}01$. Pour e), une **montée** cherche-t-elle un minimum ?
+a) $0{,}40 - 0{,}03 = 0{,}37$ ; $0{,}98 + 0{,}03 = 1{,}01$, ramené à $1{,}00$ ; $\operatorname{sign}(0) = 0$, donc $0{,}10$ ne bouge pas : **[0.37, 1.0, 0.1]**. Pour b), compare les deux calculs : quelle quantité dérive-t-on, par rapport à quoi, et que garde-t-on du gradient ? Pour c), qu'est-ce qui reste figé pendant la visualisation ? Pour d), calcule $0{,}01 \times 3\,072 \times 0{,}01$. Pour e), une **montée** cherche-t-elle un minimum ?
 
 </details>
 
@@ -390,7 +390,7 @@ Positifs réels : $pn$ ; négatifs réels : $(1 - p)n$. $TP = (1 - \operatorname
 </details>
 <details><summary>Indice 3</summary>
 
-1. $pn$ positifs et $(1 - p)n$ négatifs ; $TP = (1 - \operatorname{FNR})\,pn$ et $FN = \operatorname{FNR}\,pn$. Pour 2, isole $FP$ dans la définition de la PPV. Pour 3, $\operatorname{FPR} = \frac{FP}{(1 - p)n}$ : remplace $FP$, puis $TP$. Pour 4, inverse l'expression de Bayes : $\frac{1}{\operatorname{PPV}} - 1 = \dots$ Pour 5, prends $p$, PPV et FNR dans tes réponses de ✏️ B6.5. Pour 6, écris le rapport des deux FPR : quels facteurs se simplifient ? Pour 7, divise numérateur et dénominateur de la PPV par $p$ : comment varie $\frac{1 - p}{p}$ ? Pour 8, examine les cas $p_A = p_B$, puis $\operatorname{FPR} = \operatorname{FNR} = 0$. Pour 9, quel critère chacun mesurait-il, et que dit la question 6 quand les taux de base diffèrent ?
+1. $pn$ positifs et $(1 - p)n$ négatifs ; $TP = (1 - \operatorname{FNR})\,pn$ et $FN = \operatorname{FNR}\,pn$. Pour 2, isole $FP$ dans la définition de la PPV. Pour 3, $\operatorname{FPR} = \frac{FP}{(1 - p)n}$ : remplace $FP$, puis $TP$. Pour 4, inverse l'expression de Bayes : $\frac{1}{\operatorname{PPV}} - 1 = \dots$ Pour 5, prends $p$, PPV et FNR dans tes réponses de ✏️ B6.5. Pour 6, écris le rapport des deux FPR : quels facteurs se simplifient ? Pour 7, divise numérateur et dénominateur de la PPV par $p$ : comment varie $\frac{1 - p}{p}$ ? Pour 8, examine le cas $p_A = p_B$, puis, si les cotes diffèrent, ce que la question 6 impose à deux FPR égaux, et ce que la relation de 3 en déduit pour la PPV. Pour 9, quel critère chacun mesurait-il, et que dit la question 6 quand les taux de base diffèrent ?
 
 </details>
 
@@ -443,12 +443,12 @@ Relis 206.8 (variables de substitution, équité par aveuglement), 206.9 (audit 
 </details>
 <details><summary>Indice 2</summary>
 
-Sépare trois plans : **technique** (le département porte-t-il une autre information, et laquelle ; comment le mesurer sans l'attribut), **droit de la non-discrimination** (le code pénal protège le lieu de résidence ; la CNIL demande une justification), **droit des données et de l'IA** (une décision entièrement automatisée, des informations utiles sur la logique, un système à haut risque avec ses obligations, réparties entre fournisseur et déployeur). La fintech est à la fois fournisseur et déployeur.
+Sépare trois plans : **technique** (le département porte-t-il une autre information, et laquelle ; comment le mesurer sans l'attribut), **droit de la non-discrimination** (le code pénal punit un refus intentionnel fondé sur le lieu de résidence ; la loi du 27 mai 2008 vise aussi la discrimination indirecte, sans intention ; la CNIL demande une justification), **droit des données et de l'IA** (une décision entièrement automatisée, des informations utiles sur la logique, un système à haut risque avec ses obligations, réparties entre fournisseur et déployeur). La fintech est à la fois fournisseur et déployeur.
 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour 1 : le département est une variable de substitution probable d'une origine, et aussi d'un niveau de revenu local ; on le mesure par des données agrégées publiques, en tentant de prédire l'attribut, ou par l'écart qui reste à profil financier égal (les 9 points). Pour 2 : relis la liste de l'art. 225-1 et l'encadré de la recommandation de la CNIL sur le « département de résidence » (une stratégie géographique justifiée et documentée). Pour 3 : une décision sans intervention humaine, qui affecte la personne, relève de l'art. 22 ; cherche l'exception (contrat ou loi) et les droits de l'art. 22.3 ; pour la demande d'accès, relis ce que l'arrêt Dun & Bradstreet exige et ce qu'il refuse. Pour 4 : annexe III, point 5 b), puis les articles 9 à 15, 26, 27 et 86, et la date de l'encadré 🕰️. Pour 5 : audit avant et après retrait, avec intervalles, et un test des variables qui pourraient prendre le relais. Pour 6 : une raison compréhensible, ce qui aurait changé la décision, le droit à un réexamen humain.
+Pour 1 : le département est une variable de substitution probable d'une origine, et aussi d'un niveau de revenu local ; on le mesure par des données agrégées publiques, en tentant de prédire l'attribut, ou par l'écart qui reste à profil financier égal (les 9 points). Pour 2 : relis la liste de l'art. 225-1 ; un délit suppose une intention, alors que la discrimination indirecte de la loi du 27 mai 2008 (art. 1 et 2) n'en suppose pas : un critère neutre en apparence qui désavantage des personnes en raison de leur origine, sauf justification ; puis l'encadré de la recommandation de la CNIL sur le « département de résidence » (une stratégie géographique justifiée et documentée). Pour 3 : une décision sans intervention humaine, qui affecte la personne, relève de l'art. 22 ; cherche l'exception (contrat ou loi) et les droits de l'art. 22.3 ; pour la demande d'accès, relis ce que l'arrêt Dun & Bradstreet exige et ce qu'il refuse. Pour 4 : annexe III, point 5 b), puis les articles 9 à 15, 26, 27 et 86, et la date de l'encadré 🕰️. Pour 5 : audit avant et après retrait, avec intervalles, et un test des variables qui pourraient prendre le relais. Pour 6 : une raison compréhensible, ce qui aurait changé la décision, le droit à un réexamen humain.
 
 </details>
 

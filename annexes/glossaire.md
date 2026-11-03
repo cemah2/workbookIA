@@ -1153,7 +1153,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | equalized odds | égalité des taux d'erreur | même TPR et même FPR dans tous les groupes ; $\Delta_{\text{EO}}$ = le plus grand des deux écarts | B6 |
 | parité prédictive | predictive parity | même precision dans tous les groupes | B6 |
 | calibration par groupe | calibration within groups | parmi les personnes d'un groupe notées $s$, une proportion $s$ est positive, dans chaque groupe | B6 |
-| théorème d'impossibilité | impossibility theorem | quand les taux de base diffèrent, calibration (ou parité prédictive) et égalité des taux d'erreur ne tiennent ensemble que pour un classifieur parfait (Chouldechova ; Kleinberg et coll.) | B6 |
+| théorème d'impossibilité | impossibility theorem | quand les taux de base diffèrent, calibration (ou parité prédictive) et égalité des taux d'erreur ne tiennent ensemble que dans des cas extrêmes : un score parfait (Kleinberg et coll.), des décisions sans aucun faux positif (Chouldechova) | B6 |
 | règle des quatre cinquièmes | four-fifths rule | aux États-Unis, un taux de sélection inférieur à 80 % de celui du groupe le mieux servi est un indice d'effet défavorable (29 CFR 1607.4 D) | B6 |
 | comparaisons multiples | multiple comparisons | avec beaucoup d'écarts testés, certains sortent de leur intervalle par hasard : on choisit les comparaisons d'avance | B6 |
 | repondération | reweighing | poids $w(g, y) = P(g)P(y)/P(g, y)$ qui rendent le groupe et le label indépendants dans l'entraînement (Kamiran et Calders) | B6 |

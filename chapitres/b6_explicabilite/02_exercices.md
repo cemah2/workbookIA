@@ -18,7 +18,7 @@ Sans la fiche, en 3 minutes chacun. Réponds vite, vérifie les réponses courte
 ### B6.Q1 — Interprétable par construction ou expliqué après coup ? 🧠 ⏱️ 3 min
 *Fiche §206.1 · parcours R*
 
-a) Lequel de ces trois modèles est interprétable par construction ? (A) une forêt de 500 arbres, expliquée par TreeSHAP ; (B) une régression logistique à six features standardisées, dont on lit les coefficients ; (C) un réseau dense accompagné de la carte de saillance de chaque prédiction.
+a) Lequel de ces trois modèles est interprétable par construction ? (A) une forêt de 500 arbres, expliquée par TreeSHAP ; (B) une régression logistique à six features standardisées ; (C) un réseau dense accompagné de la carte de saillance de chaque prédiction.
 b) Vrai ou faux : une explication post hoc reproduit exactement la règle que le modèle applique.
 c) Grad-CAM est une méthode : (A) spécifique, qui lit les cartes d'activation et les gradients d'un CNN ; (B) agnostique, qui n'interroge le modèle que par ses prédictions ; (C) interprétable par construction.
 d) Vrai ou faux : l'importance par permutation s'applique telle quelle à un SVM, à une forêt ou à un réseau, sans rien savoir de leur structure.
@@ -69,7 +69,7 @@ $x_2$ est une copie presque parfaite de $x_1$. Le client vaut $\mathbf{x} = (1{,
 a) Shapley interventionnel : que vaut $\phi_1$ pour le modèle A ?
 b) Que vaut $\phi_2$ pour le modèle B ?
 c) Vrai ou faux : $\phi_1 + \phi_2$ est le même pour A et pour B.
-d) Le Shapley observationnel (conditionnel) du modèle B : (A) donne 0 à $x_2$, comme l'interventionnel ; (B) n'est pas défini quand des features sont corrélées ; (C) peut créditer $x_2$ d'une part de l'effet, bien que le modèle B ne la lise pas.
+d) Le Shapley observationnel (conditionnel) du modèle B : (A) donne 0 à $x_2$, comme l'interventionnel ; (B) n'est pas défini quand des features sont corrélées, faute de pouvoir séparer leurs effets ; (C) peut créditer $x_2$, que le modèle B ne lit pas.
 e) Pour rendre compte à un comité de l'effet de ces deux colonnes, le plus solide est : (A) la somme de leurs valeurs SHAP ; (B) la plus grande des deux valeurs ; (C) la valeur de chacune, telle quelle.
 
 ### B6.Q7 — Gradient, gradient × entrée, gradients intégrés : pourquoi une ligne de référence ? 🧠 ★★ ⏱️ 3 min
@@ -87,7 +87,7 @@ e) La photo d'un chat noir (pixels du chat à 0) sur un fond blanc, référence 
 *Fiche §206.6 · parcours R*
 
 a) Un ResNet-18 de torchvision reçoit une image de 160 × 160 pixels. Quelle est la largeur des cartes d'activation de `layer4` ?
-b) Juste après `layer4` vient : (A) une convolution de plus, de stride 2 ; (B) un pooling moyen global, qui ne garde qu'un nombre par canal ; (C) une softmax, qui garde la position.
+b) Juste après `layer4` vient : (A) une convolution de plus, de stride 2 ; (B) un pooling moyen global ; (C) une softmax, qui garde la position.
 c) La sortie de `layer1` divise la taille de l'image par 4. Pour une image de 224 pixels, quelle est la largeur d'une carte Grad-CAM calculée sur `layer1` ?
 d) Vrai ou faux : sans le ReLU final, une carte Grad-CAM peut contenir des valeurs négatives.
 e) Le score $y^k$ dont on prend le gradient est : (A) la loss de cross-entropy de l'image ; (B) la probabilité de la classe $k$ après la softmax ; (C) le logit de la classe $k$, avant la softmax.
@@ -97,17 +97,17 @@ e) Le score $y^k$ dont on prend le gradient est : (A) la loss de cross-entropy d
 
 a) Une carte d'attribution ne change presque pas quand on randomise toutes les couches du réseau. On en conclut : (A) qu'elle décrit bien le modèle, puisqu'elle est stable ; (B) qu'elle ne dépend pas de ce que le réseau a appris ; (C) que le réseau résiste aux attaques.
 b) Vrai ou faux : une méthode qui réussit le test de randomisation est donc fidèle au modèle.
-c) La randomisation en cascade : (A) randomise une seule couche, les autres gardent leurs poids appris ; (B) mélange les labels, puis réentraîne le réseau ; (C) randomise les couches une à une en partant de la sortie, en gardant randomisées celles déjà traitées.
+c) La randomisation en cascade : (A) randomise une seule couche à la fois, les autres gardent leurs poids appris ; (B) mélange les labels, puis réentraîne le réseau ; (C) randomise les couches de la sortie vers l'entrée, en les cumulant.
 d) Vrai ou faux : une corrélation de rangs de Spearman égale à 1 entre deux cartes signifie que leurs valeurs sont égales, pixel par pixel.
 e) Un CNN CIFAR-10 est réentraîné sur des labels mélangés au hasard. Quelle accuracy de test attends-tu, à 1 décimale ?
 
 ### B6.Q10 — Sources de biais : données, labels, variables de substitution, boucles de rétroaction 🧠 ⏱️ 3 min
 *Fiche §206.8 · parcours R*
 
-a) Un modèle de reconnaissance vocale, entraîné à 90 % sur des voix d'hommes, se trompe plus souvent sur des voix de femmes : (A) un biais de représentation, dans les données ; (B) une boucle de rétroaction ; (C) un biais de labels.
+a) Un modèle de reconnaissance vocale, entraîné à 90 % sur des voix d'hommes, se trompe plus souvent sur des voix de femmes : (A) un biais de représentation ; (B) une boucle de rétroaction entre décisions et données ; (C) un biais de labels, posés par les annotateurs.
 b) Un modèle de recrutement apprend la note de « potentiel » que des managers donnaient à leurs équipes : (A) un biais de mesure d'une feature ; (B) un biais de labels ; (C) un biais de déploiement.
 c) Un modèle de détection de fraude n'apprend que sur les dossiers contrôlés, et les contrôles visent les quartiers que le modèle signale : (A) un biais de labels ; (B) une variable de substitution ; (C) une boucle de rétroaction.
-d) Vrai ou faux : le prénom peut servir de variable de substitution au sexe ou à l'origine.
+d) Vrai ou faux : dans un CV, la liste des sports pratiqués peut servir de variable de substitution au sexe.
 e) Un capteur médical mesure moins bien un paramètre chez certains patients, et cette mesure est une feature du modèle : (A) un biais de mesure ; (B) un biais de déploiement ; (C) une boucle de rétroaction.
 
 ### B6.Q11 — Parité démographique, égalité des chances, calibration : peut-on tout avoir ? 🧠 ★★ ⏱️ 3 min
@@ -125,7 +125,7 @@ e) Une banque accorde des prêts ; le positif est « rembourserait ». Pour les 
 *Fiche §206.11 · parcours R*
 
 a) Une banque note la solvabilité des particuliers qui demandent un prêt : (A) risque minimal ; (B) haut risque (annexe III) ; (C) pratique interdite (art. 5).
-b) Une banque détecte les paiements frauduleux par carte : (A) hors du point 5 b) de l'annexe III, qui excepte la fraude ; (B) haut risque au titre du point 5 b) ; (C) pratique interdite.
+b) Une banque détecte les paiements frauduleux par carte : (A) hors du point 5 b) de l'annexe III ; (B) haut risque au titre du point 5 b) de l'annexe III ; (C) pratique interdite (art. 5).
 c) Une autorité publique note les citoyens d'après leurs comportements sociaux, et la note conditionne l'accès à des services : (A) risque minimal ; (B) transparence (art. 50) ; (C) pratique interdite (art. 5).
 d) Vrai ou faux : depuis le règlement 2026/1744, les obligations des systèmes à haut risque de l'annexe III s'appliquent dès le 2 août 2026.
 e) Pour un scoring de crédit, l'analyse d'impact sur les droits fondamentaux (art. 27) revient : (A) à l'entreprise qui a développé le système (le fournisseur) ; (B) à la banque qui l'utilise (le déployeur) ; (C) à la personne notée.
@@ -139,8 +139,8 @@ f) Vrai ou faux : le point 5 b) vise aussi la notation de crédit des entreprise
 *Ch. 21 (maximisation d'activation, FGSM) · fiche §206.5, §206.6 · parcours R*
 
 a) Une image de trois pixels $\mathbf{x} = (0{,}40 ;\ 0{,}98 ;\ 0{,}10)$, dans $[0, 1]$, et le gradient de la loss $\nabla_{\mathbf{x}} L = (-0{,}7 ;\ 0{,}2 ;\ 0)$. Donne l'image attaquée par FGSM avec $\varepsilon = 0{,}03$, pixels ramenés dans $[0, 1]$, sous la forme d'une liste de trois nombres à 2 décimales.
-b) Vrai ou faux : FGSM et la carte de saillance dérivent toutes deux une quantité du réseau par rapport aux pixels de l'image.
-c) La maximisation d'activation modifie, pas à pas : (A) les poids du réseau ; (B) les pixels d'une image de départ ; (C) les labels.
+b) Vrai ou faux : la passe arrière de FGSM (ch. 21) donne une carte de saillance si l'on y dérive le score de la classe au lieu de la loss, et si l'on garde la valeur absolue du gradient au lieu de son signe.
+c) La maximisation d'activation modifie, pas à pas : (A) les poids du réseau, par descente de gradient ; (B) les pixels d'une image ; (C) les labels des images d'entraînement.
 d) Un score linéaire $\mathbf{w}^\top\mathbf{x}$ sur 3 072 pixels, avec $\lvert w_j \rvert = 0{,}01$ pour tous. De combien la perturbation $\varepsilon\,\operatorname{sign}(\mathbf{w})$, avec $\varepsilon = 0{,}01$, change-t-elle le score, à 2 décimales ?
 e) Vrai ou faux : la montée de gradient qui visualise un filtre part d'un bruit et cherche un minimum de l'activation.
 
@@ -149,7 +149,7 @@ e) Vrai ou faux : la montée de gradient qui visualise un filtre part d'un bruit
 
 Une forêt profonde a pour features l'identifiant de chaque ligne (une valeur différente par ligne) et des mesures utiles.
 
-a) L'importance MDI (`feature_importances_`) de l'identifiant est : (A) parmi les plus grandes ; (B) proche de 0 ; (C) négative.
+a) L'importance MDI (`feature_importances_`) de l'identifiant est : (A) parmi les plus grandes ; (B) proche de 0, faute d'information utile ; (C) négative, parce qu'elle gêne l'apprentissage.
 b) Vrai ou faux : un `feature_importances_` élevé peut venir de ce que la forêt a appris par cœur les exemples d'entraînement.
 c) Que vaut la somme des `feature_importances_` d'une forêt de scikit-learn ?
 d) L'importance par permutation de l'identifiant, sur la validation, est : (A) la plus grande ; (B) proche de 0 ; (C) négative et grande.
@@ -186,11 +186,11 @@ e) $\phi_1$, à 1 décimale.
 f) $\phi_2$.
 g) $\phi_3$, à 1 décimale.
 h) Vrai ou faux : l'écart du terme d'interaction $x_1x_3$ à sa moyenne sur le fond est partagé à parts égales entre les features 1 et 3.
-i) Combien d'évaluations de $f$ (une ligne = une évaluation) faut-il pour calculer ces trois valeurs de Shapley exactement, si chaque $v(S)$ n'est calculé qu'une fois ?
+i) Combien d'évaluations de $f$ (une ligne = une évaluation) faut-il pour calculer ces trois valeurs de Shapley exactement, si chaque $v(S)$ n'est calculé qu'une fois, sur les deux lignes du fond, la coalition pleine comprise ?
 j) On remplace le fond par **une seule ligne**, sa ligne moyenne $(1, 2, 1)$. Que vaut alors $\phi_1$ ?
 k) Avec ta librairie, `phi, base = shapley_values(f, [2, 1, 3], [[0, 2, 0], [2, 2, 2]])`. Que contient `phi[2]` ? (A) $\phi_2$, la valeur de la deuxième feature ; (B) $\phi_3$ ; (C) la valeur de base.
 
-Dans ta copie : dresse le tableau des huit coalitions (masque, $v(S)$) et, pour chaque feature, ses quatre contributions marginales avec leurs poids. Vérifie l'efficacité. Pourquoi $\phi_2$ ne dépend-il pas de la coalition ? Compare a) à $f(1, 2, 1)$ : la valeur de base est-elle la prédiction de la ligne moyenne ? Quelle propriété du fond explique le partage de h) ?
+Dans ta copie : dresse le tableau des huit coalitions (masque, $v(S)$) et, pour chaque feature, ses quatre contributions marginales avec leurs poids. Vérifie l'efficacité. Pourquoi $\phi_2$ ne dépend-il pas de la coalition ? Compare a) à $f(1, 2, 1)$ : la valeur de base est-elle la prédiction de la ligne moyenne ? Pourquoi le partage de h) n'est-il pas égal ? Fais le calcul ligne du fond par ligne du fond (les valeurs de Shapley d'un fond de deux lignes sont la moyenne de celles de chaque ligne, puisque $v(S)$ est une moyenne), et compare $x_1 - b_1$ et $x_3 - b_3$.
 
 ### Ex B6.2 — Modèle linéaire et fond indépendant : φ_i = w_i (x_i − E[x_i]) ∂ ★★ ⏱️ 20 min
 **Objectif :** démontrer la formule des valeurs de Shapley d'un modèle linéaire, puis voir ce qu'elle devient avec une interaction.
@@ -205,7 +205,7 @@ Un modèle linéaire $f(\mathbf{x}) = w_0 + \sum_{j=1}^{M} w_j x_j$ et un fond d
 5. **Application.** $w_0 = 1$, $\mathbf{w} = (0{,}5 ;\ -2 ;\ 0)$, client $\mathbf{x} = (4, 1, 7)$, fond de trois lignes $(2, 0, 1)$, $(4, 1, 5)$, $(0, 2, 3)$. Calcule les trois $\phi_i$, la valeur de base et $f(\mathbf{x})$. Quelles features reçoivent 0, et pour deux raisons différentes ?
 6. **Un fond corrélé.** On remplace le fond par trois lignes de mêmes moyennes, mais où $x_1$ et $x_2$ montent ensemble. Les $\phi_i$ changent-ils ? Qu'est-ce que le Shapley interventionnel ignore du fond ?
 7. **La régression logistique.** $f$ rend $\sigma(w_0 + \mathbf{w}^\top\mathbf{x})$. Sur quelle sortie la formule de 3 reste-t-elle vraie : la probabilité ou le logit ? Pourquoi pas l'autre ?
-8. **Une interaction.** Le modèle $f(\mathbf{x}) = x_1 x_2$ et un fond d'**une** ligne $\mathbf{b}$. Montre que $\phi_1 = \frac{1}{2}(x_1 - b_1)(x_2 + b_2)$ et $\phi_2 = \frac{1}{2}(x_2 - b_2)(x_1 + b_1)$, et vérifie l'efficacité. Retrouve le second exemple de la docstring de `shapley_values` (client $(1, 1)$, fond $(0, 0)$), puis la part de l'interaction $x_1x_3$ dans ✏️ B6.1 j).
+8. **Une interaction.** Le modèle $f(\mathbf{x}) = x_1 x_2$ et un fond d'**une** ligne $\mathbf{b}$. Montre que $\phi_1 = \frac{1}{2}(x_1 - b_1)(x_2 + b_2)$ et $\phi_2 = \frac{1}{2}(x_2 - b_2)(x_1 + b_1)$, et vérifie l'efficacité. Retrouve le second exemple de la docstring de `shapley_values` (client $(1, 1)$, fond $(0, 0)$), puis la part de l'interaction $x_1x_3$ dans ✏️ B6.1 j) (la feature 2 n'entre pas dans ce terme : un joueur nul ajouté au jeu ne change pas les parts des autres, ce que tu peux vérifier sur les huit coalitions).
 
 ### Ex B6.3 — Gradients intégrés à la main sur f(x) = x₁² + 3x₂ et vérification de la complétude ✏️ ★★ ⏱️ 20 min
 **Objectif :** calculer à la main gradient, gradient × entrée et gradients intégrés, voir l'effet de la règle d'intégration et de la ligne de référence, et traduire un calcul en appel de ta librairie.
@@ -220,7 +220,7 @@ d) Les gradients intégrés exacts (l'intégrale calculée exactement), une list
 e) $\operatorname{IG}_1$ par la règle 'left' avec $n = 5$, à 1 décimale.
 f) $\operatorname{IG}_1$ par la règle 'right' avec $n = 5$, à 1 décimale.
 g) $\operatorname{IG}_1$ par la règle 'trapezoid' avec $n = 5$, à 1 décimale.
-h) Avec la règle 'left', le plus petit $n$ pour lequel l'erreur de complétude, $\lvert f(\mathbf{x}) - f(\mathbf{x}') - (\operatorname{IG}_1 + \operatorname{IG}_2) \rvert$, vaut au plus 0,01.
+h) Avec la règle 'left', le plus petit $n$ pour lequel l'erreur de complétude, $\lvert f(\mathbf{x}) - f(\mathbf{x}') - (\operatorname{IG}_1 + \operatorname{IG}_2) \rvert$, vaut au plus 0,03.
 i) Avec la référence $\mathbf{x}' = (1, 0)$ : $\operatorname{IG}_1$ exact.
 j) Avec la référence $\mathbf{x}' = (1, 0)$ : la somme des deux attributions exactes.
 k) captum compte des **points** : son `riemann_trapezoid` avec 6 points, sur ce modèle et avec la référence $\mathbf{0}$, donne quelle valeur de $\operatorname{IG}_1$, à 2 décimales ?
@@ -288,7 +288,7 @@ Dans un groupe de $n$ personnes, de taux de base $p$ (avec $0 < p < 1$), un clas
 4. **Par Bayes.** Écris $\operatorname{PPV} = P(y = 1 \mid \hat{y} = 1)$ par la règle de Bayes, avec $p$, le TPR et le FPR, puis retrouve la relation en isolant le FPR.
 5. **Contrôle.** Vérifie la relation sur les deux groupes de ✏️ B6.5 : calcule le membre de droite avec leurs $p$, PPV et FNR, et compare au FPR de chaque groupe.
 6. **Parité prédictive et même FNR.** Deux groupes ont la même PPV et le même FNR. Montre que le rapport de leurs FPR vaut le rapport de leurs **cotes** $\frac{p}{1 - p}$. Application : PPV = 0,8, FNR = 0,3 dans les deux groupes, taux de base 0,24 et 0,5 (ceux de ✏️ B6.5). Calcule les deux FPR.
-7. **Equalized odds.** Deux groupes ont maintenant le même FPR et le même FNR. Écris la PPV en fonction de $p$, du FPR et du FNR, et montre qu'elle croît avec $p$. Application : FPR = 0,1, FNR = 0,2, taux de base 0,24 et 0,5.
+7. **Equalized odds.** Deux groupes ont maintenant le même FPR et le même FNR. Écris la PPV en fonction de $p$, du FPR et du FNR, et montre qu'elle croît avec $p$ (on suppose FPR > 0). Application : FPR = 0,1, FNR = 0,2, taux de base 0,24 et 0,5.
 8. **Les issues.** Pour quels taux de base, ou quel classifieur, les trois égalités (PPV, FNR, FPR) peuvent-elles tenir ensemble ? Que devient la relation de 3 pour un classifieur parfait ?
 9. **COMPAS.** Que mesurait l'éditeur du score, que mesuraient les journalistes (206.8), et pourquoi la relation de 3 dit-elle qu'ils ne pouvaient pas être d'accord ? Qu'ajoute le résultat de Kleinberg et coll. (206.9), qui porte sur des scores et non sur des décisions ?
 
@@ -300,7 +300,7 @@ Hypothèses (des ordres de grandeur) : un gradient boosting de $T = 100$ arbres 
 
 1. **Shapley exact.** Pour $M = 10$, 20 et 50 : combien de prédictions par ligne expliquée, et combien de temps ? Exprime le cas $M = 50$ dans une unité parlante. Et pour expliquer 1 000 lignes (un beeswarm) ?
 2. **Le seuil.** À partir de quel $M$ le calcul exact d'une seule ligne dépasse-t-il une minute ?
-3. **KernelSHAP.** Pour les trois valeurs de $M$ : combien de coalitions, de prédictions, de temps par ligne ? Quelle part des $2^M$ coalitions voit-il pour $M = 20$ et $M = 50$ ? Qu'en déduis-tu de la précision de ses valeurs ? Pour $M = 10$, que fait shap, et lequel des deux calculs est le moins cher ?
+3. **KernelSHAP.** Pour les trois valeurs de $M$ : combien de coalitions, de prédictions, de temps par ligne ? Quelle part des $2^M$ coalitions voit-il pour $M = 20$ et $M = 50$ ? Qu'en déduis-tu de la précision de ses valeurs ? Pour $M = 10$, combien de coalitions KernelSHAP évalue-t-il ? Compare son coût à celui du calcul exact : lequel choisirais-tu, et pourquoi ?
 4. **TreeSHAP.** Combien de pas élémentaires par ligne, et de temps ? Où $M$ apparaît-il dans ce coût ? Combien de temps pour 1 000 lignes ?
 5. **Le piège des permutations.** Une autre écriture de Shapley fait la moyenne sur les $M!$ ordres d'arrivée. Combien d'ordres pour $M = 10$ et $M = 12$ ? Si l'on range chaque ordre dans un tuple Python d'environ 140 octets, combien de mémoire pour $M = 12$ ? Compare à la mémoire d'une session Colab gratuite (une douzaine de Go).
 6. **Le notebook.** 🔨 B6.14 explique 20 lignes de California avec 8 features et un fond de 50 lignes. Combien de prédictions, et de temps ?

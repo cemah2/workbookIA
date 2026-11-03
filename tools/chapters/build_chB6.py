@@ -106,7 +106,7 @@ GXI_B63 = [float(g) for g in GRAD_B63(X_B63) * X_B63]
 GAP_B63 = float(F_B63(X_B63) - F_B63(np.zeros(2)))
 IG_EXACT_B63 = [float(X_B63[0] ** 2), float(3 * X_B63[1])]                 # x1 * integral of 2 a x1 = x1**2 ; 3 x2
 IG1_LEFT_B63, IG1_RIGHT_B63, IG1_TRAP_B63 = (float(ig_rule_b63(5, m)[0]) for m in ("left", "right", "trapezoid"))
-N_LEFT_B63 = math.ceil(round(X_B63[0] ** 2 / 0.01, 9))                     # the left error of IG_1 is x1**2 / n
+N_LEFT_B63 = math.ceil(round(X_B63[0] ** 2 / 0.03, 9))                     # the left error of IG_1 is x1**2 / n
 REF2_B63 = (1.0, 0.0)
 IG1_REF2_B63 = float(X_B63[0] ** 2 - REF2_B63[0] ** 2)                     # (x1 - x1') (x1 + x1')
 SUM_REF2_B63 = float(F_B63(X_B63) - F_B63(np.array(REF2_B63)))
@@ -212,8 +212,8 @@ ig = lambda **kw: E.integrated_gradients(GRAD_B63, X_B63, **kw)
 for method, answer in (("left", IG1_LEFT_B63), ("right", IG1_RIGHT_B63), ("trapezoid", IG1_TRAP_B63)):
     assert math.isclose(ig(n_steps=5, method=method)[0], answer)
 assert np.allclose(ig(n_steps=5, method="trapezoid"), IG_EXACT_B63)       # exact: the gradient is linear on the path
-assert abs(GAP_B63 - ig(n_steps=N_LEFT_B63, method="left").sum()) <= 0.01 + 1e-12
-assert abs(GAP_B63 - ig(n_steps=N_LEFT_B63 - 1, method="left").sum()) > 0.01
+assert abs(GAP_B63 - ig(n_steps=N_LEFT_B63, method="left").sum()) <= 0.03 - 1e-4      # far from the edge (4/134)
+assert abs(GAP_B63 - ig(n_steps=N_LEFT_B63 - 1, method="left").sum()) > 0.03 + 1e-5
 assert np.allclose(ig(baseline=list(REF2_B63), n_steps=3), [IG1_REF2_B63, IG_EXACT_B63[1]])
 assert math.isclose(ig(baseline=list(REF2_B63), n_steps=3).sum(), SUM_REF2_B63, abs_tol=1e-12)
 alphas = np.linspace(0, 1, 6)                                             # captum's riemann_trapezoid, 6 points
@@ -423,7 +423,7 @@ PAPER = [
                                            "C": "le modèle sert-il une autre population que celle de son évaluation ? Relis 206.8"})),
         ("c", LETTER, '"C"', letters("C", {"A": "qui choisit les dossiers contrôlés ? Relis les puces de « D'où vient un biais »",
                                            "B": "une colonne porte-t-elle un attribut sensible à sa place ? Relis la question : qui choisit les contrôles ?"})),
-        ("d", TF, "True", r'''mistakes={"relis la puce sur les variables de substitution (§206.8)": False}'''),
+        ("d", TF, "True", r'''mistakes={"une colonne qui n'est pas le sexe peut-elle en porter une part de l'information ? Relis la puce sur les variables de substitution (§206.8)": False}'''),
         ("e", LETTER, '"A"', letters("A", {"B": "le modèle sert-il une autre population ? Relis les puces de 206.8 : qu'est-ce qui est mal mesuré ?",
                                            "C": "les décisions du modèle changent-elles le capteur ? Relis les puces de 206.8"})),
     ]),
@@ -455,7 +455,7 @@ PAPER = [
           "vérifie le signe : FGSM monte la loss, x + ε sign(∇L)": [0.43, 0.95, 0.1],
           "FGSM ajoute ε fois le signe du gradient, pas ε fois le gradient": [0.38, 0.99, 0.1],
           "le signe de 0 vaut 0 : le troisième pixel ne bouge pas": [0.37, 1.0, 0.13]}'''),
-        ("b", TF, "True", r'''mistakes={"relis le début de 206.5 et la section FGSM du ch. 21 : par rapport à quoi dérive-t-on ?": False}'''),
+        ("b", TF, "True", r'''mistakes={"relis le début de 206.5 et la section FGSM du ch. 21 : les deux calculs dérivent-ils par rapport à la même chose, avec la même passe arrière ?": False}'''),
         ("c", LETTER, '"B"', letters("B", {"A": "relis le rappel maths « le gradient par rapport à l'entrée » du ch. 21 : les poids bougent-ils ?",
                                            "C": "la maximisation d'activation a-t-elle besoin de labels ? Relis le ch. 21"})),
         ("d", DEC2, "R1D", r'''decimals=2, mistakes={"relis la formule ε Σ|w_j| du ch. 21 : il manque un facteur": 0.01 * 0.01,
@@ -508,7 +508,8 @@ PAPER = [
         ("h", TF, "False", r'''mistakes={"calcule ce que l'interaction apporte à φ₁ (retire le terme 2(x₁ − moyenne)) et compare à φ₃": True}'''),
         ("i", WHOLE, "EVALS_B61", r'''mistakes={"chaque v(S) demande une évaluation par ligne du fond : il y en a deux": 8,
           "chaque v(S) se calcule une fois et sert aux trois features": 3 * EVALS_B61,
-          "compte toutes les coalitions, la vide et la pleine comprises": 6 * 2}'''),
+          "compte toutes les coalitions, la vide et la pleine comprises": 6 * 2,
+          "la coalition pleine se calcule aussi sur les deux lignes du fond, comme les autres": EVALS_B61 - 1}'''),
         ("j", DEC1, "PHI_MEAN_B61[0]", r'''decimals=1, mistakes={"relis la question : le fond n'a plus qu'une ligne, recalcule les v(S)": 3.5,
           "tu n'as gardé que le terme 2x₁ : la feature 1 entre aussi dans l'interaction": 2.0}'''),
         ("k", LETTER, '"B"', letters("B", {"A": "relis l'encadré 📐 de la fiche : la feature 1 est la colonne 0",
@@ -535,9 +536,9 @@ PAPER = [
         ("g", DEC1, "IG1_TRAP_B63", r'''decimals=1, mistakes={"relis la question : la règle des trapèzes, dont les deux extrémités comptent pour moitié": 4.8,
           "multiplie la somme pondérée par x₁ − x′₁": 2.0,
           "les poids valent 1/n, divisés par deux aux extrémités : relis l'énoncé": 2 * (0 + 0.8 + 1.6 + 2.4 + 3.2 + 2) / 6}'''),
-        ("h", WHOLE, "N_LEFT_B63", r'''mistakes={"« au plus 0,01 » : l'égalité est permise": N_LEFT_B63 + 1,
-          "l'erreur de la règle de gauche sur IG₁ dépend de x₁² : recalcule-la": 100,
-          "écris l'erreur de la règle de gauche en fonction de n : elle vaut x₁²/n": 200},
+        ("h", WHOLE, "N_LEFT_B63", r'''mistakes={"avec ce n, l'erreur dépasse encore un peu 0,03 : prends le plus petit entier qui convient": N_LEFT_B63 - 1,
+          "l'erreur de la règle de gauche sur IG₁ dépend de x₁² : recalcule-la": 34,
+          "recalcule l'erreur de la règle de gauche en fonction de n : où intervient x₁ ?": 67},
           fractional="le nombre d'intervalles est entier : prends le plus petit n qui convient"'''),
         ("i", WHOLE, "round(IG1_REF2_B63)", r'''mistakes={"relis la question : la référence a changé ; un gradient pris en x seul ne suffit pas non plus": 4,
           "le chemin part de x′ : son point est x′ + α(x − x′)": 2}'''),
