@@ -1162,6 +1162,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | supervision humaine | human oversight | contrôle d'un système d'IA par une personne compétente, qui a le temps et l'autorité de ne pas le suivre (AI Act, art. 14) | B6 |
 | analyse d'impact sur les droits fondamentaux (FRIA) | fundamental rights impact assessment | analyse qu'un déployeur de certains systèmes à haut risque (dont le scoring de crédit) mène avant le déploiement (AI Act, art. 27) | B6 |
 | déployeur | deployer | dans l'AI Act, celui qui utilise un système d'IA sous sa propre autorité (la banque), par opposition au fournisseur qui le développe | B6 |
+| corrélation de rangs (de Spearman) | Spearman rank correlation | corrélation de Pearson des **rangs** de deux séries : 1 quand elles rangent les éléments (les pixels de deux cartes) dans le même ordre, quelle que soit l'échelle ; mesure du test de santé (🔬 B6.22) | B6 |
+| bootstrap stratifié (par groupe) | stratified bootstrap | rééchantillonnage avec remise **dans chaque groupe**, qui garde les effectifs des groupes : l'intervalle d'un taux de groupe ou d'un écart entre groupes (📦 B6.24) | B6 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

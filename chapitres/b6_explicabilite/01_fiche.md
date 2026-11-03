@@ -581,7 +581,7 @@ puis entraîner avec `sample_weight`. Sur les tranches d'âge de 206.9, les posi
 
 **Pendant l'entraînement** : une **contrainte** ou une pénalité d'équité. La méthode des réductions d'A. Agarwal et coll. (2018), `ExponentiatedGradient` dans fairlearn, réentraîne des classifieurs sur des données repondérées et les mélange pour respecter un écart maximal donné.
 
-**Après l'entraînement** : un **seuil** de décision par groupe. Hardt et ses coauteurs obtiennent ainsi l'égalité des chances ou l'equalized odds à partir de n'importe quel score, au prix d'un peu de hasard si nécessaire (`ThresholdOptimizer`). Sur des scores synthétiques à deux groupes, le seuil commun 0,5 donne des TPR de 0,856 et 0,912 et des FPR de 0,158 et 0,256 ; un seuil par groupe choisi pour un TPR de 0,80 (le quantile 0,2 des scores des positifs, sur la validation) donne des TPR de 0,799 et 0,800 et des FPR de 0,113 et 0,126.
+**Après l'entraînement** : un **seuil** de décision par groupe. Hardt et ses coauteurs obtiennent ainsi l'égalité des chances ou l'equalized odds à partir de n'importe quel score, au prix d'un peu de hasard si nécessaire (`ThresholdOptimizer`). Par exemple, sur des scores synthétiques à deux groupes (un exemple construit pour l'illustration), le seuil commun 0,5 donne des TPR de 0,856 et 0,912 et des FPR de 0,158 et 0,256 ; un seuil par groupe choisi pour un TPR de 0,80 (le quantile 0,2 des scores des positifs, sur la validation) donne des TPR de 0,799 et 0,800 et des FPR de 0,113 et 0,126.
 
 ```python
 thresholds = {g: np.quantile(scores_val[(groups_val == g) & (y_val == 1)], 0.2) for g in np.unique(groups_val)}

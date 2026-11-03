@@ -58853,7 +58853,7 @@
       "hash": "f1abfe66130c48b241b34824e9f5785e22c2b1872dd8e26618ebc01f066951cb",
       "kind": "str",
       "mistakes": {
-        "25de577cdac6b172920eec5207ec0faec9dec3617b9f68a9d4bce9ae8fbb0681": "« A » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
+        "25de577cdac6b172920eec5207ec0faec9dec3617b9f68a9d4bce9ae8fbb0681": "« A » : relis la question : on cherche parmi les cinq autres tranches que celle de a)",
         "518545c0d2c2e104939e4fb8192add1519284162901f6e00470be4c883dce2cb": "« E » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
         "60387b94401d48b107fd848461d8df0fae596ccd2aa6e569b6233130d1dc795b": "« C » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",
         "a99696558d6cebddf269d58c524153c4df2bc72548ace0336b3bdb10ea508b95": "« D » : compare la largeur (borne haute moins borne basse) des intervalles du TPR des cinq autres tranches",

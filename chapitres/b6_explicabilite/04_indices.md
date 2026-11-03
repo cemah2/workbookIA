@@ -848,4 +848,270 @@ def activations_and_gradients_20(model, layer, images, target):
 
 </details>
 
-*Les indices de B6.21 à B6.29 seront ajoutés à la prochaine session de génération, avec la fin du notebook.*
+### Ex B6.21 — Grad-CAM à l'envers : mauvaise couche, mauvaise classe, ReLU oubliée, carte mal alignée 🐛
+
+<details><summary>Indice 1</summary>
+
+Lance d'abord l'expérience telle quelle et compare tes cartes à la référence : laquelle est fine et éparpillée, laquelle prend des valeurs négatives, laquelle semble glisser vers un bord ? Puis lis les diagnostics dans l'ordre : chacun regarde un seul morceau (la couche, le score, la combinaison, l'agrandissement), et le premier en échec dit où chercher.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Point 1 : à 96 pixels, quelle sortie de ResNet-18 fait 3 × 3 (🧠 Q8, B6.20) ? Une couche plus précoce voit des bords et des textures.
+- Point 2 : `score_21` reçoit `target` : s'en sert-il ? Le gradient doit être celui du logit de la classe **étudiée**, pas de la prédite.
+- Point 3 : relis la formule de 206.6 : à quoi la ReLU s'applique-t-elle, et combien de fois ?
+- Point 4 : `wbx.model_input` agrandit les images par `wb.transfer.to_input`, en bilinéaire ; avec quelle valeur de `align_corners` ? Les deux conventions ne placent pas les centres des cases au même endroit (✏️ B6.4 j).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Les quatre lignes fautives : l'affectation de `LAYER_21`, le `return` de `score_21`, la ligne `cam = …` de `combine_21`, et l'appel à `F.interpolate` de `upsample_21`. Pour le score, par exemple :
+
+```python
+def score_21(logits, target):
+    return logits.gather(1, target.reshape(-1, 1)).sum()   # the logit of target[n] for each image, summed
+```
+
+</details>
+
+### Ex B6.22 — Test de santé d'Adebayo : randomiser les poids couche par couche, la carte change-t-elle ? 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Les tests de santé » (206.7) : on compare la carte du modèle entraîné à celle d'une **copie** dont certains poids sont tirés à nouveau ; en cascade, on randomise de plus en plus de parties en partant de la sortie ; une partie à la fois, une seule. La ressemblance se mesure par la corrélation de rangs, image par image.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `randomize_22` : `copy.deepcopy(model)` ; dans `with torch.random.fork_rng():`, `torch.manual_seed(seed)`, puis pour chaque nom, `out.get_submodule(name).modules()`, et `reset_parameters()` sur chaque `nn.Conv2d` et chaque `nn.Linear` (pas les batchnorms) ; enfin `.eval().requires_grad_(False)`.
+- `sanity_22` : calcule `explain(model)` **une** fois ; pour chaque $k$, les parties (`names[:k + 1]` ou `[names[k]]`), la copie, ses cartes ; puis, image par image, les deux cartes aplaties (`reshape(len(maps), -1)`), en valeur absolue si `absolute`, et `scipy.stats.spearmanr(u, v).statistic` ; `nan` si l'une est constante (`np.ptp(u) == 0`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def randomize_22(model, names, seed=0):
+    out = copy.deepcopy(model)
+    with torch.random.fork_rng():
+        torch.manual_seed(seed)
+        ...                                          # each Conv2d and Linear inside each named part: reset_parameters()
+    return out.eval().requires_grad_(False)
+
+
+def sanity_22(model, explain, names, mode="cascade", seed=0, absolute=False):
+    before = ...                                     # the maps of the trained model, once, as float arrays
+    rows = []
+    for k in range(len(names)):
+        parts = names[:k + 1] if mode == "cascade" else [names[k]]
+        after = ...                                  # the maps of randomize_22(model, parts, seed)
+        rows.append(...)                             # one Spearman correlation per image (nan for a constant map)
+    return np.array(rows)
+```
+
+</details>
+
+### Ex B6.23 — group_rates, demographic_parity_difference et equalized_odds_difference 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Des taux par groupe » (206.9) et refais de tête ✏️ B6.5 : chaque taux est un rapport de deux cases de la matrice de confusion **du groupe**. Ta `confusion_matrix` du ch. 3 fait la matrice ; `np.unique` donne les groupes dans l'ordre voulu.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Convertis en tableaux, vérifie les longueurs, puis que labels et prédictions sont dans $\{0, 1\}$ (`np.isin`), avant de les passer en entiers.
+- Pour chaque groupe (`np.unique`) : le masque du groupe, `confusion_matrix(y[m], p[m], labels=[0, 1])`, dont les lignes sont la vérité : `(tn, fp), (fn, tp)` ; un petit `ratio(a, b)` qui rend `nan` quand `b` vaut 0.
+- Les deux écarts : refuse moins de deux groupes ; l'equalized odds vérifie qu'aucun TPR ni FPR n'est `nan`, puis prend le plus grand de `max − min` des TPR et de `max − min` des FPR.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def group_rates(y_true, y_pred, groups):
+    yt, yp, g = ...                                  # arrays, checked: same length, only 0 and 1
+    rates = {}
+    for key in np.unique(g):
+        m = g == key
+        (tn, fp), (fn, tp) = np.asarray(confusion_matrix(yt[m], yp[m], labels=[0, 1])).tolist()
+        n = tn + fp + fn + tp
+        rates[key] = {"n": int(n), "tpr": ratio(tp, tp + fn), ...}   # the seven keys
+    return rates
+```
+
+</details>
+
+### Ex B6.24 — Audit d'équité sur Adult : indicateurs par sexe et par âge, intervalles de confiance bootstrap 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « Des écarts avec leurs intervalles » (206.9) et ta `bootstrap_ci` du ch. 2 (Ex 2.22) : elle tire les **lignes** de `x` avec remise, donc un tableau `(n, 2)` garde chaque label avec sa prédiction. Un intervalle de groupe se tire dans les lignes du groupe ; celui d'un écart, dans chaque groupe à la fois.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `rate_ci_24` : `np.column_stack([y, p])` ; une statistique qui calcule le taux demandé sur un échantillon `s` (`s[:, 0]` les labels, `s[:, 1]` les décisions ; la sélection sur toutes les lignes, le TPR sur les `y = 1`, le FPR sur les `y = 0`, `nan` sans dénominateur) ; `mylearn.stats.bootstrap_ci(pairs, stat, n_boot=n_boot, rng=rng)`.
+- `audit_24` : ta `group_rates` pour les taux ; un seul `rng` ; pour chaque groupe et chaque taux, `rate_ci_24` sur les lignes du groupe ; un `pd.DataFrame.from_dict(rows, orient="index")[COLUMNS_24]`, l'index nommé `"group"`.
+- `gap_ci_24` : les positions de chaque groupe (`np.flatnonzero(g == key)`) ; à chaque tirage, pour chaque groupe, `m[rng.integers(0, len(m), size=len(m))]`, concaténées ; l'écart recalculé sur ces lignes ; à la fin, `np.percentile(draws, [2.5, 97.5])`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def gap_ci_24(y_true, y_pred, groups, kind, n_boot=500, seed=0):
+    y, p, g = ...                                    # int arrays and the groups
+    rng = np.random.default_rng(seed)
+    members = [np.flatnonzero(g == key) for key in np.unique(g)]
+    draws = []
+    for _ in range(n_boot):
+        idx = np.concatenate([m[rng.integers(0, len(m), size=len(m))] for m in members])   # within each group
+        draws.append(...)                            # the gap `kind` on y[idx], p[idx], g[idx]
+    low, high = np.percentile(draws, [2.5, 97.5])
+    return ..., float(low), float(high)
+```
+
+</details>
+
+### Ex B6.25 — Lire un tableau d'audit : où est l'écart, est-il significatif, que conclure ? 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « Des écarts avec leurs intervalles » (206.9) : un taux se lit avec son effectif (ici, le nombre de **positifs** pour un TPR) et son intervalle ; un écart est significatif au seuil de 5 % quand l'intervalle **de l'écart** exclut 0, pas quand deux intervalles se séparent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- a) à c) : la colonne du TPR, ses bornes et la colonne des positifs, ligne par ligne.
+- d) : la ligne « écart de TPR », colonne « par sexe » : où est 0 par rapport aux deux bornes ?
+- e) : deux intervalles se chevauchent quand la borne haute de chacun dépasse la borne basse de l'autre.
+- f) : confronte chaque affirmation au tableau, une par une : ce qu'elle dit des intervalles, des taux de base, des effectifs.
+
+</details>
+<details><summary>Indice 3</summary>
+
+- a) La plus petite valeur de la colonne du TPR, parmi les six tranches : 0,417, celle des moins de 25 ans, donc `"A"`.
+- b) Sur la même ligne, la colonne « positifs ».
+- c) Calcule borne haute moins borne basse pour chacune des cinq autres tranches, et prends la plus grande.
+- d) Lis l'intervalle « écart de TPR » par sexe et place 0 par rapport à ses bornes.
+- e) Compare la borne haute du TPR des femmes à la borne basse de celui des hommes.
+- f) Pour (A), compare les intervalles du TPR des 25-34 et des 45-54 ans ; pour (B), compare les taux de sélection aux taux de base ; pour (D), lis l'intervalle des écarts par sexe ; pour (C), vérifie chacune de ses trois parties.
+
+</details>
+
+### Ex B6.26 — Prédire : retirer la variable « sexe » rend-il le modèle équitable ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « L'équité par aveuglement » (206.8). Une colonne porte l'information du sexe si l'on peut **prédire** le sexe à partir d'elle : parcours les 14 colonnes d'*Adult* (data card) et demande-toi lesquelles décrivent presque le sexe d'une personne, et lesquelles le suggèrent seulement.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- a) et b) : une ROC-AUC de 0,5 veut dire « aucune information », 1 une séparation parfaite ; pour chaque colonne qui reste, demande-toi quelle part des personnes elle classe presque sûrement, et quels indices restent sans `relationship` ni `marital-status` (métier, heures travaillées, revenus du capital).
+- c) : les écarts de TPR et de FPR viennent-ils de la colonne `sex` elle-même, ou de ce que le modèle sait par ailleurs des personnes ? Un modèle qui retrouve le sexe par d'autres colonnes fait-il d'autres erreurs ?
+- d) : relis les taux de base par sexe de B6.24 : un modèle qui sélectionne selon ses estimations de revenu peut-il sélectionner les deux sexes au même taux ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris chaque prédiction avec sa raison, en une ligne (« telle colonne dit presque le sexe parce que… », « l'écart vient surtout de… ») : l'expérience te dira laquelle de tes raisons tient. Une prédiction ratée dont tu notes la raison t'apprend plus qu'une prédiction juste par hasard.
+
+</details>
+
+### Ex B6.27 — Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis « Trois moments pour agir » (206.10) : la repondération agit sur les données (avant l'entraînement), les seuils par groupe sur les décisions (après). La fiche donne la formule des poids et deux lignes de code pour les seuils.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `reweigh_27` : pour chaque couple (groupe, label) présent, la part du groupe, la part du label et la part du couple (`np.mean` de masques booléens) ; chaque exemple reçoit le poids de son couple.
+- `tpr_thresholds_27` : pour chaque groupe, les scores de ses positifs, et leur quantile `1 - target_tpr` : une part `target_tpr` des positifs est au-dessus.
+- `decide_27` : le seuil de chaque exemple (`thresholds[g]` pour chaque groupe `g` du tableau), puis `scores >= seuils`, en entiers.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def reweigh_27(groups, y):
+    g, y = np.asarray(groups), np.asarray(y)
+    w = np.empty(len(y))
+    for key in np.unique(g):
+        for label in np.unique(y):
+            cell = (g == key) & (y == label)
+            ...                                      # w[cell] = P(g) P(y) / P(g, y), when the cell is not empty
+    return w
+
+
+def tpr_thresholds_27(scores, y, groups, target_tpr):
+    s, y, g = ...
+    return {key: float(np.quantile(s[(g == key) & (y == 1)], 1 - target_tpr)) for key in np.unique(g)}
+```
+
+</details>
+
+### Ex B6.28 — Fiche modèle avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu 🛠️
+
+<details><summary>Indice 1</summary>
+
+Relis « La fiche modèle » (206.11) et reprends la structure de ta fiche du ch. 23 (Ex 23.28) : les neuf rubriques de Mitchell et coll., plus explicabilité et équité. `FACTS_28` donne les chiffres ; tes mesures de B6.24, B6.26 et B6.27 donnent le fond de l'analyse.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Une f-string à triples guillemets (`CARD_28 = f"""…"""`), avec un titre `# …` puis les onze sections `## …` dans l'ordre de `REQUIRED_28`.
+- Le tableau par groupe se fabrique à partir de `FACTS_28["groupes"]` : une ligne `| groupe | n | TPR | FPR |` par groupe, les taux à 2 décimales.
+- Dans « Équité » : le critère retenu et **pourquoi** (pour cet usage), les écarts avec leurs intervalles, les corrections essayées et leur coût ; dans « Mises en garde » : ce qu'il ne faut pas faire de ce modèle.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+_rows = "\n".join(f"| {k} | {v['n']} | {v['TPR']:.2f} | {v['FPR']:.2f} |" for k, v in FACTS_28["groupes"].items())
+CARD_28 = f"""# Fiche modèle : …
+
+## Détails du modèle
+…
+
+## Analyses quantitatives
+| groupe | n | TPR | FPR |
+|---|---|---|---|
+{_rows}
+…
+"""
+```
+
+</details>
+
+### Ex B6.29 — Défi : écart d'equalized odds sous 0,07 sur Adult, en perdant moins de 2 points d'accuracy 🏆
+
+<details><summary>Indice 1</summary>
+
+Pars de la référence sans correction et de ton audit (B6.24) : l'écart d'equalized odds vient-il des TPR, des FPR, ou des deux ? Un seul seuil par sexe ne règle qu'un taux à la fois (B6.27) ; deux seuils, choisis ensemble, peuvent rapprocher les deux. Choisis-les sur la validation, jamais sur le test.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Ajuste le modèle sur l'entraînement ; calcule ses scores sur la validation.
+- Pour chaque sexe et chaque seuil d'une grille (par exemple de 0,05 à 0,95 par pas de 0,01) : son TPR, son FPR et son nombre de bonnes décisions.
+- Pour chaque couple (seuil des femmes, seuil des hommes) : ΔEO et l'accuracy de la validation ; garde le couple de meilleure accuracy parmi ceux dont ΔEO est **nettement** sous l'objectif (la validation n'est qu'un échantillon : vise plus bas que 0,07).
+- `decide` applique à chaque personne le seuil de son sexe, ligne par ligne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def method_29(X_train, y_train, X_val, y_val):
+    model = adult_pipeline().fit(X_train, y_train)
+    scores, sex = model.predict_proba(X_val)[:, 1], X_val["sex"].to_numpy()
+    grid = np.round(np.arange(0.05, 0.951, 0.01), 2)
+    ...                                              # TPR, FPR, right decisions of each sex at each threshold
+    eo = np.maximum(np.abs(tpr_f[:, None] - tpr_m[None, :]), np.abs(fpr_f[:, None] - fpr_m[None, :]))
+    ...                                              # the best accuracy among the pairs with eo <= a target
+    def decide(X):
+        ...                                          # the threshold of the sex of each person
+    return decide
+```
+
+</details>

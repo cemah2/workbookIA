@@ -464,4 +464,263 @@ Le modèle est gelé : sans une entrée qui demande son gradient, la sortie de `
 **Erreurs fréquentes** : oublier `requires_grad_` sur l'entrée d'un modèle gelé ; laisser un hook posé (chaque passe suivante le déclenche encore) ; prendre le gradient de la classe prédite quand on étudie la vraie ; agrandir la carte avec une autre convention que l'image (`align_corners=True`, ou `nearest`) ; enlever la ReLU de Grad-CAM ; viser `layer4` à 32 pixels (une carte de 1 × 1).
 **Variante** : sur les 8 bonnes prédictions, la carte de la **deuxième** classe la plus probable ressemble souvent à celle de la prédite : corrélations 0,85 (grenouille et oiseau), 0,98 (chien et chat), −0,15 (camion et avion), 0,48, 0,72, −0,06, 0,30 et 0,66 : quand deux classes partagent l'objet (deux animaux), leurs cartes se confondent ; Grad-CAM dit où se trouve ce qui fait monter un score, pas ce qui distingue deux classes.
 
-*Les solutions de B6.21 à B6.29 seront ajoutées à la prochaine session de génération, avec la fin du notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.*
+### Ex B6.21 — Grad-CAM à l'envers : mauvaise couche, mauvaise classe, ReLU oubliée, carte mal alignée 🐛
+**Réponse** : quatre lignes à corriger ; tel quel, le Grad-CAM du collègue s'écarte de la référence de 1,64 au pire, avec des valeurs de −0,99 à 1,00 :
+```python
+LAYER_21 = RESNET.layer4                                            # 1. the last block (3 x 3), not layer2 (12 x 12)
+
+
+def score_21(logits, target):
+    return logits.gather(1, target.reshape(-1, 1)).sum()            # 2. the class studied, not logits.argmax(1)
+
+
+def combine_21(A, G):
+    weights = G.mean(dim=(2, 3), keepdim=True)
+    cam = torch.relu((weights * A).sum(dim=1))                      # 3. the ReLU, once, on the weighted sum
+    peak = cam.abs().amax(dim=(1, 2), keepdim=True)
+    return torch.where(peak > 0, cam / torch.where(peak > 0, peak, 1.0), 0.0)
+
+
+def upsample_21(cam, size):
+    return F.interpolate(cam[:, None], size=(size, size), mode="bilinear", align_corners=False)[:, 0]   # 4.
+```
+**Démarche** : les diagnostics suivent le chemin du calcul, et chacun ne regarde que son morceau. 1. La résolution se lit sur la forme des activations : `layer2` sort 12 × 12 à 96 pixels, une case pour 8 × 8 pixels, des canaux qui répondent à des bords et des textures ; Grad-CAM vise la dernière couche convolutive, où les canaux portent des notions liées aux classes (🧠 Q8). 2. Le score prenait le logit de la classe **prédite** (`argmax`) : la carte ne dépendait plus de `target`, ce qui se voit en comparant les gradients de deux classes (identiques), et que la carte d'une bonne prédiction ne trahit pas. 3. Sans ReLU, les régions qui font **baisser** le score restent, avec un signe négatif ; une fois chaque carte divisée par sa plus grande valeur absolue, une carte presque toute négative se lit comme une carte « inversée ». 4. Les images ont été agrandies avec `align_corners=False` : les centres des 3 cases tombent aux pixels 16, 48 et 80 ; avec `align_corners=True`, les centres des cases du bord sont collés aux coins, et la carte glisse vers le bord, de 10 pixels au centre de la première case (16 pixels tout au bord). Une rampe 0, 1, 2 le mesure sans dépendre du modèle, là où la carte d'une vraie image ne dit pas où elle « devrait » tomber. Le point 5 compare enfin le tout à `wbx.grad_cam` : une couche de la bonne taille mais qui n'est pas la sortie d'un bloc entier (`layer4[1].conv2`) n'y passerait pas. De ces défauts, l'alignement est le plus discret : à 3 × 3, un décalage d'un tiers de case ne change pas « l'histoire » que raconte la carte.
+**Erreurs fréquentes** : corriger la classe en `logits[:, target].sum()` (une matrice $N \times N$ : chaque image reçoit les logits des classes de toutes les autres) ; mettre la ReLU sur les activations (elles sont déjà positives à la sortie d'un bloc) au lieu de la somme pondérée ; remplacer la ReLU par une valeur absolue ; agrandir en `nearest` (une carte en marches) ; dériver la probabilité au lieu du logit.
+**Variante** : avec `LAYER_21 = RESNET.layer3` (6 × 6), une fois les trois autres défauts corrigés, la corrélation de chaque carte agrandie avec celle de `layer4` vaut 0,14, 0,56, 0,68, −0,17 et −0,13 sur cinq des six images (médiane 0,14 ; la quatrième a une carte de `layer4` nulle, toute éteinte par la ReLU) ; avec `layer2`, médiane 0,01 : plus la couche est précoce, moins sa carte ressemble à celle que Grad-CAM recommande.
+
+### Ex B6.22 — Test de santé d'Adebayo : randomiser les poids couche par couche, la carte change-t-elle ? 🔬
+**Réponse** : sur les 16 images du CNN (médiane sur 16 images × 3 graines, entre crochets les quartiles), en cascade :
+
+| carte | `fc` seule | jusqu'à `features.17` | jusqu'à `features.10` | jusqu'à `features.0` |
+|---|---|---|---|---|
+| Grad-CAM (`features.19`) | 0,20 [−0,08 ; 0,43] | −0,00 [−0,15 ; 0,24] | −0,14 [−0,37 ; 0,24] | −0,12 [−0,32 ; 0,26] |
+| gradients intégrés (abs.) | 0,39 [0,31 ; 0,48] | 0,36 [0,29 ; 0,46] | 0,25 [0,19 ; 0,35] | 0,16 [0,12 ; 0,23] |
+| gradient (saillance) | 0,52 [0,45 ; 0,57] | 0,42 [0,38 ; 0,46] | 0,30 [0,25 ; 0,34] | 0,23 [0,16 ; 0,28] |
+| bords de l'image | 1,00 | 1,00 | 1,00 | 1,00 |
+
+Grad-CAM change dès que la sortie est randomisée et ne garde plus rien de sa carte ensuite (jusqu'à 9 cartes sur 48 deviennent constantes, toutes éteintes par la ReLU) ; les gradients et les gradients intégrés changent aussi, mais gardent une corrélation positive qui ne descend qu'à 0,16-0,23 ; le contrôle reste à 1 par construction. Une partie à la fois (`fc`, `features.17`, `features.10`, `features.0`), la saillance reste à 0,35-0,52 et les gradients intégrés à 0,25-0,39. Sur le ResNet, la carte de Grad-CAM n'a plus que 0,35 de corrélation médiane après la seule tête (22 cartes constantes sur 48), puis −0,06 et −0,16 en descendant dans `layer4`.
+**Démarche** :
+```python
+def randomize_22(model, names, seed=0):
+    out = copy.deepcopy(model)
+    with torch.random.fork_rng():                     # the draws of the following cells do not move
+        torch.manual_seed(seed)
+        for name in names:
+            for module in out.get_submodule(name).modules():
+                if isinstance(module, (torch.nn.Conv2d, torch.nn.Linear)):
+                    module.reset_parameters()
+    return out.eval().requires_grad_(False)
+
+
+def sanity_22(model, explain, names, mode="cascade", seed=0, absolute=False):
+    flat = lambda maps: np.abs(np.asarray(maps, dtype=float)) if absolute else np.asarray(maps, dtype=float)
+    before = flat(explain(model))
+    rows = []
+    for k in range(len(names)):
+        parts = names[:k + 1] if mode == "cascade" else [names[k]]
+        after = flat(explain(randomize_22(model, parts, seed)))
+        rows.append([np.nan if np.ptp(u) == 0 or np.ptp(v) == 0 else float(spearmanr(u, v).statistic)
+                     for u, v in zip(before.reshape(len(before), -1), after.reshape(len(after), -1))])
+    return np.array(rows)
+```
+La copie protège le modèle des cellules suivantes, `fork_rng` leurs tirages. Le contrôle sert d'étalon : une carte qui ne regarde pas le modèle a une corrélation de 1 quoi qu'on fasse aux poids ; une méthode qui s'en approche « ressemble » à un détecteur de bords. Grad-CAM passe nettement le test : sa carte dépend des poids de la tête et des dernières convolutions. Les gradients et les gradients intégrés passent aussi (leur corrélation baisse quand on randomise davantage), mais leur carte garde une part de structure qui ne vient pas de ce qu'a appris le réseau : pour les gradients intégrés en valeurs absolues, le facteur $\lvert x_i - x'_i \rvert$, l'intensité des pixels (la variante le montre) ; pour le gradient, sans doute l'architecture elle-même (les convolutions et les ReLU d'un réseau aux poids aléatoires donnent déjà des gradients structurés par l'image). Une carte constante veut dire qu'après randomisation aucune région ne fait monter le score de la classe : la carte a changé du tout au tout, mais la corrélation n'est pas définie, d'où un compte à part. La dispersion compte : d'une graine à l'autre, la médiane de Grad-CAM après `fc` va de 0,04 à 0,38, celle des gradients intégrés de 0,36 à 0,42 ; d'une image à l'autre, les quartiles de Grad-CAM couvrent souvent de −0,3 à 0,4 : la conclusion se tire sur la tendance, pas sur une image. Dans l'article, gradients et Grad-CAM réussissent le test, Guided Backprop et Guided Grad-CAM échouent ; ici, sur un petit CNN, on retrouve les deux premiers résultats. Un test réussi prouve seulement que la carte dépend des poids (🧠 Q9) ; il ne prouve pas qu'elle montre ce que le modèle utilise.
+**Erreurs fréquentes** : randomiser le modèle lui-même (sans copie : toutes les cellules suivantes utilisent un CNN détruit) ; tirer les poids sans `fork_rng` (les tirages suivants du notebook changent) ; remettre aussi les batchnorms à zéro (le contrat les garde) ; en cascade, ne randomiser que la partie $k$ ; comparer les cartes par une corrélation de Pearson, sensible à quelques pixels extrêmes ; conclure sur une image ou une graine.
+**Variante** : les gradients intégrés **signés** (`absolute=False`), en cascade : médianes 0,10, −0,14, 0,08, 0,05, 0,00, 0,03 et 0,03 (de `fc` à `features.0`, une graine) : sans la valeur absolue, la ressemblance disparaît dès la tête ; c'est bien $\lvert x_i - x'_i \rvert$ qui la portait. Gradient × entrée en valeurs absolues, la même cascade : 0,36, 0,32, 0,28, 0,21, 0,18, 0,14 et 0,15.
+
+### Ex B6.23 — group_rates, demographic_parity_difference et equalized_odds_difference 🔨
+**Réponse** : les 42 tests du groupe passent (39, et 3 ignorés sans fairlearn).
+**Démarche** :
+```python
+def _ratio(num, den):
+    return float(num / den) if den else float("nan")
+
+
+def _binary(name, a):
+    a = np.asarray(a)
+    if not np.isin(a, (0, 1)).all():                  # NaN, 0.5, 2 or -1: refused; True/False and 0.0/1.0: accepted
+        raise ValueError(f"{name} must contain only 0 and 1")
+    return a.astype(int)
+
+
+def group_rates(y_true, y_pred, groups):
+    yt, yp, g = _binary("y_true", y_true), _binary("y_pred", y_pred), np.asarray(groups)
+    if not len(yt) == len(yp) == len(g):
+        raise ValueError("y_true, y_pred and groups must have the same length")
+    rates = {}
+    for key in np.unique(g):
+        m = g == key
+        (tn, fp), (fn, tp) = np.asarray(mylearn.metrics.confusion_matrix(yt[m], yp[m], labels=[0, 1])).tolist()
+        n = tn + fp + fn + tp
+        rates[key] = {"n": int(n), "base_rate": _ratio(tp + fn, n), "selection_rate": _ratio(tp + fp, n),
+                      "tpr": _ratio(tp, tp + fn), "fpr": _ratio(fp, fp + tn), "precision": _ratio(tp, tp + fp),
+                      "accuracy": _ratio(tp + tn, n)}
+    return rates
+
+
+def demographic_parity_difference(y_pred, groups):
+    rates = group_rates(np.zeros(len(np.asarray(y_pred)), dtype=int), y_pred, groups)
+    if len(rates) < 2:
+        raise ValueError("at least two groups are needed")
+    s = [r["selection_rate"] for r in rates.values()]
+    return float(max(s) - min(s))
+
+
+def equalized_odds_difference(y_true, y_pred, groups):
+    rates = group_rates(y_true, y_pred, groups)
+    if len(rates) < 2:
+        raise ValueError("at least two groups are needed")
+    if any(math.isnan(r["tpr"]) or math.isnan(r["fpr"]) for r in rates.values()):
+        raise ValueError("a group has no positive or no negative example")
+    tpr, fpr = [r["tpr"] for r in rates.values()], [r["fpr"] for r in rates.values()]
+    return float(max(max(tpr) - min(tpr), max(fpr) - min(fpr)))
+```
+Chaque taux est le rapport de deux cases de la matrice **du groupe**, jamais de la matrice totale. Avec `labels=[0, 1]`, la matrice a toujours ses quatre cases, même pour un groupe sans positif ou sans sélectionné, et `C.ravel()` se lit `TN, FP, FN, TP` (lignes = vérité) : le livre et beaucoup de cours mettent TP en haut à gauche, scikit-learn TN. Un dénominateur nul donne `nan`, qui dit « ce taux n'existe pas pour ce groupe » ; l'equalized odds refuse alors de rendre un nombre, parce qu'un écart calculé en ignorant ce groupe (ce que fait fairlearn) cacherait qu'on ne sait rien de ses erreurs. Avec trois groupes ou plus, l'écart max − min dit l'ampleur, pas **entre qui** : on garde `group_rates` à côté pour le dire.
+**Erreurs fréquentes** : `confusion_matrix` sans `labels` (matrice 1 × 1 pour un groupe à un seul label, et `ValueError: not enough values to unpack`) ; FP et FN échangés ; diviser par la taille du groupe au lieu des positifs ou des négatifs ; `0` au lieu de `nan` pour un dénominateur nul ; prendre l'écart entre les deux premiers groupes seulement ; faire la moyenne des deux écarts de l'equalized odds au lieu du plus grand.
+**Variante** : sur la validation d'*Adult*, par catégorie raciale (5 groupes, de 98 à 8 345 personnes), au seuil 0,5 : $\Delta_{\text{DP}} = 0{,}179$ et $\Delta_{\text{EO}} = 0{,}260$, l'écart de TPR allant de 0,40 (`Amer-Indian-Eskimo`, 99 personnes) à 0,66 (`White`) : l'écart le plus grand porte sur le plus petit groupe, ce qui demande son intervalle avant toute conclusion.
+
+### Ex B6.24 — Audit d'équité sur Adult : indicateurs par sexe et par âge, intervalles de confiance bootstrap 📦
+**Réponse** : sur la validation, au seuil 0,5 (500 tirages) : les femmes, 3 165 personnes dont 350 positives, ont un TPR de 0,569 [0,512 ; 0,619] et un FPR de 0,015 [0,011 ; 0,020] ; les hommes, 6 604 dont 1 987 positifs, 0,663 [0,642 ; 0,684] et 0,083 [0,076 ; 0,091] ; taux de sélection 0,076 et 0,258 pour des taux de base de 0,111 et 0,301. Écarts par sexe : $\Delta_{\text{DP}} = 0{,}181$ [0,166 ; 0,194], écart de TPR 0,095 [0,042 ; 0,150], écart de FPR 0,068 [0,058 ; 0,077], donc $\Delta_{\text{EO}} = 0{,}095$ [0,064 ; 0,150]. Par âge, les moins de 25 ans n'ont que **12** positifs sur 1 647 personnes : TPR 0,417 [0,133 ; 0,727], aucun faux positif ; l'écart de TPR entre tranches vaut 0,299 [0,163 ; 0,578] et $\Delta_{\text{DP}}$ par âge 0,344.
+**Démarche** :
+```python
+def _rate_24(y, p, rate):
+    y, p = np.asarray(y), np.asarray(p)
+    if rate == "selection_rate":
+        return float(p.mean()) if len(p) else float("nan")
+    keep = y == (1 if rate == "tpr" else 0)
+    return float(p[keep].mean()) if keep.any() else float("nan")
+
+
+def rate_ci_24(y_true, y_pred, rate, n_boot=500, rng=None):
+    pairs = np.column_stack([np.asarray(y_true, dtype=int), np.asarray(y_pred, dtype=int)])   # rows stay paired
+    return mylearn.stats.bootstrap_ci(pairs, lambda s: _rate_24(s[:, 0], s[:, 1], rate), n_boot=n_boot, rng=rng)
+
+
+def audit_24(y_true, y_pred, groups, n_boot=500, seed=0):
+    y, p, g = np.asarray(y_true, dtype=int), np.asarray(y_pred, dtype=int), np.asarray(groups)
+    rng, rows = np.random.default_rng(seed), {}
+    for key, r in mylearn.explain.group_rates(y, p, g).items():
+        m = g == key
+        row = {"n": r["n"], "positives": int(y[m].sum()),
+               **{k: r[k] for k in ("base_rate", "selection_rate", "tpr", "fpr", "precision", "accuracy")}}
+        for rate in ("selection_rate", "tpr", "fpr"):
+            row[f"{rate}_low"], row[f"{rate}_high"] = rate_ci_24(y[m], p[m], rate, n_boot=n_boot, rng=rng)
+        rows[key] = row
+    table = pd.DataFrame.from_dict(rows, orient="index")[COLUMNS_24]
+    table.index.name = "group"
+    return table
+
+
+def gap_ci_24(y_true, y_pred, groups, kind, n_boot=500, seed=0):
+    y, p, g = np.asarray(y_true, dtype=int), np.asarray(y_pred, dtype=int), np.asarray(groups)
+    E = mylearn.explain
+
+    def gap(yy, pp, gg):
+        if kind == "dp":
+            return float(E.demographic_parity_difference(pp, gg))
+        if kind == "eo":
+            return float(E.equalized_odds_difference(yy, pp, gg))
+        values = [r[kind] for r in E.group_rates(yy, pp, gg).values()]
+        return float(max(values) - min(values))
+
+    rng = np.random.default_rng(seed)
+    members = [np.flatnonzero(g == key) for key in np.unique(g)]
+    draws = [gap(y[idx], p[idx], g[idx]) for idx in
+             (np.concatenate([m[rng.integers(0, len(m), size=len(m))] for m in members]) for _ in range(n_boot))]
+    low, high = np.percentile(draws, [2.5, 97.5])
+    return gap(y, p, g), float(low), float(high)
+```
+Les paires `(y, p)` se tirent ensemble, sinon on casse le lien entre un label et sa décision. Le TPR d'un groupe repose sur ses **positifs** : 12 chez les moins de 25 ans, d'où un intervalle de 0,13 à 0,73 qui ne dit presque rien ; 350 chez les femmes, 1 987 chez les hommes. Tirer dans chaque groupe garde les effectifs fixes (c'est ce qu'on veut dire par « l'incertitude de ce taux pour ce groupe ») ; tirer dans toute la validation ferait aussi varier la taille des groupes, avec des intervalles voisins pour les grands groupes. Par sexe, les trois écarts excluent 0 : le modèle sélectionne moins les femmes, en manque davantage parmi les qualifiées (TPR) et se trompe moins sur les autres (FPR). Par âge, les taux de sélection suivent de près les taux de base (de 0,007 à 0,387) : l'écart de sélection vient surtout des données ; l'écart de TPR, lui, est porté par les moins de 25 ans, au TPR très incertain. Avec 24 sous-groupes croisés, beaucoup n'auraient qu'une poignée de positifs, et un écart sur vingt sortirait de son intervalle à 95 % par hasard : on choisit les comparaisons d'avance (206.9).
+**Erreurs fréquentes** : tirer les labels et les décisions séparément ; calculer l'intervalle d'un groupe sur toute la validation (les intervalles de tous les groupes deviennent pareils) ; rendre `std` ± 1,96 au lieu des centiles ; un intervalle à 80 % (le défaut d'un exemple du livre au ch. 2) ; un écart signé (femmes − hommes) au lieu de max − min ; un nouveau `rng` réinitialisé dans chaque groupe (les groupes reçoivent des tirages corrélés).
+**Variante** : au seuil du MP3 (0,3607, le meilleur F1 sur ses folds), l'accuracy de validation tombe à 0,862 et l'écart change de nature : écart de TPR 0,108 [0,058 ; 0,161], écart de FPR 0,132 [0,118 ; 0,143], soit $\Delta_{\text{EO}} = 0{,}132$ : en sélectionnant plus, le modèle fait surtout plus de faux positifs chez les hommes.
+
+### Ex B6.25 — Lire un tableau d'audit : où est l'écart, est-il significatif, que conclure ? 📈
+**Réponse** : a) `"A"` (les moins de 25 ans, TPR 0,417) ; b) 12 ; c) `"F"` (65 ans et plus : de 0,448 à 0,651, une largeur de 0,203, sur 89 positifs) ; d) `True` (de 0,042 à 0,153) ; e) `False` (la borne haute des femmes, 0,619, est sous la borne basse des hommes, 0,642) ; f) `"C"`.
+**Démarche** : un TPR se lit avec son nombre de **positifs**, pas avec l'effectif du groupe : les moins de 25 ans sont 1 647, mais 12 seulement gagnent plus de 50 000 $ ; leur intervalle, de 0,125 à 0,714, couvre presque tout. Parmi les autres tranches, la plus large est celle des 65 ans et plus (89 positifs), devant les 55-64 ans (314 positifs, largeur 0,105). Un écart est significatif quand l'intervalle **de l'écart** exclut 0 : c'est le cas de l'écart de TPR par sexe ; que les intervalles des deux taux soient disjoints (e) est une preuve plus forte encore, mais l'inverse ne vaut pas : deux intervalles qui se chevauchent n'excluent pas un écart réel. (A) est faux : des intervalles qui se chevauchent ne prouvent pas l'égalité, et ceux des 25-34 et des 45-54 ans ne se chevauchent même pas. (B) confond un constat et une prescription : la sélection suit les taux de base (0,003 contre 0,007 chez les moins de 25 ans, 0,347 contre 0,387 chez les 45-54 ans), et rien dans le tableau ne dit que la parité démographique est le bon critère. (D) est faux : l'écart de TPR par sexe exclut 0. (C) tient les trois morceaux : le TPR le plus bas repose sur 12 positifs, l'écart de TPR par âge a un intervalle qui exclut 0 mais va de 0,16 à 0,58, et la sélection suit les taux de base. À un métier, on rapporterait d'abord l'écart de TPR par sexe, avec son intervalle : « parmi les personnes qui dépassent 50 000 $, le modèle en repère 57 % chez les femmes et 66 % chez les hommes ; l'écart, de 4 à 15 points, est très probablement réel. » Six tranches font quinze comparaisons deux à deux : choisis-les d'avance.
+**Erreurs fréquentes** : lire l'effectif du groupe au lieu de ses positifs ; conclure « pas d'écart » d'un intervalle large ; juger la significativité d'un écart au chevauchement des intervalles des deux taux ; prendre ΔDP pour un défaut du modèle quand il suit les taux de base.
+**Variante** : si les moins de 25 ans avaient 120 positifs au lieu de 12, à TPR égal, l'intervalle (approximation normale) ferait $\pm 1{,}96\sqrt{0{,}417 \times 0{,}583 / 120} \approx \pm 0{,}088$, une largeur d'environ 0,18 au lieu de 0,59 : dix fois plus de positifs, un intervalle environ trois fois plus étroit ($\sqrt{10} \approx 3{,}2$).
+
+### Ex B6.26 — Prédire : retirer la variable « sexe » rend-il le modèle équitable ? 🔮
+**Réponse** : a) `"D"` (ROC-AUC 0,933) ; b) `"C"` (0,815) ; c) `"B"` (ΔEO 0,109 sans `sex` contre 0,095 avec, un rapport de 1,15) ; d) `"A"` (0,300). Calibrage (`tools/chapters/history_chB6.py`, 8 découpages d'*Adult* × 2 graines du modèle) : AUC de 0,931 à 0,937, puis de 0,807 à 0,818 ; rapport des ΔEO de 0,74 à 1,15 ; rapport des taux de sélection de 0,29 à 0,35 ; accuracy changée de −0,2 à +0,1 point.
+**Démarche** : `relationship` vaut `Husband` ou `Wife` pour 45 % des personnes, ce qui dit presque leur sexe ; `marital-status` complète. Sans elles, le métier, les heures travaillées et les revenus du capital laissent encore deviner le sexe bien mieux qu'au hasard (0,81). Le modèle sans `sex` retrouve donc l'information par ses variables de substitution, et ses écarts ne baissent pas : sur cette validation, ΔEO **monte** un peu (le TPR des femmes passe de 0,569 à 0,554), et la sélection reste au même rapport, 0,30, très loin des quatre cinquièmes. Une part des écarts ne vient d'ailleurs d'aucune colonne : les taux de base (0,111 et 0,301) sont différents, et un modèle qui sélectionne selon ses estimations de revenu sélectionne à ces taux-là. Et sans `sex` dans les données, on ne pourrait plus ni mesurer ces écarts ni les corriger (206.8, 💼 B6.E5).
+**Erreurs fréquentes** : croire qu'un modèle qui ne voit pas l'attribut ne peut pas en dépendre ; juger une variable de substitution à sa corrélation avec la cible au lieu de sa capacité à prédire l'attribut ; prendre un rapport de ΔEO de 1,15 pour une aggravation significative (il va de 0,74 à 1,15 d'un découpage à l'autre).
+**Variante** : pour la catégorie raciale (`White` ou non), le même gradient boosting la prédit à partir des 10 autres features avec une ROC-AUC de 0,761, et de 0,683 sans `native-country` : dans *Adult*, la race a des variables de substitution plus faibles que le sexe, mais pas absentes.
+
+### Ex B6.27 — Atténuer : retrait des variables de substitution, repondération, seuils par groupe, et ce que cela coûte 🔬
+**Réponse** : sur la moitié d'évaluation de la validation (4 885 personnes), seuils par sexe choisis sur l'autre moitié pour un TPR de 0,638 (0,356 pour les femmes, 0,524 pour les hommes) :
+
+| stratégie | accuracy | ΔDP sexe | ΔEO sexe | ΔDP âge | ΔEO âge | TPR F / M | FPR F / M |
+|---|---|---|---|---|---|---|---|
+| référence (seuil 0,5) | 0,8741 | 0,173 [0,155 ; 0,193] | 0,076 [0,058 ; 0,147] | 0,353 | 0,407 | 0,60 / 0,67 | 0,016 / 0,084 |
+| sans `sex` | 0,8747 | 0,175 [0,156 ; 0,194] | 0,105 [0,058 ; 0,177] | 0,347 | 0,401 | 0,57 / 0,68 | 0,017 / 0,082 |
+| sans `sex`, `relationship`, `marital-status` | 0,8487 | 0,113 [0,092 ; 0,133] | 0,081 [0,019 ; 0,158] | 0,313 | 0,454 | 0,45 / 0,53 | 0,034 / 0,055 |
+| repondération (sexe × label) | 0,8731 | 0,106 [0,085 ; 0,124] | 0,118 [0,061 ; 0,178] | 0,318 | 0,359 | 0,73 / 0,61 | 0,035 / 0,060 |
+| seuils par sexe (même TPR) | 0,8757 | 0,135 [0,115 ; 0,155] | 0,068 [0,038 ; 0,130] | 0,347 | 0,401 | 0,72 / 0,65 | 0,030 / 0,075 |
+
+Aucune stratégie ne divise ΔEO par sexe de façon nette : leurs intervalles se recouvrent tous.
+**Démarche** :
+```python
+def reweigh_27(groups, y):
+    g, y = np.asarray(groups), np.asarray(y)
+    w = np.empty(len(y), dtype=float)
+    for key in np.unique(g):
+        for label in np.unique(y):
+            cell = (g == key) & (y == label)
+            if cell.any():
+                w[cell] = np.mean(g == key) * np.mean(y == label) / np.mean(cell)
+    return w
+
+
+def tpr_thresholds_27(scores, y, groups, target_tpr):
+    s, y, g = np.asarray(scores, dtype=float), np.asarray(y), np.asarray(groups)
+    return {key: float(np.quantile(s[(g == key) & (y == 1)], 1 - target_tpr)) for key in np.unique(g)}
+
+
+def decide_27(scores, groups, thresholds):
+    s, g = np.asarray(scores, dtype=float), np.asarray(groups)
+    return (s >= np.array([thresholds[key] for key in g])).astype(int)
+```
+Le retrait de `sex` seul ne change rien (B6.26). Retirer aussi ses deux variables de substitution coûte 2,5 points d'accuracy : le modèle perd une information utile pour **tout le monde**, et ses TPR baissent dans les deux groupes ; ΔDP diminue, ΔEO non, et l'écart par âge augmente (0,454). La repondération rend sexe et label indépendants dans l'entraînement : les femmes positives pèsent plus, et le modèle les sélectionne davantage, au point d'inverser l'écart de TPR (0,73 contre 0,61) : ΔDP baisse, ΔEO monte. Les seuils par sexe rapprochent les TPR sur la moitié de calibrage, mais sur d'autres personnes le TPR des femmes dépasse sa cible (0,72) : avec environ 175 femmes positives par moitié, un quantile se déplace de plusieurs points ; le FPR des femmes double, l'écart de FPR se réduit, et ΔEO baisse un peu, pour une accuracy qui ne bouge pas. Ces seuils utilisent le sexe **dans la décision**, la repondération seulement dans l'entraînement : la fiche dit le risque juridique du premier (206.10). Pour la statistique publique du MP3, où il faut des erreurs semblables dans les deux groupes sans changer la décision de qui que ce soit, ni l'une ni l'autre ne suffit telle quelle : on chercherait à égaliser **les deux** taux d'erreur, et à le vérifier sur des personnes neuves.
+**Erreurs fréquentes** : les poids inversés ($P(g, y) / (P(g)P(y))$, qui aggravent le déséquilibre) ; le quantile `target_tpr` au lieu de `1 - target_tpr` ; le quantile de tous les scores du groupe au lieu de ceux de ses positifs ; choisir les seuils et les mesurer sur les mêmes personnes ; ne réauditer que le sexe.
+**Variante** : choisis **et** mesurés sur la même moitié d'évaluation, les seuils par sexe (0,440 et 0,556) donnent des TPR de 0,639 et 0,638, et ΔEO 0,039 (le seul écart de FPR) : c'est ce que promettent les seuils sur les personnes qui ont servi à les choisir ; sur d'autres personnes, la moitié d'évaluation en donne 0,068.
+
+### Ex B6.28 — Fiche modèle avec sections explicabilité et équité : indicateurs par groupe, limites, usage prévu 🛠️
+**Réponse** : la fiche du notebook de solutions (`CARD_28`, plus de 600 mots) passe la vérification ; ses chiffres viennent de `FACTS_28` (accuracy de validation 0,8722, ROC-AUC 0,9293, n, TPR et FPR des huit groupes, importance par permutation : `capital-gain` 0,0538, `education-num` 0,0257, `marital-status` 0,0170, `occupation` 0,0168) et des mesures de B6.24 à B6.27.
+**Démarche** : la fiche répond à trois lecteurs. Le métier lit l'usage prévu et les mises en garde : ici, un exercice, à ne jamais utiliser pour décider de quelqu'un, sur des données de 1994. L'auditeur lit les analyses quantitatives et l'équité : un tableau par groupe avec les effectifs, le critère retenu **et sa raison** (l'equalized odds, parce qu'une statistique publique doit avoir des erreurs semblables dans chaque groupe), les écarts avec leurs intervalles, les corrections essayées et leur coût. L'autorité cherche la base légale de l'usage de données sensibles et la supervision humaine (206.11). L'explicabilité dit la méthode **et** ses données (la validation ; le fond pour une valeur SHAP), et ses limites (des features corrélées se partagent l'importance). Une vérification de structure ne juge ni la justesse d'une raison, ni l'honnêteté des limites, ni ce qui manque sans qu'on l'ait demandé (les sous-groupes croisés, par exemple) : ce sont elles qui font une bonne fiche.
+**Erreurs fréquentes** : recopier les chiffres à la main (ils divergent du modèle au premier réentraînement : une f-string) ; des taux sans effectifs ; un critère sans sa raison ; une rubrique « limites » générique (« le modèle peut se tromper ») ; oublier les usages hors périmètre ; une explicabilité sans ses données.
+**Variante** : une analyse croisée sexe × âge, à ajouter aux analyses quantitatives : les femmes de 45 à 54 ans (489 personnes, 91 positives) ont un TPR de 0,58 et un FPR de 0,018, les hommes du même âge (1 219, 570 positifs) 0,74 et 0,174 ; les femmes de moins de 25 ans n'ont que 3 positives sur 736 : leur TPR (0,33) ne se rapporte pas sans dire qu'il ne veut rien dire.
+
+### Ex B6.29 — Défi : écart d'equalized odds sous 0,07 sur Adult, en perdant moins de 2 points d'accuracy 🏆
+**Réponse** : la référence passe : sur le test du MP3, ΔEO 0,016 (écart de TPR 0,014, de FPR 0,016), accuracy 0,8638 contre 0,8707 sans correction (0,70 point de moins) ; sur le découpage de contrôle, ΔEO 0,022 et 0,89 point de moins ; ajustée sur des labels mélangés, balanced accuracy 0,500. Sur 11 découpages (le test du MP3 avec 5 validations, puis 6 autres tests), son ΔEO va de 0,012 à 0,058 et sa baisse d'accuracy de 0,53 à 0,93 point ; sans correction, ΔEO va de 0,053 à 0,118.
+**Démarche** :
+```python
+TARGET_EO_29 = 0.02     # the gap aimed at on the validation part: below the goal, for a margin on new people
+
+
+def method_29(X_train, y_train, X_val, y_val):
+    model = adult_pipeline().fit(X_train, y_train)                 # the reference recipe, without correction
+    scores, sex = model.predict_proba(X_val)[:, 1], X_val["sex"].to_numpy()
+    grid = np.round(np.arange(0.05, 0.951, 0.01), 2)
+    curves = {}
+    for group in ("Female", "Male"):                               # TPR, FPR and right decisions at each threshold
+        pos, neg = scores[(sex == group) & (y_val == 1)], scores[(sex == group) & (y_val == 0)]
+        tpr = (pos[None, :] >= grid[:, None]).mean(axis=1)
+        fpr = (neg[None, :] >= grid[:, None]).mean(axis=1)
+        curves[group] = (tpr, fpr, tpr * len(pos) + (1 - fpr) * len(neg))
+    (tpr_f, fpr_f, right_f), (tpr_m, fpr_m, right_m) = curves["Female"], curves["Male"]
+    eo = np.maximum(np.abs(tpr_f[:, None] - tpr_m[None, :]), np.abs(fpr_f[:, None] - fpr_m[None, :]))
+    acc = (right_f[:, None] + right_m[None, :]) / len(y_val)
+    if (eo <= TARGET_EO_29).any():                                 # the best accuracy among the fair enough pairs
+        i, j = np.unravel_index(np.argmax(np.where(eo <= TARGET_EO_29, acc, -1.0)), acc.shape)
+    else:
+        i, j = np.unravel_index(np.argmin(eo), eo.shape)
+    thresholds = {"Female": float(grid[i]), "Male": float(grid[j])}
+
+    def decide(X):
+        t = np.array([thresholds.get(value, 0.5) for value in X["sex"]])
+        return (model.predict_proba(X)[:, 1] >= t).astype(int)
+
+    return decide
+```
+Au seuil 0,5, les hommes ont à la fois plus de vrais positifs et plus de faux positifs : un seul seuil par sexe ne peut pas rapprocher les deux taux. Deux seuils choisis **ensemble** le peuvent : sur le test du MP3, la référence relève les deux (0,60 pour les femmes, 0,70 pour les hommes), ce qui ramène le FPR des hommes vers celui des femmes et les TPR l'un vers l'autre, pour moins d'un point d'accuracy. Le couple se choisit sur la validation, avec une marge (0,02 visé pour 0,07 exigé), parce que le TPR des femmes y repose sur environ 350 positives : un écart-type d'environ 0,026, autant sur le test. C'est aussi pourquoi le titre du contrat est passé de 0,05 à **0,07** : sur 11 découpages, la référence atteignait 0,058 au pire, et aucune variante essayée (viser 0,01, choisir les seuils sur des scores hors fold de tout l'entraînement) ne restait partout sous 0,05 avec moins de 2 points d'accuracy perdus (au pire 0,060 ; ou 0,040 pour 2,5 points). Si `sex` était interdit dans la décision, il resterait à l'utiliser **pendant** l'entraînement seulement : une repondération ou les réductions d'Agarwal et coll. (`ExponentiatedGradient`, 206.10), avec un modèle qui ne voit pas `sex` ; B6.27 montre que la repondération seule ne suffit pas.
+**Erreurs fréquentes** : choisir les seuils sur le test, ou les régler à la main après avoir regardé le test (la règle d'honneur) ; viser exactement 0,07 sur la validation ; ne régler que les TPR (l'écart de FPR reste) ; régler les seuils sur les features du test dans `decide` (refusé : chaque personne se décide seule) ; réutiliser `HGB_C` au lieu d'ajuster un modèle neuf.
+**Variante** : en visant 0,01 au lieu de 0,02 sur la validation, ΔEO vaut 0,011 sur le test du MP3 mais 0,040 sur le contrôle, et l'accuracy baisse de 1,72 et 2,53 points : le contrôle échoue (plus de 2 points). Viser plus bas fait payer de l'accuracy sans gagner en robustesse : la marge utile se mesure en écarts-types de l'échantillon, pas en centièmes sur la validation.
