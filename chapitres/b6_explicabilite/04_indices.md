@@ -606,7 +606,7 @@ Relis 206.2 : trois questions différentes. Un coefficient dit de combien la pr�
 ```python
 def permutation_12(model, X, y):
     result = permutation_importance(model, X, y, n_repeats=5, random_state=0)
-    return pd.Series(result.importances_mean, index=X.columns).sort_values(ascending=False)
+    return pd.Series(..., index=X.columns).sort_values(...)   # the mean drops of result, the largest first
 
 
 def pd_ice_12(model, X, feature):
@@ -630,7 +630,7 @@ Pour a), situe la grille de `MedInc` (du 5ᵉ au 95ᵉ centile : environ 1,6 à 
 </details>
 <details><summary>Indice 3</summary>
 
-Pour a), estime l'écart de prix moyen entre le 5ᵉ et le 95ᵉ centile du revenu, puis range-le dans l'une des quatre classes. Pour b), compare la prédiction moyenne à 33° et à 39°, longitude fixée. Pour c), demande-toi si un même déplacement vers le nord peut faire monter le prix de certains districts. Pour d), compare la force des interactions de chaque feature : le revenu agit-il de la même façon partout, et la latitude ?
+Pour a), estime l'écart de prix moyen entre le 5ᵉ et le 95ᵉ centile du revenu, puis range-le dans l'une des quatre classes. Pour b), compare la prédiction moyenne à 33° et à 39°, longitude fixée. Pour c), demande-toi si un même déplacement vers le nord, longitude fixée, peut faire monter le prix d'un district, et pour combien d'entre eux : aucun, quelques-uns, la moitié, presque tous ? Pour d), compare la force des interactions de chaque feature : le revenu agit-il de la même façon partout, et la latitude ?
 
 </details>
 
@@ -1046,7 +1046,7 @@ def reweigh_27(groups, y):
 
 def tpr_thresholds_27(scores, y, groups, target_tpr):
     s, y, g = ...
-    return {key: float(np.quantile(s[(g == key) & (y == 1)], 1 - target_tpr)) for key in np.unique(g)}
+    return {key: ... for key in np.unique(g)}       # a quantile of the scores of the positives of the group
 ```
 
 </details>

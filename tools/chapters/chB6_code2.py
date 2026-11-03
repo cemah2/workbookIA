@@ -140,8 +140,7 @@ def diagnose_21(layer, score_fn, combine_fn, upsample_fn):
         except Exception as error:  # noqa: BLE001 - the learner's code: one ❌ line, then the chain stops
             ok, measured, why = False, f"une erreur {type(error).__name__} : {str(error)[:200]}", "relis la fonction en cause"
         finally:
-            for module in RESNET.modules():                  # a hook left behind by an earlier run
-                module._forward_hooks.clear()
+            wbx.clear_hooks(RESNET)                          # a hook left behind by an earlier run
         if ok:
             print(f"✅ Ex B6.21 : point {k}, {name} ({measured}).")
         else:
@@ -216,8 +215,7 @@ except Exception as error_21:  # noqa: BLE001 - the learner's code
     mine_21 = None
     print(f"⏳ Ex B6.21 : ton Grad-CAM lève {type(error_21).__name__} ({str(error_21)[:160]}) : rien à montrer.")
 finally:
-    for module_21 in RESNET.modules():
-        module_21._forward_hooks.clear()
+    wbx.clear_hooks(RESNET)
 if mine_21 is not None and mine_21.shape == (len(X_21), SIZE_20, SIZE_20):
     ref_21 = wbx.grad_cam(RESNET, RESNET.layer4, X_21, TRUE_21, size=SIZE_20)
     rows_21 = [[PICS_21[i], overlay_21(PICS_21[i], (mine_21[i] - min(0, mine_21[i].min())) / max(np.ptp(mine_21[i]), 1e-12)),
@@ -293,47 +291,47 @@ def sanity_22(model, explain, names, mode="cascade", seed=0, absolute=False):
 
 CHECK_22 = r'''ok_22 = {}
 with checked("B6.22"):
-    before_22 = {k: v.clone() for k, v in CNN.state_dict().items()}
-    rng_22 = torch.get_rng_state()
-    copy_22 = randomize_22(CNN, ["fc", "features.17"], seed=3)
-    changed_22 = [k for k, v in CNN.state_dict().items() if not torch.equal(v, before_22[k])]
-    if changed_22:
-        CNN.load_state_dict(before_22)                 # the CNN of the following cells stays the trained one
+    _chk_before_22 = {k: v.clone() for k, v in CNN.state_dict().items()}
+    _chk_rng_22 = torch.get_rng_state()
+    _chk_copy_22 = randomize_22(CNN, ["fc", "features.17"], seed=3)
+    _chk_changed_22 = [k for k, v in CNN.state_dict().items() if not torch.equal(v, _chk_before_22[k])]
+    if _chk_changed_22:
+        CNN.load_state_dict(_chk_before_22)                 # the CNN of the following cells stays the trained one
         CNN.eval().requires_grad_(False)
-    if not returned("B6.22", "randomize_22", copy_22):
+    if not returned("B6.22", "randomize_22", _chk_copy_22):
         raise StopCheck
-    if copy_22 is CNN:
+    if _chk_copy_22 is CNN:
         print("❌ Ex B6.22 : randomize_22 rend le modèle reçu lui-même : le contrat veut une copie (copy.deepcopy).")
         raise StopCheck
-    if changed_22:
-        print(f"❌ Ex B6.22 : randomize_22 a modifié le modèle reçu ({changed_22[0]}…) : travaille sur une copie.")
+    if _chk_changed_22:
+        print(f"❌ Ex B6.22 : randomize_22 a modifié le modèle reçu ({_chk_changed_22[0]}…) : travaille sur une copie.")
         raise StopCheck
-    verdict("B6.22", torch.equal(torch.get_rng_state(), rng_22), "le générateur aléatoire global n'a pas bougé.",
+    verdict("B6.22", torch.equal(torch.get_rng_state(), _chk_rng_22), "le générateur aléatoire global n'a pas bougé.",
             "randomize_22 a déplacé le générateur aléatoire global : tire les poids dans torch.random.fork_rng().")
-    verdict("B6.22", not copy_22.training and not any(p.requires_grad for p in copy_22.parameters()),
+    verdict("B6.22", not _chk_copy_22.training and not any(p.requires_grad for p in _chk_copy_22.parameters()),
             "la copie est gelée, en mode eval().", "la copie doit être en mode eval() et gelée (requires_grad_(False)).")
-    new_22, old_22 = copy_22.state_dict(), CNN.state_dict()
-    inside_22 = [k for k in old_22 if (k.startswith("fc.") or k.startswith("features.17.")) and k.endswith(("weight", "bias"))]
-    outside_22 = [k for k in old_22 if k not in inside_22]
-    verdict("B6.22", all(not torch.equal(new_22[k], old_22[k]) for k in inside_22),
+    _chk_new_22, _chk_old_22 = _chk_copy_22.state_dict(), CNN.state_dict()
+    _chk_inside_22 = [k for k in _chk_old_22 if (k.startswith("fc.") or k.startswith("features.17.")) and k.endswith(("weight", "bias"))]
+    _chk_outside_22 = [k for k in _chk_old_22 if k not in _chk_inside_22]
+    verdict("B6.22", all(not torch.equal(_chk_new_22[k], _chk_old_22[k]) for k in _chk_inside_22),
             "les poids et biais de fc et de features.17 ont été retirés.",
             "un poids ou un biais de fc ou de features.17 n'a pas changé : chaque Conv2d et chaque Linear des parties "
             "nommées doit reprendre son reset_parameters().")
-    verdict("B6.22", all(torch.equal(new_22[k], old_22[k]) for k in outside_22),
+    verdict("B6.22", all(torch.equal(_chk_new_22[k], _chk_old_22[k]) for k in _chk_outside_22),
             "les autres parties (et les batchnorms) sont intactes.",
-            "une autre partie que fc et features.17 a changé (" + next((k for k in outside_22 if not torch.equal(new_22[k], old_22[k])), "") + ").")
-    block_22 = randomize_22(RESNET, ["layer4.1"], seed=3).state_dict()     # a block: two convolutions, two batchnorms
-    old_r_22 = RESNET.state_dict()
-    bn_22 = [k for k in old_r_22 if k.startswith("layer4.1.bn")]
-    verdict("B6.22", all(torch.equal(block_22[k], old_r_22[k]) for k in bn_22)
-            and not torch.equal(block_22["layer4.1.conv1.weight"], old_r_22["layer4.1.conv1.weight"]),
+            "une autre partie que fc et features.17 a changé (" + next((k for k in _chk_outside_22 if not torch.equal(_chk_new_22[k], _chk_old_22[k])), "") + ").")
+    _chk_block_22 = randomize_22(RESNET, ["layer4.1"], seed=3).state_dict()     # a block: two convolutions, two batchnorms
+    _chk_old_r_22 = RESNET.state_dict()
+    _chk_bn_22 = [k for k in _chk_old_r_22 if k.startswith("layer4.1.bn")]
+    verdict("B6.22", all(torch.equal(_chk_block_22[k], _chk_old_r_22[k]) for k in _chk_bn_22)
+            and not torch.equal(_chk_block_22["layer4.1.conv1.weight"], _chk_old_r_22["layer4.1.conv1.weight"]),
             "dans un bloc du ResNet (layer4.1), les convolutions changent, les batchnorms restent.",
             "dans le bloc layer4.1 du ResNet, seules les Conv2d (et les Linear) doivent reprendre leur reset_parameters() : "
             "les batchnorms gardent leurs poids et leurs statistiques.")
-    again_22 = randomize_22(CNN, ["fc", "features.17"], seed=3).state_dict()
-    other_22 = randomize_22(CNN, ["fc", "features.17"], seed=4).state_dict()
-    verdict("B6.22", all(torch.equal(again_22[k], new_22[k]) for k in new_22)
-            and not all(torch.equal(other_22[k], new_22[k]) for k in inside_22),
+    _chk_again_22 = randomize_22(CNN, ["fc", "features.17"], seed=3).state_dict()
+    _chk_other_22 = randomize_22(CNN, ["fc", "features.17"], seed=4).state_dict()
+    verdict("B6.22", all(torch.equal(_chk_again_22[k], _chk_new_22[k]) for k in _chk_new_22)
+            and not all(torch.equal(_chk_other_22[k], _chk_new_22[k]) for k in _chk_inside_22),
             "la même graine redonne les mêmes poids, une autre graine d'autres poids.",
             "randomize_22 doit être reproductible (même graine, mêmes poids) et changer avec la graine.")
     ok_22["randomize"] = True
@@ -600,7 +598,8 @@ N_BOOT_24 = 500 if FAST_MODE else 2000                # bootstrap draws (the fic
 
 TODO_24 = r'''def rate_ci_24(y_true, y_pred, rate, n_boot=500, rng=None):
     """(low, high): the 95 % percentile bootstrap interval of the rate `rate` ("selection_rate", "tpr" or "fpr") of
-    ONE group, from its pairs (y_true, y_pred), with your bootstrap_ci (ch. 2); a draw without a denominator: nan."""
+    ONE group, from its pairs (y_true, y_pred), with your bootstrap_ci (ch. 2); the statistic gives nan on a draw
+    without a denominator, which bootstrap_ci refuses (ValueError): it does not happen on the groups of Adult."""
     raise NotImplementedError("rate_ci_24")
 
 
@@ -628,7 +627,8 @@ SOLUTION_24 = r'''def _rate_24(y, p, rate):
 
 def rate_ci_24(y_true, y_pred, rate, n_boot=500, rng=None):
     """(low, high): the 95 % percentile bootstrap interval of the rate `rate` ("selection_rate", "tpr" or "fpr") of
-    ONE group, from its pairs (y_true, y_pred), with your bootstrap_ci (ch. 2); a draw without a denominator: nan."""
+    ONE group, from its pairs (y_true, y_pred), with your bootstrap_ci (ch. 2); the statistic gives nan on a draw
+    without a denominator, which bootstrap_ci refuses (ValueError): it does not happen on the groups of Adult."""
     pairs = np.column_stack([np.asarray(y_true, dtype=int), np.asarray(y_pred, dtype=int)])   # rows stay paired
     return mylearn.stats.bootstrap_ci(pairs, lambda s: _rate_24(s[:, 0], s[:, 1], rate), n_boot=n_boot, rng=rng)
 
@@ -678,6 +678,9 @@ def gap_ci_24(y_true, y_pred, groups, kind, n_boot=500, seed=0):
     return gap(y, p, g), float(low), float(high)'''
 
 CHECK_24 = r'''ok_24 = {}
+TWIN_Y_24 = np.concatenate([YA_VAL[:400], YA_VAL[:400]])          # two identical groups of 400 people
+TWIN_P_24 = np.concatenate([PRED_VAL[:400], PRED_VAL[:400]])
+TWIN_G_24 = np.array(["a"] * 400 + ["b"] * 400)
 
 
 with checked("B6.24"):
@@ -736,6 +739,12 @@ with checked("B6.24"):
         other_24["tpr_low"].to_numpy(float), again_24["tpr_low"].to_numpy(float)),
         "la même graine redonne le même tableau, une autre graine d'autres intervalles.",
         "audit_24 doit être reproductible (même graine, même tableau) et ses intervalles changer avec la graine.")
+    twin_24 = audit_24(TWIN_Y_24.copy(), TWIN_P_24.copy(), TWIN_G_24.copy(), n_boot=50, seed=0)
+    bounds_24 = ["selection_rate_low", "selection_rate_high", "tpr_low", "tpr_high", "fpr_low", "fpr_high"]
+    verdict("B6.24", not np.allclose(twin_24.loc["a", bounds_24].to_numpy(float), twin_24.loc["b", bounds_24].to_numpy(float)),
+            "deux groupes identiques ont des intervalles différents : un seul générateur pour tout le tableau.",
+            "audit_24 donne exactement les mêmes intervalles à deux groupes identiques : chaque groupe repart-il de la "
+            "même graine ? Le contrat veut un seul rng = np.random.default_rng(seed) pour tout le tableau.")
 
 with checked("B6.24"):
     if len(ok_24) < 2:
@@ -759,6 +768,29 @@ with checked("B6.24"):
                 f"gap_ci_24 (« {kind_24} ») : {fr(gk_24[0], 3)}, dans son intervalle.",
                 f"gap_ci_24 (« {kind_24} ») rend {[fr(v, 3) for v in gk_24]} ; attendu l'écart de ta fonction de B6.23 "
                 f"({fr(float(want_k_24), 3)}, celui de scikit-learn), dans son intervalle.")
+    twin_gap_24 = [float(v) for v in gap_ci_24(TWIN_Y_24.copy(), TWIN_P_24.copy(), TWIN_G_24.copy(), "tpr", n_boot=50, seed=0)]
+    verdict("B6.24", twin_gap_24[2] > 0, "deux groupes identiques reçoivent des tirages différents (un seul générateur).",
+            "gap_ci_24 : sur deux groupes identiques, tous tes tirages donnent un écart nul : chaque groupe repart-il de "
+            "la même graine ? Le contrat veut un seul rng = np.random.default_rng(seed) pour tous les tirages.")
+    real_dp_24, sizes_24 = mylearn.explain.demographic_parity_difference, []
+
+    def spy_dp_24(*args, **kwargs):              # what your gap_ci_24 passes to your demographic_parity_difference
+        groups = kwargs["groups"] if "groups" in kwargs else args[1]
+        sizes_24.append(tuple(np.unique(np.asarray(groups), return_counts=True)[1].tolist()))
+        return real_dp_24(*args, **kwargs)
+
+    try:
+        mylearn.explain.demographic_parity_difference = spy_dp_24
+        gap_ci_24(YA_VAL.copy(), PRED_VAL.copy(), SEX_VAL.copy(), "dp", n_boot=30, seed=0)
+    finally:
+        mylearn.explain.demographic_parity_difference = real_dp_24
+    want_sizes_24 = tuple(np.unique(SEX_VAL, return_counts=True)[1].tolist())
+    if len(sizes_24) > 1:                        # (seen only when gap_ci_24 calls mylearn.explain.<function>)
+        odd_sizes_24 = next((s for s in sizes_24 if s != want_sizes_24), None)
+        verdict("B6.24", odd_sizes_24 is None,
+                "gap_ci_24 : chaque tirage garde l'effectif de chaque groupe (un bootstrap stratifié).",
+                f"gap_ci_24 : un de tes tirages a des groupes de {odd_sizes_24} personnes au lieu de {want_sizes_24} : le "
+                "contrat tire les lignes de chaque groupe dans son propre groupe, pour que chaque tirage garde ses effectifs.")
     ok_24["gap"] = True
     print(f"ℹ️ {time.perf_counter() - start_24:.1f} s")'''
 
@@ -840,9 +872,9 @@ with wb.attempt("B6.25f"):
     wb.check("B6.25f", conclusion_25)'''
 
 # --- 🔮 B6.26 ---------------------------------------------------------------------------------------------------------
-TODO_26 = r'''proxy_auc_26 = ...       # a) ROC-AUC of a gradient boosting that predicts the sex from the 10 other features:
+TODO_26 = r'''proxy_auc_26 = ...       # a) ROC-AUC of a gradient boosting that predicts the sex from the 11 other features of the pipeline:
                          #    "A" below 0.6, "B" 0.6 to 0.75, "C" 0.75 to 0.9, "D" above 0.9
-proxy_auc_few_26 = ...   # b) the same without relationship and marital-status (8 features): same letters
+proxy_auc_few_26 = ...   # b) the same without relationship and marital-status (9 features): same letters
 eo_ratio_26 = ...        # c) ΔEO by sex of the model retrained without sex, divided by the ΔEO of the reference model:
                          #    "A" below 0.5, "B" 0.5 to 1.5, "C" above 1.5
 four_fifths_26 = ...     # d) model without sex: selection rate of the women / that of the men:
@@ -853,7 +885,7 @@ NOSEX_26 = adult_pipeline(drop=("sex",)).fit(XA_TRAIN, YA_TRAIN)              # 
 PRED_NOSEX_26 = (NOSEX_26.predict_proba(XA_VAL)[:, 1] >= 0.5).astype(int)
 female_tr_26, female_va_26 = (XA_TRAIN["sex"] == "Female").to_numpy(int), (SEX_VAL == "Female").astype(int)
 AUC_26 = {}
-for name_26, drop_26 in (("les 10 autres features", ("sex",)),
+for name_26, drop_26 in (("les 11 autres features", ("sex",)),
                          ("sans relationship ni marital-status", ("sex", "relationship", "marital-status"))):
     spy_26 = adult_pipeline(drop=drop_26).fit(XA_TRAIN, female_tr_26)          # predicts the sex
     AUC_26[name_26] = roc_auc_score(female_va_26, spy_26.predict_proba(XA_VAL)[:, 1])
@@ -1222,6 +1254,12 @@ def _make_evaluate_29():
     from wb import datasets as wbdata
 
     splits = {"test du MP3": wbx.adult(), "contrôle": wbx.adult(seed=CONTROL_SEED_29)}
+    goal, max_loss, max_balanced, reference = GOAL_EO_29, MAX_LOSS_29, MAX_BALANCED_29, dict(REFERENCE_29)
+    audit, balanced_accuracy = sk_audit, balanced_accuracy_score     # kept here: your method cannot replace them
+
+    def change(loss):
+        """'0,70 point de moins' or '0,20 point de plus': an accuracy above the reference is not a loss."""
+        return f"{fr(100 * abs(loss), 2)} point{'s' if abs(loss) >= 0.02 else ''} de {'moins' if loss >= 0 else 'plus'}"
 
     def baseline(split):
         model = adult_pipeline().fit(split.X_train, split.y_train.to_numpy())
@@ -1279,14 +1317,16 @@ def _make_evaluate_29():
     def run(method, split, shuffle_seed=None):
         """Fit the method cold on the train and validation parts (labels shuffled for the control), then decide the
         test part, whole and row by row (on 200 rows), every hideable global variable hidden."""
-        X_tr, y_tr = split.X_train.copy(), split.y_train.to_numpy().copy()
-        X_va, y_va = split.X_val.copy(), split.y_val.to_numpy().copy()
-        if shuffle_seed is not None:
+        X_tr, y_tr = split.X_train.reset_index(drop=True), split.y_train.to_numpy().copy()   # row numbers 0, 1, 2…:
+        X_va, y_va = split.X_val.reset_index(drop=True), split.y_val.to_numpy().copy()       # the index of Adult says
+        if shuffle_seed is not None:                                                         # nothing of the test rows
             rng = np.random.default_rng(shuffle_seed)
             y_tr, y_va = rng.permutation(y_tr), rng.permutation(y_va)
-        X_te = split.X_test.copy()
+        X_te = split.X_test.reset_index(drop=True)
+        order = np.random.default_rng(290).permutation(len(X_te))                # the test in another order
         g = globals()
         hidden = {n: Hidden(n) for n, v in list(g.items()) if not ipython_names.match(n) and hideable(v)}
+        hidden.update({n: Hidden(n) for n in ("evaluate_29", "_make_evaluate_29") if n in g})   # and this evaluation
         originals = {n: g[n] for n in hidden}
         saved = {name: getattr(wbx, name) for name in ("adult", "california", "penguins")}
         saved_data = {name: getattr(wbdata, name) for name in ("load_adult",)}
@@ -1303,7 +1343,9 @@ def _make_evaluate_29():
             seconds = time.perf_counter() - start
             if not callable(decide):
                 return None, f"method_29 doit rendre une fonction decide(X) ; reçu {type(decide).__name__}."
+            first_rows = np.concatenate([np.asarray(decide(X_te.iloc[[i]].copy())).reshape(-1) for i in range(200)])
             whole = np.asarray(decide(X_te.copy()))
+            shuffled_order = np.asarray(decide(X_te.iloc[order].reset_index(drop=True)))
             alone = np.concatenate([np.asarray(decide(X_te.iloc[[i]].copy())).reshape(-1) for i in range(200)])
         finally:
             g.update(originals)
@@ -1315,18 +1357,22 @@ def _make_evaluate_29():
         if whole.shape != (len(X_te),) or not np.isin(whole, (0, 1)).all():
             return None, (f"decide(X) doit rendre un tableau de 0 et de 1 de forme ({len(X_te)},) ; reçu la forme "
                           f"{whole.shape}.")
-        if not np.array_equal(alone.astype(int), whole[:200].astype(int)):
+        if not (np.array_equal(alone.astype(int), whole[:200].astype(int))
+                and np.array_equal(first_rows.astype(int), whole[:200].astype(int))):
             return None, ("decide ne décide pas chaque personne seule : sur les 200 premières, décider une ligne à la fois "
-                          "ne donne pas les mêmes décisions que tout le test d'un coup (une décision ne doit dépendre "
-                          "que de la personne).")
+                          "(avant et après le test entier) ne donne pas les mêmes décisions que tout le test d'un coup "
+                          "(une décision ne doit dépendre que de la personne).")
+        if shuffled_order.shape != whole.shape or not np.array_equal(shuffled_order.astype(int), whole[order].astype(int)):
+            return None, ("decide ne rend pas les mêmes décisions quand le test arrive dans un autre ordre : une décision "
+                          "ne doit dépendre que de la personne, pas de sa place dans le tableau.")
         return {"decisions": whole.astype(int), "seconds": seconds}, ""
 
     def measure(split, decisions, name):
         y = split.y_test.to_numpy()
-        rates, gaps = sk_audit(y, decisions, split.X_test["sex"].to_numpy())
+        rates, gaps = audit(y, decisions, split.X_test["sex"].to_numpy())
         acc = float(np.mean(decisions == y))
         return {"split": name, "accuracy": acc, "loss": base[name] - acc, "eo": gaps["eo"], "tpr_gap": gaps["tpr"],
-                "fpr_gap": gaps["fpr"], "balanced": float(balanced_accuracy_score(y, decisions))}
+                "fpr_gap": gaps["fpr"], "balanced": float(balanced_accuracy(y, decisions))}
 
     def evaluate_29(method):
         """method(X_train, y_train, X_val, y_val) -> decide(X): the rules of the statement, then the two measures."""
@@ -1351,16 +1397,16 @@ def _make_evaluate_29():
             globals()["FIRST_29"] = first = dict(results["test du MP3"])
         for name, r in results.items():
             print(f"{name} : accuracy {fr(r['accuracy'], 4)} (référence sans correction {fr(base[name], 4)}, "
-                  f"{fr(100 * r['loss'], 2)} point{'s' if abs(r['loss']) >= 0.02 else ''} de moins) ; ΔEO par sexe {fr(r['eo'], 3)} "
+                  f"{change(r['loss'])}) ; ΔEO par sexe {fr(r['eo'], 3)} "
                   f"(écart de TPR {fr(r['tpr_gap'], 3)}, de FPR {fr(r['fpr_gap'], 3)}) ; ajustement en {fr(r['seconds'], 1)} s.")
         if first["eo"] != results["test du MP3"]["eo"] or first["accuracy"] != results["test du MP3"]["accuracy"]:
             print(f"ℹ️ le test du MP3 a déjà été révélé dans cette session : ΔEO {fr(first['eo'], 3)}, accuracy "
                   f"{fr(first['accuracy'], 4)} à la première révélation ; c'est elle qui compte (règle d'honneur).")
-        rules = [(shuffled["balanced"] <= MAX_BALANCED_29,
+        rules = [(shuffled["balanced"] <= max_balanced,
                   f"contrôle des labels mélangés : balanced accuracy {fr(shuffled['balanced'], 3)} (au plus "
-                  f"{fr(MAX_BALANCED_29, 2)} ; le hasard : 0,5).",
+                  f"{fr(max_balanced, 2)} ; le hasard : 0,5).",
                   f"entraînée sur des labels mélangés, ta méthode décide encore le test avec une balanced accuracy de "
-                  f"{fr(shuffled['balanced'], 3)} (au plus {fr(MAX_BALANCED_29, 2)}) : apprend-elle d'une autre source "
+                  f"{fr(shuffled['balanced'], 3)} (au plus {fr(max_balanced, 2)}) : apprend-elle d'une autre source "
                   "que les labels qu'elle reçoit ?"),
                  (all(r["accuracy"] <= base[n] + 0.02 for n, r in results.items()),
                   "aucune accuracy trop belle (au plus 2 points au-dessus de la référence sans correction).",
@@ -1368,16 +1414,16 @@ def _make_evaluate_29():
                   "d'équité ne fait pas mieux qu'elle d'autant ; une fuite ?")]
         for ok, success, failure in rules:
             verdict("B6.29", ok, success, failure)
-        goals = {n: r["eo"] < GOAL_EO_29 and r["loss"] < MAX_LOSS_29 for n, r in results.items()}
+        goals = {n: r["eo"] < goal and r["loss"] < max_loss for n, r in results.items()}
         ok = all(rule[0] for rule in rules) and all(goals.values())
         verdict("B6.29", ok,
                 f"défi réussi : ΔEO {fr(results['test du MP3']['eo'], 3)} et {fr(results['contrôle']['eo'], 3)} (objectif "
-                f"sous {fr(GOAL_EO_29, 2)}), accuracy en baisse de {fr(100 * results['test du MP3']['loss'], 2)} et "
-                f"{fr(100 * results['contrôle']['loss'], 2)} point (moins de {fr(100 * MAX_LOSS_29, 0)}) ; référence : ΔEO de "
-                f"{fr(REFERENCE_29['eo'][0], 3)} à {fr(REFERENCE_29['eo'][1], 3)}.",
+                f"sous {fr(goal, 2)}) ; accuracy : {change(results['test du MP3']['loss'])} et "
+                f"{change(results['contrôle']['loss'])} (perte permise : moins de {fr(100 * max_loss, 0)} points) ; référence : "
+                f"ΔEO de {fr(reference['eo'][0], 3)} à {fr(reference['eo'][1], 3)}.",
                 "pas encore : " + " ; ".join(
-                    f"{n} : ΔEO {fr(r['eo'], 3)} (sous {fr(GOAL_EO_29, 2)}), accuracy en baisse de {fr(100 * r['loss'], 2)} point "
-                    f"(moins de {fr(100 * MAX_LOSS_29, 0)})" for n, r in results.items()) + ".")
+                    f"{n} : ΔEO {fr(r['eo'], 3)} (sous {fr(goal, 2)}), accuracy {change(r['loss'])} "
+                    f"(perte permise : moins de {fr(100 * max_loss, 0)} points)" for n, r in results.items()) + ".")
         return {"results": results, "shuffled": shuffled, "ok": ok}
 
     return evaluate_29

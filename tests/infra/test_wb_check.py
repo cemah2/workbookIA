@@ -142,9 +142,29 @@ def test_a_missed_prediction_is_not_called_a_classic_mistake():
     e = entry("d.7", False, mistakes={"relis la dernière ligne du tableau": True}, prediction=True)
     assert e["prediction"] is True and passes("d.7", e, False)
     text = message("d.7", e, True)
-    assert text.startswith("Prédiction ratée. Piste : relis la dernière ligne") and "Erreur classique" not in text
+    assert text.startswith("Prédiction ratée (tu as prédit « True »). Piste : relis la dernière ligne")
+    assert "Erreur classique" not in text
     plain = entry("d.8", False, mistakes={"relis la dernière ligne du tableau": True})
-    assert "prediction" not in plain and message("d.8", plain, True).startswith("Erreur classique.")
+    assert "prediction" not in plain and message("d.8", plain, True).startswith("Erreur classique. Piste : relis")
+
+
+def test_a_missed_choice_prediction_recalls_the_letter_before_the_hint():
+    """« Piste : « B » : lis… » read as « the hint is B »: the lead says what was predicted, the hint has no letter."""
+    e = entry("d.7b", "C", mistakes={"lis la part des courbes sous la figure": {"A", "B", "D"}}, prediction=True)
+    for letter in "ABD":
+        assert message("d.7b", e, letter) == ("Prédiction ratée (tu as prédit « " + letter + " »). Piste : lis la part "
+                                              "des courbes sous la figure")
+    assert passes("d.7b", e, "C") and passes("d.7b", e, "c")
+
+
+def test_a_set_of_wrong_values_shares_one_message():
+    e = entry("d.7c", 3, mistakes={"compte les cases du tableau": {1, 2}, "relis la question": 4})
+    assert "compte les cases" in message("d.7c", e, 1) and "compte les cases" in message("d.7c", e, 2)
+    assert "relis la question" in message("d.7c", e, 4)
+    with pytest.raises(ValueError, match="equals the right answer"):
+        entry("d.7d", "C", mistakes={"lis la figure": {"A", "C"}})
+    with pytest.raises(ValueError, match="give the same value"):
+        entry("d.7e", "C", mistakes={"lis la figure": {"A", "B"}, "relis la question": "B"})
 
 
 # ---------------------------------------------------------------- other kinds

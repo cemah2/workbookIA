@@ -43,8 +43,14 @@ def tests_after(ex_id: str, probe: str, keyword: str, n_tests: str, what: str = 
 
 
 def letters_record(ex_id: str, answer: str, hints: dict, prediction: bool = False) -> str:
-    """wb.record of a letter answer, with one message for each other letter."""
-    entries = ", ".join(f'"{message}": "{letter}"' for letter, message in hints.items() if letter != answer)
+    """wb.record of a letter answer, with a message for each other letter; letters with the same message share it (a
+    set of wrong values), so a message never has to name its letter (« Piste : « B » : … » read as the hint)."""
+    grouped = {}
+    for letter, message in hints.items():
+        if letter != answer:
+            grouped.setdefault(message, []).append(letter)
+    value = lambda ls: f'"{ls[0]}"' if len(ls) == 1 else "{" + ", ".join(f'"{x}"' for x in ls) + "}"
+    entries = ", ".join(f'"{message}": {value(ls)}' for message, ls in grouped.items())
     return f'wb.record("{ex_id}", "{answer}", mistakes={{{entries}}}' + (", prediction=True)" if prediction else ")")
 
 
@@ -97,19 +103,19 @@ Dans tes notes, avant d'exécuter : ce que tu sais de la Californie (où sont le
                  f'"{P13["lat_up"]}", {P13["spread"]}'),
        record="\n".join([
            letters_record("B6.13a", P13["medinc_rise"], {
-               "A": "« A » : lis la variation de la dépendance partielle de MedInc, sous la figure",
-               "B": "« B » : lis la variation de la dépendance partielle de MedInc, sous la figure",
-               "C": "« C » : lis la variation de la dépendance partielle de MedInc, sous la figure",
-               "D": "« D » : lis la variation de la dépendance partielle de MedInc, sous la figure"}, prediction=True),
+               "A": "lis la variation de la dépendance partielle de MedInc, sous la figure",
+               "B": "lis la variation de la dépendance partielle de MedInc, sous la figure",
+               "C": "lis la variation de la dépendance partielle de MedInc, sous la figure",
+               "D": "lis la variation de la dépendance partielle de MedInc, sous la figure"}, prediction=True),
            letters_record("B6.13b", P13["lat_trend"], {
-               "A": "« A » : suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)",
-               "B": "« B » : lis la variation de la dépendance partielle de la latitude, sous la figure",
-               "C": "« C » : suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)"}, prediction=True),
+               "A": "suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)",
+               "B": "lis la variation de la dépendance partielle de la latitude, sous la figure",
+               "C": "suis la courbe épaisse de la latitude, du sud (à gauche) au nord (à droite)"}, prediction=True),
            letters_record("B6.13c", P13["lat_up"], {
-               "A": "« A » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
-               "B": "« B » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
-               "C": "« C » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
-               "D": "« D » : lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure"},
+               "A": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+               "B": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+               "C": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure",
+               "D": "lis la part des courbes ICE de la latitude qui finissent plus haut, sous la figure"},
                prediction=True),
            f'wb.record("B6.13d", {P13["spread"]}, mistakes={{"compare les deux écarts-types de la variation des ICE, '
            f'sous la figure": {not P13["spread"]}}}, prediction=True)']),
@@ -188,7 +194,7 @@ Dans tes notes : avec quel fond la valeur SHAP de `MedInc` change-t-elle de sign
 
 La cellule de vérification compare tes deux modèles à scikit-learn, puis explique `GENTOO_17` avec les modèles de référence et tout l'entraînement pour fond : en logit pour la régression logistique, elle compare tes valeurs au cas linéaire ($\phi_{ki} = w_{ki}(x_i - \bar b_i)$ dans les unités des mesures, ∂ B6.2) ; en probabilité, elle vérifie l'efficacité de chaque classe et les valeurs de base ; pour la forêt, elle compare tes valeurs à `shap.TreeExplainer` interventionnel, avec tout le fond (`shap.maskers.Independent(XP_TRAIN, max_samples=249)` : sinon il n'en garde que 100), à $2 \cdot 10^{-3}$ près, parce que sur une forêt TreeSHAP s'écarte lui-même de `predict_proba` de quelques $10^{-4}$. Puis elle trace les trois explications et affiche, pour chacune, la somme sur les trois classes de chaque feature.
 
-Dans tes notes : quelles mesures font du manchot un Gentoo selon chaque explication ? Les logits et les probabilités classent-ils les mesures dans le même ordre ? Pourquoi les sommes sur les classes affichées valent-elles 0 pour les probabilités (pense à l'additivité et à ce que vaut la somme des trois probabilités), et que valent-elles pour les logits ? La forêt et la régression logistique s'appuient-elles sur les mêmes mesures ?""",
+Dans tes notes : quelles mesures font du manchot un Gentoo selon chaque explication ? Les logits et les probabilités classent-ils les mesures dans le même ordre ? Pourquoi les sommes sur les classes affichées valent-elles 0 pour les probabilités (pense à l'additivité et à ce que vaut la somme des trois probabilités) ? Elles valent 0 aussi pour les logits : que dit cela des coefficients de la régression logistique multinomiale de scikit-learn (affiche `LR_17[-1].coef_.sum(axis=0)`) ? La forêt et la régression logistique s'appuient-elles sur les mêmes mesures ?""",
        given=C.GIVEN_17, todo=C.TODO_17, check=C.CHECK_17, solution=C.SOLUTION_17 + "\n\n\n" + C.CHECK_17),
 ])
 

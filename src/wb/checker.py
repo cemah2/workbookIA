@@ -480,23 +480,27 @@ def make_entry(
     if mistakes:
         entry["mistakes"] = {}
         seen: dict[str, str] = {}  # normalized wrong value -> its message
-        for message, wrong_value in mistakes.items():
+        for message, wrong_values in mistakes.items():
             if not isinstance(message, str) or " " not in message.strip():
                 # {wrong value: message} instead of {message: wrong value} would store the wrong choice in clear
                 raise ValueError(f"Ex {ex_id}: `mistakes` maps a MESSAGE (a sentence) to a wrong value, but "
                                  f"{message!r} looks like a value: is the dictionary inverted?")
-            try:
-                wrong_norm = normalize(wrong_value, kind, decimals)
-            except NormalizationError as exc:
-                raise ValueError(f"Ex {ex_id}: mistake {message!r} has the wrong kind") from exc
-            if wrong_norm == norm:
-                raise ValueError(f"Ex {ex_id}: mistake {message!r} equals the right answer")
-            if wrong_norm in seen:
-                # two classic mistakes that give the same value: the learner would read only one of the messages
-                raise ValueError(f"Ex {ex_id}: mistakes {seen[wrong_norm]!r} and {message!r} give the same value "
-                                 f"({wrong_norm}); merge them into one message")
-            seen[wrong_norm] = str(message)
-            entry["mistakes"][hash_answer(ex_id, kind, wrong_norm)] = str(message)
+            # a set of wrong values shares one message (the other letters of a choice): scalar answers only, where
+            # a set cannot be a value itself
+            shared = isinstance(wrong_values, (set, frozenset)) and kind in ("str", "int", "bool", "float")
+            for wrong_value in (sorted(wrong_values, key=repr) if shared else [wrong_values]):
+                try:
+                    wrong_norm = normalize(wrong_value, kind, decimals)
+                except NormalizationError as exc:
+                    raise ValueError(f"Ex {ex_id}: mistake {message!r} has the wrong kind") from exc
+                if wrong_norm == norm:
+                    raise ValueError(f"Ex {ex_id}: mistake {message!r} equals the right answer")
+                if wrong_norm in seen:
+                    # two classic mistakes that give the same value: the learner would read only one of the messages
+                    raise ValueError(f"Ex {ex_id}: mistakes {seen[wrong_norm]!r} and {message!r} give the same value "
+                                     f"({wrong_norm}); merge them into one message")
+                seen[wrong_norm] = str(message)
+                entry["mistakes"][hash_answer(ex_id, kind, wrong_norm)] = str(message)
     if fractional is not None:
         if kind != "int":
             raise ValueError(f"Ex {ex_id}: `fractional` is only for a whole-number answer (kind 'int'), not {kind!r}")
@@ -778,9 +782,25 @@ def _thousands_message(value, right: bool) -> str:
             f"(`2_000_000`).{verdict}")
 
 
-def _classic(entry: dict, mistake: str) -> str:
-    """The message of a classic wrong value: « Erreur classique », or « Prédiction ratée » for a 🔮."""
-    lead = "Prédiction ratée" if entry.get("prediction") else "Erreur classique"
+_NO_ANSWER = object()
+
+
+def _classic(entry: dict, mistake: str, value=_NO_ANSWER) -> str:
+    """The message of a classic wrong value: « Erreur classique », or « Prédiction ratée » for a 🔮.
+
+    For a prediction whose answer is a choice, a whole number or a truth value, the lead recalls what the learner
+    predicted (« Prédiction ratée (tu as prédit « B ») »): the hint that follows is then never read as the answer."""
+    if not entry.get("prediction"):
+        return f"Erreur classique. Piste : {mistake}"
+    lead = "Prédiction ratée"
+    if value is not _NO_ANSWER and entry.get("kind") in ("str", "int", "bool"):
+        try:
+            text = str(_unwrap_single(value)).strip()
+        except Exception:  # noqa: BLE001 - an odd object: the lead without the answer
+            text = ""
+        if text:
+            shown = text if len(text) <= 40 else text[:37] + "…"
+            lead += f" (tu as prédit « {shown} »)"
     return f"{lead}. Piste : {mistake}"
 
 
@@ -812,7 +832,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                                         "à l'entier le plus proche (round).")
             mistake = entry.get("mistakes", {}).get(rounded)
             if mistake:
-                return False, "wrong", _classic(entry, mistake)
+                return False, "wrong", _classic(entry, mistake, value)
             return False, "wrong", "Ce n'est pas la bonne valeur (la réponse attendue est un nombre entier)."
         if kind in ("int", "float") and _looks_like_decimal_comma(value):
             return False, "type", ("Tu as écrit une virgule décimale : en Python, `0,5` est un couple de deux nombres, "
@@ -825,7 +845,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                     return True, "correct", _praise(ex_id)
                 mistake = entry.get("mistakes", {}).get(shape_hash)
                 if mistake:
-                    return False, "wrong", _classic(entry, mistake)
+                    return False, "wrong", _classic(entry, mistake, value)
                 return False, "wrong", _WRONG_SHAPE
         try:
             raw = _unwrap_single(value)
@@ -855,7 +875,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
             return True, "correct", _praise(ex_id)  # right up to rounding noise (e.g. float32)
         mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
         if mistake:
-            return False, "wrong", _classic(entry, mistake)
+            return False, "wrong", _classic(entry, mistake, value)
         return False, "wrong", _array_diagnosis(ex_id, entry, arr, computed)
 
     candidates = [norm]
@@ -868,7 +888,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
 
     mistake = entry.get("mistakes", {}).get(hash_answer(ex_id, kind, norm))
     if mistake:
-        return False, "wrong", _classic(entry, mistake)
+        return False, "wrong", _classic(entry, mistake, value)
     if kind in ("int", "float"):  # "500,000" read as 500 (French decimal comma) when 500000 was meant
         thousands = _thousands_reading(value)
         if thousands is not None and _hash_value(ex_id, entry, thousands) in accepted:
@@ -881,7 +901,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                 return True, "correct", _praise(ex_id)
             mistake = entry.get("mistakes", {}).get(bare_hash)
             if mistake:
-                return False, "wrong", _classic(entry, mistake)
+                return False, "wrong", _classic(entry, mistake, value)
         # a shape or a position written "1, 2", "[1, 2]", "torch.Size([1, 2])" or "1 x 2" for "(1, 2)"
         shape = _shape_reading(value)
         if shape is not None and shape != norm:
@@ -890,7 +910,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
                 return True, "correct", _praise(ex_id)
             mistake = entry.get("mistakes", {}).get(shape_hash)
             if mistake:
-                return False, "wrong", _classic(entry, mistake)
+                return False, "wrong", _classic(entry, mistake, value)
         # several choice letters with separators, in the order of an ordering answer ("B, D, E, A, C") or in another
         # order for a set of letters ("E, D, B" for "BDE")
         glued = [g for g in dict.fromkeys((_glued_letters(value, keep_order=True), _glued_letters(value)))
@@ -901,7 +921,7 @@ def check_entry(ex_id: str, entry: dict, value, computed: bool = False) -> tuple
         for glued_hash in glued_hashes:
             mistake = entry.get("mistakes", {}).get(glued_hash)
             if mistake:
-                return False, "wrong", _classic(entry, mistake)
+                return False, "wrong", _classic(entry, mistake, value)
     if kind in ("int", "float") and entry.get("choices") and norm not in entry["choices"]:
         offered = [_choice_text(choice) for choice in entry["choices"]]
         listed = ", ".join(offered[:-1]) + " ou " + offered[-1] if len(offered) > 1 else offered[0]

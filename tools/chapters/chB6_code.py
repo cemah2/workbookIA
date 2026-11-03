@@ -26,7 +26,8 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler
 from wb import explain_data as wbx
-from wb.nbtools import StopCheck, checked, filled, fr, pair, refuses, returned, run_pytest_group, same, verdict, written
+from wb.nbtools import (StopCheck, as_numpy, checked, filled, fr, pair, refuses, returned, run_pytest_group, same,
+                        verdict, written)
 
 warnings.filterwarnings("ignore", message=".*IProgress not found.*")              # tqdm, imported by shap
 warnings.filterwarnings("ignore", message="X does not have valid feature names")   # a model fitted on a DataFrame,
@@ -47,6 +48,22 @@ GBR = HistGradientBoostingRegressor(random_state=0).fit(X_TRAIN, Y_TRAIN)   # th
 def pct(x, digits=0):
     """A share written the French way: 0.734 -> '73 %'."""
     return f"{100 * x:.{digits}f} %".replace(".", ",")
+
+
+def shapley_ready(ex_id):
+    """True when your shapley_values (Ex B6.14) runs on a tiny case where f only accepts 2-D arrays (one feature,
+    a background of one row); otherwise one ⏳ or ❌ line that sends you back to B6.14."""
+    tiny = lambda: mylearn.explain.shapley_values(lambda X: np.asarray(X, dtype=float)[:, 0], [1.0], [[0.0]])
+    if not written(tiny):
+        print(f"⏳ Ex {ex_id} : cette vérification attend ta shapley_values (Ex B6.14).")
+        return False
+    try:
+        tiny()
+    except Exception as exc:  # noqa: BLE001 - the learner's code
+        print(f"❌ Ex {ex_id} : ta shapley_values (Ex B6.14) lève {type(exc).__name__} sur un cas minuscule (une "
+              "feature, un fond d'une ligne, une f qui n'accepte que des tableaux 2-D) : fais d'abord passer ses tests.")
+        return False
+    return True
 
 
 print(f"California : {len(X_TRAIN)} districts d'entraînement, {len(X_VAL)} de validation, {len(CAL.X_test)} de test, "
@@ -121,7 +138,11 @@ with checked("B6.12"):
                 f"linear_12 doit rendre un Pipeline (StandardScaler, puis LinearRegression), reçu {type(lin_12).__name__} "
                 f"{[type(s).__name__ for s in steps_12]}.")
         scaler_12 = next((s for s in steps_12 if isinstance(s, StandardScaler)), None)
-        if scaler_12 is not None and hasattr(scaler_12, "mean_"):
+        if scaler_12 is not None and not (scaler_12.with_mean and scaler_12.with_std):
+            print("❌ Ex B6.12 : ton StandardScaler ne centre pas ou ne réduit pas (with_mean="
+                  f"{scaler_12.with_mean}, with_std={scaler_12.with_std}) : le contrat veut ses réglages par défaut, "
+                  "pour des coefficients qui mesurent l'effet d'un écart-type.")
+        elif scaler_12 is not None and getattr(scaler_12, "mean_", None) is not None:
             verdict("B6.12", np.allclose(scaler_12.mean_, X_TRAIN.mean().to_numpy()),
                     "le StandardScaler a appris les moyennes de X_TRAIN.",
                     "le StandardScaler n'a pas appris les moyennes de X_TRAIN : sur quelles lignes est-il ajusté ?")
@@ -181,6 +202,11 @@ with checked("B6.12"):
         raise StopCheck
     ref_12 = partial_dependence(GBR, ROWS_12, ["AveOccup"], kind="both", grid_resolution=50)
     same("B6.12", "grid de AveOccup (50 valeurs)", out_12["grid"], ref_12["grid_values"][0])
+    ind_12 = as_numpy(out_12["individual"])
+    if ind_12 is not None and ind_12.ndim == 2 and ind_12.shape[1] > 1 and np.allclose(ind_12[:, 0], 0, atol=1e-9):
+        print("❌ Ex B6.12 : tes courbes ICE partent toutes de 0 : c'est la version centrée (chaque courbe moins sa "
+              "première valeur) ; le contrat veut les prédictions elles-mêmes.")
+        raise StopCheck
     same("B6.12", "courbes ICE de AveOccup (300 districts × 50 valeurs)", out_12["individual"],
          ref_12["individual"][0], rtol=1e-9, atol=1e-9)
     if same("B6.12", "dépendance partielle de AveOccup", out_12["average"], ref_12["average"][0], rtol=1e-9, atol=1e-9):
@@ -338,6 +364,7 @@ def tree_shap_15(model, background, rows):
     return explainer(rows)'''
 
 CHECK_15 = r'''SV_15 = MODEL_15 = None
+BASE_OK_15 = False
 with checked("B6.15"):
     if shap is None:
         print("⏳ Ex B6.15 : cet exercice a besoin de shap (wb.ensure('shap')).")
@@ -377,6 +404,10 @@ with checked("B6.15"):
     verdict("B6.15", gap_eff_15 < 1e-6, f"efficacité sur les 1 000 districts : écart maximal {gap_eff_15:.1e}.",
             f"efficacité : somme des valeurs SHAP + valeur de base s'écarte de la prédiction de {gap_eff_15:.2g} : "
             "l'explication porte-t-elle sur ce modèle et sur ces lignes ?")
+    BASE_OK_15 = bool(abs(float(np.ravel(sv_15.base_values)[0]) - float(model_15.predict(BG_15).mean())) < 1e-6)
+    verdict("B6.15", BASE_OK_15, "la valeur de base est la prédiction moyenne de ton modèle sur les 50 lignes de BG_15.",
+            "la valeur de base n'est pas la prédiction moyenne de ton modèle sur les 50 lignes de BG_15 : tree_shap_15 "
+            "reçoit-il tout le fond, en mode interventionnel ?")
     wb.check("B6.15a", float(np.ravel(sv_15.base_values)[0]), computed=True)
     wb.check("B6.15b", float(sv_15.values[0, MEDINC]), computed=True)
     wb.check("B6.15c", float(np.mean(np.abs(sv_15.values[:, MEDINC]))), computed=True)
@@ -384,8 +415,11 @@ with checked("B6.15"):
 with checked("B6.15"):
     if SV_15 is None:
         raise StopCheck
-    if not written(lambda: mylearn.explain.shapley_values(lambda X: X.sum(axis=1), [0.0], [[0.0]])):
-        print("⏳ Ex B6.15 : la comparaison attend ta shapley_values (Ex B6.14).")
+    if not BASE_OK_15:
+        print("⏳ Ex B6.15d : corrige d'abord tree_shap_15 (sa valeur de base, ci-dessus) : la comparaison à ta "
+              "shapley_values se fait avec le même fond de 50 lignes.")
+        raise StopCheck
+    if not shapley_ready("B6.15d"):
         raise StopCheck
     x0_15 = ROWS_15.iloc[0].to_numpy()
     phi_15, base_15 = pair("B6.15", "shapley_values", mylearn.explain.shapley_values(MODEL_15.predict, x0_15,
@@ -413,6 +447,9 @@ RECORD_15 = r'''# The right values, computed above with the solution; the classi
 tree_path_15 = shap.TreeExplainer(MODEL_15)(ROWS_15.iloc[:1])                # without background: path-dependent
 default_15 = shap.TreeExplainer(GBR, data=BG_15, feature_perturbation="interventional")(ROWS_15)   # the default boosting
 bg100_15 = shap.TreeExplainer(MODEL_15, data=X_TRAIN.iloc[:100], feature_perturbation="interventional")(ROWS_15.iloc[:1])
+path_bg_15 = shap.TreeExplainer(MODEL_15, data=BG_15, feature_perturbation="tree_path_dependent")(ROWS_15)   # same base
+PATH_BG_15 = ("c'est le mode « chemins de l'arbre » (feature_perturbation=\"tree_path_dependent\"), même avec un fond : "
+              "relis les deux modes de TreeExplainer (§206.4)")
 base_r_15 = float(np.ravel(SV_15.base_values)[0])
 phi_r_15 = float(SV_15.values[0, MEDINC])
 mean_r_15 = float(np.mean(np.abs(SV_15.values[:, MEDINC])))
@@ -439,6 +476,7 @@ wb.record("B6.15b", phi_r_15, decimals=4, mistakes=distinct_15(phi_r_15, {
         float(tree_path_15.values[0, MEDINC]),
     "c'est le gradient boosting par défaut : le contrat veut max_depth=3": float(default_15.values[0, MEDINC]),
     "c'est un fond de 100 lignes : le contrat en prend 50": float(bg100_15.values[0, MEDINC]),
+    PATH_BG_15: float(path_bg_15.values[0, MEDINC]),
     "vérifie le signe": -phi_r_15}))
 tree_path_all_15 = shap.TreeExplainer(MODEL_15)(ROWS_15)
 wb.record("B6.15c", mean_r_15, decimals=4, mistakes=distinct_15(mean_r_15, {
@@ -447,10 +485,11 @@ wb.record("B6.15c", mean_r_15, decimals=4, mistakes=distinct_15(mean_r_15, {
     "c'est la moyenne des valeurs SHAP signées : on demande la moyenne de leurs valeurs absolues":
         float(np.mean(SV_15.values[:, MEDINC])),
     "c'est la moyenne des carrés : on demande la moyenne des valeurs absolues": float(np.mean(SV_15.values[:, MEDINC] ** 2)),
-    "c'est le gradient boosting par défaut : le contrat veut max_depth=3": float(np.mean(np.abs(default_15.values[:, MEDINC])))}))
+    "c'est le gradient boosting par défaut : le contrat veut max_depth=3": float(np.mean(np.abs(default_15.values[:, MEDINC]))),
+    PATH_BG_15: float(np.mean(np.abs(path_bg_15.values[:, MEDINC])))}))
 wb.record("B6.15d", True, mistakes={
-    "TreeExplainer et ta shapley_values diffèrent de plus de 1e-6 : ta fonction passe-t-elle ses tests (Ex B6.14), et "
-    "garde-t-elle toutes les lignes du fond ?": False})'''
+    "TreeExplainer et ta shapley_values diffèrent de plus de 1e-6 alors que tree_shap_15 a la bonne valeur de base : ta "
+    "fonction passe-t-elle ses tests (Ex B6.14), et garde-t-elle toutes les lignes du fond ?": False})'''
 
 # --- 🔬 B6.16 ---------------------------------------------------------------------------------------------------------
 GIVEN_16 = r'''# the district to explain: the validation district closest to the 75th percentile of MedInc
@@ -519,6 +558,10 @@ with checked("B6.16"):
     for name_16, bg_16 in BACKGROUNDS_16.items():
         got_16 = explain_16(GBR, X_16.copy(), bg_16.copy())
         phi_16, base_16 = pair("B6.16", "explain_16", got_16, names=("phi", "base"), floats=("base",))
+        if len(bg_16) > 1 and abs(base_16 - float(GBR.predict(bg_16.iloc[:1])[0])) < 1e-9:
+            print(f"❌ Ex B6.16 : fond « {name_16} » : ta valeur de base est la prédiction de la première ligne du fond : "
+                  f"v(∅) est la moyenne de f sur ses {len(bg_16)} lignes.")
+            continue
         want_16 = shap.TreeExplainer(GBR, data=bg_16, feature_perturbation="interventional")(X_16.to_frame().T)
         ok_16 = same("B6.16", f"fond « {name_16} » : phi", phi_16, want_16.values[0], rtol=1e-6, atol=1e-6)
         ok_16 &= same("B6.16", f"fond « {name_16} » : valeur de base", base_16, float(np.ravel(want_16.base_values)[0]),
@@ -639,10 +682,31 @@ with checked("B6.17"):
         print("❌ Ex B6.17 : class_output_17 doit rendre une fonction f(X) -> (n,).")
         raise StopCheck
     same("B6.17", "class_output_17(LR, 2, 'proba') sur le test", f_p_17(XP_TEST), LR_17.predict_proba(XP_TEST)[:, 2])
-    same("B6.17", "class_output_17(LR, 2, 'logit') sur le test", f_l_17(XP_TEST), LR_17.decision_function(XP_TEST)[:, 2])
+    out_l_17 = f_l_17(XP_TEST)
+    arr_l_17 = as_numpy(out_l_17)
+    if (arr_l_17 is not None and arr_l_17.shape == (len(XP_TEST),)
+            and np.allclose(arr_l_17, np.log(LR_17.predict_proba(XP_TEST))[:, 2], rtol=1e-6, atol=1e-8)):
+        print("❌ Ex B6.17 : class_output_17(LR, 2, 'logit') rend le log de la probabilité : il diffère du logit "
+              "(decision_function) d'une quantité qui change d'un manchot à l'autre, le log de la somme des "
+              "exponentielles des trois logits.")
+    else:
+        same("B6.17", "class_output_17(LR, 2, 'logit') sur le test", out_l_17, LR_17.decision_function(XP_TEST)[:, 2])
 
 RESULTS_17 = {}
+ORDERS_17 = [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]   # the other orders of the three classes
+
+
+def shifted_17(got, want):
+    """True when the rows of `got` are those of `want` in another order of the classes."""
+    arr = as_numpy(got)
+    want = np.asarray(want, dtype=float)
+    return (arr is not None and arr.shape == want.shape and not np.allclose(arr, want, rtol=1e-6, atol=1e-8)
+            and any(np.allclose(arr, want[order], rtol=1e-6, atol=1e-8) for order in ORDERS_17))
+
+
 with checked("B6.17"):
+    if not shapley_ready("B6.17"):
+        raise StopCheck
     phi_l_17, base_l_17 = pair("B6.17", "shap_by_class_17", shap_by_class_17(LR_17, GENTOO_17.copy(), XP_TRAIN.copy(), "logit"),
                                names=("phi", "base"))
     if np.shape(phi_l_17) != (3, 4) or np.shape(base_l_17) != (3,):
@@ -650,6 +714,10 @@ with checked("B6.17"):
         raise StopCheck
     scaler_17, logreg_17 = LR_17[0], LR_17[-1]
     linear_17 = logreg_17.coef_ / scaler_17.scale_ * (GENTOO_17 - XP_TRAIN.mean(axis=0))   # w_ki (x_i - mean_i), ∂ B6.2
+    if shifted_17(phi_l_17, linear_17):
+        print("❌ Ex B6.17 : tes lignes sont celles d'autres classes : la ligne k doit expliquer la classe "
+              "model.classes_[k] (SPECIES[k]).")
+        raise StopCheck
     if same("B6.17", "logits : phi = w_ki (x_i − moyenne du fond), le cas linéaire", phi_l_17, linear_17, rtol=1e-6, atol=1e-8):
         RESULTS_17["régression logistique, logit"] = np.asarray(phi_l_17)
     phi_p_17, base_p_17 = pair("B6.17", "shap_by_class_17", shap_by_class_17(LR_17, GENTOO_17.copy(), XP_TRAIN.copy(), "proba"),
@@ -898,10 +966,11 @@ with checked("B6.19"):
     if not ok_19:
         raise StopCheck
     s_19 = saliency_19(want_19.copy())
-    if same("B6.19", "saliency_19 : le plus grand |gradient| des 3 canaux", s_19, np.abs(want_19).max(axis=1)):
-        ok_19["saliency"] = True
-    elif np.allclose(np.asarray(s_19, dtype=float), np.abs(want_19).mean(axis=1)):
+    arr_s_19 = as_numpy(s_19)
+    if arr_s_19 is not None and arr_s_19.shape == (4, 32, 32) and np.allclose(arr_s_19, np.abs(want_19).mean(axis=1)):
         print("❌ Ex B6.19 : c'est la moyenne des |gradients| des canaux : la carte de saillance de 206.5 prend le maximum.")
+    elif same("B6.19", "saliency_19 : le plus grand |gradient| des 3 canaux", s_19, np.abs(want_19).max(axis=1)):
+        ok_19["saliency"] = True
     gi_19 = grad_times_input_19(want_19.copy(), x_19.numpy().copy())
     if same("B6.19", "grad_times_input_19 : somme sur les canaux de gradient × pixel", gi_19, (want_19 * x_19.numpy()).sum(axis=1),
             rtol=1e-6, atol=1e-8):
@@ -914,8 +983,16 @@ with checked("B6.19"):
     if not returned("B6.19", "integrated_19", ig_19):
         raise StopCheck
     ref_ig_19 = wbx.integrated_gradients(CNN, IMAGES_19[:1], [int(LABELS_19[0])], n_steps=20)[0]
-    if same("B6.19", "integrated_19 (image noire, 20 intervalles) contre la référence", ig_19, ref_ig_19, rtol=1e-4, atol=1e-6):
-        ok_19["ig"] = True'''
+    arr_ig_19 = as_numpy(ig_19)
+    if (arr_ig_19 is not None and arr_ig_19.shape == ref_ig_19.shape and not np.allclose(arr_ig_19, ref_ig_19, rtol=1e-4, atol=1e-6)
+            and np.allclose(arr_ig_19 * IMAGES_19[0].numpy(), ref_ig_19, rtol=1e-4, atol=1e-6)):
+        print("❌ Ex B6.19 : integrated_19 rend la moyenne des gradients sur le chemin : les gradients intégrés la "
+              "multiplient par (x − x′).")
+    elif same("B6.19", "integrated_19 (image noire, 20 intervalles) contre la référence", ig_19, ref_ig_19, rtol=1e-4, atol=1e-6):
+        ok_19["ig"] = True
+    else:
+        print("ℹ️ Ex B6.19 : la ligne de référence est ici l'image noire, le tenseur nul (le CNN reçoit des pixels dans "
+              "[0, 1] et se normalise lui-même), et la règle celle des trapèzes, en 20 intervalles.")'''
 
 EXPERIMENT_19 = r'''if len(ok_19) == 4:
     start_19 = time.perf_counter()
@@ -1005,7 +1082,7 @@ print(f"ResNet-18 {'de référence' if RESNET_INFO['source'] == 'reference' else
       f"les 200 images : {pct(np.mean(PRED_20 == POOL_20[1]), 1)} ; 8 bonnes prédictions et 8 erreurs retenues.")'''
 
 CHECK_20 = r'''ok_20 = {}
-RESNET.layer4._forward_hooks.clear()                   # hooks left by an earlier run of your code
+wbx.clear_hooks(RESNET)                                # hooks left on RESNET by an earlier run of your code
 with checked("B6.20"):
     x_20 = X_20[[0, 1, 8, 9]]
     true_20 = POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])][[0, 1, 8, 9]]
@@ -1015,15 +1092,20 @@ with checked("B6.20"):
         got_20 = activations_and_gradients_20(RESNET, RESNET.layer4, x_20.clone(), t_20.copy())
     except RuntimeError as exc_20:
         if "require" in str(exc_20) and "grad" in str(exc_20):
-            print("❌ Ex B6.20 : ton code lève RuntimeError : " + str(exc_20)[:160] + " ; les poids du modèle sont gelés "
-                  "(requires_grad=False) : relis le dernier détail de « Avec PyTorch : deux hooks » (§206.6).")
+            print("❌ Ex B6.20 : ton code lève RuntimeError : " + str(exc_20)[:160] + " ; deux causes possibles : les "
+                  "poids du modèle sont gelés (requires_grad=False), relis le dernier détail de « Avec PyTorch : deux "
+                  "hooks » (§206.6) ; ou ton hook de passe avant rend une valeur, qui remplace la sortie du module, et "
+                  "un tenseur détaché coupe le graphe (le hook ne rend rien, 206.6).")
             raise StopCheck
         raise
     A_20, G_20 = pair("B6.20", "activations_and_gradients_20", got_20, names=("A", "G"))
-    if RESNET.layer4._forward_hooks:
-        print("❌ Ex B6.20 : un hook reste posé sur layer4 après l'appel : retire-le (handle.remove(), dans un finally) ; "
-              "sinon chaque passe avant suivante le déclenche encore.")
-        RESNET.layer4._forward_hooks.clear()
+    left_20 = wbx.leftover_hooks(RESNET)
+    if left_20:
+        print("❌ Ex B6.20 : un hook reste posé sur RESNET après l'appel ("
+              + ", ".join(f"{name or 'le modèle'} : {', '.join(kinds)}" for name, kinds in left_20.items())
+              + ") : retire chaque hook de module (handle.remove(), dans un finally) ; sinon chaque passe suivante le "
+              "déclenche encore.")
+        wbx.clear_hooks(RESNET)
         raise StopCheck
     if same("B6.20", "A : la sortie de layer4", A_20, A_ref_20, rtol=1e-5, atol=1e-6):
         ok_20["A"] = True
@@ -1037,7 +1119,7 @@ with checked("B6.20"):
     if same("B6.20", "G : le gradient du logit de target[n] par rapport à A", G_20, G_ref_20, rtol=1e-4, atol=1e-7):
         ok_20["G"] = True
 RESNET.eval().requires_grad_(False)                    # restored for the cells that follow, whatever your code did
-RESNET.layer4._forward_hooks.clear()
+wbx.clear_hooks(RESNET)
 
 with checked("B6.20"):
     if len(ok_20) < 2:
@@ -1055,9 +1137,19 @@ with checked("B6.20"):
         if arr_cam_20.min() < -1e-9:
             print("❌ Ex B6.20 : la carte a des valeurs négatives : grad_cam garde-t-il sa ReLU (relu=True par défaut) ?")
             raise StopCheck
+        nearest_20 = F.interpolate(small_20, size=(SIZE_20, SIZE_20), mode="nearest")[:, 0].numpy()
+        if np.allclose(arr_cam_20, nearest_20, rtol=1e-4, atol=1e-5):
+            print("❌ Ex B6.20 : la carte est agrandie par plus proche voisin (des blocs) : le contrat veut "
+                  "mode=\"bilinear\", align_corners=False, la convention qui a agrandi les images.")
+            raise StopCheck
+        wbx.clear_hooks(RESNET)
+        if np.allclose(arr_cam_20, wbx.grad_cam(RESNET, RESNET.layer3, x_20, t_20, size=SIZE_20), rtol=1e-4, atol=1e-5):
+            print("❌ Ex B6.20 : ce sont les cartes de layer3 : cam_20 doit pondérer les activations du module `layer` "
+                  "qu'elle reçoit.")
+            raise StopCheck
     if same("B6.20", f"cam_20 : cartes agrandies à {SIZE_20} × {SIZE_20}", arr_cam_20, want_cam_20, rtol=1e-4, atol=1e-5):
         ok_20["cam"] = True
-RESNET.layer4._forward_hooks.clear()'''
+wbx.clear_hooks(RESNET)'''
 
 EXPERIMENT_20 = r'''if len(ok_20) == 3:
     labels_20 = POOL_20[1][np.concatenate([RIGHT_20, WRONG_20])]

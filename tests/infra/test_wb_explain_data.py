@@ -3,6 +3,7 @@ the learner's ResNet of Ex B1.27 read from its folder, and the reference extract
 (hooks and autograd, integrated gradients, Grad-CAM, cascading randomisation, rank correlations)."""
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -116,6 +117,25 @@ def test_activations_and_gradients_work_on_a_frozen_model_and_broadcast_one_targ
     unused = nn.Conv2d(3, 3, 1)
     with pytest.raises(ValueError, match="not used"):
         X.activations_and_gradients(model, unused, _images(2), 0)
+
+
+def test_leftover_hooks_finds_every_kind_and_clear_hooks_removes_them():
+    torch.manual_seed(0)
+    net = nn.Sequential(nn.Linear(3, 4), nn.ReLU(), nn.Linear(4, 2))
+    assert X.leftover_hooks(net) == {}
+    calls = []
+    net[0].register_forward_hook(lambda m, i, o: calls.append("forward"))
+    net[0].register_forward_pre_hook(lambda m, i: calls.append("pre"))
+    net[2].register_full_backward_hook(lambda m, gi, go: calls.append("backward"))
+    net.register_forward_hook(lambda m, i, o, **kw: None, with_kwargs=True)
+    left = X.leftover_hooks(net)
+    assert left == {"": ["forward_hooks"], "0": ["forward_hooks", "forward_pre_hooks"], "2": ["backward_hooks"]}
+    assert X.clear_hooks(net) == left and X.leftover_hooks(net) == {}
+    net(torch.ones(1, 3, requires_grad=True)).sum().backward()      # no hook fires, nothing breaks
+    assert calls == []
+    net[2].register_full_backward_hook(lambda m, gi, go: calls.append("again"))   # a new hook works after clearing
+    net(torch.ones(1, 3, requires_grad=True)).sum().backward()
+    assert calls == ["again"]
 
 
 def test_input_gradients_and_integrated_gradients_on_a_linear_model_are_exact():
@@ -294,7 +314,9 @@ def test_the_learner_model_of_b1_27_is_found_read_and_frozen(tmp_path, monkeypat
     monkeypatch.setattr("wb.core.repo_root", lambda *a, **k: tmp_path / "repo")
     assert X.find_b1_folder(tmp_path / "b6_explicabilite") == folder.resolve()
     assert X.find_b1_folder(tmp_path / "elsewhere" / "deeper") is None
+    before = {p.name: (p.read_bytes(), p.stat().st_mtime_ns) for p in folder.iterdir()}
     model, info = X.load_b1_folder(folder)
+    assert {p.name: (p.read_bytes(), p.stat().st_mtime_ns) for p in folder.iterdir()} == before   # read, never written
     assert info["source"] == "learner" and info["size"] == 64 and info["classes"] == list("abcdefghij")
     assert info["mean"] == (0.5, 0.5, 0.5) and info["std"] == (0.25, 0.25, 0.25)
     assert not model.training and not any(p.requires_grad for p in model.parameters())
@@ -317,3 +339,20 @@ def test_b1_resnet_falls_back_on_the_reference_and_says_so(tmp_path, monkeypatch
     assert model == "ref" and "pas de modèle publié" in capsys.readouterr().out
     monkeypatch.setattr("wb.core.repo_root", lambda *a, **k: tmp_path)       # never the real mon_travail/
     assert X.find_b1_folder(tmp_path / "nowhere") is None
+
+
+def test_the_solutions_notebook_never_reads_the_learner_model_of_b1():
+    """The solutions notebook of B6 sets B1_FOLDER = None and never looks for the folder of Ex B1.27; the exercise
+    notebook looks for it (and only reads it)."""
+    from wb.core import repo_root
+
+    folder = Path(repo_root()) / "chapitres" / "b6_explicabilite"
+    if not (folder / "05_solutions.ipynb").exists():
+        pytest.skip("chapter B6 not built")
+    sources = {}
+    for name in ("03_notebook", "05_solutions"):
+        nb = json.loads((folder / f"{name}.ipynb").read_text(encoding="utf-8"))
+        sources[name] = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
+    assert "B1_FOLDER = None" in sources["05_solutions"] and "find_b1_folder(" not in sources["05_solutions"]
+    assert "load_b1_folder(" not in sources["05_solutions"]
+    assert "B1_FOLDER = wbx.find_b1_folder()" in sources["03_notebook"]

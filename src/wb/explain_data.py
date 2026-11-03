@@ -17,6 +17,7 @@ Quick reference
 >>> names = cascade_layers(net)             # the blocks with weights, from the output to the input
 >>> copy = randomize_layers(net, names[:3], seed=0)   # a copy whose three top blocks are re-initialised
 >>> rho = spearman_per_image(cams_a, cams_b)
+>>> leftover_hooks(net), clear_hooks(net)   # the hooks a learner's code left on the modules (checks of B6.20, B6.21)
 
 **Tabular data.** ``california`` rounds the eight features to float32 (then keeps them as float64). The reason:
 ``HistGradientBoostingRegressor`` puts some of its thresholds exactly on repeated values of the data (latitude and
@@ -595,6 +596,36 @@ def activations_and_gradients(model, layer, x, target):
         handle.remove()
     A = store["A"].detach()
     return A.double().numpy(), G.detach().double().numpy(), logits.detach().double().numpy()
+
+
+HOOK_DICTS = ("_forward_hooks", "_forward_pre_hooks", "_backward_hooks", "_backward_pre_hooks")
+_HOOK_COMPANIONS = ("_forward_hooks_with_kwargs", "_forward_hooks_always_called", "_forward_pre_hooks_with_kwargs")
+
+
+def leftover_hooks(model) -> dict:
+    """``{module name: [kinds]}``: the hooks still registered on ``model`` or one of its submodules, by kind
+    (``forward_hooks``, ``forward_pre_hooks``, ``backward_hooks``, ``backward_pre_hooks``); ``""`` names ``model``
+    itself. Empty when no hook is left. (A hook on a tensor dies with the tensor: it is not looked for.)"""
+    out = {}
+    for name, module in model.named_modules():
+        kinds = [kind.strip("_") for kind in HOOK_DICTS if getattr(module, kind, None)]
+        if kinds:
+            out[name] = kinds
+    return out
+
+
+def clear_hooks(model) -> dict:
+    """Remove every module hook left on ``model`` and its submodules (forward, forward pre, backward, backward pre),
+    as ``handle.remove()`` would; returns what was there (:func:`leftover_hooks`, before)."""
+    left = leftover_hooks(model)
+    for module in model.modules():
+        for kind in HOOK_DICTS + _HOOK_COMPANIONS:
+            hooks = getattr(module, kind, None)
+            if hooks:
+                hooks.clear()
+        if getattr(module, "_is_full_backward_hook", None) is not None:
+            module._is_full_backward_hook = None
+    return left
 
 
 def input_gradients(model, x, target):

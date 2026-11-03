@@ -238,7 +238,7 @@ $\phi_i$ répond à « pourquoi ce score **plutôt que le score moyen du fond** 
 
 ### Combien ça coûte
 
-Le calcul exact demande $v(S)$ pour les $2^M$ coalitions, chacune sur les $B$ lignes du fond : $2^M \times B$ prédictions. Avec $M = 8$ et $B = 50$, $256 \times 50 = 12\,800$ prédictions : 0,08 s pour un `HistGradientBoostingRegressor` de 100 arbres sur nos deux cœurs (environ 150 000 lignes par seconde) ; avec $M = 12$, 204 800 prédictions, environ 1,3 s. Chaque feature de plus **double** le coût : d'où le garde-fou `max_features=12` de ta fonction, et les approximations de 206.4 (🧮 B6.7).
+Le calcul exact demande $v(S)$ pour les $2^M$ coalitions, chacune sur les $B$ lignes du fond : $2^M \times B$ prédictions. Avec $M = 8$ et $B = 50$, $256 \times 50 = 12\,800$ prédictions : 0,08 s pour un `HistGradientBoostingRegressor` de 100 arbres sur nos deux cœurs, en un seul appel à `predict` (environ 150 000 lignes par seconde ; 256 appels de 50 lignes prennent plutôt 0,4 s, car chaque appel a un coût fixe) ; avec $M = 12$, 204 800 prédictions, environ 1,3 s. Chaque feature de plus **double** le coût : d'où le garde-fou `max_features=12` de ta fonction, et les approximations de 206.4 (🧮 B6.7).
 
 ---
 
@@ -638,6 +638,7 @@ Un **scoring de crédit** des particuliers est donc **à haut risque** (🧠 Q12
 | Conclure « inutile » d'une dépendance partielle plate | la PDP de $x_2$ est plate alors que $x_2$ décide de tout, avec $x_3$ | tracer les courbes ICE ; regarder l'importance par permutation |
 | Oublier le fond | deux rapports SHAP sur le même modèle, avec des fonds différents, comparés valeur à valeur | écrire le fond avec chaque explication ; le même fond pour tout ce qu'on compare |
 | Comparer TreeSHAP « chemins » et Shapley interventionnel | `TreeExplainer(model)` sans fond, comparé à un calcul exact avec un fond | `TreeExplainer(model, data=bg, feature_perturbation="interventional")` |
+| Croire TreeSHAP additif sur des données en float64 | `TreeExplainer` interventionnel (shap 0.54.1) sur un `HistGradientBoostingRegressor` de California : valeurs SHAP et valeur de base s'écartent de la prédiction jusqu'à 0,53, car shap parcourt les arbres en float32 et des seuils tombent sur des valeurs répétées (latitude, longitude) | arrondir les features en float32 avant d'ajuster le modèle (`X.astype("float32").astype("float64")`), puis vérifier l'efficacité |
 | Croire une carte de saillance au premier coup d'œil | une carte nette qui suit les contours de l'objet | test de santé : randomiser les poids, la carte doit changer |
 | Prendre le gradient en un seul point d'un réseau saturé | gradient × entrée explique un quart de l'écart sur une sigmoïde saturée | gradients intégrés, et vérifier la complétude |
 | Grad-CAM sur la mauvaise couche ou la mauvaise classe | une couche précoce : une carte fine qui suit les bords ; la classe prédite au lieu de la classe étudiée | la dernière couche convolutive ; `target` = la classe qu'on explique |

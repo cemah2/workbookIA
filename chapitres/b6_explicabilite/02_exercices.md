@@ -303,7 +303,7 @@ Hypothèses (des ordres de grandeur) : un gradient boosting de $T = 100$ arbres 
 3. **KernelSHAP.** Pour les trois valeurs de $M$ : combien de coalitions, de prédictions, de temps par ligne ? Quelle part des $2^M$ coalitions voit-il pour $M = 20$ et $M = 50$ ? Qu'en déduis-tu de la précision de ses valeurs ? Pour $M = 10$, combien de coalitions KernelSHAP évalue-t-il ? Compare son coût à celui du calcul exact : lequel choisirais-tu, et pourquoi ?
 4. **TreeSHAP.** Combien de pas élémentaires par ligne, et de temps ? Où $M$ apparaît-il dans ce coût ? Combien de temps pour 1 000 lignes ?
 5. **Le piège des permutations.** Une autre écriture de Shapley fait la moyenne sur les $M!$ ordres d'arrivée. Combien d'ordres pour $M = 10$ et $M = 12$ ? Si l'on range chaque ordre dans un tuple Python d'environ 140 octets, combien de mémoire pour $M = 12$ ? Compare à la mémoire d'une session Colab gratuite (une douzaine de Go).
-6. **Le notebook.** 🔨 B6.14 explique 20 lignes de California avec 8 features et un fond de 50 lignes. Combien de prédictions, et de temps ?
+6. **Le notebook.** Ta `shapley_values` de 🔨 B6.14 explique un district de California avec 8 features et un fond de 50 lignes. Pour expliquer 20 districts de la même façon, combien de prédictions, et de temps ?
 7. Dis, en une phrase chacune, quand utiliser le calcul exact, KernelSHAP et TreeSHAP.
 
 <a id="reflexion"></a>
