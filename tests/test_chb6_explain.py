@@ -455,13 +455,13 @@ def test_shapley_values_interaction_of_three_features(exp):
 
 
 def test_shapley_values_accept_max_features_features(exp):
+    # M == max_features is allowed (only M > max_features raises); tested with M = 4, since a learner who loops over
+    # the M! orderings instead of the 2**M coalitions would run out of memory with M = 12
     rng = np.random.default_rng(12)
-    w, x, bg = rng.normal(size=12), rng.normal(size=12), rng.normal(size=(2, 12))
-    phi, _ = shapley_of(exp, vectorised(lambda X: X @ w, 12), x, bg)
-    assert_close(phi, w * (x - bg.mean(axis=0)), msg="shapley_values with M = 12 = max_features (default): allowed "
-                                                     "(only M > max_features raises)")
-    phi, _ = shapley_of(exp, vectorised(lambda X: X @ w[:4], 4), x[:4], bg[:, :4], max_features=4)
-    assert_close(phi, w[:4] * (x[:4] - bg[:, :4].mean(axis=0)), msg="shapley_values with M = 4 and max_features=4")
+    w, x, bg = rng.normal(size=4), rng.normal(size=4), rng.normal(size=(2, 4))
+    phi, _ = shapley_of(exp, vectorised(lambda X: X @ w, 4), x, bg, max_features=4)
+    assert_close(phi, w * (x - bg.mean(axis=0)), msg="shapley_values with M = 4 and max_features=4: allowed (only "
+                                                      "M > max_features raises)")
 
 
 def test_shapley_values_do_not_modify_their_inputs(exp):
@@ -1194,6 +1194,12 @@ def test_demographic_parity_difference_hand_computed(exp):
     got = gap_of(exp.demographic_parity_difference, y_pred, groups, what="demographic parity gap")
     assert_gap(got, 0.75, "demographic_parity_difference (selection rates 'a' 1/4, 'b' 1/2, 'c' 1, groups of sizes 4, "
                           "4 and 2): largest minus smallest selection rate")
+    # selection rates 'a' 1/2, 'b' 1, 'c' 0: the largest is in the middle group (sorted order)
+    groups = ["c"] * 3 + ["a"] * 2 + ["b"] * 3
+    y_pred = [0, 0, 0] + [1, 0] + [1, 1, 1]
+    got = gap_of(exp.demographic_parity_difference, y_pred, groups, what="demographic parity gap")
+    assert_gap(got, 1.0, "demographic_parity_difference (selection rates 'a' 1/2, 'b' 1, 'c' 0): largest minus "
+                         "smallest over all the groups")
 
 
 def test_demographic_parity_difference_against_group_selection_rates(exp):
@@ -1246,6 +1252,9 @@ def test_equalized_odds_difference_docstring_example(exp):
     pytest.param([("m", 3, 1, 1, 4), ("k", 1, 1, 1, 1), ("z", 9, 1, 0, 5)], 0.5,
                  "three groups: TPR 3/4, 1/2, 9/10 for 'm', 'k', 'z' (gap 0.4), FPR 1/5, 1/2, 0 (gap 0.5)",
                  id="three-groups"),
+    pytest.param([("a", 1, 1, 1, 4), ("b", 2, 0, 2, 3), ("c", 3, 1, 3, 7)], 0.5,
+                 "TPR 1/2, 1, 3/4 for 'a', 'b', 'c' (gap 1/2), FPR 1/5, 2/5, 3/10 (gap 1/5): the largest TPR and FPR "
+                 "are in the middle group 'b'", id="extremes-in-the-middle-group"),
 ])
 def test_equalized_odds_difference_hand_computed(exp, blocks, want, why):
     y_true, y_pred, groups = make(*blocks)

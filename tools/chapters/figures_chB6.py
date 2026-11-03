@@ -70,13 +70,14 @@ def save(fig, name: str) -> None:
 def figure_pdp_ice() -> None:
     from sklearn.ensemble import HistGradientBoostingRegressor
     from sklearn.inspection import partial_dependence
+    from sklearn.model_selection import train_test_split
 
     rng = np.random.default_rng(0)
     n = 3000
     X = rng.uniform(-1, 1, size=(n, 3))
     y = 0.2 * X[:, 0] - 5 * X[:, 1] + 10 * X[:, 1] * (X[:, 2] >= 0) + rng.normal(0, 0.3, n)
-    model = HistGradientBoostingRegressor(random_state=0).fit(X[:2250], y[:2250])
-    X_va = X[2250:]
+    X_tr, X_va, y_tr, _ = train_test_split(X, y, random_state=0)         # the split of the code in 206.2
+    model = HistGradientBoostingRegressor(random_state=0).fit(X_tr, y_tr)
     res = partial_dependence(model, X_va, features=[1], kind="both", grid_resolution=25,
                              percentiles=(0.02, 0.98))
     grid, ice, avg = res["grid_values"][0], res["individual"][0], res["average"][0]
