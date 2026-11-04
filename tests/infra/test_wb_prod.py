@@ -112,6 +112,26 @@ def test_stderr_lines_by_level():
     assert result.stderr_lines("ERROR") == ["ERRORS are not ERROR lines"]
 
 
+def test_tail_leaves_out_the_markers_under_a_traceback_line():
+    """Session 76 (V5): Python 3.13 underlines the failing expression with ~ and ^; a one-line message keeps the
+    lines that say something."""
+    err = "Traceback (most recent call last):\n    loss = model(x)\n           ~~~~~^^^\nRuntimeError: too small\n"
+    assert wbp.RunResult(["x"], 1, "", err).tail(2) == "loss = model(x) ⏎ RuntimeError: too small"
+    assert wbp.RunResult(["x"], 1, "", "").tail() == "(rien sur stderr)"
+
+
+def test_temporary_project_is_removed_at_the_end_of_the_session():
+    """Session 76 (V5): the temporary project of a Python session is removed when it ends (it used to pile up in
+    /tmp, one per run of the notebook)."""
+    import subprocess
+    import sys
+    code = "from wb import prod; p = prod.project_dir('solution'); (p / 'f.txt').write_text('x'); print(p.parent)"
+    done = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=60)
+    assert done.returncode == 0, f"expected the child to run, got {done.stderr[-300:]}"
+    folder = Path(done.stdout.strip())
+    assert folder.name.startswith("wb_b7_project_") and not folder.exists(), f"expected {folder} removed at exit"
+
+
 def test_import_package_reads_the_files_again(tmp_path):
     pkg = tmp_path / "src" / wbp.PACKAGE
     pkg.mkdir(parents=True)

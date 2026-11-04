@@ -259,7 +259,8 @@ class RunResult:
 
     def tail(self, n: int = 3) -> str:
         """The last n lines of stderr, joined by « ⏎ » (for a one-line message)."""
-        lines = [line.strip() for line in self.stderr.strip().splitlines() if line.strip()]
+        lines = [line.strip() for line in self.stderr.strip().splitlines()
+                 if line.strip() and not set(line.strip()) <= set("^~ ")]   # not the markers under a traceback line
         return " ⏎ ".join(lines[-n:]) if lines else "(rien sur stderr)"
 
     def _ipython_display_(self) -> None:   # a RunResult on the last line of a cell: a short summary

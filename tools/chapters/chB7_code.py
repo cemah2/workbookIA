@@ -803,7 +803,7 @@ with checked("B7.11"):
     ok_11["absent"] = refuses("B7.11", "un fichier absent", lambda: config_11.load_config(yaml_11 / "absent.yaml"),
                               error=FileNotFoundError)
     (yaml_11 / "tag.yaml").write_text('lr: !!python/object/apply:float ["0.1"]\n', encoding="utf-8")
-    ok_11["safe_load"] = refuses("B7.11", "un fichier avec une étiquette !!python (yaml.safe_load la refuse)",
+    ok_11["safe_load"] = refuses("B7.11", "un fichier avec un tag YAML !!python (yaml.safe_load le refuse)",
                                  lambda: config_11.load_config(yaml_11 / "tag.yaml"), error=Exception)
     want_files_11 = {"configs/fast.yaml": DEFAULTS_11,
                      "configs/smoke.yaml": {**DEFAULTS_11, "n_train": 256, "batch_size": 64, "widths": [8, 16]}}
@@ -822,8 +822,9 @@ with checked("B7.11"):
         absent_11 = sorted(set(want_11) - set(written_11)) if isinstance(written_11, dict) else sorted(want_11)
         ok_11[rel_11] = got_11 == want_11 and not absent_11
         verdict("B7.11", ok_11[rel_11], f"{rel_11} : les dix réglages du contrat, écrits dans le fichier.",
-                f"{rel_11} : attendu {want_11}, reçu {got_11}" + (f" ; réglages absents du fichier (il doit se "
-                f"suffire) : {absent_11}" if absent_11 else "") + ".")
+                (f"{rel_11} : attendu {want_11}, reçu {got_11}" if got_11 != want_11 else f"{rel_11} : les bonnes "
+                 "valeurs, mais pas toutes écrites") + (f" ; réglages absents du fichier (il doit se suffire, sans "
+                 f"compter sur les valeurs par défaut) : {absent_11}" if absent_11 else "") + ".")
     if later_files_pending("B7.11"):
         ok_11["cli"] = False
     else:

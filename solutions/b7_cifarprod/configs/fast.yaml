@@ -7,3 +7,5 @@ n_train: 2000
 arch: cnn
 widths: [16, 32]
 data: data/cifar10_2000.npz
+deterministic: true
+num_workers: 0
