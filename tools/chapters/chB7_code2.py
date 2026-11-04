@@ -851,13 +851,15 @@ with checked("B7.21"), warnings.catch_warnings():
     io_21 = scratch("export")
     x_21 = model_input(X_B[:64], INFO_B["mean"], INFO_B["std"]).numpy()
     np.save(io_21 / "x.npy", x_21)
-    probe_21 = ("import json, sys, warnings\nimport numpy as np\nimport torch\nwarnings.simplefilter('ignore')\n"
+    probe_21 = ("import json, sys, warnings\nsys.modules['cifarprod'] = None   # not importable here, even if installed\n"
+                "import numpy as np\nimport torch\nwarnings.simplefilter('ignore')\n"
                 "exported = torch.export.load(sys.argv[1]).module()\nx = torch.from_numpy(np.load(sys.argv[2]))\n"
                 "with torch.inference_mode():\n    for b in (1, 7, 64):\n        np.save(f'{sys.argv[3]}/out{b}.npy', exported(x[:b]).numpy())\n"
                 "refused = {}\nfor name, bad in {'1025': torch.zeros(1025, 3, 32, 32), '28': torch.zeros(2, 3, 28, 28)}.items():\n"
                 "    try:\n        exported(bad)\n        refused[name] = None\n    except Exception as err:\n"
                 "        refused[name] = str(err).splitlines()[0][:120]\n"
-                "import importlib.util\nprint(json.dumps({'refused': refused, 'cifarprod': importlib.util.find_spec('cifarprod') is not None}))\n")
+                "try:\n    import cifarprod\n    reachable = True\nexcept ImportError:\n    reachable = False\n"
+                "print(json.dumps({'refused': refused, 'cifarprod': reachable}))\n")
     (io_21 / "reload_pt2.py").write_text(probe_21, encoding="utf-8")
     r_21 = wbp.run([sys.executable, io_21 / "reload_pt2.py", path_21, io_21 / "x.npy", io_21], scratch("elsewhere"))
     seen_21 = r_21.last_json() if r_21.ok else None

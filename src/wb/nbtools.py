@@ -60,6 +60,10 @@ _NONE_HINT = " ; une fonction ou une méthode oublie-t-elle son return ?"
 _TENSOR_HINT = (" ; une fonction NumPy a-t-elle reçu un tenseur PyTorch ? (rends un tableau NumPy : "
                 "t.detach().cpu().numpy())")
 _TORCH_ARGUMENTS = "received an invalid combination of arguments"   # np.mean(tensor) and the like
+_PICKLE_HINT = (" ; torch.load ne lit que ce qu'écrit torch.save (un pickle) : un fichier .safetensors se lit par "
+                "safetensors.torch.load_file, et on ne passe jamais weights_only=False pour un fichier qu'on n'a pas "
+                "écrit soi-même")
+_PICKLE_ERRORS = ("Weights only load failed", "invalid load key")   # torch.load on a file that is not its pickle
 
 
 def _torch_tensor_type():
@@ -153,7 +157,8 @@ def checked(ex_id: str):
     - :class:`StopCheck`: the reason is already printed, the block stops silently;
     - any other exception: ``❌ Ex <id> : ton code lève <type> : <message>`` (never an empty message), with
       a hint about a forgotten ``return`` when the message is about None (an ``AttributeError`` on None),
-      or about a tensor given to NumPy (PyTorch's "received an invalid combination of arguments").
+      or about a tensor given to NumPy (PyTorch's "received an invalid combination of arguments"), or about
+      ``torch.load`` given a file that is not its pickle (a ``.safetensors`` file).
     """
     with attempt(ex_id):
         try:
@@ -175,6 +180,10 @@ def checked(ex_id: str):
                 hint = _NONE_HINT
             elif _TORCH_ARGUMENTS in message:
                 hint = _TENSOR_HINT
+            elif any(text in message for text in _PICKLE_ERRORS):
+                hint = _PICKLE_HINT
+                if _PICKLE_ERRORS[0] in message:              # PyTorch's advice (weights_only=False) is not repeated
+                    message = _PICKLE_ERRORS[0]
             else:
                 hint = ""
             shown = message[:300] or "(sans message)"

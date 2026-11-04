@@ -36,11 +36,13 @@ def file_cell(name: str, text: str, comment: str = "") -> str:
 # Part A · the project
 # =====================================================================================================================
 TOOLS_A = r'''# Tools of part A: the folder of your project, the data of the chapter, the commands; nothing here is your package
+import atexit
 import contextlib
 import io
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 import time
@@ -49,6 +51,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import yaml
 from wb import prod as wbp
 from wb.nbtools import StopCheck, checked, fr, refuses, run_pytest_group, same, verdict, written
 
@@ -61,9 +64,31 @@ DEFAULTS = {"seed": 0, "epochs": 1, "lr": 0.05, "batch_size": 128, "n_train": 20
             "data": "data/cifar10_2000.npz", "deterministic": True, "num_workers": 0}   # TrainConfig().to_dict()
 
 
+SCRATCH_ROOT = Path(tempfile.mkdtemp(prefix="wb_b7_session_"))       # removed when the kernel stops
+atexit.register(shutil.rmtree, SCRATCH_ROOT, ignore_errors=True)
+LATER_FILES = {"tracking": ("TRACKING_PY", "B7.14"), "artifact": ("ARTIFACT_PY", "B7.17")}
+
+
 def scratch(prefix):
-    """A new temporary folder (outside the project): the checks write their test files there."""
-    return Path(tempfile.mkdtemp(prefix=f"wb_b7_{prefix}_"))
+    """A new temporary folder (outside the project, removed when the kernel stops): the checks write their test files
+    there."""
+    return Path(tempfile.mkdtemp(prefix=f"{prefix}_", dir=SCRATCH_ROOT))
+
+
+def later_files_pending(ex_id):
+    """⏳ (True) when the cli.py of your project imports a module of a later exercise (tracking.py, artifact.py) that
+    the project does not have yet: on a new project, « Tout exécuter » reaches this cell before the cell that
+    defines that module."""
+    cli_file = PROJECT / "src" / "cifarprod" / "cli.py"
+    text = cli_file.read_text(encoding="utf-8", errors="replace") if cli_file.is_file() else ""
+    absent = [f"{module}.py (la cellule de {name}, Ex {ex})" for module, (name, ex) in LATER_FILES.items()
+              if re.search(rf"^\s*(from\s+(\.|cifarprod\.)\s*{module}\b|from\s+(\.|cifarprod)\s+import\s.*\b{module}\b"
+                           rf"|import\s+cifarprod\.{module}\b)", text, re.M)
+              and not (PROJECT / "src" / "cifarprod" / f"{module}.py").is_file()]
+    if absent:
+        print(f"⏳ Ex {ex_id} : ton cli.py importe {' et '.join(absent)}, que ton projet n'a pas encore (sur un projet "
+              "neuf, « Tout exécuter » arrive ici avant cette cellule) : exécute-la, puis réexécute celle-ci.")
+    return bool(absent)
 
 
 def run_line(ex_id, result, ok, success, failure):
@@ -76,8 +101,9 @@ def run_line(ex_id, result, ok, success, failure):
         return False
     if result.timed_out:
         ok, failure = False, f"délai dépassé ({result.seconds:.0f} s) : {failure}"
-    seen = (f"stderr : {result.tail(2)[:400]}" if result.stderr.strip() else
-            f"rien sur stderr ; stdout : {result.stdout.strip()[-300:]!r}" if result.stdout.strip() else "rien sur stderr")
+    seen = " ; ".join(part for part in [
+        f"stderr : {result.tail(2)[:400]}" if result.stderr.strip() else "rien sur stderr",
+        f"stdout : {result.stdout.strip()[-300:]!r}" if result.stdout.strip() else ""] if part)
     verdict(ex_id, ok, f"{shown} → {success}", f"{shown} → {failure} (code {result.returncode} ; {seen})")
     return ok
 
@@ -268,8 +294,17 @@ with checked("B7.9"):                                    # data.py
                      and np.allclose(mean_9, want_9[0], atol=1e-10) and np.allclose(std_9, want_9[1], atol=1e-10))
     verdict("B7.9", ok_9["stats"], f"channel_stats : moyennes {np.round(mean_9, 4).tolist()}, écarts-types "
             f"{np.round(std_9, 4).tolist()} (trois floats Python chacun).",
-            f"channel_stats rend {mean_9!r}, {std_9!r} : attendu trois floats Python chacun, moyenne et écart-type "
-            "(divisé par n) des pixels de chaque canal dans [0, 1].")
+            f"channel_stats rend {mean_9!r}, {std_9!r} : attendu les moyennes {np.round(want_9[0], 6).tolist()} et "
+            f"les écarts-types {np.round(want_9[1], 6).tolist()}, trois floats Python chacun, des pixels de chaque canal "
+            "dans [0, 1] (calcule en float64 : en float32, la moyenne de 2 millions de pixels s'écarte de 3e-4).")
+    few_9 = SUBSET["x_val"][:4]
+    std4_9 = np.asarray(data_9.channel_stats(few_9)[1], dtype=np.float64)
+    want4_9 = (few_9 / 255.0).std(axis=(0, 1, 2))
+    ok_9["ddof"] = std4_9.shape == (3,) and np.allclose(std4_9, want4_9, rtol=0, atol=1e-6)
+    verdict("B7.9", ok_9["ddof"], "channel_stats de 4 images : l'écart-type divisé par n.",
+            f"channel_stats de 4 images : écarts-types {np.round(std4_9, 6).tolist()}, attendu "
+            f"{np.round(want4_9, 6).tolist()} (divisé par n ; np.std(..., ddof=1) et torch.std, par défaut, divisent "
+            "par n - 1).")
     four_9 = SUBSET["x_val"][:4]
     want_x_9 = ((four_9 / 255.0 - np.array(want_9[0])) / np.array(want_9[1])).transpose(0, 3, 1, 2)
     x_9 = data_9.preprocess(four_9.copy(), tuple(want_9[0]), tuple(want_9[1]))
@@ -372,8 +407,9 @@ with checked("B7.9"):                                    # train.py, in this not
     stats_256_9 = (SUBSET["x_train"][:256] / 255.0).mean(axis=(0, 1, 2))
     ok_9["mean"] = np.allclose(r1_9["mean"], stats_256_9, atol=1e-10)
     verdict("B7.9", ok_9["mean"], "la normalisation est apprise sur les images d'entraînement reçues.",
-            "result['mean'] doit être channel_stats des images d'entraînement reçues par train (ni la validation, ni "
-            "les statistiques d'ImageNet).")
+            ("(channel_stats est déjà faux, ci-dessus) " if not ok_9.get("stats", True) else "")
+            + "result['mean'] doit être channel_stats des images d'entraînement reçues par train (ni la validation, "
+            "ni les statistiques d'ImageNet).")
     ok_9["eval"] = not r1_9["model"].training
     verdict("B7.9", ok_9["eval"], "le modèle rendu est en mode eval().", "le modèle rendu est encore en mode "
             "entraînement : relis la docstring de train.")
@@ -382,6 +418,31 @@ with checked("B7.9"):                                    # train.py, in this not
     verdict("B7.9", ok_9["seed"], "deux appels avec seed=0 donnent les mêmes poids, seed=1 d'autres.",
             "deux appels de train avec seed=0 doivent donner exactement les mêmes poids, et seed=1 d'autres poids "
             "(seed_everything au début de train, le générateur de make_loader).")
+    tiny_9 = (SUBSET["x_train"][:64], SUBSET["y_train"][:64], SUBSET["x_val"][:32], SUBSET["y_val"][:32])
+    with wbp.torch_state_kept(), contextlib.redirect_stdout(printed_9):
+        z0_9 = train_9.train(*tiny_9, arch="cnn", widths=(4, 8), epochs=1, lr=1e-9, batch_size=64, seed=0)
+        z1_9 = train_9.train(*tiny_9, arch="cnn", widths=(4, 8), epochs=1, lr=1e-9, batch_size=64, seed=1)
+    ok_9["init"] = wbp.max_gap(z0_9["model"].state_dict(), z1_9["model"].state_dict()) > 1e-3
+    verdict("B7.9", ok_9["init"], "l'initialisation dépend de la graine (avec lr = 1e-9, les poids rendus sont "
+            "presque ceux du départ, et seed=1 en donne d'autres).",
+            "avec lr = 1e-9 (les poids ne bougent presque pas), train(seed=0) et train(seed=1) rendent les mêmes poids : "
+            "l'initialisation du modèle ne dépend pas de seed (seed_everything(seed, ...) avant build_model ?).")
+    with wbp.torch_state_kept(), contextlib.redirect_stdout(printed_9):
+        bn_9 = train_9.train(SUBSET["x_train"][:128], SUBSET["y_train"][:128], SUBSET["x_val"][:64],
+                             SUBSET["y_val"][:64], arch="vgg", widths=(4,), epochs=2, batch_size=64, seed=0)
+        probe_m_9 = wbp.build_reference("vgg", (4,)).train()
+        train_9.evaluate(probe_m_9, data_9.make_loader(SUBSET["x_val"][:32], SUBSET["y_val"][:32], (0.5,) * 3,
+                                                       (0.25,) * 3, batch_size=16))
+    counted_9 = [int(v) for k, v in bn_9["model"].state_dict().items() if k.endswith("num_batches_tracked")][:1]
+    ok_9["train mode"] = counted_9 == [4]
+    verdict("B7.9", ok_9["train mode"], "un VGG entraîné 2 epochs de 2 mini-batches : sa batchnorm a vu les 4 "
+            "mini-batches en mode train().", "un VGG entraîné 2 epochs de 2 mini-batches : sa première batchnorm en a "
+            f"compté {counted_9[0] if counted_9 else '?'} en mode train(), attendu 4 (model.train() au début de chaque "
+            "epoch ? evaluate rend-il le mode d'avant ? build_model fait-il un calcul en mode train ?).")
+    ok_9["evaluate mode"] = probe_m_9.training
+    verdict("B7.9", ok_9["evaluate mode"], "evaluate rend au modèle son mode d'avant (ici, train).",
+            "evaluate laisse en mode eval() un modèle reçu en mode train() : rends-lui son mode d'avant "
+            "(was_training = model.training, puis model.train(was_training)).")
     ok_9["print"] = printed_9.getvalue() == ""
     verdict("B7.9", ok_9["print"], "train n'écrit rien avec print.",
             f"train écrit avec print ({printed_9.getvalue().strip()[:80]!r}…) : passe par log.info et log.debug.")
@@ -403,15 +464,27 @@ with checked("B7.9"):                                    # pip install -e, in a 
             print("⏳ Ex B7.9 : ni pip ni uv dans cet environnement : l'installation éditable n'est pas vérifiée ici.")
             raise StopCheck
         ok_9["install"] = bool(install_9.ok)
+        log_9 = install_9.log if len(install_9.log) <= 600 else install_9.log[-600:].split("\n", 1)[-1]
+        why_9 = (" (ce backend n'est pas installé dans l'environnement du workbook : garde setuptools, comme le dit le "
+                 "contrat)" if re.search(r"No module named '(hatchling|flit_core|poetry|pdm)", install_9.log) else "")
         verdict("B7.9", install_9.ok, f"pip install -e . dans un environnement neuf ({install_9.method}, "
-                f"{fr(install_9.seconds, 1)} s).", "pip install -e . échoue : " + install_9.log[-600:])
+                f"{fr(install_9.seconds, 1)} s).", f"pip install -e . échoue{why_9} : {log_9}")
         if not install_9.ok:
             raise StopCheck
-        probe_9 = ("import cifarprod, importlib.metadata as m, json; print(json.dumps([cifarprod.__file__, "
-                   "m.version('cifarprod'), [e.value for e in m.entry_points(group='console_scripts') if e.name == "
-                   "'cifarprod']]))")
+        probe_9 = ("import sys, json, importlib.metadata as m, cifarprod, cifarprod.data, cifarprod.model, "
+                   "cifarprod.train; print(json.dumps([cifarprod.__file__, m.version('cifarprod'), [e.value for e in "
+                   "m.entry_points(group='console_scripts') if e.name == 'cifarprod'], 'wb' in sys.modules]))")
         seen_9 = install_9.run(["python", "-c", probe_9], scratch("elsewhere"))
-        where_9, version_9, entry_9 = json.loads(seen_9.stdout) if seen_9.ok else (None, None, None)
+        where_9, version_9, entry_9, uses_wb_9 = json.loads(seen_9.stdout) if seen_9.ok else (None, None, None, None)
+        if seen_9.ok and where_9 is None:
+            verdict("B7.9", False, "", "depuis un autre dossier, cifarprod.__file__ vaut None : sans "
+                    "src/cifarprod/__init__.py, Python en fait un paquet-espace de noms (namespace package), sans "
+                    "__version__ ; remets __init__.py.")
+            raise StopCheck
+        ok_9["no wb"] = uses_wb_9 is False
+        if seen_9.ok and uses_wb_9:
+            verdict("B7.9", False, "", "ton paquet importe wb (l'outillage du workbook) : un paquet installable ne "
+                    "dépend que des dépendances déclarées dans son pyproject.toml.")
         ok_9["editable"] = seen_9.ok and Path(where_9).resolve().is_relative_to(PROJECT / "src")
         verdict("B7.9", ok_9["editable"], "depuis un autre dossier, import cifarprod lit ton dossier src/ (une "
                 "installation éditable, pas une copie).", f"depuis un autre dossier, import cifarprod : {where_9 or seen_9.tail(1)}.")
@@ -534,6 +607,8 @@ with checked("B7.10"):
     if "ARTIFACT_PY" in globals() and ARTIFACT_PY is not ...:
         files_10["src/cifarprod/artifact.py"] = ARTIFACT_PY          # Ex B7.17, if it is already done
     wbp.write_files(PROJECT, files_10)
+    if later_files_pending("B7.10"):
+        raise StopCheck
     cli_10 = wbp.import_module(PROJECT, "cli")
     cli_10.build_parser()                                 # ⏳ while it raises NotImplementedError
     out_10 = scratch("out")
@@ -586,6 +661,15 @@ with checked("B7.10"):
         ok_10["verbose"] = run_line("B7.10", r_10, r_10.ok and any("cifarprod" in line for line in r_10.stderr_lines("DEBUG")),
                                     "avec -v, les lignes DEBUG des mini-batches.",
                                     "attendu, avec -v, des lignes DEBUG du paquet sur stderr")
+    (out_10 / "small.yaml").write_text("n_train: 200\n", encoding="utf-8")
+    r_10 = wbp.cli(PROJECT, "train", "--config", out_10 / "small.yaml", "--out", out_10 / "e")
+    ok_10["config"] = run_line("B7.10", r_10, r_10.ok, "code 0 avec --config et sans aucun --set.",
+                               "attendu le code 0 pour train --config FILE sans aucun --set (le défaut de --set : [])")
+    r_10 = wbp.cli(PROJECT, "train", "--set", "n_train=200", "--set", "widths=[4, 4, 4, 4, 4, 4]", "--out", out_10 / "f")
+    ok_10["fails"] = run_line("B7.10", r_10, r_10.returncode == 1 and r_10.stderr_lines("ERROR") and not r_10.stdout.strip(),
+                              "code 1, une ligne ERROR (avec sa trace), rien sur stdout, quand l'entraînement échoue.",
+                              "un CNN à six étages de max pooling ne peut pas traiter une image 32 × 32 : attendu le code "
+                              "1, une ligne ERROR (log.exception) et rien sur stdout quand l'entraînement échoue")
     with wbp.isolated_logging():                         # main() configures the logging of THIS process
         try:
             code_10 = cli_10.main(["train", "--set", "lr"])
@@ -653,6 +737,8 @@ SOLUTION_11 = "\n\n".join([
 
 CHECK_11 = r'''import dataclasses
 
+import yaml
+
 ok_11 = {}
 DEFAULTS_11 = DEFAULTS
 with checked("B7.11"):
@@ -716,20 +802,38 @@ with checked("B7.11"):
             "donner les valeurs par défaut (yaml.safe_load rend None).")
     ok_11["absent"] = refuses("B7.11", "un fichier absent", lambda: config_11.load_config(yaml_11 / "absent.yaml"),
                               error=FileNotFoundError)
+    (yaml_11 / "tag.yaml").write_text('lr: !!python/object/apply:float ["0.1"]\n', encoding="utf-8")
+    ok_11["safe_load"] = refuses("B7.11", "un fichier avec une étiquette !!python (yaml.safe_load la refuse)",
+                                 lambda: config_11.load_config(yaml_11 / "tag.yaml"), error=Exception)
     want_files_11 = {"configs/fast.yaml": DEFAULTS_11,
                      "configs/smoke.yaml": {**DEFAULTS_11, "n_train": 256, "batch_size": 64, "widths": [8, 16]}}
     for rel_11, want_11 in want_files_11.items():
-        got_11 = config_11.load_config(PROJECT / rel_11).to_dict()
-        ok_11[rel_11] = got_11 == want_11
-        verdict("B7.11", ok_11[rel_11], f"{rel_11} : les réglages du contrat.",
-                f"{rel_11} : attendu {want_11}, reçu {got_11}.")
-    out_11 = scratch("out")
-    r_11 = wbp.cli(PROJECT, "train", "--set", "epochs=0", "--out", out_11 / "a")
-    ok_11["cli epochs"] = run_line("B7.11", r_11, r_11.returncode == 2 and any("epochs" in l for l in r_11.stderr_lines("ERROR")),
-                                   "code 2 et une ligne ERROR qui nomme epochs, avant toute seconde de calcul.",
-                                   "attendu le code 2 et une ligne ERROR qui nomme epochs")
-    r_11 = wbp.cli(PROJECT, "train", "--config", "configs/smoke.yaml", "--out", out_11 / "b")
-    ok_11["cli smoke"] = run_line("B7.11", r_11, r_11.ok, f"code 0 en {fr(r_11.seconds, 1)} s.", "attendu le code 0")
+        try:
+            got_11 = config_11.load_config(PROJECT / rel_11).to_dict()
+        except ValueError as err_11:
+            ok_11[rel_11] = False
+            print(f"❌ Ex B7.11 : {rel_11} est refusé par ta configuration : « {str(err_11)[:160]} » (pour PyYAML, un "
+                  "nombre sans point, comme 5e-2, est une chaîne : écris 0.05).")
+            continue
+        try:
+            written_11 = yaml.safe_load((PROJECT / rel_11).read_text(encoding="utf-8")) or {}
+        except yaml.YAMLError:
+            written_11 = {}
+        absent_11 = sorted(set(want_11) - set(written_11)) if isinstance(written_11, dict) else sorted(want_11)
+        ok_11[rel_11] = got_11 == want_11 and not absent_11
+        verdict("B7.11", ok_11[rel_11], f"{rel_11} : les dix réglages du contrat, écrits dans le fichier.",
+                f"{rel_11} : attendu {want_11}, reçu {got_11}" + (f" ; réglages absents du fichier (il doit se "
+                f"suffire) : {absent_11}" if absent_11 else "") + ".")
+    if later_files_pending("B7.11"):
+        ok_11["cli"] = False
+    else:
+        out_11 = scratch("out")
+        r_11 = wbp.cli(PROJECT, "train", "--set", "epochs=0", "--out", out_11 / "a")
+        ok_11["cli epochs"] = run_line("B7.11", r_11, r_11.returncode == 2 and any("epochs" in l for l in r_11.stderr_lines("ERROR")),
+                                       "code 2 et une ligne ERROR qui nomme epochs, avant toute seconde de calcul.",
+                                       "attendu le code 2 et une ligne ERROR qui nomme epochs")
+        r_11 = wbp.cli(PROJECT, "train", "--config", "configs/smoke.yaml", "--out", out_11 / "b")
+        ok_11["cli smoke"] = run_line("B7.11", r_11, r_11.ok, f"code 0 en {fr(r_11.seconds, 1)} s.", "attendu le code 0")
 if ok_11 and all(ok_11.values()):
     print("✅ Ex B7.11 : ta configuration est typée, validée au chargement et surchargeable.")'''
 
@@ -792,7 +896,7 @@ def train_run_13(seed, deterministic=True):
     --set deterministic=<true|false> --out <a new temporary folder>, through wbp.cli. Returns {"weights": the dict of
     tensors of the model.safetensors it wrote, "val_acc": the val_acc of its JSON line, "seconds": its duration};
     RuntimeError with the end of stderr if the command does not end with the code 0."""
-    out = tempfile.mkdtemp(prefix="wb_b7_13_")
+    out = scratch("run13")
     result = wbp.cli(PROJECT, "train", "--config", "configs/fast.yaml", "--set", f"seed={seed}",
                      "--set", f"deterministic={str(deterministic).lower()}", "--out", out)
     if not result.ok:
@@ -829,6 +933,8 @@ with checked("B7.13"):
     verdict("B7.13", ok_gap_13, "max_gap_13 : 1e-6 (un float Python).",
             f"max_gap_13 sur un poids qui diffère de 1e-6 : reçu {gap_13!r}, attendu le float 1e-6 (à l'arrondi du float32 près).")
     tools_ok_13 = bool(all_13 and ok_gap_13)
+if tools_ok_13 and later_files_pending("B7.13"):
+    tools_ok_13 = False
 probe_13 = wbp.cli(PROJECT, "--version")
 if tools_ok_13 and not probe_13.ok:
     tools_ok_13 = False
@@ -837,14 +943,42 @@ if tools_ok_13 and not probe_13.ok:
 
 EXPERIMENT_13 = r'''RUNS_13 = {}
 if not tools_ok_13:
-    print("⏳ Ex B7.13 : l'expérience attend same_weights_13, max_gap_13 et train_run_13 justes (cellule précédente).")
+    print("⏳ Ex B7.13 : l'expérience attend la cellule précédente (ce qui y manque est dit ci-dessus).")
 else:
     with checked("B7.13"):
         PLAN_13 = {"A": (0, True), "B": (0, True), "C": (0, False), "D": (1, True), "E": (2, True)}
-        for key_13, (seed_13, det_13) in PLAN_13.items():
-            RUNS_13[key_13] = train_run_13(seed_13, det_13)
-            print(f"run {key_13} : graine {seed_13}, algorithmes déterministes {'oui' if det_13 else 'non'} → val_acc "
-                  f"{fr(RUNS_13[key_13]['val_acc'], 3)} en {fr(RUNS_13[key_13]['seconds'], 1)} s")
+        CALLS_13, cli_13 = [], wbp.cli                   # the commands that train_run_13 runs through wbp.cli
+
+        def spy_cli_13(project, *args, **kwargs):
+            CALLS_13.append([str(a) for a in args])
+            return cli_13(project, *args, **kwargs)
+
+        wbp.cli = spy_cli_13
+        try:
+            for key_13, (seed_13, det_13) in PLAN_13.items():
+                first_call_13 = len(CALLS_13)
+                RUNS_13[key_13] = train_run_13(seed_13, det_13)
+                print(f"run {key_13} : graine {seed_13}, algorithmes déterministes {'oui' if det_13 else 'non'} → "
+                      f"val_acc {fr(RUNS_13[key_13]['val_acc'], 3)} en {fr(RUNS_13[key_13]['seconds'], 1)} s")
+                set_13 = {}
+                for args_13 in CALLS_13[first_call_13:]:
+                    for a_13, b_13 in zip(args_13, args_13[1:]):
+                        if a_13 == "--set" and "=" in b_13:
+                            key_s_13, _, value_s_13 = b_13.partition("=")
+                            try:
+                                set_13[key_s_13.strip()] = yaml.safe_load(value_s_13)
+                            except yaml.YAMLError:
+                                set_13[key_s_13.strip()] = value_s_13
+                if len(CALLS_13) > first_call_13 and (set_13.get("seed") != seed_13
+                                                      or set_13.get("deterministic") is not det_13):
+                    verdict("B7.13", False, "", f"run {key_13} : train_run_13({seed_13}, {det_13}) lance ta commande "
+                            f"avec les surcharges {set_13} : attendu --set seed={seed_13} --set "
+                            f"deterministic={str(det_13).lower()}.")
+                    raise StopCheck
+        finally:
+            wbp.cli = cli_13
+        if not CALLS_13:
+            print("ℹ️ train_run_13 ne passe pas par wbp.cli : les arguments de ta commande ne sont pas vérifiés.")
         for first_13, second_13, what_13 in [("A", "B", "même graine, deux fois"), ("A", "C", "déterministe ou non"),
                                              ("A", "D", "graine 0 contre graine 1"), ("D", "E", "graine 1 contre graine 2")]:
             wa_13, wb_13 = RUNS_13[first_13]["weights"], RUNS_13[second_13]["weights"]
@@ -854,6 +988,14 @@ else:
         half_13 = 4.303 * accs_13.std(ddof=1) / np.sqrt(3)                # t(0.975; 2), the table of 207.4
         print(f"accuracy sur 3 graines : {fr(100 * accs_13.mean(), 1)} % ± {fr(100 * half_13, 1)} (intervalle à 95 %, "
               f"t = 4,303 pour n = 3 ; valeurs {', '.join(fr(100 * a, 1) for a in accs_13)})")
+        seeds_13 = not same_weights_13(RUNS_13["A"]["weights"], RUNS_13["D"]["weights"]) and \
+            not same_weights_13(RUNS_13["D"]["weights"], RUNS_13["E"]["weights"])
+        verdict("B7.13", seeds_13, "les graines 0, 1 et 2 donnent trois modèles différents : la graine va de la "
+                "configuration jusqu'à l'entraînement.", "les graines 0, 1 et 2 donnent les mêmes poids : la graine "
+                "n'arrive pas jusqu'à l'entraînement (train_run_13 passe-t-elle --set seed=… ? ta commande "
+                "transmet-elle config.seed à train ?).")
+        if not seeds_13:
+            raise StopCheck
         wb.check("B7.13", same_weights_13(RUNS_13["A"]["weights"], RUNS_13["B"]["weights"]))'''
 
 RECORD_13 = r'''wb.record("B7.13", True, mistakes={"tes deux runs à même graine n'ont pas exactement les mêmes poids : qu'est-ce qui, "
@@ -917,6 +1059,7 @@ SOLUTION_14 = "\n\n".join([
 
 CHECK_14 = r'''import hashlib
 import platform
+from datetime import datetime, timedelta, timezone
 from importlib import metadata
 
 import pandas as pd
@@ -928,10 +1071,13 @@ with checked("B7.14"):
     ids_14 = [tracking_14.new_run_id() for _ in range(3)]
     today_14 = time.strftime("%Y%m%d", time.gmtime())
     ok_14["id"] = (all(isinstance(i, str) and re.fullmatch(r"\d{8}-\d{6}-[0-9a-f]{6}", i) for i in ids_14)
-                   and len(set(ids_14)) == 3 and ids_14[0][:8] == today_14)
-    verdict("B7.14", ok_14["id"], f"new_run_id : {ids_14[0]}, {ids_14[1]}… (date UTC, heure, six caractères au hasard).",
-            f"new_run_id : attendu trois identifiants distincts de la forme {today_14}-HHMMSS-xxxxxx (date UTC), "
-            f"reçu {ids_14!r:.120}.")
+                   and len(set(ids_14)) == 3)
+    if ok_14["id"]:
+        stamp_14 = datetime.strptime(ids_14[0][:15], "%Y%m%d-%H%M%S").replace(tzinfo=timezone.utc)
+        ok_14["id"] = abs((datetime.now(timezone.utc) - stamp_14).total_seconds()) < 120
+    verdict("B7.14", ok_14["id"], f"new_run_id : {ids_14[0]}, {ids_14[1]}… (date et heure UTC, six caractères au hasard).",
+            f"new_run_id : attendu trois identifiants distincts de la forme {today_14}-HHMMSS-xxxxxx, la date et "
+            f"l'heure de l'UTC (datetime.now(timezone.utc), pas l'heure locale) ; reçu {ids_14!r:.120}.")
     blob_14 = scratch("blob") / "weights.bin"
     blob_14.write_bytes(np.random.default_rng(0).bytes(300_000))
     want_art_14 = {"path": str(blob_14), "bytes": 300_000, "sha256": hashlib.sha256(blob_14.read_bytes()).hexdigest()}
@@ -963,6 +1109,8 @@ ready_14 = (written(lambda: wbp.import_module(PROJECT, "tracking").new_run_id())
             and written(lambda: wbp.import_module(PROJECT, "config").TrainConfig()))
 if not ready_14:
     print("⏳ Ex B7.14 : le journal des runs attend tracking.py, et ta commande et ta configuration (B7.10, B7.11).")
+elif later_files_pending("B7.14"):
+    ok_14["later files"] = False
 else:
     with checked("B7.14"):                                 # the command line logs every run
         out_14 = scratch("runs")
@@ -1019,6 +1167,20 @@ else:
                               and arts_14[0].get("bytes") == art_path_14.stat().st_size)
         verdict("B7.14", ok_14["artifacts"], "artifacts : le fichier des poids, sa taille et son SHA-256.",
                 f"artifacts : attendu [{{path, bytes, sha256}}] du fichier <out>/model.safetensors, reçu {arts_14!r:.200}.")
+        arts_3_14 = runs_14[2]["artifacts"]
+        ok_14["seed"] = bool(arts_14 and arts_3_14) and arts_14[0].get("sha256") != arts_3_14[0].get("sha256")
+        verdict("B7.14", ok_14["seed"], "les runs de graines 0 et 1 ont écrit des poids différents.",
+                "les runs de graines 0 et 1 ont écrit les mêmes poids (même SHA-256) : la configuration enregistrée "
+                "(seed 1) ne dit pas ce qui a été entraîné ; ta commande transmet-elle config.seed à train ?")
+        try:
+            started_14 = datetime.fromisoformat(str(rec_14["started"]))
+            ok_14["started"] = (started_14.utcoffset() == timedelta(0)
+                                and abs((datetime.now(timezone.utc) - started_14).total_seconds()) < 600)
+        except (TypeError, ValueError):
+            ok_14["started"] = False
+        verdict("B7.14", ok_14["started"], f"started : {rec_14['started']} (ISO 8601, UTC).",
+                f"started : attendu la date ISO 8601 en UTC, avec son fuseau (datetime.now(timezone.utc).isoformat()), "
+                f"reçu {rec_14['started']!r}.")
         default_out_14 = (PROJECT / runs_14[2]["artifacts"][0]["path"]).resolve() if runs_14[2]["artifacts"] else None
         ok_14["default out"] = default_out_14 == (PROJECT / "runs" / runs_14[2]["run_id"] / "model.safetensors").resolve()
         verdict("B7.14", ok_14["default out"], "sans --out, les poids vont dans runs/<run_id>/.",
@@ -1035,7 +1197,7 @@ else:
         TABLE_14 = pd.json_normalize(runs_14)[["run_id", "status", "config.seed", "config.n_train", "metrics.val_acc_final",
                                                "seconds"]]
         print(TABLE_14.to_string(index=False))
-if ok_14 and all(ok_14.values()) and len(ok_14) >= 12:
+if ok_14 and all(ok_14.values()) and len(ok_14) >= 17:
     print("✅ Ex B7.14 : chaque run laisse sa ligne : ce qui le définit, ce qu'il mesure, ce qu'il produit.")'''
 
 # --- 📦 B7.15 ---------------------------------------------------------------------------------------------------------
@@ -1087,11 +1249,22 @@ PYTEST_ARGS_15 = ["-c", str(PROJECT / "pyproject.toml"), "--rootdir", str(PROJEC
 ENV_15 = {"PYTHONPATH": str(PROJECT / "src")}
 TESTS_15 = {"tests/conftest.py": CONFTEST_PY, "tests/test_model.py": TEST_MODEL_PY, "tests/test_data.py": TEST_DATA_PY,
             "tests/test_cli.py": TEST_CLI_PY}
+
+
+def project_files_15():
+    """{file of the project (caches excepted), relative to it: its modification time}."""
+    return {str(p.relative_to(PROJECT)): p.stat().st_mtime_ns for p in PROJECT.rglob("*")
+            if p.is_file() and not {"__pycache__", ".pytest_cache"} & set(p.parts)}
+
+
 if TEST_DATA_PY is ... or TEST_CLI_PY is ...:
     print("⏳ Ex B7.15 : écris d'abord TEST_DATA_PY et TEST_CLI_PY.")
+elif later_files_pending("B7.15"):
+    pass
 else:
     with checked("B7.15"):
         wbp.write_files(PROJECT, TESTS_15)
+        before_15 = project_files_15()
         own_15 = {}
         for rel_15 in ("tests/test_model.py", "tests/test_data.py", "tests/test_cli.py"):
             print(f"— {rel_15}, sur ton paquet :")
@@ -1099,6 +1272,11 @@ else:
         ok_15["own"] = all(r.ok for r in own_15.values())
         verdict("B7.15", ok_15["own"], "tes tests passent sur ton paquet.", "tes tests doivent d'abord passer sur ton "
                 "paquet (les lignes ci-dessus) ; si c'est ton paquet qui a tort, corrige-le dans sa cellule.")
+        new_15 = sorted(rel for rel, stamp in project_files_15().items() if before_15.get(rel) != stamp)
+        ok_15["clean"] = not new_15
+        verdict("B7.15", ok_15["clean"], "tes tests n'écrivent rien dans le projet (tmp_path).",
+                f"tes tests ont écrit dans le projet : {new_15[:3]}{' …' if len(new_15) > 3 else ''} : passe --out et "
+                "--runs vers tmp_path.")
         collected_15 = {}
         for marker_15 in ("", "slow"):
             listing_15 = wbp.run([sys.executable, "-m", "pytest", "tests/test_data.py", "tests/test_cli.py", "--collect-only",
@@ -1135,7 +1313,7 @@ else:
             verdict("B7.15", ok_15[mutant_15.key], f"version fautive {k_15} ({mutant_15.what}) : attrapée par {name_15} "
                     f"(« {reason_15[:110]} »).", f"version fautive {k_15} ({mutant_15.what}) : attrapée par {name_15}, "
                     f"mais la première ligne de son message ne dit pas ce qui était attendu : « {reason_15[:160]} ».")
-if ok_15 and all(ok_15.values()) and len(ok_15) == 3 + len(wbp.MUTANTS):
+if ok_15 and all(ok_15.values()) and len(ok_15) == 4 + len(wbp.MUTANTS):
     print(f"✅ Ex B7.15 : tes tests passent sur un paquet juste et attrapent les {len(wbp.MUTANTS)} versions fautives.")'''
 
 # =====================================================================================================================
@@ -1174,6 +1352,10 @@ def fresh_service_16(model=None, classes=CLASSES):
     folder = scratch("artifact")
     save_artifact_16(model if model is not None else wbp.reference_model()[0], folder, list(INFO_16["mean"]),
                      list(INFO_16["std"]), list(classes))
+    found = sorted(p.name for p in folder.iterdir())
+    if found != ["meta.json", "model.safetensors"]:
+        raise RuntimeError(f"l'artefact contient {found} : attendu model.safetensors (les poids, sans pickle) et "
+                           "meta.json, comme le dit la docstring de save_artifact_16")
     return load_service_16(folder)
 
 
@@ -1270,6 +1452,13 @@ def diagnose_16(ex_id="B7.16"):
             return False, (f"sur 200 images, le service ne rend le nom du notebook que pour {agree} ; par exemple, "
                            f"{count} images que le notebook classe « {want} » reçoivent « {got} »"), \
                 "le nom que rend le service correspond-il à la sortie du modèle ?"
+        order = np.random.default_rng(5).permutation(len(PATHS_16))[:40]     # other files, other names, other order
+        again = scratch("again")
+        copies = [Path(shutil.copy(PATHS_16[k], again / f"img_{j:03d}.png")) for j, k in enumerate(order)]
+        agree = sum(a == WANT_16[k] for a, k in zip(predict_16(model, meta, copies), order))
+        if agree != len(order):
+            return False, (f"les mêmes images, copiées sous d'autres noms et dans un autre ordre, ne reçoivent le nom du "
+                           f"notebook que pour {agree} sur {len(order)}"), "le service doit répondre d'après l'image seule"
         perm = np.random.default_rng(16).permutation(10)
         shuffled = wbp.reference_model()[0]
         with torch.no_grad():

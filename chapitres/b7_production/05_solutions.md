@@ -184,7 +184,7 @@ a) **A** : le pipeline entier, prétraitement compris ; un modèle sans sa stand
 Le paquet de référence du chapitre est dans `solutions/b7_cifarprod/` (le notebook de solutions en écrit les fichiers dans un dossier temporaire) : `pyproject.toml`, `configs/`, `src/cifarprod/` et `tests/`. Les extraits ci-dessous en montrent les parties qui comptent ; les nombres sont ceux de `05_solutions.ipynb` (2 cœurs, PyTorch 2.11) et de `tools/chapters/history_chB7.py`.
 
 ### Ex B7.9 — Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable 📦
-**Réponse** : les quatre fichiers de `solutions/b7_cifarprod/src/cifarprod/` et son `pyproject.toml` ; les 33 vérifications passent. L'entraînement fumée des réglages par défaut (CNN 16-32, 2 000 images, une epoch, 16 pas de SGD) atteint une accuracy de validation de 0,302 en moins d'une seconde dans le notebook (≈ 3 s par la ligne de commande, l'import de PyTorch compris) ; l'installation éditable dans un environnement neuf prend de 0,5 à 4 s.
+**Réponse** : les quatre fichiers de `solutions/b7_cifarprod/src/cifarprod/` et son `pyproject.toml` ; les 37 vérifications passent. L'entraînement fumée des réglages par défaut (CNN 16-32, 2 000 images, une epoch, 16 pas de SGD) atteint une accuracy de validation de 0,302 en moins d'une seconde dans le notebook (≈ 3 s par la ligne de commande, l'import de PyTorch compris) ; l'installation éditable dans un environnement neuf prend de 0,5 à 4 s.
 **Démarche** : le cœur est le prétraitement, qui servira à l'entraînement **et** au service :
 ```python
 def preprocess(images: np.ndarray, mean, std) -> torch.Tensor:
@@ -205,7 +205,7 @@ def preprocess(images: np.ndarray, mean, std) -> torch.Tensor:
 **Variante** : `build_model("vgg", (16, 32, 64))` est exactement le modèle livré du MP5 (72 954 paramètres) : `build_model("vgg", (16, 32, 64)).load_state_dict(torch.load(".../solution/model.pt", weights_only=True))` passe, sans erreur de clé, et donne 84,8 % d'accuracy sur 1 000 images de test de CIFAR-10. Un paquet qui reprend les noms de couches de `cifarkit` recharge ses anciens modèles.
 
 ### Ex B7.10 — Une interface en ligne de commande : argparse, logging et codes de sortie 📦
-**Réponse** : `solutions/b7_cifarprod/src/cifarprod/cli.py` (et `__main__.py`, deux lignes)  ; les douze vérifications passent. Sur 200 images, `cifarprod train --set n_train=200` rend 0, écrit `<out>/model.safetensors` et quatre lignes INFO sur stderr, et une seule ligne JSON sur stdout (accuracy de validation 0,136 : 200 images, deux pas de SGD ; on ne juge ici que la mécanique).
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/cli.py` (et `__main__.py`, deux lignes) ; les quatorze vérifications passent. Sur 200 images, `cifarprod train --set n_train=200` rend 0, écrit `<out>/model.safetensors` et quatre lignes INFO sur stderr, et une seule ligne JSON sur stdout (accuracy de validation 0,136 : 200 images, deux pas de SGD ; on ne juge ici que la mécanique).
 **Démarche** :
 ```python
 def main(argv: list[str] | None = None) -> int:
@@ -248,7 +248,7 @@ def main(argv: list[str] | None = None) -> int:
 **Démarche** :
 ```python
 def train_run_13(seed, deterministic=True):
-    out = tempfile.mkdtemp(prefix="wb_b7_13_")
+    out = scratch("run13")                         # a new temporary folder (tempfile.mkdtemp() also works)
     result = wbp.cli(PROJECT, "train", "--config", "configs/fast.yaml", "--set", f"seed={seed}",
                      "--set", f"deterministic={str(deterministic).lower()}", "--out", out)
     if not result.ok:
@@ -257,11 +257,11 @@ def train_run_13(seed, deterministic=True):
     return {"weights": load_file(summary["weights"]), "val_acc": summary["val_acc"], "seconds": result.seconds}
 ```
 A et B sont identiques parce que tout ce qui est tiré l'est par des générateurs semés par la configuration (l'initialisation après `torch.manual_seed`, l'ordre par le `generator` du `DataLoader`), et que chaque run est un processus neuf : rien d'un run précédent ne déplace les tirages. C l'est aussi, **sur ce processeur et avec ce PyTorch** : les opérations de ce CNN n'ont pas d'implémentation non déterministe sur CPU, et `use_deterministic_algorithms` n'a rien à changer. La documentation ne promet rien d'autre que « le même logiciel sur le même matériel » : sur un GPU, la passe arrière d'une convolution peut accumuler dans un ordre qui varie (207.4). L'écart d'une graine à l'autre (0,40 sur un poids, 3 points d'accuracy) est l'ordre de grandeur à garder en tête avant de croire qu'un réglage « gagne » d'un point : avec trois graines, la demi-largeur de l'intervalle vaut 3,9 points.
-**Erreurs fréquentes** : comparer deux runs par leur accuracy (deux modèles différents peuvent avoir la même) ; `a == b` sur deux dictionnaires de tenseurs (Python compare des tenseurs, et `bool` d'un tenseur à plusieurs valeurs lève une erreur) ; `max_gap_13` qui rend un tenseur ; oublier `--set deterministic=...` (C n'est plus l'expérience annoncée) ; un seul dossier `--out` pour tous les runs (le suivant écrase les poids du précédent).
+**Erreurs fréquentes** : comparer deux runs par leur accuracy (deux modèles différents peuvent avoir la même) ; `a == b` sur deux dictionnaires de tenseurs (Python compare des tenseurs, et `bool` d'un tenseur à plusieurs valeurs lève une erreur) ; `max_gap_13` qui rend un tenseur ; oublier `--set deterministic=...` (C n'est plus l'expérience annoncée) ; un seul dossier `--out` pour tous les runs (le suivant écrase les poids du précédent) ; une commande qui passe `seed=0` à `train` au lieu de `config.seed` (les cinq runs sont alors identiques : la vérification exige trois modèles différents pour les graines 0, 1 et 2).
 **Variante** : sur cinq graines (0 à 4, `history_chB7.py`), l'accuracy vaut 30,2 ; 33,2 ; 32,6 ; 33,4 et 28,6 %, soit 31,6 % ± 2,6 ($t_{0{,}975;\,4} = 2{,}776$, $s = 2{,}1$ points) ; les modes déterministe et non déterministe donnent les mêmes poids pour les cinq graines.
 
 ### Ex B7.14 — Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL 📦
-**Réponse** : `solutions/b7_cifarprod/src/cifarprod/tracking.py`, et dans `cli.py` le dictionnaire `record`, complété au fil du run et écrit dans le `finally` ; les dix-sept vérifications passent, et `pandas.json_normalize` met les trois runs dans un tableau (statuts `ok`, `failed`, `ok`).
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/tracking.py`, et dans `cli.py` le dictionnaire `record`, complété au fil du run et écrit dans le `finally` ; les dix-neuf vérifications passent, et `pandas.json_normalize` met les trois runs dans un tableau (statuts `ok`, `failed`, `ok`).
 **Démarche** :
 ```python
     record = {"run_id": run_id, "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),

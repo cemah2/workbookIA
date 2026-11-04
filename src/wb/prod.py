@@ -30,6 +30,7 @@ Nothing here imports PyTorch at import time.
 
 from __future__ import annotations
 
+import atexit
 import hashlib
 import json
 import os
@@ -79,7 +80,9 @@ def reference_package() -> Path:
 def _temporary_project() -> Path:
     global _SOLUTION_PROJECT
     if _SOLUTION_PROJECT is None or not _SOLUTION_PROJECT.is_dir():
-        _SOLUTION_PROJECT = Path(tempfile.mkdtemp(prefix="wb_b7_project_")) / PROJECT_NAME
+        folder = Path(tempfile.mkdtemp(prefix="wb_b7_project_"))
+        atexit.register(shutil.rmtree, folder, ignore_errors=True)      # removed when the Python session ends
+        _SOLUTION_PROJECT = folder / PROJECT_NAME
     return _SOLUTION_PROJECT
 
 
@@ -191,7 +194,7 @@ def write_file(project: str | Path, rel: str, text: str, *, if_absent: bool = Fa
         if not overwrite and manifest.get(rel) != _sha(current):
             if not quiet:
                 print(f"ℹ️ {rel} a été modifié hors du notebook : je garde le fichier du disque (c'est lui qui est "
-                      f"testé). Pour repartir du contenu de la cellule, supprime {target} ou passe overwrite=True.")
+                      f"testé). Pour repartir du contenu de la cellule, supprime {target} : la cellule le réécrira.")
             return target
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.with_name(target.name + ".wb_tmp")
@@ -994,6 +997,7 @@ def serve_process(src, artifact, *, backend: str = "auto", timeout: float = 60, 
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.wait(10)
+        shutil.rmtree(log.parent, ignore_errors=True)
 
 
 def reference_artifact(folder) -> Path:

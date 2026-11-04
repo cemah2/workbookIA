@@ -131,6 +131,22 @@ def test_checked_a_tensor_given_to_numpy_is_not_a_forgotten_return(capsys):
     assert "un tenseur PyTorch" in text and "return" not in text and text.endswith("suite\n")
 
 
+def test_checked_torch_load_of_a_safetensors_file_points_to_load_file(tmp_path, capsys):
+    """Scenario B7.13 (session 76, V4): torch.load on a .safetensors file; PyTorch advises weights_only=False, which
+    is not repeated, and following it gives a cryptic "invalid load key": both point to safetensors' load_file."""
+    torch = pytest.importorskip("torch")
+    safetensors_torch = pytest.importorskip("safetensors.torch")
+    path = tmp_path / "w.safetensors"
+    safetensors_torch.save_file({"a": torch.ones(3)}, str(path))
+    run_checked(lambda: torch.load(path))
+    text = out(capsys)
+    assert text.startswith("❌ Ex 21.4 : ton code lève UnpicklingError : Weights only load failed ; ")
+    assert "safetensors.torch.load_file" in text and "will likely succeed" not in text and text.endswith("suite\n")
+    run_checked(lambda: torch.load(path, weights_only=False))
+    text = out(capsys)
+    assert "invalid load key" in text and "safetensors.torch.load_file" in text
+
+
 def test_checked_never_prints_an_empty_message(capsys):
     """Scenario 24.18: scikit-learn's message starts with a new line (audit P5 V-VI, A10 18)."""
     run_checked(raise_(ValueError("\nAll the 12 fits failed.\nIt is very likely that your model is misconfigured.")))
