@@ -516,11 +516,13 @@ TODO_10 = "\n\n".join([
 
 SOLUTION_10 = "\n\n".join([
     "# Ex B7.10: the command line of the reference package. Its run journal (the import of .tracking, --runs, the "
-    "record\n# of each run) belongs to Ex B7.14: the solutions notebook writes the final cli.py at once, and tracking.py "
-    "with it.",
+    "record\n# of each run) belongs to Ex B7.14, its artifact (save_artifact) to Ex B7.17: the solutions notebook writes "
+    "the final\n# cli.py at once, and tracking.py and artifact.py with it.",
     file_cell("MAIN_PY", reference_file("src/cifarprod/__main__.py"), "src/cifarprod/__main__.py"),
     file_cell("CLI_PY", reference_file("src/cifarprod/cli.py"), "src/cifarprod/cli.py"),
     file_cell("TRACKING_PY", reference_file("src/cifarprod/tracking.py"), "src/cifarprod/tracking.py (Ex B7.14)"),
+    file_cell("ARTIFACT_PY", reference_file("src/cifarprod/artifact.py"), "src/cifarprod/artifact.py (Ex B7.17: the "
+              "final cli.py writes the artifact of each run)"),
 ])
 
 CHECK_10 = r'''ok_10 = {}
@@ -529,6 +531,8 @@ with checked("B7.10"):
     files_10 = {"src/cifarprod/__main__.py": MAIN_PY, "src/cifarprod/cli.py": CLI_PY}
     if "TRACKING_PY" in globals() and TRACKING_PY is not ...:
         files_10["src/cifarprod/tracking.py"] = TRACKING_PY          # Ex B7.14, if it is already done
+    if "ARTIFACT_PY" in globals() and ARTIFACT_PY is not ...:
+        files_10["src/cifarprod/artifact.py"] = ARTIFACT_PY          # Ex B7.17, if it is already done
     wbp.write_files(PROJECT, files_10)
     cli_10 = wbp.import_module(PROJECT, "cli")
     cli_10.build_parser()                                 # ⏳ while it raises NotImplementedError

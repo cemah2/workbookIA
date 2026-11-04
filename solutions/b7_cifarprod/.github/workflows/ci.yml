@@ -1,0 +1,27 @@
+# Continuous integration: on every push and pull request, install the package on a clean machine, run the tests,
+# then a smoke training on synthetic data (the CIFAR-10 subset is not in git). A step that fails stops the job.
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install PyTorch (CPU index) and the package
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev,serve]"
+      - name: Tests
+        run: pytest -q
+      - name: Smoke training on synthetic data
+        run: |
+          python scripts/make_synthetic.py data/synthetic.npz
+          cifarprod train --config configs/smoke.yaml --set data=data/synthetic.npz --out runs/ci

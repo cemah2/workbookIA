@@ -1,0 +1,8 @@
+# The dependencies of the API, pinned (the versions of the workbook, which are those of Colab); torch is installed
+# apart, from the CPU index of PyTorch (see the Dockerfile)
+numpy==2.1.3
+pyyaml==6.0.3
+safetensors==0.8.0
+fastapi==0.141.1
+uvicorn==0.53.0
+pydantic==2.13.5

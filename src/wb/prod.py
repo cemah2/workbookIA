@@ -53,6 +53,11 @@ SUBSET_FILE = "cifar10_2000.npz"
 SUBSET_PER_CLASS = {"train": 200, "val": 50}          # 2 000 training and 500 validation images
 SUBSET_FINGERPRINT = "286106e2dece6e60837434f3a343b7e33546b6a807ed5bb28b78b32e51558deb"   # x_train, y_train, x_val, y_val
 MP5_FOLDER = "projets/partie_5_classifieur_cifar10"
+# the training images of the MP5 reference model: the 45 000 images of cifarkit.stratified_split(y, 5000, seed=0) on the
+# 50 000 training images of CIFAR-10, and their labels (array_fingerprint; history_chB7.py "mp5data" recomputes it and
+# checks that their channel means are those of model.json)
+MP5_DATA = {"path": "CIFAR-10 train, MP5 split (stratified, 5 000 for validation, seed 0)", "n_train": 45000,
+            "sha256": "b76c6f2c4d0363823f47b8c3ce5216534ffd21bfd08e019a4a92c205c964af7b"}
 CLASSES = ("airplane", "automobile", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck")
 
 _SOLUTION_PROJECT: Path | None = None
@@ -619,7 +624,7 @@ def reference_model():
     model.eval()
     info = {"source": "reference", "folder": folder, "config": config, "mean": tuple(meta["mean"]),
             "std": tuple(meta["std"]), "classes": tuple(meta["classes"]),
-            "val_acc": meta.get("metrics", {}).get("val_acc")}
+            "val_acc": meta.get("metrics", {}).get("val_acc"), "data": dict(MP5_DATA)}
     return model, info
 
 
@@ -804,8 +809,10 @@ MUTANTS = [
     Mutant("exitcode", "cli.py", [('        log.error("invalid configuration: %s", err)\n        return 2',
                                    '        log.error("invalid configuration: %s", err)\n        return 0')],
            "main rend 0 (un succès) quand la configuration est invalide"),
-    Mutant("weights", "cli.py", [('        save_file(result["model"].state_dict(), str(weights))\n', ""),
-                                 ("artifacts=[artifact(weights)])", "artifacts=[])")],
+    Mutant("weights", "cli.py", [('        save_artifact(out, result["model"], arch=config.arch, widths=config.widths, '
+                                  'mean=result["mean"],\n', '        dict(out=out, arch=config.arch, widths=config.widths, '
+                                  'mean=result["mean"],\n'),
+                                 ("artifacts=[artifact(weights), artifact(meta)])", "artifacts=[])")],
            "la commande train rend 0 sans écrire model.safetensors", slow=True),
 ]
 
@@ -904,3 +911,483 @@ def says_expected(reason: str) -> bool:
     pytest.raises' « DID NOT RAISE »)."""
     first = reason.splitlines()[0].lower() if reason else ""
     return any(word in first for word in EXPECTED_WORDS)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Part B: a server in another process, the reference artifact, latencies
+# ---------------------------------------------------------------------------------------------------------------------
+def free_port(host: str = "127.0.0.1") -> int:
+    """A TCP port free right now on ``host`` (the system picks it)."""
+    import socket
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((host, 0))
+        return s.getsockname()[1]
+
+
+def port_open(port: int, host: str = "127.0.0.1") -> bool:
+    """True when something accepts TCP connections on ``host:port``."""
+    import socket
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.5)
+        return s.connect_ex((host, port)) == 0
+
+
+@dataclass
+class ServerProcess:
+    """A server started by :func:`serve_process`: its base URL, its port and its process."""
+
+    url: str
+    port: int
+    process: subprocess.Popen
+    log: Path
+
+    def stderr(self) -> str:
+        try:
+            return self.log.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return ""
+
+
+@contextlib.contextmanager
+def serve_process(src, artifact, *, backend: str = "auto", timeout: float = 60, env: dict | None = None,
+                  module: str = f"{PACKAGE}.serve"):
+    """``python -m cifarprod.serve --artifact <artifact> --port <free port> --backend <backend>`` in ANOTHER process,
+    the package read from the folder ``src``; waits until ``GET /health`` answers 200 (RuntimeError with the end of
+    its stderr if it stops or does not answer within ``timeout`` seconds), yields a :class:`ServerProcess`, and
+    ALWAYS stops the process at the end (terminate, then kill after 10 s), even after an error."""
+    import urllib.request
+
+    port = free_port()
+    log = Path(tempfile.mkdtemp(prefix="wb_b7_server_")) / "stderr.txt"
+    full_env = {**os.environ, "PYTHONPATH": _pythonpath([src]), "PYTHONIOENCODING": "utf-8", "NO_COLOR": "1",
+                "PYTHONDONTWRITEBYTECODE": "1", **(env or {})}
+    args = [sys.executable, "-m", module, "--artifact", str(Path(artifact).resolve()), "--port", str(port),
+            "--backend", backend]
+    with log.open("w", encoding="utf-8") as err:
+        process = subprocess.Popen(args, cwd=str(Path(artifact).resolve().parent), env=full_env,
+                                   stdout=subprocess.DEVNULL, stderr=err)
+    server = ServerProcess(f"http://127.0.0.1:{port}", port, process, log)
+    try:
+        deadline = time.monotonic() + timeout
+        while True:
+            if process.poll() is not None:
+                raise RuntimeError(f"the server stopped with the exit code {process.returncode}: "
+                                   f"{server.stderr().strip()[-600:]}")
+            try:
+                with urllib.request.urlopen(f"{server.url}/health", timeout=2) as answer:
+                    if answer.status == 200:
+                        break
+            except OSError:
+                pass
+            if time.monotonic() > deadline:
+                raise RuntimeError(f"the server did not answer /health within {timeout:.0f} s: "
+                                   f"{server.stderr().strip()[-600:]}")
+            time.sleep(0.1)
+        yield server
+    finally:
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(10)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(10)
+
+
+def reference_artifact(folder) -> Path:
+    """The artifact of the reference model (the VGG of the MP5, :func:`reference_model`) written in ``folder`` by the
+    ``save_artifact`` of the reference package, in another process (the notebook's own ``cifarprod`` is untouched):
+    model.safetensors and meta.json, with the data fingerprint :data:`MP5_DATA` and its validation accuracy."""
+    folder = Path(folder).resolve()
+    code = ("import sys\nfrom wb import prod as wbp\nfrom cifarprod.artifact import save_artifact\n"
+            "model, info = wbp.reference_model()\n"
+            "save_artifact(sys.argv[1], model, arch=info['config']['arch'], widths=info['config']['widths'], "
+            "mean=info['mean'], std=info['std'], classes=info['classes'], data=info['data'], "
+            "metrics={'val_acc': info['val_acc']})\n")
+    done = run([sys.executable, "-c", code, folder], folder.parent if folder.parent.exists() else Path.cwd(),
+               src=[reference_package() / "src"], timeout=300)
+    if not done.ok:
+        raise RuntimeError(f"the reference artifact was not written: {done.tail(5)}")
+    return folder
+
+
+def latencies(call, n: int = 200, warmup: int = 20) -> np.ndarray:
+    """The durations (ms) of ``n`` calls of ``call()``, after ``warmup`` calls that are not measured (207.7)."""
+    for _ in range(warmup):
+        call()
+    times = []
+    for _ in range(n):
+        start = time.perf_counter()
+        call()
+        times.append(time.perf_counter() - start)
+    return 1000 * np.array(times)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Part C: reading a workflow of GitHub Actions and a Dockerfile (never run), the chain of the challenge
+# ---------------------------------------------------------------------------------------------------------------------
+@dataclass
+class Review:
+    """One point of a review: its key, whether it holds, and the message for each case (in French)."""
+
+    key: str
+    ok: bool
+    success: str
+    failure: str
+
+
+SECRET_WORDS = re.compile(r"(TOKEN|SECRET|PASSWORD|PASSWD|API_?KEY|ACCESS_?KEY)", re.IGNORECASE)
+
+
+def _bash_syntax(script: str) -> str | None:
+    """None if ``bash -n`` accepts the script (or if bash is not there), else its message. Nothing is run."""
+    bash = shutil.which("bash")
+    if bash is None:
+        return None
+    done = subprocess.run([bash, "-n"], input=script, capture_output=True, text=True, timeout=30)
+    return None if done.returncode == 0 else (done.stderr.strip() or f"code {done.returncode}")
+
+
+def _workflow_steps(doc: dict) -> list[dict]:
+    steps = []
+    for job in (doc.get("jobs") or {}).values():
+        if isinstance(job, dict):
+            steps += [s for s in job.get("steps") or [] if isinstance(s, dict)]
+    return steps
+
+
+def review_workflow(text: str, project: str | Path | None = None) -> list[Review]:
+    """The checks of a GitHub Actions workflow (📦 B7.23), read as YAML and never run: triggers, an Ubuntu job, the
+    checkout and setup-python actions (a version written as a string, the pip cache), torch from the CPU index, the
+    package installed with its extra dev, pytest, a smoke training on synthetic data after the tests, no failure
+    swallowed, no secret in clear, ``bash -n`` on each ``run``, the files it names present in ``project``."""
+    import yaml
+
+    out: list[Review] = []
+
+    def add(key, ok, success, failure):
+        out.append(Review(key, bool(ok), success, failure))
+
+    try:
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError as err:
+        add("yaml", False, "", f"le fichier n'est pas du YAML valide : {str(err).splitlines()[0]}")
+        return out
+    if not isinstance(doc, dict):
+        add("yaml", False, "", f"le fichier doit décrire un dictionnaire (name, on, jobs), reçu {type(doc).__name__}")
+        return out
+    add("yaml", True, "YAML valide.", "")
+    trigger = doc.get("on", doc.get(True))            # PyYAML 6 reads the key `on:` as the boolean True (YAML 1.1)
+    if isinstance(trigger, str):
+        events = {trigger}
+    elif isinstance(trigger, (list, dict)):
+        events = set(trigger)
+    else:
+        events = set()
+    add("on", {"push", "pull_request"} <= events, "déclenché à chaque push et pull request (PyYAML lit la clé on: "
+        "comme True : le vérificateur le sait).", f"attendu les déclencheurs push et pull_request, reçu {sorted(map(str, events))}")
+    jobs = doc.get("jobs") if isinstance(doc.get("jobs"), dict) else {}
+    ubuntu = [name for name, job in jobs.items() if isinstance(job, dict) and "ubuntu" in str(job.get("runs-on", ""))]
+    add("job", bool(ubuntu), f"un job sur Ubuntu ({', '.join(ubuntu)}).", "attendu au moins un job avec runs-on: "
+        "ubuntu-latest")
+    steps = _workflow_steps(doc)
+    runs = [(k, str(s.get("run", ""))) for k, s in enumerate(steps) if s.get("run")]
+    uses = [(k, str(s.get("uses", "")), s.get("with") or {}) for k, s in enumerate(steps) if s.get("uses")]
+
+    def find(pattern):
+        """(step, offset) of the first match of ``pattern`` in the run blocks, in their order; None if none."""
+        for k, text in runs:
+            m = re.search(pattern, text)
+            if m:
+                return (k, m.start())
+        return None
+
+    checkout = [u for _, u, _ in uses if u.startswith("actions/checkout@")]
+    major = re.match(r"actions/checkout@v(\d+)", checkout[0]) if checkout else None
+    add("checkout", major and int(major.group(1)) >= 4, f"{checkout[0] if checkout else ''} récupère le code.",
+        "attendu une étape uses: actions/checkout@v7 (la version de la fiche ; v4 au moins)")
+    setup = [(u, w) for _, u, w in uses if u.startswith("actions/setup-python@")]
+    version = setup[0][1].get("python-version") if setup else None
+    add("python", setup and isinstance(version, str) and re.fullmatch(r"3\.1[1-9]", version),
+        f"{setup[0][0] if setup else ''} avec python-version \"{version}\" (une chaîne).",
+        "attendu une étape uses: actions/setup-python@v7 avec python-version: \"3.13\" entre guillemets"
+        + (f" ; reçu {version!r} ({type(version).__name__}) : sans guillemets, YAML lit 3.10 comme le nombre 3.1"
+           if setup and not isinstance(version, str) else ""))
+    add("cache", setup and setup[0][1].get("cache") == "pip", "cache: pip (les paquets téléchargés sont gardés d'un "
+        "run à l'autre).", "attendu cache: pip dans l'étape setup-python")
+    torch_at = find(r"pip install[^\n]*\btorch\b[^\n]*download\.pytorch\.org/whl/cpu|pip install[^\n]*download\.pytorch"
+                    r"\.org/whl/cpu[^\n]*\btorch\b")
+    add("torch", torch_at is not None, "torch installé depuis l'index CPU de PyTorch.",
+        "attendu une commande pip install torch ... --index-url https://download.pytorch.org/whl/cpu (sans l'index "
+        "CPU, pip télécharge la version CUDA, plus de 2 Go)")
+    install_at = find(r"pip install[^\n]*-e[^\n]*\[[^\]]*dev")
+    add("install", install_at is not None and torch_at is not None and install_at > torch_at,
+        "le paquet installé en mode éditable avec son extra dev, après torch.",
+        "attendu pip install -e \".[dev]\" (l'extra dev apporte pytest), APRÈS l'installation de torch depuis l'index "
+        "CPU (sinon pip prend torch sur PyPI)")
+    test_at = find(r"\bpytest\b")
+    test_text = dict(runs).get(test_at[0], "") if test_at else ""
+    add("pytest", test_at is not None and install_at is not None and test_at > install_at and "not slow" not in test_text,
+        "pytest après l'installation, les tests slow compris.",
+        "attendu une étape run: pytest -q après l'installation, sans -m \"not slow\" (l'intégration continue lance "
+        "aussi l'entraînement fumée marqué slow)")
+    smoke_at = find(r"(?:\bcifarprod|-m cifarprod) train\b[^\n]*configs/smoke\.yaml|(?:\bcifarprod|-m cifarprod) train\b"
+                    r"[^\n]*\n?[^\n]*configs/smoke\.yaml")
+    synth_at = find(r"synthetic")
+    smoke_text = dict(runs).get(smoke_at[0], "") if smoke_at else ""
+    add("smoke", smoke_at is not None and test_at is not None and smoke_at > test_at and synth_at is not None
+        and synth_at < smoke_at and "--set data=" in smoke_text,
+        "un entraînement fumée (configs/smoke.yaml) sur des données synthétiques, après les tests.",
+        "attendu, après pytest, une étape qui écrit des données synthétiques (scripts/make_synthetic.py) puis "
+        "cifarprod train --config configs/smoke.yaml --set data=<ce fichier> (les données du projet ne sont pas dans git)")
+    swallowed = [k for k, t in runs if re.search(r"\|\|\s*(true|:|exit 0)\b", t)] + \
+        [k for k, s in enumerate(steps) if s.get("continue-on-error") is True]
+    add("failures", not swallowed, "aucune erreur avalée (pas de || true ni de continue-on-error).",
+        f"l'étape {swallowed[0] + 1 if swallowed else ''} avale son échec (|| true ou continue-on-error) : une "
+        "intégration continue qui ne peut pas échouer ne vérifie rien")
+    clear = [m.group(0) for s in steps for m in re.finditer(r"([A-Za-z_]*(?:TOKEN|SECRET|PASSWORD|API_?KEY)[A-Za-z_]*)\s*[:=]\s*([^\s$'\"{][^\s]*)",
+                                                         json.dumps(s, ensure_ascii=False).replace('\\"', '"'))]
+    add("secrets", not clear, "aucun secret écrit en clair (un secret passe par ${{ secrets.NOM }}).",
+        f"un secret semble écrit en clair ({clear[0][:40] if clear else ''}) : il passe par ${{{{ secrets.NOM }}}}")
+    bad = [(k, msg) for k, t in runs if (msg := _bash_syntax(t))]
+    add("bash", not bad, "chaque bloc run: est du bash valide (bash -n, rien n'est lancé).",
+        f"l'étape {bad[0][0] + 1 if bad else ''} n'est pas du bash valide : {bad[0][1][:160] if bad else ''}")
+    if project is not None:
+        named = sorted({m for _, t in runs for m in re.findall(r"(?:configs|scripts)/[\w./-]+", t)})
+        missing = [m for m in named if not (Path(project) / m).exists()]
+        add("files", not missing, f"les fichiers cités existent dans le projet ({', '.join(named) or 'aucun'}).",
+            f"le workflow cite des fichiers absents du projet : {', '.join(missing)}")
+    return out
+
+
+def dockerfile_instructions(text: str) -> list[tuple[str, str]]:
+    """The instructions of a Dockerfile as (KEYWORD, arguments): comments dropped, lines ending with a backslash
+    joined to the next one."""
+    out, current = [], ""
+    for raw in text.replace("\r\n", "\n").split("\n"):
+        line = raw.strip()
+        if not current and (not line or line.startswith("#")):
+            continue
+        if current and line.startswith("#"):
+            continue
+        if line.endswith("\\"):
+            current += line[:-1].rstrip() + " "
+            continue
+        current += line
+        if current.strip():
+            keyword, _, args = current.strip().partition(" ")
+            out.append((keyword.upper(), args.strip()))
+        current = ""
+    if current.strip():
+        keyword, _, args = current.strip().partition(" ")
+        out.append((keyword.upper(), args.strip()))
+    return out
+
+
+def _requirements(text: str) -> dict:
+    """{name (lower case): the version pinned with ==, or None} of a requirements file."""
+    out = {}
+    for line in text.splitlines():
+        line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
+        m = re.match(r"([A-Za-z0-9_.\-]+)\s*(?:\[[^\]]*\])?\s*(==\s*([^\s;]+))?", line)
+        if m:
+            out[m.group(1).lower().replace("_", "-")] = m.group(3)
+    return out
+
+
+def _exec_form(args: str):
+    try:
+        value = json.loads(args)
+    except ValueError:
+        return None
+    return value if isinstance(value, list) and all(isinstance(v, str) for v in value) else None
+
+
+def review_dockerfile(dockerfile: str, dockerignore: str, requirements: str,
+                      project: str | Path | None = None) -> list[Review]:
+    """The checks of a Dockerfile (📦 B7.24), read as text and never built: a pinned slim base, settings in ENV and no
+    secret, a WORKDIR, the dependencies copied and installed BEFORE the code (cache of the layers), torch from the CPU
+    index, a requirements file pinned to the versions of this environment (without torch), the package and the
+    artifact copied, MODEL_DIR on the artifact, a user without privileges, EXPOSE and a CMD in exec form on 0.0.0.0
+    and the same port, a .dockerignore; with ``project``, the command of CMD is tried (``--help``) in the package."""
+    from importlib import metadata
+
+    out: list[Review] = []
+
+    def add(key, ok, success, failure):
+        out.append(Review(key, bool(ok), success, failure))
+
+    ins = dockerfile_instructions(dockerfile)
+    words = [k for k, _ in ins]
+
+    def where(keyword, predicate=lambda a: True):
+        return [i for i, (k, a) in enumerate(ins) if k == keyword and predicate(a)]
+
+    base = ins[0][1] if ins and ins[0][0] == "FROM" else ""
+    pinned = re.fullmatch(r"python:3\.1[1-9]\.\d+-slim(-[a-z]+)?(@sha256:[0-9a-f]{64})?|python:[\w.-]+@sha256:[0-9a-f]{64}",
+                          base.split(" AS ")[0].split(" as ")[0].strip())
+    add("from", pinned, f"FROM {base} : une image slim, à une version précise.",
+        f"FROM {base or '(absent en tête)'} : attendu une image slim de Python à une version précise "
+        "(python:3.13.18-slim-trixie, ou un digest @sha256:...) ; un tag comme 3.13-slim ou latest bouge")
+    envs = {}
+    for i in where("ENV"):
+        for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(\"[^\"]*\"|\S+)", ins[i][1]):
+            envs[m.group(1)] = m.group(2).strip('"')
+        if "=" not in ins[i][1] and ins[i][1].split():          # the old form ENV NAME value
+            envs[ins[i][1].split()[0]] = " ".join(ins[i][1].split()[1:])
+    add("unbuffered", envs.get("PYTHONUNBUFFERED") == "1", "ENV PYTHONUNBUFFERED=1 (les logs sortent tout de suite).",
+        "attendu ENV PYTHONUNBUFFERED=1 : sans lui, Python garde ses messages en mémoire et docker logs reste muet")
+    secrets = [name for name in envs if SECRET_WORDS.search(name)]
+    secrets += [f"ARG {a.split('=')[0]}" for i, (k, a) in enumerate(ins) if k == "ARG" and SECRET_WORDS.search(a)]
+    add("secrets", not secrets, "aucun secret dans l'image (ni ENV ni ARG).",
+        f"{', '.join(secrets)} : un secret écrit dans le Dockerfile reste lisible dans l'image (docker history) ; il "
+        "arrive au lancement par une variable d'environnement (docker run -e) ou un gestionnaire de secrets")
+    workdir = [ins[i][1] for i in where("WORKDIR")]
+    add("workdir", workdir and workdir[-1].rstrip("/") not in ("",), f"WORKDIR {workdir[-1] if workdir else ''}.",
+        "attendu un WORKDIR à soi (/app), pas la racine")
+    copies = [(i, ins[i][1].split()) for i in where("COPY")]
+    req_copy = next((i for i, a in copies if any("requirements" in x for x in a[:-1])), None)
+    code_copy = next((i for i, a in copies if any(x.rstrip("/") in ("src", ".") for x in a[:-1])), None)
+    req_install = next((i for i in where("RUN", lambda a: re.search(r"pip install[^&|;]*-r\s+\S*requirements", a))), None)
+    add("layers", req_copy is not None and req_install is not None and code_copy is not None
+        and req_copy < req_install < code_copy,
+        "les dépendances sont copiées et installées AVANT le code : un changement du code ne réinstalle rien.",
+        "attendu COPY du fichier requirements, puis RUN pip install -r ..., puis seulement COPY src/ (Docker garde une "
+        "couche en cache tant qu'elle et les précédentes ne changent pas)")
+    torch_run = next((ins[i][1] for i in where("RUN", lambda a: re.search(r"\btorch\b", a) is not None)), "")
+    add("torch", "download.pytorch.org/whl/cpu" in torch_run and re.search(r"torch==\d", torch_run),
+        "torch, à une version figée, depuis l'index CPU de PyTorch.",
+        "attendu RUN pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu (la version CUDA et "
+        "ses bibliothèques NVIDIA pèsent plusieurs gigaoctets)")
+    reqs = _requirements(requirements if isinstance(requirements, str) else "")
+    loose = [name for name, version in reqs.items() if not version]
+    wrong = []
+    for name, version in reqs.items():
+        if version:
+            try:
+                have = metadata.version(name)
+            except metadata.PackageNotFoundError:
+                continue
+            if have.split("+")[0] != version:
+                wrong.append(f"{name}=={version} (ici {have})")
+    needed = {"fastapi", "uvicorn", "pydantic", "numpy", "safetensors", "pyyaml"}
+    add("requirements", reqs and not loose and not wrong and needed <= set(reqs) and "torch" not in reqs,
+        f"requirements : {len(reqs)} paquets figés aux versions de cet environnement, torch à part.",
+        "attendu dans le fichier requirements les dépendances de l'API, chacune figée avec == à la version de cet "
+        f"environnement, sans torch (installé à part depuis l'index CPU) ; "
+        + "; ".join(part for part in [f"sans version : {', '.join(loose)}" if loose else "",
+                                      f"autres versions : {', '.join(wrong)}" if wrong else "",
+                                      f"manquent : {', '.join(sorted(needed - set(reqs)))}" if needed - set(reqs) else "",
+                                      "torch y est" if "torch" in reqs else ""] if part))
+    package = next((i for i in where("RUN", lambda a: re.search(r"pip install[^&|;]*(\s\.|\s-e\s+\.)(\s|$)", a + " "))), None)
+    add("package", package is not None and code_copy is not None and package > code_copy,
+        "le paquet installé après la copie de son code.", "attendu, après COPY src/, RUN pip install --no-deps . "
+        "(le paquet lui-même ; ses dépendances sont déjà là)")
+    artifact_copy = next(((i, a) for i, a in copies if any("artifact" in x for x in a[:-1])), None)
+    model_dir = envs.get("MODEL_DIR", "")
+    destination = ""
+    if artifact_copy:
+        destination = artifact_copy[1][-1].rstrip("/")
+        if not destination.startswith("/") and workdir:
+            destination = workdir[-1].rstrip("/") + "/" + destination.lstrip("./")
+    add("artifact", artifact_copy is not None and model_dir.rstrip("/") == destination,
+        f"l'artefact copié dans {destination}, et ENV MODEL_DIR={model_dir} le désigne.",
+        f"attendu COPY artifact/ artifact/ et ENV MODEL_DIR sur ce dossier (ici MODEL_DIR={model_dir or 'absent'}, "
+        f"artefact copié dans {destination or 'nulle part'}) : le service lit son modèle par cette variable")
+    users = [(i, ins[i][1].split(":")[0].strip()) for i in where("USER")]
+    created = any(re.search(r"\b(useradd|adduser)\b", ins[i][1]) for i in where("RUN") if not users or i < users[-1][0])
+    cmd = where("CMD") + where("ENTRYPOINT")
+    add("user", users and users[-1][1] not in ("root", "0") and created and (not cmd or users[-1][0] < cmd[-1]),
+        f"USER {users[-1][1] if users else ''} : le serveur tourne sans privilèges.",
+        "attendu un utilisateur créé (RUN useradd ... ou adduser) puis USER <cet utilisateur> avant CMD : un "
+        "conteneur lancé en root donne ses droits à qui exploite une faille de l'API")
+    exposed = [ins[i][1].split("/")[0].strip() for i in where("EXPOSE")]
+    command = _exec_form(ins[cmd[-1]][1]) if cmd else None
+    port = None
+    if command and "--port" in command and command.index("--port") + 1 < len(command):
+        port = command[command.index("--port") + 1]
+    add("cmd", command is not None, f"CMD en forme exec : {command}.",
+        f"attendu CMD en forme exec, une liste JSON (CMD [\"python\", \"-m\", ...]) : en forme shell, le serveur ne "
+        f"reçoit pas les signaux d'arrêt ; reçu {ins[cmd[-1]][1] if cmd else 'aucun CMD'}")
+    add("host", command is not None and "0.0.0.0" in command, "le serveur écoute 0.0.0.0 (joignable hors du conteneur).",
+        "attendu --host 0.0.0.0 dans CMD : un serveur qui n'écoute que 127.0.0.1 est injoignable hors du conteneur")
+    add("port", exposed and port is not None and port in exposed, f"EXPOSE {exposed[0] if exposed else ''} et --port "
+        f"{port} : le même port.", f"attendu EXPOSE <port> et --port <le même> dans CMD (EXPOSE {exposed or 'absent'}, "
+        f"--port {port or 'absent'})")
+    ignore = [line.strip().rstrip("/") for line in (dockerignore or "").splitlines() if line.strip() and not line.startswith("#")]
+    def ignored(name):
+        return any(p.lstrip("*/").rstrip("*") in (name, name + "/") or p == name or p.endswith(name) for p in ignore)
+    lacking = [name for name in (".git", "data", "runs", "__pycache__", ".env") if not ignored(name)]
+    add("dockerignore", not lacking, ".dockerignore : .git, data, runs, __pycache__ et .env restent hors de l'image.",
+        f".dockerignore : il manque {', '.join(lacking)} (sinon COPY envoie au build les données, l'historique, les "
+        "caches, et peut-être un .env avec des secrets)")
+    if project is not None and command:
+        args = None
+        if command[:2] == ["python", "-m"] and len(command) > 2:
+            args = [sys.executable, "-m", command[2], "--help"]
+        elif command[0] == "uvicorn":
+            target = next((c for c in command[1:] if ":" in c and not c.startswith("-")), None)
+            if target:
+                module, _, attr = target.partition(":")
+                args = [sys.executable, "-c", f"import {module} as m; assert callable(getattr(m, {attr!r}, None)) or "
+                        f"hasattr(m, {attr!r})"]
+        if args:
+            done = run(args, project, src=[Path(project) / "src"], timeout=120)
+            add("runs", done.ok, f"la commande de CMD existe dans ton paquet ({' '.join(command[:3])} ... --help : code 0).",
+                f"la commande de CMD ne répond pas dans ton paquet ({done.tail(2)[:200]})")
+    return out
+
+
+def is_git_repository(project: str | Path) -> bool:
+    """True when ``project`` is the top folder of a git repository (git must be installed)."""
+    if shutil.which("git") is None:
+        return False
+    done = run(["git", "rev-parse", "--show-toplevel"], project, timeout=30)
+    return done.ok and Path(done.stdout.strip()).resolve() == Path(project).resolve()
+
+
+COPY_IGNORED = ("data", "runs", "__pycache__", "*.egg-info", ".pytest_cache", ".git", ".venv", MANIFEST, "*.pyc")
+
+
+def clone_project(project: str | Path, dest: str | Path) -> tuple[Path, str, list[str]]:
+    """A fresh copy of the project in ``dest``, as a new machine would get it: ``git clone`` when the project is a git
+    repository (only what is committed), else a copy without data/, runs/, caches and .git. Returns (dest, how, notes):
+    ``how`` is "git clone" or "copie", ``notes`` the files changed but not committed (git status --porcelain)."""
+    project, dest = Path(project).resolve(), Path(dest)
+    if dest.exists():
+        shutil.rmtree(dest)
+    if is_git_repository(project):
+        done = run(["git", "clone", "--quiet", str(project), str(dest)], project.parent, timeout=120)
+        if not done.ok:
+            raise RuntimeError(f"git clone failed: {done.tail(3)}")
+        status = run(["git", "status", "--porcelain"], project, timeout=30).stdout.splitlines()
+        return dest, "git clone", [line[3:] for line in status if line.strip()]
+    shutil.copytree(project, dest, ignore=shutil.ignore_patterns(*COPY_IGNORED))
+    return dest, "copie", []
+
+
+def machine_speed(repeats: int = 5) -> float:
+    """The speed of this machine, now: the median duration (s) of a fixed piece of work (8 SGD steps of the CNN
+    (16, 32) on a batch of 128 random images, a new model each time), after one round not measured. PyTorch's global
+    random state is not touched."""
+    import torch
+    import torch.nn.functional as F
+
+    times = []
+    with torch.random.fork_rng():
+        for k in range(repeats + 1):
+            torch.manual_seed(k)
+            start = time.perf_counter()
+            model = build_reference("cnn", (16, 32))
+            opt = torch.optim.SGD(model.parameters(), lr=0.05, momentum=0.9)
+            x, y = torch.randn(128, 3, 32, 32), torch.arange(128) % 10
+            for _ in range(8):
+                opt.zero_grad()
+                F.cross_entropy(model(x), y).backward()
+                opt.step()
+            times.append(time.perf_counter() - start)
+    return float(np.median(times[1:]))

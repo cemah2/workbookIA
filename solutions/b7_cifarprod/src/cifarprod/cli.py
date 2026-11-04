@@ -4,7 +4,8 @@
     cifarprod --version
 
 Exit codes: 0 success; 2 bad usage (argparse) or invalid configuration; 1 the data cannot be read or the training
-failed. Messages go through logging (stderr); the only line written on stdout is the JSON summary of the run.
+failed. Messages go through logging (stderr); the only line written on stdout is the JSON summary of the run. The
+folder --out receives the artifact of the model (model.safetensors and meta.json, artifact.py).
 """
 
 from __future__ import annotations
@@ -49,9 +50,8 @@ def run_train(args: argparse.Namespace) -> int:
               "config": config.to_dict(), "environment": environment(), "status": "failed"}
     start = time.perf_counter()
     try:
-        from safetensors.torch import save_file
-
-        from .data import fingerprint, load_npz
+        from .artifact import save_artifact
+        from .data import CLASSES, fingerprint, load_npz
         from .train import train
 
         try:
@@ -69,13 +69,14 @@ def run_train(args: argparse.Namespace) -> int:
         result = train(X, y, X_val, y_val, arch=config.arch, widths=config.widths, epochs=config.epochs,
                        lr=config.lr, batch_size=config.batch_size, seed=config.seed,
                        deterministic=config.deterministic, num_workers=config.num_workers)
-        out.mkdir(parents=True, exist_ok=True)
-        weights = out / "model.safetensors"
-        save_file(result["model"].state_dict(), str(weights))
         history = result["history"]
+        weights, meta = out / "model.safetensors", out / "meta.json"
+        save_artifact(out, result["model"], arch=config.arch, widths=config.widths, mean=result["mean"],
+                      std=result["std"], classes=CLASSES, data={**record["data"], "run_id": run_id},
+                      metrics={"val_acc": history["val_acc"][-1], "val_loss": history["val_loss"][-1]})
         record.update(status="ok", metrics={**history, "val_acc_final": history["val_acc"][-1]},
                       normalization={"mean": list(result["mean"]), "std": list(result["std"])},
-                      artifacts=[artifact(weights)])
+                      artifacts=[artifact(weights), artifact(meta)])
         log.info("run %s: val_acc %.4f, weights in %s", run_id, history["val_acc"][-1], weights)
         print(json.dumps({"run_id": run_id, "status": "ok", "val_acc": history["val_acc"][-1],
                           "weights": str(weights.resolve())}))

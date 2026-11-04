@@ -13,7 +13,15 @@ Writes tools/chapters/history_chB7.json (statistics only, no weights), which chB
   versions with ONE gap left, the accuracy of the service on the 200 images (for 05_solutions.md);
 - "t13": 🔬 B7.13, the reference command line (configs/fast.yaml) with the seeds 0 to 4, deterministic or not: the
   accuracies and the largest gaps between the weights.
-The cells of the notebook are reused as is (tools/chapters/chB7_code.py), executed in one namespace.
+- "mp5data": the fingerprint of the 45 000 training images of the MP5 reference model (cifarkit.stratified_split, seed
+  0), checked against wbp.MP5_DATA and against the channel means of its model.json;
+- "l19": 🔮 B7.19, the latency protocol of EXPERIMENT_19 (reference API in another process) repeated for 2 and 1
+  threads, FastAPI and http.server, three times: the two ratios and their categories must be the same everywhere;
+- "d22": 📈 B7.22, the table of EXPERIMENT_22 (SOLUTION_22), and its answers again with other noise seeds and the
+  reference and production halves swapped: the answers must not change;
+- "c25": 🏆 B7.25, the chain of the self-check on the reference package (git clone, editable install, pytest, demo),
+  three times, with wbp.machine_speed(): the speed constant of the challenge and the worst time.
+The cells of the notebook are reused as is (tools/chapters/chB7_code*.py), executed in one namespace.
 """
 
 from __future__ import annotations
@@ -139,7 +147,161 @@ def t13() -> dict:
     return out
 
 
-ENTRIES = {"p12": p12, "b16": b16, "t13": t13}
+def mp5data() -> dict:
+    import wb
+    from wb import prod as wbp
+
+    sys.path.insert(0, str(ROOT / "projets" / "partie_5_classifieur_cifar10" / "solution"))
+    wb.load_mylearn("ref")
+    import data as mp5
+    from cifarkit.pipeline import stratified_split
+
+    X, y = mp5.load_cifar10()
+    train_idx, _ = stratified_split(y, 5000, 0)
+    sha = wbp.array_fingerprint(X[train_idx], y[train_idx])
+    mean = (X[train_idx] / 255.0).mean(axis=(0, 1, 2))
+    meta = json.loads((wbp.reference_folder() / "model.json").read_text(encoding="utf-8"))
+    out = {"sha256": sha, "n_train": int(len(train_idx)), "same_as_wbp": sha == wbp.MP5_DATA["sha256"],
+           "mean_matches_model_json": bool(np.allclose(mean, meta["mean"], rtol=0, atol=1e-12))}
+    print("mp5data", out)
+    if not (out["same_as_wbp"] and out["mean_matches_model_json"]):
+        raise SystemExit("mp5data: wbp.MP5_DATA does not match the MP5 split")
+    return out
+
+
+def l19() -> dict:
+    import requests
+    import torch
+
+    from wb import prod as wbp
+
+    ns = namespace()
+    import chB7_code2 as C2
+    exec(C2.GIVEN_17, ns)
+    folder = wbp.reference_artifact(ns["scratch"]("artifact19") / "vgg")
+    model, info = wbp.reference_model()
+    x = ns["model_input"](ns["X_B"], info["mean"], info["std"])
+    body1, body32 = {"pixels": ns["X_B"][0].tolist()}, {"images": ns["X_B"][:32].tolist()}
+    rows, keep = [], torch.get_num_threads()
+    for repeat in range(3):
+        for threads in (2, 1):
+            torch.set_num_threads(threads)
+            with torch.inference_mode():
+                direct = wbp.latencies(lambda: model(x[:1]), 200, 20)
+            for backend in ("fastapi", "stdlib"):
+                with wbp.serve_process(wbp.reference_package() / "src", folder, backend=backend,
+                                       env={"OMP_NUM_THREADS": str(threads)}) as server:
+                    s = requests.Session()
+                    one = wbp.latencies(lambda: s.post(f"{server.url}/predict", json=body1, timeout=30), 200, 20)
+                    many = wbp.latencies(lambda: s.post(f"{server.url}/predict_batch", json=body32, timeout=30), 40, 3)
+                row = {"repeat": repeat, "threads": threads, "backend": backend,
+                       "direct_p50": float(np.percentile(direct, 50)), "direct_p95": float(np.percentile(direct, 95)),
+                       "one_p50": float(np.percentile(one, 50)), "one_p95": float(np.percentile(one, 95)),
+                       "batch_p50": float(np.percentile(many, 50)), "batch_p95": float(np.percentile(many, 95))}
+                row["a"] = row["one_p95"] / row["direct_p95"]
+                row["b"] = row["batch_p95"] / row["one_p95"]
+                row["gain"] = 32 * row["one_p50"] / row["batch_p50"]
+                rows.append(row)
+                print("l19", {k: round(v, 2) if isinstance(v, float) else v for k, v in row.items()}, flush=True)
+    torch.set_num_threads(keep)
+    cat = lambda r, lo, hi: "A" if r < lo else "B" if r <= hi else "C"
+    answers = {(cat(r["a"], 2, 20), cat(r["b"], 3, 32)) for r in rows}
+    if len(answers) != 1:
+        raise SystemExit(f"l19: the categories change from one run to another: {answers}")
+    a, b = answers.pop()
+    pick = lambda key: [round(min(r[key] for r in rows), 2), round(max(r[key] for r in rows), 2)]
+    return {"answers": {"a": a, "b": b}, "rows": rows, "ranges": {k: pick(k) for k in ("a", "b", "gain", "direct_p50",
+            "direct_p95", "one_p50", "one_p95", "batch_p50", "batch_p95")},
+            "direct_p50_default": float(np.median([r["direct_p50"] for r in rows if r["threads"] == 2]))}
+
+
+def d22() -> dict:
+    import chB7_code2 as C2
+    import chB7_code3 as C3
+
+    ns = namespace()
+    for block in (C2.GIVEN_17, C3.GIVEN_22, C3.SOLUTION_22, C3.CHECK_22):
+        exec(block, ns)
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        ns["plt"].show = lambda *a, **k: None
+        exec(C3.EXPERIMENT_22, ns)
+    table = ns["TABLE_22"]
+
+    def answers(t):
+        letters = lambda f: "".join(k for k in sorted(t) if f(t[k]))
+        return {"a": letters(lambda r: r["psi"] > 0.25), "b": letters(lambda r: r["p"] < 0.05),
+                "c": letters(lambda r: r["psi_classes"] > 0.25),
+                "d": letters(lambda r: r["accuracy"] < ns["acc_ref_22"] - 0.10), "e": round(t["D"]["psi"], 2)}
+
+    main = answers(table)
+    others = []
+    for seed, swap in [(0, False), (1, False), (2, True), (22, True)]:
+        X, Y = ns["X_22"], ns["Y_22"]
+        ref, prod, ry, py = (X[1::2], X[::2], Y[1::2], Y[::2]) if swap else (X[::2], X[1::2], Y[::2], Y[1::2])
+        wins = {"A": prod, "B": np.round(prod * 0.6).astype(np.uint8),
+                "C": np.clip(prod + np.random.default_rng(seed).normal(0, 25, prod.shape), 0, 255).round().astype(np.uint8),
+                "D": np.round(prod * 0.9).astype(np.uint8)}
+        proba = {k: ns["offline_b"](ns["MODEL_22"], v, ns["REF_INFO"]["mean"], ns["REF_INFO"]["std"])[0]
+                 for k, v in {"ref": ref, **wins}.items()}
+        light = {k: ns["brightness_22"](v) for k, v in {"ref": ref, **wins}.items()}
+        pred = {k: v.argmax(axis=1) for k, v in proba.items()}
+        acc_ref = float((pred["ref"] == ry).mean())
+        t = {}
+        for k in wins:
+            from scipy import stats
+            t[k] = {"psi": ns["psi_22"](light["ref"], light[k]), "p": float(stats.ks_2samp(light["ref"], light[k]).pvalue),
+                    "psi_classes": ns["psi_classes_22"](pred["ref"], pred[k]), "accuracy": float((pred[k] == py).mean())}
+        ns["acc_ref_22"], keep = acc_ref, ns["acc_ref_22"]
+        got = answers(t)
+        ns["acc_ref_22"] = keep
+        others.append({"seed": seed, "swap": swap, **{k: v for k, v in got.items() if k != "e"},
+                       "psi_D": round(t["D"]["psi"], 3), "table": t})
+        print("d22", seed, swap, got)
+    stable = all(all(o[k] == main[k] for k in "abcd") for o in others)
+    print("d22 main", main, "stable", stable)
+    if not stable:
+        raise SystemExit("d22: the letters change with the noise seed or the halves")
+    return {"answers": main, "table": table, "acc_ref": ns["acc_ref_22"], "others": others,
+            "psi_D_exact": table["D"]["psi"]}
+
+
+def c25() -> dict:
+    import tempfile
+
+    from wb import prod as wbp
+
+    runs = []
+    for repeat in range(3):
+        speed = wbp.machine_speed()
+        project = Path(tempfile.mkdtemp(prefix="wb_b7_c25_")) / "cifar-prod"
+        shutil.copytree(wbp.reference_package(), project, ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
+        for args in (["git", "init", "-q"], ["git", "add", "-A"],
+                     ["git", "-c", "user.name=w", "-c", "user.email=w@example.org", "commit", "-q", "-m", "c25"]):
+            wbp.run(args, project, timeout=60)
+        start = time.perf_counter()
+        clone, how, _ = wbp.clone_project(project, project.parent / "clone")
+        install = wbp.install_editable(clone)
+        try:
+            tests = install.run(["python", "-m", "pytest", "-q", "-p", "no:cacheprovider", "--strict-markers", "-c",
+                                 str(clone / "pyproject.toml"), "--rootdir", str(clone)], clone, timeout=600)
+            demo = install.run(["python", "scripts/demo.py"], clone, timeout=600)
+        finally:
+            install.cleanup()
+        total = time.perf_counter() - start
+        row = {"speed": speed, "how": how, "install": install.seconds, "tests": tests.seconds, "tests_ok": tests.ok,
+               "demo": demo.seconds, "demo_ok": demo.ok, "total": total, "summary": demo.last_json(),
+               "tests_summary": (tests.stdout.strip().splitlines() or [""])[-1]}
+        runs.append(row)
+        print("c25", {k: round(v, 2) if isinstance(v, float) else v for k, v in row.items()}, flush=True)
+        if not (tests.ok and demo.ok):
+            raise SystemExit(f"c25: the reference chain fails: {tests.stdout[-500:]} {demo.stderr[-500:]}")
+    return {"runs": runs, "calib_speed": float(np.median([r["speed"] for r in runs])),
+            "worst_total": float(max(r["total"] for r in runs)),
+            "worst_equivalent": float(max(r["total"] * np.median([q["speed"] for q in runs]) / r["speed"] for r in runs))}
+
+
+ENTRIES = {"p12": p12, "b16": b16, "t13": t13, "mp5data": mp5data, "l19": l19, "d22": d22, "c25": c25}
 
 
 def main(argv=None) -> int:
