@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-03, session 74 (bonus B6 terminé).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-04, session 75 (bonus B7, 1ʳᵉ partie).*
 
 ## Prochaine étape
 
-➡️ **Session 75 : chapitre bonus B7 (Du notebook à la production), 1ʳᵉ partie** (`docs/syllabus/data/chB7.json`, 2 sessions), puis le bonus B8.
+➡️ **Session 76 : chapitre bonus B7 (Du notebook à la production), 2ᵉ et dernière partie** : le notebook B7.9 à B7.25 (projet : paquet, ligne de commande, configuration, reproductibilité, suivi, tests → service : artefact, API, latence, export → exploitation : dérive, intégration continue, Docker), le paquet de référence dans `solutions/` avec ses tests, ses indices et solutions, la fin du chapitre ; tout ce qu'il faut est dans `chapitres/b7_production/EN_COURS.md` (« Pour la session 76 »). Puis le bonus B8.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -195,7 +195,8 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | B4 | LLM en pratique : Hugging Face, prompting, RAG et LoRA | ✅ | 69-70 | 50 exercices (dont 19 dans le notebook : prompting, recherche et RAG sur Holmes, LoRA, classification, livraison, défi), fiche (≈ 14 800 mots, 6 figures), 28 flashcards, partie 0 (122 vérifications) ; `mylearn/retrieval.py` (129 tests) ; infrastructure `wb.llm`, `wb.rag` ; données `data/qa/` (30 questions sur Holmes, 10 sur Verne, 12 de contrôle en empreintes) |
 | B5 | Modèles de diffusion : un DDPM minimal | ✅ | 71-72 | 50 exercices (dont 20 dans le notebook : mathématiques de `diffusion.py`, jouets 2D et flow matching, U-Net sur MNIST, DDPM contre DDIM, guidance sur Fashion-MNIST, mémorisation, distance de Fréchet face au VAE et au DCGAN, échantillonneur autonome, défi), fiche (≈ 13 700 mots, 5 figures), 26 flashcards, partie 0 (118 vérifications) ; `mylearn/diffusion.py` (209 tests) ; infrastructure `wb.diffusion` ; diffusers 0.40.0 en oracle facultatif |
 | B6 | Explicabilité, équité et éthique | ✅ | 73-74 | 49 exercices (dont 18 dans le notebook : explications globales, SHAP sur California et Penguins, gradients intégrés et Grad-CAM sur CIFAR-10 et le ResNet du B1, test d'Adebayo, audit d'équité sur Adult, atténuation, fiche modèle, défi), fiche (≈ 13 400 mots, 6 figures), 28 flashcards, partie 0 (121 vérifications) ; `mylearn/explain.py` (186 tests) ; infrastructure `wb.explain_data` |
-| B7-B8 | Chapitres bonus | 📅 | | |
+| B7 | Du notebook à la production | 🛠️ 1/2 | 75 | fiche (≈ 11 100 mots, 5 figures), 27 exercices papier, 24 flashcards, partie 0 (116 vérifications) ; aucun module `mylearn` (chapitre de compétences pro) ; fastapi, uvicorn et pydantic figés aux versions de Colab ; notebook B7.9 à B7.25 à la session 76 |
+| B8 | Chapitre bonus | 📅 | | |
 | PF | Projet final et finalisation (P10) | 📅 | | |
 
 ## Session 1 (2026-09-29) : mise en place ✅
@@ -652,6 +653,25 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 75 (2026-11-04) : chapitre bonus B7 (Du notebook à la production), 1ʳᵉ partie ✅
+
+**Fait** :
+- **Dépendances** : fastapi 0.141.1, uvicorn 0.53.0 et pydantic 2.13.5 (versions de Colab du 2026-09-30, contrat) ajoutés à `requirements.txt`, à `check_env.py`, à l'extra `serve` de `pyproject.toml` et au §21 ; extra `prod` (onnx, onnxscript, onnxruntime, mlflow, ruff, pre-commit), non installé.
+- **Fiche** (`01_fiche.md`, ≈ 11 100 mots, sections 207.1 à 207.10, toutes ⏩ ; figures `tools/chapters/figures_chB7.py` : cycle de vie, intégration continue, latences avec p50, p95 et p99, PSI, KS). `torch.export` (écart 0,0), FastAPI avec `TestClient`, repli `http.server`, déterminisme (`CUBLAS_WORKSPACE_CONFIG` plus demandé depuis PyTorch 2.10), `quantize_dynamic` déprécié en 2.11, bfloat16, latences, PSI et KS rejoués ; TorchScript déprécié, ONNX en `dynamo=True`, TorchServe plus maintenu, actions GitHub v7, PEP 751 vérifiés ; articles lus sur PDF (Sculley et coll. 2015, ML Test Score, Model Cards, Failing Loudly) ; RGPD art. 5, 6.4, 15, 17 et CNIL 2021-122.
+- **Exercices papier** (`02_exercices.md`) : 11 quiz, 3 rappels (24, 23, 15), ✏️ B7.1 à B7.4 (taille d'un artefact, intervalle sur cinq graines, p50 et p95, PSI), 🧮 B7.5, 🗣️ B7.6, ⚖️ B7.7, 📄 B7.8, 5 entretiens ; indices et solutions ; `06_mes_reponses.md` ; 24 flashcards.
+- **Partie 0 du notebook** (`tools/chapters/build_chB7.py`) : 116 vérifications `wb.check`, sans téléchargement ; parties suivantes annoncées.
+- **`wb.check`** : un choix multiple saisi en minuscules dans le désordre (`"dca"`) est accepté (test dans `tests/infra`), pour tous les chapitres.
+- Annexes : glossaire (58 termes, « paquet » (*package*)), formulaire (section B7), erreurs fréquentes, aide-mémoire PyTorch, auto-évaluation ; `EN_COURS.md` (« Pour la session 76 »).
+- **Vérifications indépendantes** : voir BIBLE §22, ligne « Vérification indépendante du ch. B7, 1ʳᵉ partie ».
+- Vérification finale : `syllabus.py check` 0 problème ; tests mode apprenant 702 ; `build_answers.py --check`, `export_flashcards.py --check` (941 cartes), `check_env.py` ; partie 0 sans ❌, « Run all » du notebook vide sans erreur ; `mon_travail/` intact. En-tête de la fiche : 18 h, lecture 1,5 h.
+- Écarts : section « Écarts » (session 75).
+
+**Leçons** :
+- un chapitre sans module `mylearn` se vérifie quand même deux fois : le solveur à l'aveugle et le relecteur suffisent pour la partie papier, le paquet de référence et ses tests viennent avec le notebook ;
+- un défaut d'outil commun (`wb.check` refusait `"dca"`) se trouve en essayant plusieurs formats de saisie : il se corrige pour tous les chapitres, avec un test ;
+- des QCM à plusieurs lettres ont tous la même structure (trois bonnes sur quatre, un intrus absurde) : on varie le nombre de bonnes réponses et on rend les intrus plausibles ;
+- une API qui évolue vite (export, quantification, déterminisme) se vérifie dans le code de la version figée, pas dans la mémoire.
 
 ## Session 74 (2026-11-03) : chapitre bonus B6 (Explicabilité, équité et éthique), 2ᵉ et dernière partie ✅
 
@@ -1500,4 +1520,5 @@ Côté apprenant : **l'audit des parties V et VI est fait.** Rien ne change dans
 | 72 | B5 | vérifications : B5.13, B5.15, B5.20, B5.25, B5.26 et B5.28 `manual` → `wb.check` ; B5.31 `wb.check` → `manual` (défi jugé par `verdict`) ; `prereq` : B5.21 + B3, B5.27 + B5.24, B5.30 + B5.27 ; mode rapide : U-Net (16, 32, 64) de 221 057 paramètres et 4 epochs au lieu d'≈ 1 M de paramètres et 2 epochs (qualité insuffisante en 2 min) ; B5.24 sur 32 images avec la confiance du classifieur ; B5.25 b) sur 5 pas, B5.26 c) sur la diversité, B5.28 à nombre de pas égal (aucune copie : a) « moins de 10 % », b) sur le r médian) ; B5.29 avec le code de la solution du MP6 et les features du classifieur MNIST ; défi B5.31 : objectif fixé par calibrage (56 en mode rapide, 12 en 10 min en mode complet), temps d'entraînement mis à l'échelle de la machine ; aucun ID, titre, type, durée ni parcours ne change | budget du §4 ; robustesse d'une graine à l'autre |
 | 73 | B6 (chapitre non publié) | vérifications des quiz B6.Q1 à Q12 et des rappels B6.R1 à R3 `manual` → `wb.check` (partie 0) ; « model card » → « fiche modèle » (titre de B6.28 et autres champs) et « post-hoc » → « post hoc » (termes du glossaire) ; ✏️ B6.3 h : seuil « au plus 0,03 » (réponse 134) au lieu d'un seuil qui tombait pile sur 4/400 ; aucun ID, type, durée ni parcours ne change | terminologie du §5 ; réponse robuste aux arrondis |
 | 74 | B6 | **titre de B6.29** : « … sous 0,05 … » → « … sous 0,07 … » (la référence, deux seuils par sexe choisis sur la validation, fait 0,012 à 0,058 sur 11 découpages ; le TPR des femmes repose sur ≈ 350 positifs, écart-type ≈ 0,026) ; `notes` du contrat alignées ; vérifications : B6.13, B6.25 et B6.26 `manual` → `wb.check` ; B6.29 `wb.check` → `manual` (défi jugé par `verdict`) ; `prereq` : B6.27 + B6.24 ; seuils par sexe permis dans la décision du défi (dit dans l'énoncé) ; B6.13 : « bosse de la latitude » remplacée par sa tendance (instable d'un découpage à l'autre) ; aucun ID, type, durée ni parcours ne change | défi calibré avant d'être promis (leçon B4) |
+| 75 | B7 (chapitre non publié) | vérifications des quiz B7.Q1 à Q11 et des rappels B7.R1 à R3 `manual` → `wb.check` (partie 0) ; dépendances fastapi, uvicorn et pydantic ajoutées (prévu par le contrat) ; aucun ID, titre, type, durée ni parcours ne change | comme B1 à B6 |
 | 62 | 21 à 29, CP4 à CP6, MP5, MP6 (R1 à R9 validés) | **titres** changés, ID inchangés : 23.15, 23.28, 24.8, 24.E2, 25.27, 26.E4, 26.31, 27.R1, 27.Q7, 29.R3, MP5.1, MP6.7 ; **types et ★** : CP6.8 📦 → 🔨, CP6.4 et CP6.9 ★ → ★★, titre de CP6.9 « Réparer un pas d'entraînement de GAN » ; **durées** : 21.12 ★★ 30, 21.23 25, 22.12 ★★ 30, 22.13 30, 25.28 ★★★ 35, 26.14 ★★ 30, 26.19 ★★★ 35, 26.20 ★★★ 75, 26.21 ★★★ 90, 26.31 ★★★ 40, MP5.8 90 min (MP5 : 10 h) ; **parcours maths** : 23.12, 23.13, 23.15, 23.16, 23.18, 23.23, 23.25, 24.19, 24.20, 24.22, 24.23, 27.20, 27.27 ; **énoncés précisés**, réponses inchangées : 21.Q8 a, 22.20, 24.24, 24.27, 24.R1 a, 26.17, 26.35, 29.15, CP6.7, CP6.8 ; `cp6.json` : champs `notes` et `study_notes` | audit P5 V-VI, rapport §6 |

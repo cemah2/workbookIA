@@ -5450,20 +5450,20 @@ Un modèle n'a de valeur que s'il sort du notebook. En partant du classifieur CI
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B7.Q1 | 🧠 | Les pièges du notebook : état caché et ordre d'exécution | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q2 | 🧠 | src/, tests/, configs/, scripts/ : où va quoi ? | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q3 | 🧠 | print ou logging : niveaux, destinations et messages utiles | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q4 | 🧠 | Ce qui va dans la configuration, et ce qui ne doit jamais y aller | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q5 | 🧠 | Même graine, résultats différents : les sources de non-déterminisme | ★★ | 3 | — | 02 | — | R | manual |
-| B7.Q6 | 🧠 | requirements.txt, fichier de verrouillage, pyproject.toml : qui fige quoi ? | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q7 | 🧠 | Que tester dans un projet de machine learning ? | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q8 | 🧠 | Artefact de modèle : les poids seuls ne suffisent pas | ★ | 3 | — | 02 | — | R | manual |
-| B7.Q9 | 🧠 | Latence p50, p95 et débit : ce que ressent l'utilisateur | ★★ | 3 | — | 02 | — | – | manual |
-| B7.Q10 | 🧠 | torch.export, ONNX, TorchScript : lequel choisir aujourd'hui ? | ★★ | 3 | — | 02 | — | – | manual |
-| B7.Q11 | 🧠 | Écart entraînement-production et dérive des données : vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| B7.R1 | 🔁 | Ce qu'une ligne de journal d'expériences doit contenir | ★ | 5 | — | 02 | 24 | R | manual |
-| B7.R2 | 🔁 | Checkpoint complet, state_dict et weights_only | ★ | 5 | — | 02 | 23 | R | manual |
-| B7.R3 | 🔁 | Sauvegarder un Pipeline et figer les versions | ★ | 5 | — | 02 | 15 | R | manual |
+| B7.Q1 | 🧠 | Les pièges du notebook : état caché et ordre d'exécution | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q2 | 🧠 | src/, tests/, configs/, scripts/ : où va quoi ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q3 | 🧠 | print ou logging : niveaux, destinations et messages utiles | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q4 | 🧠 | Ce qui va dans la configuration, et ce qui ne doit jamais y aller | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q5 | 🧠 | Même graine, résultats différents : les sources de non-déterminisme | ★★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q6 | 🧠 | requirements.txt, fichier de verrouillage, pyproject.toml : qui fige quoi ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q7 | 🧠 | Que tester dans un projet de machine learning ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q8 | 🧠 | Artefact de modèle : les poids seuls ne suffisent pas | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.Q9 | 🧠 | Latence p50, p95 et débit : ce que ressent l'utilisateur | ★★ | 3 | — | 02 | — | – | wb.check |
+| B7.Q10 | 🧠 | torch.export, ONNX, TorchScript : lequel choisir aujourd'hui ? | ★★ | 3 | — | 02 | — | – | wb.check |
+| B7.Q11 | 🧠 | Écart entraînement-production et dérive des données : vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| B7.R1 | 🔁 | Ce qu'une ligne de journal d'expériences doit contenir | ★ | 5 | — | 02 | 24 | R | wb.check |
+| B7.R2 | 🔁 | Checkpoint complet, state_dict et weights_only | ★ | 5 | — | 02 | 23 | R | wb.check |
+| B7.R3 | 🔁 | Sauvegarder un Pipeline et figer les versions | ★ | 5 | — | 02 | 15 | R | wb.check |
 | B7.1 | ✏️ | Taille d'un artefact : float32, bfloat16, int8, et la mémoire au chargement | ★ | 10 | — | 02 | 20 | M | wb.check |
 | B7.2 | ✏️ | Cinq graines, un intervalle : la dispersion d'une accuracy rapportée | ★★ | 20 | — | 02 | 2 | M | wb.check |
 | B7.3 | ✏️ | Latence et débit : p50 et p95 sur vingt mesures, batch 1 contre batch 32 | ★★ | 15 | — | 02 | 2 | M | wb.check |
