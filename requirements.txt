@@ -63,6 +63,11 @@ diffusers==0.40.0      # B5: oracle of the tests of diffusion.py (optional: skip
 # --- Explainability (B6) ---------------------------------------------
 shap==0.54.1
 
+# --- Serving a model (B7) ---------------------------------------------
+fastapi==0.141.1       # B7.18 (fallback: http.server)
+uvicorn==0.53.0
+pydantic==2.13.5
+
 # --- Tests and notebook tooling ---------------------------------------
 pytest==8.4.2
 nbformat==5.11.1

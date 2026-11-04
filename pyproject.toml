@@ -27,8 +27,10 @@ umap = ["umap-learn>=0.5.7"]
 rl = ["gymnasium>=1.0"]
 hf = ["transformers>=4.50", "datasets>=3.0", "tokenizers>=0.21", "accelerate>=1.0", "peft>=0.14", "diffusers>=0.30"]
 xai = ["shap>=0.46"]
+serve = ["fastapi>=0.110", "uvicorn>=0.30", "pydantic>=2.6"]
+prod = ["onnx", "onnxscript", "onnxruntime", "mlflow", "ruff", "pre-commit"]
 dev = ["pytest>=8.0", "nbformat>=5.10", "nbclient>=0.10", "ipykernel>=6.0"]
-all = ["dl-workbook[torch,boost,umap,rl,hf,xai,dev]"]
+all = ["dl-workbook[torch,boost,umap,rl,hf,xai,serve,dev]"]
 
 [tool.setuptools]
 package-dir = { "" = "src" }

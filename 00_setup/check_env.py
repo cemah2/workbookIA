@@ -27,13 +27,13 @@ PACKAGES = {
     "sklearn": "scikit-learn", "torch": "torch", "torchvision": "torchvision",
     "xgboost": "xgboost", "lightgbm": "lightgbm", "umap": "umap-learn",
     "gymnasium": "gymnasium", "transformers": "transformers", "datasets": "datasets", "diffusers": "diffusers",
-    "shap": "shap", "pytest": "pytest", "nbformat": "nbformat", "nbclient": "nbclient",
+    "shap": "shap", "fastapi": "fastapi", "uvicorn": "uvicorn", "pydantic": "pydantic", "pytest": "pytest", "nbformat": "nbformat", "nbclient": "nbclient",
 }
 CRITICAL = {"numpy", "pandas", "matplotlib", "sklearn", "pytest"}
 NEEDED_FROM = {  # when a package becomes necessary
     "torch": "ch. 5 : 5.21, 10.14, 10.15 ; indispensable au ch. 20", "torchvision": "ch. 20", "xgboost": "ch. 14", "lightgbm": "ch. 14",
     "umap": "ch. 12", "gymnasium": "ch. 26", "transformers": "bonus B2-B4",
-    "datasets": "bonus B2-B4", "diffusers": "bonus B5", "shap": "bonus B6", "nbformat": "outils", "nbclient": "outils",
+    "datasets": "bonus B2-B4", "diffusers": "bonus B5", "shap": "bonus B6", "fastapi": "bonus B7", "uvicorn": "bonus B7", "pydantic": "bonus B7", "nbformat": "outils", "nbclient": "outils",
     "scipy": "ch. 2",
 }
 DATA_FILES = [
