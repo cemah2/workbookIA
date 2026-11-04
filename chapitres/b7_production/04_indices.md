@@ -633,7 +633,7 @@ Repère tous les tirages d'un run : l'initialisation des poids (après `torch.ma
 </details>
 <details><summary>Indice 2</summary>
 
-Avec `num_workers = 0`, `__getitem__` tire dans le générateur global du notebook, juste après l'initialisation. Avec des workers, chaque processus fils a son propre générateur, semé à partir d'une graine de base que le `DataLoader` tire, à chaque epoch, dans son `generator` (207.4, et la page « Reproducibility » de PyTorch). Pour a) et b), la question est : un run rejoué refait-il exactement les mêmes tirages ? Pour c) et d), les deux runs tirent-ils dans les mêmes générateurs, et y a-t-il seulement des tirages à faire ?
+Avec `num_workers = 0`, `__getitem__` tire dans le générateur global du notebook, juste après l'initialisation. Avec des workers, chaque processus fils a son propre générateur, semé à partir d'une graine de base que tire le `DataLoader` (207.4, et la page « Reproducibility » de PyTorch). Pour a) et b), la question est : un run rejoué refait-il exactement les mêmes tirages ? Pour c) et d), les deux runs tirent-ils dans les mêmes générateurs, et y a-t-il seulement des tirages à faire ?
 
 </details>
 <details><summary>Indice 3</summary>
