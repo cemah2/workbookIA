@@ -72,7 +72,7 @@ D'où deux règles : « Redémarrer et tout exécuter » avant de croire un rés
 
 ### Une structure de dépôt
 
-Il n'y a pas de norme unique, mais une forme courante, que reprend le notebook :
+Une forme courante, que reprend le notebook :
 
 ```text
 cifar-prod/
@@ -118,7 +118,7 @@ Les **bornes** de `dependencies` disent ce que le code supporte ; les **versions
 
 `pip install -e .` installe le package en mode **éditable** (*editable install*, PEP 660) : un lien vers ton dossier `src/` au lieu d'une copie. Une modification du code est visible au prochain import, et la commande `cifarprod` existe tout de suite ; dans un notebook, un module déjà importé n'est pas relu : redémarre le noyau.
 
-> 🕰️ **Mise à jour (2026) — l'outillage Python** — **Le livre :** absent (2018 : `setup.py` et `requirements.txt` à la main). · **Aujourd'hui :** `pyproject.toml` (PEP 621) décrit tout projet ; **uv** (Astral, 0.13 en novembre 2026) crée l'environnement, installe et **verrouille** en quelques secondes (`uv lock` écrit un `uv.lock` multiplateforme, à versionner ; `uv sync --locked` refuse un verrou périmé) ; **pip-tools** (`pip-compile`) épingle un `requirements.txt` ; la **PEP 751**, acceptée le 31 mars 2025, normalise un verrou commun, `pylock.toml` (`uv export --format pylock.toml`, et `pip lock`, expérimental, depuis pip 25.1) ; **ruff** vérifie le style et formate ; **pre-commit** lance ces vérifications avant chaque commit. Aucun n'est installé dans le workbook ni sur Colab (extra optionnel `prod`). · **Faut-il quand même l'apprendre ?** Oui : un `pyproject.toml` propre, un verrou et un linter sont le minimum qu'un recruteur regarde. · *Sources :* [guide « Writing your pyproject.toml »](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) ; [« src layout vs flat layout »](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) ; [PEP 751](https://peps.python.org/pep-0751/) et la [spécification `pylock.toml`](https://packaging.python.org/en/latest/specifications/pylock-toml/) ; [uv, projets et verrou](https://docs.astral.sh/uv/concepts/projects/layout/) ; [`pip lock`](https://pip.pypa.io/en/stable/cli/pip_lock/) ; Pimentel et coll., « [A Large-scale Study about Quality and Reproducibility of Jupyter Notebooks](https://leomurta.github.io/papers/pimentel2019a.pdf) », MSR 2019.
+> 🕰️ **Mise à jour (2026) — l'outillage Python** — **Le livre :** absent (2018 : `setup.py` et `requirements.txt` à la main). · **Aujourd'hui :** `pyproject.toml` (PEP 621) décrit tout projet ; **uv** (Astral, 0.13 en novembre 2026) crée l'environnement, installe et **verrouille** en quelques secondes (`uv lock` écrit un `uv.lock` multiplateforme, à versionner ; `uv sync --locked` refuse un verrou périmé) ; **pip-tools** (`pip-compile`) épingle un `requirements.txt` ; la **PEP 751**, acceptée le 31 mars 2025, normalise un verrou commun, `pylock.toml` (`uv export --format pylock.toml`, et `pip lock`, expérimental, depuis pip 25.1) ; **ruff** vérifie le style et formate ; **pre-commit** lance ces vérifications avant chaque commit. ruff et pre-commit ne sont ni dans le workbook ni sur Colab (extra optionnel `prod`) ; le chapitre n'en dépend pas. · **Faut-il quand même l'apprendre ?** Oui : un `pyproject.toml` propre, un verrou et un linter sont le minimum qu'un recruteur regarde. · *Sources :* [guide « Writing your pyproject.toml »](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) ; [« src layout vs flat layout »](https://packaging.python.org/en/latest/discussions/src-layout-vs-flat-layout/) ; [PEP 751](https://peps.python.org/pep-0751/) et la [spécification `pylock.toml`](https://packaging.python.org/en/latest/specifications/pylock-toml/) ; [uv, projets et verrou](https://docs.astral.sh/uv/concepts/projects/layout/) ; [`pip lock`](https://pip.pypa.io/en/stable/cli/pip_lock/) ; Pimentel et coll., « [A Large-scale Study about Quality and Reproducibility of Jupyter Notebooks](https://leomurta.github.io/papers/pimentel2019a.pdf) », MSR 2019.
 
 ---
 
@@ -137,6 +137,7 @@ from .config import load_config
 
 log = logging.getLogger(__name__)          # one logger per module, named after it
 
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="cifarprod", description="Train and serve a CIFAR-10 classifier.")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -145,6 +146,7 @@ def build_parser() -> argparse.ArgumentParser:
     train.add_argument("--set", action="append", default=[], metavar="KEY=VALUE", help="override a setting")
     train.add_argument("-v", "--verbose", action="store_true", help="also show DEBUG messages")
     return parser
+
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)          # a bad option: a message and exit code 2
@@ -158,6 +160,7 @@ def main(argv: list[str] | None = None) -> int:
     log.info("training with %s", config)
     ...                                              # train, save the artifact, log the run
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
@@ -177,7 +180,7 @@ Un programme rend au système un entier : **0** pour un succès, autre chose pou
 
 ## 207.3 · Configuration : dataclasses, YAML ou JSON, surcharges, validation ; séparer code et paramètres ⏩
 
-Un learning rate écrit en dur dans `train.py` se change sans trace. La configuration sort les **paramètres** du code (le code dit **comment** on entraîne, la configuration **avec quoi**), et chaque run enregistre la sienne (207.5). Elle contient hyperparamètres, architecture, graine, tailles, chemins relatifs, mode, et **jamais** un mot de passe ou un jeton : une configuration se versionne et se recopie dans les journaux (207.9).
+Un learning rate écrit en dur dans `train.py` se change sans trace. La configuration sort les **paramètres** du code (le code dit **comment** on entraîne, la configuration **avec quoi**), et chaque run enregistre la sienne (207.5). Elle contient hyperparamètres, architecture, graine, tailles, chemins relatifs, mode, et **jamais** un mot de passe ou une clé d'API : une configuration se versionne et se recopie dans les journaux (207.9).
 
 Le **YAML** est un format texte de paires `clé: valeur` et de listes, plus agréable à écrire à la main que le JSON, commentaires compris :
 
@@ -199,6 +202,7 @@ from pathlib import Path
 
 import yaml
 
+
 @dataclass(frozen=True)
 class TrainConfig:
     seed: int = 0
@@ -217,6 +221,7 @@ class TrainConfig:
                 raise ValueError(f"{f.name}: expected {kind.__name__}, got {value!r}")
         if self.epochs < 1 or not 0 < self.lr < 1:
             raise ValueError(f"need epochs >= 1 and 0 < lr < 1, got {self.epochs} and {self.lr}")
+
 
 def load_config(path: str | Path, overrides: list[str] = ()) -> TrainConfig:
     raw = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
@@ -254,6 +259,7 @@ import random
 import numpy as np
 import torch
 
+
 def seed_everything(seed: int, deterministic: bool = True) -> torch.Generator:
     """Seed Python, NumPy and PyTorch; return a generator for the DataLoader."""
     random.seed(seed)
@@ -263,7 +269,7 @@ def seed_everything(seed: int, deterministic: bool = True) -> torch.Generator:
     return torch.Generator().manual_seed(seed)
 ```
 
-Le générateur rendu se passe au `DataLoader` (`generator=g`), pour que l'ordre des mini-batches ne dépende pas de ce qui a été tiré avant. Les processus de chargement (*workers*, ch. 24) ont leurs propres générateurs, dérivés d'une graine de base (`generator`, `worker_init_fn`). Ce que changent `num_workers` et le GPU à graine égale, c'est la question du 🔮 B7.12.
+Le générateur rendu se passe au `DataLoader` (`generator=g`), pour que l'ordre des mini-batches ne dépende pas de ce qui a été tiré avant. Les workers du `DataLoader` (ch. 24) ont leurs propres générateurs, dérivés d'une graine de base (`generator`, `worker_init_fn`). Ce que changent `num_workers` et le GPU à graine égale, c'est la question du 🔮 B7.12.
 
 Même avec des graines fixées, deux exécutions peuvent différer : certaines opérations additionnent dans un ordre qui varie (les threads d'un GPU qui accumulent dans la même case), et l'addition des flottants n'est pas associative. `torch.use_deterministic_algorithms(True)` impose une implémentation déterministe là où elle existe, et lève une `RuntimeError` sur une opération qui n'en a pas ; sur GPU, `torch.backends.cudnn.benchmark = False` empêche aussi cuDNN de choisir son algorithme en chronométrant. Le prix : un peu de vitesse. Ce que cela change sur cinq exécutions, c'est le 🔬 B7.13. Et rien n'est garanti d'une version ou d'une plateforme à l'autre : on fige donc aussi l'environnement.
 
@@ -279,6 +285,7 @@ Le même nom de fichier peut cacher d'autres données : un dataset retélécharg
 import hashlib
 
 import numpy as np
+
 
 def array_fingerprint(*arrays: np.ndarray) -> str:
     """SHA-256 of the dtype, shape and bytes of each array: another value if one pixel changes."""
@@ -314,8 +321,10 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+
 def new_run_id() -> str:
     return f"{datetime.now(timezone.utc):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
+
 
 def log_run(path: Path, record: dict) -> None:
     """Append one JSON line per run: never rewrite the past."""
@@ -324,7 +333,7 @@ def log_run(path: Path, record: dict) -> None:
         f.write(json.dumps(record, sort_keys=True) + "\n")
 ```
 
-Contrairement au CSV de `cifarkit`, une ligne JSON peut contenir une configuration imbriquée, et un champ ajouté ne casse pas les anciennes lignes. Pour comparer, `pandas.json_normalize([json.loads(l) for l in open(path)])` met tout dans un tableau (une colonne `config.lr` par réglage imbriqué). Un run raté reste dans le journal avec son statut : l'effacer fausse les comparaisons (⚖️ 24.9). Une comparaison honnête ne change qu'une chose à la fois, à budget égal, sur les mêmes graines, et choisit sur la validation.
+Contrairement au CSV de `cifarkit`, une ligne JSON peut contenir une configuration imbriquée, et un champ ajouté ne casse pas les anciennes lignes. Pour comparer, `pandas.json_normalize([json.loads(l) for l in open(path)])` met tout dans un tableau (une colonne `config.lr` par réglage imbriqué). Un run raté reste dans le journal avec son statut : l'effacer fausse les comparaisons (⚖️ 24.9).
 
 > 🕰️ **Mise à jour (2026) — le suivi d'expériences** — **Le livre :** absent. · **Aujourd'hui :** **MLflow** (3.18 en novembre 2026) enregistre pour chaque *run* paramètres, métriques et artefacts (`mlflow.start_run()`, `log_param`, `log_metric`, `log_artifact`), les compare dans une interface web et tient un registre de modèles. **Weights & Biases** (service en ligne) et **TensorBoard** (courbes d'entraînement) sont préinstallés sur Colab, contrairement à MLflow. Aucun n'est dans l'environnement du workbook : le chapitre écrit un suivi JSONL de quinze lignes, qui montre ce que ces outils font. · **Faut-il quand même l'apprendre ?** Oui : la discipline (tout run enregistré, configuration complète, artefacts liés au run) est la même quel que soit l'outil. · *Sources :* [MLflow Tracking](https://mlflow.org/docs/latest/ml/tracking/) ; [googlecolab/backend-info, `pip-freeze.txt`](https://github.com/googlecolab/backend-info/blob/main/pip-freeze.txt) (commit `fecf4f8` du 2 novembre 2026 : tensorboard et wandb présents, mlflow absent).
 
@@ -348,15 +357,18 @@ import torch.nn.functional as F
 
 from cifarprod.model import build_model
 
+
 @pytest.fixture
 def model():
     torch.manual_seed(0)
     return build_model(widths=(12, 24))
 
+
 @pytest.mark.parametrize("batch", [1, 7])
 def test_output_shape(model, batch):
     out = model(torch.zeros(batch, 3, 32, 32))
     assert out.shape == (batch, 10), f"expected ({batch}, 10), got {tuple(out.shape)}"
+
 
 def test_overfits_one_batch(model):
     g = torch.Generator().manual_seed(0)
@@ -409,7 +421,7 @@ Deux pièges propres au ML : sans l'index CPU de PyTorch (`--index-url https://d
 
 ### L'artefact du modèle
 
-Au ch. 23 et au MP5, ton modèle livré était un `state_dict` et un `model.json`. L'**artefact de modèle** est le dossier versionné qui contient **tout** ce qu'il faut pour prédire sans le notebook : les **poids**, en **safetensors** (ch. 23 : des tenseurs nommés et un petit en-tête JSON, chargés sans rien exécuter, contrairement à un `pickle`) ; l'**architecture** (la fonction qui la construit et ses arguments : `{"arch": "small_cnn", "widths": [12, 24]}`) ; le **prétraitement** exact (taille d'entrée, ordre des canaux, échelle des pixels, moyenne et écart-type **appris sur l'entraînement**) ; les **classes**, dans l'ordre des sorties (la sortie 3 n'est « chat » que si la liste le dit) ; la **traçabilité** (version, run, commit, versions des bibliothèques, empreinte des données, métriques) ; la **fiche modèle** (ch. 23, B6).
+Au ch. 23 et au MP5, ton modèle livré était un `state_dict` et un `model.json`. L'**artefact de modèle** est le dossier versionné qui contient **tout** ce qu'il faut pour prédire sans le notebook : les **poids**, en **safetensors** (ch. 23 : des tenseurs nommés et un petit en-tête JSON, chargés sans rien exécuter, contrairement à un `pickle`) ; l'**architecture** (la fonction qui la construit et ses arguments : `{"arch": "small_cnn", "widths": [12, 24]}`) ; le **prétraitement** exact (taille d'entrée, ordre des canaux, échelle des pixels, moyenne et écart-type **appris sur l'entraînement**) ; les **classes**, dans l'ordre des sorties (la sortie 3 n'est « chat » que si la liste le dit) ; la **traçabilité** (version, run, commit, versions des bibliothèques, empreinte des données, métriques) ; la **fiche modèle** (M. Mitchell et coll., 2019 ; ch. 23, B6).
 
 ```python
 from safetensors.torch import load_file, save_file
@@ -422,7 +434,7 @@ model.eval()
 
 Les métadonnées de safetensors ne prennent que des chaînes : le reste va dans un `meta.json`. Pour le CNN de la fiche, le fichier pèse 73 744 octets (18 322 poids en float32 plus l'en-tête). Sans le `model.eval()` final, dropout et batchnorm restent en mode entraînement (ch. 20).
 
-Le **training-serving skew** (ch. 12) est l'écart entre ce que le modèle a vu à l'entraînement et ce qu'il reçoit en service, quand les deux chaînes de préparation diffèrent : une normalisation recalculée au lieu d'être relue, des images décodées par une autre bibliothèque (OpenCV lit en BGR, Pillow en RGB), des pixels restés entre 0 et 255. Le modèle ne plante pas : il répond moins bien. Parades : **une seule fonction** de prétraitement, appelée par l'entraînement **et** par le service, et un **test de non-régression** (ch. 7) qui compare les réponses de l'API à l'évaluation hors ligne sur quelques images (🐛 B7.16).
+Le **training-serving skew** (ch. 12) est l'écart entre ce que le modèle a vu à l'entraînement et ce qu'il reçoit en service, quand les deux chaînes de préparation diffèrent : une normalisation recalculée au lieu d'être relue, des images décodées par une autre bibliothèque (OpenCV lit en BGR, Pillow en RGB). Le modèle ne plante pas : il répond moins bien. Parades : **une seule fonction** de prétraitement, appelée par l'entraînement **et** par le service, et un **test de non-régression** (ch. 7) qui compare les réponses de l'API à l'évaluation hors ligne sur quelques images (🐛 B7.16).
 
 ### En ligne ou par batches, et une API HTTP
 
@@ -435,6 +447,7 @@ import numpy as np
 import torch
 from fastapi import FastAPI
 from pydantic import BaseModel, field_validator
+
 
 class Image(BaseModel):
     pixels: list[list[list[int]]]                   # 32 x 32 x 3 RGB values in 0..255
@@ -449,11 +462,14 @@ class Image(BaseModel):
             raise ValueError("pixel values must be in 0..255")
         return v
 
+
 app = FastAPI(title="cifar-api")
+
 
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok", "model_version": VERSION}
+
 
 @app.post("/predict")
 def predict(image: Image) -> dict:
@@ -505,13 +521,14 @@ Pourquoi le p95 ? Un utilisateur fait beaucoup de requêtes : sur 20, la probabi
 
 **Un calcul à la main.** Dix requêtes ont pris 12, 15, 11, 14, 13, 40, 12, 16, 13 et 12 ms ; triées : 11, 12, 12, 12, 13, 13, 14, 15, 16, 40. La moyenne vaut 15,8 ms, plus que huit des dix. Avec la méthode par défaut de NumPy (positions 0 à 9), la médiane, en position $0{,}5 \times 9 = 4{,}5$, vaut 13 ms, et le $p_{95}$, en position $0{,}95 \times 9 = 8{,}55$, vaut $16 + 0{,}55 \times 24 = 29{,}2$ ms ; avec la convention « la plus petite valeur qui laisse au moins 95 % des mesures en dessous » (`method="inverted_cdf"`), 40 ms. Sur dix mesures, le $p_{95}$ tient à une requête et à la convention.
 
-**Mesurer** : sur la machine cible, avec `time.perf_counter()`, après des appels d'échauffement (les premiers allouent la mémoire et choisissent les noyaux de calcul), sous `torch.inference_mode()` :
+**Mesurer** : sur la machine cible, avec `time.perf_counter()`, après quelques appels à blanc (les premiers allouent la mémoire et choisissent les noyaux de calcul), sous `torch.inference_mode()` :
 
 ```python
 import time
 
 import numpy as np
 import torch
+
 
 def latencies_ms(model, x, n=200, warmup=20):
     with torch.inference_mode():
@@ -524,12 +541,13 @@ def latencies_ms(model, x, n=200, warmup=20):
             times.append(time.perf_counter() - t0)
     return 1000 * np.array(times)
 
+
 p50, p95 = np.percentile(latencies_ms(model.eval(), torch.randn(1, 3, 32, 32)), [50, 95])
 ```
 
 Pour le CNN de la fiche, un appel direct pour une image prend quelques dixièmes de milliseconde ; une requête HTTP coûte bien plus (sérialiser 3 072 pixels en JSON, les relire, valider) : mesure le **chemin complet**, celui du client.
 
-Le **débit** (*throughput*, B1) est le nombre d'exemples traités par seconde :
+Le **débit** (B1) est le nombre d'exemples traités par seconde :
 
 $$\text{débit} = \frac{\text{taille du batch}}{\text{latence du batch}}.$$
 
@@ -610,7 +628,7 @@ Pour un modèle servi sur CPU, l'image installe torch depuis l'**index CPU** (la
 
 ### Variables d'environnement et secrets
 
-Une **variable d'environnement** est une paire nom-valeur que le système passe au programme (`os.environ.get("MODEL_DIR", "artifacts/current")`) : elle règle ce qui change d'un déploiement à l'autre (dossier du modèle, port, niveau de log) sans reconstruire l'image. C'est par là qu'arrivent les **secrets** (jeton, mot de passe), **jamais** par le dépôt, la configuration ou le Dockerfile : un `ENV TOKEN=...` reste lisible dans l'image (`docker history`), un secret commité reste dans l'historique de git, et il faut alors le **révoquer**. Les secrets se déclarent dans le service qui exécute : *secrets* de GitHub Actions (`${{ secrets.HF_TOKEN }}`, masqués dans les journaux), de Colab (l'icône de clé) ; en local, un `.env` listé dans `.gitignore`.
+Une **variable d'environnement** est une paire nom-valeur que le système passe au programme (`os.environ.get("MODEL_DIR", "artifacts/current")`) : elle règle ce qui change d'un déploiement à l'autre (dossier du modèle, port, niveau de log) sans reconstruire l'image. C'est par là qu'arrivent les **secrets** (clé d'API, mot de passe), **jamais** par le dépôt, la configuration ou le Dockerfile : un `ENV TOKEN=...` reste lisible dans l'image (`docker history`), un secret commité reste dans l'historique de git, et il faut alors le **révoquer**. Les secrets se déclarent dans le service qui exécute : *secrets* de GitHub Actions (`${{ secrets.HF_TOKEN }}`, masqués dans les journaux), de Colab (l'icône de clé) ; en local, un `.env` listé dans `.gitignore`.
 
 ### Une démo hébergée
 
@@ -646,13 +664,13 @@ Pour une variable continue, le **test de Kolmogorov-Smirnov** à deux échantill
 
 $$D = \sup_x \big|F_{\text{réf}}(x) - F_{\text{prod}}(x)\big|.$$
 
-> 🧮 **Rappel outil — le test KS avec scipy** — `scipy.stats.ks_2samp(ref, prod)` rend $D$ (entre 0 et 1) et une **valeur p** : la probabilité d'observer un écart au moins aussi grand si les deux échantillons venaient de la même distribution ; sous 0,05, par convention, on conclut que les distributions diffèrent. On l'utilise comme un outil, sans démonstration ; il ne suppose rien sur la forme des distributions, seulement des valeurs continues et des tirages indépendants.
+> 🧮 **Rappel outil — le test KS avec scipy** — `scipy.stats.ks_2samp(ref, prod)` rend $D$ (entre 0 et 1) et une **p-valeur** (ch. 8) : la probabilité d'observer un écart au moins aussi grand si les deux échantillons venaient de la même distribution ; sous 0,05, par convention, on conclut que les distributions diffèrent. On l'utilise comme un outil, sans démonstration ; il ne suppose rien sur la forme des distributions, seulement des valeurs continues et des tirages indépendants.
 
-**Exemple.** Cinq images de référence ont pour luminosités moyennes 0,31 ; 0,42 ; 0,47 ; 0,52 ; 0,58, et cinq images de production 0,22 ; 0,29 ; 0,35 ; 0,44 ; 0,61. Juste après 0,29, deux images de production sur cinq sont passées et aucune de la référence : l'écart vaut 0,4 ; il vaut encore 0,4 après 0,35 ($0{,}6 - 0{,}2$) et après 0,44 ($0{,}8 - 0{,}4$), jamais plus : $D = 0{,}4$. La valeur p vaut 0,87 : avec cinq images de chaque côté, un tel écart arrive souvent par hasard.
+**Exemple.** Cinq images de référence ont pour luminosités moyennes 0,31 ; 0,42 ; 0,47 ; 0,52 ; 0,58, et cinq images de production 0,22 ; 0,29 ; 0,35 ; 0,44 ; 0,61. Juste après 0,29, deux images de production sur cinq sont passées et aucune de la référence : l'écart vaut 0,4 ; il vaut encore 0,4 après 0,35 ($0{,}6 - 0{,}2$) et après 0,44 ($0{,}8 - 0{,}4$), jamais plus : $D = 0{,}4$. La p-valeur vaut 0,87 : avec cinq images de chaque côté, un tel écart arrive souvent par hasard.
 
 ![Deux fonctions de répartition en escalier : celle de la production (bleue) monte plus tôt que celle de la référence (grise) ; une double flèche rouge en x = 0,30 marque l'écart D = 0,4](figures/ks.png)
 
-L'inverse gêne davantage en production : avec beaucoup de données, tout devient significatif. Deux échantillons gaussiens de 10 000 valeurs décalés de 0,05 écart-type donnent $D = 0{,}024$ et une valeur p de 0,008, pour un décalage sans importance ; avec 200 valeurs chacun, $D = 0{,}08$ et p = 0,55. Une valeur p mesure la **certitude** d'un écart, pas sa **taille** : on juge sur $D$ ou le PSI, avec des fenêtres de taille fixe. Avec beaucoup de variables, on fait un test par variable et l'on corrige pour leur nombre (la **correction de Bonferroni** compare la plus petite valeur p à $0{,}05 / K$ pour $K$ tests). Chez Rabanser et coll., sur MNIST et CIFAR-10, la meilleure méthode dans l'ensemble était l'une des plus simples : ces tests KS corrigés, appliqués aux **sorties softmax** d'un classifieur déjà entraîné. Et un décalage détecté n'est pas toujours **nuisible** : il faut mesurer s'il dégrade la qualité.
+L'inverse gêne davantage en production : avec beaucoup de données, tout devient significatif. Deux échantillons gaussiens de 10 000 valeurs décalés de 0,05 écart-type donnent $D = 0{,}024$ et une p-valeur de 0,008, pour un décalage sans importance ; avec 200 valeurs chacun, $D = 0{,}08$ et p = 0,55. Une p-valeur mesure la **certitude** d'un écart, pas sa **taille** : on juge sur $D$ ou le PSI, avec des fenêtres de taille fixe. Avec beaucoup de variables, on fait un test par variable et l'on corrige pour leur nombre (la **correction de Bonferroni** compare la plus petite p-valeur à $0{,}05 / K$ pour $K$ tests). Chez Rabanser et coll., sur MNIST et CIFAR-10, la meilleure méthode dans l'ensemble était l'une des plus simples : ces tests KS corrigés, appliqués aux **sorties softmax** d'un classifieur déjà entraîné. Et un décalage détecté n'est pas toujours **nuisible** : il faut mesurer s'il dégrade la qualité.
 
 > 🕰️ **Mise à jour (2026) — les outils de surveillance** — **Le livre :** absent. · **Aujourd'hui :** **Evidently** (0.7) produit des rapports de dérive par colonne avec une vingtaine de méthodes ; par défaut, le test KS pour une colonne numérique d'au plus 1 000 valeurs, une distance de Wasserstein normalisée (seuil 0,1) au-delà, et un PSI à seuil 0,1 si on le choisit. **NannyML** estime en plus la performance **sans** les labels. Aucun n'est installé dans le workbook ni sur Colab : le notebook calcule PSI et KS lui-même. · **Faut-il quand même l'apprendre ?** Oui : choisir la référence, les fenêtres et les seuils, puis décider quoi faire d'une alerte, reste ton travail (💼 E4). · *Sources :* [Evidently, « Customize data drift »](https://docs.evidentlyai.com/metrics/customize_data_drift) ; Rabanser et coll., « [Failing Loudly](https://arxiv.org/abs/1810.11953v4) », NeurIPS 2019 ; du Pisanie et coll., « [A critical review of existing and new population stability testing procedures in credit risk scoring](https://arxiv.org/abs/2303.01227) » (2023), qui rapporte les seuils de Lewis et les critiques de Yurdakul et Naranjo.
 
@@ -683,15 +701,15 @@ D. Sculley et ses collègues de Google (« Hidden Technical Debt in Machine Lear
 |---|---|---|
 | Un script qui rend 0 après un échec | `except Exception: print(err)`, puis fin normale | laisser remonter l'erreur ou `return 1` ; lire `returncode` dans le notebook |
 | Faire confiance aux nombres YAML | `lr: 1e-3` lu comme une chaîne, `no` comme `False` | `yaml.safe_load`, des types vérifiés, les clés inconnues refusées |
-| Un secret dans le dépôt ou l'image | un jeton dans `config.yaml`, ou `ENV TOKEN=...` dans le Dockerfile | variables d'environnement, secrets de la CI ; révoquer un secret publié |
+| Un secret dans le dépôt ou l'image | une clé d'API dans `config.yaml`, ou `ENV TOKEN=...` dans le Dockerfile | variables d'environnement, secrets de la CI ; révoquer un secret publié |
 | Rapporter le meilleur de cinq graines | « 72,1 % » quand la moyenne est 71,0 % | moyenne et intervalle sur toutes les graines, comparées graine par graine |
 | Croire un run reproductible sans l'avoir rejoué | graine fixée, mais un `DataLoader` sans `generator` et du code non commité | `seed_everything`, algorithmes déterministes, commit propre ; rejouer et comparer |
 | Un artefact sans son prétraitement ni ses classes | le service renormalise à sa façon, ou reconstruit la liste des classes | statistiques de normalisation, format d'image et classes dans l'artefact, lus par le service |
 | Deux chaînes de préparation | l'API décode les images avec une autre bibliothèque que l'entraînement | une seule fonction de prétraitement, partagée et testée |
-| Résumer une latence par sa moyenne | « 8,5 ms de moyenne », et des requêtes à 25 ms | p50 et p95 sur des centaines de mesures, après échauffement, convention écrite |
+| Résumer une latence par sa moyenne | « 8,5 ms de moyenne », et des requêtes à 25 ms | p50 et p95 sur des centaines de mesures, premiers appels écartés, convention écrite |
 | Croire qu'un format plus petit est plus rapide | bfloat16 ou int8 annoncés « plus rapides » sans mesure | mesurer sur la machine cible ; vérifier que l'argmax ne change pas |
 | Exporter sans vérifier | un `.pt2` exporté en mode entraînement, ou avec la taille de batch figée | `model.eval()`, `dynamic_shapes`, écart maximal mesuré sur des données neuves |
-| Conclure à une dérive sur une valeur p | KS « significatif » sur 10 000 requêtes pour un écart minuscule | juger la taille de l'écart ($D$, PSI) sur des fenêtres fixes, seuils écrits à l'avance |
+| Conclure à une dérive sur une p-valeur | KS « significatif » sur 10 000 requêtes pour un écart minuscule | juger la taille de l'écart ($D$, PSI) sur des fenêtres fixes, seuils écrits à l'avance |
 | Tout journaliser « au cas où » | les images de tous les clients, sans durée de conservation | minimiser, pseudonymiser, fixer une durée, savoir effacer les lignes d'une personne |
 | Aucun retour arrière possible | l'ancien artefact écrasé par le nouveau | versionner chaque artefact, garder le précédent, tester le retour arrière |
 
