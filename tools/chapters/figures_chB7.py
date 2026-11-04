@@ -148,10 +148,11 @@ def figure_latency() -> None:
     fig, ax = plt.subplots(figsize=(8.6, 3.4))
     ax.hist(t, bins=np.arange(4, 36, 0.5), color=C[0], alpha=0.75)
     ax.set_xlim(3, 36)
-    top = ax.get_ylim()[1]
+    top = 1.3 * ax.get_ylim()[1]             # headroom: the labels sit above the tallest bars
+    ax.set_ylim(0, top)
     for v, lab, col, ls, (dx, yf, ha) in [(p50, "p50", INK, "-", (-0.3, 0.93, "right")),
-                                          (mean, "moyenne", MUTED, ":", (0.3, 0.80, "left")),
-                                          (p95, "p95", C[1], "--", (0.3, 0.62, "left")),
+                                          (mean, "moyenne", MUTED, ":", (0.3, 0.82, "left")),
+                                          (p95, "p95", C[1], "--", (0.3, 0.68, "left")),
                                           (p99, "p99", wbplot.BAD, "--", (0.3, 0.93, "left"))]:
         ax.axvline(v, color=col, ls=ls, lw=1.6)
         ax.text(v + dx, top * yf, f"{lab} = {french(v, 1)} ms", color=col, fontsize=9, ha=ha,
@@ -178,7 +179,7 @@ def figure_psi() -> None:
     a1.set_title("les intervalles sont les quintiles de la référence", fontsize=10)
     a2.bar(k, contrib, 0.6, color=C[1])
     for i, c in zip(k, contrib):
-        a2.text(i, c + 0.0015, french(c, 4), ha="center", fontsize=8.5, color=INK)
+        a2.text(i, c + 0.0015, french(c, 4) if c > 0 else "0", ha="center", fontsize=8.5, color=INK)
     a2.set_xticks(k, [str(i) for i in k])
     a2.set_xlabel("intervalle")
     a2.set_ylabel("$(p_k - q_k)\\ln(p_k / q_k)$")
