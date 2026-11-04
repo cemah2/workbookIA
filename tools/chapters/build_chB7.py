@@ -14,8 +14,9 @@ ttest_rel confidence intervals, stats.entropy), torchvision (ConvNeXt-Tiny built
 download), safetensors (the size of the MP5 VGG file and its header), PyYAML, logging, argparse, subprocess,
 torch.utils.data.DataLoader, torch.export (a static batch and a data-dependent `if`), torch.load(weights_only=True)
 and scikit-learn (InconsistentVersionWarning): part 0 downloads nothing. B7 has no mylearn module.
-The notebook itself (exercises B7.9 to B7.25) comes at the second generation session (NEXT_SESSION), in three phases:
-the project, the service, the operations.
+The notebook itself (exercises B7.9 to B7.25), in three phases: the project (part A, B7.9 to B7.15), the service
+(part B, B7.16 to B7.21), the operations (part C, B7.22 to B7.25); chB7_parts*.py and chB7_code*.py hold the cells,
+history_chB7.py what is precomputed (history_chB7.json).
 """
 
 from __future__ import annotations
@@ -657,16 +658,32 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "(🗣️ B7.6, ⚖️ B7.7, 📄 B7.8) et l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B7.9 to B7.25): second generation session
+# Parts A to C (exercises B7.9 to B7.25). Session 76, first half: part A (B7.9 to B7.15) and the start of part B
+# (🐛 B7.16), chB7_parts.py and chB7_code.py. The second half (B7.17 to B7.25, NEXT_SESSION below) appends its
+# exercises to PART_B.exercises and adds part C (chB7_parts2.py and chB7_code2.py).
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import dataclasses  # noqa: E402
+
+import chB7_code  # noqa: E402,F401  (the cells; history_chB7.py reuses them)
+from chB7_parts import PART_B, PARTS  # noqa: E402,F401
+
+for _part in PARTS:
+    for _ex in _part.exercises:
+        check_unique_keys(_ex.record or "x = 1", _ex.id)
+
+# What the next half of the session adds (announced in the table and the footer until it exists)
 NEXT_SESSION = [
-    ("A", "B7.9 à B7.15", "le projet : du notebook au paquet, ligne de commande, configuration, reproductibilité, "
-                          "suivi des runs et tests"),
-    ("B", "B7.16 à B7.21", "le service : les écarts entre entraînement et production, l'artefact, l'API, la "
-                           "latence, l'accélération sur CPU et l'export"),
+    ("B", "B7.17 à B7.21", "le service (suite) : l'artefact, l'API, la latence, l'accélération sur CPU et l'export"),
     ("C", "B7.22 à B7.25", "l'exploitation : la dérive, l'intégration continue, le Dockerfile et le défi"),
 ]
+_DONE = {ex.id for part in PARTS for ex in part.exercises}
+NEXT_SESSION = [row for row in NEXT_SESSION if not ({f"B7.{n}" for n in range(int(row[1].split()[0][3:]),
+                                                                              int(row[1].split()[2][3:]) + 1)} <= _DONE)]
+
+
+def kind_part(part, kind: str):
+    """The part with its tools for this notebook: «KIND» is "learner" (exercise notebook) or "solution"."""
+    return dataclasses.replace(part, given=part.given.replace("«KIND»", "learner" if kind == "exercise" else "solution"))
 
 
 def header_cells(kind: str) -> list:
@@ -676,9 +693,7 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B7 · Du notebook à la production — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -718,8 +733,8 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B7.9 à B7.25 (le projet, le service, l'exploitation) seront ajoutés à la "
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices " + " et ".join(ids for _, ids, _ in NEXT_SESSION) + " seront ajoutés à la "
              "prochaine session de génération ; relance alors `python tools/start_chapter.py B7` pour obtenir le "
              "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
@@ -741,7 +756,7 @@ def build(kind: str) -> list:
     cells += objectives_cell()
     cells += paper_cells(kind, PAPER, PAPER_CONTEXT + LIBRARY_CHECKS, PAPER_INTRO)
     for part in PARTS:
-        cells += part_cells(part, kind)
+        cells += part_cells(kind_part(part, kind), kind)
     cells += footer_cells(kind)
     return cells
 

@@ -71,20 +71,58 @@ def reference_package() -> Path:
 # ---------------------------------------------------------------------------------------------------------------------
 # The project folder and the files written by the cells
 # ---------------------------------------------------------------------------------------------------------------------
-def project_dir(kind: str = "learner") -> Path:
-    """The folder of the project: ``"learner"`` -> ``<repo>/mon_travail/b7_production/cifar-prod`` (created);
-    ``"solution"`` -> a temporary folder ``wb_b7_project_*``, the same for the whole Python session."""
+def _temporary_project() -> Path:
     global _SOLUTION_PROJECT
+    if _SOLUTION_PROJECT is None or not _SOLUTION_PROJECT.is_dir():
+        _SOLUTION_PROJECT = Path(tempfile.mkdtemp(prefix="wb_b7_project_")) / PROJECT_NAME
+    return _SOLUTION_PROJECT
+
+
+def _on_colab() -> bool:
+    import importlib.util
+    return "google.colab" in sys.modules or importlib.util.find_spec("google.colab") is not None
+
+
+def project_dir(kind: str = "learner") -> Path:
+    """The folder of the project (created):
+
+    - ``"learner"``: ``<repo>/mon_travail/b7_production/cifar-prod``, the learner's space, when the notebook runs from
+      ``mon_travail/``, on Colab (whose current folder is ``/content``) or outside the repository; but a temporary
+      folder when it runs from the repository itself outside ``mon_travail/`` (the version of ``chapitres/``, which
+      Claude runs to check it: it never writes in ``mon_travail/``); the variable ``WB_B7_PROJECT`` forces a folder;
+    - ``"solution"``: a temporary folder ``wb_b7_project_*``, the same for the whole Python session.
+    """
     if kind == "learner":
-        folder = repo_root() / "mon_travail" / WORK_FOLDER / PROJECT_NAME
+        forced = os.environ.get("WB_B7_PROJECT")
+        root = repo_root()
+        cwd = Path.cwd().resolve()
+        if forced:
+            folder = Path(forced)
+        elif _inside(cwd, root) and not _inside(cwd, root / "mon_travail") and not _on_colab():
+            folder = _temporary_project()
+        else:
+            folder = root / "mon_travail" / WORK_FOLDER / PROJECT_NAME
     elif kind == "solution":
-        if _SOLUTION_PROJECT is None or not _SOLUTION_PROJECT.is_dir():
-            _SOLUTION_PROJECT = Path(tempfile.mkdtemp(prefix="wb_b7_project_")) / PROJECT_NAME
-        folder = _SOLUTION_PROJECT
+        folder = _temporary_project()
     else:
         raise ValueError(f"kind must be 'learner' or 'solution', got {kind!r}")
     folder.mkdir(parents=True, exist_ok=True)
     return folder.resolve()
+
+
+def project_line(project: str | Path, kind: str = "learner") -> str:
+    """The ℹ️ line that says where the project of the notebook is."""
+    if not is_temporary(project):
+        return f"ℹ️ ton projet : {project}"
+    if kind == "solution":
+        return "ℹ️ le projet : un dossier temporaire (le notebook de solutions n'écrit jamais dans le dépôt)."
+    return ("ℹ️ ce notebook n'est pas ta copie de mon_travail/ : ton projet va dans un dossier temporaire, effacé à la "
+            "fin de la session. Travaille dans ta copie (python tools/start_chapter.py B7).")
+
+
+def is_temporary(project: str | Path) -> bool:
+    """True when the project folder is a temporary one (not the learner's space)."""
+    return _inside(Path(project), Path(tempfile.gettempdir())) and not _inside(Path(project), repo_root())
 
 
 def _inside(path: Path, folder: Path) -> bool:
@@ -274,6 +312,50 @@ def import_module(project: str | Path, module: str):
     return importlib.import_module(f"{PACKAGE}.{module}")
 
 
+import contextlib  # noqa: E402
+
+
+@contextlib.contextmanager
+def torch_state_kept():
+    """Run the learner's code in the notebook without changing the notebook's PyTorch: the deterministic mode, the
+    random state (CPU) and the number of threads are put back afterwards, even after an error."""
+    import torch
+
+    deterministic = torch.are_deterministic_algorithms_enabled()
+    warn_only = torch.is_deterministic_algorithms_warn_only_enabled()
+    rng, threads = torch.get_rng_state(), torch.get_num_threads()
+    try:
+        yield
+    finally:
+        torch.use_deterministic_algorithms(deterministic, warn_only=warn_only)
+        torch.set_rng_state(rng)
+        torch.set_num_threads(threads)
+
+
+@contextlib.contextmanager
+def isolated_logging():
+    """Call the learner's ``main()`` in the notebook: the handlers and the level of the root logger are put back
+    afterwards (``logging.basicConfig`` would otherwise show every INFO line of every library for the rest of the
+    session), and what it writes on stderr is kept in the yielded buffer instead of being shown."""
+    import io
+    import logging
+
+    root = logging.getLogger()
+    handlers, level = list(root.handlers), root.level
+    buffer = io.StringIO()
+    try:
+        with contextlib.redirect_stderr(buffer):
+            yield buffer
+    finally:
+        for handler in list(root.handlers):
+            if handler not in handlers:
+                root.removeHandler(handler)
+        for handler in handlers:
+            if handler not in root.handlers:
+                root.addHandler(handler)
+        root.setLevel(level)
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Editable install in a temporary virtual environment
 # ---------------------------------------------------------------------------------------------------------------------
@@ -457,7 +539,8 @@ def test_images(per_class: int = 100, seed: int = 2011) -> tuple[np.ndarray, np.
 
 
 _TEST: dict = {}
-_TEST_FINGERPRINTS = {"100-2011": "ddb4740418bb7c3e82994bcd3c68fedb578596a6ffca88719856ed5aa9360e66"}   # (x, y)
+_TEST_FINGERPRINTS = {"100-2011": "ddb4740418bb7c3e82994bcd3c68fedb578596a6ffca88719856ed5aa9360e66",    # (x, y)
+                      "20-2011": "97b06a4da7b0821f0727c0dce53e4d7c765ab9a6d390bcc567f7d6342fe2538e"}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,131 @@
+{
+ "p12": {
+  "answers": {
+   "a": true,
+   "b": true,
+   "c": false,
+   "d": true
+  },
+  "rows": [
+   {
+    "seed": 0,
+    "n": 512,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.02719581127166748
+   },
+   {
+    "seed": 0,
+    "n": 256,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.01594053953886032
+   },
+   {
+    "seed": 1,
+    "n": 512,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.028807729482650757
+   },
+   {
+    "seed": 1,
+    "n": 256,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.023361876606941223
+   },
+   {
+    "seed": 2,
+    "n": 512,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.02636304497718811
+   },
+   {
+    "seed": 2,
+    "n": 256,
+    "a": true,
+    "b": true,
+    "c": false,
+    "d": true,
+    "gap_c": 0.014082744717597961
+   }
+  ],
+  "seconds_to_compute": 13.5
+ },
+ "b16": {
+  "versions": 32,
+  "accuracy_one_gap_left": {
+   "classes": 0.085,
+   "eval": 0.865,
+   "normalization": 0.875,
+   "reading": 0.105,
+   "float64": "RuntimeError: expected scalar type Double but found Float"
+  },
+  "offline_accuracy": 0.87,
+  "messages": {
+   "none": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "float64,reading,normalization": "❌ Ex B7.16 : point 4, le modèle du service : la même image, bien prétraitée, reçoit d'autres scores seule et dans un batch de 8 (écart 2.508), et chaque appel change les statistiques internes du modèle (running_mean) ; compare le modèle que rend load_service_16 à celui de l'évaluation hors ligne : qu'est-ce qui les distingue ?",
+   "float64,reading,eval": "❌ Ex B7.16 : point 3, le prétraitement : une image prétraitée seule n'a pas les mêmes valeurs que dans un batch de 8 (écart 1.801) : son prétraitement dépend des autres images envoyées ; d'où viennent la moyenne et l'écart-type qu'utilise le service ?",
+   "float64,reading,classes": "❌ Ex B7.16 : point 3, le prétraitement : une image prétraitée seule n'a pas les mêmes valeurs que dans un batch de 8 (écart 1.801) : son prétraitement dépend des autres images envoyées ; d'où viennent la moyenne et l'écart-type qu'utilise le service ?",
+   "float64,normalization,eval": "❌ Ex B7.16 : point 2, l'image lue : l'image lue n'est pas celle que voit l'entraînement : ses valeurs vont de 24 à 252, alors que l'entraînement voit des pixels dans [0, 1] ; son canal 0 est le canal 2 de l'image envoyée (le bleu à la place du rouge) ; compare-la à X_16[0] / 255 : que rend la fonction de lecture ?",
+   "float64,normalization,classes": "❌ Ex B7.16 : point 2, l'image lue : l'image lue n'est pas celle que voit l'entraînement : ses valeurs vont de 24 à 252, alors que l'entraînement voit des pixels dans [0, 1] ; son canal 0 est le canal 2 de l'image envoyée (le bleu à la place du rouge) ; compare-la à X_16[0] / 255 : que rend la fonction de lecture ?",
+   "float64,eval,classes": "❌ Ex B7.16 : point 2, l'image lue : l'image lue n'est pas celle que voit l'entraînement : ses valeurs vont de 24 à 252, alors que l'entraînement voit des pixels dans [0, 1] ; son canal 0 est le canal 2 de l'image envoyée (le bleu à la place du rouge) ; compare-la à X_16[0] / 255 : que rend la fonction de lecture ?",
+   "reading,normalization,eval": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "reading,normalization,classes": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "reading,eval,classes": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "normalization,eval,classes": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "float64,reading,normalization,eval": "❌ Ex B7.16 : point 5, les noms rendus (test de non-régression) : sur 200 images, le service ne rend le nom du notebook que pour 19 ; par exemple, 23 images que le notebook classe « oiseau » reçoivent « bateau » ; le nom que rend le service correspond-il à la sortie du modèle ?",
+   "float64,reading,normalization,classes": "❌ Ex B7.16 : point 4, le modèle du service : la même image, bien prétraitée, reçoit d'autres scores seule et dans un batch de 8 (écart 2.508), et chaque appel change les statistiques internes du modèle (running_mean) ; compare le modèle que rend load_service_16 à celui de l'évaluation hors ligne : qu'est-ce qui les distingue ?",
+   "float64,reading,eval,classes": "❌ Ex B7.16 : point 3, le prétraitement : une image prétraitée seule n'a pas les mêmes valeurs que dans un batch de 8 (écart 1.801) : son prétraitement dépend des autres images envoyées ; d'où viennent la moyenne et l'écart-type qu'utilise le service ?",
+   "float64,normalization,eval,classes": "❌ Ex B7.16 : point 2, l'image lue : l'image lue n'est pas celle que voit l'entraînement : ses valeurs vont de 24 à 252, alors que l'entraînement voit des pixels dans [0, 1] ; son canal 0 est le canal 2 de l'image envoyée (le bleu à la place du rouge) ; compare-la à X_16[0] / 255 : que rend la fonction de lecture ?",
+   "reading,normalization,eval,classes": "❌ Ex B7.16 : point 1, le service répond : le service plante sur 8 images envoyées : RuntimeError : expected scalar type Double but found Float ; lis la dernière ligne de l'erreur : quel tenseur ne va pas avec les poids du modèle ?",
+   "float64,reading,normalization,eval,classes": ""
+  },
+  "seconds_to_compute": 2.7
+ },
+ "t13": {
+  "val_acc": [
+   0.302,
+   0.332,
+   0.326,
+   0.334,
+   0.286
+  ],
+  "seconds": [
+   3.54,
+   3.51,
+   3.53,
+   3.59,
+   3.78
+  ],
+  "det_equals_nondet": [
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "gap_seed": [
+   0.40216057002544403,
+   0.40314750373363495,
+   0.3933583050966263,
+   0.37551258504390717
+  ],
+  "mean5": 0.316,
+  "s5": 0.021071307505705496,
+  "half5": 0.026159289531636768,
+  "seconds_to_compute": 35.4
+ }
+}
