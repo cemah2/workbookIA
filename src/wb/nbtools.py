@@ -438,7 +438,7 @@ def _test_path(test_file, root: Path) -> str:
 
 
 def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner", timeout: float = 300,
-                     *, max_shown: int = 8, root=None) -> GroupResult:
+                     *, max_shown: int = 8, root=None, env: dict | None = None, args=()) -> GroupResult:
     """Run the tests of ``test_file`` selected by ``keyword`` (``pytest -k``), on the learner's code by default.
 
     Parameters
@@ -455,7 +455,12 @@ def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner
     max_shown : int
         At most this many failures are printed.
     root : path, optional
-        The repository (default: ``wb.repo_root()``, which reads ``WB_ROOT``).
+        The repository (default: ``wb.repo_root()``, which reads ``WB_ROOT``); the folder of another project (the
+        package of chapter B7) runs that project's tests.
+    env : dict, optional
+        Variables added to the environment of pytest (``{"PYTHONPATH": ...}`` for a project's ``src/``).
+    args : sequence of str, optional
+        More arguments for pytest (``["-c", "pyproject.toml", "--strict-markers"]``).
 
     Each failure is printed on two lines: ``❌ <test name>`` (``⏳`` when the function is not written yet),
     then its reason (the first line of pytest's message, read with ``COLUMNS=1000``). Real failures come
@@ -476,9 +481,10 @@ def run_pytest_group(test_file, keyword: str | None = None, impl: str = "learner
         command += ["-k", keyword]
     if impl != "learner":
         command.append(f"--impl={impl}")
+    command += [str(a) for a in args]
     try:
         result = subprocess.run(command, cwd=root, capture_output=True, text=True, timeout=timeout,
-                                env={**os.environ, "COLUMNS": "1000"})   # long lines: the reason of each failure
+                                env={**os.environ, **(env or {}), "COLUMNS": "1000"})   # long lines: each reason
     except subprocess.TimeoutExpired:
         print(f"❌ les tests n'ont pas fini en {_minutes(timeout)} : une boucle de ton code ne s'arrête-t-elle pas ?")
         return GroupResult(summary="timeout", timed_out=True)

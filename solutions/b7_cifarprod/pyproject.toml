@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cifarprod"
+version = "0.1.0"
+description = "A CIFAR-10 classifier, from the notebook to production (bonus chapter B7 of the workbook)."
+requires-python = ">=3.11"
+dependencies = ["numpy>=2.0", "torch>=2.5", "pyyaml>=6.0", "safetensors>=0.4"]   # loose bounds: what the code needs
+
+[project.optional-dependencies]
+serve = ["fastapi>=0.110", "uvicorn>=0.30", "pydantic>=2.6"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+cifarprod = "cifarprod.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: a long test (an end-to-end training); skipped with -m 'not slow'"]

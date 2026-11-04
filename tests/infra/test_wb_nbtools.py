@@ -519,6 +519,27 @@ def test_run_pytest_group_shows_a_module_that_does_not_import(tmp_path, capsys):
     assert len(lines) == 2 and lines[1].startswith("pytest: ") and "!!!" not in lines[1]
 
 
+def test_run_pytest_group_passes_env_and_args(tmp_path, capsys):
+    """The tests of another project (chapter B7): its src/ through env, its own options through args."""
+    (tmp_path / "src" / "pkg_b7").mkdir(parents=True)
+    (tmp_path / "src" / "pkg_b7" / "__init__.py").write_text("VALUE = 3\n", encoding="utf-8")
+    (tmp_path / "test_env.py").write_text(textwrap.dedent('''
+        import pytest
+        import pkg_b7
+
+        def test_value():
+            assert pkg_b7.VALUE == 3
+
+        @pytest.mark.slow
+        def test_long():
+            pass
+    '''), encoding="utf-8")
+    result = run_pytest_group("test_env.py", root=tmp_path, env={"PYTHONPATH": str(tmp_path / "src")},
+                              args=["-m", "not slow"])
+    assert result.ok and result.passed == 1
+    assert out(capsys).startswith("pytest: 1 passed, 1 deselected")
+
+
 @pytest.mark.parametrize("test_file, error", [
     ("tests", ValueError), ("tests/", ValueError), ("tests/conftest.py", ValueError),
     ("tests/test_missing.py", FileNotFoundError),

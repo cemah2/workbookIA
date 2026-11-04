@@ -1,0 +1,9 @@
+# configs/fast.yaml: the smoke training of the notebook (2 000 images, 1 epoch, < 1 min on a CPU)
+seed: 0
+epochs: 1
+lr: 0.05
+batch_size: 128
+n_train: 2000
+arch: cnn
+widths: [16, 32]
+data: data/cifar10_2000.npz

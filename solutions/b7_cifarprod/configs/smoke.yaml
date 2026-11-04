@@ -1,0 +1,9 @@
+# configs/smoke.yaml: the end-to-end test of the continuous integration (a few seconds: it judges no accuracy)
+seed: 0
+epochs: 1
+lr: 0.05
+batch_size: 64
+n_train: 256
+arch: cnn
+widths: [8, 16]
+data: data/cifar10_2000.npz
