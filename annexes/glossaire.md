@@ -1218,7 +1218,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | retour arrière | rollback | remettre en service l'artefact précédent, gardé et prêt, en une minute | B7 |
 | déploiement canari, en ombre | canary, shadow deployment | servir un nouveau modèle à une petite part du trafic d'abord / lui envoyer les requêtes et comparer ses réponses sans les servir | B7 |
 | dette technique (du ML) | technical debt | les coûts de maintenance qu'accumulent les raccourcis d'aujourd'hui ; dans un système de ML, souvent au niveau du système plutôt que du code (Sculley et coll., 2015) | B7 |
-| code de colle | glue code | le code qui fait entrer les données dans un paquet générique et les en fait sortir ; souvent l'essentiel d'un système de ML | B7 |
+| code de colle | glue code | le code qui fait entrer les données dans un paquet générique et les en fait sortir ; dans un système mûr, il peut faire l'essentiel du code (« au moins 95 % », Sculley et coll., 2015) | B7 |
 | CACE | Changing Anything Changes Everything | dans un système de ML, changer une entrée, une feature ou un réglage change tout le reste du modèle | B7 |
 | minimisation, limitation de la conservation | data minimisation, storage limitation | principes du RGPD (art. 5, 1 c et e) : des données limitées à ce qui est nécessaire, gardées une durée écrite | B7 |
 | pseudonymisation | pseudonymisation | remplacer un identifiant par un pseudonyme ; les données restent personnelles tant qu'on peut refaire le lien (RGPD, art. 4, point 5) | B7 |

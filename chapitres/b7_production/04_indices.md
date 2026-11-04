@@ -76,7 +76,7 @@ La configuration se versionne et se recopie dans les journaux : elle contient le
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le learning rate (A) est un réglage : il y va ; pour B, C et D, demande-toi si la valeur peut être lue par toute personne qui clone le dépôt. Pour b), cherche la ligne qui a un point avant l'exposant et pas de guillemets. Pour c), relis le `except (OSError, ValueError)` de `main`. Pour d), que montre `docker history` ? Pour e), un nouveau commit efface-t-il les anciens ? Pour f), que dit le commentaire de `__post_init__` dans `TrainConfig` ?
+a) Le learning rate (A) est un réglage : il y va ; pour B, C et D, demande-toi si la valeur peut être lue par toute personne qui clone le dépôt. Pour b), applique à chacune des trois lignes les deux règles de PyYAML de l'indice 2. Pour c), relis le `except (OSError, ValueError)` de `main`. Pour d), que montre `docker history` ? Pour e), un nouveau commit efface-t-il les anciens ? Pour f), que dit le commentaire de `__post_init__` dans `TrainConfig` ?
 
 </details>
 
@@ -130,7 +130,7 @@ Tests unitaires (formes, prétraitement, configuration), tests de données (sch�
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : sans `zero_grad`, les gradients s'accumulent et le réseau n'arrive plus à apprendre par cœur 16 images. Pour b), quel test regarde le contenu des images de deux jeux ? Pour c), relis la puce « bout en bout » : que juge l'entraînement fumée, et que ne juge-t-il pas ? Pour d), une loss qui ne baisse pas empêche-t-elle un script de rendre 0 ? Pour e), quelle somme est la plus prudente des quatre ?
+a) **B** : sans `zero_grad`, les gradients s'accumulent d'un pas à l'autre, et le réseau a du mal à apprendre par cœur 16 images ; les deux autres tests ne regardent même pas la boucle. Pour b), quel test regarde le contenu des images de deux jeux ? Pour c), relis la puce « bout en bout » : que juge l'entraînement fumée, et que ne juge-t-il pas ? Pour d), une loss qui ne baisse pas empêche-t-elle un script de rendre 0 ? Pour e), quelle somme est la plus prudente des quatre ?
 
 </details>
 
@@ -184,7 +184,7 @@ Relis « torch.export et ONNX » et l'encadré 🕰️ « exporter un modèle Py
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : TorchScript est déprécié dans la 2.11, et un pickle de l'objet demande le code de sa classe au chargement. Pour b), quel format se lit sans PyTorch, depuis d'autres langages ? Pour c), que produit `torch.compile` : un fichier, ou un modèle plus rapide dans le même programme ? Pour d), que dit la fiche d'un export sans `dynamic_shapes` ? Pour e), relis l'encadré 🕰️ : `dynamo=True` par défaut depuis quelle version ? Pour f), la condition dépend-elle de la forme de `x`, ou de ses valeurs ?
+a) **B** : TorchScript est déprécié dans la 2.11, et un pickle de l'objet demande le code de sa classe au chargement. Pour b), quel format se lit sans PyTorch, depuis d'autres langages ? Pour c), que produit `torch.compile` : un fichier, ou un modèle plus rapide dans le même programme ? Pour d), que dit la fiche d'un export sans `dynamic_shapes` ? Pour e), relis l'encadré 🕰️ : sur quoi `torch.onnx.export` s'appuie-t-il par défaut, et depuis quelle version ? Pour f), la condition dépend-elle de la forme de `x`, ou de ses valeurs ?
 
 </details>
 
@@ -224,7 +224,7 @@ Une ligne par run, écrite automatiquement : ce qui **définit** le run (code, d
 </details>
 <details><summary>Indice 3</summary>
 
-a) Le commit (A) est indispensable : sans lui, on ne sait pas quel code a tourné ; pour B, C et D, demande-toi si la valeur change ce que fait le run. Pour b), que deviendrait une moyenne calculée sans les runs ratés ? Pour c), une ligne JSON ancienne a-t-elle besoin du nouveau champ pour se lire ? Pour d), deux runs relancés ajoutent-ils ou remplacent-ils des lignes ? Pour e), relis le format de `new_run_id` : `%Y%m%d-%H%M%S`.
+a) Le commit (A) est indispensable : sans lui, on ne sait pas quel code a tourné ; pour B, C et D, demande-toi si la valeur change ce que fait le run. Pour b), que deviendrait une moyenne calculée sans les runs ratés ? Pour c), une ligne JSON ancienne a-t-elle besoin du nouveau champ pour se lire, et réécrit-on un journal JSONL ? Pour d), deux runs relancés ajoutent-ils ou remplacent-ils des lignes ? Pour e), relis le format de `new_run_id` : `%Y%m%d-%H%M%S`.
 
 </details>
 
@@ -412,7 +412,7 @@ Pour chaque risque, cherche trois choses dans le texte : la définition, l'exemp
 </details>
 <details><summary>Indice 3</summary>
 
-1. La métaphore vient de Ward Cunningham, en 1992 ; la dette cachée « compounds silently ». Pour 2, la figure a dix boîtes, dont « ML Code » au milieu. Pour 3, CACE est défini dans le paragraphe « Entanglement ». Pour 4, cherche « versioned copy » et les quatre puces de « Underutilized Data Dependencies ». Pour 5, l'exemple des deux modèles boursiers. Pour 6, la phrase « at most … machine learning code ». Pour 7, compare chaque principe à `load_config`. Pour 8, les trois puces de « Monitoring and Testing ». Pour 9, les titres en gras de la section 8. Pour 10, pense au suivi d'expériences, à la validation des données et au ML Test Score.
+1. La métaphore vient de Ward Cunningham, en 1992 ; la dette cachée « compounds silently ». Pour 2, la figure a dix boîtes, dont « ML Code » au milieu. Pour 3, CACE est défini dans le paragraphe « Entanglement ». Pour 4, cherche « versioned copy » et les quatre puces de « Underutilized Data Dependencies ». Pour 5, cherche « randomization » pour la boucle directe, et l'exemple des deux modèles boursiers pour la boucle cachée. Pour 6, la phrase « at most … machine learning code ». Pour 7, compare chaque principe à `load_config`. Pour 8, les trois puces de « Monitoring and Testing ». Pour 9, les titres en gras de la section 8. Pour 10, pense au suivi d'expériences, à la validation des données et au ML Test Score.
 
 </details>
 

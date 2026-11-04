@@ -81,7 +81,7 @@ e) Vrai ou faux : deux machines qui installent le même `uv.lock` obtiennent la 
 *Fiche §207.6 · parcours R*
 
 a) Ta boucle d'entraînement oublie `opt.zero_grad()`. Quel test le détecte le mieux ? (A) la forme de la sortie du modèle ; (B) l'overfitting d'un mini-batch de 16 images ; (C) le schéma des données d'entrée.
-b) 37 images du test sont aussi dans l'entraînement. Quel test le détecte ? (A) l'entraînement fumée ; (B) l'overfitting d'un mini-batch ; (C) un test de données qui compare les empreintes des images.
+b) 37 images du test sont aussi dans l'entraînement. Quel test le détecte ? (A) l'entraînement fumée, qui fait tourner toute la chaîne sur 200 images ; (B) l'overfitting d'un mini-batch de 16 images de l'entraînement ; (C) un test de données qui compare les empreintes des images.
 c) Un entraînement fumée doit : (A) aller au bout, écrire son artefact et rendre 0, quelle que soit l'accuracy ; (B) atteindre l'accuracy du modèle livré, sur moins d'images ; (C) mesurer la latence de l'API sur quelques requêtes.
 d) Vrai ou faux : un entraînement fumée qui rend 0 et écrit son artefact montre que le modèle apprend.
 e) Grille du ML Test Score : une équipe totalise 3 points en données, 2,5 en modèle, 4 en infrastructure et 1 en surveillance. Quel est son score, à 1 décimale ?
@@ -90,10 +90,10 @@ e) Grille du ML Test Score : une équipe totalise 3 points en données, 2,5 en m
 *Fiche §207.7 · parcours R*
 
 a) Lesquels doivent être dans l'artefact pour que l'API prédise comme l'évaluation hors ligne ? (A) la moyenne et l'écart-type par canal des images d'entraînement ; (B) la liste des classes, dans l'ordre des sorties ; (C) l'état de l'optimiseur ; (D) le format d'entrée (RGB, pixels de 0 à 255 ramenés dans $[0, 1]$). (une ou plusieurs lettres)
-b) Le service construit le modèle avec `widths=(16, 32)`, alors que l'artefact a été entraîné avec `widths=(12, 24)`, puis appelle `load_state_dict` : (A) le modèle prédit, mais presque au hasard ; (B) `load_state_dict` lève une erreur qui nomme les tenseurs de formes différentes ; (C) PyTorch redimensionne les poids pour qu'ils entrent.
+b) Le service construit le modèle avec `widths=(16, 32)`, alors que l'artefact a été entraîné avec `widths=(12, 24)`, puis appelle `load_state_dict` : (A) le modèle se charge sans erreur, mais prédit presque au hasard ; (B) `load_state_dict` lève une erreur qui nomme les tenseurs de formes différentes ; (C) PyTorch tronque ou complète par des zéros les poids qui n'ont pas la bonne forme, puis prédit.
 c) `save_file(state_dict, "model.safetensors", metadata={"version": 1})` : (A) enregistre la version 1 dans l'en-tête ; (B) écrit le fichier et ignore les métadonnées ; (C) lève une `TypeError`.
 d) Vrai ou faux : l'empreinte des données d'entraînement, notée dans l'artefact, permet de vérifier six mois plus tard qu'un réentraînement a utilisé exactement les mêmes images.
-e) Le service renvoie la version de l'artefact dans chaque réponse. À quoi sert-elle surtout ? (A) à accélérer le chargement du modèle ; (B) à choisir le format des pixels attendu ; (C) à savoir quel modèle a produit chaque prédiction, et à vérifier qu'un retour arrière a bien eu lieu.
+e) Le service renvoie la version de l'artefact dans chaque réponse. À quoi sert-elle surtout ? (A) à accélérer le chargement, en gardant en mémoire un modèle par version ; (B) à dire au client dans quel format envoyer les pixels de son image ; (C) à savoir quel modèle a produit chaque prédiction.
 
 ### B7.Q9 — Latence p50, p95 et débit : ce que ressent l'utilisateur 🧠 ★★ ⏱️ 3 min
 *Fiche §207.7, §207.8 · parcours —*
@@ -114,7 +114,7 @@ a) Un nouveau projet sous PyTorch 2.11 veut un fichier que son service Python re
 b) Le service est écrit en C# et ne doit pas dépendre de PyTorch : (A) ONNX, servi par ONNX Runtime ; (B) `torch.compile` ; (C) le `state_dict` en safetensors.
 c) Vrai ou faux : `torch.compile` écrit un fichier que l'on peut servir sans le code Python du modèle.
 d) Un modèle exporté sur un exemple de batch 8, sans `dynamic_shapes`, reçoit un batch de 3 : (A) il calcule normalement ; (B) une garde refuse l'entrée ; (C) il complète le batch par des zéros.
-e) Vrai ou faux : dans PyTorch 2.11, `torch.onnx.export` passe par défaut par `torch.export`.
+e) Vrai ou faux : dans PyTorch 2.11, `torch.onnx.export` passe encore par défaut par TorchScript, comme dans la 2.8.
 f) Le `forward` d'un modèle contient `if x.mean() > 0:`. `torch.export.export` : (A) échoue, car le graphe dépendrait de la valeur des données ; (B) garde les deux branches et choisit à l'exécution ; (C) réussit, et ne garde que la branche prise par l'exemple.
 
 ### B7.Q11 — Écart entraînement-production et dérive des données : vrai ou faux 🧠 ⏱️ 3 min
@@ -124,7 +124,7 @@ a) Vrai ou faux : un modèle dont les poids ne changent pas peut voir son accura
 b) Vrai ou faux : le training-serving skew vient d'un changement du monde après le déploiement.
 c) Vrai ou faux : avec 50 000 requêtes par fenêtre, un test KS peut donner une p-valeur de 0,001 pour un décalage sans importance pratique.
 d) Vrai ou faux : la distribution des classes prédites peut donner l'alerte avant que les vrais labels n'arrivent.
-e) Une nouvelle marque de téléphone, aux photos plus saturées, devient majoritaire chez les utilisateurs : (A) une dérive des entrées (*covariate shift*) ; (B) un training-serving skew ; (C) un *concept shift*.
+e) Une nouvelle marque de téléphone, aux photos plus saturées, devient majoritaire chez les utilisateurs : (A) une dérive des entrées ; (B) un training-serving skew ; (C) un *concept shift*.
 f) Vrai ou faux : des intervalles de PSI recalculés chaque semaine sur la production donnent des PSI comparables d'une semaine à l'autre.
 
 <a id="rappels"></a>
@@ -136,23 +136,23 @@ f) Vrai ou faux : des intervalles de PSI recalculés chaque semaine sur la produ
 
 a) Lesquels faut-il noter pour pouvoir rejouer un run ? (A) le commit git du code ; (B) la graine ; (C) tous les hyperparamètres, y compris ceux laissés par défaut ; (D) la couleur de sa courbe dans la figure de comparaison. (une ou plusieurs lettres)
 b) Un run a divergé (loss `nan` à l'epoch 3) : (A) tu gardes sa ligne, avec son statut ; (B) tu effaces sa ligne, qui fausserait les moyennes ; (C) tu le relances à la même graine et tu remplaces sa ligne.
-c) Vrai ou faux : ajouter un champ `warmup_steps` aux nouvelles lignes d'un journal JSONL laisse les anciennes lignes lisibles telles quelles.
+c) Vrai ou faux : pour ajouter un champ `warmup_steps` aux runs à venir, il faut d'abord réécrire les anciennes lignes du journal JSONL avec ce champ, sinon elles ne se liront plus.
 d) Un journal JSONL contient 7 runs ; tu en relances 2, avec d'autres graines. Combien de lignes contient-il ensuite ?
-e) Dans l'identifiant de run `20261104-161731-e06339`, que représente `161731` ? (A) la graine du run ; (B) le début du commit git ; (C) l'heure du lancement, 16 h 17 min 31 s (UTC).
+e) Dans l'identifiant de run `20261104-161731-e06339`, que représente `161731` ? (A) la graine du run, recopiée de sa configuration ; (B) les six premiers caractères du commit git du code ; (C) l'heure du lancement, 16 h 17 min 31 s (UTC).
 
 ### B7.R2 — Ch. 23 : checkpoint complet, state_dict et weights_only 🔁 ★ ⏱️ 5 min
 *Ch. 23 (§23.9, sauvegarder et recharger) · fiche §207.7 · parcours R*
 
 a) Pour reprendre un entraînement exactement là où il s'est arrêté, que faut-il sauvegarder, en plus de l'epoch ? (A) le `state_dict` du modèle ; (B) le `state_dict` de l'optimiseur ; (C) l'objet `DataLoader` entier, par pickle ; (D) l'état des générateurs aléatoires. (une ou plusieurs lettres)
-b) Pour servir le modèle dans une API, il te faut : (A) le checkpoint complet, optimiseur compris ; (B) le `state_dict` et le code qui reconstruit l'architecture ; (C) l'état de l'optimiseur.
+b) Pour servir le modèle dans une API, il te faut : (A) le checkpoint complet, optimiseur compris ; (B) le `state_dict` et le code qui reconstruit l'architecture ; (C) l'état de l'optimiseur, avec les moments qu'Adam garde pour chaque poids.
 c) Vrai ou faux : `torch.load(path, weights_only=True)` refuse un fichier qui contient un objet Python quelconque, comme une instance de ta classe `Trainer`.
 d) Vrai ou faux : `model.load_state_dict(...)` reconstruit l'architecture à partir des noms des tenseurs du fichier.
-e) Tu reprends un entraînement avec Adam en rechargeant le modèle, mais pas l'optimiseur : (A) Adam repart de moments nuls, et ses premiers pas diffèrent de ceux qu'aurait faits l'entraînement interrompu ; (B) rien ne change, Adam recalcule ses moments à partir des poids ; (C) `load_state_dict` lève une erreur.
+e) Tu reprends un entraînement avec Adam en rechargeant le modèle, mais pas l'optimiseur : (A) Adam repart de moments nuls : ses premiers pas changent ; (B) rien ne change, car Adam recalcule ses moments à partir des poids rechargés ; (C) `load_state_dict` lève une erreur, faute de l'état de l'optimiseur.
 
 ### B7.R3 — Ch. 15 : sauvegarder un Pipeline et figer les versions 🔁 ★ ⏱️ 5 min
 *Ch. 15 (« sauvegarder un modèle et ses versions », 🛠️ 15.30) · fiche §207.4, §207.7 · parcours R*
 
-a) Tu livres un classifieur scikit-learn dont les features sont standardisées : (A) tu sauvegardes le `Pipeline` entier, prétraitement compris ; (B) le modèle seul, le service standardisera ; (C) les coefficients dans un CSV.
+a) Tu livres un classifieur scikit-learn dont les features sont standardisées : (A) tu sauvegardes le `Pipeline` entier, prétraitement compris ; (B) le modèle seul, le service standardisera ; (C) les seuls coefficients du modèle, dans un CSV plus lisible qu'un binaire.
 b) Vrai ou faux : un fichier `joblib` écrit avec scikit-learn 1.6 se relit de façon garantie avec scikit-learn 1.9.
 c) Charger avec scikit-learn 1.9 un modèle écrit avec la 1.6 affiche : (A) un `FutureWarning` ; (B) un `InconsistentVersionWarning` ; (C) rien.
 d) Vrai ou faux : charger un fichier `joblib` d'une source inconnue peut exécuter du code arbitraire.
@@ -185,7 +185,7 @@ h) Combien d'octets occupent les tenseurs de son `state_dict` (paramètres et bu
 i) Son fichier safetensors pèse 296 464 octets. Combien d'octets d'en-tête ?
 j) Quelle part de ses paramètres porte sa couche dense, en %, à 1 décimale ?
 
-Dans ta copie : pourquoi la quantification dynamique divise-t-elle par plus de 3 la taille de ConvNeXt-Tiny, et pourquoi ne ferait-elle presque rien sur le VGG ? Que contient l'en-tête de i) ? Comment la fiche (207.8) abaisse-t-elle le pic g), et pourquoi « la taille du fichier n'est qu'un plancher » ?
+Dans ta copie : pourquoi la quantification dynamique divise-t-elle par plus de 3 la taille de ConvNeXt-Tiny, et pourquoi ne réduirait-elle presque pas le fichier du VGG ? Que contient l'en-tête de i) ? Comment la fiche (207.8) abaisse-t-elle le pic g), et pourquoi « la taille du fichier n'est qu'un plancher » ?
 
 ### Ex B7.2 — Cinq graines, un intervalle : la dispersion d'une accuracy rapportée ✏️ ★★ ⏱️ 20 min
 **Objectif :** rapporter une accuracy avec son intervalle de Student sur cinq graines, puis comparer deux modèles graine par graine.
@@ -246,7 +246,7 @@ e) $D_{\text{KL}}(q\,\|\,p) = \sum_k q_k \ln\frac{q_k}{p_k}$ pour la semaine 2, 
 f) Selon les seuils usuels (0,1 et 0,25), les semaines 1 et 2 tombent dans : (A) « pas de changement notable » et « petit changement » ; (B) « pas de changement notable » et « changement important » ; (C) « petit changement » et « changement important ».
 g) Vrai ou faux : sans $\varepsilon$, NumPy rend un PSI infini pour la semaine 3.
 h) Le PSI de la semaine 3, avec $\varepsilon = 10^{-4}$, à 2 décimales.
-i) Le PSI de la semaine 3, avec $\varepsilon = 10^{-3}$, à 2 décimales.
+i) Le PSI de la semaine 3, avec $\varepsilon = 10^{-3}$, à 3 décimales.
 
 Dans ta copie : vérifie que le PSI de la semaine 2 vaut $D_{\text{KL}}(p\,\|\,q) + D_{\text{KL}}(q\,\|\,p)$. Pourquoi chaque terme est-il positif ou nul ? Que disent h) et i) de la façon de rapporter un PSI avec un intervalle vide ? Propose une autre façon de traiter cet intervalle. Que suggère l'évolution des trois semaines sur les images reçues, et que ferais-tu avant de réentraîner ?
 
@@ -304,7 +304,7 @@ Lis D. Sculley et coll., « Hidden Technical Debt in Machine Learning Systems »
 2. **La figure 1.** Nomme ses boîtes. Lesquelles ton projet du MP5 a-t-il déjà, lesquelles ce chapitre ajoute-t-il, lesquelles restent absentes ?
 3. **Les frontières qui s'effacent** (section 2). Définis le principe CACE avec un exemple tiré de ton projet. Qu'est-ce qu'un consommateur non déclaré, et quelles parades les auteurs proposent-ils ? Quel lien avec ton API (📦 B7.18) ?
 4. **Les dépendances de données** (section 3). Quelle parade les auteurs proposent-ils contre une dépendance instable, et à quel prix ? Cite les quatre façons dont une dépendance sous-utilisée s'installe, et la façon de la détecter. Contre lesquels de ces risques l'empreinte des données (207.4) protège-t-elle, et contre lesquels ne fait-elle rien ?
-5. **Les boucles de rétroaction** (section 4). Distingue boucle directe et boucle cachée, avec un exemple de l'article pour chacune. Imagine une boucle cachée pour la plateforme de ⚖️ B7.7.
+5. **Les boucles de rétroaction** (section 4). Distingue boucle directe et boucle cachée ; donne la parade de l'article contre la première et l'un de ses exemples de la seconde. Imagine une boucle cachée pour la plateforme de ⚖️ B7.7.
 6. **Les anti-patterns** (section 5). Quelle part du code d'un système mûr est du code de colle, selon les auteurs, et quelle parade proposent-ils ? Qu'est-ce qu'une jungle de pipelines ? Qu'est-il arrivé à Knight Capital, et à quel anti-pattern les auteurs l'attribuent-ils ? Cite les trois « odeurs » de la fin de la section.
 7. **La dette de configuration** (section 6). Recopie les six principes d'un bon système de configuration. Lesquels la configuration de 207.3 (dataclass, YAML, validation, surcharges, fichiers versionnés) respecte-t-elle, et lequel lui manque le plus ?
 8. **Le monde extérieur** (section 7). Pourquoi un seuil fixé à la main vieillit-il mal ? Décris les trois points de départ de la surveillance que propose l'article, et ce que chacun donnerait pour ton classifieur.

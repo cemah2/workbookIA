@@ -60048,6 +60048,7 @@
       "magnitude": 0,
       "mistakes": {
         "0caceb9199bbd59bd97deb931c67ecd6a7bef843b490a781a992fd0df183ee21": "le débit ne croît pas comme la taille du batch : calcule-le avec les mesures",
+        "54194d9f545a20f0885b8d37d440949b14f3912a6783ed655aced97b106012a9": "tu as divisé les débits arrondis à l'entier : garde les valeurs non arrondies de e) et f)",
         "af4985435d333625f76a75cbaac8892a9d467bf5f33921ff4432a2b116389c11": "vérifie le sens du rapport : f) divisé par e)"
       },
       "sign": 1,
@@ -60184,14 +60185,15 @@
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
     "B7.4i": {
-      "decimals": 2,
-      "hash": "92f002ad6b94890c22312f20f0e0e1f86f264e981d378427419df97dd35a653f",
-      "hash_coarse": "2b79207fafc72fffc4030c5c594075e245340f831ae587aa0518c063c21198b3",
+      "decimals": 3,
+      "hash": "6d8b7fc0f01c4230de2ab6c18d908c2c4120c0beff8e03d906ae1c0c86f74bd3",
+      "hash_coarse": "92f002ad6b94890c22312f20f0e0e1f86f264e981d378427419df97dd35a653f",
       "kind": "float",
       "magnitude": 0,
       "mistakes": {
-        "18e06db3de857543c0999305783f8fe26662725de232ef2743862f497af4922c": "relis la question : ε = 10⁻³",
-        "97686a3b25077362593a5ccaaa72629fcafd65b8126dbae630ef092209fe863c": "le PSI utilise le logarithme naturel ln"
+        "373d5763bea1e2142149400186e8faf49852db2a3a77115bc422d78808f38df8": "relis la question : ε = 10⁻³",
+        "b591bc8af6980568d253769f07147087de5627941380abbfa2bdab8e4ac92ef5": "le PSI utilise le logarithme naturel ln",
+        "c3544f972fa61aef54c5d1ed193f4a0a6e16286081177e77c6e8ff2c2b9cfd4a": "relis l'énoncé : ε s'ajoute à toutes les parts, celles de la production et celles de la référence"
       },
       "sign": 1,
       "source": "chapitres/b7_production/05_solutions.ipynb"
@@ -60722,10 +60724,10 @@
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
     "B7.Q10e": {
-      "hash": "58bc719d97d97113bcf434eba0d9d870a9e9f0fdad80587905900dcdbb68527d",
+      "hash": "10082953edf6ec5b621a794dd9dc7406f08d5e13bd4a3f56fc6d5724c3d0cc57",
       "kind": "bool",
       "mistakes": {
-        "10082953edf6ec5b621a794dd9dc7406f08d5e13bd4a3f56fc6d5724c3d0cc57": "relis l'encadré 🕰️ de 207.8 : sur quoi s'appuie torch.onnx.export depuis la 2.9 ?"
+        "58bc719d97d97113bcf434eba0d9d870a9e9f0fdad80587905900dcdbb68527d": "relis l'encadré 🕰️ de 207.8 : sur quoi s'appuie torch.onnx.export par défaut depuis la 2.9 ?"
       },
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
@@ -60818,10 +60820,10 @@
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
     "B7.R1c": {
-      "hash": "62c31178f7b663fe2259059176bcae330a65386ea878e8641bf3c1d276294da0",
+      "hash": "87af68f2f67dc38f0e4e71f05696b21960b9315c36a4f21de2b0a2a8ca890e7c",
       "kind": "bool",
       "mistakes": {
-        "87af68f2f67dc38f0e4e71f05696b21960b9315c36a4f21de2b0a2a8ca890e7c": "relis le paragraphe qui suit log_run (§207.5) : un champ ajouté gêne-t-il les anciennes lignes ?"
+        "62c31178f7b663fe2259059176bcae330a65386ea878e8641bf3c1d276294da0": "relis le paragraphe qui suit log_run (§207.5) : un champ ajouté gêne-t-il les anciennes lignes ?"
       },
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },

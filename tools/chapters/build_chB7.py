@@ -128,6 +128,8 @@ KL_PQ_W2_B74 = float(np.sum(P_B74[2] * np.log(P_B74[2] / Q_B74)))
 KL_QP_W2_B74 = float(np.sum(Q_B74 * np.log(Q_B74 / P_B74[2])))
 PSI_W3_B74 = float(psi_terms_b74(P_B74[3], eps=1e-4).sum())
 PSI_W3_EPS3_B74 = float(psi_terms_b74(P_B74[3], eps=1e-3).sum())
+# a classic mistake for i): epsilon added to the production shares only (or to the empty share only: same at 3 decimals)
+PSI_W3_EPS3_PART_B74 = float(((P_B74[3] + 1e-3 - Q_B74) * np.log((P_B74[3] + 1e-3) / Q_B74)).sum())
 '''
 
 LIBRARY_CHECKS = r'''
@@ -490,7 +492,7 @@ PAPER = [
         ("c", TF, "False", r'''mistakes={"relis l'encadré 🕰️ de 207.8 : que produit torch.compile ?": True}'''),
         ("d", LETTER, '"B"', letters("B", {"A": "relis le paragraphe sur dynamic_shapes (§207.8) : que devient la taille de batch d'un export sans dynamic_shapes ?",
                                            "C": "un modèle exporté complète-t-il une entrée ? Relis le paragraphe sur les gardes (§207.8)"})),
-        ("e", TF, "True", r'''mistakes={"relis l'encadré 🕰️ de 207.8 : sur quoi s'appuie torch.onnx.export depuis la 2.9 ?": False}'''),
+        ("e", TF, "False", r'''mistakes={"relis l'encadré 🕰️ de 207.8 : sur quoi s'appuie torch.onnx.export par défaut depuis la 2.9 ?": True}'''),
         ("f", LETTER, '"A"', letters("A", {"B": "un graphe figé peut-il contenir un if Python sur une valeur des données ? Relis le début de « torch.export et ONNX »",
                                            "C": "garder la seule branche de l'exemple, c'était le défaut de torch.jit.trace : relis le début de « torch.export et ONNX »"})),
     ]),
@@ -507,7 +509,7 @@ PAPER = [
         ("a", LETTERS, '"ABC"', several("ABC", "ABCD", "le journal d'expériences du ch. 24 (🛠️ 24.15) et 207.5")),
         ("b", LETTER, '"A"', letters("A", {"B": "relis la fin du paragraphe qui suit log_run (§207.5) : que fausse l'effacement d'un run raté ?",
                                            "C": "remplacer la ligne, c'est réécrire le passé : relis la docstring de log_run (§207.5)"})),
-        ("c", TF, "True", r'''mistakes={"relis le paragraphe qui suit log_run (§207.5) : un champ ajouté gêne-t-il les anciennes lignes ?": False}'''),
+        ("c", TF, "False", r'''mistakes={"relis le paragraphe qui suit log_run (§207.5) : un champ ajouté gêne-t-il les anciennes lignes ?": True}'''),
         ("d", WHOLE, "R1D", r'''mistakes={"un journal JSONL s'écrit en ajoutant des lignes : relance-t-on un run en réécrivant la sienne ?": 7,
           "le journal garde-t-il les sept premiers runs ? Relis la docstring de log_run (§207.5)": 2}'''),
         ("e", LETTER, '"C"', letters("C", {"A": "relis new_run_id (§207.5) : de quoi l'identifiant est-il fait ?",
@@ -604,6 +606,7 @@ PAPER = [
           "relis la question : le débit se calcule avec le p50 du batch, pas son p95": round(32_000 / P95_32_B73)},
           fractional="le débit se donne ici en images par seconde, arrondi à l'entier"'''),
         ("g", DEC1, "RATIO_B73", r'''decimals=1, mistakes={"vérifie le sens du rapport : f) divisé par e)": 1 / RATIO_B73,
+          "tu as divisé les débits arrondis à l'entier : garde les valeurs non arrondies de e) et f)": round(THR32_B73) / round(THR1_B73),
           "le débit ne croît pas comme la taille du batch : calcule-le avec les mesures": 32.0}'''),
         ("h", DEC2, "PER_IMAGE_B73", r'''decimals=2, mistakes={"relis la question : le p50 du batch divisé par 32": P50_32_B73,
           "relis la question : on part du p50 du batch, pas de son p95": P95_32_B73 / 32}'''),
@@ -633,7 +636,8 @@ PAPER = [
         ("g", TF, "True", r'''mistakes={"calcule ln(0 / 0,25) : que vaut-il pour NumPy, et que devient son produit par (0 − 0,25) ?": False}'''),
         ("h", DEC2, "PSI_W3_B74", r'''decimals=2, mistakes={"le PSI utilise le logarithme naturel ln": float(psi_terms_b74(P_B74[3], eps=1e-4, log=np.log10).sum()),
           "relis l'énoncé : ε vaut 10⁻⁴ ici": PSI_W3_EPS3_B74}'''),
-        ("i", DEC2, "PSI_W3_EPS3_B74", r'''decimals=2, mistakes={"relis la question : ε = 10⁻³": PSI_W3_B74,
+        ("i", DEC3, "PSI_W3_EPS3_B74", r'''decimals=3, mistakes={"relis la question : ε = 10⁻³": PSI_W3_B74,
+          "relis l'énoncé : ε s'ajoute à toutes les parts, celles de la production et celles de la référence": PSI_W3_EPS3_PART_B74,
           "le PSI utilise le logarithme naturel ln": float(psi_terms_b74(P_B74[3], eps=1e-3, log=np.log10).sum())}'''),
     ]),
 ]
