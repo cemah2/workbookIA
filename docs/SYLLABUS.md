@@ -5482,10 +5482,10 @@ Un modèle n'a de valeur que s'il sort du notebook. En partant du classifieur CI
 | B7.16 | 🐛 | Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver | ★★ | 30 | CIFAR-10 | 03 | B7.15 | C | manual |
 | B7.17 | 📦 | L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données | ★★ | 30 | CIFAR-10 | 03 | B7.14 | RC | manual |
 | B7.18 | 📦 | Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées | ★★★ | 45 | CIFAR-10 | 03 | B7.17 | RC | manual |
-| B7.19 | 🔮 | Prédire la latence p95 de l'API, requête par requête puis par batches de 32 | ★ | 10 | CIFAR-10 | 03 | B7.18, B7.3 | C | manual |
+| B7.19 | 🔮 | Prédire la latence p95 de l'API, requête par requête puis par batches de 32 | ★ | 10 | CIFAR-10 | 03 | B7.18, B7.3 | C | wb.check |
 | B7.20 | 🔬 | Accélérer l'inférence sur CPU : batches, threads, inference_mode, bfloat16, quantification | ★★ | 30 | CIFAR-10 | 03 | B7.19, B7.1 | C | manual |
 | B7.21 | 📦 | Exporter avec torch.export et vérifier l'équivalence numérique (ONNX en option) | ★★ | 25 | CIFAR-10 | 03 | B7.17 | C | wb.check |
-| B7.22 | 📈 | Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ? | ★★ | 25 | CIFAR-10 | 03 | B7.4, B7.17 | C | manual |
+| B7.22 | 📈 | Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ? | ★★ | 25 | CIFAR-10 | 03 | B7.4, B7.17 | C | wb.check |
 | B7.23 | 🛠️ | Intégration continue : un workflow GitHub Actions qui installe, teste et lance un entraînement fumée | ★★ | 25 | CIFAR-10 | 03 | B7.15 | RC | manual |
 | B7.24 | 📦 | Lire et compléter un Dockerfile : image de base, dépendances CPU, utilisateur non root, variables | ★★ | 20 | — | 03 | B7.18 | C | manual |
 | B7.25 | 🏆 | Défi : un dépôt prêt pour la production, de git clone à une prédiction servie en moins de 10 min de CPU | ★★★★ | 180 | CIFAR-10 | 03 | B7.23, B7.24 | C | manual |

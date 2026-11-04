@@ -1620,3 +1620,37 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B6.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (28 cartes)
 <!-- wb:end B6 -->
+
+<!-- wb:section B7 -->
+## B7 — Du notebook à la production ⏱️ 18 h
+
+- [ ] B7.Q1–Q11 🧠 Quiz (11 questions, 33 min)
+- [ ] B7.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B7.1 ✏️ Taille d'un artefact : float32, bfloat16, int8, et la mémoire au chargement ★ 10 min
+- [ ] B7.2 ✏️ Cinq graines, un intervalle : la dispersion d'une accuracy rapportée ★★ 20 min
+- [ ] B7.3 ✏️ Latence et débit : p50 et p95 sur vingt mesures, batch 1 contre batch 32 ★★ 15 min
+- [ ] B7.4 ✏️ Indice de stabilité de population (PSI) à la main sur quatre intervalles ★★ 20 min
+- [ ] B7.5 🧮 Fermi : servir 100 requêtes par seconde — cœurs CPU, regroupement en batches, coût mensuel ★★ 20 min
+- [ ] B7.6 🗣️ « Ça marche dans mon notebook » : convaincre un manager d'industrialiser, en cinq lignes ★ 10 min
+- [ ] B7.7 ⚖️ Journaliser les prédictions en production : minimisation, durée de conservation, droits des personnes ★★ 20 min
+- [ ] B7.8 📄 Sculley et coll. (2015) : « Hidden Technical Debt in Machine Learning Systems » ★★★ 45 min
+- [ ] B7.9 📦 Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable ★★★ 60 min
+- [ ] B7.10 📦 Une interface en ligne de commande : argparse, logging et codes de sortie ★★ 30 min
+- [ ] B7.11 📦 Configuration : dataclass + YAML, surcharges en ligne de commande, validation ★★ 30 min
+- [ ] B7.12 🔮 Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ? ★ 10 min
+- [ ] B7.13 🔬 Mesurer le non-déterminisme : graines fixées ou non, algorithmes déterministes, cinq exécutions ★★ 30 min
+- [ ] B7.14 📦 Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL ★★ 30 min
+- [ ] B7.15 📦 Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données ★★★ 45 min
+- [ ] B7.16 🐛 Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver ★★ 30 min
+- [ ] B7.17 📦 L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données ★★ 30 min
+- [ ] B7.18 📦 Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées ★★★ 45 min
+- [ ] B7.19 🔮 Prédire la latence p95 de l'API, requête par requête puis par batches de 32 ★ 10 min
+- [ ] B7.20 🔬 Accélérer l'inférence sur CPU : batches, threads, inference_mode, bfloat16, quantification ★★ 30 min
+- [ ] B7.21 📦 Exporter avec torch.export et vérifier l'équivalence numérique (ONNX en option) ★★ 25 min
+- [ ] B7.22 📈 Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ? ★★ 25 min
+- [ ] B7.23 🛠️ Intégration continue : un workflow GitHub Actions qui installe, teste et lance un entraînement fumée ★★ 25 min
+- [ ] B7.24 📦 Lire et compléter un Dockerfile : image de base, dépendances CPU, utilisateur non root, variables ★★ 20 min
+- [ ] B7.25 🏆 Défi : un dépôt prêt pour la production, de git clone à une prédiction servie en moins de 10 min de CPU ★★★★ 180 min
+- [ ] B7.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (24 cartes)
+<!-- wb:end B7 -->
