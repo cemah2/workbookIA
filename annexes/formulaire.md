@@ -854,5 +854,24 @@ Notations : features numérotées de 1 à $M$ dans les formules, colonnes 0 à $
 | relation de Chouldechova | $\operatorname{FPR} = \frac{p}{1 - p}\cdot\frac{1 - \operatorname{PPV}}{\operatorname{PPV}}\cdot(1 - \operatorname{FNR})$ | |
 | repondération | $w(g, y) = \frac{P(g)\,P(y)}{P(g, y)}$ | `fit(X, y, sample_weight=w)` |
 
-### B7 et B8
+### B7 · Du notebook à la production
+
+Notations : $n$ graines, $a_i$ l'accuracy du run $i$, $\bar a$ leur moyenne, $s$ leur écart-type corrigé ; $N$ un nombre de paramètres ; $\lambda$ un débit d'arrivée, $W$ un temps de réponse, $L$ un nombre moyen de requêtes en cours (pas une loss) ; $q_k$ et $p_k$ les parts de la référence et de la production dans l'intervalle $k$ ; $F$ une fonction de répartition empirique.
+
+| Notion | Formule | En code |
+|---|---|---|
+| intervalle sur $n$ graines | $\bar a \pm t_{0{,}975;\,n-1}\,\frac{s}{\sqrt n}$ ; $t = 2{,}776$ pour $n = 5$, 2,571 pour 6, 2,262 pour 10 | `scipy.stats.t.ppf(0.975, n - 1)` ; `stats.ttest_1samp(a, 0).confidence_interval()` |
+| comparaison sur les mêmes graines | le même intervalle, sur les différences $b_i - a_i$ | `stats.ttest_rel(b, a).confidence_interval()` |
+| percentile (méthode par défaut de NumPy) | position $h = \frac{q}{100}(n - 1)$ dans les mesures triées $x_{(0)} \le \dots \le x_{(n-1)}$, puis $x_{(\lfloor h \rfloor)} + (h - \lfloor h \rfloor)(x_{(\lfloor h \rfloor + 1)} - x_{(\lfloor h \rfloor)})$ | `np.percentile(t, [50, 95])` (`method="inverted_cdf"` : une autre convention) |
+| au moins une requête lente sur $k$ | $1 - 0{,}95^k$ au-delà du p95 | |
+| débit | $\frac{\text{taille du batch}}{\text{latence du batch}}$ | |
+| loi de Little | $L = \lambda \times W$ | |
+| taille des poids | $N \times$ octets par paramètre (4 en float32, 2 en bfloat16 ou float16, 1 en int8) ; 1 Mo $= 10^6$ octets, 1 Mio $= 2^{20}$ | `sum(t.numel() * t.element_size() for t in sd.values())` |
+| quantification dynamique | matrices des couches listées en int8, le reste inchangé | `torch.ao.quantization.quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)` |
+| équivalence d'un export | $\max \lvert f(\mathbf{x}) - f_{\text{exporté}}(\mathbf{x}) \rvert$ sur des données neuves | `(model(x) - ep.module()(x)).abs().max()` |
+| PSI | $\sum_k (p_k - q_k)\ln\frac{p_k}{q_k} = D_{\text{KL}}(p\,\|\,q) + D_{\text{KL}}(q\,\|\,p)$ ; $\varepsilon$ ajouté aux parts si un intervalle est vide ; seuils usuels 0,1 et 0,25 | `stats.entropy(p, q) + stats.entropy(q, p)` |
+| statistique de Kolmogorov-Smirnov | $D = \sup_x \lvert F_{\text{réf}}(x) - F_{\text{prod}}(x)\rvert$ | `scipy.stats.ks_2samp(ref, prod)` |
+| correction de Bonferroni | $m$ tests : chaque p-valeur comparée à $0{,}05/m$ | |
+
+### B8
 *(à compléter)*

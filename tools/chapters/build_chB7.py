@@ -207,9 +207,14 @@ with tempfile.TemporaryDirectory() as tmp:
     assert len(path.read_text(encoding="utf-8").splitlines()) == R1D
 assert datetime.strptime("20261104-161731", "%Y%m%d-%H%M%S").strftime("%H:%M:%S") == "16:17:31"
 
-# quiz Q8: the classes sorted by name ; safetensors metadata must be strings
-classes = ["avion", "automobile", "oiseau", "chat", "cerf", "chien", "grenouille", "cheval", "bateau", "camion"]
-assert classes[3] == "chat" and sorted(classes)[3] == "camion"
+# quiz Q8: load_state_dict refuses tensors of another shape ; safetensors metadata must be strings
+narrow, wide = torch.nn.Linear(12, 3), torch.nn.Linear(16, 3)
+try:
+    wide.load_state_dict(narrow.state_dict())
+except RuntimeError as err:
+    assert "size mismatch" in str(err)
+else:
+    raise AssertionError("load_state_dict accepted tensors of another shape")
 from safetensors.torch import save as save_safetensors
 
 try:
@@ -239,15 +244,23 @@ class DataDependent(torch.nn.Module):
         return x - 1
 
 
-logging.getLogger("torch").setLevel(logging.CRITICAL)          # torch.export logs the failed trace
-try:
-    with warnings.catch_warnings():
+import contextlib
+
+torch_loggers = ("torch", "torch.fx.experimental.symbolic_shapes", "torch._dynamo", "torch.export")
+saved_levels = {name: logging.getLogger(name).level for name in torch_loggers}
+try:                                                            # torch.export prints the trace that failed
+    for name in torch_loggers:
+        logging.getLogger(name).setLevel(logging.CRITICAL)
+    with contextlib.redirect_stderr(io.StringIO()), warnings.catch_warnings():
         warnings.simplefilter("ignore")
         torch.export.export(DataDependent(), (torch.randn(4, 3),))
 except Exception as err:
     assert "data-dependent" in str(err), str(err)[:200]
 else:
     raise AssertionError("a data-dependent if was exported")
+finally:
+    for name, level in saved_levels.items():
+        logging.getLogger(name).setLevel(level)
 
 # recall R2: weights_only=True refuses an arbitrary Python object
 
@@ -372,17 +385,17 @@ PAPER = [
         ("a", LETTER, '"A"', letters("A", {"B": "un fichier de tests vérifie le code ; l'API, elle, importe cette fonction",
                                            "C": "configs/ ne contient que des réglages, pas du code",
                                            "D": "scripts/ range ce qu'on lance à la main ; cette fonction est importée par l'entraînement et l'API"})),
-        ("b", LETTER, '"D"', letters("D", {"A": "le package ne contient que le code qu'importent l'entraînement et le service : ce script, on le lance",
+        ("b", LETTER, '"D"', letters("D", {"A": "src/cifarprod/ ne contient que le code qu'importent l'entraînement et le service : ce script, on le lance",
                                            "B": "ce script ne vérifie pas le code, il prépare les données",
                                            "C": "configs/ ne contient que des réglages, pas du code"})),
         ("c", LETTER, '"C"', letters("C", {"A": "un fichier YAML de réglages n'est pas du code importable",
                                            "B": "ce fichier décrit un entraînement ; il ne teste rien lui-même",
                                            "D": "scripts/ range du code à lancer ; un fichier YAML est un réglage"})),
-        ("d", LETTER, '"B"', letters("B", {"A": "le package ne contient que le code qui sert en production",
+        ("d", LETTER, '"B"', letters("B", {"A": "src/cifarprod/ ne contient que le code qui sert en production",
                                            "C": "configs/ ne contient que des réglages",
                                            "D": "où pytest cherche-t-il les tests d'un dépôt ? Relis l'arborescence de 207.1"})),
         ("e", TF, "False", r'''mistakes={"relis le paragraphe qui suit l'arborescence (§207.1) : les données et les sorties des runs vont-elles dans git ?": True}'''),
-        ("f", LETTER, '"B"', letters("B", {"A": "relis l'avantage du layout src/ (§207.1) : le dossier courant suffit-il pour importer le package ?",
+        ("f", LETTER, '"B"', letters("B", {"A": "relis l'avantage du layout src/ (§207.1) : le dossier courant suffit-il pour importer cifarprod ?",
                                            "C": "pytest installe-t-il quoi que ce soit ? Relis le layout src/ (§207.1)"})),
         ("g", TF, "True", r'''mistakes={"relis [project.scripts] (§207.1) : que crée cette ligne à l'installation ?": False}'''),
     ]),
@@ -447,13 +460,13 @@ PAPER = [
     ]),
     Paper("B7.Q8", "Artefact de modèle : les poids seuls ne suffisent pas", [
         ("a", LETTERS, '"ABD"', several("ABD", "ABCD", "« L'artefact du modèle » (§207.7)")),
-        ("b", LETTER, '"A"', letters("A", {"B": "relis la question : la liste du service n'est pas celle de l'entraînement",
-                                           "C": "l'indice 3 existe dans toute liste de dix noms : laquelle le service lit-il ?"})),
+        ("b", LETTER, '"B"', letters("B", {"A": "load_state_dict vérifie-t-il les noms et les formes des tenseurs ? Relis §23.9.2 du ch. 23",
+                                           "C": "PyTorch modifie-t-il les tenseurs qu'on lui donne ? Relis §23.9.2 du ch. 23"})),
         ("c", LETTER, '"C"', letters("C", {"A": "relis le paragraphe qui suit le code de « L'artefact du modèle » : quels types prennent les métadonnées de safetensors ?",
                                            "B": "safetensors ignore-t-il ce qu'il ne sait pas écrire ? Relis « L'artefact du modèle » (§207.7)"})),
-        ("d", TF, "True", r'''mistakes={"relis le training-serving skew (§207.7) : des statistiques recalculées sur la production suivent-elles celles de l'entraînement ?": False}'''),
-        ("e", LETTER, '"B"', letters("B", {"A": "le dropout agit en mode entraînement : que fait model.eval() ?",
-                                           "C": "un modèle en mode entraînement calcule-t-il quand même ? Relis la fin de « L'artefact du modèle »"})),
+        ("d", TF, "True", r'''mistakes={"relis « Les versions figées et l'empreinte des données » (§207.4) : que devient l'empreinte quand un seul pixel change ?": False}'''),
+        ("e", LETTER, '"C"', letters("C", {"A": "la version change-t-elle le calcul ? Relis la traçabilité dans « L'artefact du modèle » (§207.7)",
+                                           "B": "le format des pixels est une information à part de l'artefact : relis la liste de « L'artefact du modèle »"})),
     ]),
     Paper("B7.Q9", "Latence p50, p95 et débit : ce que ressent l'utilisateur", [
         ("a", WHOLE, "round(Q9A)", r'''mistakes={"relis la question : la moyenne pèse chaque requête, et 900 requêtes prennent 10 ms": 10,
@@ -486,8 +499,8 @@ PAPER = [
         ("b", TF, "False", r'''mistakes={"relis la définition du training-serving skew (§207.7) : d'où vient l'écart ?": True}'''),
         ("c", TF, "True", r'''mistakes={"relis la fin de « Le test de Kolmogorov-Smirnov » (§207.10) : que devient une p-valeur avec beaucoup de données ?": False}'''),
         ("d", TF, "True", r'''mistakes={"relis ce qu'on surveille sur les sorties (§207.10) : faut-il attendre les labels ?": False}'''),
-        ("e", LETTER, '"B"', letters("B", {"A": "le monde a-t-il changé, ou les deux chaînes de préparation diffèrent-elles ?",
-                                           "C": "la relation entre une image et sa classe a-t-elle changé ? Relis 207.7 et 207.10"})),
+        ("e", LETTER, '"A"', letters("A", {"B": "les deux chaînes de préparation ont-elles changé, ou les images reçues ? Relis 207.7 et 207.10",
+                                           "C": "la relation entre une image et sa classe a-t-elle changé ? Relis « Pourquoi un modèle se dégrade sans changer » (§207.10)"})),
         ("f", TF, "False", r'''mistakes={"relis la fin de « Les seuils » (§207.10) : quand fixe-t-on les bornes des intervalles ?": True}'''),
     ]),
     Paper("B7.R1", "Ce qu'une ligne de journal d'expériences doit contenir", [

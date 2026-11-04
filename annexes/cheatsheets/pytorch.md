@@ -304,6 +304,23 @@
 | `w = store["G"].mean(dim=(2, 3))` ; `cam = F.relu(torch.einsum("nc,nchw->nhw", w, store["A"]))` | Grad-CAM : poids = moyenne spatiale des gradients, somme pondérée des canaux, ReLU |
 | `F.interpolate(cam[:, None], size=images.shape[-2:], mode="bilinear", align_corners=False)[:, 0]` | agrandir la carte à la taille de l'image, avec la même convention `align_corners` que pour l'image |
 
+## Production : déterminisme, inférence et export (bonus B7)
+
+| Code | Effet |
+|---|---|
+| `random.seed(s)` ; `np.random.seed(s)` ; `torch.manual_seed(s)` ; `g = torch.Generator().manual_seed(s)` ; `DataLoader(..., generator=g)` | fixer les trois générateurs et l'ordre des mini-batches (`seed_everything`, fiche B7, §207.4) |
+| `torch.use_deterministic_algorithms(True)` (`warn_only=True` : un avertissement) ; `torch.backends.cudnn.benchmark = False` | exiger des opérations déterministes ; sur GPU, empêcher cuDNN de choisir son algorithme en chronométrant |
+| `with torch.inference_mode(): logits = model.eval()(x)` | prédire sans construire le graphe des gradients ; plus strict que `no_grad` (les tenseurs créés ne peuvent pas servir à un entraînement) |
+| `t0 = time.perf_counter()` … `time.perf_counter() - t0` après quelques appels à blanc ; `np.percentile(t, [50, 95])` | mesurer une latence et la résumer par ses percentiles |
+| `torch.set_num_threads(k)` | le nombre de threads de calcul sur CPU ; viser threads × processus ≈ nombre de cœurs |
+| `save_file(model.state_dict(), "model.safetensors", metadata={"version": "1.0.0"})` ; `model.load_state_dict(load_file(path))` | l'artefact en safetensors (`from safetensors.torch import save_file, load_file`) ; des métadonnées en chaînes seulement |
+| `ep = torch.export.export(model.eval(), (x,), dynamic_shapes={"input": {0: torch.export.Dim("batch", min=1, max=1024)}})` | figer le graphe et les poids, avec une taille de batch variable (`"input"` : le nom de l'argument de `forward`, ici celui de `nn.Sequential`) |
+| `torch.export.save(ep, "model.pt2")` ; `exported = torch.export.load("model.pt2").module()` | enregistrer et recharger un modèle exporté, sans le code de sa classe |
+| `(model(x) - exported(x)).abs().max().item()` | l'équivalence numérique d'un export, sur des données neuves et plusieurs tailles de batch |
+| `model.to(torch.bfloat16)` (et l'entrée aussi) ; `with torch.autocast("cpu", dtype=torch.bfloat16):` | l'inférence en bfloat16 sur CPU, tout le modèle ou les seules opérations qui le supportent ; vérifier que l'argmax ne change pas |
+| `torch.ao.quantization.quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)` | quantification dynamique des seules couches denses (dépréciée au profit de torchao, mais encore là dans 2.11) |
+| `with torch.device("meta"): model = build_model()` ; `sd = torch.load(path, mmap=True, weights_only=True)` ; `model.load_state_dict(sd, assign=True)` | charger un modèle avec une seule copie des poids en mémoire |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

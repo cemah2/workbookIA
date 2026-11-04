@@ -86,7 +86,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | exception | exception | erreur signalée par `raise`, rattrapée par `try` / `except` | 0A |
 | pile d'appels | call stack | les appels de fonctions en cours, chacun en attente du suivant ; profondeur limitée (`RecursionError`) | 0A |
 | traceback | trace de la pile d'appels | message d'erreur qui liste les appels en cours au moment de l'erreur (lire la dernière ligne d'abord) | 0A |
-| module, package | module, package | fichier `.py` / dossier de modules qu'on importe | 0A |
+| module, paquet | module, package | fichier `.py` / dossier de modules qu'on importe ; un paquet installable se décrit par un `pyproject.toml` (B7) | 0A |
 | classe, objet, méthode, attribut | class, object, method, attribute | modèle d'objets ; un objet ; une fonction d'un objet ; une valeur d'un objet | 0A |
 | héritage | inheritance | une classe fille reprend et spécialise une classe mère (`super()`) | 0A |
 | générateur | generator | fonction avec `yield`, qui produit ses valeurs une par une, à la demande | 0A |
@@ -1164,6 +1164,64 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | déployeur | deployer | dans l'AI Act, celui qui utilise un système d'IA sous sa propre autorité (la banque), par opposition au fournisseur qui le développe | B6 |
 | corrélation de rangs (de Spearman) | Spearman rank correlation | corrélation de Pearson des **rangs** de deux séries : 1 quand elles rangent les éléments (les pixels de deux cartes) dans le même ordre, quelle que soit l'échelle ; mesure du test de santé (🔬 B6.22) | B6 |
 | bootstrap stratifié (par groupe) | stratified bootstrap | rééchantillonnage avec remise **dans chaque groupe**, qui garde les effectifs des groupes : l'intervalle d'un taux de groupe ou d'un écart entre groupes (📦 B6.24) | B6 |
+| paquet | package | un projet Python installable par pip ou uv, décrit par son `pyproject.toml` (nom, version, dépendances, points d'entrée) ; il contient un ou plusieurs dossiers de modules importables (`src/cifarprod/`) | B7 |
+| état caché (d'un notebook) | hidden state (of a notebook) | les variables que le noyau garde dans l'ordre où l'on a exécuté les cellules, celles d'une cellule supprimée comprises ; « Redémarrer et tout exécuter » le vide (à ne pas confondre avec l'état caché d'un RNN, ch. 22) | B7 |
+| layout `src/` | src layout | ranger le code importable dans `src/<paquet>/` : depuis la racine, le paquet ne s'importe qu'une fois installé, et les tests passent par la version installée | B7 |
+| installation éditable | editable install | `pip install -e .` : un lien vers le dossier du code plutôt qu'une copie ; une modification est visible au prochain import (PEP 660) | B7 |
+| point d'entrée | entry point | une commande installée avec le paquet (`[project.scripts]`), qui appelle une fonction (`cifarprod = "cifarprod.cli:main"`) | B7 |
+| code de sortie | exit code | l'entier qu'un programme rend au système : 0 pour un succès, autre chose pour un échec (2 pour une mauvaise utilisation, celui d'`argparse`) ; ce que lisent un script, une CI et `subprocess.run(...).returncode` | B7 |
+| logging | journalisation | le module de Python qui donne à chaque message un niveau et une destination ; configuré une fois, dans le point d'entrée | B7 |
+| niveau de log | log level | `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` : un logger laisse passer les messages de son niveau et des niveaux plus graves | B7 |
+| logger, handler | logger, handler (gestionnaire) | un logger par module (`logging.getLogger(__name__)`) dit d'où vient un message ; un handler dit où il va (console, fichier, service de collecte) | B7 |
+| configuration typée | typed configuration | une `@dataclass` (ou un modèle pydantic) qui déclare chaque réglage avec son type et sa valeur par défaut, et le valide au chargement | B7 |
+| surcharge (de configuration) | override | changer un réglage sans toucher au fichier, en ligne de commande (`--set lr=0.01`) | B7 |
+| YAML | YAML | format texte de paires `clé: valeur` et de listes, avec commentaires ; PyYAML suit YAML 1.1 (`1e-3` lu comme une chaîne, `no` comme `False`) : lire par `yaml.safe_load` et valider | B7 |
+| fichier de verrouillage | lock file | la version exacte de chaque paquet, dépendances indirectes comprises, souvent avec ses empreintes (`uv.lock`, `pylock.toml` de la PEP 751, un `requirements.txt` épinglé) : ce qui a marché | B7 |
+| uv, pip-tools, ruff, pre-commit | uv, pip-tools, ruff, pre-commit | outils du projet Python : environnement, installation et verrou (uv) ; `requirements.txt` épinglé (`pip-compile`) ; style et formatage (ruff) ; vérifications avant chaque commit (pre-commit) | B7 |
+| empreinte (des données) | data fingerprint | la somme de contrôle SHA-256 du type, de la forme et des octets des données d'un run (et de leurs labels) : un pixel changé la change toute | B7 |
+| algorithmes déterministes | deterministic algorithms | `torch.use_deterministic_algorithms(True)` : PyTorch prend une implémentation déterministe là où elle existe, et lève une erreur sinon (`warn_only=True` : un avertissement) | B7 |
+| loi de Student | Student's t distribution | la loi qui remplace la loi normale pour l'intervalle d'une moyenne quand l'écart-type est estimé sur $n$ valeurs : quantile $t_{0{,}975;\,n-1}$ (2,776 pour $n = 5$), plus grand que 1,96 | B7 |
+| identifiant de run | run ID | nom unique d'un run (date, heure et quelques caractères aléatoires : `20261104-161731-e06339`), qui relie ses métriques et ses artefacts | B7 |
+| artefact | artifact | un fichier qu'écrit un run (checkpoint, modèle livré, figure), noté avec son chemin et son empreinte | B7 |
+| JSONL | JSON Lines | un objet JSON par ligne, ajouté à la fin du fichier ; un champ nouveau ne gêne pas les anciennes lignes | B7 |
+| MLflow | MLflow | outil de suivi d'expériences (runs, paramètres, métriques, artefacts, registre de modèles), absent de Colab et du workbook | B7 |
+| fixture (pytest) | fixture | fonction marquée `@pytest.fixture` qui prépare un objet pour les tests qui la nomment en argument ; chaque test en reçoit un neuf | B7 |
+| test de données | data test | test du schéma des données (type, forme, étendue des labels), de leur équilibre et du recouvrement entre entraînement et test | B7 |
+| test d'overfitting d'un mini-batch | overfit-one-batch test | un réseau correct apprend par cœur quelques images ; sinon, la boucle d'entraînement a un bug | B7 |
+| entraînement fumée | smoke test | un entraînement minuscule de bout en bout, qui doit aller au bout, écrire son artefact et rendre 0, sans juger l'accuracy | B7 |
+| intégration continue (CI) | continuous integration | rejouer l'installation et les tests à chaque `push` ou *pull request*, sur une machine propre (GitHub Actions) | B7 |
+| workflow, job, étape, action | workflow, job, step, action | dans GitHub Actions, le fichier YAML de `.github/workflows/`, ses travaux, leurs étapes (`run:` une commande, `uses:` une action publiée) | B7 |
+| ML Test Score | ML Test Score | grille de 28 tests en quatre familles (données, modèle, infrastructure, surveillance) ; le score est la plus faible des quatre sommes (Breck et coll., 2017) | B7 |
+| artefact de modèle | model artifact | le dossier versionné qui permet de prédire sans le notebook : poids, architecture, prétraitement, classes dans l'ordre, traçabilité, fiche modèle | B7 |
+| inférence par batches, en ligne | batch inference, online inference | prédire d'un coup un grand ensemble à heure fixe (on optimise le débit) / répondre pendant que quelqu'un attend (on optimise la latence) | B7 |
+| regroupement dynamique | dynamic batching | un serveur qui attend quelques millisecondes pour réunir en un batch des requêtes arrivées presque ensemble | B7 |
+| API HTTP, route | HTTP API, endpoint | un programme qui répond à des requêtes HTTP ; chaque adresse (`/health`, `/predict`) est une route | B7 |
+| code de statut | status code | le nombre d'une réponse HTTP : 200 succès, 422 entrée invalide, 500 erreur du serveur | B7 |
+| FastAPI, uvicorn, pydantic | FastAPI, uvicorn, pydantic | le framework d'API, le serveur qui le fait tourner, et la bibliothèque qui valide les entrées ; `TestClient` teste l'API sans serveur | B7 |
+| p50, p95, p99 | p50, p95, p99 | les 50ᵉ, 95ᵉ et 99ᵉ percentiles des latences : la requête typique, celle que 95 % ne dépassent pas, la queue | B7 |
+| SLO | service level objective | objectif de service écrit en percentiles (« 95 % des requêtes en moins de 100 ms ») | B7 |
+| loi de Little | Little's law | $L = \lambda W$ : requêtes en cours = débit d'arrivée × temps moyen dans le système, dans un système stable (J. Little, 1961) | B7 |
+| exporter (un modèle), `torch.export` | export | enregistrer le graphe de calcul et les poids dans un fichier qui se recharge sans le code du modèle ; `torch.export.export` rend un `ExportedProgram`, enregistré en `.pt2` | B7 |
+| garde | guard | condition sur les formes d'entrée sous laquelle un `ExportedProgram` reste valable ; une entrée qui ne la vérifie pas est refusée | B7 |
+| TorchScript | TorchScript | l'ancien format d'export de PyTorch (`torch.jit.script`, `torch.jit.trace`), déprécié dans PyTorch 2.11 au profit de `torch.export` | B7 |
+| quantification dynamique, statique | dynamic, static quantization | poids des couches listées en int8 et activations quantifiées à la volée, sans calibration / activations calibrées d'avance, convolutions comprises | B7 |
+| torchao | torchao | la bibliothèque de quantification de PyTorch qui remplace `torch.ao.quantization` (`quantize_`) ; à installer à une version compatible avec son torch | B7 |
+| conteneur, image | container, image | une image est la recette figée d'un environnement (système, Python, paquets, code) ; un conteneur est son exécution isolée | B7 |
+| Dockerfile, couche | Dockerfile, layer | la recette d'une image ; chaque instruction crée une couche, gardée en cache et visible dans l'image (`docker history`) | B7 |
+| variable d'environnement | environment variable | paire nom-valeur passée par le système au programme (`os.environ`) : ce qui change d'un déploiement à l'autre, et les secrets | B7 |
+| secret | secret | une clé d'API ou un mot de passe : jamais dans le dépôt, la configuration ou l'image ; un secret publié se révoque | B7 |
+| démo hébergée | hosted demo | une page web autour du modèle (Gradio), hébergée par un service (Hugging Face Spaces) ; une démo n'est pas une production | B7 |
+| PSI (indice de stabilité de population) | population stability index | $\sum_k (p_k - q_k)\ln\frac{p_k}{q_k}$ sur des intervalles fixés sur la référence ; la KL symétrisée ; seuils usuels 0,1 et 0,25, des conventions | B7 |
+| test de Kolmogorov-Smirnov | Kolmogorov-Smirnov test | compare deux échantillons par $D = \sup_x \lvert F_{\text{réf}}(x) - F_{\text{prod}}(x)\rvert$ et une p-valeur (`scipy.stats.ks_2samp`) | B7 |
+| correction de Bonferroni | Bonferroni correction | avec $m$ tests, comparer chaque p-valeur à $0{,}05/m$ pour garder le risque global de fausse alerte sous 5 % | B7 |
+| biais de prédiction | prediction bias | écart entre la distribution des classes prédites et celle des classes observées : un signal d'alerte sans attendre les labels (Sculley et coll., 2015) | B7 |
+| retour arrière | rollback | remettre en service l'artefact précédent, gardé et prêt, en une minute | B7 |
+| déploiement canari, en ombre | canary, shadow deployment | servir un nouveau modèle à une petite part du trafic d'abord / lui envoyer les requêtes et comparer ses réponses sans les servir | B7 |
+| dette technique (du ML) | technical debt | les coûts de maintenance qu'accumulent les raccourcis d'aujourd'hui ; dans un système de ML, souvent au niveau du système plutôt que du code (Sculley et coll., 2015) | B7 |
+| code de colle | glue code | le code qui fait entrer les données dans un paquet générique et les en fait sortir ; souvent l'essentiel d'un système de ML | B7 |
+| CACE | Changing Anything Changes Everything | dans un système de ML, changer une entrée, une feature ou un réglage change tout le reste du modèle | B7 |
+| minimisation, limitation de la conservation | data minimisation, storage limitation | principes du RGPD (art. 5, 1 c et e) : des données limitées à ce qui est nécessaire, gardées une durée écrite | B7 |
+| pseudonymisation | pseudonymisation | remplacer un identifiant par un pseudonyme ; les données restent personnelles tant qu'on peut refaire le lien (RGPD, art. 4, point 5) | B7 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

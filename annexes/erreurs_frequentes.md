@@ -16,6 +16,9 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | test `FAILED ... ⏳ pas encore implémenté` | la fonction contient encore `raise NotImplementedError` | implémente-la |
 | `git pull` refuse de s'exécuter | un fichier hors de `mon_travail/` a été modifié | `git status`, puis `git restore <fichier>` (copie d'abord ta modification si tu y tiens) |
 | `fatal: Need to specify how to reconcile divergent branches` | tu as des commits locaux et Claude en a poussé d'autres | `git config --global pull.rebase true` et `git config --global rebase.autoStash true`, puis `git pull` |
+| `ModuleNotFoundError: No module named 'cifarprod'` quand tu lances `pytest` depuis la racine du dépôt | avec le layout `src/`, le paquet ne s'importe qu'une fois installé | `pip install -e .` (ou `pip install -e ".[dev]"`), puis redémarre le noyau si un notebook l'utilise (fiche B7, §207.1) |
+| `cifarprod: command not found` après avoir ajouté une ligne à `[project.scripts]` | la commande s'installe avec le paquet | relance `pip install -e .` ; `python -m cifarprod` marche partout, Colab compris (fiche B7, §207.2) |
+| l'intégration continue télécharge plus de 2 Go à `pip install torch` | sous Linux, la roue par défaut est celle de CUDA | `pip install torch --index-url https://download.pytorch.org/whl/cpu` avant les autres dépendances (fiche B7, §207.6) |
 
 ## Python et NumPy
 
@@ -106,6 +109,10 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | des valeurs de Shapley fausses alors que l'efficacité tient presque, ou une valeur de base égale à `f(background.mean(0))` | la fonction de valeur calcule $f$ sur la ligne moyenne du fond au lieu de la moyenne de $f$ sur les lignes | `rows = background.copy(); rows[:, mask] = x[mask]; v = f(rows).mean()` : $f$ d'abord, la moyenne ensuite (fiche B6, §206.3) |
 | `MemoryError`, ou une session qui redémarre, dans un Shapley exact à 12 features | les $M!$ ordres d'arrivée rangés dans une liste (`list(itertools.permutations(range(12)))` : des centaines de millions de tuples) | énumérer les $2^M$ coalitions (`itertools.product([False, True], repeat=M)`) et calculer chaque $v(S)$ une seule fois (🔨 B6.14) |
 | un taux par groupe à 0 là où il devrait être `nan`, ou `ValueError: not enough values to unpack` dans un audit | un groupe sans positif : `confusion_matrix` sans `labels=[0, 1]` rend une matrice 1×1, ou une division par 0 remplacée par 0 | `confusion_matrix(y, p, labels=[0, 1])` ; un dénominateur nul donne `nan`, qu'on signale au lieu de le cacher |
+| `ValueError: lr: expected float, got '1e-3'` au chargement d'une configuration | PyYAML suit YAML 1.1 : sans point dans la mantisse, `1e-3` est une chaîne | écris `1.0e-3` ; garde la vérification des types (fiche B7, §207.3) |
+| aucun message de log, ou chaque message affiché deux fois | `logging.basicConfig` jamais appelé, ou appelé dans plusieurs modules | configurer une fois, dans le point d'entrée ; les modules font `logging.getLogger(__name__)` (🧠 B7.Q3) |
+| `TypeError: argument 'metadata': 'int' object is not an instance of 'str'` dans `save_file` | les métadonnées de safetensors ne prennent que des chaînes | `{"version": "1.0.0"}`, et le reste dans un `meta.json` (fiche B7, §207.7) |
+| un PSI égal à `inf` (avec `RuntimeWarning: divide by zero`) | un intervalle vide : $\ln 0 = -\infty$ | ajouter $\varepsilon$ à toutes les parts et l'écrire avec le résultat, ou fusionner l'intervalle avec son voisin (✏️ B7.4) |
 
 ## Maths et algèbre linéaire
 
@@ -369,6 +376,11 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une carte Grad-CAM qui glisse vers les bords de l'image, ou des cartes de deux classes identiques | la carte agrandie avec `align_corners=True` quand les images l'ont été avec `align_corners=False` ; ou le score dérivé pris sur `logits.argmax(1)` au lieu de la classe étudiée | la convention qui a agrandi les images (`wb.transfer.to_input`) ; `logits.gather(1, target[:, None]).sum()` (🐛 B6.21) |
 | un test de santé où les cartes de toutes les cellules suivantes ne veulent plus rien dire | les poids randomisés **dans** le modèle (sans `copy.deepcopy`), ou tirés hors de `torch.random.fork_rng()` | randomiser une copie, sous `fork_rng` (🔬 B6.22) |
 | des gradients intégrés qui ne vérifient pas la complétude, même avec beaucoup de pas | le gradient d'un batch calculé par `f(p).mean().backward()` (chaque gradient divisé par la taille du batch), ou des points sans la référence ($\alpha\mathbf{x}$ au lieu de $\mathbf{x}' + \alpha(\mathbf{x} - \mathbf{x}')$) | `f(p).sum().backward()` (chaque sortie ne dépend que de sa ligne) et les points du chemin depuis la référence ; vérifier $\sum_i \operatorname{IG}_i \approx f(\mathbf{x}) - f(\mathbf{x}')$ |
+| `GuardOnDataDependentSymNode: Could not guard on data-dependent expression` dans `torch.export.export` | un `if` Python sur une **valeur** d'un tenseur (`if x.mean() > 0:`) | réécrire sans branche (`torch.where`) ou avec `torch.cond` (🧠 B7.Q10) |
+| `Guard failed: input.size()[0] == 4` en appelant un modèle exporté | exporté sans `dynamic_shapes` : la taille de batch de l'exemple est figée | `dynamic_shapes={"input": {0: torch.export.Dim("batch", min=1, max=1024)}}` (fiche B7, §207.8) |
+| `ModuleNotFoundError: No module named 'onnxscript'` dans `torch.onnx.export` | depuis PyTorch 2.9, l'export ONNX passe par `torch.export` et demande onnxscript | installer l'extra optionnel `prod` (onnx, onnxscript, onnxruntime) ou s'en tenir au `.pt2` (fiche B7, §207.8) |
+| `RuntimeError: Error(s) in loading state_dict … size mismatch for 0.weight` | le modèle reconstruit avec d'autres arguments que ceux de l'entraînement | relire l'architecture et ses arguments dans l'artefact (`meta.json`) avant `load_state_dict` (🧠 B7.Q8) |
+| `DeprecationWarning: torch.ao.quantization is deprecated` | l'API de quantification de PyTorch passe à torchao | elle marche encore dans PyTorch 2.11 ; pour un nouveau projet, torchao à une version compatible (fiche B7, §207.8) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -541,3 +553,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | une carte d'attribution acceptée parce qu'elle « suit bien l'objet » | une carte nette peut ne pas dépendre du modèle (un détecteur de bords) | test de santé : randomiser les poids, la carte doit changer (Adebayo et coll.) |
 | des seuils par groupe qui égalisent parfaitement les TPR, puis plus du tout en production | seuils choisis et mesurés sur les mêmes personnes : un quantile sur 175 positifs bouge de plusieurs points | choisir sur une moitié, mesurer sur l'autre ; viser plus bas que l'objectif (🔬 B6.27, 🏆 B6.29) |
 | « j'ai retiré le sexe, le modèle est équitable » | d'autres colonnes prédisent le sexe (sur *Adult*, `relationship` et `marital-status`) et les taux de base diffèrent | mesurer : prédire l'attribut à partir des autres features, réauditer après le retrait (🔮 B6.26) |
+| « le nouveau modèle est meilleur : 71,8 % contre 71,2 % » | une graine chacun, ou deux intervalles comparés séparément | cinq graines, les mêmes pour les deux modèles, et l'intervalle de la différence graine par graine (✏️ B7.2) |
+| un p95 annoncé au dixième de milliseconde sur vingt mesures | sur vingt mesures, le p95 tient à deux requêtes et à la convention | des centaines de mesures après des appels à blanc, la convention écrite (✏️ B7.3) |
+| « la quantification int8 divise la taille par quatre » pour un CNN | la quantification dynamique ne touche que les couches listées (`nn.Linear`) | compter la part des paramètres dans ces couches avant de promettre un gain (✏️ B7.1) |
+| une alerte de dérive à chaque fenêtre de 50 000 requêtes | une p-valeur de test KS minuscule pour un écart sans importance | juger la taille de l'écart ($D$, PSI) sur des fenêtres fixes, avec des seuils écrits à l'avance (fiche B7, §207.10) |
+| un journal des prédictions gardé sans limite « pour réentraîner plus tard » | pas de minimisation, pas de durée, une finalité nouvelle | des statistiques plutôt que les images, une durée écrite et une purge automatique, une base pour chaque finalité (⚖️ B7.7) |

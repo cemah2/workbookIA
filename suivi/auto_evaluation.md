@@ -631,3 +631,19 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Rédiger une fiche modèle avec ses rubriques explicabilité et équité | |
 | Situer un projet de scoring face au RGPD (art. 22) et à l'AI Act (haut risque, obligations, dates) | |
 <!-- wb:end B6 -->
+<!-- wb:section B7 -->
+## B7 — Du notebook à la production
+
+| Compétence | Niveau |
+|---|:-:|
+| Transformer un notebook en paquet installable (`pyproject.toml`, layout `src/`, installation éditable) | |
+| Écrire une ligne de commande avec `argparse`, du logging et des codes de sortie honnêtes | |
+| Écrire une configuration typée et validée, avec des surcharges, et garder les secrets hors du dépôt | |
+| Rendre un run reproductible (graines, déterminisme, verrou, commit, empreinte des données) et le journaliser | |
+| Rapporter une accuracy sur plusieurs graines avec un intervalle de Student, et comparer deux modèles graine par graine | |
+| Tester un projet de ML (tests unitaires, de données, overfitting d'un mini-batch, entraînement fumée) et l'automatiser en CI | |
+| Livrer un artefact de modèle complet et le servir par une API qui valide ses entrées | |
+| Mesurer une latence (p50, p95) et un débit, et dimensionner un service avec la loi de Little | |
+| Exporter un modèle avec `torch.export`, vérifier l'équivalence et mesurer ce que rapportent bfloat16 et int8 | |
+| Lire et compléter un Dockerfile ; surveiller la dérive (PSI, test KS) et journaliser dans le respect du RGPD | |
+<!-- wb:end B7 -->
