@@ -60242,6 +60242,134 @@
       },
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
+    "B7.19a": {
+      "hash": "ad43733bec88ad53b0b415c67375ec741d2df73dc83240e58b4e4d5cd40a2f6a",
+      "kind": "str",
+      "mistakes": {
+        "cd6e046c6de37449d27dcb1256cdd9baab34799f617732b498f31987b636166b": "relis le tableau : la ligne POST /predict, 1 image, contre l'appel direct",
+        "e590f849521dd070fc54013c6035d61cf00dfed5742216e960adf967aa74d4a9": "relis le tableau : la ligne POST /predict, 1 image, contre l'appel direct"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.19b": {
+      "hash": "908090cd65efacf1bd63bdb9d2e9d9d1acc120950848c3a5910c509e1392837f",
+      "kind": "str",
+      "mistakes": {
+        "9dd1872bfe7f2aaf9625853c35afa02dbb41e0a545c5da2d481cfd68563e7eb3": "relis le tableau : le p95 de /predict_batch contre celui de /predict",
+        "e47edcc5f55d1d243b6c7162824a593ba7e35cddff6b86c8c086d5b0a93d6c39": "relis le tableau : le p95 de /predict_batch contre celui de /predict"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.21": {
+      "hash": "dd76a2fdb17b36bf47e7656774e22cfcacdecbfa0a3f27781949fa70ee40ef7e",
+      "kind": "bool",
+      "mistakes": {
+        "51c921221da64012890562a6f3def70f99a8f3b1b639a8bbf68a7a003558f017": "ton export s'écarte du modèle de plus de 1e-6 : la taille de batch est-elle libre, et le modèle en mode eval() quand tu l'exportes ?"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.22a": {
+      "hash": "b15908a9579fc4f1a22d8aa1318d1fe37faa6473494dd749da4ee08beacb5fca",
+      "kind": "str",
+      "mistakes": {
+        "0dae7d39cf7d207b8dbc1c89edd4ba0b69ededc89bfa95ba42c6e9a5d3dc563b": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "26e7c63eab58e1c20c1fc8982e9cf16f70cdd54583c07cb621d8950dae124bb9": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "4d9da79ccdae83c22e0420de38e62b5fb47915da70096006070faf7ed7e6a1e5": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "5b82d2f0b44241e26bdfcd69e7404399a897fb99b762f1ccee1e18a6ad016b54": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "827bc4b33ea3ef80d6d494c354f6fceaa1e78497b6a965741bed88843e34cdb9": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "828451b2a6d0077eef31a271fb46655bb085d6e37976fb6b2aee4752379bfb7f": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "927ff059a5a7a5ec1b72067cad49c09380da065b3134b9f5fa568f0c976fd362": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "ae4777a00c3c6c628035f21554a30b9441eb0d223d8bf9928570edd931758369": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "b303fc03b463a4cee43a292595e0a979ae74f38cc042efa396a4e1a0b13fcdea": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "b57754f63a22faa3e2fbe7bbd3d7be2d8afbcc7739a005aee96174895e73263d": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "cd63d8c42cec3b178acb40c0e41d4be5c73858e48658a23cf482542e1ad58214": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "d3c743f35295a9c5b2c141581e8f7e0f9f18143f1413aa3dfdb49a9698451f15": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "e08240e72f3376fd960082e38fa840b20bf4cb03771a4846663f7cd0b623811a": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25",
+        "e1af64f7902967e5e5a71d9ca050be3f4cb3d353328682908143e5e4339e788b": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI lum. et le seuil 0,25"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.22b": {
+      "hash": "70f540daee9ca5b03ee153daf12db23369a3e9ca81c6fbe73a9cd6af77e7ae8b",
+      "kind": "str",
+      "mistakes": {
+        "01cf7648e0607d41f357d19916f2c877d0de82f43b978ef8a92086f32a3f12e5": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "2266266ccc6d8b76a5f08a5c57dbb2c08fd84af5f7a7ae4889e33615b5fd82b8": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "2a3877fa2671811952bb395d6ce0b7fa1dc7b8daabe63602b148801f7a3357e2": "il manque au moins une fenêtre : relis la colonne KS p et le seuil 0,05",
+        "55e186aab47d5843800492717fe1634babe7f3908a9f3b9728f1b5423685fbc8": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "5ae910d8e70ef38ea47e92e3dcceaefa6fda2eda340a0d0524f4a8872a3c7a91": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "5fde81c1aa0a0b7a19a92fb31c5276cf46eeb691b2c3c038588f64bba22a6c09": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "80f9dfab0fd526869f8aff30cf5fc4d9676c14c47438608cf7d19f55fe8a8cc8": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "9b608737229a719d7369b34bf703504fda92b18e214f1726e731ec80fab5ec25": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "9f3a8d7e182e05885bb5dbc2a85d60900d47058f05bd40e80ad8b010df44cf57": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "b14d5cbe2d98114944fa75a6b10fa7f93c86b329246798a6d653b30eb4414558": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "bd2a9eac535f5ce2aaca7da5def1997a1663da9c6ee14aa41b9041603d396b2e": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "d59a5b85e7b92dd1a1f00842f54d4dbd6f1d71afa930e96a0615e2d8df1972be": "il manque au moins une fenêtre : relis la colonne KS p et le seuil 0,05",
+        "e868744caba1369d0a22b2bc7475ba94d8f55397bf2a20ef7f67cba98b20724c": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05",
+        "eb42001422f612b4f37227d642a3e8108c981b6b4f283a7f2307c1c67c950875": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne KS p et le seuil 0,05"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.22c": {
+      "hash": "6e4d83de9c847573fb550a39144ca199a0722a94783dd279a7bbe936ab1315d1",
+      "kind": "str",
+      "mistakes": {
+        "002db5906f09fdaa898a426de1fd7d1c5aa4e05e1922d8f157f3b05e7277fc27": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "007fc4c7a41c17ebd78fd6ededfec40d339c1024f75a828e91795256f35b4cd5": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "2bb651c892e54e5bb34aa8e182c2d7a0061b20b4eb88178f4fa1e772b4819f4d": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "346fd390019776a764f0ee6ae3e3d27a0220d94fe21dff197efe8dbe0ad79391": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "394fd7ab08786e723e0ab6fc59b97b30ee66799323a13cb1184cd6f104596e15": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "39790f2d635ade42c87f8c2a12cf9de910c2a17407f6b72cb501f3fad83f7216": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "6ded4157a83f11c17489dcef686a84784ddde782c8895aa854254b0ca10acd0b": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "6fbd440089a86cc4d593924cd1ffa411c015c957a3a804884100c87bb35462bc": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "78af865fc394cfd3da5a7e94a18e452830dcc9565f7ef5566119d9ceaa944b77": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "917808697096c6185479bc5a9d2b24bd2d028ed4bdf5d71a0bb251d46fd9301c": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "a7eedf9fd9a28c923b0da3b2f62c5847aa7f77364294961342474557c7cb030b": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "add70a8daf119f02acb764a22d1437f4c1d6588bfb05d5c9b7c6b9e7cd5cf5cf": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "b468c0ff5744ceeeb962848210e11261e5206f380a334829a885ec47f627082d": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne PSI classes et le seuil 0,25",
+        "fc2618f552b512fe103fcea2f66451e58cc62f05344c507f19c7c1f2363770ae": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne PSI classes et le seuil 0,25"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.22d": {
+      "hash": "e63c4f94b2d41f7350684255eab7549c7ce4d4a70e239de73b18e6522a88296a",
+      "kind": "str",
+      "mistakes": {
+        "02f1faf608f270d296d3f85f60a74610964d1f4f2a42a5d6ecdfcda8eb1e5b7b": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "304084426ecf5639f8acd145c8219599f60d034041b829608607f1c14016edb0": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "3957baab4d522ff11662c7c083f4beecbcf2e5f285da91b214e954027624ff33": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "3dd3290edfcea03976f389841f3108f87d6f9643d8c1c5ba5d61f3057e87b020": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "66123765d7c6b7efe1f47a6bd059bc0aaef3139a8e45bff186157ec198f90fdd": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "8dd43d9d889bc20625b7a64c7a8763b6c1662b0c1c2aab0a3316e2bd05806c0d": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "9845b2bbdce85398a6fdd7a4a6028d5a1e32db2dfed3a49271165bc58fa20b2c": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "9b0896f20c8300d766690b54da2860ec512e88a074ff83affdfe7b3269a69dbd": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "9d64ddc5e0137fcb78df94d3ec459120a133f01bee8029d43663d3a19f68f03b": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "c1d14c7cbccca9dc062127d41402c9d04547a5f96cf45df4f83b5d434f13cafb": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "c5b86618895d154bb38f60c97d1c122d7b0d0d7c2badd2208a62482811565c47": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "e42526b4e3805a8a5299af399aa45a2620240ff1876ef3906430bf3a450f9dc5": "il manque au moins une fenêtre, et une autre n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "f57a027d1decc08065389a9bdd8a5a15fb43230197dee1edf7bd5f4af5f1a09f": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence",
+        "ffaaa91a6d936a2cad310c7320a917242b13f4385ef88cb2c52cfcc83f8fe3f5": "au moins une des fenêtres choisies n'a pas sa place : relis la colonne accuracy, comparée à celle de la référence"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.22e": {
+      "decimals": 2,
+      "hash": "45f484c23f1468e9c2d1017ee2670eff78c38be5bd41142d4ffe5fd954023498",
+      "hash_coarse": "18b86d49338e617694aba67126a6c84e06c814323c1f5f4a31d15270969d18ba",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "009cd1884a620f02a8b92472fab395063b0f9ba3595d8d7fa9ff294f2527003c": "relis la question : la fenêtre D, colonne PSI lum.",
+        "b0a82722496532f4dd5e4c794a8b52ecee8994490d0591756af8edf228f00456": "relis la question : le PSI de la luminosité, pas celui des classes",
+        "bba2b02309b7892ad7cb9c5f68530a015a1be84851a73b0ceab7b1885e75faec": "relis la question : la fenêtre D, colonne PSI lum.",
+        "cddf8426f8b9b71c35b58cc01f6c2ed443e17b1b70c63625ef7a7cc154315cad": "relis la question : la fenêtre D, colonne PSI lum.",
+        "f18570a973c306f8105e497a3237b3694d8ceffa01769b1540aad22dc9d961bb": "relis la question : le PSI, pas la statistique D du test KS"
+      },
+      "sign": 1,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
     "B7.Q1a": {
       "hash": "c60b08e131923f38ef20943d6b7a1b80374e12ff8cc80644acb9d63e54cc97d1",
       "kind": "int",

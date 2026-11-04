@@ -92,16 +92,18 @@ with checked("B7.22"):
     cases_22 = {"la référence contre elle-même": (np.linspace(0, 1, 101), np.linspace(0, 1, 101)),
                 "des valeurs tirées ailleurs": (np.random.default_rng(0).normal(0, 1, 400), np.random.default_rng(1).normal(0.5, 1, 300)),
                 "tout dans un intervalle (des parts nulles)": (np.random.default_rng(2).uniform(0, 1, 200), np.full(50, 0.99)),
-                "des valeurs égales aux coupures": (np.repeat(np.arange(5.0), 2), np.full(10, 2.0))}
+                "des valeurs égales aux coupures": (np.arange(11.0), np.full(20, 10.0))}
     ok_p_22 = True
     for label_22, (r_22, p_22) in cases_22.items():
-        got_22, want_22 = psi_22(r_22, p_22), oracle_psi_22(r_22, p_22)
+        with np.errstate(divide="ignore", invalid="ignore"):         # a log(0) of your code: the value says it
+            got_22, want_22 = psi_22(r_22, p_22), oracle_psi_22(r_22, p_22)
         good_22 = type(got_22) is float and abs(got_22 - want_22) <= 1e-9 * max(1, abs(want_22))
         ok_p_22 &= good_22
         verdict("B7.22", good_22, f"psi_22, {label_22} : {fr(want_22, 4)}.",
                 f"psi_22, {label_22} : attendu le float {want_22:.6f}, reçu {got_22!r} (coupures aux déciles de la "
                 "référence, une valeur égale à une coupure va dans l'intervalle au-dessus, eps ajouté à chaque part).")
-    got_c_22 = psi_classes_22(np.arange(100) % 10, np.r_[np.zeros(40, int), np.arange(60) % 6])
+    with np.errstate(divide="ignore", invalid="ignore"):
+        got_c_22 = psi_classes_22(np.arange(100) % 10, np.r_[np.zeros(40, int), np.arange(60) % 6])
     q_c_22 = np.full(10, 0.1) + 1e-4
     p_c_22 = np.bincount(np.r_[np.zeros(40, int), np.arange(60) % 6], minlength=10) / 100 + 1e-4
     want_c_22 = float(((p_c_22 - q_c_22) * np.log(p_c_22 / q_c_22)).sum())

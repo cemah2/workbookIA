@@ -205,14 +205,17 @@ def l19() -> dict:
                 print("l19", {k: round(v, 2) if isinstance(v, float) else v for k, v in row.items()}, flush=True)
     torch.set_num_threads(keep)
     cat = lambda r, lo, hi: "A" if r < lo else "B" if r <= hi else "C"
-    answers = {(cat(r["a"], 2, 20), cat(r["b"], 3, 32)) for r in rows}
+    one = [r for r in rows if r["threads"] == 1]               # the protocol of the notebook: one thread
+    answers = {(cat(r["a"], 2, 20), cat(r["b"], 3, 32)) for r in one}
     if len(answers) != 1:
         raise SystemExit(f"l19: the categories change from one run to another: {answers}")
     a, b = answers.pop()
-    pick = lambda key: [round(min(r[key] for r in rows), 2), round(max(r[key] for r in rows), 2)]
-    return {"answers": {"a": a, "b": b}, "rows": rows, "ranges": {k: pick(k) for k in ("a", "b", "gain", "direct_p50",
-            "direct_p95", "one_p50", "one_p95", "batch_p50", "batch_p95")},
-            "direct_p50_default": float(np.median([r["direct_p50"] for r in rows if r["threads"] == 2]))}
+    pick = lambda key, rs: [round(min(r[key] for r in rs), 2), round(max(r[key] for r in rs), 2)]
+    keys = ("a", "b", "gain", "direct_p50", "direct_p95", "one_p50", "one_p95", "batch_p50", "batch_p95")
+    return {"answers": {"a": a, "b": b}, "rows": rows, "ranges": {k: pick(k, one) for k in keys},
+            "ranges_fastapi": {k: pick(k, [r for r in one if r["backend"] == "fastapi"]) for k in keys},
+            "ranges_two_threads": {k: pick(k, [r for r in rows if r["threads"] == 2]) for k in keys},
+            "direct_p50_default": float(np.median([r["direct_p50"] for r in one]))}
 
 
 def d22() -> dict:

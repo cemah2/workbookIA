@@ -1147,8 +1147,21 @@ def review_workflow(text: str, project: str | Path | None = None) -> list[Review
     add("failures", not swallowed, "aucune erreur avalée (pas de || true ni de continue-on-error).",
         f"l'étape {swallowed[0] + 1 if swallowed else ''} avale son échec (|| true ou continue-on-error) : une "
         "intégration continue qui ne peut pas échouer ne vérifie rien")
-    clear = [m.group(0) for s in steps for m in re.finditer(r"([A-Za-z_]*(?:TOKEN|SECRET|PASSWORD|API_?KEY)[A-Za-z_]*)\s*[:=]\s*([^\s$'\"{][^\s]*)",
-                                                         json.dumps(s, ensure_ascii=False).replace('\\"', '"'))]
+    clear = []
+
+    def walk(node):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if isinstance(value, (str, int, float)) and SECRET_WORDS.search(str(key)) and "${{" not in str(value):
+                    clear.append(f"{key}: {value}")
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+        elif isinstance(node, str):
+            clear.extend(m.group(0) for m in re.finditer(r"\b\w*(?:TOKEN|SECRET|PASSWORD|API_?KEY)\w*=(?!\$)\S+", node))
+
+    walk(doc)
     add("secrets", not clear, "aucun secret écrit en clair (un secret passe par ${{ secrets.NOM }}).",
         f"un secret semble écrit en clair ({clear[0][:40] if clear else ''}) : il passe par ${{{{ secrets.NOM }}}}")
     bad = [(k, msg) for k, t in runs if (msg := _bash_syntax(t))]
@@ -1307,13 +1320,18 @@ def review_dockerfile(dockerfile: str, dockerignore: str, requirements: str,
         "conteneur lancé en root donne ses droits à qui exploite une faille de l'API")
     exposed = [ins[i][1].split("/")[0].strip() for i in where("EXPOSE")]
     command = _exec_form(ins[cmd[-1]][1]) if cmd else None
+    import shlex
+    try:                                                   # the words of CMD, exec form or shell form
+        words = command if command is not None else (shlex.split(ins[cmd[-1]][1]) if cmd else [])
+    except ValueError:
+        words = []
     port = None
-    if command and "--port" in command and command.index("--port") + 1 < len(command):
-        port = command[command.index("--port") + 1]
+    if "--port" in words and words.index("--port") + 1 < len(words):
+        port = words[words.index("--port") + 1]
     add("cmd", command is not None, f"CMD en forme exec : {command}.",
         f"attendu CMD en forme exec, une liste JSON (CMD [\"python\", \"-m\", ...]) : en forme shell, le serveur ne "
         f"reçoit pas les signaux d'arrêt ; reçu {ins[cmd[-1]][1] if cmd else 'aucun CMD'}")
-    add("host", command is not None and "0.0.0.0" in command, "le serveur écoute 0.0.0.0 (joignable hors du conteneur).",
+    add("host", "0.0.0.0" in words, "le serveur écoute 0.0.0.0 (joignable hors du conteneur).",
         "attendu --host 0.0.0.0 dans CMD : un serveur qui n'écoute que 127.0.0.1 est injoignable hors du conteneur")
     add("port", exposed and port is not None and port in exposed, f"EXPOSE {exposed[0] if exposed else ''} et --port "
         f"{port} : le même port.", f"attendu EXPOSE <port> et --port <le même> dans CMD (EXPOSE {exposed or 'absent'}, "

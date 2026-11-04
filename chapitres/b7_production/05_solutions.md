@@ -335,4 +335,174 @@ Chaque test pose un cas dont la réponse se connaît sans le code : une image co
 **Erreurs fréquentes** : corriger le plantage par `model.double()` (le service tourne, deux fois plus lent, et en d'autres nombres que l'entraînement : le point 1 le refuse) ; inverser les canaux sans diviser par 255, ou l'inverse ; recopier dans le service la liste `CLASSES` au lieu de la lire dans l'artefact (le premier modèle entraîné dans un autre ordre la contredit : c'est la seconde moitié du point 5) ; appeler `model.eval()` dans `predict_16` seulement (le modèle que rend `load_service_16` n'est pas prêt à prédire) ; juger la réparation sur l'accuracy d'un batch de 200 images (elle laisse passer deux écarts).
 **Variante** : le test de non-régression du point 5, en trois lignes réutilisables dans une intégration continue : `names = predict(model, meta, paths)`, `want = [noms de l'évaluation hors ligne]`, `assert names == want, f"expected the offline names, {sum(a != b for a, b in zip(names, want))} differ"` ; sur le service du collègue tel quel, il échouait avant même de comparer (le plantage), puis, le seul float64 corrigé, sur 183 images sur 200 (17 noms justes).
 
-*Les solutions des exercices B7.17 à B7.25 (la fin du service et l'exploitation) seront ajoutées à la prochaine session de génération, avec le notebook.*
+### Ex B7.17 — L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/artifact.py`, et dans `cli.py` l'appel `save_artifact(out, ...)` qui remplace l'écriture des seuls poids ; les neuf vérifications passent. L'artefact du VGG du MP5 tient en deux fichiers : `model.safetensors` (296 504 octets : les 38 tenseurs du `state_dict`, buffers des batchnorms compris, et un en-tête qui porte maintenant `package_version`) et `meta.json` (872 octets). Un processus neuf le recharge et rend, pour les 200 images de test, les noms du notebook et ses probabilités à $10^{-5}$ près.
+**Démarche** :
+```python
+def save_artifact(folder, model, *, arch, widths, mean, std, classes, data, metrics=None) -> Path:
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    state = {k: v.detach().cpu().contiguous() for k, v in model.state_dict().items()}
+    save_file(state, str(folder / WEIGHTS), metadata={"package_version": __version__})
+    meta = {"package_version": __version__, "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "arch": str(arch), "widths": [int(w) for w in widths], "input": dict(INPUT),
+            "mean": [float(m) for m in mean], "std": [float(s) for s in std], "classes": [str(c) for c in classes],
+            "data": dict(data), "metrics": dict(metrics or {}), "torch": torch.__version__,
+            "python": platform.python_version(), "weights_sha256": file_sha256(folder / WEIGHTS)}
+    (folder / META).write_text(json.dumps(meta, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return folder
+```
+L'artefact répond aux trois questions qu'un service se pose : **comment reconstruire** le modèle (`arch`, `widths`, les poids), **comment préparer** une image (`input`, `mean`, `std` appris sur l'entraînement), **comment nommer** une sortie (`classes`, dans l'ordre des sorties). Il répond aussi à celles de la personne qui le relit six mois plus tard : quel code (`package_version`), quelles bibliothèques (`torch`, `python`), quelles données (`data`, l'empreinte des images **et** des labels, celle du journal de B7.14), quels poids (`weights_sha256`). `load_artifact` vérifie cette dernière avant de charger : un fichier de poids remplacé à la main, ou corrompu, est refusé au lieu de servir en silence un autre modèle. `predict_images` passe par `preprocess`, la fonction de l'entraînement : il n'y a plus deux chaînes de préparation, donc plus de training-serving skew possible sur ce point. Des cinq écarts de B7.16, l'artefact en supprime trois (la normalisation recalculée, l'ordre des classes, `eval()` oublié, désormais dans `load_artifact`) ; la lecture d'une image en BGR et le float64 restent possibles dans le code qui lit le fichier envoyé, d'où l'API de B7.18, qui reçoit des pixels RGB déjà décodés, et le test de non-régression. La fiche modèle du ch. 23 (ou de 🛠️ B6.28) va à côté de ce dossier, dans le dépôt (`MODEL_CARD.md`), et cite son `weights_sha256`.
+**Erreurs fréquentes** : `model.eval()` oublié dans `load_artifact` (dans un processus neuf, le VGG ne donne plus que 187 noms du notebook sur 200, et une image seule change de classe : la batchnorm normalise par les statistiques du batch) ; les classes recopiées de la constante du paquet au lieu de celles reçues (un modèle aux sorties dans un autre ordre ne reçoit plus aucun bon nom) ; l'empreinte des poids calculée **avant** l'écriture du fichier, ou jamais vérifiée ; `datetime.now()` sans fuseau ; des tuples ou des `np.float64` dans `meta.json` (`json.dumps` refuse les seconds) ; des métadonnées safetensors qui ne sont pas des chaînes (`{"version": 1}` lève une `TypeError`, 🧠 Q8 c).
+**Variante** : l'artefact de `cifarprod train --set n_train=200` (le CNN 16-32 de la partie A) pèse 102 784 octets de poids et 793 octets de `meta.json` ; `torch.load` d'un `state_dict` sauvé par `torch.save` le relirait aussi, mais `weights_only=True` est alors indispensable (🔁 R2), alors que safetensors ne contient que des tenseurs.
+
+### Ex B7.18 — Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/serve.py` ; les seize vérifications passent, et les deux serveurs donnent les mêmes réponses : les noms du notebook sur 8 images et un batch de 32, 422 sans l'entrée pour les huit requêtes mal formées, 500 `{"detail": "internal error"}` pour un modèle qui plante, et un serveur arrêté, port libéré, même après une erreur dans le bloc de `running`.
+**Démarche** :
+```python
+    @app.exception_handler(RequestValidationError)
+    async def invalid(request: Request, exc: RequestValidationError):
+        return JSONResponse(status_code=422, content={"detail": errors_without_input(exc.errors())})
+
+    @app.post("/predict")
+    def predict(image: Image):
+        try:
+            answer = app.state.service.predict([image.pixels])[0]
+        except Exception:                                  # noqa: BLE001 - logged, a clean 500 for the client
+            log.exception("prediction failed")
+            return JSONResponse(status_code=500, content={"detail": "internal error"})
+        return {**answer, "model_version": app.state.service.version}
+```
+Le service sépare trois rôles. **Valider** : `Image` et `Batch` refusent avant tout calcul ce qui n'est pas une image 32 × 32 × 3 d'entiers de 0 à 255 ; le modèle n'a pas à se méfier de ses entrées, et la même définition sert aux deux serveurs. **Prédire** : `Service` charge l'artefact une seule fois et ne connaît pas HTTP. **Transporter** : FastAPI d'un côté, `BaseHTTPRequestHandler` de l'autre, qui ne font que lire, appeler `Service` et répondre. Par défaut, FastAPI renvoie dans un 422 l'entrée refusée : pour une image de 28 × 28, une réponse de 6 481 octets qui contient tous les pixels envoyés ; avec le gestionnaire ci-dessus, 124 octets, le message et l'emplacement seulement (⚖️ B7.7 : une image envoyée peut montrer une personne). Une erreur interne donne un 500 sans trace (la trace va dans le journal du serveur, pas au client, qui n'a pas à connaître ton code). `running` porte la leçon de la fiche : tout ce qui démarre un serveur l'arrête dans un `finally` ; sinon, la cellule réexécutée trouve son port déjà pris et le thread de l'ancien serveur tourne encore. `protocol_version = "HTTP/1.1"` garde la connexion ouverte d'une requête à l'autre ; `disable_nagle_algorithm` évite qu'en-têtes et corps, écrits séparément, attendent 40 ms l'accusé de réception du client (mesuré : 48 ms par requête sans lui, 6 ms avec).
+**Erreurs fréquentes** : le 422 par défaut de FastAPI (l'entrée renvoyée telle quelle) ; une exception du modèle non rattrapée (le client reçoit `Internal Server Error` en texte, pas en JSON, et aucune ligne de log ne dit pourquoi) ; `Batch` sans bornes (65 images acceptées, un batch vide qui plante dans `preprocess` : 500 au lieu de 422) ; `server.shutdown()` après le `yield` mais hors d'un `finally` (une erreur dans le bloc laisse le port ouvert) ; le modèle rechargé à chaque requête (dix fois plus lent) ; `main` qui rend 0 quand l'artefact manque (un orchestrateur croit le service démarré) ; une réponse HTTP/1.1 sans `Content-Length` (le client attend la fin d'une réponse qui ne vient pas).
+**Variante** : `uvicorn --factory cifarprod.serve:app_from_env` sert la même application, le dossier de l'artefact lu dans la variable `MODEL_DIR` : c'est la forme qu'attend un conteneur (B7.24), où l'on change de modèle sans reconstruire l'image ; la commande de B7.24 et celle-ci passent les mêmes quinze points de la relecture du Dockerfile.
+
+### Ex B7.19 — Prédire la latence p95 de l'API, requête par requête puis par batches de 32 🔮
+**Réponse** : a) **`"B"`** (de 2 à 20) ; b) **`"B"`** (de 3 à 32). Dans l'exécution de `05_solutions.ipynb`, sur un thread : appel direct d'une image, p50 0,87 ms et p95 1,25 ms ; `POST /predict`, p50 6,5 ms et p95 9,0 ms, soit **7,2** fois l'appel direct ; `POST /predict_batch` de 32 images, p50 81 ms et p95 102 ms, soit **11,3** fois une requête d'une image, pour 2,6 fois son débit. Sur douze exécutions (`history_chB7.py` : trois répétitions, FastAPI et `http.server`, un et deux threads), a) va de 3,5 à 12 et b) de 9,3 à 18 : les catégories ne changent jamais.
+**Démarche** : a) une requête d'une image fait bien plus qu'appeler le modèle : le client écrit 3 072 entiers en JSON, le serveur les lit, pydantic valide trois niveaux de listes imbriquées, NumPy les convertit, puis la réponse fait le chemin inverse, et la boucle HTTP ajoute ses en-têtes. Ces étapes, en Python, coûtent plusieurs fois l'appel du VGG (≈ 1 ms) : la requête vaut quelques appels du modèle, pas un seul (A est faux) ; le modèle reste une part réelle de la requête (C est faux). b) Dans un batch de 32, ce qui est **par requête** (la connexion, le routage, les en-têtes) ne se paie qu'une fois ; ce qui est **par image** (le JSON, la validation) se paie 32 fois ; le modèle, lui, traite 32 images en ≈ 18 ms au lieu de 32 × 0,9. La requête de 32 images coûte donc une dizaine de fois celle d'une image, ni à peine plus (A), ni plus que 32 requêtes (C). Le débit ne gagne que 2 à 3 fois, et chaque image du batch attend les 31 autres : avec un objectif « 95 % des requêtes en moins de 100 ms », les requêtes d'une image le tiennent largement (9 ms), le batch de 32 tout juste (≈ 100 ms au p95, plus de 100 ms dans certaines exécutions). Le regroupement dynamique (207.7) ne sert que si les requêtes arrivent nombreuses en même temps ; ici, réduire le JSON (des images encodées en PNG, ou en base64) ferait gagner davantage. Les nombres de ✏️ B7.3 étaient synthétiques : leur rapport des débits (5,6) n'est pas celui d'ici.
+**Erreurs fréquentes** : croire que le HTTP ne coûte rien face à un réseau de neurones (vrai pour un gros modèle sur GPU, faux pour un petit CNN sur CPU) ; prédire qu'un batch de 32 coûte 32 fois une image (le modèle amortit ses coûts fixes) ou presque rien de plus (le JSON croît avec le nombre d'images) ; comparer des moyennes au lieu des p95 ; mesurer sans appels à blanc ; mesurer le seul serveur et oublier le client, alors que l'utilisateur attend aussi l'écriture et la lecture du JSON.
+**Variante** : avec le repli `http.server` au lieu de FastAPI (un thread), a) va de 3,5 à 6,0 et b) de 14,7 à 17,8 sur trois exécutions : mêmes catégories ; `http.server` est un peu plus rapide pour une image (pas de couche ASGI), mais son JSON de 32 images n'est pas plus rapide à lire.
+
+### Ex B7.20 — Accélérer l'inférence sur CPU : batches, threads, inference_mode, bfloat16, quantification 🔬
+**Réponse** : les quatre fonctions de la solution ; les vérifications passent. Dans l'exécution de `05_solutions.ipynb` (2 cœurs, p50 en ms ; une autre exécution donne des nombres voisins, les rapports tiennent) :
+
+| Batch | float32, 2 threads | no_grad | autograd actif | 1 thread | bfloat16 | int8 dynamique |
+|---|---|---|---|---|---|---|
+| 1 | 1,8 | 2,5 | 2,6 | **0,9** | 3,4 | 2,1 |
+| 32 | 16,9 | | | 18,3 | 21,1 | 17,6 |
+
+Sur 1 000 images de test : accuracy 0,848 en float32 et en bfloat16, 0,846 en int8 dynamique ; accord des décisions avec le float32 : 99,5 % (5 images sur 1 000) et 99,8 % (2 images), écarts maximaux des logits 0,10 et 0,09.
+**Démarche** :
+```python
+def bfloat16_20(model):
+    low = copy.deepcopy(model).to(torch.bfloat16)
+    return lambda x: low(x.to(torch.bfloat16)).float()
+```
+**Le batch** est le seul levier qui multiplie le débit (≈ 550 images par seconde à batch 1, ≈ 1 900 à batch 32). **Les threads** : pour une image, deux threads sont plus lents qu'un seul (0,9 contre 1,8 ms) : le travail est trop petit pour être partagé, et réveiller un second thread coûte plus qu'il ne rapporte ; à batch 32, le second thread gagne un peu. **L'autograd** : `inference_mode` gagne 0,2 à 0,8 ms par appel (selon l'exécution) sur `no_grad` et l'autograd actif, parce qu'il ne garde rien pour une passe arrière ; sur un gros modèle, c'est surtout de la mémoire gagnée. **Le bfloat16 ralentit** : ce processeur n'a pas d'instructions de calcul en 16 bits pour ces convolutions, PyTorch convertit et reconvertit ; sur un processeur qui en a (AMX des Xeon récents) ou un GPU, ce serait l'inverse. **La quantification dynamique ne change presque rien** : elle ne touche que la couche dense, 0,9 % des paramètres du VGG (✏️ B7.1 j) ; les convolutions, qui font tout le calcul, restent en float32. Les décisions changent à peine (5 et 2 images sur 1 000), mais elles changent : on vérifie l'accord sur des données réelles avant de livrer. Pour un service qui reçoit une image à la fois : un thread par processus, `inference_mode`, et plusieurs processus ; pour des prédictions par batches de nuit : de grands batches et tous les threads.
+**Erreurs fréquentes** : mesurer les premiers appels (le premier appel en bfloat16 ou int8 coûte plusieurs fois les suivants) ; `model.to(torch.bfloat16)` sans copie (le modèle d'origine passe en bfloat16 et tout ce qui suit change) ; `quantize_dynamic(..., inplace=True)` sur le modèle reçu ; conclure d'une seule exécution sur des écarts de 10 % (deux exécutions de la même ligne en diffèrent souvent autant) ; juger la quantification à la taille du fichier sans mesurer la vitesse ni les décisions.
+**Variante** : `torch.autocast("cpu", dtype=torch.bfloat16)` au lieu de convertir le modèle ne passe en 16 bits que les opérations qui le supportent : sur les mêmes 1 000 images, 99,5 % des décisions identiques, écart maximal des logits 0,081, accuracy 0,851 ; sur ce CPU, il ne va pas plus vite que le float32.
+
+### Ex B7.21 — Exporter avec torch.export et vérifier l'équivalence numérique (ONNX en option) 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/export.py` ; `wb.check` : **`True`**. L'export du VGG pèse 386 213 octets (contre 296 504 pour les poids seuls) ; rechargé dans un processus qui ne peut pas importer `cifarprod`, il donne **exactement** les logits du modèle (écart 0,0) pour des batches de 1, 7 et 64 images, et ses gardes refusent un batch de 1 025 images et une image de 28 × 28 (« Guard failed: input.size()[2] == 32 »).
+**Démarche** :
+```python
+def export_model(model, path, max_batch: int = 1024) -> Path:
+    model.eval()
+    batch = torch.export.Dim("batch", min=1, max=int(max_batch))
+    program = torch.export.export(model, (torch.zeros(2, 3, 32, 32),), dynamic_shapes={"input": {0: batch}})
+    torch.export.save(program, str(path))
+    return Path(path)
+```
+L'écart est nul parce que l'export ne recalcule rien autrement : il enregistre les mêmes opérations ATen, avec les mêmes poids, que le modèle appelle lui-même ; à taille de batch égale, les noyaux de calcul sont les mêmes. (Comparés à des tailles de batch **différentes**, le modèle sur 64 images et l'export sur 1, les nombres diffèrent de l'ordre de $10^{-6}$ : un autre batch choisit parfois un autre ordre de calcul.) Le `.pt2` contient le graphe en plus des poids, d'où ses 90 Ko de plus. Le mode compte : exporté en mode entraînement, ce VGG garde des batchnorms qui normalisent par les statistiques de chaque batch, et l'écart avec le modèle en `eval()` monte à 2,9 ; d'où `model.eval()` au début d'`export_model`, même si l'appelant l'a oublié. L'exemple a 2 images : `torch.export` traite à part une dimension de taille 1 (il la fige), et la dimension de batch ne serait plus libre. On choisirait ONNX quand le service ne doit pas dépendre de PyTorch du tout (ONNX Runtime en C++, sur un téléphone, dans un navigateur) ; `torch.export` suffit quand le service a PyTorch mais pas ton code.
+**Erreurs fréquentes** : l'export sans `dynamic_shapes` (la taille du batch d'exemple est figée : le batch de 1 échoue, « Guard failed: input.size()[0] == 2 ») ; un exemple d'une seule image (la dimension de batch devient une constante) ; l'export en mode entraînement ; comparer le modèle et l'export sur des batches de tailles différentes, puis s'étonner d'un écart de $10^{-6}$ ; vérifier l'équivalence sur les données qui ont servi d'exemple (rien ne dit alors que le graphe généralise) ; recharger le `.pt2` dans le même processus que le modèle (on ne prouve pas qu'il se passe de ton code).
+**Variante** : sans `dynamic_shapes`, l'export (batch figé à 2) pèse 384 276 octets, et refuse 1 image comme 7 : un service qui reçoit une image à la fois tomberait à la première requête ; c'est pourquoi la vérification essaie trois tailles de batch.
+
+### Ex B7.22 — Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ? 📈
+**Réponse** : a) **`"B"`** ; b) **`"BD"`** ; c) **`"C"`** ; d) **`"C"`** ; e) **0,16**. Le tableau (500 images par fenêtre, référence : accuracy 0,864) :
+
+| Fenêtre | PSI lum. | KS D | KS p | PSI classes | confiance | accuracy |
+|---|---|---|---|---|---|---|
+| A (telles quelles) | 0,043 | 0,056 | 0,41 | 0,030 | 0,793 | 0,832 |
+| B (× 0,6) | 3,745 | 0,684 | $8 \times 10^{-112}$ | 0,033 | 0,740 | 0,802 |
+| C (bruit, σ = 25) | 0,054 | 0,062 | 0,29 | 1,340 | 0,525 | 0,356 |
+| D (× 0,9) | 0,156 | 0,170 | $10^{-6}$ | 0,026 | 0,790 | 0,832 |
+
+**Démarche** :
+```python
+def psi_22(ref, prod, bins=10, eps=1e-4):
+    cuts = np.quantile(ref, np.arange(1, bins) / bins)
+    q = np.bincount(np.searchsorted(cuts, ref, side="right"), minlength=bins) / len(ref) + eps
+    p = np.bincount(np.searchsorted(cuts, prod, side="right"), minlength=bins) / len(prod) + eps
+    return float(np.sum((p - q) * np.log(p / q)))
+```
+Chaque fenêtre raconte une autre histoire. **A** : d'autres images de la même source ; PSI 0,04, KS non significatif, rien à signaler : c'est le bruit d'échantillonnage d'un PSI sur 500 images, qu'il faut connaître avant de fixer un seuil. **B** : les entrées changent énormément (PSI 3,7), mais les classes prédites presque pas, et l'accuracy perd 3 points : la normalisation par canal et les convolutions rendent ce VGG peu sensible à un éclairage uniforme. Alerte sur les entrées, oui, mais pour **vérifier la chaîne d'acquisition** (une caméra mal réglée ?), pas pour réentraîner. **C** : la luminosité moyenne ne bouge pas (le bruit est centré), donc ni le PSI ni le KS des entrées ne voient rien ; mais les classes prédites changent complètement (PSI 1,34), la confiance chute, et l'accuracy tombe à 0,36 : c'est la fenêtre qui **nuit**, et seule la surveillance des **sorties** la voit. Il faut alerter, revenir en arrière ou bloquer la source, puis réentraîner avec du bruit. **D** : un « petit changement » au sens de Lewis (PSI 0,16), sans effet sur les sorties ni sur l'accuracy ; le KS le déclare pourtant très significatif ($p = 10^{-6}$) : avec 500 images, un décalage de la luminosité de 10 % se détecte sans peine, et avec 50 000 images par fenêtre, la p-valeur serait encore bien plus petite pour le même écart. Une p-valeur mesure la **certitude** d'un écart, pas sa **gravité** (207.10) : on surveille D de plus près, on n'agit pas. La leçon de Rabanser et coll. se lit ici : surveiller les sorties du modèle (classes prédites, confiance) attrape ce qui nuit, quelle que soit la variable d'entrée qui a changé.
+**Erreurs fréquentes** : une valeur égale à une coupure envoyée en dessous (`searchsorted` par défaut, `side="left"`) ; $\varepsilon$ ajouté aux seules parts de la production (une part nulle de la référence donne un PSI infini) ; des coupures recalculées sur la production ; les quartiles de ✏️ B7.4 au lieu des déciles ; `np.bincount` sans `minlength` (une classe absente décale tout) ; alerter sur toute p-valeur sous 0,05 (D) ; conclure de B qu'une grosse dérive des entrées nuit forcément ; ne surveiller que les entrées (C passe).
+**Variante** : avec les deux moitiés du test échangées (la référence devient la production), le PSI de la luminosité de D vaut 0,246, tout près du seuil de 0,25, au lieu de 0,156 : un PSI dépend de l'échantillon, et un seuil appliqué à une seule fenêtre de 500 images bascule pour presque rien. Les autres réponses ne changent pas (B 4,3 ; C sous 0,04 ; classes prédites de C : 1,39).
+
+### Ex B7.23 — Intégration continue : un workflow GitHub Actions qui installe, teste et lance un entraînement fumée 🛠️
+**Réponse** : `solutions/b7_cifarprod/.github/workflows/ci.yml` ; les quatorze points de la relecture passent.
+**Démarche** :
+```yaml
+      - name: Install PyTorch (CPU index) and the package
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev,serve]"
+      - name: Tests
+        run: pytest -q
+      - name: Smoke training on synthetic data
+        run: |
+          python scripts/make_synthetic.py data/synthetic.npz
+          cifarprod train --config configs/smoke.yaml --set data=data/synthetic.npz --out runs/ci
+```
+Le workflow refait, sur une machine neuve, ce qu'un recruteur ferait en clonant le dépôt. L'ordre compte : torch d'abord, depuis l'index CPU, sinon `pip install -e .` résoudrait la dépendance `torch>=2.5` sur PyPI et téléchargerait la version CUDA (plus de 2 Go) ; puis le paquet et ses extras `dev` (pytest) et `serve` (les tests de l'API). Les tests ne lancent pas un vrai entraînement de bout en bout sur des données réelles : les données ne sont pas dans git (et ne doivent pas y être), d'où l'entraînement fumée sur 256 images synthétiques, qui vérifie que la commande, la configuration et l'écriture de l'artefact marchent ensemble, sans juger l'accuracy. `python-version: "3.13"` entre guillemets : sans eux, YAML lit `3.10` comme le nombre 3,1, et GitHub installerait Python 3.1. Compte quelques minutes par run, surtout le téléchargement de torch CPU (de l'ordre de 200 Mo) ; `cache: pip` le garde d'un run à l'autre. Sur GitHub, l'onglet Actions montre chaque run, et un badge « passing » sur le README dit en un coup d'œil que le dépôt s'installe et que ses tests passent.
+**Erreurs fréquentes** : `python-version: 3.10` sans guillemets ; `pip install torch` sans l'index CPU ; `pip install -e .` sans l'extra `dev` (pytest absent : `pytest: command not found`) ; `pytest -m "not slow"` en CI (l'entraînement fumée, marqué `slow`, ne tourne alors nulle part) ; `|| true` ou `continue-on-error: true` (une CI qui ne peut pas échouer ne vérifie rien) ; un entraînement sur `data/cifar10_2000.npz`, absent du clone ; un jeton écrit en clair dans `env:` au lieu de `${{ secrets.NOM }}` (il reste dans l'historique de git : il faut le révoquer).
+**Variante** : `strategy: matrix: python-version: ["3.12", "3.13"]` sous le job, et `python-version: ${{ matrix.python-version }}` dans l'étape setup-python, font tourner le même job deux fois, une par version : deux coches vertes ou rouges par commit, et une incompatibilité de version se voit avant tes utilisateurs.
+
+### Ex B7.24 — Lire et compléter un Dockerfile : image de base, dépendances CPU, utilisateur non root, variables 📦
+**Réponse** : `solutions/b7_cifarprod/Dockerfile`, `.dockerignore` et `requirements-serve.txt` ; les quinze points de la relecture passent. Le Dockerfile du collègue en manquait onze.
+**Démarche** :
+```dockerfile
+FROM python:3.13.18-slim-trixie
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    MODEL_DIR=/app/artifact
+WORKDIR /app
+COPY requirements-serve.txt .
+RUN pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu \
+    && pip install -r requirements-serve.txt
+COPY pyproject.toml .
+COPY src/ src/
+RUN pip install --no-deps .
+COPY artifact/ artifact/
+RUN groupadd --system app && useradd --system --no-log-init --gid app app
+USER app
+EXPOSE 8000
+CMD ["python", "-m", "cifarprod.serve", "--host", "0.0.0.0", "--port", "8000"]
+```
+Les lignes du collègue, et ce qu'elles auraient fait. `FROM python:latest` : une image qui change sous tes pieds (aujourd'hui Python 3.14, pas la 3.13 de ton code), et pas slim (plusieurs centaines de mégaoctets de plus). `ENV HF_TOKEN=...` : la clé reste lisible par quiconque a l'image (`docker history`) ; il faut la **révoquer** (elle a été écrite dans un fichier, peut-être commitée) et la passer au lancement (`docker run -e HF_TOKEN`, ou le gestionnaire de secrets de la plateforme). `COPY . .` en tête : chaque modification d'une ligne de code invalide la couche, et tout se réinstalle (plusieurs minutes) ; il copie aussi les données, `.git` et un éventuel `.env` si le `.dockerignore` ne les exclut pas. `pip install torch` sans index : la version CUDA, plusieurs gigaoctets, inutiles sur CPU. Pas de `USER` : le serveur tourne en root dans le conteneur. `CMD python -m cifarprod.serve` en forme shell : le processus principal est `/bin/sh`, qui ne transmet pas le signal d'arrêt de `docker stop` (le serveur est tué après 10 s au lieu de s'arrêter proprement), et sans `--host 0.0.0.0`, le serveur n'écoute que l'intérieur du conteneur. Sur ton PC, `127.0.0.1` est au contraire le bon choix : il n'expose pas ton API au réseau local.
+**Erreurs fréquentes** : `python:3.13-slim` (un tag qui bouge à chaque version corrective) ; `USER app` avant les `pip install` (l'utilisateur n'a pas le droit d'installer) ou avant `useradd` ; `ENV MODEL_DIR` qui ne désigne pas le dossier copié ; `requirements-serve.txt` sans versions, ou avec `torch` (pip le prendrait sur PyPI) ; `EXPOSE 8000` et `--port 8080` ; un `.dockerignore` oublié (le contexte de build envoie `data/` et ses mégaoctets à chaque build).
+**Variante** : `CMD ["uvicorn", "--factory", "cifarprod.serve:app_from_env", "--host", "0.0.0.0", "--port", "8000"]` lance uvicorn directement, l'artefact lu dans `MODEL_DIR` : la relecture passe aussi les quinze points ; avec plusieurs processus (`--workers 2`), chacun charge son propre modèle (≈ 0,3 Mo ici, plusieurs gigaoctets pour un grand modèle : la mémoire limite le nombre de processus).
+
+### Ex B7.25 — Défi : un dépôt prêt pour la production, de git clone à une prédiction servie en moins de 10 min de CPU 🏆
+**Réponse** : le dépôt de référence (`solutions/b7_cifarprod/` : `README.md`, `MODEL_CARD.md`, `scripts/demo.py`, `Makefile`, et tout ce que B7.9 à B7.24 ont construit). Cloné, installé, testé puis servi par sa démo en 12 à 14 s sur la machine de génération (installation éditable 0,6 s, `pytest` 4 à 6 s, démo 7 s ; trois exécutions, `history_chB7.py`), il obtient 10 sur 10 à la grille. Le titre du contrat tient avec une large marge : même en comptant ≈ 3 min pour télécharger PyTorch CPU sur une machine neuve, on reste sous 4 min.
+
+**La grille** (0, ½ ou 1 point par critère) :
+
+| # | Critère | ½ point | 1 point |
+|---|---|---|---|
+| 1 | installation sur un clone neuf | elle marche, mais demande un geste non écrit (un fichier à copier, une variable à définir) | `git clone`, torch CPU puis `pip install -e ".[dev,serve]"`, rien d'autre, écrit dans le README |
+| 2 | `make` ou script unique | une suite de commandes à taper dans l'ordre | une commande (`python scripts/demo.py`, `make demo`), code 0, de l'entraînement à une prédiction servie |
+| 3 | tests verts | ils passent, mais seulement avec les données ou sans les tests `slow` | `pytest -q` passe sur un clone neuf, sans les données (les tests qui en ont besoin sautent) |
+| 4 | intégration continue | un workflow qui installe et teste | installation (torch CPU), tests et entraînement fumée, sans erreur avalée (B7.23) |
+| 5 | configuration | des réglages dans un fichier, mais non validés | `configs/`, une configuration typée, validée, surchargeable (B7.11) |
+| 6 | artefact versionné | les poids et la normalisation | poids, architecture, normalisation, classes, version du paquet, empreintes des données et des poids, vérifiées au chargement (B7.17) |
+| 7 | API qui répond | `/predict` répond | `/health` et `/predict`, entrées validées (422 sans l'entrée), 500 propre, arrêt propre (B7.18) |
+| 8 | latence mesurée | un nombre sans protocole | p50 et p95 en ms, avec le protocole (appels à blanc, nombre de requêtes, machine) (B7.19) |
+| 9 | README | il dit quoi installer | ce que c'est, installer, tester, entraîner, servir, les résultats avec leur dispersion |
+| 10 | fiche modèle | quelques lignes | modèle, usage prévu et exclu, données, performances, limites mesurées (bruit, éclairage, B7.22) |
+
+**Démarche** : le défi assemble le chapitre ; la difficulté est de se mettre à la place d'une machine neuve. `scripts/demo.py` ne suppose rien de ce qui n'est pas commité : sans `data/cifar10_2000.npz`, il écrit des données synthétiques ; il lance l'entraînement par la ligne de commande (pas en important `train`), comme le ferait n'importe qui ; il sert l'API dans un thread, toujours arrêtée, et rend un résumé JSON en dernière ligne, qu'un script ou une CI sait lire. L'auto-contrôle ne note pas : il **clone** (seul ce qui est commité arrive), installe dans un environnement neuf, lance les tests et la démo, et montre un indice par critère. Ce qu'il ne voit pas : la clarté du README, la justesse de la fiche modèle (des limites inventées passeraient), un secret dans l'historique de git, et la vraie durée d'installation sur une machine sans cache. Du ML Test Score (207.6), le dépôt passe des tests d'infrastructure (entraînement reproductible, tests de l'API, retour arrière possible par l'artefact précédent) et de données (schéma vérifié) ; le premier test à ajouter serait une surveillance automatique (B7.22) branchée sur les journaux du service.
+**Erreurs fréquentes** : une démo qui lit `data/cifar10_2000.npz` (absent d'un clone : elle plante) ; des fichiers écrits mais pas commités (l'auto-contrôle ne les voit pas, une autre machine non plus) ; un serveur de démo jamais arrêté (la démo ne rend pas la main) ; un README qui recopie les commandes sans dire ce qu'elles font ni ce qu'on obtient ; des résultats sans leur dispersion ; une fiche modèle sans limites, ou avec des limites jamais mesurées.
+**Variante** : publié sur GitHub, le même dépôt montre son premier run dans l'onglet Actions quelques minutes après le push ; avec `make demo` comme étape finale du workflow, la CI vérifierait aussi le critère 2 à chaque commit (≈ 10 s de plus).

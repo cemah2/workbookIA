@@ -763,4 +763,250 @@ Pour le point 1 : `np.asarray(images, dtype=np.float64)` fait du prétraitement 
 
 </details>
 
-*Les indices des exercices B7.17 à B7.25 (la fin du service et l'exploitation) seront ajoutés à la prochaine session de génération, avec le notebook.*
+### Ex B7.17 — L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données 📦
+
+<details><summary>Indice 1</summary>
+
+Pose-toi la question de B7.16 à l'envers : un processus neuf, qui n'a ni le notebook ni ses variables, reçoit ce dossier ; que lui faut-il pour reconstruire le modèle, préparer une image exactement comme à l'entraînement, et nommer chaque sortie ? Tout ce qui n'est pas un tenseur va dans `meta.json` (les métadonnées de safetensors ne prennent que des chaînes). Et pour qu'un fichier de poids échangé ne passe pas en silence, `meta.json` garde son empreinte.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `save_artifact` : `Path(folder).mkdir(parents=True, exist_ok=True)` ; `save_file(model.state_dict(), str(folder / "model.safetensors"), metadata={"package_version": __version__})` ; puis le dictionnaire de `meta.json`, des types que JSON accepte (`list(widths)`, `[float(m) for m in mean]`, `list(classes)`), la date par `datetime.now(timezone.utc).isoformat(timespec="seconds")`, l'empreinte par `file_sha256` **après** l'écriture des poids ; `json.dumps(meta, indent=1)`.
+- `load_artifact` : lire `meta.json`, comparer `file_sha256(folder / "model.safetensors")` à `meta["weights_sha256"]` (une `ValueError` qui le dit), puis `build_model(meta["arch"], meta["widths"], len(meta["classes"]))`, `load_state_dict(load_file(...))`, `model.eval()`.
+- `predict_images` : `preprocess(np.asarray(images), meta["mean"], meta["std"])` (il accepte une image seule), `torch.softmax(model(x), dim=1)` sous `torch.inference_mode()`, `.numpy()` (float32), l'argmax ligne par ligne, puis `meta["classes"][k]`.
+- Dans `cli.py`, l'entrée `data` du journal (`record["data"]`) est déjà le dictionnaire voulu pour `data`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def save_artifact(folder, model, *, arch, widths, mean, std, classes, data, metrics=None):
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    save_file(model.state_dict(), str(folder / "model.safetensors"), metadata={"package_version": __version__})
+    meta = {...}                                    # the keys of the docstring, JSON types only
+    meta["weights_sha256"] = file_sha256(folder / "model.safetensors")
+    ...                                             # write meta.json, return the folder
+```
+
+</details>
+
+### Ex B7.18 — Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées 📦
+
+<details><summary>Indice 1</summary>
+
+Sépare trois choses : **valider** (les modèles pydantic, partagés), **prédire** (`Service`, qui ne connaît ni HTTP ni FastAPI), **transporter** (FastAPI d'un côté, `BaseHTTPRequestHandler` de l'autre, chacun ne fait que lire la requête, appeler `Service` et écrire la réponse). Les deux serveurs donnent alors les mêmes réponses par construction. Pour `running`, relis le squelette de la fiche (207.7) : tout ce qui démarre un serveur a un `finally` qui l'arrête.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `Image` : le modèle de la fiche ; `Batch` : un `field_validator("images")` qui vérifie la longueur (1 à 64) et chaque image avec la même fonction que `Image`.
+- FastAPI : `@app.exception_handler(RequestValidationError)` rend un `JSONResponse(status_code=422, ...)` construit à partir de `exc.errors()` **sans** la clé `"input"` ; dans chaque route, un `try` autour de `service.predict`, et dans l'`except` : `log.exception(...)`, puis `JSONResponse(status_code=500, content={"detail": "internal error"})`.
+- `http.server` : `do_POST` lit `self.rfile.read(int(self.headers["Content-Length"]))`, valide par `Image.model_validate_json(corps)` (une `ValidationError` → 422 avec `err.errors()` nettoyées), répond par `send_response`, `send_header("Content-Length", ...)`, `end_headers` et `wfile.write` ; `self.server.service` est le `Service`.
+- `running` : `@contextlib.contextmanager` ; pour `"stdlib"`, `make_server(...)`, un `threading.Thread(target=server.serve_forever, daemon=True)`, `yield` l'URL dans un `try`, et `shutdown()` puis `server_close()` dans le `finally` ; pour `"fastapi"`, `uvicorn.Server(uvicorn.Config(app, host=..., port=0))` dans un thread, attendre `server.started`, lire le port dans `server.servers[0].sockets[0].getsockname()[1]`, et `server.should_exit = True` dans le `finally`.
+- `main` : `argparse`, `os.environ.get("MODEL_DIR", "artifact")` comme défaut, et un `try` autour du chargement (`log.error(...)`, `return 1`).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+    @app.exception_handler(RequestValidationError)
+    async def invalid(request, exc):
+        errors = [{"loc": list(e["loc"]), "msg": e["msg"], "type": e["type"]} for e in exc.errors()]
+        return JSONResponse(status_code=422, content={"detail": errors})
+
+
+@contextlib.contextmanager
+def running(artifact_dir, backend="auto", host="127.0.0.1"):
+    ...                                             # choose the backend, build and start the server in a thread
+    try:
+        yield f"http://{host}:{port}"
+    finally:
+        ...                                         # stop it, free the port, join the thread
+```
+
+</details>
+
+### Ex B7.19 — Prédire la latence p95 de l'API, requête par requête puis par batches de 32 🔮
+
+<details><summary>Indice 1</summary>
+
+Décompose une requête `POST /predict` en étapes, côté client puis côté serveur : écrire 3 072 entiers en JSON, les envoyer, les relire, les valider, les convertir en tableau, prétraiter, appeler le modèle, écrire la réponse, la relire. L'appel direct n'en fait qu'une. Puis fais la même liste pour 32 images : quelles étapes coûtent une fois par requête, lesquelles une fois par image ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), ordonne les coûts : l'appel direct du VGG sur une image prend de l'ordre de la milliseconde (✏️ B7.3 et la fiche donnent des ordres de grandeur, pas cette machine) ; demande-toi si sérialiser, transporter et valider 3 072 entiers en Python coûte nettement moins, autant, ou bien plus. Pour b), sépare ce qui se paie une fois par requête (la connexion, le routage, les en-têtes) de ce qui croît avec le nombre d'images (le JSON, la validation, et le modèle, qui lui-même ne croît pas tout à fait comme la taille du batch). Une catégorie se décide par un rapport, pas par une durée.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Écris $t_{\text{requête}} = t_{\text{fixe}} + n \times t_{\text{JSON par image}} + t_{\text{modèle}}(n)$ pour $n = 1$ et $n = 32$, avec $t_{\text{modèle}}(32)$ entre $t_{\text{modèle}}(1)$ et $32 \times t_{\text{modèle}}(1)$. Pour a), compare $t_{\text{requête}}(1)$ à $t_{\text{modèle}}(1)$ ; pour b), $t_{\text{requête}}(32)$ à $t_{\text{requête}}(1)$ : pour chaque terme, demande-toi lequel domine, et place le rapport dans les bornes des catégories.
+
+</details>
+
+### Ex B7.20 — Accélérer l'inférence sur CPU : batches, threads, inference_mode, bfloat16, quantification 🔬
+
+<details><summary>Indice 1</summary>
+
+Deux règles : on ne mesure pas les premiers appels (ils allouent la mémoire et choisissent les noyaux de calcul), et on ne touche jamais au modèle qu'on reçoit (une version bfloat16 ou int8 est une **copie**). Pour comparer deux précisions, compare leurs **décisions** (l'argmax) avant leurs logits.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `latency_20` : la boucle de `latencies_ms` de la fiche (207.7), puis `np.percentile(times, [50, 95])`, en `float`.
+- `bfloat16_20` : `copy.deepcopy(model).to(torch.bfloat16)`, et une fonction qui fait `low(x.to(torch.bfloat16)).float()`.
+- `quantized_20` : `torch.ao.quantization.quantize_dynamic(copy.deepcopy(model), {torch.nn.Linear}, dtype=torch.qint8)` ; l'avertissement de dépréciation se tait par `warnings.catch_warnings()`.
+- `agreement_20` : `(a.argmax(dim=1) == b.argmax(dim=1)).float().mean()` et `(a - b).abs().max()`, chacun en `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def latency_20(fn, x, n=50, warmup=5):
+    for _ in range(warmup):
+        fn(x)
+    times = []
+    ...                                             # n timed calls with time.perf_counter, in ms
+    p50, p95 = np.percentile(times, [50, 95])
+    return float(p50), float(p95)
+```
+
+</details>
+
+### Ex B7.21 — Exporter avec torch.export et vérifier l'équivalence numérique (ONNX en option) 📦
+
+<details><summary>Indice 1</summary>
+
+Relis le code de 207.8 : il donne presque tout. Ce qui manque est ce qui casse en silence : un modèle laissé en mode entraînement (la batchnorm exportée normalise alors par les statistiques de chaque batch), et une taille de batch figée sur celle de l'exemple (le graphe exporté refuse alors toute autre taille).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `export_model` : `model.eval()` d'abord ; `batch = torch.export.Dim("batch", min=1, max=max_batch)` ; `torch.export.export(model, (torch.zeros(2, 3, 32, 32),), dynamic_shapes={"input": {0: batch}})` (le nom `"input"` est celui de l'argument de `nn.Sequential.forward`) ; `torch.export.save(program, str(path))`. L'exemple a 2 images : avec 1, PyTorch fige cette dimension (une taille 1 est traitée à part).
+- `export_artifact` : `load_artifact(folder)[0]`, puis `export_model(..., Path(folder) / "model.pt2", max_batch)`.
+- `max_gap` : sous `torch.inference_mode()`, `(model(x).double() - exported(x).double()).abs().max()`, en `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def export_model(model, path, max_batch=1024):
+    model.eval()
+    batch = torch.export.Dim("batch", min=1, max=int(max_batch))
+    program = torch.export.export(model, (torch.zeros(2, 3, 32, 32),), dynamic_shapes={"input": {0: batch}})
+    ...                                             # save it in path, return the path
+```
+
+</details>
+
+### Ex B7.22 — Surveiller la dérive : PSI et test KS sur des images assombries ou bruitées, quand alerter ? 📈
+
+<details><summary>Indice 1</summary>
+
+Le PSI de ✏️ B7.4, sur dix intervalles au lieu de quatre : les bornes viennent de la référence, une fois pour toutes, et la production est comptée dans les mêmes intervalles. Puis lis le tableau colonne par colonne, chaque question avec **son** seuil : une colonne des entrées, une des sorties, une de la qualité.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `brightness_22` : `images.reshape(len(images), -1).mean(axis=1) / 255`.
+- `psi_22` : `cuts = np.quantile(ref, np.arange(1, bins) / bins)` ; l'indice de l'intervalle de chaque valeur par `np.searchsorted(cuts, values, side="right")` (`side="right"` envoie une valeur égale à une coupure au-dessus) ; les parts par `np.bincount(..., minlength=bins) / len(values)` ; $\varepsilon$ ajouté aux deux ; puis la somme de 207.10.
+- `psi_classes_22` : la même somme, les parts par `np.bincount(labels, minlength=n_classes)`.
+- Lecture : a) compare la colonne « PSI lum. » à 0,25 ; b) la colonne « KS p » à 0,05 ; c) la colonne « PSI classes » à 0,25 ; d) l'accuracy de chaque fenêtre à celle de la référence moins 10 points.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : dans la colonne « PSI lum. », seule la fenêtre B dépasse 0,25 (3,745 ; A, C et D restent sous 0,16) : a) vaut `"B"`. Pour b), c) et d), applique le critère de l'indice 2 à chaque ligne, sans regarder les autres colonnes ; pour e), recopie la valeur de la fenêtre D dans la colonne « PSI lum. », arrondie à deux décimales. Puis, pour « quand alerter ? », croise : une fenêtre peut changer les entrées sans nuire au modèle, et nuire sans changer la luminosité.
+
+</details>
+
+### Ex B7.23 — Intégration continue : un workflow GitHub Actions qui installe, teste et lance un entraînement fumée 🛠️
+
+<details><summary>Indice 1</summary>
+
+Pars du début donné par la fiche (207.6) et ajoute, dans l'ordre où une machine neuve en a besoin : installer, tester, lancer. Chaque étape est une commande que tu sais déjà faire dans un terminal ; un code de sortie non nul arrête le job, et c'est voulu.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Les déclencheurs : `on: [push, pull_request]` (ou un dictionnaire) ; `runs-on: ubuntu-latest`.
+- `python-version: "3.13"` entre guillemets : sans eux, YAML lit `3.10` comme le nombre `3.1`.
+- Une étape `run: |` sur plusieurs lignes : `pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu`, puis `pip install -e ".[dev,serve]"`.
+- `run: pytest -q`, puis une étape « entraînement fumée » : `python scripts/make_synthetic.py data/synthetic.npz` et `cifarprod train --config configs/smoke.yaml --set data=data/synthetic.npz --out runs/ci`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```yaml
+      - name: Install PyTorch (CPU index) and the package
+        run: |
+          pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          ...                                       # the package, in editable mode, with its extras
+      - name: Tests
+        run: ...
+```
+
+</details>
+
+### Ex B7.24 — Lire et compléter un Dockerfile : image de base, dépendances CPU, utilisateur non root, variables 📦
+
+<details><summary>Indice 1</summary>
+
+Lis le Dockerfile du collègue ligne par ligne avec le tableau de 207.9 à côté : pour chaque ligne, demande-toi ce qu'elle laisse dans l'image (un secret ? un tag qui bouge ?), ce qu'elle fait au cache des couches, et sous quel utilisateur tourne ce qui suit.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- La base : la ligne du tableau de 207.9 dit quel tag choisir et pourquoi un tag comme `latest` est un piège.
+- Les réglages : deux variables (les logs sans tampon, le dossier du modèle) ; la clé d'API du collègue n'a rien à faire dans l'image (207.9, « Variables d'environnement et secrets »).
+- L'ordre : `COPY . .` en tête fait tout reconstruire au moindre changement du code ; copie d'abord le seul fichier des dépendances, installe torch depuis l'index CPU (la ligne de B7.23), puis les dépendances ; ensuite le code, le paquet lui-même (`--no-deps` : ses dépendances sont déjà là), enfin l'artefact, là où `MODEL_DIR` le cherche.
+- L'utilisateur : `useradd` (ou `adduser`) dans un `RUN`, puis `USER`, après les installations (qui demandent les droits) et avant la commande.
+- La commande : la forme exec est une liste JSON ; ton `main` de B7.18 prend `--host` et `--port`.
+- Les versions de `REQUIREMENTS_SERVE` : `importlib.metadata.version("fastapi")`, etc.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```dockerfile
+FROM python:3.13.18-slim-trixie
+ENV PYTHONUNBUFFERED=1 \
+    MODEL_DIR=/app/artifact
+WORKDIR /app
+COPY requirements-serve.txt .
+...                                                 # torch from the CPU index, the requirements, then the code
+```
+
+</details>
+
+### Ex B7.25 — Défi : un dépôt prêt pour la production, de git clone à une prédiction servie en moins de 10 min de CPU 🏆
+
+<details><summary>Indice 1</summary>
+
+Mets-toi à la place de quelqu'un qui découvre ton dépôt sur une autre machine : il n'a ni ton dossier `data/`, ni tes `runs/`, ni tes fichiers non commités, ni ton notebook. Fais la liste de ce qu'il doit taper, de `git clone` à une prédiction, et réduis-la à une installation et une commande. Puis relis la grille : chaque critère est une question qu'il se pose.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `scripts/demo.py` enchaîne ce que tu as déjà : `scripts/make_synthetic.py` si le fichier de données manque, `subprocess.run([sys.executable, "-m", "cifarprod", "train", "--config", "configs/smoke.yaml", "--set", f"data={...}", "--out", ...])`, puis `with running(dossier) as url:` (B7.18), `requests.get(url + "/health")` et une boucle de `requests.post(url + "/predict", json={"pixels": image.tolist()})` chronométrée, enfin `print(json.dumps({...}))` et `return 0`.
+- Le README : ce que fait le projet, l'installation (torch CPU d'abord), la démo, les tests, l'entraînement, le service, les résultats avec leur dispersion (B7.13) et la latence mesurée (B7.19).
+- La fiche modèle : les rubriques du ch. 23 et de B6 (modèle, usage prévu et exclu, données, performances, limites), et ce que tu as mesuré en B7.20 et B7.22.
+- Commite, puis relance l'auto-contrôle : il ne voit que ce qui est commité.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def main():
+    ...                                             # the data file, or a synthetic one
+    train = subprocess.run([sys.executable, "-m", "cifarprod", "train", ...], capture_output=True, text=True)
+    if train.returncode != 0:
+        return 1
+    with running(out) as url:
+        ...                                         # /health, then timed /predict requests
+    print(json.dumps({"status": ..., "label": ..., "probability": ..., "p50_ms": ..., "p95_ms": ..., "artifact": ...}))
+    return 0
+```
+
+</details>

@@ -659,12 +659,13 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
 
 # ---------------------------------------------------------------------------
 # Parts A to C (exercises B7.9 to B7.25). Session 76, first half: part A (B7.9 to B7.15) and the start of part B
-# (🐛 B7.16), chB7_parts.py and chB7_code.py. The second half (B7.17 to B7.25, NEXT_SESSION below) appends its
-# exercises to PART_B.exercises and adds part C (chB7_parts2.py and chB7_code2.py).
+# (🐛 B7.16), chB7_parts.py and chB7_code.py; second half: B7.17 to B7.21 appended to PART_B and part C (B7.22 to
+# B7.25), chB7_parts2.py, chB7_code2.py and chB7_code3.py.
 # ---------------------------------------------------------------------------
 import dataclasses  # noqa: E402
 
 import chB7_code  # noqa: E402,F401  (the cells; history_chB7.py reuses them)
+import chB7_parts2  # noqa: E402,F401  (B7.17 to B7.21 into PART_B, part C into PARTS)
 from chB7_parts import PART_B, PARTS  # noqa: E402,F401
 
 for _part in PARTS:
@@ -739,12 +740,14 @@ def footer_cells(kind: str) -> list:
              "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
-               "1. Sais-tu dire où va chaque fichier d'un projet de ML (code, tests, configuration, données) et "
-               "pourquoi un notebook ne suffit pas ?\n"
-               "2. Sais-tu rapporter une accuracy sur cinq graines avec son intervalle, et comparer deux modèles "
-               "graine par graine ?\n"
-               "3. Sais-tu calculer un p50, un p95 et un débit, et dimensionner un service à la louche ?\n"
-               "4. Sais-tu calculer un PSI, dire ce qu'il mesure, et ce que tu ferais d'une alerte ?\n\n"
+               "1. Sais-tu transformer un notebook en paquet installable, avec une ligne de commande, une "
+               "configuration validée, des runs journalisés et des tests qui attrapent de vraies erreurs ?\n"
+               "2. Sais-tu rapporter une accuracy sur plusieurs graines avec son intervalle, et dire ce qui rend deux "
+               "runs identiques au bit près (ou non) ?\n"
+               "3. Sais-tu livrer un modèle dans un artefact qui se suffit, le servir par une API qui valide ses "
+               "entrées, mesurer son p95 et vérifier un export ?\n"
+               "4. Sais-tu calculer un PSI et lire un test KS, dire ce qu'une alerte mérite, et écrire le workflow "
+               "et le Dockerfile qui rendent ton dépôt reproductible par n'importe qui ?\n\n"
                "**Pour aller plus loin** : l'article de Sculley et coll. (📄 B7.8) et le ML Test Score de Breck et "
                "coll., cités dans la fiche. La suite : le bonus B8, l'apprentissage par renforcement moderne."
                + later)]

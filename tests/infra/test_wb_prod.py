@@ -299,3 +299,160 @@ def test_the_reference_package_files_fit_in_a_cell():
             text = path.read_text(encoding="utf-8")
             assert "'''" not in text and not text.endswith("\\"), path
     assert json.loads(json.dumps({"ok": True}))
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Part B and C: a server in another process, the reference artifact, the reviews of a workflow and of a Dockerfile,
+# the clone of the challenge
+# ---------------------------------------------------------------------------------------------------------------------
+def test_mp5_data_is_in_the_info_of_the_reference_model():
+    pytest.importorskip("torch")
+    _, info = wbp.reference_model()
+    assert info["data"] == wbp.MP5_DATA and len(info["data"]["sha256"]) == 64 and info["data"]["n_train"] == 45000
+
+
+def test_latencies_leave_out_the_calls_not_measured():
+    calls = []
+    times = wbp.latencies(lambda: calls.append(1), n=7, warmup=3)
+    assert len(calls) == 10 and times.shape == (7,) and (times >= 0).all()
+
+
+def test_free_port_then_port_open():
+    import socket
+
+    port = wbp.free_port()
+    assert not wbp.port_open(port)
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", port))
+        s.listen()
+        assert wbp.port_open(port)
+
+
+def test_reference_artifact_is_served_in_another_process_and_always_stopped(tmp_path):
+    pytest.importorskip("torch")
+    pytest.importorskip("pydantic")
+    import requests
+
+    folder = wbp.reference_artifact(tmp_path / "artifact")
+    meta = json.loads((folder / "meta.json").read_text(encoding="utf-8"))
+    assert meta["data"] == wbp.MP5_DATA and meta["arch"] == "vgg" and (folder / "model.safetensors").is_file()
+    with wbp.serve_process(wbp.reference_package() / "src", folder, backend="stdlib") as server:
+        assert requests.get(f"{server.url}/health", timeout=10).json()["model"]["weights_sha256"] == meta["weights_sha256"]
+        process, port = server.process, server.port
+    assert process.poll() is not None and not wbp.port_open(port)
+    with pytest.raises(RuntimeError, match="stopped"):
+        with wbp.serve_process(wbp.reference_package() / "src", tmp_path / "nothing", backend="stdlib", timeout=60):
+            pass
+
+
+REF = wbp.reference_package()
+
+
+def review(items):
+    return {item.key: item.ok for item in items}
+
+
+def test_the_reference_workflow_passes_every_point():
+    got = review(wbp.review_workflow((REF / ".github/workflows/ci.yml").read_text(encoding="utf-8"), REF))
+    assert all(got.values()), got
+    assert {"on", "python", "torch", "install", "pytest", "smoke", "failures", "secrets", "bash", "files"} <= set(got)
+
+
+@pytest.mark.parametrize("old, new, key", [
+    ('python-version: "3.13"', "python-version: 3.10", "python"),
+    (" --index-url https://download.pytorch.org/whl/cpu", "", "torch"),
+    ("run: pytest -q", 'run: pytest -q -m "not slow"', "pytest"),
+    ("run: pytest -q", "run: pytest -q || true", "failures"),
+    ("on:\n  push:\n  pull_request:", "on: [push]", "on"),
+    ("          cifarprod train --config configs/smoke.yaml --set data=data/synthetic.npz --out runs/ci\n", "", "smoke"),
+    ("    timeout-minutes: 20", "    timeout-minutes: 20\n    env:\n      HF_TOKEN: hf_abcdef123456", "secrets"),
+    ("pip install -e \".[dev,serve]\"", "pip install -e \".[dev,serve]\" && fi", "bash"),
+    ("configs/smoke.yaml", "configs/tiny.yaml", "files"),
+], ids=["unquoted version", "no CPU index", "slow tests skipped", "failure swallowed", "push only", "no smoke training",
+        "secret in clear", "bash syntax", "missing file"])
+def test_a_faulty_workflow_fails_its_point(old, new, key):
+    text = (REF / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert text.count(old) >= 1, old
+    got = review(wbp.review_workflow(text.replace(old, new), REF))
+    assert got[key] is False, (key, got)
+
+
+def test_a_workflow_that_is_not_yaml_is_refused():
+    assert review(wbp.review_workflow("jobs: [unclosed", None)) == {"yaml": False}
+
+
+def test_dockerfile_instructions_join_the_continuation_lines():
+    text = "# comment\nFROM python:3.13.18-slim\nRUN a \\\n    && b\n\nCMD [\"x\"]\n"
+    assert wbp.dockerfile_instructions(text) == [("FROM", "python:3.13.18-slim"), ("RUN", "a && b"), ("CMD", '["x"]')]
+
+
+def reference_docker():
+    return [(REF / name).read_text(encoding="utf-8") for name in ("Dockerfile", ".dockerignore", "requirements-serve.txt")]
+
+
+def test_the_reference_dockerfile_passes_every_point():
+    got = review(wbp.review_dockerfile(*reference_docker(), REF))
+    assert all(got.values()) and "runs" in got, got
+
+
+def test_the_starting_dockerfile_of_b7_24_fails_where_it_should():
+    sys.path.insert(0, str(ROOT / "tools" / "chapters"))
+    import chB7_code3
+
+    _, ignore, requirements = reference_docker()
+    got = review(wbp.review_dockerfile(chB7_code3.DOCKERFILE_START, ignore, requirements))
+    for key in ("from", "unbuffered", "secrets", "layers", "torch", "package", "artifact", "user", "cmd", "host", "port"):
+        assert got[key] is False, (key, got)
+
+
+@pytest.mark.parametrize("old, new, key", [
+    ("FROM python:3.13.18-slim-trixie", "FROM python:3.13-slim", "from"),
+    ("USER app", "USER root", "user"),
+    ('CMD ["python", "-m", "cifarprod.serve", "--host", "0.0.0.0", "--port", "8000"]',
+     "CMD python -m cifarprod.serve --host 0.0.0.0 --port 8000", "cmd"),
+    ('"--host", "0.0.0.0", ', "", "host"),
+    ("EXPOSE 8000", "EXPOSE 9000", "port"),
+    ("    MODEL_DIR=/app/artifact", "    MODEL_DIR=/app/models", "artifact"),
+    ("    PIP_NO_CACHE_DIR=1 \\\n", "    PIP_NO_CACHE_DIR=1 \\\n    API_KEY=abc \\\n", "secrets"),
+    ("COPY requirements-serve.txt .\n", "COPY . .\n", "layers"),
+], ids=["moving tag", "root", "shell form", "localhost", "other port", "MODEL_DIR elsewhere", "secret", "code first"])
+def test_a_faulty_dockerfile_fails_its_point(old, new, key):
+    dockerfile, ignore, requirements = reference_docker()
+    assert dockerfile.count(old) == 1, old
+    got = review(wbp.review_dockerfile(dockerfile.replace(old, new), ignore, requirements))
+    assert got[key] is False, (key, got)
+
+
+def test_unpinned_requirements_and_a_thin_dockerignore_are_refused():
+    dockerfile, ignore, requirements = reference_docker()
+    got = review(wbp.review_dockerfile(dockerfile, ignore, requirements.replace("fastapi==0.141.1", "fastapi")))
+    assert got["requirements"] is False
+    got = review(wbp.review_dockerfile(dockerfile, ignore, requirements + "torch==2.11.0\n"))
+    assert got["requirements"] is False
+    got = review(wbp.review_dockerfile(dockerfile, ignore.replace(".env\n", ""), requirements))
+    assert got["dockerignore"] is False
+
+
+def test_clone_project_clones_what_is_committed_or_copies(tmp_path):
+    project = tmp_path / "p"
+    (project / "src").mkdir(parents=True)
+    (project / "src" / "a.py").write_text("x = 1\n", encoding="utf-8")
+    (project / "data").mkdir()
+    (project / "data" / "big.npz").write_bytes(b"0")
+    copy, how, notes = wbp.clone_project(project, tmp_path / "copy")
+    assert how == "copie" and (copy / "src" / "a.py").is_file() and not (copy / "data").exists() and notes == []
+    if shutil.which("git") is None:
+        pytest.skip("no git here")
+    for args in (["git", "init", "-q"], ["git", "add", "src"],
+                 ["git", "-c", "user.name=t", "-c", "user.email=t@example.org", "commit", "-q", "-m", "t"]):
+        assert wbp.run(args, project).ok
+    (project / "src" / "b.py").write_text("y = 2\n", encoding="utf-8")
+    clone, how, notes = wbp.clone_project(project, tmp_path / "clone")
+    assert how == "git clone" and (clone / "src" / "a.py").is_file() and not (clone / "src" / "b.py").exists()
+    assert any("b.py" in n or "src/" in n for n in notes) and any("data" in n for n in notes)
+
+
+def test_machine_speed_is_a_positive_duration():
+    pytest.importorskip("torch")
+    speed = wbp.machine_speed(repeats=2)
+    assert 0 < speed < 30

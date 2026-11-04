@@ -173,7 +173,8 @@ with checked("B7.17"):                                    # a NEW process reload
                 "np.save(sys.argv[3], np.asarray(proba, dtype=np.float64))\n"
                 "print(json.dumps({'labels': [str(v) for v in labels], 'training': model.training, "
                 "'dtype': str(np.asarray(proba).dtype)}))\n")
-    r_17 = wbp.run([sys.executable, "-c", probe_17, ARTIFACT_B, io_17 / "x.npy", io_17 / "p.npy"], PROJECT,
+    (io_17 / "reload.py").write_text(probe_17, encoding="utf-8")
+    r_17 = wbp.run([sys.executable, io_17 / "reload.py", ARTIFACT_B, io_17 / "x.npy", io_17 / "p.npy"], PROJECT,
                    src=[PROJECT / "src"])
     seen_17 = r_17.last_json() if r_17.ok else None
     if not run_line("B7.17", r_17, r_17.ok and isinstance(seen_17, dict), "un processus neuf recharge l'artefact.",
@@ -368,17 +369,41 @@ class Failing_18(torch.nn.Module):
         raise RuntimeError("the model failed (a test of the check cell)")
 
 
+@contextlib.contextmanager
+def logged_18():
+    """The records of the logger cifarprod.serve during the block, kept here instead of being printed."""
+    import logging
+    logger, records = logging.getLogger("cifarprod.serve"), []
+    handler = logging.Handler(level=logging.DEBUG)
+    handler.emit = records.append
+    keep = logger.propagate, logger.level
+    logger.addHandler(handler)
+    logger.propagate = False
+    logger.setLevel(logging.DEBUG)
+    try:
+        yield records
+    finally:
+        logger.removeHandler(handler)
+        logger.propagate, logger.level = keep[0], keep[1]
+
+
 def api_cases_18(get, post, label):
     """The same cases for both servers: get(path) and post(path, body) return (status, body as a dict or a text)."""
     oks = {}
     status, body = get("/health")
-    model_info = body.get("model", {}) if isinstance(body, dict) else {}
-    oks["health"] = (status == 200 and body.get("status") == "ok" and body.get("package_version") == "0.1.0"
-                     and model_info.get("weights_sha256") == META_18["weights_sha256"]
-                     and model_info.get("data_sha256") == META_18["data"].get("sha256") and isinstance(body.get("torch"), str))
+    body = body if isinstance(body, dict) else {}
+    model_info = body.get("model", {}) if isinstance(body.get("model"), dict) else {}
+    want_health = {"status": "ok", "package_version": "0.1.0"}
+    want_model = {"arch": META_18["arch"], "widths": META_18["widths"], "classes": META_18["classes"],
+                  "weights_sha256": META_18["weights_sha256"], "data_sha256": META_18["data"].get("sha256"),
+                  "created": META_18.get("created")}
+    wrong = [k for k, v in want_health.items() if body.get(k) != v] + \
+        [f"model.{k}" for k, v in want_model.items() if model_info.get(k) != v] + \
+        ([] if isinstance(body.get("torch"), str) else ["torch"])
+    oks["health"] = status == 200 and not wrong
     verdict("B7.18", oks["health"], f"{label} GET /health : 200, la version du paquet, le SHA-256 des poids et des données.",
             f"{label} GET /health : attendu 200 et {{status, package_version, model: {{arch, widths, classes, "
-            f"weights_sha256, data_sha256, created}}, torch}} ; reçu {status} {str(body)[:200]}.")
+            f"weights_sha256, data_sha256, created}}, torch}} ; reçu {status}, champs absents ou faux : {wrong}.")
     answers = [post("/predict", {"pixels": X_B[i].tolist()}) for i in range(8)]
     labels = [b.get("label") if isinstance(b, dict) else None for _, b in answers]
     probs_ok = all(isinstance(b, dict) and abs(float(b.get("probability", -1)) - PROBA_B[i].max()) <= 6e-5
@@ -433,21 +458,25 @@ with checked("B7.18"):
             except ValueError:
                 return response.text
 
-        ok_18.update({f"fastapi {k}": v for k, v in api_cases_18(
-            lambda path: (lambda r: (r.status_code, as_body_18(r)))(client_18.get(path)),
-            lambda path, body: (lambda r: (r.status_code, as_body_18(r)))(client_18.post(path, json=body)),
-            "FastAPI :").items()})
+        with logged_18():                                 # the server's log lines are kept, not printed
+            ok_18.update({f"fastapi {k}": v for k, v in api_cases_18(
+                lambda path: (lambda r: (r.status_code, as_body_18(r)))(client_18.get(path)),
+                lambda path, body: (lambda r: (r.status_code, as_body_18(r)))(client_18.post(path, json=body)),
+                "FastAPI :").items()})
         kept_18 = app_18.state.service.model
         app_18.state.service.model = Failing_18()
         try:
-            r_18 = client_18.post("/predict", json={"pixels": X_B[0].tolist()})
+            with logged_18() as records_18:
+                r_18 = client_18.post("/predict", json={"pixels": X_B[0].tolist()})
         finally:
             app_18.state.service.model = kept_18
-        ok_18["fastapi 500"] = r_18.status_code == 500 and as_body_18(r_18) == {"detail": "internal error"}
+        traced_18 = any(r.levelname == "ERROR" and r.exc_info for r in records_18)
+        ok_18["fastapi 500"] = r_18.status_code == 500 and as_body_18(r_18) == {"detail": "internal error"} and traced_18
         verdict("B7.18", ok_18["fastapi 500"], "FastAPI : un modèle qui plante donne un 500 propre, {\"detail\": "
-                "\"internal error\"}.", f"FastAPI : un modèle qui lève une exception doit donner 500 et le JSON "
-                f"{{\"detail\": \"internal error\"}} (sans trace pour le client) ; reçu {r_18.status_code} "
-                f"{str(as_body_18(r_18))[:120]}.")
+                "\"internal error\"}, et une ligne log.exception (ici retenue, pas affichée).",
+                f"FastAPI : un modèle qui lève une exception doit donner 500 et le JSON {{\"detail\": \"internal "
+                f"error\"}} (sans trace pour le client), et une ligne log.exception côté serveur ; reçu {r_18.status_code} "
+                f"{str(as_body_18(r_18))[:120]}, {'une' if traced_18 else 'aucune'} ligne ERROR avec sa trace.")
 
 with checked("B7.18"):                                    # the fallback, started and ALWAYS stopped by this cell
     if "serve_18" not in globals() or ARTIFACT_B is None:
@@ -466,14 +495,17 @@ with checked("B7.18"):                                    # the fallback, starte
             except ValueError:
                 return response.status_code, response.text
 
-        ok_18.update({f"stdlib {k}": v for k, v in api_cases_18(
-            lambda path: answer_18(session_18.get(url_18 + path, timeout=10)),
-            lambda path, body: answer_18(session_18.post(url_18 + path, json=body, timeout=10)),
-            "http.server :").items()})
+        with logged_18():
+            ok_18.update({f"stdlib {k}": v for k, v in api_cases_18(
+                lambda path: answer_18(session_18.get(url_18 + path, timeout=10)),
+                lambda path, body: answer_18(session_18.post(url_18 + path, json=body, timeout=10)),
+                "http.server :").items()})
         kept_18 = server_18.service.model
         server_18.service.model = Failing_18()
         try:
-            status_18, body_18 = answer_18(session_18.post(url_18 + "/predict", json={"pixels": X_B[0].tolist()}, timeout=10))
+            with logged_18():
+                status_18, body_18 = answer_18(session_18.post(url_18 + "/predict", json={"pixels": X_B[0].tolist()},
+                                                               timeout=10))
         finally:
             server_18.service.model = kept_18
         ok_18["stdlib 500"] = status_18 == 500 and body_18 == {"detail": "internal error"}
@@ -550,11 +582,12 @@ def category_19(question, ratio):
 folder_19 = wbp.reference_artifact(scratch("artifact19") / "vgg")
 model_19, info_19 = wbp.reference_model()
 x_19 = model_input(X_B, info_19["mean"], info_19["std"])
-with torch.inference_mode():
+with wbp.torch_state_kept(), torch.inference_mode():        # one thread, as the server: one image at a time
+    torch.set_num_threads(1)
     direct1_19 = wbp.latencies(lambda: model_19(x_19[:1]), 200, 20)
     direct32_19 = wbp.latencies(lambda: model_19(x_19[:32]), 50, 5)
 one_body_19, batch_body_19 = {"pixels": X_B[0].tolist()}, {"images": X_B[:32].tolist()}
-with wbp.serve_process(wbp.reference_package() / "src", folder_19, backend="auto") as server_19:
+with wbp.serve_process(wbp.reference_package() / "src", folder_19, backend="auto", env={"OMP_NUM_THREADS": "1"}) as server_19:
     session_19 = requests.Session()
     http1_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict", json=one_body_19, timeout=30), 200, 20)
     http32_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict_batch", json=batch_body_19, timeout=30), 40, 3)
@@ -674,7 +707,8 @@ with checked("B7.20"):
     verdict("B7.20", ok_lat_20, f"latency_20 : (p50, p95) en ms, les 3 appels à blanc écartés ({fr(got_20[0], 1)} et "
             f"{fr(got_20[1], 1)} ms pour un appel d'environ 1 ms).",
             f"latency_20(fn, x, n=8, warmup=3) sur une fonction qui dort 30 ms pendant les 3 premiers appels puis 1 ms : "
-            f"attendu 11 appels et (p50, p95) en ms, deux floats d'environ 1 ms ; reçu {len(calls_20)} appels et {got_20!r}.")
+            f"attendu 11 appels et (p50, p95) en ms, deux floats d'environ 1 ms (les 3 appels à blanc, lents, ne sont pas "
+            f"mesurés) ; reçu {len(calls_20)} appels et {got_20!r}.")
     model_20 = wbp.reference_model()[0]
     x_20 = model_input(X_B[:16], REF_INFO["mean"], REF_INFO["std"])
     with torch.inference_mode():
@@ -686,13 +720,19 @@ with checked("B7.20"):
             "d'origine intact.", f"bfloat16_20 : attendu une fonction qui rend des logits float32 (16, 10) calculés en "
             f"bfloat16, sans changer le modèle donné ; reçu {getattr(low_20, 'dtype', type(low_20).__name__)}, modèle "
             f"{next(model_20.parameters()).dtype}.")
+    model_20 = wbp.reference_model()[0]                     # a new copy: bfloat16_20 may have changed the first one
     q_20 = quantized_20(model_20)
     kinds_20 = {type(m).__module__ + "." + type(m).__name__ for m in q_20.modules()}
-    ok_q_20 = (any("quantized" in k and k.endswith("Linear") for k in kinds_20) and isinstance(model_20[-1], torch.nn.Linear)
-               and any(isinstance(m, torch.nn.Conv2d) for m in q_20.modules()) and q_20 is not model_20)
+    linear_q_20 = any("quantized" in k and k.endswith("Linear") for k in kinds_20)
+    intact_20 = type(model_20[-1]) is torch.nn.Linear and q_20 is not model_20
+    convs_20 = any(type(m) is torch.nn.Conv2d for m in q_20.modules())
+    ok_q_20 = linear_q_20 and intact_20 and convs_20
     verdict("B7.20", ok_q_20, "quantized_20 : une copie dont la couche dense est en int8 dynamique, les convolutions en "
-            "float32, le modèle d'origine intact.", f"quantized_20 : attendu une COPIE dont les nn.Linear sont "
-            f"quantifiées (quantize_dynamic, qint8) et les convolutions inchangées ; modules : {sorted(kinds_20)[:6]}.")
+            "float32, le modèle d'origine intact.", "quantized_20 : attendu une COPIE dont les nn.Linear sont "
+            "quantifiées (quantize_dynamic, qint8) et les convolutions inchangées ; "
+            + "; ".join(part for part in ["aucune couche dense quantifiée" if not linear_q_20 else "",
+                                          "le modèle donné a changé (inplace=True, ou pas de copie ?)" if not intact_20 else "",
+                                          "les convolutions ont changé" if not convs_20 else ""] if part) + ".")
     a_20 = torch.tensor([[3.0, 0, 0], [0, 2.0, 0], [0, 0, 1.0], [1.0, 0, 0]])
     b_20 = torch.tensor([[2.5, 0, 0], [0, 2.0, 0], [0, 0, 1.0], [0, 1.5, 0]])
     got_ag_20 = agreement_20(a_20, b_20)
@@ -805,8 +845,9 @@ with checked("B7.21"), warnings.catch_warnings():
         verdict("B7.21", False, "", f"export_artifact doit écrire et rendre {ARTIFACT_B.name}/model.pt2 ; rendu {path_21!r}.")
         raise StopCheck
     sizes_21 = (Path(path_21).stat().st_size, (ARTIFACT_B / "model.safetensors").stat().st_size)
-    verdict("B7.21", True, f"export_artifact écrit model.pt2 dans l'artefact ({sizes_21[0]:_} octets, contre "
-            f"{sizes_21[1]:_} pour les poids seuls).".replace("_", " "), "")
+    bytes_21 = [f"{n:_}".replace("_", " ") for n in sizes_21]
+    verdict("B7.21", True, f"export_artifact écrit model.pt2 dans l'artefact ({bytes_21[0]} octets, contre "
+            f"{bytes_21[1]} pour les poids seuls).", "")
     io_21 = scratch("export")
     x_21 = model_input(X_B[:64], INFO_B["mean"], INFO_B["std"]).numpy()
     np.save(io_21 / "x.npy", x_21)
@@ -817,16 +858,17 @@ with checked("B7.21"), warnings.catch_warnings():
                 "    try:\n        exported(bad)\n        refused[name] = None\n    except Exception as err:\n"
                 "        refused[name] = str(err).splitlines()[0][:120]\n"
                 "import importlib.util\nprint(json.dumps({'refused': refused, 'cifarprod': importlib.util.find_spec('cifarprod') is not None}))\n")
-    r_21 = wbp.run([sys.executable, "-c", probe_21, path_21, io_21 / "x.npy", io_21], scratch("elsewhere"))
+    (io_21 / "reload_pt2.py").write_text(probe_21, encoding="utf-8")
+    r_21 = wbp.run([sys.executable, io_21 / "reload_pt2.py", path_21, io_21 / "x.npy", io_21], scratch("elsewhere"))
     seen_21 = r_21.last_json() if r_21.ok else None
     if not run_line("B7.21", r_21, r_21.ok and isinstance(seen_21, dict) and not seen_21["cifarprod"],
                     "un processus SANS ton paquet recharge model.pt2 et calcule.",
                     "attendu un processus sans cifarprod qui recharge model.pt2 (torch.export.load) et calcule les "
                     "batches de 1, 7 et 64 images"):
         raise StopCheck
-    with torch.inference_mode():
-        want_21 = MODEL_B(torch.from_numpy(x_21)).double().numpy()
-    gaps_21 = {b: float(np.abs(np.load(io_21 / f"out{b}.npy").astype(np.float64) - want_21[:b]).max()) for b in (1, 7, 64)}
+    with torch.inference_mode():                             # the model on the SAME batches as the export
+        want_21 = {b: MODEL_B(torch.from_numpy(x_21[:b])).double().numpy() for b in (1, 7, 64)}
+    gaps_21 = {b: float(np.abs(np.load(io_21 / f"out{b}.npy").astype(np.float64) - want_21[b]).max()) for b in (1, 7, 64)}
     GAP_21 = max(gaps_21.values())
     ok_21["equal"] = GAP_21 <= 1e-6
     verdict("B7.21", ok_21["equal"], "l'export calcule ce que calcule le modèle, à 1e-6 près, pour 1, 7 et 64 images "
@@ -864,7 +906,7 @@ with checked("B7.21"), warnings.catch_warnings():
                           dynamic_shapes={"input": {0: torch.export.Dim("batch", min=1, max=1024)}})
         session_21 = onnxruntime.InferenceSession(str(onnx_path_21))
         out_onnx_21 = session_21.run(None, {session_21.get_inputs()[0].name: x_21})[0]
-        print(f"ℹ️ ONNX (option) : écart maximal avec le modèle {float(np.abs(out_onnx_21 - want_21).max()):.2g} sur 64 images.")
+        print(f"ℹ️ ONNX (option) : écart maximal avec le modèle {float(np.abs(out_onnx_21 - want_21[64]).max()):.2g} sur 64 images.")
     else:
         print("ℹ️ ONNX (option) : onnxscript et onnxruntime ne sont pas installés ici (extra prod) : l'export ONNX n'est "
               "pas essayé.")
