@@ -487,9 +487,21 @@ def test_several_choice_letters_in_another_order_or_with_separators_are_read_glu
               "B, D et E", "E et D et B", "b, d ET e", "(B), (D), (E)", "(B) et (D) et (E)", "(B) (D) (E)"):
         assert passes("g.20", e, v), v
     assert "Erreur classique" in message("g.20", e, "D, B")      # the mistakes are read the same way
-    for v in ("BD", "B, D, E, F", "ABDE", "B, DE", "bed", "B et D", "B, D et"):   # "bed" may be a word, not letters
+    for v in ("BD", "B, D, E, F", "ABDE", "B, DE", "B et D", "B, D et", "bdee", "bdd"):
         assert not passes("g.20", e, v), v
     assert "Erreur classique" in message("g.20", e, "B et D")
+
+
+def test_several_choice_letters_glued_in_lower_case_and_another_order_are_read_as_letters():
+    e = entry("g.27", "ACD", mistakes={"il manque au moins une lettre": {"AC", "AD", "CD"}})
+    for v in ("acd", "dca", "cda", "dac", "cad", "DCA"):                  # « dans n'importe quel ordre »
+        assert passes("g.27", e, v), v
+    for v in ("dcab", "dc a b", "dcc", "abd"):
+        assert not passes("g.27", e, v), v
+    assert "Erreur classique" in message("g.27", e, "dc")               # the mistakes are read the same way
+    assert "Erreur classique" in message("g.27", e, "ca")
+    e = entry("g.28", "BDEAC")                                   # an ordering is never re-sorted
+    assert passes("g.28", e, "bdeac") and not passes("g.28", e, "abcde") and not passes("g.28", e, "edcba")
     e = entry("g.24", "BD")                                      # "et" only counts BETWEEN two letters
     for v in ("B, D et", "et B, D", "B et D et"):
         assert not passes("g.24", e, v), v

@@ -565,7 +565,7 @@ Avec 40 requêtes par seconde qui restent chacune 50 ms, il y a en moyenne $40 \
 
 ### torch.export et ONNX
 
-Servir un `state_dict` demande le code Python qui construit le modèle. **Exporter**, c'est enregistrer le **graphe de calcul** lui-même (opérations et poids) dans un format qui se recharge sans ce code (autre programme, C++, téléphone, moteur d'inférence) ; le graphe est figé, et un `if x.sum() > 0` en Python ne s'exporte pas tel quel. `torch.export.export(model, exemple)` trace le modèle sur des entrées d'exemple et rend un `ExportedProgram` : le graphe, les poids et des **gardes** (*guards*) qui disent pour quelles formes d'entrée il reste valable.
+Servir un `state_dict` demande le code Python qui construit le modèle. **Exporter**, c'est enregistrer le **graphe de calcul** lui-même (opérations et poids) dans un format qui se recharge sans ce code (autre programme, C++, téléphone, moteur d'inférence) ; le graphe est figé, et un `if x.sum() > 0` en Python fait échouer l'export. `torch.export.export(model, exemple)` trace le modèle sur des entrées d'exemple et rend un `ExportedProgram` : le graphe, les poids et des **gardes** (*guards*) qui disent pour quelles formes d'entrée il reste valable.
 
 ```python
 import torch
@@ -656,7 +656,7 @@ Chaque terme est positif ou nul (les deux facteurs ont le même signe). Le PSI e
 
 ![À gauche, les parts de la référence (0,20 partout) et de la production (0,10 à 0,30) ; à droite, la contribution de chaque intervalle au PSI, de somme 0,135](figures/psi.png)
 
-**Les seuils** : l'usage, venu du scoring de crédit (E. Lewis, 1994), lit un PSI sous 0,1 comme « pas de changement notable », de 0,1 à 0,25 comme « petit changement », au-delà comme « changement important ». Ce sont des **conventions** : un PSI dépend du nombre d'intervalles et, à distribution inchangée, du nombre d'exemples ; B. Yurdakul et J. Naranjo (2020) calculent des seuils selon ces deux nombres. Un intervalle vide rend $\ln(p_k/q_k)$ infini : on ajoute aux parts une petite constante ($10^{-4}$), écrite avec le résultat. Les bornes se fixent **une fois**, sur la référence.
+**Les seuils** : l'usage, venu du scoring de crédit (E. Lewis, 1994), lit un PSI sous 0,1 comme « pas de changement notable », de 0,1 à 0,25 comme « petit changement », au-delà comme « changement important ». Ce sont des **conventions** : un PSI dépend du nombre d'intervalles et, à distribution inchangée, du nombre d'exemples ; B. Yurdakul et J. Naranjo (2020) calculent des seuils selon ces deux nombres. Un intervalle vide rend $\ln(p_k/q_k)$ infini : on ajoute une petite constante ($10^{-4}$) à **toutes** les parts, de la production et de la référence, et on l'écrit avec le résultat. Les bornes se fixent **une fois**, sur la référence.
 
 ### Le test de Kolmogorov-Smirnov
 

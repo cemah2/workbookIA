@@ -42,8 +42,8 @@ g) `[project.scripts]` contient `cifarprod = "cifarprod.cli:main"`. Vrai ou faux
 ### B7.Q3 — print ou logging : niveaux, destinations et messages utiles 🧠 ⏱️ 3 min
 *Fiche §207.2 · parcours R*
 
-a) « epoch 3/10, val_acc 0.612 » s'écrit au niveau : (A) `DEBUG` ; (B) `INFO` ; (C) `WARNING` ; (D) `ERROR`.
-b) « no 'seed' in configs/fast.yaml: using the default 0 » s'écrit au niveau : (A) `DEBUG` ; (B) `INFO` ; (C) `WARNING` ; (D) `ERROR`.
+a) « saved artifact to artifacts/1.0.0 (73744 bytes) », à la fin d'un run réussi, s'écrit au niveau : (A) `DEBUG` ; (B) `INFO` ; (C) `WARNING` ; (D) `ERROR`.
+b) « no GPU found: training on CPU (about 10 times slower) » s'écrit au niveau : (A) `DEBUG` ; (B) `INFO` ; (C) `WARNING` ; (D) `ERROR`.
 c) Le point d'entrée appelle `logging.basicConfig(level=logging.WARNING)`, puis le programme émet un message `log.debug`, trois `log.info`, un `log.warning` et un `log.error`. Combien de messages s'affichent ?
 d) Vrai ou faux : `data.py`, un module de ton paquet, doit appeler `logging.basicConfig` pour que ses messages s'affichent.
 e) Lequel de ces messages aide le plus quelqu'un qui cherche un bug six mois plus tard ? (A) « étape de chargement des données terminée avec succès, on passe à la suite » ; (B) « ATTENTION : données chargées, à vérifier si les résultats sont mauvais » ; (C) « loaded 2000 train images (sha256 3fa1c2…), labels 0..9 ».
@@ -72,24 +72,24 @@ e) Le `DataLoader(shuffle=True)` d'un run est créé sans `generator`. Tu ajoute
 *Fiche §207.1, §207.4 · parcours R*
 
 a) `dependencies = ["torch>=2.5"]`, dans `pyproject.toml`, dit : (A) la version exacte qui a servi au dernier run ; (B) la version à installer sur Colab ; (C) la plus ancienne version que le code accepte.
-b) Quel fichier liste la version exacte de chaque paquet, dépendances indirectes comprises, souvent avec l'empreinte de chaque fichier ? (A) `uv.lock` ; (B) `pyproject.toml` ; (C) `README.md`.
+b) Ton `pyproject.toml` demande `numpy>=2.0`. Quel fichier dit quelle version de NumPy, et de chacune de ses dépendances, le dernier `uv sync` a installée ? (A) `uv.lock` ; (B) `pyproject.toml`, dans sa table `[project]` ; (C) le cache de pip, dans `~/.cache/pip`.
 c) Vrai ou faux : une bibliothèque publiée sur PyPI épingle ses dépendances (`numpy==2.1.3`) dans son `pyproject.toml`.
 d) Ton run a noté le commit `a1b2c3d`, mais `git status --porcelain` n'était pas vide : (A) une partie du code du run n'est dans aucun commit ; (B) on peut rejouer le run exactement depuis `a1b2c3d` ; (C) le commit enregistré est invalide.
-e) Vrai ou faux : deux machines qui installent le même `uv.lock` obtiennent la même version de NumPy, même si une version plus récente est sortie entre les deux installations.
+e) Vrai ou faux : deux machines Linux, avec la même version de Python, qui installent le même `uv.lock` obtiennent la même version de NumPy, même si une version plus récente est sortie entre les deux installations.
 
 ### B7.Q7 — Que tester dans un projet de machine learning ? 🧠 ⏱️ 3 min
 *Fiche §207.6 · parcours R*
 
 a) Ta boucle d'entraînement oublie `opt.zero_grad()`. Quel test le détecte le mieux ? (A) la forme de la sortie du modèle ; (B) l'overfitting d'un mini-batch de 16 images ; (C) le schéma des données d'entrée.
 b) 37 images du test sont aussi dans l'entraînement. Quel test le détecte ? (A) l'entraînement fumée, qui fait tourner toute la chaîne sur 200 images ; (B) l'overfitting d'un mini-batch de 16 images de l'entraînement ; (C) un test de données qui compare les empreintes des images.
-c) Un entraînement fumée doit : (A) aller au bout, écrire son artefact et rendre 0, quelle que soit l'accuracy ; (B) atteindre l'accuracy du modèle livré, sur moins d'images ; (C) mesurer la latence de l'API sur quelques requêtes.
+c) L'entraînement fumée de ta CI finit en 40 s avec une accuracy de 15 %. Il est réussi si : (A) le programme a rendu 0 et laissé un artefact ; (B) son accuracy approche celle du modèle livré, à quelques points près ; (C) l'API, relancée sur son artefact, répond en moins de 100 ms.
 d) Vrai ou faux : un entraînement fumée qui rend 0 et écrit son artefact montre que le modèle apprend.
 e) Grille du ML Test Score : une équipe totalise 3 points en données, 2,5 en modèle, 4 en infrastructure et 1 en surveillance. Quel est son score, à 1 décimale ?
 
 ### B7.Q8 — Artefact de modèle : les poids seuls ne suffisent pas 🧠 ⏱️ 3 min
 *Fiche §207.7 · parcours R*
 
-a) Lesquels doivent être dans l'artefact pour que l'API prédise comme l'évaluation hors ligne ? (A) la moyenne et l'écart-type par canal des images d'entraînement ; (B) la liste des classes, dans l'ordre des sorties ; (C) l'état de l'optimiseur ; (D) le format d'entrée (RGB, pixels de 0 à 255 ramenés dans $[0, 1]$). (une ou plusieurs lettres)
+a) Lesquels doivent être dans l'artefact pour que l'API prédise comme l'évaluation hors ligne ? (A) la moyenne et l'écart-type par canal des images d'entraînement ; (B) la liste des classes, dans l'ordre des sorties ; (C) l'état de l'optimiseur ; (D) le learning rate atteint à la fin de l'entraînement. (une ou plusieurs lettres)
 b) Le service construit le modèle avec `widths=(16, 32)`, alors que l'artefact a été entraîné avec `widths=(12, 24)`, puis appelle `load_state_dict` : (A) le modèle se charge sans erreur, mais prédit presque au hasard ; (B) `load_state_dict` lève une erreur qui nomme les tenseurs de formes différentes ; (C) PyTorch tronque ou complète par des zéros les poids qui n'ont pas la bonne forme, puis prédit.
 c) `save_file(state_dict, "model.safetensors", metadata={"version": 1})` : (A) enregistre la version 1 dans l'en-tête ; (B) écrit le fichier et ignore les métadonnées ; (C) lève une `TypeError`.
 d) Vrai ou faux : l'empreinte des données d'entraînement, notée dans l'artefact, permet de vérifier six mois plus tard qu'un réentraînement a utilisé exactement les mêmes images.
@@ -105,7 +105,7 @@ b) Que vaut le p95, en ms ?
 c) Vrai ou faux : deux services de même latence moyenne peuvent avoir des p95 très différents.
 d) Un autre service reçoit 60 requêtes par seconde, et chacune y reste 150 ms en moyenne. Combien de requêtes y sont en cours, en moyenne ?
 e) Un batch de 64 images est traité en 0,4 s. Quel débit, en images par seconde ?
-f) Regrouper les requêtes en batches : (A) augmente le débit, et chaque image attend la fin de son batch ; (B) diminue la latence de chaque image, puisque le calcul est partagé ; (C) ne change rien sur CPU, faute de calcul parallèle.
+f) Ton service passe d'un appel du modèle par image à un appel par groupe de 32 requêtes. Sur CPU : (A) il sert plus d'images par seconde, mais une requête peut attendre sa réponse plus longtemps ; (B) chaque requête est servie plus vite, puisque le calcul est partagé ; (C) rien ne change, faute de calcul parallèle.
 
 ### B7.Q10 — torch.export, ONNX, TorchScript : lequel choisir aujourd'hui ? 🧠 ★★ ⏱️ 3 min
 *Fiche §207.8 · parcours —*
@@ -134,8 +134,8 @@ f) Vrai ou faux : des intervalles de PSI recalculés chaque semaine sur la produ
 ### B7.R1 — Ch. 24 : ce qu'une ligne de journal d'expériences doit contenir 🔁 ★ ⏱️ 5 min
 *Ch. 24 (journal d'expériences, 🛠️ 24.15) · fiche §207.5 · parcours R*
 
-a) Lesquels faut-il noter pour pouvoir rejouer un run ? (A) le commit git du code ; (B) la graine ; (C) tous les hyperparamètres, y compris ceux laissés par défaut ; (D) la couleur de sa courbe dans la figure de comparaison. (une ou plusieurs lettres)
-b) Un run a divergé (loss `nan` à l'epoch 3) : (A) tu gardes sa ligne, avec son statut ; (B) tu effaces sa ligne, qui fausserait les moyennes ; (C) tu le relances à la même graine et tu remplaces sa ligne.
+a) Lesquels faut-il noter pour pouvoir rejouer un run ? (A) le commit git du code ; (B) la graine ; (C) tous les hyperparamètres, y compris ceux laissés par défaut ; (D) les versions de Python et de PyTorch. (une ou plusieurs lettres)
+b) Un run a divergé (loss `nan` à l'epoch 3) : (A) sa ligne reste, marquée `"status": "diverged"` ; (B) tu effaces sa ligne, qui fausserait les moyennes ; (C) tu le relances à la même graine et tu remplaces sa ligne.
 c) Vrai ou faux : pour ajouter un champ `warmup_steps` aux runs à venir, il faut d'abord réécrire les anciennes lignes du journal JSONL avec ce champ, sinon elles ne se liront plus.
 d) Un journal JSONL contient 7 runs ; tu en relances 2, avec d'autres graines. Combien de lignes contient-il ensuite ?
 e) Dans l'identifiant de run `20261104-161731-e06339`, que représente `161731` ? (A) la graine du run, recopiée de sa configuration ; (B) les six premiers caractères du commit git du code ; (C) l'heure du lancement, 16 h 17 min 31 s (UTC).
@@ -156,7 +156,7 @@ a) Tu livres un classifieur scikit-learn dont les features sont standardisées :
 b) Vrai ou faux : un fichier `joblib` écrit avec scikit-learn 1.6 se relit de façon garantie avec scikit-learn 1.9.
 c) Charger avec scikit-learn 1.9 un modèle écrit avec la 1.6 affiche : (A) un `FutureWarning` ; (B) un `InconsistentVersionWarning` ; (C) rien.
 d) Vrai ou faux : charger un fichier `joblib` d'une source inconnue peut exécuter du code arbitraire.
-e) Lesquels vont dans le fichier de métadonnées, à côté du modèle ? (A) `sklearn.__version__` ; (B) `numpy.__version__` ; (C) le score de validation ; (D) le mot de passe de la base de données d'où viennent les données. (une ou plusieurs lettres)
+e) Lesquels vont dans le fichier de métadonnées, à côté du modèle ? (A) `sklearn.__version__` ; (B) `numpy.__version__` ; (C) le score de validation ; (D) une copie des données d'entraînement, pour pouvoir vérifier le modèle plus tard. (une ou plusieurs lettres)
 f) Pour servir des prédictions sans Python : (A) `skops.io` ; (B) `joblib` ; (C) ONNX.
 
 <a id="papier"></a>
@@ -217,7 +217,7 @@ c) Son p95, à 2 décimales.
 d) Combien des vingt mesures dépassent la moyenne ?
 e) Le débit du batch 1 calculé avec son p50, en images par seconde, arrondi à l'entier.
 f) Le débit du batch 32 calculé avec son p50, en images par seconde, arrondi à l'entier.
-g) Combien de fois f) est-il plus grand que e), à 1 décimale ?
+g) Combien de fois le débit du batch 32 est-il plus grand que celui du batch 1 (débits non arrondis), à 1 décimale ?
 h) Le temps de calcul par image dans un batch de 32 (le p50 du batch divisé par 32), en ms, à 2 décimales.
 i) Vrai ou faux : l'objectif « 95 % des images servies en moins de 100 ms » est tenu si chaque image est servie dans un batch de 32 (une image attend la fin de son batch, et l'on ne compte pas le temps passé à le remplir).
 j) Une page affiche 8 prédictions, demandées l'une après l'autre, de latences indépendantes. Quelle probabilité qu'au moins une dépasse le p95, à 2 décimales ?
@@ -259,15 +259,16 @@ Hypothèses (des ordres de grandeur, à prendre telles quelles) :
 - sur un cœur, le modèle traite une image seule en 4 ms et un batch de 16 en 24 ms ; entre les deux, un batch de $b$ images prend à peu près $2{,}7 + 1{,}33\,b$ ms ;
 - chaque requête coûte en plus 3 ms de CPU que le regroupement ne partage pas (lire le JSON, valider, prétraiter, répondre) ;
 - l'objectif : un p95 sous 100 ms ; pour que les files d'attente restent courtes, on ne charge un cœur qu'à 60 % en moyenne ;
-- une machine virtuelle de 4 vCPU coûte de 0,15 à 0,25 € de l'heure (prix indicatif) ; un mois compte 730 heures ; on compte un vCPU comme un cœur.
+- une machine virtuelle de 4 vCPU coûte de 0,15 à 0,25 € de l'heure (prix indicatif) ; un mois compte 730 heures ; on compte un vCPU comme un cœur ;
+- pour la question 5 seulement : une machine de 4 vCPU avec un GPU d'entrée de gamme coûte de 0,50 à 1 € de l'heure, et son GPU traite un batch de 64 images du modèle lourd en environ 15 ms.
 
 Réponds dans ta copie, avec des ordres de grandeur ; des fourchettes sont bienvenues.
 
 1. **Sans regroupement.** Quel temps de CPU par requête ? Combien de cœurs sont occupés en moyenne à 100 requêtes par seconde, et combien en faut-il avec la règle des 60 % ? Et au pic ?
 2. **Les requêtes en cours.** Une requête reste en moyenne 30 ms dans le service hors pic et 60 ms au pic (calcul, attente et réseau). Combien de requêtes sont en cours dans chaque cas ? Qu'en déduis-tu sur le nombre de requêtes que le serveur doit accepter en même temps, comparé au nombre de cœurs ?
-3. **Le regroupement.** Le serveur attend au plus 10 ms pour remplir un batch, de 16 images au plus. Combien de requêtes arrivent en 10 ms, hors pic et au pic ? Au pic, quel temps de CPU par requête, et quel gain par rapport à 1 ? Quel prix en latence ? Pourquoi un batch de 16 est-il hors de portée hors pic ?
+3. **Le regroupement.** Le serveur attend au plus 10 ms pour remplir un batch, de 16 images au plus. Combien de requêtes arrivent en 10 ms, hors pic et au pic ? Au pic, quel temps de CPU par requête, et quel gain par rapport à 1 ? Quel prix en latence ? Pourquoi un batch de 16 est-il hors de portée, hors pic comme au pic ?
 4. **Le coût.** Combien de machines de 4 vCPU faut-il pour tenir le pic, sans et avec regroupement ? Avec une seconde machine pour la redondance, quel coût mensuel ?
-5. **Un modèle dix fois plus lourd.** Le modèle prend maintenant 40 ms pour une image et $27 + 13{,}3\,b$ ms pour un batch de $b$. Refais 1 et 3 au pic. Quand un GPU devient-il intéressant ?
+5. **Un modèle dix fois plus lourd.** Le modèle prend maintenant 40 ms pour une image et $27 + 13{,}3\,b$ ms pour un batch de $b$. Refais 1 et 3 au pic. Compare le coût mensuel de la flotte CPU, redondance comprise, à celui d'une machine GPU et de sa remplaçante : quand un GPU devient-il intéressant ?
 6. En deux phrases : qu'est-ce qui pèse le plus dans le coût de ce service, et quel est le premier levier que tu essaierais ?
 
 <a id="reflexion"></a>

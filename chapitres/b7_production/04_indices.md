@@ -58,7 +58,7 @@ Les niveaux, du plus détaillé au plus grave : `DEBUG`, `INFO` (les étapes nor
 </details>
 <details><summary>Indice 3</summary>
 
-a) **B** : une fin d'epoch est une étape normale. Pour b), le programme continue, mais quelque chose d'attendu manque : quel niveau ? Pour c), compte les messages de niveau `WARNING` ou plus grave. Pour d), où se configurent les handlers, et qu'arriverait-il si chaque module les configurait ? Pour e), lequel des trois messages contient un fait que l'on peut vérifier ? Pour f), le `except` empêche-t-il le script d'aller au bout ?
+a) **B** : écrire l'artefact à la fin d'un run réussi est une étape normale. Pour b), le programme continue, mais dans des conditions inattendues : quel niveau ? Pour c), compte les messages de niveau `WARNING` ou plus grave. Pour d), où se configurent les handlers, et qu'arriverait-il si chaque module les configurait ? Pour e), lequel des trois messages contient un fait que l'on peut vérifier ? Pour f), le `except` empêche-t-il le script d'aller au bout ?
 
 </details>
 
@@ -260,7 +260,7 @@ On sauvegarde le pipeline entier ; un `joblib` ne se relit de façon fiable qu'a
 </details>
 <details><summary>Indice 3</summary>
 
-a) **A** : le prétraitement fait partie du modèle, il voyage avec lui. Pour b), relis la deuxième règle : que garantit la documentation d'une version à l'autre ? Pour c), quel avertissement porte le nom des versions ? Pour d), relis la troisième règle. Pour e), demande-toi pour chaque lettre si elle aide à relire ou à juger le modèle, et si elle peut être lue par n'importe qui. Pour f), lequel des trois formats ne demande pas Python ?
+a) **A** : le prétraitement fait partie du modèle, il voyage avec lui. Pour b), relis la deuxième règle : que garantit la documentation d'une version à l'autre ? Pour c), quel avertissement porte le nom des versions ? Pour d), relis la troisième règle. Pour e), demande-toi pour chaque lettre si elle aide à relire ou à juger le modèle, et si elle a sa place dans un petit fichier qui voyage avec lui. Pour f), lequel des trois formats ne demande pas Python ?
 
 </details>
 
@@ -354,7 +354,7 @@ Cœurs occupés $=$ requêtes par seconde $\times$ temps de CPU par requête (en
 </details>
 <details><summary>Indice 3</summary>
 
-1. $4 + 3 = 7$ ms par requête ; à 100 requêtes par seconde, $100 \times 0{,}007 = 0{,}7$ cœur occupé ; divise par 0,6 et arrondis ; refais au pic. Pour 2, $100 \times 0{,}030$ et $300 \times 0{,}060$. Pour 3, $100 \times 0{,}01$ et $300 \times 0{,}01$ requêtes, puis le temps de CPU par requête avec ce $b$. Pour 4, divise les cœurs nécessaires par 4, ajoute une machine, multiplie par $0{,}15$ à $0{,}25 \times 730$. Pour 5, refais 1 et 3 avec $40 + 3$ ms et $\frac{27 + 13{,}3\,b}{b} + 3$. Pour 6, compare la part fixe de 3 ms à la part du modèle.
+1. $4 + 3 = 7$ ms par requête ; à 100 requêtes par seconde, $100 \times 0{,}007 = 0{,}7$ cœur occupé ; divise par 0,6 et arrondis ; refais au pic. Pour 2, $100 \times 0{,}030$ et $300 \times 0{,}060$. Pour 3, $100 \times 0{,}01$ et $300 \times 0{,}01$ requêtes, puis le temps de CPU par requête avec ce $b$. Pour 4, divise les cœurs nécessaires par 4, ajoute une machine, multiplie par $0{,}15$ à $0{,}25 \times 730$. Pour 5, refais 1 et 3 avec $40 + 3$ ms et $\frac{27 + 13{,}3\,b}{b} + 3$, ajoute une machine de redondance à chaque flotte, puis compare $730 \times$ le prix horaire des deux solutions, et le nombre d'images qu'arrive à réunir un GPU en 10 ms. Pour 6, compare la part fixe de 3 ms à la part du modèle.
 
 </details>
 

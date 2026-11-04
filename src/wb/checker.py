@@ -1001,10 +1001,12 @@ _LETTER_SEPARATORS = re.compile(r"[\s,;/+&-]+")
 def _glued_letters(value, *, keep_order: bool = False) -> str | None:
     """Several choice letters written in another order or with separators ("E, D, B", "d+b+e", "EDB", "B, D et E",
     "(B), (D)") ->
-    the normalised letters, sorted and glued ("bde"); None when the text is not a list of single letters
-    (a word typed in lower case, like "cab", is not read as letters).
+    the normalised letters, sorted and glued ("bde"); None when the text is not a list of single letters.
+    Letters glued in lower case ("dca") are read as letters only in the sorted reading, and only when they are
+    distinct: the caller compares that reading with the stored answer, so a word answer ("cab") is never re-sorted,
+    while "dca" passes for the set of letters "ACD" (02_exercices: « dans n'importe quel ordre »).
     ``keep_order=True``: the letters glued in the order typed, repeats kept ("B, D, E, A, C" -> "bdeac"), for the
-    answers that are an ordering of the letters."""
+    answers that are an ordering of the letters (glued lower-case letters are then the text itself)."""
     raw = _unwrap_single(value)
     if not isinstance(raw, str):
         return None
@@ -1015,6 +1017,9 @@ def _glued_letters(value, *, keep_order: bool = False) -> str | None:
     if len(parts) > 1 and all(len(part) == 1 and part.isascii() and part.isalpha() for part in parts):
         letters = parts
     elif len(parts) == 1 and len(parts[0]) > 1 and parts[0].isascii() and parts[0].isalpha() and parts[0].isupper():
+        letters = list(parts[0])
+    elif (not keep_order and len(parts) == 1 and len(parts[0]) > 1 and parts[0].isascii() and parts[0].isalpha()
+          and parts[0].islower() and len(set(parts[0])) == len(parts[0])):     # "dca" for "ACD"
         letters = list(parts[0])
     else:
         return None
