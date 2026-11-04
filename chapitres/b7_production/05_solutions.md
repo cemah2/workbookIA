@@ -181,4 +181,158 @@ a) **A** : le pipeline entier, prétraitement compris ; un modèle sans sa stand
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B7.9 à B7.25) seront ajoutées à la prochaine session de génération, avec le notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.
+Le paquet de référence du chapitre est dans `solutions/b7_cifarprod/` (le notebook de solutions en écrit les fichiers dans un dossier temporaire) : `pyproject.toml`, `configs/`, `src/cifarprod/` et `tests/`. Les extraits ci-dessous en montrent les parties qui comptent ; les nombres sont ceux de `05_solutions.ipynb` (2 cœurs, PyTorch 2.11) et de `tools/chapters/history_chB7.py`.
+
+### Ex B7.9 — Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable 📦
+**Réponse** : les quatre fichiers de `solutions/b7_cifarprod/src/cifarprod/` et son `pyproject.toml` ; les 33 vérifications passent. L'entraînement fumée des réglages par défaut (CNN 16-32, 2 000 images, une epoch, 16 pas de SGD) atteint une accuracy de validation de 0,302 en moins d'une seconde dans le notebook (≈ 3 s par la ligne de commande, l'import de PyTorch compris) ; l'installation éditable dans un environnement neuf prend de 0,5 à 4 s.
+**Démarche** : le cœur est le prétraitement, qui servira à l'entraînement **et** au service :
+```python
+def preprocess(images: np.ndarray, mean, std) -> torch.Tensor:
+    images = np.asarray(images)
+    if images.dtype != np.uint8:
+        raise ValueError(f"preprocess expects uint8 images (0..255), got {images.dtype}")
+    if images.ndim == 3:
+        images = images[None]
+    if images.ndim != 4 or images.shape[1:] != (32, 32, 3):
+        raise ValueError(f"expected images of shape (N, 32, 32, 3) or (32, 32, 3), got {images.shape}")
+    x = torch.from_numpy(np.ascontiguousarray(images)).permute(0, 3, 1, 2).to(torch.float32) / 255.0
+    m = torch.tensor(mean, dtype=torch.float32).view(1, 3, 1, 1)
+    s = torch.tensor(std, dtype=torch.float32).view(1, 3, 1, 1)
+    return ((x - m) / s).contiguous()
+```
+`load_npz` vérifie le schéma **avant** de rendre les tableaux : une donnée mal formée doit arrêter le run dès la lecture, pas fausser l'entraînement en silence. `train` sème tout au début (l'initialisation des poids dépend du générateur global), apprend la normalisation sur `X` seul, et confie l'ordre des mini-batches à un générateur propre au `DataLoader` : deux appels avec la même graine donnent les mêmes poids, quel que soit ce qui a été tiré avant dans le notebook. Le `pyproject.toml` reprend celui de la fiche, avec `safetensors`, l'extra `serve`, le point d'entrée et la section `[tool.pytest.ini_options]`. Le layout `src/` fait le reste : `import cifarprod` n'est possible qu'une fois le paquet installé (ou son `src/` dans le `PYTHONPATH`, comme le font les cellules), donc les tests utilisent le paquet installé, pas une copie du dossier courant. L'installation éditable écrit dans l'environnement un lien vers `src/` : un fichier modifié est relu au prochain import (dans un **nouveau** processus ; un notebook garde l'ancien module en mémoire, d'où `wbp.import_package`, qui l'oublie avant de réimporter).
+**Erreurs fréquentes** : un `print` dans `train` (la ligne de commande de B7.10 réserve stdout à son résumé) ; la normalisation apprise sur l'entraînement **et** la validation ; `channel_stats` qui rend des tableaux NumPy (ils ne passent pas par `json.dumps`, et B7.14 plante) ; un `DataLoader` mélangé sans `generator` (l'ordre suit alors le générateur global) ; `preprocess` qui accepte des floats et les divise encore par 255 ; une convolution avec biais avant une batchnorm (des paramètres inutiles, et un `state_dict` qui ne recharge plus le modèle du MP5) ; un autre backend que setuptools, absent de l'environnement (`hatchling`).
+**Variante** : `build_model("vgg", (16, 32, 64))` est exactement le modèle livré du MP5 (72 954 paramètres) : `build_model("vgg", (16, 32, 64)).load_state_dict(torch.load(".../solution/model.pt", weights_only=True))` passe, sans erreur de clé, et donne 84,8 % d'accuracy sur 1 000 images de test de CIFAR-10. Un paquet qui reprend les noms de couches de `cifarkit` recharge ses anciens modèles.
+
+### Ex B7.10 — Une interface en ligne de commande : argparse, logging et codes de sortie 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/cli.py` (et `__main__.py`, deux lignes)  ; les douze vérifications passent. Sur 200 images, `cifarprod train --set n_train=200` rend 0, écrit `<out>/model.safetensors` et quatre lignes INFO sur stderr, et une seule ligne JSON sur stdout (accuracy de validation 0,136 : 200 images, deux pas de SGD ; on ne juge ici que la mécanique).
+**Démarche** :
+```python
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)        # a bad option: a message and exit code 2
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, stream=sys.stderr,
+                        format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    return run_train(args)
+```
+`run_train` range chaque erreur dans sa case : `load_config` dans un premier `try` (code 2 : l'utilisateur doit corriger sa commande), la lecture des données dans un deuxième (code 1 : le run n'a pas pu se faire), le reste dans un troisième (`log.exception` ajoute la trace, code 1). stdout ne reçoit qu'une ligne, le résumé JSON : un script ou une intégration continue la lit sans trier les messages de log. `main` **rend** son code : un test l'appelle (`assert main([...]) == 2`), et `sys.exit(main())`, en bas du fichier et dans `__main__.py`, le transmet au système. La référence importe PyTorch dans `run_train` seulement : `cifarprod --help` répond en un dixième de seconde au lieu d'une seconde et demie.
+**Erreurs fréquentes** : `except Exception: print(err)` puis la fin normale (le code 0 d'un échec : le premier piège du tableau de la fiche) ; `logging.basicConfig` dans `train.py` (un module de bibliothèque ne configure pas le logging : c'est le rôle du point d'entrée) ; `sys.exit(...)` dans `main` (le test, et le notebook, s'arrêtent avec lui) ; les messages de log sur stdout (le JSON n'est plus la seule ligne) ; un chemin relatif dans le résumé (faux dès que le lecteur n'est pas dans le même dossier).
+**Variante** : avec la version de départ de `config.py`, `cifarprod train --set epochs=0` ne rend pas 2 : il lance un entraînement de zéro epoch, puis plante en lisant `history["val_acc"][-1]` (une `IndexError`, code 1), après avoir chargé les données et construit le modèle ; la validation de B7.11 refuse ce réglage avant toute seconde de calcul.
+
+### Ex B7.11 — Configuration : dataclass + YAML, surcharges en ligne de commande, validation 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/config.py`, `configs/fast.yaml` et `configs/smoke.yaml` ; les seize surcharges invalides sont refusées, chacune par une `ValueError` qui nomme son réglage, et `cifarprod train --config configs/smoke.yaml` tourne en ≈ 3 s.
+**Démarche** :
+```python
+    def __post_init__(self) -> None:
+        for f in fields(self):                          # a dataclass does not check the types: we do
+            value, kind = getattr(self, f.name), type(f.default)
+            if kind is float and type(value) is int:
+                object.__setattr__(self, f.name, float(value))          # 1 -> 1.0 is fine
+            elif kind is tuple and type(value) is list:
+                object.__setattr__(self, f.name, tuple(value))          # a YAML list -> a tuple
+            elif type(value) is not kind:                               # True is not an int here
+                raise ValueError(f"{f.name}: expected {kind.__name__}, got {value!r}")
+        ...                                             # widths, arch, then the bounds
+```
+`type(value) is kind` plutôt que `isinstance` : `isinstance(True, int)` est vrai, et `batch_size: yes` passerait pour 1. Les bornes viennent après les types, pour que leurs comparaisons ne plantent pas sur une chaîne. `load_config` superpose trois couches, des valeurs par défaut au fichier puis aux surcharges ; les clés inconnues se refusent avant de construire la dataclass (sinon `TrainConfig(**raw)` lève une `TypeError`, que la ligne de commande ne range pas dans le code 2). `lr: 1e-3` est lu par PyYAML 6 comme la **chaîne** `'1e-3'` (YAML 1.1 veut un point dans un nombre à exposant) : seule la validation du type l'arrête. Les secrets (clé d'API, mot de passe) ne vont jamais dans ce fichier : il se versionne et se recopie dans chaque ligne du journal (B7.14) ; ils passent par des variables d'environnement (207.9).
+**Erreurs fréquentes** : `isinstance` pour les types (les booléens passent) ; des bornes larges (`0 <= lr <= 1` accepte `lr = 0`, un run qui n'apprend rien) ; une clé inconnue ignorée (une faute de frappe garde la valeur par défaut, sans rien dire) ; `yaml.load` au lieu de `yaml.safe_load` ; un fichier vide qui plante (`yaml.safe_load` rend `None`) ; `to_dict` qui garde un tuple (JSON le relit en liste : la configuration relue n'est plus égale).
+**Variante** : avec pydantic (installé avec FastAPI), `class TrainConfig(BaseModel, frozen=True)` et `lr: float = Field(0.05, gt=0, lt=1)` font la même validation en déclarant les bornes ; `model_config = ConfigDict(extra="forbid", strict=True)` refuse les clés inconnues et les conversions (`"1e-3"` comme `True`). Sa `ValidationError` est une `ValueError` : `cli.py` ne change pas.
+
+### Ex B7.12 — Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ? 🔮
+**Réponse** : a) **`True`** ; b) **`True`** ; c) **`False`** (écart maximal des poids : 0,027) ; d) **`True`**. Les quatre réponses sont les mêmes pour les graines 0, 1 et 2 et pour 256 ou 512 images (`history_chB7.py`), l'écart de c) allant de 0,014 à 0,029. e) Sur un GPU, les poids ne sont en général **pas** ceux du CPU (d'autres noyaux de calcul, qui additionnent dans un autre ordre), et deux runs sur le même GPU ne sont identiques qu'avec `torch.use_deterministic_algorithms(True)` et `torch.backends.cudnn.benchmark = False` (207.4) ; la cellule le mesure sur Colab.
+**Démarche** : a) un run à 0 worker est une suite d'opérations fixée par `torch.manual_seed(0)` : rejoué, il refait les mêmes tirages, dans le même ordre, sur le même processeur. b) Avec des workers, chaque processus fils sème son générateur avec une graine de base que le `DataLoader` tire, à chaque epoch, dans **son** `generator` (graine 0), plus le numéro du worker : rejoué, chaque worker refait les mêmes retournements. c) À 0 worker, les retournements sont tirés dans le générateur global du notebook, juste après l'initialisation des poids ; à 4 workers, dans les générateurs des workers : ce ne sont pas les mêmes tirages, donc pas les mêmes images retournées, donc pas les mêmes poids. d) Sans retournement, plus rien n'est tiré dans `__getitem__` : l'ordre des mini-batches vient du `generator`, le même dans les deux cas, et les workers ne font que lire les images. La leçon : `num_workers` fait partie de la configuration d'un run reproductible dès qu'une augmentation tire au hasard ; `worker_init_fn` sème aussi NumPy et `random` dans chaque worker (sinon des workers créés par `fork` peuvent copier le même état NumPy), mais ne rend pas un run à 4 workers égal à un run à 0 worker.
+**Erreurs fréquentes** : croire que `num_workers` ne change que la vitesse ; croire qu'un run à 4 workers ne se rejoue pas (il se rejoue, avec le même `generator`) ; oublier que le GPU change les nombres même à graine fixée.
+**Variante** : avec `persistent_workers=True`, les workers sont créés une seule fois, et leurs générateurs continuent d'une epoch à l'autre au lieu d'être semés de nouveau : un run reste rejouable avec les mêmes réglages, mais ses retournements de la deuxième epoch diffèrent de ceux d'un run sans workers persistants.
+
+### Ex B7.13 — Mesurer le non-déterminisme : graines fixées ou non, algorithmes déterministes, cinq exécutions 🔬
+**Réponse** : `wb.check` : **`True`** (A et B, graine 0, ont exactement les mêmes poids). Les cinq runs de la référence (≈ 3,5 s chacun) : A, B et C (sans les algorithmes déterministes) donnent les mêmes poids au bit près, et la même accuracy de validation, 0,302 ; d'une graine à l'autre, l'écart maximal des poids vaut 0,40, et l'accuracy des graines 0, 1 et 2 vaut 30,2 ; 33,2 et 32,6 %, soit **32,0 % ± 3,9** (intervalle à 95 %, $t_{0{,}975;\,2} = 4{,}303$).
+**Démarche** :
+```python
+def train_run_13(seed, deterministic=True):
+    out = tempfile.mkdtemp(prefix="wb_b7_13_")
+    result = wbp.cli(PROJECT, "train", "--config", "configs/fast.yaml", "--set", f"seed={seed}",
+                     "--set", f"deterministic={str(deterministic).lower()}", "--out", out)
+    if not result.ok:
+        raise RuntimeError(f"cifarprod train exited with {result.returncode}: {result.tail(3)}")
+    summary = result.last_json()
+    return {"weights": load_file(summary["weights"]), "val_acc": summary["val_acc"], "seconds": result.seconds}
+```
+A et B sont identiques parce que tout ce qui est tiré l'est par des générateurs semés par la configuration (l'initialisation après `torch.manual_seed`, l'ordre par le `generator` du `DataLoader`), et que chaque run est un processus neuf : rien d'un run précédent ne déplace les tirages. C l'est aussi, **sur ce processeur et avec ce PyTorch** : les opérations de ce CNN n'ont pas d'implémentation non déterministe sur CPU, et `use_deterministic_algorithms` n'a rien à changer. La documentation ne promet rien d'autre que « le même logiciel sur le même matériel » : sur un GPU, la passe arrière d'une convolution peut accumuler dans un ordre qui varie (207.4). L'écart d'une graine à l'autre (0,40 sur un poids, 3 points d'accuracy) est l'ordre de grandeur à garder en tête avant de croire qu'un réglage « gagne » d'un point : avec trois graines, la demi-largeur de l'intervalle vaut 3,9 points.
+**Erreurs fréquentes** : comparer deux runs par leur accuracy (deux modèles différents peuvent avoir la même) ; `a == b` sur deux dictionnaires de tenseurs (Python compare des tenseurs, et `bool` d'un tenseur à plusieurs valeurs lève une erreur) ; `max_gap_13` qui rend un tenseur ; oublier `--set deterministic=...` (C n'est plus l'expérience annoncée) ; un seul dossier `--out` pour tous les runs (le suivant écrase les poids du précédent).
+**Variante** : sur cinq graines (0 à 4, `history_chB7.py`), l'accuracy vaut 30,2 ; 33,2 ; 32,6 ; 33,4 et 28,6 %, soit 31,6 % ± 2,6 ($t_{0{,}975;\,4} = 2{,}776$, $s = 2{,}1$ points) ; les modes déterministe et non déterministe donnent les mêmes poids pour les cinq graines.
+
+### Ex B7.14 — Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL 📦
+**Réponse** : `solutions/b7_cifarprod/src/cifarprod/tracking.py`, et dans `cli.py` le dictionnaire `record`, complété au fil du run et écrit dans le `finally` ; les dix-sept vérifications passent, et `pandas.json_normalize` met les trois runs dans un tableau (statuts `ok`, `failed`, `ok`).
+**Démarche** :
+```python
+    record = {"run_id": run_id, "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "config": config.to_dict(), "environment": environment(), "status": "failed"}
+    start = time.perf_counter()
+    try:
+        ...
+        record["data"] = {"path": config.data, "n_train": len(X), "sha256": fingerprint(X, y)}
+        ...
+        record.update(status="ok", metrics={**history, "val_acc_final": history["val_acc"][-1]},
+                      normalization={"mean": list(result["mean"]), "std": list(result["std"])},
+                      artifacts=[artifact(weights)])
+        return 0
+    ...
+    finally:
+        record["seconds"] = round(time.perf_counter() - start, 3)
+        log_run(args.runs, record)                # every run is logged, the failed ones too
+```
+Le statut part à `"failed"` et ne passe à `"ok"` qu'à la fin : un run interrompu au milieu reste un échec dans le journal. Le `finally` écrit la ligne quel que soit le chemin de sortie (les `return 1` compris). L'empreinte porte sur les images **et** les labels réellement utilisés (`X[:n_train]`, `y[:n_train]`) : un label corrigé, ou un autre `n_train`, donne une autre empreinte. Le commit et `dirty` disent si le code se rejoue : un run fait avec des fichiers non commités ne se refait pas à l'identique. Le mode `"a"` d'`open` ajoute ; le journal ne se réécrit jamais, et un run raté y garde sa ligne (⚖️ 24.9 : l'effacer fausserait les comparaisons).
+**Erreurs fréquentes** : `open(path, "w")` (chaque run efface le journal) ; la ligne écrite seulement en cas de succès ; des tableaux NumPy ou des tenseurs dans le record (`json.dumps` plante dans le `finally`, et la ligne est perdue) ; l'empreinte de `X` seul, ou de tout le fichier au lieu des `n_train` images utilisées ; `datetime.now()` sans fuseau (deux machines n'écrivent pas la même heure) ; un `run_id` de la seule date à la seconde (deux runs lancés la même seconde se confondent).
+**Variante** : `pd.json_normalize(read_runs("runs/runs.jsonl")).query("status == 'ok'").sort_values("metrics.val_acc_final", ascending=False)[["run_id", "config.seed", "config.lr", "data.sha256", "metrics.val_acc_final"]]` est le tableau de comparaison de MLflow en une ligne ; les trois runs de la vérification y donnent 0,146 (graine 1) puis 0,136 (graine 0), le run raté filtré.
+
+### Ex B7.15 — Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données 📦
+**Réponse** : `solutions/b7_cifarprod/tests/` : 29 tests (24 dans `test_data.py` et `test_cli.py`, paramètres compris, dont un marqué `slow`) qui passent en ≈ 3 s sur le paquet de référence et attrapent les six versions fautives, chacune par un message qui dit ce qui était attendu :
+
+| Version fautive | Attrapée par | Première ligne du message |
+|---|---|---|
+| sans la division par 255 | `test_constant_image_preprocessed[255]` | `expected [2.0, 3.0, 7.0] per channel, got [1018.0, 1273.0, 2547.0]` |
+| des floats, sans schéma | `test_data_schema[train-2000]` | `expected uint8 images, got float32` |
+| validation = entraînement | `test_no_image_in_both_parts` | `expected no validation image in the training part, got 500` |
+| lr hors de ]0, 1[ accepté | `test_invalid_config_refused[lr=0]` | `DID NOT RAISE <class 'ValueError'>` |
+| code 0 sur une configuration invalide | `test_exit_code_of_an_invalid_config` | `expected the exit code 2 for epochs=0, got 0` |
+| pas de fichier de poids | `test_smoke_train` (slow) | `expected the weights in .../run/model.safetensors` |
+
+**Démarche** :
+```python
+@pytest.mark.parametrize("value", [0, 255])
+def test_constant_image_preprocessed(value):
+    x = preprocess(np.full((32, 32, 3), value, dtype=np.uint8), MEAN, STD)
+    want = torch.tensor([(value / 255 - m) / s for m, s in zip(MEAN, STD)]).view(1, 3, 1, 1).expand(1, 3, 32, 32)
+    assert x.shape == (1, 3, 32, 32), f"expected the shape (1, 3, 32, 32), got {tuple(x.shape)}"
+    assert torch.allclose(x, want, atol=1e-6), f"expected {want[0, :, 0, 0].tolist()} per channel, got {x[0, :, 0, 0].tolist()}"
+
+
+def test_no_image_in_both_parts(data_file):
+    train = {fingerprint(image) for image in load_npz(data_file, "train")[0]}
+    shared = sum(fingerprint(image) in train for image in load_npz(data_file, "val")[0])
+    assert shared == 0, f"expected no validation image in the training part, got {shared}"
+```
+Chaque test pose un cas dont la réponse se connaît sans le code : une image constante (une moyenne et un écart-type choisis pour que les valeurs attendues soient rondes, 2, 3 et 7), le schéma du fichier, l'absence d'image commune, des réglages hors bornes, des codes de sortie. Les tests de la fiche gardent leur rôle : la forme de la sortie, et l'overfitting de 16 images, qui verrait une boucle d'entraînement cassée (un `zero_grad` oublié, des labels mélangés) que les autres tests ne regardent pas. L'entraînement fumée est marqué `slow` parce qu'il entraîne un modèle (une seconde ici, des minutes dans un vrai projet) : on le saute en local (`-m "not slow"`), l'intégration continue le lance. Un test qui ne vérifie que « ça ne plante pas » n'attrape aucune des six versions : aucune ne plante.
+**Erreurs fréquentes** : un `assert` sans message (pytest n'affiche alors que `assert 1018.0 == 2.0`, sans dire ce qui était voulu) ; tester l'accuracy exacte d'un entraînement (le test casse au moindre changement de version) ; écrire le journal ou les poids dans le projet (`--runs` et `--out` vers `tmp_path`) ; un test qui dépend d'un autre (l'ordre des tests n'est pas garanti) ; un test de données qui échoue sans le fichier de données au lieu de sauter (l'intégration continue ne l'a pas).
+**Variante** : un test de données de plus, l'équilibre des classes, `np.bincount(y, minlength=10)` vaut 200 partout pour l'entraînement et 50 pour la validation ; il attraperait une huitième version fautive (un sous-ensemble tiré sans stratification) que les six tests de la référence laissent passer.
+
+### Ex B7.16 — Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver 🐛
+**Réponse** : cinq lignes à corriger, numérotées dans le code ; réparé, le service rend les 200 noms du notebook (accuracy 0,870), même pour un modèle dont les sorties sont rangées dans un autre ordre :
+```python
+    meta = {"arch": "vgg", "widths": [16, 32, 64], "mean": list(mean), "std": list(std),
+            "classes": list(classes)}                             # 3. the order of the outputs
+    ...
+    model.eval()                                                  # 2. the evaluation mode
+    ...
+    return wbp.imread_bgr(path)[..., ::-1].astype(np.float32) / 255   # 4. RGB, floats in [0, 1]
+    ...
+    x = np.asarray(images, dtype=np.float32)                      # 5. float32, as in training
+    mean = np.asarray(meta["mean"], dtype=x.dtype)                # 1. the statistics of the
+    std = np.asarray(meta["std"], dtype=x.dtype)                  #    training, from the artifact
+    ...
+    return [FRENCH_16[meta["classes"][i]] for i in k.tolist()]   # 3. the order of the artifact
+```
+**Démarche** : 1. le service **plante** (`expected scalar type Double but found Float`) : `np.asarray(..., dtype=np.float64)` fait de tout le prétraitement un calcul en float64, et `torch.from_numpy` garde ce type, que la convolution refuse avec des poids float32. 2. Une fois le service debout, l'image lue est en BGR et de 0 à 255 : `wbp.imread_bgr`, comme `cv2.imread`, rend les canaux dans l'ordre bleu, vert, rouge, en entiers. 3. Le prétraitement normalise chaque batch par **ses propres** statistiques : une image n'a pas la même entrée seule ou avec d'autres, et une seule image uniforme deviendrait une division par zéro ; c'est aussi lui qui cachait l'échelle de 0 à 255 du point 2 (une normalisation par les statistiques du batch efface tout facteur d'échelle). 4. Sans `model.eval()`, la batchnorm utilise les statistiques du batch et met à jour ses `running_mean` à chaque requête : le modèle dérive avec le trafic. 5. Les noms : `sorted(FRENCH_16.values())` range les classes par ordre alphabétique **français**, alors que la sortie $k$ est `CLASSES[k]` ; l'ordre des sorties appartient au modèle, il doit voyager dans l'artefact. Quand un seul écart reste (`history_chB7.py`, les 32 versions rejouées), le service a une accuracy de 0,085 (les classes), 0,105 (la lecture) ou plante (le float64) ; mais 0,865 sans `eval()` et 0,875 avec la normalisation par batch, contre 0,870 au notebook : sur un batch de 200 images variées, les statistiques du batch ressemblent à celles de l'entraînement, et ces deux écarts **ne se voient pas** sur l'accuracy. Ils se voient sur une image seule, ce que font les points 3 et 4, et ce que fera ton API, qui reçoit une image à la fois.
+**Erreurs fréquentes** : corriger le plantage par `model.double()` (le service tourne, deux fois plus lent, et en d'autres nombres que l'entraînement : le point 1 le refuse) ; inverser les canaux sans diviser par 255, ou l'inverse ; recopier dans le service la liste `CLASSES` au lieu de la lire dans l'artefact (le premier modèle entraîné dans un autre ordre la contredit : c'est la seconde moitié du point 5) ; appeler `model.eval()` dans `predict_16` seulement (le modèle que rend `load_service_16` n'est pas prêt à prédire) ; juger la réparation sur l'accuracy d'un batch de 200 images (elle laisse passer deux écarts).
+**Variante** : le test de non-régression du point 5, en trois lignes réutilisables dans une intégration continue : `names = predict(model, meta, paths)`, `want = [noms de l'évaluation hors ligne]`, `assert names == want, f"expected the offline names, {sum(a != b for a, b in zip(names, want))} differ"` ; sur le service du collègue tel quel, il échouait avant même de comparer (le plantage), puis, le seul float64 corrigé, sur 183 images sur 200 (17 noms justes).
+
+*Les solutions des exercices B7.17 à B7.25 (la fin du service et l'exploitation) seront ajoutées à la prochaine session de génération, avec le notebook.*

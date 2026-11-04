@@ -67,12 +67,18 @@ def scratch(prefix):
 
 
 def run_line(ex_id, result, ok, success, failure):
-    """One verdict about a command of your package: what was run, then the end of stderr when it went wrong."""
+    """One verdict about a command of your package: what was run, then the end of stderr when it went wrong (⏳ when
+    the command stopped on a NotImplementedError of your skeleton)."""
     shown = result.command().replace(f"python -m {wbp.PACKAGE}", "cifarprod")
+    pending = re.findall(r"NotImplementedError: (.+)", result.stderr)
+    if not ok and pending:
+        print(f"⏳ Ex {ex_id} : {shown} → pas encore fait ({pending[-1].strip()}).")
+        return False
     if result.timed_out:
         ok, failure = False, f"délai dépassé ({result.seconds:.0f} s) : {failure}"
-    verdict(ex_id, ok, f"{shown} → {success}", f"{shown} → {failure} (code {result.returncode} ; stderr : "
-                                                f"{result.tail(2)[:400]})")
+    seen = (f"stderr : {result.tail(2)[:400]}" if result.stderr.strip() else
+            f"rien sur stderr ; stdout : {result.stdout.strip()[-300:]!r}" if result.stdout.strip() else "rien sur stderr")
+    verdict(ex_id, ok, f"{shown} → {success}", f"{shown} → {failure} (code {result.returncode} ; {seen})")
     return ok
 
 
@@ -317,11 +323,18 @@ with checked("B7.9"):                                    # model.py
         ref_shapes_9 = {k: tuple(v.shape) for k, v in want_m_9.state_dict().items()}
         out_9 = mine_9.eval()(torch.zeros(5, 3, 32, 32))
         ok_9[arch_9 + str(widths_9)] = shapes_9 == ref_shapes_9 and tuple(out_9.shape) == (5, 10)
+        extra_9 = sorted(set(shapes_9) - set(ref_shapes_9))
+        lacking_9 = sorted(set(ref_shapes_9) - set(shapes_9))
+        other_9 = sorted(k for k in set(shapes_9) & set(ref_shapes_9) if shapes_9[k] != ref_shapes_9[k])
+        diff_9 = "; ".join(part for part in [f"en trop : {extra_9[:4]}" if extra_9 else "",
+                                             f"manquants : {lacking_9[:4]}" if lacking_9 else "",
+                                             f"d'autres formes : {other_9[:4]}" if other_9 else ""] if part)
         verdict("B7.9", ok_9[arch_9 + str(widths_9)],
                 f"build_model({arch_9!r}, {widths_9}) : {model_9.n_parameters(mine_9):_} paramètres, les mêmes couches "
                 "que l'architecture du contrat, sortie (5, 10).".replace("_", " "),
-                f"build_model({arch_9!r}, {widths_9}) : attendu les tenseurs {ref_shapes_9} et une sortie (5, 10), "
-                f"reçu {shapes_9} et {tuple(out_9.shape)}.")
+                f"build_model({arch_9!r}, {widths_9}) : les noms et les formes des tenseurs du state_dict diffèrent de "
+                f"ceux de l'architecture du contrat ({diff_9 or 'mêmes tenseurs'}) ; sortie {tuple(out_9.shape)}, "
+                "attendu (5, 10).")
     n_9 = model_9.n_parameters(wbp.build_reference("cnn", (12, 24)))
     ok_9["n_parameters"] = n_9 == sum(p.numel() for p in wbp.build_reference("cnn", (12, 24)).parameters())
     verdict("B7.9", ok_9["n_parameters"], "n_parameters compte les paramètres entraînables.",
@@ -570,7 +583,10 @@ with checked("B7.10"):
                                     "avec -v, les lignes DEBUG des mini-batches.",
                                     "attendu, avec -v, des lignes DEBUG du paquet sur stderr")
     with wbp.isolated_logging():                         # main() configures the logging of THIS process
-        code_10 = cli_10.main(["train", "--set", "lr"])
+        try:
+            code_10 = cli_10.main(["train", "--set", "lr"])
+        except SystemExit as exit_10:                     # sys.exit inside main: the notebook would stop there
+            code_10 = f"SystemExit({exit_10.code!r})"
     ok_10["main"] = type(code_10) is int and code_10 == 2
     verdict("B7.10", ok_10["main"], 'main(["train", "--set", "lr"]) rend l\'entier 2 dans le notebook.',
             f'main(["train", "--set", "lr"]) doit rendre l\'entier 2 (sans sys.exit) ; reçu {code_10!r}.')
@@ -797,21 +813,23 @@ with checked("B7.13"):
     tiny_13 = {**twin_13, "w": torch.tensor([[0.0, 0.0, 1e-6], [0.0, 0.0, 0.0]])}
     cases_13 = [("deux copies identiques", base_13, twin_13, True), ("un poids qui diffère de 1e-6", base_13, tiny_13, False),
                 ("un tenseur en moins", base_13, {k: v for k, v in twin_13.items() if k != "b"}, False)]
-    tools_ok_13 = True
+    all_13 = True
     for label_13, a_13, b_13, want_13 in cases_13:
         got_13 = same_weights_13(a_13, b_13)
         good_13 = isinstance(got_13, (bool, np.bool_)) and bool(got_13) == want_13
-        tools_ok_13 &= good_13
+        all_13 &= good_13
         verdict("B7.13", good_13, f"same_weights_13 sur {label_13} : {want_13}.",
                 f"same_weights_13 sur {label_13} : attendu {want_13}, reçu {got_13!r}.")
     gap_13 = max_gap_13(base_13, tiny_13)
     ok_gap_13 = type(gap_13) is float and abs(gap_13 - float(torch.tensor(1e-6))) < 1e-12
-    tools_ok_13 &= ok_gap_13
     verdict("B7.13", ok_gap_13, "max_gap_13 : 1e-6 (un float Python).",
             f"max_gap_13 sur un poids qui diffère de 1e-6 : reçu {gap_13!r}, attendu le float 1e-6 (à l'arrondi du float32 près).")
-if not written(lambda: train_run_13(0)):
-    print("⏳ Ex B7.13 : l'expérience attend ta fonction train_run_13.")
-    tools_ok_13 = False'''
+    tools_ok_13 = bool(all_13 and ok_gap_13)
+probe_13 = wbp.cli(PROJECT, "--version")
+if tools_ok_13 and not probe_13.ok:
+    tools_ok_13 = False
+    print(f"⏳ Ex B7.13 : ta commande ne répond pas encore (cifarprod --version : code {probe_13.returncode}, "
+          f"{probe_13.tail(1)[:160]}) : fais d'abord passer B7.10 et B7.11.")'''
 
 EXPERIMENT_13 = r'''RUNS_13 = {}
 if not tools_ok_13:
@@ -936,70 +954,83 @@ with checked("B7.14"):
             f"log_run puis read_runs : attendu deux lignes JSON, la première inchangée, relues dans l'ordre, et [] pour "
             f"un journal absent ; le fichier contient {lines_14!r:.200}.")
 
-with checked("B7.14"):                                   # the command line logs every run
-    out_14 = scratch("runs")
-    journal_14 = out_14 / "runs.jsonl"
-    r1_14 = wbp.cli(PROJECT, "train", "--set", "n_train=200", "--out", out_14 / "a", "--runs", journal_14)
-    ok_14["run 1"] = run_line("B7.14", r1_14, r1_14.ok, "code 0.", "attendu le code 0")
-    first_line_14 = journal_14.read_text(encoding="utf-8").splitlines()[0] if journal_14.is_file() else None
-    r2_14 = wbp.cli(PROJECT, "train", "--set", "n_train=99999", "--runs", journal_14)
-    ok_14["run 2"] = run_line("B7.14", r2_14, r2_14.returncode == 1, "code 1 (n_train plus grand que les données).",
-                              "attendu le code 1 : n_train = 99 999 dépasse les 2 000 images")
-    r3_14 = wbp.cli(PROJECT, "train", "--set", "n_train=200", "--set", "seed=1", "--runs", journal_14)
-    ok_14["run 3"] = run_line("B7.14", r3_14, r3_14.ok, "code 0, sans --out.", "attendu le code 0")
-    runs_14 = [json.loads(l) for l in journal_14.read_text(encoding="utf-8").splitlines()] if journal_14.is_file() else []
-    ok_14["three"] = [r.get("status") for r in runs_14] == ["ok", "failed", "ok"] and \
-        journal_14.read_text(encoding="utf-8").splitlines()[0] == first_line_14
-    verdict("B7.14", ok_14["three"], "trois lignes dans le journal, statuts ok, failed, ok ; la première jamais réécrite.",
-            f"attendu trois lignes de statuts ['ok', 'failed', 'ok'], la première inchangée ; reçu "
-            f"{[r.get('status') for r in runs_14]}.")
-    if not ok_14["three"]:
-        raise StopCheck
-    keys_14 = {"run_id", "started", "status", "seconds", "config", "environment", "data", "metrics", "normalization",
-               "artifacts"}
-    ok_rec_14 = all(keys_14 <= set(r) for r in (runs_14[0], runs_14[2])) and {"run_id", "status", "seconds", "config",
-                                                                               "error"} <= set(runs_14[1])
-    verdict("B7.14", ok_rec_14, "chaque ligne a les champs du contrat (un run raté : son erreur).",
-            f"champs manquants : run réussi {sorted(keys_14 - set(runs_14[0]))}, run raté "
-            f"{sorted({'run_id', 'status', 'seconds', 'config', 'error'} - set(runs_14[1]))}.")
-    if not ok_rec_14:
-        raise StopCheck
-    rec_14 = runs_14[0]
-    ok_14["ids"] = len({r["run_id"] for r in runs_14}) == 3 and r1_14.last_json().get("run_id") == rec_14["run_id"] \
-        and r3_14.last_json().get("run_id") == runs_14[2]["run_id"]
-    verdict("B7.14", ok_14["ids"], "trois identifiants distincts, ceux des lignes JSON de stdout.",
-            "attendu trois run_id distincts, et sur stdout le run_id de la ligne du journal.")
-    ok_14["config"] = rec_14["config"] == {**DEFAULTS, "n_train": 200} and runs_14[2]["config"] == {**DEFAULTS, "n_train": 200, "seed": 1}
-    verdict("B7.14", ok_14["config"], "la configuration complète du run (to_dict), surcharges comprises.",
-            f"config du premier run : attendu {{**DEFAULTS, 'n_train': 200}}, reçu {rec_14['config']!r:.200}.")
-    want_sha_14 = wbp.array_fingerprint(SUBSET["x_train"][:200], SUBSET["y_train"][:200])
-    ok_14["data"] = rec_14["data"].get("sha256") == want_sha_14 and rec_14["data"].get("n_train") == 200
-    verdict("B7.14", ok_14["data"], f"l'empreinte des 200 images d'entraînement et de leurs labels : {want_sha_14[:12]}….",
-            f"data : attendu n_train 200 et sha256 = fingerprint(X[:200], y[:200]) des images ET des labels utilisés, "
-            f"reçu {rec_14['data']!r:.200}.")
-    arts_14 = rec_14["artifacts"]
-    art_path_14 = (PROJECT / arts_14[0]["path"]).resolve() if arts_14 else None
-    ok_14["artifacts"] = (len(arts_14) >= 1 and art_path_14 == (out_14 / "a" / "model.safetensors").resolve()
-                          and arts_14[0].get("sha256") == hashlib.sha256(art_path_14.read_bytes()).hexdigest()
-                          and arts_14[0].get("bytes") == art_path_14.stat().st_size)
-    verdict("B7.14", ok_14["artifacts"], "artifacts : le fichier des poids, sa taille et son SHA-256.",
-            f"artifacts : attendu [{{path, bytes, sha256}}] du fichier <out>/model.safetensors, reçu {arts_14!r:.200}.")
-    default_out_14 = (PROJECT / runs_14[2]["artifacts"][0]["path"]).resolve() if runs_14[2]["artifacts"] else None
-    ok_14["default out"] = default_out_14 == (PROJECT / "runs" / runs_14[2]["run_id"] / "model.safetensors").resolve()
-    verdict("B7.14", ok_14["default out"], "sans --out, les poids vont dans runs/<run_id>/.",
-            f"sans --out, attendu runs/<run_id>/model.safetensors, reçu {default_out_14}.")
-    metrics_14 = rec_14["metrics"]
-    ok_14["metrics"] = (len(metrics_14.get("val_acc", [])) == 1 and metrics_14.get("val_acc_final") == r1_14.last_json().get("val_acc")
-                        and np.allclose(rec_14["normalization"]["mean"], (SUBSET["x_train"][:200] / 255).mean(axis=(0, 1, 2))))
-    verdict("B7.14", ok_14["metrics"], "metrics (une valeur par epoch, val_acc_final) et la normalisation apprise.",
-            "metrics : attendu train_loss, val_loss, val_acc (une valeur par epoch) et val_acc_final, la val_acc de "
-            "stdout ; normalization : la moyenne et l'écart-type des images d'entraînement.")
-    ok_14["failed"] = "n_train" in runs_14[1].get("error", "")
-    verdict("B7.14", ok_14["failed"], f"le run raté garde son erreur : « {runs_14[1].get('error', '')[:70]} ».",
-            f"le run raté doit garder son erreur (qui nomme n_train) ; reçu {runs_14[1].get('error')!r}.")
-    TABLE_14 = pd.json_normalize(runs_14)[["run_id", "status", "config.seed", "config.n_train", "metrics.val_acc_final",
-                                           "seconds"]]
-    print(TABLE_14.to_string(index=False))
+ready_14 = (written(lambda: wbp.import_module(PROJECT, "tracking").new_run_id())
+            and written(lambda: wbp.import_module(PROJECT, "cli").build_parser())
+            and written(lambda: wbp.import_module(PROJECT, "config").TrainConfig()))
+if not ready_14:
+    print("⏳ Ex B7.14 : le journal des runs attend tracking.py, et ta commande et ta configuration (B7.10, B7.11).")
+else:
+    with checked("B7.14"):                                 # the command line logs every run
+        out_14 = scratch("runs")
+        journal_14 = out_14 / "runs.jsonl"
+        r1_14 = wbp.cli(PROJECT, "train", "--set", "n_train=200", "--out", out_14 / "a", "--runs", journal_14)
+        ok_14["run 1"] = run_line("B7.14", r1_14, r1_14.ok, "code 0.", "attendu le code 0")
+        first_lines_14 = journal_14.read_text(encoding="utf-8").splitlines() if journal_14.is_file() else []
+        first_line_14 = first_lines_14[0] if first_lines_14 else None
+        r2_14 = wbp.cli(PROJECT, "train", "--set", "n_train=99999", "--runs", journal_14)
+        ok_14["run 2"] = run_line("B7.14", r2_14, r2_14.returncode == 1, "code 1 (n_train plus grand que les données).",
+                                  "attendu le code 1 : n_train = 99 999 dépasse les 2 000 images")
+        r3_14 = wbp.cli(PROJECT, "train", "--set", "n_train=200", "--set", "seed=1", "--runs", journal_14)
+        ok_14["run 3"] = run_line("B7.14", r3_14, r3_14.ok, "code 0, sans --out.", "attendu le code 0")
+        lines_14 = journal_14.read_text(encoding="utf-8").splitlines() if journal_14.is_file() else []
+        runs_14 = []
+        for line_14 in lines_14:
+            try:
+                record_14 = json.loads(line_14)
+            except ValueError:
+                record_14 = None
+            runs_14.append(record_14 if isinstance(record_14, dict) else {"status": f"ligne illisible : {line_14[:60]!r}"})
+        ok_14["three"] = [r.get("status") for r in runs_14] == ["ok", "failed", "ok"] and lines_14[0] == first_line_14
+        verdict("B7.14", ok_14["three"], "trois lignes dans le journal, statuts ok, failed, ok ; la première jamais réécrite.",
+                f"attendu trois lignes de statuts ['ok', 'failed', 'ok'], la première inchangée ; reçu "
+                f"{[r.get('status') for r in runs_14]}.")
+        if not ok_14["three"]:
+            raise StopCheck
+        keys_14 = {"run_id", "started", "status", "seconds", "config", "environment", "data", "metrics", "normalization",
+                   "artifacts"}
+        ok_rec_14 = all(keys_14 <= set(r) for r in (runs_14[0], runs_14[2])) and {"run_id", "status", "seconds", "config",
+                                                                                   "error"} <= set(runs_14[1])
+        verdict("B7.14", ok_rec_14, "chaque ligne a les champs du contrat (un run raté : son erreur).",
+                f"champs manquants : run réussi {sorted(keys_14 - set(runs_14[0]))}, run raté "
+                f"{sorted({'run_id', 'status', 'seconds', 'config', 'error'} - set(runs_14[1]))}.")
+        if not ok_rec_14:
+            raise StopCheck
+        rec_14 = runs_14[0]
+        ok_14["ids"] = len({r["run_id"] for r in runs_14}) == 3 and r1_14.last_json().get("run_id") == rec_14["run_id"] \
+            and r3_14.last_json().get("run_id") == runs_14[2]["run_id"]
+        verdict("B7.14", ok_14["ids"], "trois identifiants distincts, ceux des lignes JSON de stdout.",
+                "attendu trois run_id distincts, et sur stdout le run_id de la ligne du journal.")
+        ok_14["config"] = rec_14["config"] == {**DEFAULTS, "n_train": 200} and runs_14[2]["config"] == {**DEFAULTS, "n_train": 200, "seed": 1}
+        verdict("B7.14", ok_14["config"], "la configuration complète du run (to_dict), surcharges comprises.",
+                f"config du premier run : attendu {{**DEFAULTS, 'n_train': 200}}, reçu {rec_14['config']!r:.200}.")
+        want_sha_14 = wbp.array_fingerprint(SUBSET["x_train"][:200], SUBSET["y_train"][:200])
+        ok_14["data"] = rec_14["data"].get("sha256") == want_sha_14 and rec_14["data"].get("n_train") == 200
+        verdict("B7.14", ok_14["data"], f"l'empreinte des 200 images d'entraînement et de leurs labels : {want_sha_14[:12]}….",
+                f"data : attendu n_train 200 et sha256 = fingerprint(X[:200], y[:200]) des images ET des labels utilisés, "
+                f"reçu {rec_14['data']!r:.200}.")
+        arts_14 = rec_14["artifacts"]
+        art_path_14 = (PROJECT / arts_14[0]["path"]).resolve() if arts_14 else None
+        ok_14["artifacts"] = (len(arts_14) >= 1 and art_path_14 == (out_14 / "a" / "model.safetensors").resolve()
+                              and arts_14[0].get("sha256") == hashlib.sha256(art_path_14.read_bytes()).hexdigest()
+                              and arts_14[0].get("bytes") == art_path_14.stat().st_size)
+        verdict("B7.14", ok_14["artifacts"], "artifacts : le fichier des poids, sa taille et son SHA-256.",
+                f"artifacts : attendu [{{path, bytes, sha256}}] du fichier <out>/model.safetensors, reçu {arts_14!r:.200}.")
+        default_out_14 = (PROJECT / runs_14[2]["artifacts"][0]["path"]).resolve() if runs_14[2]["artifacts"] else None
+        ok_14["default out"] = default_out_14 == (PROJECT / "runs" / runs_14[2]["run_id"] / "model.safetensors").resolve()
+        verdict("B7.14", ok_14["default out"], "sans --out, les poids vont dans runs/<run_id>/.",
+                f"sans --out, attendu runs/<run_id>/model.safetensors, reçu {default_out_14}.")
+        metrics_14 = rec_14["metrics"]
+        ok_14["metrics"] = (len(metrics_14.get("val_acc", [])) == 1 and metrics_14.get("val_acc_final") == r1_14.last_json().get("val_acc")
+                            and np.allclose(rec_14["normalization"]["mean"], (SUBSET["x_train"][:200] / 255).mean(axis=(0, 1, 2))))
+        verdict("B7.14", ok_14["metrics"], "metrics (une valeur par epoch, val_acc_final) et la normalisation apprise.",
+                "metrics : attendu train_loss, val_loss, val_acc (une valeur par epoch) et val_acc_final, la val_acc de "
+                "stdout ; normalization : la moyenne et l'écart-type des images d'entraînement.")
+        ok_14["failed"] = "n_train" in runs_14[1].get("error", "")
+        verdict("B7.14", ok_14["failed"], f"le run raté garde son erreur : « {runs_14[1].get('error', '')[:70]} ».",
+                f"le run raté doit garder son erreur (qui nomme n_train) ; reçu {runs_14[1].get('error')!r}.")
+        TABLE_14 = pd.json_normalize(runs_14)[["run_id", "status", "config.seed", "config.n_train", "metrics.val_acc_final",
+                                               "seconds"]]
+        print(TABLE_14.to_string(index=False))
 if ok_14 and all(ok_14.values()) and len(ok_14) >= 12:
     print("✅ Ex B7.14 : chaque run laisse sa ligne : ce qui le définit, ce qu'il mesure, ce qu'il produit.")'''
 

@@ -60198,6 +60198,50 @@
       "sign": 1,
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
+    "B7.12a": {
+      "hash": "f16bcf6d70697ff594f9b6580ff41366f50a145f01c2acf964577cc02516abe5",
+      "kind": "bool",
+      "mistakes": {
+        "b14b5132eb7a5e5efb37d8a26d462124c1e124e21110ab184eef34cbf94f899d": "relis le tableau : num_workers 0, essai 1 contre essai 2"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.12b": {
+      "hash": "29da372ac53649a14b2e94ebfe99536627fb5b3a1a65161d16509725b8eb3765",
+      "kind": "bool",
+      "mistakes": {
+        "93ec2b5bc5cb6a82a041e745156737a9fc2e4dcd9a400aa7703eeb2c79bf1c1b": "relis le tableau : num_workers 4, essai 1 contre essai 2"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.12c": {
+      "hash": "eaba67d85f7c5be6a54d7edee45ba9f96738aa2a661958397bdd270b5869cfcb",
+      "kind": "bool",
+      "mistakes": {
+        "9a09612a4cce5888e907970e91d78afd0f0d1e3b995e45dcc2d871251769543d": "relis le tableau : num_workers 0 contre 4, avec l'augmentation"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.12d": {
+      "hash": "149b4a28dda87cb0740dd4e46a34e9d5a46c04c1d3edd2ffc9ccabd2b1e43643",
+      "kind": "bool",
+      "mistakes": {
+        "42949c8d805eab7535cf655b43d577ffd47684bda7addbcaf2bf174a0ffa7903": "relis le tableau : num_workers 0 contre 4, sans l'augmentation"
+      },
+      "prediction": true,
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
+    "B7.13": {
+      "hash": "9ee1286ad49598e6d89727bdb3553a017c38793bb5ad5a446b419f821629750c",
+      "kind": "bool",
+      "mistakes": {
+        "9ddf73ff008fff2f5f8e441f451dea4b026faac62622283265fbab0df9fb66c4": "tes deux runs à même graine n'ont pas exactement les mêmes poids : qu'est-ce qui, dans ton entraînement, ne dépend pas de la graine de la configuration ?"
+      },
+      "source": "chapitres/b7_production/05_solutions.ipynb"
+    },
     "B7.Q1a": {
       "hash": "c60b08e131923f38ef20943d6b7a1b80374e12ff8cc80644acb9d63e54cc97d1",
       "kind": "int",

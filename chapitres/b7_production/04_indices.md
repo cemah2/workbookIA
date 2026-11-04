@@ -514,4 +514,253 @@ Commence par : « Je pars de l'usage : quelqu'un attend-il la réponse, et combi
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B7.9 à B7.25) seront ajoutés à la prochaine session de génération, avec le notebook.
+### Ex B7.9 — Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable 📦
+
+<details><summary>Indice 1</summary>
+
+Pars de ton `cifarkit` du MP5 et de la fiche : 207.1 donne un `pyproject.toml` presque complet, 207.4 `seed_everything` et l'empreinte, 207.6 le CNN. Un paquet n'est que du code importable : aucune variable globale du notebook, aucun chemin en dur, aucun `print`. Chaque fonction reçoit ce dont elle a besoin et rend un résultat ; c'est ce qui la rend testable.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `pyproject.toml` : la fiche, plus `safetensors` dans `dependencies`, l'extra `serve` avec `pydantic`, et la table `[tool.pytest.ini_options]` (`testpaths`, `markers = ["slow: ..."]`). Avec le layout `src/`, setuptools trouve le paquet tout seul.
+- `load_npz` : `np.load(path)` dans un `with`, puis les tableaux `x_<part>` et `y_<part>` ; vérifie `X.dtype == np.uint8`, `X.ndim == 4`, `X.shape[1:] == (32, 32, 3)`, `y.shape == (len(X),)`, `np.issubdtype(y.dtype, np.integer)` et `0 <= y <= 9` avant de rendre `y.astype(np.int64)`.
+- `channel_stats` : `x = images / 255.0` en float64, puis `x.mean(axis=(0, 1, 2))` et `x.std(axis=(0, 1, 2))`, convertis en floats Python (`float(v)`).
+- `preprocess` : `torch.from_numpy(images).permute(0, 3, 1, 2)` (NHWC vers NCHW), `.to(torch.float32) / 255`, puis la moyenne et l'écart-type mis en forme `(1, 3, 1, 1)` pour diffuser sur chaque canal.
+- `make_loader` : un `TensorDataset(preprocess(X, mean, std), torch.as_tensor(y))` et `DataLoader(..., shuffle=shuffle, generator=torch.Generator().manual_seed(seed) if shuffle else None)`.
+- `build_model` : une liste de couches construite par une boucle sur `widths`, puis `nn.Sequential(*layers)` ; la taille de la couche dense du `"cnn"` vaut `widths[-1] * (32 // 2**len(widths))**2`.
+- `train` : `seed_everything`, `channel_stats(X)`, `build_model`, les deux loaders, `torch.optim.SGD(..., momentum=0.9)` ; dans chaque epoch, la boucle de 207.6 (`zero_grad`, la loss, `backward`, `step`), puis `evaluate` sur la validation et une ligne `log.info`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def preprocess(images, mean, std):
+    images = np.asarray(images)
+    if images.dtype != np.uint8:
+        raise ValueError(...)
+    if images.ndim == 3:
+        images = images[None]                       # one image -> a batch of one
+    x = torch.from_numpy(np.ascontiguousarray(images)).permute(0, 3, 1, 2).to(torch.float32) / 255.0
+    ...                                             # (x - m) / s with m, s of shape (1, 3, 1, 1)
+
+
+def train(X, y, X_val, y_val, *, arch="cnn", widths=(16, 32), epochs=1, lr=0.05, batch_size=128, seed=0,
+          deterministic=True, num_workers=0):
+    start = time.perf_counter()
+    seed_everything(seed, deterministic)            # before build_model: the initialization depends on it
+    mean, std = channel_stats(X)                    # the training images only
+    ...                                             # model, loaders, SGD; for each epoch: the loop, evaluate, log.info
+    model.eval()
+    return {"model": model, "mean": mean, "std": std, "history": history, "seconds": time.perf_counter() - start}
+```
+
+</details>
+
+### Ex B7.10 — Une interface en ligne de commande : argparse, logging et codes de sortie 📦
+
+<details><summary>Indice 1</summary>
+
+Relis 207.2 : le code de `cli.py` y est presque entier. Ce qui reste : l'option `--out` et `--version`, la lecture des données, l'appel de `train`, l'écriture des poids et le résumé sur stdout. Range chaque erreur dans sa case : une configuration refusée (code 2), des données illisibles ou un entraînement qui plante (code 1).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `--version` : `parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")` ; la sous-commande obligatoire : `add_subparsers(dest="command", required=True)`.
+- Le logging : un seul `logging.basicConfig(level=..., format="%(asctime)s %(levelname)s %(name)s: %(message)s")`, dans `main`, après `parse_args` ; il écrit sur stderr par défaut.
+- Trois `try` : autour de `load_config` (`except (OSError, ValueError)` → `log.error`, `return 2`), autour de `load_npz` et du contrôle de `n_train` (→ `return 1`), autour du reste (`except Exception` → `log.exception`, `return 1`).
+- Les poids : `from safetensors.torch import save_file`, `out.mkdir(parents=True, exist_ok=True)`, `save_file(result["model"].state_dict(), str(out / "model.safetensors"))`.
+- Le résumé : `print(json.dumps({...}))`, le seul `print` du paquet, avec `str(weights.resolve())` pour le chemin absolu.
+- `__main__.py` : deux lignes, `from .cli import main` puis `raise SystemExit(main())`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
+                        format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+    try:
+        config = load_config(args.config, args.set)
+    except (OSError, ValueError) as err:
+        log.error("invalid configuration: %s", err)
+        return 2
+    ...   # the data (return 1 on OSError/ValueError), train, save_file, log.info, print(json.dumps(...)), return 0
+```
+
+</details>
+
+### Ex B7.11 — Configuration : dataclass + YAML, surcharges en ligne de commande, validation 📦
+
+<details><summary>Indice 1</summary>
+
+207.3 donne `TrainConfig` et `load_config` presque entiers. Ce qui manque : les bornes de tous les réglages, le contrôle de `arch` et de `widths`, la conversion d'une liste en tuple, un fichier qui n'est pas un dictionnaire, et `to_dict`. Le principe : tout refuser au chargement, avec un message qui nomme le réglage, plutôt qu'au milieu d'un entraînement.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Les types : `type(f.default)` donne le type attendu de chaque champ (`int`, `float`, `str`, `tuple`, `bool`) ; compare avec `type(value) is kind` (et non `isinstance`, pour qu'un booléen ne passe pas pour un entier) ; deux conversions par `object.__setattr__` (la dataclass est figée).
+- Les bornes, après les types : un `if` par règle, ou un seul message qui donne les valeurs reçues ; `widths` : non vide, chaque élément un `int` (pas un booléen) ≥ 1.
+- `to_dict` : `dataclasses.asdict(self)`, puis `widths` en liste.
+- `load_config` : `yaml.safe_load(...) or {}` pour un fichier vide, `isinstance(loaded, dict)`, puis chaque surcharge par `item.partition("=")` et `yaml.safe_load(value)` ; les clés inconnues : `set(raw) - {f.name for f in fields(TrainConfig)}`.
+- Les fichiers YAML : une clé par ligne (`widths: [16, 32]`), un nombre avec un point (`lr: 0.05`, jamais `5e-2` sans point, que PyYAML lit comme une chaîne).
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def __post_init__(self):
+    for f in fields(self):
+        value, kind = getattr(self, f.name), type(f.default)
+        if kind is float and type(value) is int:
+            object.__setattr__(self, f.name, float(value))
+        elif kind is tuple and type(value) is list:
+            object.__setattr__(self, f.name, tuple(value))
+        elif type(value) is not kind:
+            raise ValueError(f"{f.name}: expected {kind.__name__}, got {value!r}")
+    ...   # widths, arch, then the bounds of seed, epochs, lr, batch_size, n_train, num_workers
+```
+
+</details>
+
+### Ex B7.12 — Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Repère tous les tirages d'un run : l'initialisation des poids (après `torch.manual_seed`), l'ordre des mini-batches (le `generator` du `DataLoader`), et les retournements tirés dans `__getitem__`. Pour chacun, demande-toi dans quel processus il a lieu, et quel générateur il utilise.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Avec `num_workers = 0`, `__getitem__` tire dans le générateur global du notebook, juste après l'initialisation. Avec des workers, chaque processus fils a son propre générateur, semé à partir d'une graine de base que le `DataLoader` tire, à chaque epoch, dans son `generator` (207.4, et la page « Reproducibility » de PyTorch). Pour a) et b), la question est : un run rejoué refait-il exactement les mêmes tirages ? Pour c) et d), les deux runs tirent-ils dans les mêmes générateurs, et y a-t-il seulement des tirages à faire ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a) : deux runs à 0 worker partent de `torch.manual_seed(0)`, puis font les mêmes opérations dans le même ordre : compare les deux suites de tirages. Pour b), écris d'où vient la graine de chaque worker et si elle change d'un run à l'autre. Pour c), compare le générateur qui tire un retournement à 0 worker et celui qui le tire à 4 workers. Pour d), demande-toi ce qui reste aléatoire une fois les retournements retirés, et où il est tiré. Pour e), relis 207.4 et le ch. 23 sur le matériel.
+
+</details>
+
+### Ex B7.13 — Mesurer le non-déterminisme : graines fixées ou non, algorithmes déterministes, cinq exécutions 🔬
+
+<details><summary>Indice 1</summary>
+
+`train_run_13` n'entraîne rien elle-même : elle lance ta commande, comme le ferait un script ou une intégration continue, puis relit ce que la commande a écrit (la ligne JSON de stdout, le fichier de poids). Pour comparer deux runs, compare **tous** leurs tenseurs, pas une accuracy.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `wbp.cli(PROJECT, "train", "--config", "configs/fast.yaml", "--set", f"seed={seed}", ...)` rend un `RunResult` : `.ok`, `.returncode`, `.tail(3)` (la fin de stderr), `.last_json()` (la dernière ligne de stdout, lue en JSON) ; un dossier neuf par run : `tempfile.mkdtemp()`.
+- Les poids : `safetensors.torch.load_file(summary["weights"])` rend un dictionnaire de tenseurs.
+- `same_weights_13` : les mêmes clés (`a.keys() == b.keys()`) et `torch.equal` pour chacune ; `max_gap_13` : `(a[k].double() - b[k].double()).abs().max()` pour chaque clé, le plus grand, en `float`.
+- `deterministic` s'écrit `true` ou `false` dans la surcharge (YAML) : `str(deterministic).lower()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_run_13(seed, deterministic=True):
+    result = wbp.cli(PROJECT, "train", "--config", "configs/fast.yaml", "--set", f"seed={seed}",
+                     "--set", f"deterministic={str(deterministic).lower()}", "--out", tempfile.mkdtemp())
+    if not result.ok:
+        raise RuntimeError(...)                     # the code and result.tail(3)
+    summary = result.last_json()
+    ...                                             # {"weights": load_file(...), "val_acc": ..., "seconds": ...}
+```
+
+</details>
+
+### Ex B7.14 — Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL 📦
+
+<details><summary>Indice 1</summary>
+
+Relis 207.5 : `new_run_id` et `log_run` y sont entiers. Le travail est dans `cli.py` : décider **quand** une ligne s'écrit (toujours, même si le run échoue, d'où un `finally`) et **quoi** y mettre (ce qui définit le run, ce qu'il mesure, ce qu'il produit). Prépare le dictionnaire au début du run, complète-le en chemin, écris-le à la fin.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `file_sha256` : `hashlib.sha256()` nourri par blocs (`iter(lambda: f.read(1 << 20), b"")`), puis `.hexdigest()` ; `artifact` : `Path(path).stat().st_size`.
+- `environment` : `subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True)`, dans un `try` (pas de git : `None`) ; `dirty` : `bool(sortie de git status --porcelain)`.
+- `log_run` : `path.parent.mkdir(parents=True, exist_ok=True)`, puis `open(path, "a")` (le mode `"a"` ajoute à la fin ; `"w"` effacerait le journal) et `json.dumps(record, sort_keys=True) + "\n"`.
+- `cli.py` : `run_id = new_run_id()` après la configuration ; `record = {"run_id": ..., "started": datetime.now(timezone.utc).isoformat(), "config": config.to_dict(), "environment": environment(), "status": "failed"}` ; dans le chemin réussi, `record.update(status="ok", ...)` ; dans le `finally`, `record["seconds"] = ...` puis `log_run(args.runs, record)`.
+- Tout ce qui va dans le journal doit passer par `json.dumps` : des floats Python, des listes, pas de tableaux NumPy ni de tenseurs.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+    record = {"run_id": run_id, "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+              "config": config.to_dict(), "environment": environment(), "status": "failed"}
+    start = time.perf_counter()
+    try:
+        ...                                         # data (record["data"]), train, save the weights
+        record.update(status="ok", metrics=..., normalization=..., artifacts=[artifact(weights)])
+        return 0
+    except Exception as err:
+        record["error"] = f"{type(err).__name__}: {err}"
+        ...
+    finally:
+        record["seconds"] = round(time.perf_counter() - start, 3)
+        log_run(args.runs, record)
+```
+
+</details>
+
+### Ex B7.15 — Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données 📦
+
+<details><summary>Indice 1</summary>
+
+Un bon test de ML est un cas où **tu sais la réponse sans le code** : une image toute blanche prétraitée vaut $(1 - \text{mean}_c)/\text{std}_c$ dans chaque canal ; le fichier de données a 2 000 images `uint8` ; aucune image de validation n'a l'empreinte d'une image d'entraînement ; `epochs=0` doit être refusé. Pour chaque famille de 207.6, écris d'abord la phrase « si le code est juste, alors… », puis l'`assert`.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Prétraitement : `@pytest.mark.parametrize("value", [0, 255])`, une image `np.full((32, 32, 3), value, dtype=np.uint8)`, une moyenne et un écart-type simples (`(0.5, 0.4, 0.3)`, `(0.25, 0.2, 0.1)`), la valeur attendue calculée dans le test, `torch.allclose`. L'ordre des canaux : une image rouge (seul le canal 0 à 255) doit donner 1 dans le canal 0, 0 ailleurs, avec une moyenne nulle et un écart-type de 1.
+- Schéma : la fixture `data_file`, `load_npz(data_file, part)` pour `"train"` et `"val"` ; un fichier mal formé écrit dans `tmp_path` par `np.savez`, puis `with pytest.raises(ValueError):`.
+- Recouvrement : un ensemble (`set`) des `fingerprint(image)` de l'entraînement, puis compter les images de validation qui y sont.
+- Configuration : `@pytest.mark.parametrize("override", [...])` et `pytest.raises(ValueError)` autour de `load_config(None, [override])`.
+- Codes de sortie : `main([...])` rend un entier ; passe `--runs str(tmp_path / "runs.jsonl")`.
+- Bout en bout : `@pytest.mark.slow`, la fixture `synthetic_file`, `--set data=...`, `--set n_train=96`, `--out` dans `tmp_path`, puis le code, le fichier de poids et le journal.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+@pytest.mark.parametrize("value", [0, 255])
+def test_constant_image_preprocessed(value):
+    x = preprocess(np.full((32, 32, 3), value, dtype=np.uint8), MEAN, STD)
+    want = ...                                      # (value / 255 - m) / s for each channel, as a (1, 3, 32, 32) tensor
+    assert torch.allclose(x, want, atol=1e-6), f"expected {...} per channel, got {...}"
+
+
+def test_exit_code_of_an_invalid_config(tmp_path):
+    code = main(["train", "--set", "epochs=0", "--runs", str(tmp_path / "runs.jsonl")])
+    assert code == 2, f"expected the exit code 2 for epochs=0, got {code}"
+```
+
+</details>
+
+### Ex B7.16 — Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver 🐛
+
+<details><summary>Indice 1</summary>
+
+Suis une image du fichier PNG jusqu'au nom renvoyé, et compare à chaque étape avec ce que faisait le notebook du collègue (l'énoncé le décrit) : le format de l'image lue, son échelle, sa normalisation, son type, le mode du modèle, l'ordre des noms. Les diagnostics s'enchaînent dans cet ordre : corrige celui qui échoue, réexécute, passe au suivant.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Point 1 : lis le type de chaque tableau entre la lecture et le modèle ; NumPy garde le type le plus précis d'une opération, et `torch.from_numpy` garde celui du tableau.
+- Point 2 : `wbp.imread_bgr` lit comme OpenCV ; compare sa sortie pour `PATHS_16[0]` à `X_16[0]`, canal par canal, et leurs valeurs extrêmes.
+- Point 3 : d'où viennent la moyenne et l'écart-type de `preprocess_16` ? Prétraite une image seule, puis dans un batch : que devrait-il se passer ?
+- Point 4 : relis ce que fait un modèle à batchnorm en mode entraînement (ch. 20), et ce que rend `load_service_16`.
+- Point 5 : la liste `names` de `predict_16` suit-elle l'ordre des sorties du modèle ? Qui, de l'entraînement ou du service, connaît cet ordre, et comment le second l'apprend-il ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour le point 1 : `np.asarray(images, dtype=np.float64)` fait du prétraitement entier un calcul en float64, et `conv2d` refuse un tenseur float64 avec des poids float32 ; choisis le type de l'entraînement. Pour les points 2 à 5, pose le critère sans le corriger : l'image lue doit valoir `X_16[0] / 255` à $10^{-6}$ près ; une image doit avoir le même prétraitement seule et dans un batch ; la même image doit avoir les mêmes scores seule et dans un batch, et le modèle ne doit pas changer en prédisant ; le nom d'une sortie $k$ doit venir de l'artefact, quel que soit le modèle.
+
+</details>
+
+*Les indices des exercices B7.17 à B7.25 (la fin du service et l'exploitation) seront ajoutés à la prochaine session de génération, avec le notebook.*

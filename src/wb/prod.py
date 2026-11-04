@@ -80,7 +80,10 @@ def _temporary_project() -> Path:
 
 def _on_colab() -> bool:
     import importlib.util
-    return "google.colab" in sys.modules or importlib.util.find_spec("google.colab") is not None
+    try:
+        return "google.colab" in sys.modules or importlib.util.find_spec("google.colab") is not None
+    except (ImportError, ValueError):            # no "google" package at all
+        return False
 
 
 def project_dir(kind: str = "learner") -> Path:
@@ -229,9 +232,9 @@ class RunResult:
             return None
 
     def stderr_lines(self, level: str | None = None) -> list[str]:
-        """The lines of stderr (those that contain `` LEVEL `` if level is given, e.g. "ERROR")."""
+        """The lines of stderr (those that contain the word ``level`` if it is given, e.g. "ERROR")."""
         lines = self.stderr.splitlines()
-        return [line for line in lines if f" {level} " in f" {line} "] if level else lines
+        return [line for line in lines if re.search(rf"\b{level}\b", line)] if level else lines
 
     def command(self) -> str:
         """The command, shortened: the interpreter becomes ``python`` and absolute paths keep their last part."""
@@ -271,7 +274,8 @@ def run(args, cwd, *, timeout: float = 120, src=(), env: dict | None = None, inp
     cwd = Path(cwd).resolve()
     args = [str(a) for a in args]
     full_env = {**os.environ, "PYTHONPATH": _pythonpath(list(src)), "PYTHONIOENCODING": "utf-8",
-                "PYTHONDONTWRITEBYTECODE": "1", **(env or {})}
+                "PYTHONDONTWRITEBYTECODE": "1", "PYTHON_COLORS": "0", "NO_COLOR": "1", **(env or {})}
+    full_env.pop("FORCE_COLOR", None)
     start = time.perf_counter()
     try:
         done = subprocess.run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace",
@@ -291,6 +295,10 @@ def cli(project: str | Path, *args, timeout: float = 120, env: dict | None = Non
     return run([sys.executable, "-m", PACKAGE, *args], project, timeout=timeout, src=[project / "src"], env=env)
 
 
+class PackageImportError(RuntimeError):
+    """A module of the learner's package that does not import (its message says which, and why, in French)."""
+
+
 def import_package(project: str | Path, name: str = PACKAGE):
     """The package ``name`` of ``<project>/src``, imported afresh (its modules already imported are forgotten, so that
     the files just written are read). Raises what the import raises."""
@@ -300,16 +308,32 @@ def import_package(project: str | Path, name: str = PACKAGE):
     for key in [k for k in sys.modules if k == name or k.startswith(name + ".")]:
         del sys.modules[key]
     sys.path[:] = [src] + [p for p in sys.path if p != src and not (p and Path(p, name, "__init__.py").is_file())]
+    for cache in Path(src, name).rglob("__pycache__"):     # a file rewritten in the same second, with the same size,
+        shutil.rmtree(cache, ignore_errors=True)            # would otherwise be read from a stale .pyc
     importlib.invalidate_caches()
-    return importlib.import_module(name)
+    keep, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        return importlib.import_module(name)
+    except ImportError as error:
+        raise PackageImportError(f"{name} ne s'importe pas ({type(error).__name__} : {error})") from error
+    finally:
+        sys.dont_write_bytecode = keep
 
 
 def import_module(project: str | Path, module: str):
-    """``cifarprod.<module>`` of the project, imported afresh with its package (:func:`import_package`)."""
+    """``cifarprod.<module>`` of the project, imported afresh with its package (:func:`import_package`). An
+    ``ImportError`` (a module of the package not written yet, a name that does not exist) becomes a
+    :class:`PackageImportError`, which the check cells report as one ❌ line."""
     import importlib
 
     import_package(project)
-    return importlib.import_module(f"{PACKAGE}.{module}")
+    keep, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+    try:
+        return importlib.import_module(f"{PACKAGE}.{module}")
+    except ImportError as error:
+        raise PackageImportError(f"{PACKAGE}.{module} ne s'importe pas ({type(error).__name__} : {error})") from error
+    finally:
+        sys.dont_write_bytecode = keep
 
 
 import contextlib  # noqa: E402
@@ -732,6 +756,7 @@ def workers_run(num_workers: int = 0, seed: int = 0, *, augment: bool = True, n:
     optimizer = torch.optim.SGD(model.parameters(), lr=0.05, momentum=0.9)
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", message=".*worker processes in total.*")
+        warnings.filterwarnings("ignore", message=r".*use of fork\(\) may lead to deadlocks.*")
         loader = DataLoader(FlipDataset(n, augment), batch_size=batch_size, shuffle=True,
                             generator=torch.Generator().manual_seed(seed), num_workers=num_workers)
         for _ in range(epochs):
