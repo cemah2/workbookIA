@@ -5475,10 +5475,10 @@ Un modèle n'a de valeur que s'il sort du notebook. En partant du classifieur CI
 | B7.9 | 📦 | Du notebook au paquet : data.py, model.py, train.py, pyproject.toml et installation éditable | ★★★ | 60 | CIFAR-10 | 03 | CP5, 23 | RC | manual |
 | B7.10 | 📦 | Une interface en ligne de commande : argparse, logging et codes de sortie | ★★ | 30 | CIFAR-10 | 03 | B7.9 | RC | manual |
 | B7.11 | 📦 | Configuration : dataclass + YAML, surcharges en ligne de commande, validation | ★★ | 30 | CIFAR-10 | 03 | B7.10 | RC | manual |
-| B7.12 | 🔮 | Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ? | ★ | 10 | CIFAR-10 | 03 | B7.11 | C | manual |
+| B7.12 | 🔮 | Prédire : même graine, puis num_workers = 4, puis GPU — résultats identiques ? | ★ | 10 | CIFAR-10 | 03 | B7.11 | C | wb.check |
 | B7.13 | 🔬 | Mesurer le non-déterminisme : graines fixées ou non, algorithmes déterministes, cinq exécutions | ★★ | 30 | CIFAR-10 | 03 | B7.12, B7.2 | C | wb.check |
 | B7.14 | 📦 | Suivi d'expériences maison : identifiant de run, configuration, métriques et artefacts en JSONL | ★★ | 30 | CIFAR-10 | 03 | B7.11, 24 | RC | manual |
-| B7.15 | 📦 | Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données | ★★★ | 45 | CIFAR-10 | 03 | B7.9, 21 | RC | manual |
+| B7.15 | 📦 | Tests pytest pour le ML : formes, overfitting d'un mini-batch, prétraitement, schéma des données | ★★★ | 45 | CIFAR-10 | 03 | B7.11, 21 | RC | manual |
 | B7.16 | 🐛 | Le modèle qui marche dans le notebook et pas en production : cinq écarts à retrouver | ★★ | 30 | CIFAR-10 | 03 | B7.15 | C | manual |
 | B7.17 | 📦 | L'artefact du modèle : safetensors, configuration, normalisation, classes, version, empreinte des données | ★★ | 30 | CIFAR-10 | 03 | B7.14 | RC | manual |
 | B7.18 | 📦 | Une API de prédiction avec FastAPI (repli : http.server) : /health, /predict, validation des entrées | ★★★ | 45 | CIFAR-10 | 03 | B7.17 | RC | manual |
