@@ -19,6 +19,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `ModuleNotFoundError: No module named 'cifarprod'` quand tu lances `pytest` depuis la racine du dépôt | avec le layout `src/`, le paquet ne s'importe qu'une fois installé | `pip install -e .` (ou `pip install -e ".[dev]"`), puis redémarre le noyau si un notebook l'utilise (fiche B7, §207.1) |
 | `cifarprod: command not found` après avoir ajouté une ligne à `[project.scripts]` | la commande s'installe avec le paquet | relance `pip install -e .` ; `python -m cifarprod` marche partout, Colab compris (fiche B7, §207.2) |
 | l'intégration continue télécharge plus de 2 Go à `pip install torch` | sous Linux, la roue par défaut est celle de CUDA | `pip install torch --index-url https://download.pytorch.org/whl/cpu` avant les autres dépendances (fiche B7, §207.6) |
+| l'intégration continue installe Python 3.1 au lieu de 3.10 | `python-version: 3.10` sans guillemets : YAML lit le nombre 3,1 | `python-version: "3.10"`, toujours entre guillemets (fiche B7, §207.6) |
+| le conteneur tourne, mais l'API ne répond pas depuis la machine hôte | le serveur n'écoute que `127.0.0.1`, l'intérieur du conteneur | `--host 0.0.0.0` dans la commande du conteneur, et `docker run -p 8000:8000` (fiche B7, §207.9) |
 
 ## Python et NumPy
 
@@ -113,6 +115,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | aucun message de log, ou chaque message affiché deux fois | `logging.basicConfig` jamais appelé, ou appelé dans plusieurs modules | configurer une fois, dans le point d'entrée ; les modules font `logging.getLogger(__name__)` (🧠 B7.Q3) |
 | `TypeError: argument 'metadata': 'int' object is not an instance of 'str'` dans `save_file` | les métadonnées de safetensors ne prennent que des chaînes | `{"version": "1.0.0"}`, et le reste dans un `meta.json` (fiche B7, §207.7) |
 | un PSI égal à `inf` (avec `RuntimeWarning: divide by zero`) | un intervalle vide : $\ln 0 = -\infty$ | ajouter $\varepsilon$ à toutes les parts et l'écrire avec le résultat, ou fusionner l'intervalle avec son voisin (✏️ B7.4) |
+| `OSError: [Errno 98] Address already in use` en réexécutant la cellule qui lance un serveur | le serveur précédent tourne encore dans son thread | un port libre choisi par le système (port 0) et l'arrêt dans un `finally` : `shutdown()` puis `server_close()` (ou `should_exit` pour uvicorn) (fiche B7, §207.7) |
+| chaque requête à un serveur `http.server` prend 40 ms de plus que prévu | en HTTP/1.1, les en-têtes et le corps partent séparément et attendent l'accusé de réception du client (algorithme de Nagle) | `disable_nagle_algorithm = True` dans le handler, ou un seul `wfile.write` (fiche B7, §207.7) |
 
 ## Maths et algèbre linéaire
 
@@ -381,6 +385,8 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | `ModuleNotFoundError: No module named 'onnxscript'` dans `torch.onnx.export` | depuis PyTorch 2.9, l'export ONNX passe par `torch.export` et demande onnxscript | installer l'extra optionnel `prod` (onnx, onnxscript, onnxruntime) ou s'en tenir au `.pt2` (fiche B7, §207.8) |
 | `RuntimeError: Error(s) in loading state_dict … size mismatch for 0.weight` | le modèle reconstruit avec d'autres arguments que ceux de l'entraînement | relire l'architecture et ses arguments dans l'artefact (`meta.json`) avant `load_state_dict` (🧠 B7.Q8) |
 | `DeprecationWarning: torch.ao.quantization is deprecated` | l'API de quantification de PyTorch passe à torchao | elle marche encore dans PyTorch 2.11 ; pour un nouveau projet, torchao à une version compatible (fiche B7, §207.8) |
+| un modèle exporté dont les logits s'écartent de ceux du modèle d'environ 1 | exporté en mode entraînement : la batchnorm de l'export normalise par les statistiques de chaque batch | `model.eval()` avant `torch.export.export`, puis l'équivalence vérifiée sur plusieurs tailles de batch (fiche B7, §207.8) |
+| un modèle bfloat16 plus lent que le float32 sur CPU | le processeur n'a pas d'instructions 16 bits pour ces opérations : PyTorch convertit | mesurer sur la machine cible avant de choisir ; le bfloat16 paie sur GPU ou sur les CPU qui le calculent (fiche B7, §207.8) |
 
 ## Erreurs de raisonnement (ML)
 
@@ -558,3 +564,5 @@ Les messages d'erreur rencontrés le plus souvent, avec leur cause et la solutio
 | « la quantification int8 divise la taille par quatre » pour un CNN | la quantification dynamique ne touche que les couches listées (`nn.Linear`) | compter la part des paramètres dans ces couches avant de promettre un gain (✏️ B7.1) |
 | une alerte de dérive à chaque fenêtre de 50 000 requêtes | une p-valeur de test KS minuscule pour un écart sans importance | juger la taille de l'écart ($D$, PSI) sur des fenêtres fixes, avec des seuils écrits à l'avance (fiche B7, §207.10) |
 | un journal des prédictions gardé sans limite « pour réentraîner plus tard » | pas de minimisation, pas de durée, une finalité nouvelle | des statistiques plutôt que les images, une durée écrite et une purge automatique, une base pour chaque finalité (⚖️ B7.7) |
+| une API qui renvoie l'image refusée dans sa réponse 422 | le gestionnaire par défaut de FastAPI recopie l'entrée (le champ `input`) | un gestionnaire de `RequestValidationError` qui ne garde que `loc`, `msg` et `type` (fiche B7, §207.10) |
+| une dérive des entrées jugée sans danger parce que la luminosité ne bouge pas | un bruit centré, par exemple, change les images sans changer leur moyenne | surveiller aussi les sorties du modèle (classes prédites, confiance), qui voient ce qui nuit (fiche B7, §207.10) |

@@ -672,15 +672,6 @@ for _part in PARTS:
     for _ex in _part.exercises:
         check_unique_keys(_ex.record or "x = 1", _ex.id)
 
-# What the next half of the session adds (announced in the table and the footer until it exists)
-NEXT_SESSION = [
-    ("B", "B7.17 à B7.21", "le service (suite) : l'artefact, l'API, la latence, l'accélération sur CPU et l'export"),
-    ("C", "B7.22 à B7.25", "l'exploitation : la dérive, l'intégration continue, le Dockerfile et le défi"),
-]
-_DONE = {ex.id for part in PARTS for ex in part.exercises}
-NEXT_SESSION = [row for row in NEXT_SESSION if not ({f"B7.{n}" for n in range(int(row[1].split()[0][3:]),
-                                                                              int(row[1].split()[2][3:]) + 1)} <= _DONE)]
-
 
 def kind_part(part, kind: str):
     """The part with its tools for this notebook: «KIND» is "learner" (exercise notebook) or "solution"."""
@@ -694,7 +685,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |" for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B7 · Du notebook à la production — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -734,10 +724,6 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if not NEXT_SESSION else
-             "\n\n*Les exercices " + " et ".join(ids for _, ids, _ in NEXT_SESSION) + " seront ajoutés à la "
-             "prochaine session de génération ; relance alors `python tools/start_chapter.py B7` pour obtenir le "
-             "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu transformer un notebook en paquet installable, avec une ligne de commande, une "
@@ -749,8 +735,7 @@ def footer_cells(kind: str) -> list:
                "4. Sais-tu calculer un PSI et lire un test KS, dire ce qu'une alerte mérite, et écrire le workflow "
                "et le Dockerfile qui rendent ton dépôt reproductible par n'importe qui ?\n\n"
                "**Pour aller plus loin** : l'article de Sculley et coll. (📄 B7.8) et le ML Test Score de Breck et "
-               "coll., cités dans la fiche. La suite : le bonus B8, l'apprentissage par renforcement moderne."
-               + later)]
+               "coll., cités dans la fiche. La suite : le bonus B8, l'apprentissage par renforcement moderne.")]
 
 
 def build(kind: str) -> list:

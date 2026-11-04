@@ -1,9 +1,8 @@
 """Part A (the project: B7.9 to B7.15) and the start of part B (🐛 B7.16) of the chapter B7 notebook: statements and
 cells (used by build_chB7.py).
 
-The second half of the chapter (B7.17 to B7.25) appends its exercises to PART_B.exercises and adds part C; it reuses
-the tools of part A (TOOLS_A: PROJECT, DATA_FILE, SUBSET, CLASSES, DEFAULTS, scratch, run_line) and those of B7.16
-(MODEL_16, INFO_16, X_16, Y_16, PATHS_16, FRENCH_16, offline_input_16), all described in EN_COURS.md.
+The second half of the chapter (B7.17 to B7.25, chB7_parts2.py) appends its exercises to PART_B.exercises and adds
+part C; it reuses the tools of part A (TOOLS_A: PROJECT, DATA_FILE, SUBSET, CLASSES, DEFAULTS, scratch, run_line).
 """
 
 from __future__ import annotations

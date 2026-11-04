@@ -1217,6 +1217,9 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | biais de prédiction | prediction bias | écart entre la distribution des classes prédites et celle des classes observées : un signal d'alerte sans attendre les labels (Sculley et coll., 2015) | B7 |
 | retour arrière | rollback | remettre en service l'artefact précédent, gardé et prêt, en une minute | B7 |
 | déploiement canari, en ombre | canary, shadow deployment | servir un nouveau modèle à une petite part du trafic d'abord / lui envoyer les requêtes et comparer ses réponses sans les servir | B7 |
+| gestionnaire de contexte | context manager | un objet qu'on ouvre par `with` : son code de fin s'exécute toujours, même après une erreur dans le bloc (`with running(dossier) as url:` démarre un serveur et l'arrête) | B7 |
+| forme exec, forme shell | exec form, shell form | `CMD ["python", "-m", ...]` (une liste JSON : le programme reçoit lui-même les signaux d'arrêt) ou `CMD python -m ...` (lancé par `/bin/sh`, qui ne les transmet pas) | B7 |
+| connexion persistante | keep-alive | en HTTP/1.1, une même connexion TCP sert plusieurs requêtes (`requests.Session`, `protocol_version = "HTTP/1.1"` et `Content-Length` côté serveur) | B7 |
 | dette technique (du ML) | technical debt | les coûts de maintenance qu'accumulent les raccourcis d'aujourd'hui ; dans un système de ML, souvent au niveau du système plutôt que du code (Sculley et coll., 2015) | B7 |
 | code de colle | glue code | le code qui fait entrer les données dans un paquet générique et les en fait sortir ; dans un système mûr, il peut faire l'essentiel du code (« au moins 95 % », Sculley et coll., 2015) | B7 |
 | CACE | Changing Anything Changes Everything | dans un système de ML, changer une entrée, une feature ou un réglage change tout le reste du modèle | B7 |

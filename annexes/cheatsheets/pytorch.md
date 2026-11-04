@@ -319,6 +319,8 @@
 | `(model(x) - exported(x)).abs().max().item()` | l'équivalence numérique d'un export, sur des données neuves et plusieurs tailles de batch |
 | `model.to(torch.bfloat16)` (et l'entrée aussi) ; `with torch.autocast("cpu", dtype=torch.bfloat16):` | l'inférence en bfloat16 sur CPU, tout le modèle ou les seules opérations qui le supportent ; vérifier que l'argmax ne change pas |
 | `torch.ao.quantization.quantize_dynamic(model, {nn.Linear}, dtype=torch.qint8)` | quantification dynamique des seules couches denses (dépréciée au profit de torchao, mais encore là dans 2.11) |
+| `low = copy.deepcopy(model).to(torch.bfloat16)` ; `quantize_dynamic(copy.deepcopy(model), ...)` | une version réduite est une **copie** : le modèle servi ne change pas (B7.20) |
+| `torch.export.export(model.eval(), (torch.zeros(2, 3, 32, 32),), dynamic_shapes=...)` | un exemple de **2** images : une dimension de taille 1 serait figée par l'export (B7.21) |
 | `with torch.device("meta"): model = build_model()` ; `sd = torch.load(path, mmap=True, weights_only=True)` ; `model.load_state_dict(sd, assign=True)` | charger un modèle avec une seule copie des poids en mémoire |
 
 ## Dataset et DataLoader

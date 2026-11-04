@@ -92,7 +92,8 @@ with checked("B7.22"):
     cases_22 = {"la référence contre elle-même": (np.linspace(0, 1, 101), np.linspace(0, 1, 101)),
                 "des valeurs tirées ailleurs": (np.random.default_rng(0).normal(0, 1, 400), np.random.default_rng(1).normal(0.5, 1, 300)),
                 "tout dans un intervalle (des parts nulles)": (np.random.default_rng(2).uniform(0, 1, 200), np.full(50, 0.99)),
-                "des valeurs égales aux coupures": (np.arange(11.0), np.full(20, 10.0))}
+                "des valeurs égales aux coupures": (np.array([0, 0, 0, 1, 2, 2, 4, 4, 4, 5, 5, 6, 7, 7], float),
+                                                    np.array([5, 5, 4, 4, 7, 2, 6, 5, 0, 3, 6, 4], float))}
     ok_p_22 = True
     for label_22, (r_22, p_22) in cases_22.items():
         with np.errstate(divide="ignore", invalid="ignore"):         # a log(0) of your code: the value says it
