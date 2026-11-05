@@ -14,8 +14,10 @@ context cell of the solutions notebook, then checked against the libraries: the 
 (F.huber_loss, F.smooth_l1_loss, log_softmax and autograd, torch.optim.Adam, clip_grad_norm_, torch.min/clamp,
 F.logsigmoid, torch.distributions.Categorical), and gymnasium (CartPole-v1 spaces, the seeds of reset and of the
 action space), with exact enumerations for the overestimation quiz: part 0 downloads nothing and trains no agent.
-The notebook itself (exercises B8.12 to B8.28) comes at the second generation session (NEXT_SESSION), in three
-phases: the value, the policy, the preferences.
+The notebook exercises come in three phases: A, the value (B8.12 to B8.15); B, the policy (B8.16 to B8.24); C, the
+preferences (B8.25 to B8.28). Session 78 writes them in two halves: B8.12 to B8.20 (chB8_parts.py, chB8_code.py,
+infrastructure wb.deep_rl_env), then B8.21 to B8.28 (NEXT_SESSION); history_chB8.py precomputes the calibrations and the
+multi-seed protocols (tools/chapters/history_chB8.json, src/wb/deep_rl_protocols.json).
 """
 
 from __future__ import annotations
@@ -756,18 +758,30 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B8.12 to B8.28): second generation session
+# Parts A to C (exercises B8.12 to B8.28). Session 78 writes them in two halves: B8.12 to B8.20 (chB8_parts.py,
+# chB8_code.py: part A and the start of part B), then B8.21 to B8.28 (NEXT_SESSION: the end of part B and part C).
+# history_chB8.py precomputes the calibrations and the multi-seed protocols.
 # ---------------------------------------------------------------------------
-PARTS: list = []
+import dataclasses  # noqa: E402
+
+import chB8_code  # noqa: E402,F401  (the cells; history_chB8.py reuses them)
+from chB8_parts import PART_B, PARTS  # noqa: E402,F401
+
+for _part in PARTS:
+    for _ex in _part.exercises:
+        check_unique_keys(_ex.record or "x = 1", _ex.id)
+
 NEXT_SESSION = [
-    ("A", "B8.12 à B8.15", "la valeur : CartPole pour un réseau, ton DQN avec sa mémoire de rejeu et son réseau "
-                           "cible, le DQN qui diverge, les ablations sur trois graines"),
-    ("B", "B8.16 à B8.24", "la politique : REINFORCE avec et sans baseline, GAE et l'objectif clippé dans ta "
-                           "librairie, ton PPO sur des environnements vectorisés, ses journaux, ses hyperparamètres "
-                           "et sa robustesse"),
+    ("B", "B8.21 à B8.24", "la fin de la politique : les journaux de ton PPO, ses hyperparamètres sur trois graines, "
+                           "sa robustesse face à une autre physique"),
     ("C", "B8.25 à B8.28", "les préférences : Bradley-Terry et DPO dans ta librairie, un RLHF miniature sur "
                            "CartPole, la revue de code face à CleanRL, et le défi"),
 ]
+
+
+def kind_part(part, kind: str):
+    """The part with its tools for this notebook: «KIND» is "learner" (exercise notebook) or "solution"."""
+    return dataclasses.replace(part, given=part.given.replace("«KIND»", "learner" if kind == "exercise" else "solution"))
 
 
 def header_cells(kind: str) -> list:
@@ -777,9 +791,8 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    if not PARTS:
-        rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-                 for key, ids, title in NEXT_SESSION]
+    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
+             for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B8 · RL moderne : DQN, gradient de politique, PPO et RLHF — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -821,8 +834,8 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if PARTS else
-             "\n\n*Les exercices de code B8.12 à B8.28 (la valeur, la politique, les préférences) seront ajoutés à "
+    later = ("" if not NEXT_SESSION else
+             "\n\n*Les exercices B8.21 à B8.28 (la fin de la politique, les préférences et le défi) seront ajoutés à "
              "la prochaine session de génération ; relance alors `python tools/start_chapter.py B8` pour obtenir le "
              "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
@@ -843,7 +856,7 @@ def build(kind: str) -> list:
     cells += objectives_cell()
     cells += paper_cells(kind, PAPER, PAPER_CONTEXT + LIBRARY_CHECKS, PAPER_INTRO)
     for part in PARTS:
-        cells += part_cells(part, kind)
+        cells += part_cells(kind_part(part, kind), kind)
     cells += footer_cells(kind)
     return cells
 

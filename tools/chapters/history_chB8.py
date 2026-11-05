@@ -24,8 +24,11 @@ Entries of the first half (session 78, B8.12 to B8.20):
 - "p16": 🔮 B8.16, REINFORCE without baseline, with the mean baseline and with normalised returns, 300 episodes, on
   six seeds: the training returns and the greedy evaluation at the end; the answers of the predictions must be the
   same on every seed (or are counts over the seeds);
+- "c14": 🐛 B8.14, the repaired colleague's DQN (8 000 steps) on five seeds: the threshold of the check; and the
+  versions with all the bugs, then with one bug left (seed 0), for 05_solutions.md;
 - "c17": 📦 B8.17, the spread of the per-episode gradients with and without baseline (wbr.episode_gradients) for
-  untrained and half-trained policies on several seeds: the ratio must be clearly above 1 everywhere;
+  untrained policies and policies trained 60 episodes, five seeds each; the weights of the trained policy of the
+  notebook (seed 1) and the two ratios of the notebook's episodes;
 - "c20": 📦 B8.20, the reference PPO (wbr.train_ppo, PPO_SETTINGS, 50 000 steps) on six seeds: the deterministic
   evaluation (100 episodes, EVAL_SEED); the threshold of the check;
 - "c28": 🏆 B8.28 (first measure, for the second half): the reference PPO with 100 000 steps on three seeds, the mean
@@ -170,12 +173,15 @@ def p16() -> tuple[dict, dict]:
 
 
 # --------------------------------------------------------------------------------------------------------------------- c17
-def c17() -> dict:
+C17_SEED = 1
+
+
+def c17() -> tuple[dict, dict]:
     import torch
 
     from wb import deep_rl_env as R
 
-    rows = []
+    rows, notebook, kept = [], {}, None
     for seed in range(5):
         for trained in (0, 60):
             if trained:
@@ -189,8 +195,21 @@ def c17() -> dict:
             rows.append({"seed": seed, "trained": trained, "ratio": spreads["none"] / spreads["mean"],
                          "mean_length": float(np.mean([len(e["rewards"]) for e in episodes])), "cos": cos})
             print("c17", rows[-1], flush=True)
-    del torch
-    return {"rows": rows, "min_ratio": min(r["ratio"] for r in rows)}
+            if seed == C17_SEED and trained:
+                kept = {k: v.detach().double().numpy().tolist() for k, v in net.state_dict().items()}
+    for name, net in (("untrained", R.policy_network(64, seed=17)), ("trained", None)):
+        if net is None:
+            net = R.policy_network(64)
+            net.load_state_dict({k: torch.tensor(v, dtype=torch.float32) for k, v in kept.items()})
+        episodes = R.collect_episodes(net, 32, 1700)
+        spreads = {b: R.gradient_spread(R.episode_gradients(net, episodes, b)) for b in ("none", "mean")}
+        notebook[name] = {"ratio": spreads["none"] / spreads["mean"], "spreads": spreads,
+                          "mean_length": float(np.mean([len(e["rewards"]) for e in episodes]))}
+        print("c17 notebook", name, notebook[name], flush=True)
+    calib = {"rows": rows, "min_ratio_trained": min(r["ratio"] for r in rows if r["trained"]),
+             "kept_seed": C17_SEED, "notebook": notebook}
+    return calib, {"state_dict": kept, "protocol": f"wbr.train_reinforce(seed={C17_SEED}, n_episodes=60, "
+                                                     "baseline='mean'), its policy network"}
 
 
 # --------------------------------------------------------------------------------------------------------------- c20, c28
@@ -231,11 +250,18 @@ def namespace(blocks=()) -> dict:
 
     import chB8_code as C
 
-    ns = {"wb": wb, "cfg": wb.setup(seed=42, fast=True, verbose=False), "FAST_MODE": True, "__name__": "history_chB8"}
-    exec(C.TOOLS_A.replace("«KIND»", "ref"), ns)
+    ns = {"wb": wb, "cfg": wb.setup(seed=42, fast=True, verbose=False), "FAST_MODE": True, "__name__": "history_chB8",
+          "mylearn": wb.load_mylearn("ref")}
+    exec(C.TOOLS_A.replace("«KIND»", "solution"), ns)
     for block in blocks:
-        exec(getattr(C, block), ns)
+        exec(fill(getattr(C, block) if block.isupper() else block), ns)
     return ns
+
+
+def fill(text: str) -> str:
+    """A cell with its «NAME» placeholders replaced by neutral values (the calibrations do not depend on them)."""
+    import re
+    return re.sub(r"«[A-Z0-9_]+»", "0", text)
 
 
 def b14() -> dict:
@@ -268,7 +294,36 @@ def b14() -> dict:
     return {"versions": len(table), "messages": {",".join(r["fixed"]) or "none": r["message"] for r in table}}
 
 
-ENTRIES = {"tab26": tab26, "c12": c12, "c13": c13, "a15": a15, "p16": p16, "c17": c17, "c20": c20, "c28": c28,
+def c14() -> dict:
+    import chB8_code as C
+
+    ns = namespace(["GIVEN_14"])
+    exec(C.SOLUTION_14, ns)
+    rows = []
+    for seed in range(5):
+        start = time.perf_counter()
+        online, log = ns["run_colleague_14"](seed, 8_000)
+        ev = ns["wbr"].evaluate(ns["wbr"].greedy_q(online), 100, ns["EVAL_SEED"])
+        rows.append({"seed": seed, "eval": ev["mean_return"], "episodes": len(log["returns"]),
+                     "last20": float(np.mean(log["returns"][-20:])), "q_end": log["q_mean"][-1],
+                     "seconds": round(time.perf_counter() - start, 1)})
+        print("c14", rows[-1], flush=True)
+    buggy = {}
+    exec(C.TODO_14, ns)
+    online, log = ns["run_colleague_14"](0, 8_000)
+    buggy["all_bugs"] = {"eval": ns["wbr"].evaluate(ns["wbr"].greedy_q(online), 100, ns["EVAL_SEED"])["mean_return"],
+                         "q_mean": log["q_mean"], "last20": float(np.mean(log["returns"][-20:]))}
+    for name in C.FIX_ORDER_14:                      # one bug left
+        exec(C.repaired_14([f for f in C.FIX_ORDER_14 if f != name]), ns)
+        online, log = ns["run_colleague_14"](0, 8_000)
+        buggy[name] = {"eval": ns["wbr"].evaluate(ns["wbr"].greedy_q(online), 100, ns["EVAL_SEED"])["mean_return"],
+                       "q_mean": log["q_mean"][-1], "last20": float(np.mean(log["returns"][-20:]))}
+        print("c14 one bug left", name, buggy[name], flush=True)
+    worst = min(r["eval"] for r in rows)
+    return {"rows": rows, "worst": worst, "threshold": float(5 * np.floor(0.6 * worst / 5)), "buggy": buggy}
+
+
+ENTRIES = {"tab26": tab26, "c14": c14, "c12": c12, "c13": c13, "a15": a15, "p16": p16, "c17": c17, "c20": c20, "c28": c28,
            "b14": b14}
 
 

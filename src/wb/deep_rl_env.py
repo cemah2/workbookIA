@@ -345,7 +345,7 @@ class _Memory:
 
 def train_dqn(seed: int = 0, total_steps: int | None = None, settings: dict | None = None, variant: str = "dqn", *,
               eval_every: int = 2_000, eval_episodes: int = 20, eval_seed: int = EVAL_SEED, fast: bool = True,
-              env=None):
+              env=None, targets_fn=None, capacity: int | None = None, stop_after: int | None = None):
     """Train the reference DQN on CartPole-v1 and return ``(q_net, history)``.
 
     One environment step: ε-greedy action (``linear_epsilon``), the transition stored with ``terminated`` only (a time
@@ -355,7 +355,10 @@ def train_dqn(seed: int = 0, total_steps: int | None = None, settings: dict | No
     one every ``target_every`` steps. Variants: ``"no_target"`` (targets from the online network), ``"no_replay"``
     (a memory of ``batch_size`` transitions: each mini-batch is the last ``batch_size`` steps, in a random order),
     ``"double"`` (Double DQN). Every ``eval_every`` steps, the greedy policy is evaluated on ``eval_episodes`` episodes
-    (``evaluate``, its own environment and seeds: the training run does not depend on it).
+    (``evaluate``, its own environment and seeds: the training run does not depend on it). ``targets_fn`` (same
+    arguments as ``dqn_targets``) and ``capacity`` replace the targets and the size of the memory of the variant: the
+    full mode of Ex B8.15 runs this loop with the learner's ``targets_15`` and ``memory_size_15``. ``stop_after`` stops
+    the run after that many steps (the same schedule as the whole run: a prefix of the recorded curve).
 
     ``history``: ``eval_steps``, ``eval_returns``, ``episode_returns``, ``episode_ends`` (the step of each end),
     ``seconds``, and the protocol (``seed``, ``variant``, ``total_steps``, ``settings``)."""
@@ -365,7 +368,9 @@ def train_dqn(seed: int = 0, total_steps: int | None = None, settings: dict | No
     total_steps = int(total_steps if total_steps is not None else dqn_steps(fast))
     if variant not in DQN_VARIANTS:
         raise ValueError(f"variant must be one of {DQN_VARIANTS}, got {variant!r}")
-    capacity = s["batch_size"] if variant == "no_replay" else s["capacity"]
+    if capacity is None:
+        capacity = s["batch_size"] if variant == "no_replay" else s["capacity"]
+    targets_fn = targets_fn if targets_fn is not None else dqn_targets
     start = time.perf_counter()
     with single_thread():
         q_net = q_network(s["hidden"], seed=seed)
@@ -377,7 +382,7 @@ def train_dqn(seed: int = 0, total_steps: int | None = None, settings: dict | No
         state, _ = env.reset(seed=int(seed))
         history = {"eval_steps": [], "eval_returns": [], "episode_returns": [], "episode_ends": []}
         ret = 0.0
-        for step in range(total_steps):
+        for step in range(total_steps if stop_after is None else min(total_steps, int(stop_after))):
             eps = linear_epsilon(step, total_steps, s["eps_start"], s["eps_end"], s["eps_fraction"])
             if rng.random() < eps:
                 action = int(rng.integers(2))
@@ -397,7 +402,7 @@ def train_dqn(seed: int = 0, total_steps: int | None = None, settings: dict | No
                 bs, ba, br, bs2, bd = memory.sample(s["batch_size"])
                 bs, bs2 = torch.as_tensor(bs), torch.as_tensor(bs2)
                 br = torch.as_tensor(br, dtype=torch.float32)
-                y = dqn_targets(q_net, frozen, bs2, br, torch.as_tensor(bd), s["gamma"], variant)
+                y = targets_fn(q_net, frozen, bs2, br, torch.as_tensor(bd), s["gamma"], variant)
                 pred = q_net(bs).gather(1, torch.as_tensor(ba).unsqueeze(1)).squeeze(1)
                 loss = F.huber_loss(pred, y, delta=s["huber_delta"])
                 optimizer.zero_grad()
@@ -681,6 +686,31 @@ def collect_rollout(agent, envs, obs, just_reset, n_steps: int, generator, ep_re
     return batch, obs, just_reset
 
 
+def ppo_loss(agent, obs, actions, old_log_probs, advantages, returns, settings: dict | None = None):
+    """The PPO loss of a mini-batch (tensors) and its parts, the reference of the learner's ``ppo_loss_20``:
+    ``(loss, parts)`` with ``loss = policy_loss + vf_coef * value_loss - ent_coef * entropy``, ``policy_loss =
+    -mean(min(rho A, clip(rho, 1 - eps, 1 + eps) A))``, ``rho = exp(log pi(a|s) - old_log_prob)``, ``value_loss =
+    0.5 mean((V(s) - returns)^2)``, ``entropy`` the mean entropy of ``pi(.|s)``; the advantages are used as given.
+    ``parts``: floats ``policy_loss``, ``value_loss``, ``entropy``, ``approx_kl`` (mean of ``(rho - 1) - log rho``),
+    ``clipfrac`` (share of ``|rho - 1| > eps``)."""
+    torch = _torch()
+    s = {**PPO_SETTINGS, **(settings or {})}
+    log_all = torch.log_softmax(agent.actor(obs), dim=1)
+    new_logp = log_all.gather(1, actions.long()[:, None]).squeeze(1)
+    entropy = -(log_all.exp() * log_all).sum(dim=1).mean()
+    log_ratio = new_logp - old_log_probs
+    ratio = log_ratio.exp()
+    eps = s["clip_eps"]
+    policy_loss = -torch.min(ratio * advantages, ratio.clamp(1 - eps, 1 + eps) * advantages).mean()
+    value_loss = 0.5 * ((agent.value(obs) - returns) ** 2).mean()
+    loss = policy_loss + s["vf_coef"] * value_loss - s["ent_coef"] * entropy
+    with torch.no_grad():
+        parts = {"policy_loss": float(policy_loss), "value_loss": float(value_loss), "entropy": float(entropy),
+                 "approx_kl": float(((ratio - 1) - log_ratio).mean()),
+                 "clipfrac": float(((ratio - 1).abs() > eps).float().mean())}
+    return loss, parts
+
+
 def ppo_update(agent, optimizer, batch, advantages, returns, s: dict, generator) -> dict:
     """``n_epochs`` passes over the valid transitions of the rollout, in ``n_minibatches`` shuffled mini-batches: one
     Adam step each on ``-L^CLIP + vf_coef * 0.5 * MSE(V, returns) - ent_coef * entropy`` (advantages normalised per
@@ -701,29 +731,17 @@ def ppo_update(agent, optimizer, batch, advantages, returns, s: dict, generator)
         order = torch.randperm(n, generator=generator)
         for lo in range(0, n - size + 1, size):
             idx = order[lo:lo + size]
-            logits = agent.actor(obs_all[idx])
-            log_all = torch.log_softmax(logits, dim=1)
-            new_logp = log_all.gather(1, flat["actions"][idx, None]).squeeze(1)
-            entropy = -(log_all.exp() * log_all).sum(dim=1).mean()
-            log_ratio = new_logp - flat["log_probs"][idx]
-            ratio = log_ratio.exp()
             adv = adv_all[idx]
             if s["norm_adv"] and len(adv) > 1:
                 adv = (adv - adv.mean()) / (adv.std() + 1e-8)
-            eps = s["clip_eps"]
-            policy_loss = -torch.min(ratio * adv, ratio.clamp(1 - eps, 1 + eps) * adv).mean()
-            value_loss = 0.5 * ((agent.value(obs_all[idx]) - ret_all[idx]) ** 2).mean()
-            loss = policy_loss + s["vf_coef"] * value_loss - s["ent_coef"] * entropy
+            loss, parts = ppo_loss(agent, obs_all[idx], flat["actions"][idx], flat["log_probs"][idx], adv,
+                                   ret_all[idx], s)
             optimizer.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(agent.parameters(), s["max_grad_norm"])
             optimizer.step()
-            with torch.no_grad():
-                logs["policy_loss"].append(float(policy_loss))
-                logs["value_loss"].append(float(value_loss))
-                logs["entropy"].append(float(entropy))
-                logs["clipfrac"].append(float(((ratio - 1).abs() > eps).float().mean()))
-                logs["approx_kl"].append(float(((ratio - 1) - log_ratio).mean()))
+            for k, v in parts.items():
+                logs[k].append(v)
     return {k: float(np.mean(v)) if v else float("nan") for k, v in logs.items()}
 
 
@@ -844,10 +862,11 @@ def save_agent(key: dict, agent, logs: dict | None = None, folder: str | Path | 
     return path
 
 
-def load_agent(key: dict, folder: str | Path | None = None):
-    """``(agent, info)`` for the checkpoint of ``key`` (an ``ActorCritic`` in eval mode; ``info``: ``logs``, ``extra``,
-    ``saved_at``, ``path``), or None when there is none, when the file holds another key, or when it is incomplete or
-    unreadable."""
+def load_agent(key: dict, folder: str | Path | None = None, build=None):
+    """``(agent, info)`` for the checkpoint of ``key`` (``build()``, an untrained module of the same class, with the
+    weights loaded strictly, in eval mode; by default an ``ActorCritic`` of the saved width; ``info``: ``logs``,
+    ``extra``, ``saved_at``, ``path``), or None when there is none, when the file holds another key, or when it is
+    incomplete or unreadable."""
     torch = _torch()
     path = agent_file(key, folder)
     if not path.exists():
@@ -856,7 +875,7 @@ def load_agent(key: dict, folder: str | Path | None = None):
         payload = torch.load(path, map_location="cpu", weights_only=True)
         if payload.get("__complete__") is not True or payload.get("key") != _canonical(key):
             return None
-        agent = _actor_critic_class()(payload["hidden"])
+        agent = build() if build is not None else _actor_critic_class()(payload["hidden"])
         agent.load_state_dict(payload["state_dict"])
     except Exception:  # noqa: BLE001 - truncated, corrupt, another format: as if absent
         return None
