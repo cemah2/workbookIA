@@ -1,10 +1,10 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-04, session 75 (bonus B7, 1ʳᵉ partie).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-05, session 76 (bonus B7, 2ᵉ et dernière partie).*
 
 ## Prochaine étape
 
-➡️ **Session 76 : chapitre bonus B7 (Du notebook à la production), 2ᵉ et dernière partie** : le notebook B7.9 à B7.25 (projet : paquet, ligne de commande, configuration, reproductibilité, suivi, tests → service : artefact, API, latence, export → exploitation : dérive, intégration continue, Docker), le paquet de référence dans `solutions/` avec ses tests, ses indices et solutions, la fin du chapitre ; tout ce qu'il faut est dans `chapitres/b7_production/EN_COURS.md` (« Pour la session 76 »). Puis le bonus B8.
+➡️ **Session 77 : chapitre bonus B8 (RL moderne : DQN, gradient de politique, PPO et RLHF), 1ʳᵉ partie** (`docs/syllabus/data/chB8.json`, 2 sessions de génération, dossier `chapitres/b8_rl_moderne/`) : fiche, exercices papier, partie 0 du notebook, référence `mylearn` et ses tests, `EN_COURS.md`. C'est le dernier chapitre bonus.
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -144,6 +144,8 @@ Côté apprenant : **le chapitre bonus B5 (modèles de diffusion : un DDPM minim
 
 Côté apprenant : **le chapitre bonus B6 (explicabilité, équité et éthique) est terminé** : `python tools/start_chapter.py B6` copie la fiche, ta copie et le notebook complet, et crée `mylearn/explain.py` ; le notebook te fait expliquer un modèle de California (coefficients, permutation, dépendance partielle et courbes ICE), écrire ton Shapley exact puis utiliser SHAP sur un gradient boosting et sur Penguins, montrer que le fond change tout, écrire tes gradients intégrés et ton Grad-CAM, les appliquer à un CNN CIFAR-10 et au ResNet du B1 (ton modèle de B1.27 s'il existe), réparer un Grad-CAM à l'envers, passer le test de santé d'Adebayo, écrire tes indicateurs d'équité, auditer *Adult* par sexe et par âge avec des intervalles bootstrap, prédire puis mesurer l'effet du retrait de la variable « sexe », comparer trois atténuations et leur coût, rédiger une fiche modèle, et relever le défi (écart d'equalized odds sous 0,07 en perdant moins de 2 points d'accuracy). Tout tourne sur CPU en environ 3 minutes.
 
+Côté apprenant : Côté apprenant : **le chapitre bonus B7 (du notebook à la production) est terminé** : `python tools/start_chapter.py B7` copie la fiche, ta copie et le notebook complet (aucun module `mylearn` : ton code est le paquet `cifarprod` de ton projet, que le notebook écrit dans `mon_travail/b7_production/cifar-prod/`) ; le notebook te fait transformer ton classifieur en paquet installable, avec sa ligne de commande, sa configuration validée, des runs reproductibles et journalisés et des tests qui attrapent de vraies erreurs, réparer un service qui ne marche qu'au notebook, livrer le VGG du MP5 dans un artefact qui se suffit, le servir par une API FastAPI (et son repli `http.server`), prédire puis mesurer sa latence, l'accélérer sur CPU, l'exporter avec `torch.export`, surveiller la dérive (PSI, test KS), écrire le workflow d'intégration continue et le Dockerfile, et relever le défi : un dépôt que n'importe qui clone, installe, teste et fait prédire en une commande. Tout tourne sur CPU (≈ 2 min 30 pour le notebook de solutions) ; ni GitHub ni Docker ne sont nécessaires.
+
 ## Statut des chapitres
 
 Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ généré · 🔍 audité
@@ -195,7 +197,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | B4 | LLM en pratique : Hugging Face, prompting, RAG et LoRA | ✅ | 69-70 | 50 exercices (dont 19 dans le notebook : prompting, recherche et RAG sur Holmes, LoRA, classification, livraison, défi), fiche (≈ 14 800 mots, 6 figures), 28 flashcards, partie 0 (122 vérifications) ; `mylearn/retrieval.py` (129 tests) ; infrastructure `wb.llm`, `wb.rag` ; données `data/qa/` (30 questions sur Holmes, 10 sur Verne, 12 de contrôle en empreintes) |
 | B5 | Modèles de diffusion : un DDPM minimal | ✅ | 71-72 | 50 exercices (dont 20 dans le notebook : mathématiques de `diffusion.py`, jouets 2D et flow matching, U-Net sur MNIST, DDPM contre DDIM, guidance sur Fashion-MNIST, mémorisation, distance de Fréchet face au VAE et au DCGAN, échantillonneur autonome, défi), fiche (≈ 13 700 mots, 5 figures), 26 flashcards, partie 0 (118 vérifications) ; `mylearn/diffusion.py` (209 tests) ; infrastructure `wb.diffusion` ; diffusers 0.40.0 en oracle facultatif |
 | B6 | Explicabilité, équité et éthique | ✅ | 73-74 | 49 exercices (dont 18 dans le notebook : explications globales, SHAP sur California et Penguins, gradients intégrés et Grad-CAM sur CIFAR-10 et le ResNet du B1, test d'Adebayo, audit d'équité sur Adult, atténuation, fiche modèle, défi), fiche (≈ 13 400 mots, 6 figures), 28 flashcards, partie 0 (121 vérifications) ; `mylearn/explain.py` (186 tests) ; infrastructure `wb.explain_data` |
-| B7 | Du notebook à la production | 🛠️ 1/2 | 75 | fiche (≈ 11 100 mots, 5 figures), 27 exercices papier, 24 flashcards, partie 0 (116 vérifications) ; aucun module `mylearn` (chapitre de compétences pro) ; fastapi, uvicorn et pydantic figés aux versions de Colab ; notebook B7.9 à B7.25 à la session 76 |
+| B7 | Du notebook à la production | ✅ | 75-76 | fiche (≈ 11 100 mots, 5 figures), 27 exercices papier, 24 flashcards, partie 0 (116 vérifications) ; aucun module `mylearn` (chapitre de compétences pro) ; fastapi, uvicorn et pydantic figés aux versions de Colab ; notebook B7.9 à B7.25 (paquet de référence `solutions/b7_cifarprod/`, `wb.prod`), 2 apprenants simulés et un relecteur |
 | B8 | Chapitre bonus | 📅 | | |
 | PF | Projet final et finalisation (P10) | 📅 | | |
 
@@ -653,6 +655,47 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 76 (2026-11-04/05) : chapitre bonus B7 (Du notebook à la production), 2ᵉ et dernière partie ✅
+
+**Fait** :
+- **Infrastructure** `src/wb/prod.py` (`wbp`, tests dans `tests/infra/test_wb_prod.py`) :
+  - le dossier du projet (`mon_travail/b7_production/cifar-prod/` chez l'apprenant, un dossier temporaire pour les solutions et pour toute exécution depuis le dépôt) ;
+  - l'écriture gardée des fichiers du paquet ;
+  - les commandes : chacune dans sa propre session, ses sorties dans des fichiers, tout le groupe tué au délai et ce qui survit à la fin, jamais le groupe de l'appelant ;
+  - l'installation éditable dans un venv temporaire ;
+  - un serveur lancé dans un sous-processus et toujours arrêté ;
+  - l'artefact de référence et l'empreinte des 45 000 images du MP5 ;
+  - les latences ;
+  - la relecture d'un workflow et d'un Dockerfile ;
+  - les imports non déclarés ;
+  - la vitesse de la machine.
+
+  `run_pytest_group` reçoit `env` et `args`.
+- **Paquet de référence** `solutions/b7_cifarprod/` :
+  - données, modèle, entraînement, configuration validée, ligne de commande, journal d'expériences ;
+  - artefact, API (FastAPI avec repli `http.server`), export `torch.export` ;
+  - 34 tests, démo, workflow GitHub Actions, Dockerfile, Makefile, README et fiche modèle.
+- **Notebook** (`build_chB7.py`, `chB7_parts.py`, `chB7_code*.py`, `history_chB7.py`), B7.9 à B7.25 :
+  - **partie A** : 📦 du notebook au paquet, ligne de commande, configuration ; 🔮 B7.12 ; reproductibilité, suivi, tests ; 🐛 B7.16 ;
+  - **partie B** : 📦 artefact, 📦 API, 🔮 B7.19 (rapports de p95), 🔬 accélération sur CPU (aucun temps enregistré), 📦 export (verdict ≤ 1e-6) ;
+  - **partie C** : 📈 dérive (PSI et KS), 🛠️ workflow et 📦 Dockerfile, relus et jamais lancés ; 🏆 B7.25, corrigé à la main sur une grille de 10 critères, avec un auto-contrôle sur un clone git et aucune note affichée.
+- `04_indices.md` et `05_solutions.md` pour les 17 exercices. Annexes : glossaire, erreurs fréquentes, aide-mémoire PyTorch. Data card de CIFAR-10. `EN_COURS.md` supprimé : le chapitre est publié.
+- **Vérifications indépendantes** : deux apprenants simulés, un sur B7.9 à B7.16 (74 erreurs plantées), un sur B7.17 à B7.25 (47 erreurs). Un relecteur a appliqué leurs constats et relu le chapitre. Voir BIBLE §22.
+- **Vérification finale** :
+  - `syllabus.py check` : 0 problème ;
+  - tests : mode apprenant 771, `--impl=ref` REFCOUNT, paquet de référence 31 (3 ignorés) ;
+  - `build_answers.py --check`, `export_flashcards.py --check` (941 cartes) et `check_env.py` passent ;
+  - solutions exécutées en ≈ 2 min sans ❌ ni ⏳ ; « Run all » du notebook vide en ≈ 6 s, sans erreur ;
+  - `mon_travail/` intact ; en-tête de la fiche : 18 h, lecture 1,5 h, comme le SYLLABUS.
+- Écarts : section « Écarts » (ligne 76).
+
+**Leçons** :
+- une commande lancée par une cellule tourne dans sa propre session, et ses sorties vont dans des fichiers. Sinon, un petit-enfant laissé en vie (un serveur jamais arrêté) bloque `communicate()` jusqu'au délai, et une sortie sans fin remplit la mémoire du noyau ;
+- avant de tuer un groupe de processus, on vérifie que ce n'est ni le groupe ni la session de l'appelant ;
+- un mutant qui peut bloquer se vérifie par un test unitaire court et bridé (`prlimit`, `timeout`), jamais en rejouant tout le notebook. Le conteneur a redémarré deux fois pendant ces rejeux. Les commits d'étape toutes les 20 minutes n'ont rien laissé perdre ;
+- dans un chapitre de projet, le « Tout exécuter » sur un projet neuf est un cas à part : un module importé par la ligne de commande n'est écrit que plus bas, et la cellule doit répondre ⏳, pas ❌ ;
+- une vérification de bout en bout (graine transmise jusqu'aux poids, mode du modèle rendu, code de sortie d'un échec) attrape des erreurs que les comparaisons de valeurs laissent passer.
 
 ## Session 75 (2026-11-04) : chapitre bonus B7 (Du notebook à la production), 1ʳᵉ partie ✅
 
@@ -1425,6 +1468,7 @@ Côté apprenant : **l'audit des parties V et VI est fait.** Rien ne change dans
 | 40 | Ch. B4 sur Colab : modes complets 🚀 de B4.26 (SmolLM2-135M, 300 pas de 8 × 256 tokens, lr 5e-4, réglages non mesurés sur CPU) et de B4.28 (toutes les données, 3 epochs, Qwen2.5 zéro-shot sur 400 messages) ; défi B4.30 en mode complet (600 s ; référence 286 s ici) ; générations de Qwen2.5 et SmolLM2 sur une autre machine (un arrondi peut changer un token : chiffres voisins) ; première exécution sans cache (≈ 15 min de générations) ; pic mémoire (4,4 Go ici) | le CPU et la mémoire de Colab diffèrent ; le cache existait sur la machine de génération | à faire |
 | 41 | Ch. B5 sur Colab : mode complet 🚀 jamais exécuté ici (B5.23 avec le U-Net de la fiche, 20 epochs sur 60 000 images, ρ = 0,999 ; B5.25, B5.27, B5.28 ; défi complet, objectif 12 calibré sur ce CPU) et son temps sur GPU (§4) ; entraînement de B5.23 (120 s ici, plafond 180 s) ; mise à l'échelle du temps du défi sur une autre machine ; `sample.py` lancé par sous-processus ; diffusers 0.42.1 préinstallé sur Colab contre 0.40.0 figé | le CPU de la machine de génération ne fait pas le mode complet ; versions de Colab à revérifier | à faire |
 | 42 | Ch. B6 sur Colab : shap 0.54.1 préinstallé (B6.15 à B6.17) ; entraînements de référence du CNN (≈ 40 s) et du ResNet (≈ 35 s) au premier passage, puis relus du cache ; « Tout exécuter » en mode rapide (≈ 3 min à froid, 2 min ensuite) ; `wbx.find_b1_folder` qui lit le modèle publié en B1.27 sur Drive ; `fiche_modele_adult_b6.md` écrite à côté du notebook (B6.28) | le cache existait sur la machine de génération ; chemins de Drive | à faire |
+| 43 | Ch. B7 sur Colab : installation éditable dans un venv temporaire (pip ou uv) depuis `mon_travail/b7_production/cifar-prod` sur Drive ; FastAPI 0.141.1, uvicorn 0.54.0 et pydantic 2.14.1 de Colab (le workbook fige 0.53.0 et 2.13.5) pour B7.18 ; catégories du 🔮 B7.19 sur le CPU de Colab (rapports calibrés ici : a 3,5 à 12, b 9,3 à 18) ; serveur uvicorn dans un thread et serveur dans un sous-processus arrêtés à la fin des cellules ; `git` dans le dossier du projet sur Drive pour le clone de 🏆 B7.25, et son temps ramené à la vitesse de la machine ; « Tout exécuter » (≈ 2 min 30 ici) | aucune de ces conditions n'existe sur la machine de génération | à faire |
 
 ## Calibrage
 
@@ -1521,5 +1565,5 @@ Côté apprenant : **l'audit des parties V et VI est fait.** Rien ne change dans
 | 73 | B6 (chapitre non publié) | vérifications des quiz B6.Q1 à Q12 et des rappels B6.R1 à R3 `manual` → `wb.check` (partie 0) ; « model card » → « fiche modèle » (titre de B6.28 et autres champs) et « post-hoc » → « post hoc » (termes du glossaire) ; ✏️ B6.3 h : seuil « au plus 0,03 » (réponse 134) au lieu d'un seuil qui tombait pile sur 4/400 ; aucun ID, type, durée ni parcours ne change | terminologie du §5 ; réponse robuste aux arrondis |
 | 74 | B6 | **titre de B6.29** : « … sous 0,05 … » → « … sous 0,07 … » (la référence, deux seuils par sexe choisis sur la validation, fait 0,012 à 0,058 sur 11 découpages ; le TPR des femmes repose sur ≈ 350 positifs, écart-type ≈ 0,026) ; `notes` du contrat alignées ; vérifications : B6.13, B6.25 et B6.26 `manual` → `wb.check` ; B6.29 `wb.check` → `manual` (défi jugé par `verdict`) ; `prereq` : B6.27 + B6.24 ; seuils par sexe permis dans la décision du défi (dit dans l'énoncé) ; B6.13 : « bosse de la latitude » remplacée par sa tendance (instable d'un découpage à l'autre) ; aucun ID, type, durée ni parcours ne change | défi calibré avant d'être promis (leçon B4) |
 | 75 | B7 (chapitre non publié) | vérifications des quiz B7.Q1 à Q11 et des rappels B7.R1 à R3 `manual` → `wb.check` (partie 0) ; dépendances fastapi, uvicorn et pydantic ajoutées (prévu par le contrat) ; aucun ID, titre, type, durée ni parcours ne change | comme B1 à B6 |
-| 76 | B7 (chapitre non publié) | `check` de 🔮 B7.12 `manual` → `wb.check` (ses quatre prédictions sont vérifiées) ; `prereq` de 📦 B7.15 `["B7.9", "21"]` → `["B7.11", "21"]` (ses tests appellent la configuration et `main(argv)` de B7.10 et B7.11) ; aucun ID, titre, type, durée ni parcours ne change ; `syllabus.py build` à lancer par le coordinateur | les champs `check` et `prereq` suivent le notebook |
+| 76 | B7 | `check` de 🔮 B7.12 `manual` → `wb.check` (ses quatre prédictions sont vérifiées) ; `prereq` de 📦 B7.15 `["B7.9", "21"]` → `["B7.11", "21"]` (ses tests appellent la configuration et `main(argv)` de B7.10 et B7.11) ; `check` de 🔮 B7.19 et 📈 B7.22 `manual` → `wb.check` (leurs réponses sont vérifiées) ; 📦 B7.21 garde `wb.check` (le verdict « écart ≤ 1e-6 » est enregistré comme un booléen, pas l'écart, nul sur ce CPU) ; titre du défi B7.25 gardé (la chaîne de la référence, de `git clone` à la prédiction servie, prend 12 à 14 s ici sans téléchargement ; ≈ 3 min comptées pour PyTorch CPU) ; aucun ID, titre, type, durée ni parcours ne change | les champs `check` et `prereq` suivent le notebook |
 | 62 | 21 à 29, CP4 à CP6, MP5, MP6 (R1 à R9 validés) | **titres** changés, ID inchangés : 23.15, 23.28, 24.8, 24.E2, 25.27, 26.E4, 26.31, 27.R1, 27.Q7, 29.R3, MP5.1, MP6.7 ; **types et ★** : CP6.8 📦 → 🔨, CP6.4 et CP6.9 ★ → ★★, titre de CP6.9 « Réparer un pas d'entraînement de GAN » ; **durées** : 21.12 ★★ 30, 21.23 25, 22.12 ★★ 30, 22.13 30, 25.28 ★★★ 35, 26.14 ★★ 30, 26.19 ★★★ 35, 26.20 ★★★ 75, 26.21 ★★★ 90, 26.31 ★★★ 40, MP5.8 90 min (MP5 : 10 h) ; **parcours maths** : 23.12, 23.13, 23.15, 23.16, 23.18, 23.23, 23.25, 24.19, 24.20, 24.22, 24.23, 27.20, 27.27 ; **énoncés précisés**, réponses inchangées : 21.Q8 a, 22.20, 24.24, 24.27, 24.R1 a, 26.17, 26.35, 29.15, CP6.7, CP6.8 ; `cp6.json` : champs `notes` et `study_notes` | audit P5 V-VI, rapport §6 |
