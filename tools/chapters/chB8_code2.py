@@ -322,6 +322,11 @@ def check_review_27(review):
         if span:
             cited |= set(range(span[0], span[1] + 1))
     if not problems:
+        spans = {line_range_27(e["lignes"]) for e in review}
+        extracts = {" ".join(e["extrait"].split()) for e in review}
+        if min(len(spans), len(extracts)) < 8:
+            problems.append(f"la revue ne compte que {min(len(spans), len(extracts))} écarts distincts (des lignes ou "
+                            "des extraits répétés) : il en faut au moins 8, chacun sur ses lignes de ppo.py.")
         if not cited & {«DONE_LINES_27»}:
             problems.append("la revue ne cite pas la ligne où ppo.py décide qu'un épisode est fini (208.4, « Fin "
                             "d'épisode ou limite de temps »).")
@@ -378,8 +383,8 @@ else:
 GIVEN_28 = r'''BUDGET_28 = wbr.CHALLENGE_BUDGET              # 100 000 environment steps per run, counted by the infrastructure
 SEEDS_28 = wbr.CHALLENGE_SEEDS                 # the three seeds of the challenge (none of them trains anything else)
 print(f"défi : {len(SEEDS_28)} runs (graines {list(SEEDS_28)}), au plus {BUDGET_28} pas d'environnement chacun, puis "
-      f"100 épisodes déterministes sur des graines tenues à l'écart ; objectif : {wbr.SOLVED:g} de moyenne sur les "
-      "trois runs.")'''
+      f"100 épisodes déterministes sur des graines tenues à l'écart ; objectif : au moins {wbr.SOLVED:g} de moyenne "
+      "sur chacun des trois runs.")'''
 
 TODO_28 = r'''def train_28(seed, budget):
     """Train an agent on CartPole-v1 from scratch, with at most `budget` environment steps (every copy of every
@@ -509,13 +514,22 @@ with checked("B8.24"):
         if not returned("B8.24", "set_physics_24", out_24):
             good_24.append(False)
             continue
+        nones_24 = [k for k in wbr.PHYSICS + ("total_mass", "polemass_length")
+                    if getattr(env_24.unwrapped, k, 0.0) is None]
+        if nones_24:
+            print(f"❌ Ex B8.24 : set_physics_24, {label_24} : env.unwrapped a reçu None pour {nones_24} ; None veut "
+                  "dire « inchangé » : ne pose que ce qui est donné.")
+            good_24.append(False)
+            continue
         got_24, want_24 = wbr.physics_of(env_24), wbr.physics_of(wbr.make_env(**change_24))
         wrong_24 = {k: (want_24[k], got_24[k]) for k in want_24 if not math.isclose(got_24[k], want_24[k], rel_tol=1e-12)}
         good_24.append(not wrong_24 and out_24 is env_24)
         if wrong_24:
+            wrapper_24 = [k for k in change_24 if k in vars(env_24)]          # set on the TimeLimit, not on the env
             print(f"❌ Ex B8.24 : set_physics_24, {label_24} : attendu "
                   + ", ".join(f"{k} = {w:g}" for k, (w, _) in wrong_24.items()) + " ; reçu "
-                  + ", ".join(f"{k} = {g:g}" for k, (_, g) in wrong_24.items()) + ".")
+                  + ", ".join(f"{k} = {g:g}" for k, (_, g) in wrong_24.items())
+                  + (f" : {wrapper_24} posés sur l'enveloppe ; step() lit ceux de env.unwrapped." if wrapper_24 else "."))
             continue
         if out_24 is not env_24:
             print(f"❌ Ex B8.24 : set_physics_24 doit rendre l'environnement qu'il a reçu (env), reçu un autre objet.")
@@ -539,6 +553,11 @@ with checked("B8.24"):
     rule_24 = wbr.rule_policy
     for name_24, factors_24 in (("gravity", [2.0, 1.5]), ("length", [2.0, 4.0])):   # not sorted, on purpose
         got_24 = robustness_24(rule_24, name_24, list(factors_24), n_episodes=5, seed=2424)
+        if isinstance(got_24, (list, tuple)) and any(isinstance(v, dict) for v in got_24):
+            print("❌ Ex B8.24 : robustness_24 rend une liste de dict ; attendu un float par facteur, le "
+                  "[\"mean_return\"] de wbr.evaluate.")
+            good_24.append(False)
+            break
         want_24 = [wbr.evaluate(rule_24, 5, 2424, **{name_24: DEFAULTS_24[name_24] * f})["mean_return"]
                    for f in factors_24]
         good_24.append(same("B8.24", f"robustness_24(règle de 208.1, {name_24!r}, {factors_24}, 5 épisodes) : chaque "
@@ -688,10 +707,13 @@ with checked("B8.26"):
     obs_26 = torch.as_tensor(np.random.default_rng(26).normal(0, 0.5, (5, 4)), dtype=torch.float32)
     out_26 = model_26(obs_26)
     n_params_26 = sum(p.numel() for p in model_26.parameters())
-    verdict("B8.26", isinstance(model_26, nn.Module) and tuple(out_26.shape) == (5,) and out_26.requires_grad,
+    shape_ok_26 = isinstance(model_26, nn.Module) and tuple(out_26.shape) == (5,) and out_26.requires_grad
+    verdict("B8.26", shape_ok_26,
             f"make_reward_model_26 : forward rend (5,) pour 5 observations, {n_params_26} paramètres.",
             f"make_reward_model_26 : attendu un nn.Module dont forward rend un tenseur (5,) avec son graphe pour 5 "
-            f"observations, reçu {tuple(getattr(out_26, 'shape', ()))}.")
+            f"observations, reçu {tuple(getattr(out_26, 'shape', ()))} : la suite de la vérification attend ce modèle.")
+    if not shape_ok_26:
+        raise StopCheck
     fixed_26 = wbr.reward_model(HIDDEN_26, seed=1)              # a fixed reward model, so that only your sum is tested
     some_26 = PAIRS_26["first"][:6]
     got_26 = trajectory_returns_26(fixed_26, [t.copy() for t in some_26])
@@ -714,6 +736,18 @@ with checked("B8.26"):
         r2_26 = wbr.trajectory_returns(start_model_26, small_26["second"])
         wins_26 = torch.as_tensor(np.asarray(small_26["preferred"]) == 0)
         want_first_26 = float(-F.logsigmoid(torch.where(wins_26, r1_26 - r2_26, r2_26 - r1_26)).mean())
+
+    def bt_26(model):                                           # the Bradley-Terry loss of the 30 pairs, in torch
+        first, second = wbr.trajectory_returns(model, small_26["first"]), wbr.trajectory_returns(model, small_26["second"])
+        return -F.logsigmoid(torch.where(wins_26, first - second, second - first)).mean()
+
+    stepped_26 = copy.deepcopy(start_model_26)                  # one Adam step on the loss of all the pairs at once
+    adam_26 = torch.optim.Adam(stepped_26.parameters(), lr=LR_26)
+    adam_26.zero_grad()
+    bt_26(stepped_26).backward()
+    adam_26.step()
+    with torch.no_grad():
+        want_second_26 = float(bt_26(stepped_26))
     mylearn.deep_rl.bradley_terry_loss = spy_bt_26
     try:
         model_s_26, losses_s_26 = pair("B8.26", "train_reward_model_26", train_reward_model_26(small_26, 7, epochs=20),
@@ -731,19 +765,29 @@ with checked("B8.26"):
             f"torch.manual_seed(seed) puis make_reward_model_26()), reçu "
             f"{(float(losses_s_26[0]) if len(losses_s_26) else None)!r} sur {len(losses_s_26)} valeurs ; le préféré est "
             "pairs['first'] quand pairs['preferred'] vaut 0.")
+    good_26.append(len(losses_s_26) == 20 and abs(float(losses_s_26[1]) - want_second_26)
+                   <= 1e-4 * max(1.0, want_second_26))
+    verdict("B8.26", good_26[-1], "la deuxième epoch suit un pas d'Adam sur le gradient de Bradley-Terry de toutes les "
+                                  "paires.",
+            f"la loss de la deuxième epoch : attendu {want_second_26:.6g} (un seul pas d'Adam par epoch, sur toutes les "
+            "paires à la fois, avec les gradients de ta bradley_terry_loss), reçu "
+            f"{(float(losses_s_26[1]) if len(losses_s_26) > 1 else None)!r} : est-ce bien ce gradient qui entre dans "
+            "le réseau, une fois par epoch ?")
     good_26.append(len(losses_s_26) == 20 and float(losses_s_26[-1]) < float(losses_s_26[0]))
     verdict("B8.26", good_26[-1], "la loss baisse en 20 epochs.",
             "la loss ne baisse pas en 20 epochs : le gradient atteint-il le réseau (torch.autograd.backward avec les "
             "gradients de ta bradley_terry_loss, puis optimizer.step()) ?")
     fn_26 = reward_fn_26(fixed_26)
     batch_26 = np.random.default_rng(260).normal(0, 0.5, (4, 4)).astype(np.float32)
-    r_26 = fn_26(batch_26, np.zeros(4, dtype=np.int64), batch_26.copy())
+    r_26 = fn_26(batch_26[::-1].copy(), np.zeros(4, dtype=np.int64), batch_26.copy())     # obs and next_obs differ
     with torch.no_grad():
         want_r_26 = fixed_26(torch.as_tensor(batch_26)).double().numpy()
     good_26.append(isinstance(r_26, np.ndarray) and r_26.shape == (4,) and np.allclose(r_26, want_r_26, atol=1e-5))
     verdict("B8.26", good_26[-1], "reward_fn_26 rend un tableau NumPy (4,) : model(next_obs).",
             f"reward_fn_26 : attendu un tableau NumPy (4,) égal à model(next_obs), reçu {type(r_26).__name__} "
-            f"{np.shape(r_26)}.")
+            f"{np.shape(r_26)}" + (" aux valeurs différentes : rends la récompense du modèle reçu, sur next_obs "
+                                   "(l'observation qui suit le pas)" if isinstance(r_26, np.ndarray)
+                                   and r_26.shape == (4,) else "") + ".")
     ok_26 = all(good_26)'''
 
 EXPERIMENT_26 = r'''# The two reward models (broad, narrow), then four PPO agents: on each learned reward, on the true reward, on the +1 of

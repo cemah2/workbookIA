@@ -402,8 +402,35 @@ def test_run_challenge_guards_the_trainers_the_checkpoints_and_the_agents_of_the
         assert namespace["AGENT_20"] is None and namespace["AGENTS_26"] is None and namespace["N"] == 3   # masked
         return R.rule_policy
 
-    res = R.run_challenge(honest, 1, budget=50, namespace=namespace, n_episodes=2)
+    res = R.run_challenge(honest, 1, budget=50, namespace=namespace, n_episodes=2, min_steps=1)
     assert res["error"] is None and res["steps"] == 1 and res["solved"] and namespace["AGENT_20"] is kept
+    assert "pas d'environnement joués" in R.run_challenge(honest, 1, budget=50, namespace=namespace,
+                                                          n_episodes=2)["error"], "a hand-written rule, 1 step"
+    assert "AGENT_20" in R.run_challenge(lambda s, b: namespace["AGENT_20"], 1, budget=50, namespace=namespace,
+                                         n_episodes=1)["error"], "masked: the message names it"
+
+    def noisy(seed, budget, a=kept):
+        twin = copy.deepcopy(a)
+        with torch.no_grad():
+            for p in twin.parameters():
+                p.add_(1e-6 * torch.randn_like(p))
+        return twin
+
+    assert "au bruit près" in R.run_challenge(noisy, 1, budget=50, namespace=namespace, n_episodes=1,
+                                              min_steps=0)["error"]
+    coin = np.random.default_rng(0)
+    assert "déterministe" in R.run_challenge(lambda s, b: (lambda st, i: int(coin.integers(2))), 1, budget=50,
+                                             n_episodes=1, min_steps=0)["error"]
+    held = sorted(R.evaluation_seeds(R.CHALLENGE_EVAL_SEED, 100))
+
+    def on_held(seed, budget):
+        R.make_env().reset(seed=held[3])
+        return R.rule_policy
+
+    assert "tenue à l'écart" in R.run_challenge(on_held, 1, budget=50, n_episodes=100, min_steps=0)["error"]
+    vec_held = R.run_challenge(lambda s, b: R.make_vec(4, seed=held[0] - 2) and R.rule_policy, 1, budget=50,
+                               n_episodes=100, min_steps=0)
+    assert "tenue à l'écart" in vec_held["error"], "the copies of a vector env are seeded seed + i"
     assert "interdit" in R.run_challenge(lambda s, b: R.train_ppo(s, 512)[0], 1, budget=50, n_episodes=1)["error"]
     assert "interdit" in R.run_challenge(lambda s, b: torch.load("x.pt"), 1, budget=50, n_episodes=1)["error"]
     alias, load_alias = R.train_ppo, torch.load              # taken before the run: not the guarded module names

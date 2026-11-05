@@ -930,10 +930,10 @@ def reference_agent(fast: bool = True, folder: str | Path | None = None, verbose
     return loaded
 
 
-def same_weights(a, b) -> bool:
-    """True when two torch modules hold exactly the same parameters and buffers, in the same order (an agent handed
-    back in place of one trained from scratch)."""
-    return _same_parameters(_parameters_of(a), _parameters_of(b))
+def same_weights(a, b, near: float = 0.0) -> bool:
+    """True when two torch modules hold the same parameters and buffers, in the same order (an agent handed back in
+    place of one trained from scratch): exactly, or within a relative L2 distance ``near`` (a copy with noise)."""
+    return _same_parameters(_parameters_of(a), _parameters_of(b), near=near)
 
 
 ANSWER_FUNCTIONS = ("linear_epsilon", "dqn_targets", "train_dqn", "discounted_returns", "reinforce_weights",
@@ -1150,6 +1150,8 @@ CHALLENGE_BUDGET = 100_000      # environment steps, all copies, every CartPole 
 CHALLENGE_SEEDS = (280, 281, 282)
 CHALLENGE_EVAL_SEED = 28_028    # held out: no training and no other evaluation of the notebook use it
 CHALLENGE_GUARDED = ("train_dqn", "train_reinforce", "train_ppo", "reference_agent", "load_agent", "precomputed")
+CHALLENGE_MIN_STEPS = 10_000    # a policy that comes out of fewer counted steps is not a trained agent
+CHALLENGE_NEAR = 1e-3           # an agent within this relative L2 distance of an agent that existed before is a copy
 
 
 class BudgetExceeded(RuntimeError):
@@ -1160,18 +1162,43 @@ class ChallengeRuleBroken(RuntimeError):
     """Raised during the challenge by a forbidden call (a reference trainer, a checkpoint, torch.load, async copies)."""
 
 
+def evaluation_seeds(seed: int, n_episodes: int) -> set:
+    """The episode seeds that ``evaluate(policy, n_episodes, seed)`` draws (the held-out episodes of the challenge)."""
+    rng = np.random.default_rng(seed)
+    return {int(rng.integers(2**31)) for _ in range(int(n_episodes))}
+
+
 @contextlib.contextmanager
-def counted_steps(budget: int):
+def counted_steps(budget: int, held: set | None = None):
     """Count every step of every CartPole of the process inside the block, however it was created (``gym.make``,
     ``gym.make_vec`` in "sync" mode, ``make_env``, ``make_vec``, a copy of an environment, ``env.unwrapped``):
     ``CartPoleEnv.step`` and ``CartPoleVectorEnv.step`` are patched at the class level (the vector version counts
     one step per copy). The step that would go beyond ``budget`` raises ``BudgetExceeded``. ``"async"`` copies, which
-    step in other processes, raise ``ChallengeRuleBroken``. Yields a dict whose ``"steps"`` is the count."""
+    step in other processes, raise ``ChallengeRuleBroken``, and so does a ``reset`` with one of the seeds of ``held``
+    (the held-out evaluation episodes). Yields a dict whose ``"steps"`` is the count."""
     from gymnasium.envs.classic_control import cartpole
 
     counter = {"steps": 0, "budget": int(budget)}
+    held = set(held or ())
     single, vector = cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step
+    single_reset, vector_reset = cartpole.CartPoleEnv.reset, cartpole.CartPoleVectorEnv.reset
     async_init = gym.vector.AsyncVectorEnv.__init__
+
+    def refuse_held(seeds):
+        if held & set(seeds):
+            raise ChallengeRuleBroken("cette graine est celle d'un épisode de l'évaluation tenue à l'écart : aucun "
+                                      "entraînement ne s'en sert")
+
+    def reset(self, *args, seed=None, **kwargs):
+        if seed is not None:
+            refuse_held([int(seed)])
+        return single_reset(self, *args, seed=seed, **kwargs)
+
+    def vector_reset_(self, *args, seed=None, **kwargs):
+        if seed is not None:
+            refuse_held([int(s) for s in seed] if isinstance(seed, (list, tuple)) else
+                        [int(seed) + i for i in range(self.num_envs)])
+        return vector_reset(self, *args, seed=seed, **kwargs)
 
     def step(self, action):
         if counter["steps"] >= counter["budget"]:
@@ -1190,11 +1217,13 @@ def counted_steps(budget: int):
                                   "utilise 'sync'")
 
     cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step = step, vector_step
+    cartpole.CartPoleEnv.reset, cartpole.CartPoleVectorEnv.reset = reset, vector_reset_
     gym.vector.AsyncVectorEnv.__init__ = refuse_async
     try:
         yield counter
     finally:
         cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step = single, vector
+        cartpole.CartPoleEnv.reset, cartpole.CartPoleVectorEnv.reset = single_reset, vector_reset
         gym.vector.AsyncVectorEnv.__init__ = async_init
 
 
@@ -1202,9 +1231,17 @@ def _parameters_of(module) -> list:
     return [p.detach().cpu().clone() for p in module.state_dict().values()]
 
 
-def _same_parameters(a: list, b: list) -> bool:
+def _same_parameters(a: list, b: list, near: float = 0.0) -> bool:
+    """True when the two lists of tensors are equal, or, with ``near`` > 0, when their relative L2 distance (over all
+    the tensors) is at most ``near``: a copy with a little noise added."""
     torch = _torch()
-    return len(a) == len(b) and all(x.shape == y.shape and torch.equal(x, y) for x, y in zip(a, b))
+    if len(a) != len(b) or any(x.shape != y.shape for x, y in zip(a, b)):
+        return False
+    if near <= 0:
+        return all(torch.equal(x, y) for x, y in zip(a, b))
+    gap = sum(float((x.double() - y.double()).pow(2).sum()) for x, y in zip(a, b))
+    size = sum(float(y.double().pow(2).sum()) for y in b)
+    return gap <= near ** 2 * max(size, 1e-12)
 
 
 def _holders_of_modules(namespace: dict) -> list:
@@ -1244,17 +1281,40 @@ def _known_agents(namespace: dict) -> dict:
     return known
 
 
+def _shown(names, at_most: int = 3) -> str:
+    """A few names of masked globals for a message: the constants (AGENT_20...) first, then « … »."""
+    ordered = sorted(names, key=lambda n: (not n.isupper(), n))
+    return ", ".join(ordered[:at_most]) + (", …" if len(ordered) > at_most else "")
+
+
+def _deterministic(policy, eval_seed: int, n_states: int = 50) -> bool:
+    """True when the function ``policy`` gives the same action twice on each of ``n_states`` states of an episode
+    played by the rule of 208.1 (a seed that is not an evaluation seed of the challenge, after the run: not counted)."""
+    probe = make_env()
+    state, info = probe.reset(seed=int(eval_seed) - 1)
+    for _ in range(n_states):
+        if policy(state.copy(), dict(info)) != policy(state.copy(), dict(info)):
+            return False
+        state, _, terminated, truncated, info = probe.step(rule_policy(state, info))
+        if terminated or truncated:
+            state, info = probe.reset()
+    return True
+
+
 def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namespace: dict | None = None,
-                  eval_seed: int = CHALLENGE_EVAL_SEED, n_episodes: int = 100) -> dict:
+                  eval_seed: int = CHALLENGE_EVAL_SEED, n_episodes: int = 100,
+                  min_steps: int = CHALLENGE_MIN_STEPS) -> dict:
     """One run of the challenge B8.28: ``train_fn(seed, budget)`` trains from scratch and returns a policy (a torch
     module, evaluated by its most probable action, or a deterministic function ``(state, info) -> int``).
 
     During the run: every CartPole step is counted (``counted_steps``; beyond ``budget``, ``BudgetExceeded`` stops
-    the run); the trainers and checkpoints of this module (``CHALLENGE_GUARDED``) and ``torch.load`` raise
-    ``ChallengeRuleBroken``; the torch modules of ``namespace`` (the notebook's globals, such as the agent of B8.20)
-    and the dicts, lists or tuples that hold one, are set to None, then restored. After the run: a module whose parameters equal those of an agent that existed
-    before is refused; the policy is evaluated on ``n_episodes`` episodes drawn from ``eval_seed`` (held out), 500
-    steps at most. Returns ``seed``, ``steps``, ``seconds``, ``mean_return``, ``min_return``, ``solved`` (mean >=
+    the run); a reset with the seed of an evaluation episode, the trainers and checkpoints of this module
+    (``CHALLENGE_GUARDED``, under any name) and ``torch.load`` raise ``ChallengeRuleBroken``; the torch modules of
+    ``namespace`` (the notebook's globals, such as the agent of B8.20) and the dicts, lists or tuples that hold one,
+    are set to None, then restored. After the run: a policy that comes out of fewer than ``min_steps`` counted steps,
+    a module whose parameters are those of an agent that existed before (within ``CHALLENGE_NEAR``), and a function
+    that is not deterministic are refused; the policy is evaluated on ``n_episodes`` episodes drawn from
+    ``eval_seed`` (held out), 500 steps at most. Returns ``seed``, ``steps``, ``seconds``, ``mean_return``, ``min_return``, ``solved`` (mean >=
     475) and ``error`` (None, or the reason the run does not count, in French: the notebook shows it)."""
     import torch
 
@@ -1283,7 +1343,7 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
         for name in CHALLENGE_GUARDED:
             module[name] = guard(f"wbr.{name}")
         torch.load = torch.serialization.load = guard("torch.load")
-        with counted_steps(budget) as counter:
+        with counted_steps(budget, held=evaluation_seeds(eval_seed, n_episodes)) as counter:
             try:
                 with watched({**{f"wbr.{name}": saved[name] for name in CHALLENGE_GUARDED}, "torch.load": loads[0]}):
                     policy = train_fn(seed, budget)        # the same functions under another name (an alias) too
@@ -1303,13 +1363,21 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
     if result["error"] is None:
         if policy is None or not callable(policy):
             result["error"] = ("train_fn doit rendre une politique : un module torch, ou une fonction (state, info) -> "
-                               "int")
-        elif isinstance(policy, torch.nn.Module):
-            mine = _parameters_of(policy)
-            same = [name for name, params in known.items() if _same_parameters(mine, params)]
-            if same:
-                result["error"] = (f"l'agent rendu a les paramètres d'un agent entraîné avant le run ({same[0]}) : "
-                                   "on entraîne à partir de rien")
+                               "int" + (f" ; pendant le défi, les agents du notebook ({_shown(masked)}) valent None : "
+                                        "entraîne le tien" if masked else ""))
+        elif isinstance(policy, torch.nn.Module) and any(
+                _same_parameters(_parameters_of(policy), params, near=CHALLENGE_NEAR) for params in known.values()):
+            same = next(name for name, params in known.items()
+                        if _same_parameters(_parameters_of(policy), params, near=CHALLENGE_NEAR))
+            result["error"] = (f"l'agent rendu a les paramètres d'un agent entraîné avant le run ({same}), au bruit "
+                               "près : on entraîne à partir de rien")
+        elif result["steps"] < min_steps:
+            result["error"] = (f"{result['steps']} pas d'environnement joués, moins de {min_steps} : la "
+                               "politique rendue doit sortir d'un entraînement sur CartPole (une règle écrite à la "
+                               "main n'est pas un agent entraîné)")
+        elif not isinstance(policy, torch.nn.Module) and not _deterministic(policy, eval_seed):
+            result["error"] = ("la politique rendue n'est pas déterministe : deux appels sur le même état rendent des "
+                               "actions différentes (rends l'action la plus probable)")
     if result["error"] is None:
         with torch.no_grad():
             ev = evaluate(policy, n_episodes, eval_seed)
