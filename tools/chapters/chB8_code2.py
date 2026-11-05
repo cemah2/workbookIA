@@ -551,6 +551,9 @@ with checked("B8.24"):
                                    "pas sont ceux de la référence.",
                 f"set_physics_24, {label_24} : un épisode joué avec les mêmes actions s'écarte de la référence.")
     rule_24 = wbr.rule_policy
+    if not all(good_24):
+        print("⏳ Ex B8.24 : robustness_24 se vérifie une fois set_physics_24 juste (ci-dessus).")
+        raise StopCheck
     for name_24, factors_24 in (("gravity", [2.0, 1.5]), ("length", [2.0, 4.0])):   # not sorted, on purpose
         got_24 = robustness_24(rule_24, name_24, list(factors_24), n_episodes=5, seed=2424)
         if isinstance(got_24, (list, tuple)) and any(isinstance(v, dict) for v in got_24):
