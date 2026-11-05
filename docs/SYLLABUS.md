@@ -5586,10 +5586,10 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 | B8.18 | 🔨 | compute_gae et explained_variance | ★★ | 30 | — | 03 | B8.4 | MC | pytest |
 | B8.19 | 🔨 | clipped_surrogate : valeur et gradient par rapport au ratio | ★★ | 20 | — | 03 | B8.5 | MC | pytest |
 | B8.20 | 📦 | PPO from scratch sur CartPole : environnements vectorisés, acteur-critique, GAE, clip, entropie | ★★★★ | 150 | CartPole | 03 | B8.18, B8.19, B8.17 | C | manual |
-| B8.21 | 📈 | Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée | ★★ | 20 | CartPole | 03 | B8.20 | C | manual |
+| B8.21 | 📈 | Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée | ★★ | 20 | CartPole | 03 | B8.20 | C | wb.check |
 | B8.22 | 🔬 | Hyperparamètres de PPO : ε du clip, λ, nombre d'epochs — robustesse sur trois graines 🚀 | ★★★ | 45 | CartPole | 03 | B8.20 | C | manual |
-| B8.23 | 🔮 | Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long | ★ | 10 | CartPole | 03 | B8.20 | C | manual |
-| B8.24 | 🔬 | Robustesse : modifier la physique de CartPole et mesurer la chute du retour | ★★ | 25 | CartPole | 03 | B8.23 | C | manual |
+| B8.23 | 🔮 | Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long | ★ | 10 | CartPole | 03 | B8.20 | C | wb.check |
+| B8.24 | 🔬 | Robustesse : modifier la physique de CartPole et mesurer la chute du retour | ★★ | 25 | CartPole | 03 | B8.23, B8.20 | C | manual |
 | B8.25 | 🔨 | bradley_terry_loss et dpo_loss | ★★ | 20 | — | 03 | B8.6 | MC | pytest |
 | B8.26 | 📦 | RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense | ★★★★ | 90 | CartPole | 03 | B8.25, B8.20 | C | manual |
 | B8.27 | 🛠️ | Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart | ★★ | 30 | CartPole | 03 | B8.20 | C | manual |

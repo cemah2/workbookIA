@@ -1654,3 +1654,40 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B7.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (24 cartes)
 <!-- wb:end B7 -->
+
+<!-- wb:section B8 -->
+## B8 — RL moderne : DQN, gradient de politique, PPO et RLHF ⏱️ 21 h
+
+- [ ] B8.Q1–Q12 🧠 Quiz (12 questions, 36 min)
+- [ ] B8.R1–R3 🔁 Rappels (3 questions, 15 min)
+- [ ] B8.1 ✏️ Cible DQN à la main : état terminal, puis cible Double DQN ★ 15 min
+- [ ] B8.2 ✏️ Loss de Huber et son gradient pour trois erreurs TD ★ 10 min
+- [ ] B8.3 ✏️ Gradient du log d'une politique softmax à trois actions ★★ 15 min
+- [ ] B8.4 ✏️ GAE à la main sur quatre pas, pour λ = 0, 0,95 et 1 ★★ 20 min
+- [ ] B8.5 ✏️ Objectif clippé de PPO : quatre cas, valeur et gradient nul ou non ★★ 20 min
+- [ ] B8.6 ✏️ Préférences : loss de Bradley-Terry puis loss DPO sur une paire de réponses ★★ 20 min
+- [ ] B8.7 ∂ Le gradient de politique en une étape : l'astuce de la log-dérivée, puis la baseline sans biais ★★★ 40 min
+- [ ] B8.8 🧮 Fermi : combien d'interactions ? CartPole, Atari (DQN 2015), AlphaGo Zero et le temps CPU correspondant ★★ 15 min
+- [ ] B8.9 🗣️ PPO expliqué en cinq lignes ★ 10 min
+- [ ] B8.10 ⚖️ RLHF : qui choisit les préférences ? Annotateurs, valeurs et flagornerie des modèles ★★ 25 min
+- [ ] B8.11 📄 Schulman et coll. (2017) : « Proximal Policy Optimization Algorithms » ★★★ 45 min
+- [ ] B8.12 📦 CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26 ★ 15 min
+- [ ] B8.13 📦 DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant ★★★ 60 min
+- [ ] B8.14 🐛 Le DQN qui diverge : quatre erreurs de cible, de fin d'épisode et d'exploration ★★ 30 min
+- [ ] B8.15 🔬 Ablations du DQN : sans réseau cible, sans rejeu, avec Double DQN — trois graines ★★★ 50 min 🚀
+- [ ] B8.16 🔮 Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ? ★ 10 min
+- [ ] B8.17 📦 REINFORCE avec et sans baseline : variance du gradient et vitesse d'apprentissage ★★★ 45 min
+- [ ] B8.18 🔨 compute_gae et explained_variance ★★ 30 min
+- [ ] B8.19 🔨 clipped_surrogate : valeur et gradient par rapport au ratio ★★ 20 min
+- [ ] B8.20 📦 PPO from scratch sur CartPole : environnements vectorisés, acteur-critique, GAE, clip, entropie ★★★★ 150 min
+- [ ] B8.21 📈 Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée ★★ 20 min
+- [ ] B8.22 🔬 Hyperparamètres de PPO : ε du clip, λ, nombre d'epochs — robustesse sur trois graines ★★★ 45 min 🚀
+- [ ] B8.23 🔮 Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long ★ 10 min
+- [ ] B8.24 🔬 Robustesse : modifier la physique de CartPole et mesurer la chute du retour ★★ 25 min
+- [ ] B8.25 🔨 bradley_terry_loss et dpo_loss ★★ 20 min
+- [ ] B8.26 📦 RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense ★★★★ 90 min
+- [ ] B8.27 🛠️ Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart ★★ 30 min
+- [ ] B8.28 🏆 Défi : CartPole-v1 résolu (≥ 475 sur 100 épisodes) en au plus 100 000 pas, trois graines sur trois ★★★★ 120 min
+- [ ] B8.E1–E5 💼 Entretien (5 questions, 50 min)
+- [ ] Flashcards importées dans Anki (26 cartes)
+<!-- wb:end B8 -->
