@@ -312,9 +312,10 @@ with checked("B8.13"):
                                  rewards_13 + 0.9 * (~term_13).float() * torch.tensor([3.0, 5.0, 0.5, -1.0]),
                                  rtol=1e-6, atol=1e-6)
 
+eps_ok_13 = False
 with checked("B8.13"):
     eps_steps_13 = [0, 1500, 3000, 6000, 9999]
-    same("B8.13", "epsilon_13 aux pas 0, 1 500, 3 000, 6 000 et 9 999 d'un entraînement de 10 000 pas",
+    eps_ok_13 = same("B8.13", "epsilon_13 aux pas 0, 1 500, 3 000, 6 000 et 9 999 d'un entraînement de 10 000 pas",
          [epsilon_13(k, 10_000) for k in eps_steps_13],
          [wbr.linear_epsilon(k, 10_000, 1.0, 0.05, SETTINGS_13["eps_fraction"]) for k in eps_steps_13])
 
@@ -365,7 +366,7 @@ with checked("B8.13"):
                 "deux entraînements de même graine ne donnent pas le même " + ("historique" if same_q_13 else "réseau")
                 + " : relis le contrat des graines (torch.manual_seed, le premier reset, le générateur de "
                 "l'exploration, random_state de la mémoire).")
-        ok_13 = all(good_13)'''
+        ok_13 = all(good_13) and eps_ok_13'''
 
 EXPERIMENT_13 = r'''if not ok_13:
     print("⏳ Ex B8.13 : l'entraînement complet attend que la vérification ci-dessus passe.")
@@ -769,7 +770,7 @@ if runs_15:
 # =====================================================================================================================
 # --- 🔮 B8.16 ---------------------------------------------------------------------------------------------------------
 TODO_16 = r'''# Your predictions, BEFORE running the next cell (an int, or True/False)
-best_16 = ...        # a) 0 (sans baseline), 1 (baseline moyenne) or 2 (retours normalisés)
+best_16 = ...        # a) 0 (no baseline), 1 (mean baseline) or 2 (normalised returns)
 first_200_16 = ...   # b) an int from 0 to 6
 beats_16 = ...       # c) True or False'''
 
@@ -894,30 +895,36 @@ with checked("B8.17"):
 
 with checked("B8.17"):
     if rl_ready("B8.17", "returns_to_go"):
-        good_17 = []
         for name_17, net_17 in POLICIES_17.items():
             for baseline_17 in ("none", "mean"):
                 copy_17 = copy.deepcopy(net_17)
                 got_17 = episode_gradients_17(copy_17, EPISODES_17[name_17], baseline_17)
                 want_17 = wbr.episode_gradients(net_17, EPISODES_17[name_17], baseline_17)
                 if not returned("B8.17", "episode_gradients_17", got_17):
-                    good_17.append(False)
-                    continue
-                arr_17 = np.asarray(got_17, dtype=float) if not isinstance(got_17, torch.Tensor) else got_17.detach().numpy()
+                    raise StopCheck
+                arr_17 = np.asarray(got_17.detach() if isinstance(got_17, torch.Tensor) else got_17, dtype=float)
                 label_17 = f"episode_gradients_17, politique {name_17}, baseline {baseline_17!r}"
-                if arr_17.shape == want_17.shape and np.allclose(arr_17, -want_17, rtol=1e-4, atol=1e-6) \
-                        and not np.allclose(want_17, 0):
-                    print(f"❌ Ex B8.17 : {label_17} : tous les signes sont inversés : on minimise la loss −mean(log π · (G − b)).")
-                    good_17.append(False)
-                    continue
                 lengths_17 = np.array([len(e["rewards"]) for e in EPISODES_17[name_17]], dtype=float)
-                if arr_17.shape == want_17.shape and np.allclose(arr_17, want_17 * lengths_17[:, None], rtol=1e-4, atol=1e-6):
-                    print(f"❌ Ex B8.17 : {label_17} : chaque ligne vaut T fois l'attendu : une somme sur les pas au lieu "
-                          "d'une moyenne ?")
-                    good_17.append(False)
-                    continue
-                good_17.append(same("B8.17", label_17, arr_17, want_17, rtol=1e-4, atol=1e-6))
-        grads_ok_17 = all(good_17)
+                near_17 = lambda a, b: a.shape == b.shape and np.linalg.norm(a - b) <= 1e-3 * np.linalg.norm(b)
+                if near_17(arr_17, -want_17):
+                    print(f"❌ Ex B8.17 : {label_17} : tous les signes sont inversés : on minimise la loss −mean(log π · (G − b)).")
+                    raise StopCheck
+                if near_17(arr_17, want_17 * lengths_17[:, None]):
+                    print(f"❌ Ex B8.17 : {label_17} : chaque ligne vaut T fois l'attendu (T, la longueur de son épisode) : "
+                          "une somme sur les pas au lieu d'une moyenne ?")
+                    raise StopCheck
+                if baseline_17 == "mean" and near_17(arr_17, np.concatenate(
+                        [wbr.episode_gradients(net_17, [e], "mean") for e in EPISODES_17[name_17]])):
+                    print(f"❌ Ex B8.17 : {label_17} : ta baseline est la moyenne des G_t de chaque épisode ; le contrat "
+                          "demande une seule constante, la moyenne des G_t de tous les épisodes donnés.")
+                    raise StopCheck
+                if near_17(arr_17, wbr.episode_gradients(net_17, EPISODES_17[name_17], baseline_17, gamma=1.0)):
+                    print(f"❌ Ex B8.17 : {label_17} : ce sont les gradients avec γ = 1 : tes retours sont-ils actualisés "
+                          "avec gamma ?")
+                    raise StopCheck
+                if not same("B8.17", label_17, arr_17, want_17, rtol=1e-4, atol=1e-6):
+                    raise StopCheck
+        grads_ok_17 = True
         if grads_ok_17:
             for name_17, net_17 in POLICIES_17.items():
                 spread_17 = {b: wbr.gradient_spread(episode_gradients_17(copy.deepcopy(net_17), EPISODES_17[name_17], b))
@@ -1321,6 +1328,9 @@ with checked("B8.20"):
         good_20.append(got_20 is not None and abs(float(got_20) - v_20) <= 1e-5 * max(1.0, abs(v_20)))
         if not good_20[-1]:
             print(f"❌ Ex B8.20 : ppo_loss_20, parts[{k_20!r}] : attendu {v_20:.6g}, reçu {got_20!r}.")
+    if not good_20[0] and all(good_20[1:]):
+        print("❌ Ex B8.20 : les cinq parties sont justes, mais la loss ne les combine pas comme le contrat : "
+              "policy_loss + vf_coef × value_loss − ent_coef × entropy (signes et coefficients de SETTINGS_20).")
     ref_agent_20.zero_grad()
     loss_20.backward()
     reached_20 = {name: any(p.grad is not None and float(p.grad.abs().sum()) > 0 for p in m.parameters())

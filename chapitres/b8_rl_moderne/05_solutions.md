@@ -222,4 +222,156 @@ Dans ta copie : $L_{\text{RM}} = \ln(1 + e^{-d})$, calculée par `np.logaddexp(0
 
 ## Exercices du notebook
 
-Les solutions des exercices du notebook (B8.12 à B8.28) seront ajoutées à la prochaine session de génération, avec le notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.
+### Ex B8.12 — CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26 📦
+**Réponse** : `describe_12` rend `{"obs_shape": (4,), "n_actions": 2, "max_steps": 500, "threshold": 475.0}` sur CartPole-v1, et `max_steps = 200` sur `gym.make("CartPole-v1", max_episode_steps=200)` ; la politique aléatoire de graine 13 tient **20,06** pas en moyenne sur 100 épisodes (écart-type 7,8) ; la table du ch. 26 tient 500,0 pas sur 100 épisodes entiers, et 200,0 avec le `max_steps` par défaut d'`evaluate_policy`.
+**Démarche** :
+```python
+def describe_12(env):
+    return {"obs_shape": tuple(env.observation_space.shape), "n_actions": int(env.action_space.n),
+            "max_steps": int(env.spec.max_episode_steps), "threshold": float(env.spec.reward_threshold)}
+
+
+def random_policy_12(seed):
+    rng = np.random.default_rng(seed)        # once: each call goes on with the same stream
+
+    def policy(state, info):
+        return int(rng.integers(2))
+    return policy
+
+
+def evaluate_12(env, policy, seed, n_episodes=100):
+    return mylearn.rl.evaluate_policy(env, policy, n_episodes, max_steps=env.spec.max_episode_steps,
+                                      rng=np.random.default_rng(seed))
+```
+Trois façons d'obtenir une mesure fausse sans aucune erreur. **Taper** les constantes (500, 475) au lieu de les lire : le code marche sur CartPole-v1, et se trompe en silence sur une variante (la vérification essaie une limite de 200). **Recréer** le générateur à chaque appel : la politique rend toujours la même action, et l'épisode dure 9 ou 10 pas. **Oublier** `max_steps` : la table du ch. 26 passe de 500 à 200, une politique parfaite paraît loin du seuil de 475. Le retour de la politique aléatoire (20,06) n'est pas celui de la fiche (22,3) : ce ne sont ni les mêmes 100 épisodes ni le même tirage des actions, et une moyenne de 100 épisodes d'écart-type ≈ 12 a une erreur type d'environ 1,2 (ch. 2) ; sur les graines 0 à 15, ce protocole donne de 20,06 à 24,32. La table de 12 cases tient le mât 500 pas : CartPole n'est pas difficile ; ce qui l'est, c'est de **trouver** la politique sans découpage choisi à la main (dix intervalles par variable feraient $10^4$ cases, 208.1).
+**Erreurs fréquentes** : `env.action_space.sample()` (sa graine ne suit pas `reset(seed=...)`, 🧠 Q10) ; un seul générateur pour les actions et les graines des épisodes (les deux tirages se mêlent : 23,68 au lieu de 20,06 ici) ; `rng=13` au lieu d'un générateur (la référence l'accepte, ta fonction peut-être pas) ; une action en tenseur 0-D ou en `np.int64` qu'on compare à un `int`.
+**Variante** : la même politique aléatoire évaluée sur `gym.make("CartPole-v1", max_episode_steps=200)` donne la même moyenne, 20,06 : ses épisodes ne dépassent jamais 200 pas (le plus long de ces 100 épisodes en fait 44). Le `max_steps` ne coûte qu'aux bonnes politiques.
+
+### Ex B8.13 — DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant 📦
+**Réponse** : 4 610 paramètres ; cibles des 4 transitions de la vérification (3,7 ; 0 ; 1,45 ; −1,9) ; ε = (1 ; 0,525 ; 0,05 ; 0,05 ; 0,05) ; sur le CartPole coupé à 15 pas, la mémoire range les 53 vraies fins et aucune des 5 limites de temps. Entraînement de 20 000 pas (graine 13) : ≈ 40 s, 199 épisodes, 22,1 de retour moyen sur les 20 premiers et 138,9 sur les 20 derniers ; politique gloutonne 147,1 sur 100 épisodes (écart-type 2,9), au-dessus du seuil de 55. Sur 8 graines, le DQN de référence finit entre 92,9 et 388,9.
+**Démarche** : le code complet est dans `05_solutions.ipynb` (cellule de B8.13) ; ses deux lignes décisives :
+```python
+y = dqn_targets_13(q_target, next_states, rewards, terminated, s["gamma"])     # under torch.no_grad()
+q_sa = q_net(states).gather(1, actions[:, None]).squeeze(1)                     # the action played only
+```
+Chaque pas suit l'algorithme de 208.2 : action ε-greedy, transition rangée avec `terminated` **seul**, fin d'épisode sur `terminated or truncated`, puis une mise à jour (Huber, Adam, norme du gradient ≤ 10) et, tous les 500 pas, la copie du réseau cible. Les mises à jour commencent au pas 1 000 : 19 001 pas d'Adam en tout, chacun sur 128 transitions tirées parmi les 10 000 dernières. La courbe monte vite, puis redescend : sur les trois graines de B8.15, la politique gloutonne de la référence vaut de 136 à 254 dès 3 000 pas, puis de 113 à 135 à 20 000 pas. La politique d'entraînement explore encore (ε = 0,05), et le réseau, qui poursuit une cible déplacée à chaque copie, oublie et réapprend (l'instabilité de 208.1) : un DQN se rapporte par sa courbe, pas par son dernier point. L'évaluation gloutonne, faite à part, sans exploration et sur d'autres graines, est la seule mesure qui vaille, et elle ne vaut que pour ce réseau-là : la même recette donne de 93 à 389 selon la graine.
+**Erreurs fréquentes** : des cibles avec gradient (`requires_grad=True` : la loss se dérive à travers la cible) ; des cibles de forme `(B, 1)` (`max(dim=1, keepdim=True)`) qui, retranchées à une prédiction `(B,)`, diffusent en `(B, B)` sans erreur ; `1 - terminated` sur un tenseur booléen (PyTorch refuse) ; `done = terminated or truncated` dans la mémoire ; le planning d'ε réglé sur le nombre d'épisodes, inconnu d'avance ; oublier `torch.manual_seed` (deux runs ne se comparent plus).
+**Variante** : avec `F.smooth_l1_loss(pred, y)` (son `beta` vaut 1 par défaut), la loss est exactement la même qu'avec `F.huber_loss(..., delta=1.0)` : les deux ne diffèrent qu'à un autre seuil (✏️ B8.2). Avec l'erreur quadratique (le choix de `dqn.py` de CleanRL), une cible aberrante du début donne un pas sans borne ; sur ce petit problème, le gradient clipping à 10 en rattrape une partie.
+
+### Ex B8.14 — Le DQN qui diverge : quatre erreurs de cible, de fin d'épisode et d'exploration 🐛
+**Réponse** : les quatre lignes fautives, réparées :
+```python
+    with torch.no_grad():                                         # 1. the frozen network, no gradient
+        follow = frozen(torch.as_tensor(batch["next_states"])).max(dim=1).values
+    memory.push(obs, action, reward, next_obs, term)              # 2. a time limit is not an end
+    return weight * EPS_FIRST + (1.0 - weight) * EPS_LAST         # 3. the end of the schedule
+MEMORY_SLOTS = 10_000                                             # 4. a memory of many episodes
+```
+Réparé, le DQN du collègue tient 201,3 pas en moyenne (politique gloutonne, 8 000 pas, graine 0 ; de 156 à 309 sur 5 graines, seuil 90).
+**Démarche** : tel quel, l'agent ne quitte jamais le hasard : ε vaut 1 du premier au dernier pas (`exploration_rate` rend `EPS_FIRST` à toutes les étapes : le second terme répète la borne de départ), et les retours d'entraînement restent vers 22. C'est le symptôme le plus visible, mais il en cache trois autres, que seul un diagnostic par morceau montre. 1. La cible est calculée par le **réseau en ligne**, avec son graphe : `requires_grad=True`, et chaque pas d'Adam déplace la cible qu'il poursuit ; corrigée par un seul `torch.no_grad()`, elle bouge encore dès que les poids en ligne changent : il faut aussi le réseau figé. 2. `remember` range `term | trunc` : une limite de temps devient une fin, et la cible de ces états perd son amorçage. 3. Le planning d'ε. 4. 100 cases de mémoire : après 2 000 pas, 100 % des transitions tirées datent des 100 derniers pas, contre 4 % avec 10 000 cases. Ce que chaque erreur coûte, mesuré sur la graine 0 en laissant **une seule** erreur (8 000 pas, politique gloutonne) : la cible en ligne, 157 ; la mémoire de 100, 157 ; les fins confondues, 201, exactement comme le DQN réparé, car en 8 000 pas aucun épisode n'atteint 500 pas, et l'erreur n'agit jamais (elle frapperait les meilleurs épisodes, plus tard) ; ε bloqué à 1, des retours d'entraînement de 20,6, mais une politique gloutonne de 145 : Q-learning est off-policy, il apprend même de données jouées au hasard. Aucune de ces erreurs ne plante, et trois sur quatre laissent un agent qui « apprend un peu » : d'où les diagnostics par morceau plutôt qu'un entraînement de plus.
+**Erreurs fréquentes** : n'ajouter que `torch.no_grad()` au point 1 (la cible bouge encore avec le réseau en ligne) ; corriger le point 2 en rendant `term` au lieu de `term | trunc` (la boucle ne remettrait plus l'environnement à zéro après une limite de temps) ; agrandir `MINI_BATCH` au lieu de la mémoire.
+**Variante** : avec une mémoire de 1 000 cases au lieu de 10 000, le point 4 passe (environ 10 % des transitions tirées datent des 100 derniers pas, puisque la mémoire garde les 1 000 derniers) : la limite n'est pas un nombre magique, mais l'ordre de grandeur de ce qu'un mini-batch doit mêler, des dizaines d'épisodes.
+
+### Ex B8.15 — Ablations du DQN : sans réseau cible, sans rejeu, avec Double DQN — trois graines 🔬
+**Réponse** : dernière évaluation gloutonne (20 épisodes) des trois graines, après 20 000 pas : DQN 134,7, 118,3 et 112,5 (médiane 118,3) ; **sans réseau cible** 9,6, 9,2 et 9,2 : l'agent ne tient jamais plus de 10 pas ; **sans rejeu** 89,3, 176,8 et 237,5 (médiane 176,8) ; **Double DQN** 167,6, 107,4 et 122,3 (médiane 122,3). Sur 100 épisodes d'évaluation, les mêmes réseaux font 139,8 / 117,1 / 109,1, 9,4 / 9,3 / 9,3, 95,2 / 175,5 / 223,7 et 173,5 / 105,8 / 122,7.
+**Démarche** :
+```python
+def targets_15(online, frozen, next_states, rewards, terminated, gamma, variant):
+    with torch.no_grad():
+        if variant == "double":
+            best = online(next_states).argmax(dim=1, keepdim=True)        # the online network chooses...
+            following = frozen(next_states).gather(1, best).squeeze(1)    # ...the target network values it
+        else:
+            following = (online if variant == "no_target" else frozen)(next_states).max(dim=1).values
+        return rewards + gamma * (1.0 - terminated.float()) * following
+```
+Une seule ablation tranche, et nettement : **sans réseau cible**, les valeurs divergent. La moyenne de $\max_a Q$ sur 256 états de départ vaut ≈ 4 avec DQN après 3 000 pas et ≈ 21 après 12 000 (le retour actualisé d'un épisode de 500 pas vaut au plus 99) ; sans réseau cible, elle vaut ≈ 2 600 après 3 000 pas et ≈ 300 000 après 12 000 : chaque mise à jour amorce sur des valeurs qu'elle vient de gonfler (la triade mortelle de 208.1, sans le stabilisateur), et l'`argmax` se fige sur une action. Les trois autres variantes se recouvrent : les intervalles de DQN (112 à 135), de Double DQN (107 à 168) et de « sans rejeu » (89 à 238) se chevauchent, et une médiane sur trois graines ne permet pas de les classer. « Sans rejeu » a ici une mémoire de 128 transitions, les derniers pas, chacune réutilisée environ 128 fois : on retire la **décorrélation**, pas la réutilisation (🧠 Q3) ; sur CartPole et en 20 000 pas, ce qu'on y perd ne se voit pas. Pour affirmer qu'une variante est meilleure, il faudrait bien plus de graines, plusieurs tâches et des intervalles bootstrap (208.6, rliable) ; Double DQN corrige un biais (✏️ B8.1) dont l'effet se mesure surtout sur des valeurs grandes et des jeux longs, comme dans l'article de 2016.
+**Erreurs fréquentes** : prendre l'`argmax` du réseau cible pour Double DQN (on retombe sur DQN) ; conclure d'une seule graine ; lire la dernière évaluation seule (une courbe de DQN oscille : la dernière valeur d'une graine peut être son creux) ; garder le réseau figé pour « sans réseau cible ».
+**Variante** : classe les variantes par l'**aire sous la courbe** (la moyenne des 20 évaluations de chaque graine) plutôt que par la dernière évaluation : médianes DQN 136,8, Double DQN 133,7, sans rejeu 124,2, sans réseau cible 9,3. L'ordre des trois premières change avec la mesure, ce qui confirme qu'elles ne se séparent pas avec trois graines ; seule la divergence sans réseau cible tient sous les deux mesures. (Le mode complet, 50 000 pas avec tes morceaux, ≈ 20 minutes de CPU 🚀, n'a pas été exécuté pour ces solutions.)
+
+### Ex B8.16 — Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ? 🔮
+**Réponse** : a) `1` (la baseline moyenne : médiane 487,2, contre 390,0 pour les retours normalisés et 121,6 sans baseline) ; b) `5` (sans baseline, la moyenne glissante atteint 200 sur cinq graines sur six) ; c) `True` (la baseline moyenne finit au-dessus sur chacune des six graines : 499, 500, 448, 490, 203 et 484, contre 138, 301, 124, 15, 120 et 9).
+**Démarche** : sur CartPole, tous les retours $G_t$ sont positifs et grands (jusqu'à ≈ 99 avec $\gamma = 0{,}99$) : sans baseline, **chaque** action jouée est renforcée, d'autant plus que l'épisode a duré ; le signal utile (ce qui distingue une bonne action d'une mauvaise) est une petite différence entre de grands nombres positifs. La baseline retire la partie commune : le gradient a la même espérance (∂ B8.7), mais beaucoup moins de bruit (B8.17 le mesure), et le même learning rate fait des pas plus utiles. La normalisation centre aussi, mais divise par l'écart-type de **chaque** épisode : un épisode court et un épisode long pèsent autant, et l'échelle des pas ne dit plus combien l'épisode a rapporté. La dispersion entre graines est grande pour les trois variantes, et deux runs s'**effondrent** (50 derniers épisodes vers 9) : sans baseline, la graine 5 a atteint 200 à l'épisode 96 puis est tombée ; normalisé, la graine 4 n'a jamais décollé. Une politique softmax qui devient presque déterministe sur une mauvaise action ne reçoit plus de signal : ses épisodes durent 9 pas, ses $\log\pi$ sont presque nuls, et un learning rate de $10^{-2}$ sans bonus d'entropie ne la sauve pas. Une seule graine aurait pu inverser a) (la graine 3 : normalisé 500, baseline 490) ; la médiane de six graines le tranche, avec une marge d'environ 100.
+**Erreurs fréquentes** : croire que l'absence de biais garantit l'apprentissage (une estimation sans biais mais très dispersée avance au hasard) ; confondre normalisation et baseline (la normalisation change aussi l'échelle) ; conclure d'une seule courbe.
+**Variante** : lis la même figure sur les **100 premiers** épisodes seulement : les médianes des six graines valent 55,5 sans baseline, 215,2 avec la baseline moyenne et 114,0 avec les retours normalisés ; l'ordre est déjà celui de la fin, et l'écart est plus grand en proportion : la baseline sert surtout au début, quand le signal est le plus noyé.
+
+### Ex B8.17 — REINFORCE avec et sans baseline : variance du gradient et vitesse d'apprentissage 📦
+**Réponse** : gradients par épisode identiques à ceux de la référence (32 × 450 nombres, pour les deux politiques et les deux baselines) ; dispersion $\frac{1}{M}\sum_i\lVert g_i - \bar g\rVert^2$ sans puis avec baseline : 17,2 et 15,6 pour la politique non entraînée (rapport 1,10 ; épisodes de 21,4 pas en moyenne), 54,6 et 13,0 pour la politique entraînée 60 épisodes (rapport 4,20 ; 373,3 pas). Entraînement de 300 épisodes (graine 17) : avec la baseline, 494,3 de moyenne sur les 50 derniers épisodes et 500,0 en évaluation déterministe (≈ 1 min) ; sans baseline, la politique s'est effondrée (9,5 sur les 50 derniers, 9,3 en évaluation, 2 s).
+**Démarche** :
+```python
+def episode_gradients_17(policy_net, episodes, baseline, gamma=0.99):
+    returns = [mylearn.rl.returns_to_go(e["rewards"], gamma) for e in episodes]
+    b = float(np.mean(np.concatenate(returns))) if baseline == "mean" else 0.0
+    params = list(policy_net.parameters())
+    rows = []
+    for e, G in zip(episodes, returns):
+        log_pi = torch.log_softmax(policy_net(torch.as_tensor(e["states"])), dim=1)
+        log_pi_a = log_pi.gather(1, torch.as_tensor(e["actions"])[:, None]).squeeze(1)
+        loss = -(log_pi_a * torch.as_tensor(G - b, dtype=torch.float32)).mean()
+        grads = torch.autograd.grad(loss, params)                 # leaves the .grad of the network alone
+        rows.append(torch.cat([g.reshape(-1) for g in grads]).double().numpy())
+    return np.stack(rows)
+```
+(`train_reinforce_17` est dans `05_solutions.ipynb` : une boucle `while` par épisode avec `Categorical`, puis un pas d'Adam.) La baseline aide **selon les épisodes**. Une politique non entraînée joue des épisodes d'une vingtaine de pas : les $G_t$ vont de ≈ 20 à 1, leur moyenne vaut ≈ 9, et la retirer ne réduit la dispersion que de 10 % ; sur les cinq graines de la calibration, le rapport va de 0,93 à 1,35 : une baseline **constante** peut même augmenter la variance, car la baseline qui la minimise n'est pas la moyenne des retours mais une moyenne pondérée par $\lVert\nabla\log\pi\rVert^2$. Après 60 épisodes, les épisodes durent ≈ 370 pas, les $G_t$ montent jusqu'à ≈ 97 : sans baseline, chaque pas pousse fort dans une direction commune à toutes les actions, et la dispersion est 4,2 fois plus grande (de 1,8 à 5,3 sur cinq graines). Sur 32 épisodes, les deux gradients moyens ne coïncident pas (leur cosinus va de 0,19 à 0,99 selon la graine) : l'espérance est la même, l'estimation de 32 tirages ne l'est pas. Ta courbe avec baseline tombe dans l'intervalle de la référence ; celle sans baseline s'est effondrée, comme deux des six graines de B8.16.
+**Erreurs fréquentes** : une somme au lieu d'une moyenne sur les pas (chaque gradient est multiplié par $T$ : un épisode long pèse plus) ; le signe (on minimise $-\log\pi \cdot G$) ; une baseline calculée sur l'épisode lui-même pour la mesure (c'est une autre baseline) ; `loss.backward()` dans une boucle sans `zero_grad` (les gradients s'additionnent d'un épisode à l'autre) ; `returns_to_go` avec $\gamma = 1$.
+**Variante** : une baseline **par pas** (la moyenne, sur les 32 épisodes encore en cours, des $G_t$ au même pas $t$) donne, pour la politique entraînée, une dispersion de 15,3 : moins bien que la constante (13,0). Des épisodes de longueurs différentes n'ont pas le même avenir au même pas : la bonne baseline dépend de l'**état**, pas du numéro du pas, et c'est ce qu'apprend le critique de 208.4.
+
+### Ex B8.18 — compute_gae et explained_variance 🔨
+**Réponse** : les 79 tests passent ; sur le rollout de ✏️ B8.4 (λ = 0,95), `compute_gae` rend (0,7962 ; 0,44 ; 1,9637 ; 0,94).
+**Démarche** :
+```python
+def compute_gae(rewards, values, next_values, terminated, truncated, gamma=0.99, lam=0.95):
+    r, v, nv = (np.array(a, dtype=float) for a in (rewards, values, next_values))
+    term, trunc = np.array(terminated, dtype=bool), np.array(truncated, dtype=bool)
+    if not (r.shape == v.shape == nv.shape == term.shape == trunc.shape) or r.ndim not in (1, 2):
+        raise ValueError("the five arrays need the same shape, (T,) or (T, n_envs)")
+    if not (0 <= gamma <= 1 and 0 <= lam <= 1):
+        raise ValueError("gamma and lam must be in [0, 1]")
+    delta = r + gamma * np.where(term, 0.0, nv) - v
+    done = term | trunc
+    adv = np.zeros_like(delta)
+    last = np.zeros_like(delta[0])
+    for t in range(len(delta) - 1, -1, -1):
+        last = delta[t] + gamma * lam * np.where(done[t], 0.0, last)
+        adv[t] = last
+    return adv, adv + v
+
+
+def explained_variance(y_pred, y_true):
+    y_pred, y_true = np.array(y_pred, dtype=float), np.array(y_true, dtype=float)
+    if y_pred.shape != y_true.shape:
+        raise ValueError("y_pred and y_true need the same shape")
+    var = np.var(y_true)
+    return float("nan") if var == 0 else float(1 - np.var(y_true - y_pred) / var)
+```
+(La référence `solutions/mylearn_ref/deep_rl.py` valide en plus les NaN, les types de $\gamma$ et $\lambda$ et les drapeaux.) Tout tient dans deux masques : `term` dans $\delta_t$ (pas d'avenir après une vraie fin), `done` dans la récursion (le pas suivant appartient à un autre épisode). Une ligne du tableau est un pas de **toutes** les copies : la même boucle sert aux formes `(T,)` et `(T, n_envs)`, et les colonnes ne se mélangent jamais. `next_values` évite deux pièges : au dernier pas d'un rollout non fini, il n'y a pas de `values[T]` (prendre 0 couperait l'amorçage de tous les derniers pas) ; au pas d'une troncature, `values[t + 1]` serait la valeur de la première observation du nouvel épisode. λ = 0 donne les erreurs TD, λ = 1 avec $V = 0$ les retours actualisés : deux tests de la série.
+**Erreurs fréquentes** : `(1 - done)` dans $\delta_t$ (une troncature n'amorce plus) ; `done` du pas **suivant** dans la récursion (le décalage de CleanRL, qui n'a pas le même sens de `dones`) ; `returns = advantages + next_values` ; la diffusion silencieuse d'un `(T, 1)` contre un `(T,)` ; `explained_variance(y_true, y_pred)` dans l'ordre de scikit-learn (0,35 au lieu de −12 sur l'exemple des tests) ; `np.var(..., ddof=1)` d'un seul côté.
+**Variante** : sur l'exemple de 208.4 tronqué au pas 2, avec une vraie dernière observation estimée à 0,7, les avantages deviennent (0,617075 ; 0,5935 ; 0,83) : tous remontent, parce que l'état suivant garde son avenir.
+
+### Ex B8.19 — clipped_surrogate : valeur et gradient par rapport au ratio 🔨
+**Réponse** : les 38 tests passent ; sur l'exemple de 208.5, loss −0,0167 et gradient (0 ; −0,6667 ; 0,3333), comme l'autograd.
+**Démarche** :
+```python
+def clipped_surrogate(ratio, advantages, clip_eps=0.2):
+    r, a = np.array(ratio, dtype=float), np.array(advantages, dtype=float)
+    if r.ndim != 1 or r.shape != a.shape:
+        raise ValueError("ratio and advantages need the same shape (n,)")
+    if (r < 0).any() or not clip_eps > 0:
+        raise ValueError("ratios must be >= 0 and clip_eps > 0")
+    unclipped = r * a
+    clipped = np.clip(r, 1 - clip_eps, 1 + clip_eps) * a
+    loss = -float(np.mean(np.minimum(unclipped, clipped)))
+    grad = np.where(unclipped <= clipped, -a / r.size, 0.0)
+    return loss, grad
+```
+Le gradient d'un minimum est celui du terme qui est le minimum ; le terme clippé, constant hors de l'intervalle, a un gradient nul. Le cas délicat est l'égalité : sur un bord exact ($\rho = 1 \pm \varepsilon$) ou dans l'intervalle, les deux termes sont égaux, et l'autograd de `torch.min` partage le gradient moitié-moitié entre deux chemins qui ont tous deux la pente $\hat A$ (`clamp` est inclusif à ses bords) : la somme vaut $-\hat A/n$. D'où le `<=` : avec `<`, les tests aux bords échouent. Avec $\varepsilon \ge 1$, la borne basse $1 - \varepsilon$ est négative ou nulle : un avantage négatif n'est plus jamais clippé vers le bas.
+**Erreurs fréquentes** : `<` au lieu de `<=` ; clipper l'avantage au lieu du ratio ; un masque « ratio dans l'intervalle » qui ne regarde pas le signe de l'avantage (un ratio de 1,35 avec un avantage négatif garde son gradient) ; oublier la division par $n$ ; le signe de la loss.
+**Variante** : avec ε = 0,4, l'exemple de 208.5 n'a plus aucun gradient nul : les trois ratios tombent dans [0,6 ; 1,4], la loss vaut −0,05 et le gradient (1/3 ; −2/3 ; 1/3). (Avec ε = 0,3, le premier ratio serait sur le bord en arithmétique exacte, mais `1 - 0.3` vaut 0,7000000000000001 en flottants : un test sur un bord ne prend que des bords exacts en binaire, comme 0,75 = 1 − 0,25.)
+
+### Ex B8.20 — PPO from scratch sur CartPole : environnements vectorisés, acteur-critique, GAE, clip, entropie 📦
+**Réponse** : 9 155 paramètres (acteur 4 610, critique 4 545) ; le rollout rejoué correspond à l'environnement champ par champ ; la loss d'un mini-batch de 16 vaut 7,48768 comme la référence ; deux itérations observées : un appel de `compute_gae` par itération sur des tableaux (128, 4), un appel de `clipped_surrogate` par mini-batch. Entraînement de 50 000 pas (graine 20, 97 itérations, 211 épisodes finis) : 19 s, retour moyen des rollouts de 45,0 sur les 5 premières itérations à 500,0 sur les 5 dernières, politique déterministe **500,0** sur 100 épisodes ; écart maximal entre ta `clipped_surrogate` et la loss torch : $2{,}6 \times 10^{-8}$. Sur 6 graines, le PPO de référence fait 500 cinq fois et 284 une fois (seuil 170).
+**Démarche** : le code complet est dans `05_solutions.ipynb` (cellule de B8.20). Les quatre morceaux suivent 208.5. Le rollout garde **tous** les pas, avec un masque : au pas qui ne fait que remettre une copie à zéro, `valid` vaut `False`, la récompense 0 et les deux drapeaux `False` ; le pas qui précède (la vraie fin) a `done` vrai, donc la récursion de GAE s'y arrête, et ce faux pas n'influence aucun avantage gardé. `next_values` est $V$ de l'observation que rend chaque pas : à une limite de temps, la vraie dernière observation (en next-step, c'est elle que rend le pas), ce sur quoi la troncature amorce ; CleanRL traite au contraire `truncated` comme une fin (`next_done = terminations | truncations`, 208.4). Puis 10 epochs de 4 mini-batches de ≈ 128 transitions valides : 3 880 pas d'Adam, chaque transition vue 10 fois. Sur 50 000 pas, 211 pas de reset ont été écartés, un par fin d'épisode : gardés, ils apprendraient à l'agent qu'une action quelconque, après une chute, mène à un état de départ, et lui enseigneraient des valeurs de transitions qui n'existent pas.
+**Erreurs fréquentes** : apprendre sur les pas de reset (le bug silencieux d'un code écrit pour gymnasium 0.29) ; prendre `values[t + 1]` pour la valeur suivante ; oublier de porter `just_reset` d'un rollout au suivant ; normaliser les avantages avant de calculer les retours du critique ; `.item()` ou `.detach()` sur la loss du critique (le critique n'apprend plus : la vérification le voit) ; un bonus d'entropie de mauvais signe (la politique se fige plus vite) ; un learning rate qui ne décroît pas, et une politique qui se dégrade à la fin.
+**Variante** : sans normaliser les avantages (`norm_adv=False`), le PPO de référence (`wbr.train_ppo`, 50 000 pas) fait encore 500,0 en évaluation déterministe sur les graines 20, 21 et 22 : sur CartPole, ce détail ne change rien de visible ; la normalisation fixe l'échelle des pas, ce qui compte quand l'échelle des récompenses change d'un problème à l'autre.
+
+*Les solutions de B8.21 à B8.28 seront ajoutées à la prochaine session de génération, avec la fin du notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.*

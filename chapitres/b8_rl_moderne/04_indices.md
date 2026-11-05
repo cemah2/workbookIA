@@ -586,4 +586,270 @@ Commence par : « En RL, la variance entre graines est souvent plus grande que l
 
 ## Exercices du notebook
 
-Les indices des exercices du notebook (B8.12 à B8.28) seront ajoutés à la prochaine session de génération, avec le notebook.
+### Ex B8.12 — CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26 📦
+
+<details><summary>Indice 1</summary>
+
+Tout ce que demande `describe_12` est dans l'objet `env` : son espace d'observation, son espace d'actions et sa fiche d'enregistrement `env.spec` (relis le premier bloc de code de 208.1). Pour la politique aléatoire, le générateur doit **survivre** d'un appel à l'autre : il se crée dans `random_policy_12`, et la fonction rendue s'en sert. Pour `evaluate_12`, relis le piège « un plafond caché dans l'évaluation » (208.6).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `describe_12` : `env.observation_space.shape` (déjà un tuple), `env.action_space.n`, `env.spec.max_episode_steps`, `env.spec.reward_threshold` ; convertis en `tuple`, `int` et `float`.
+- `random_policy_12` : une fermeture (*closure*, 0A) : `rng = np.random.default_rng(seed)`, puis une fonction interne `policy(state, info)` qui rend `int(rng.integers(2))`, et `return policy`.
+- `evaluate_12` : un seul appel à `mylearn.rl.evaluate_policy`, avec `max_steps=env.spec.max_episode_steps` et `rng=np.random.default_rng(seed)`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def random_policy_12(seed):
+    rng = np.random.default_rng(seed)       # created ONCE, outside the policy
+    def policy(state, info):
+        ...                                  # one draw of rng per call, as a Python int
+    return policy
+
+
+def evaluate_12(env, policy, seed, n_episodes=100):
+    return mylearn.rl.evaluate_policy(env, policy, n_episodes, max_steps=..., rng=...)
+```
+
+</details>
+
+### Ex B8.13 — DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant 📦
+
+<details><summary>Indice 1</summary>
+
+Relis l'algorithme en cinq étapes de 208.2 (« Les deux stabilisateurs ») et le premier bloc de code de 208.2 : chaque pas d'environnement fait une action, range une transition, et parfois une mise à jour ; le réseau cible n'est qu'une **copie** du réseau en ligne, réécrite de temps en temps. La cible se calcule sous `torch.no_grad()` ; la prédiction se lit avec `gather` sur l'action jouée. Écris d'abord les trois petites fonctions, vérifie-les, puis la boucle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `make_q_net_13` : `nn.Sequential` de trois `nn.Linear` séparés par deux `nn.ReLU`.
+- `dqn_targets_13` : `q_target(next_states).max(dim=1).values` donne une valeur par ligne ; `terminated.float()` transforme les booléens en 0 et 1 (on ne soustrait pas un booléen d'un nombre en PyTorch).
+- `epsilon_13` : la progression `min(1, step / (eps_fraction × total_steps))`, puis une interpolation entre `eps_start` et `eps_end`.
+- `train_dqn_13`, dans l'ordre : les graines et le réseau, `copy.deepcopy` pour le réseau cible, Adam, le générateur de l'exploration, la `ReplayBuffer` ; puis la boucle `for step in range(total_steps)` : l'action (`rng.random() < ε` → `int(rng.integers(2))`, sinon `argmax` sans gradient), `env.step`, `buffer.push(..., terminated)`, la fin d'épisode (les deux listes de `history`, `env.reset()`), la mise à jour (`buffer.sample`, les tenseurs, la cible, `gather`, `F.huber_loss`, `zero_grad`, `backward`, `clip_grad_norm_`, `step`), la copie du réseau cible quand `(step + 1) % target_every == 0`.
+- Les tableaux de `buffer.sample` sont en NumPy : `torch.as_tensor(...)` ; les récompenses sont en float64, à passer en float32 (`dtype=torch.float32`) pour les mêler aux sorties du réseau.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_dqn_13(env, seed, total_steps, settings=SETTINGS_13):
+    s = settings
+    torch.manual_seed(seed)
+    q_net = make_q_net_13(s["hidden"])
+    q_target = copy.deepcopy(q_net)
+    # Adam, rng = np.random.default_rng(seed), the ReplayBuffer of mylearn.rl (random_state=seed), history
+    state, _ = env.reset(seed=seed)
+    for step in range(total_steps):
+        # 1. epsilon-greedy action with epsilon_13(step, total_steps, s)
+        next_state, reward, terminated, truncated, _ = env.step(action)
+        buffer.push(state, action, reward, next_state, terminated)       # terminated only
+        # 2. end of an episode (terminated or truncated): history, env.reset()
+        # 3. an update when step + 1 >= learning_starts (and every train_freq steps)
+        q_sa = q_net(states).gather(1, actions[:, None]).squeeze(1)
+        # 4. the copy into q_target every target_every steps
+    return q_net, buffer, history
+```
+
+</details>
+
+### Ex B8.14 — Le DQN qui diverge : quatre erreurs de cible, de fin d'épisode et d'exploration 🐛
+
+<details><summary>Indice 1</summary>
+
+Lance d'abord l'expérience telle quelle : regarde les trois courbes (les retours, ε, les valeurs Q) et demande-toi ce qu'un DQN sain devrait y montrer. Puis lis les diagnostics dans l'ordre : chacun regarde un seul morceau, et le premier en échec dit lequel. Relis ensuite les pièges de 208.1 et 208.2, et 🧠 Q3.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Point 1 : une cible doit être une **constante** pour le gradient, et venir du réseau qui ne bouge pas entre deux copies. Lequel des deux réseaux reçus `bellman_targets` utilise-t-il, et sous quel contexte ?
+- Point 2 : `remember` a deux rôles, ranger la transition et dire si l'épisode est fini. Ces deux rôles demandent-ils le même drapeau (208.2, ⚠️ « la limite de temps n'est pas une fin ») ?
+- Point 3 : calcule à la main `exploration_rate(0)` et `exploration_rate(EPS_STEPS)` : la formule passe-t-elle vraiment d'une borne à l'autre ?
+- Point 4 : combien d'épisodes de 50 pas tiennent dans la mémoire, et que tire alors un mini-batch de 64 ? Compare aux capacités du tableau de 208.2.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Les quatre lignes fautives : la ligne `follow = …` de `bellman_targets`, l'appel `memory.push(...)` de `remember`, le `return` d'`exploration_rate` et la constante `MEMORY_SLOTS`. Pour la première, par exemple :
+
+```python
+    with torch.no_grad():                                         # a constant for the gradient
+        follow = frozen(torch.as_tensor(batch["next_states"])).max(dim=1).values
+```
+
+</details>
+
+### Ex B8.15 — Ablations du DQN : sans réseau cible, sans rejeu, avec Double DQN — trois graines 🔬
+
+<details><summary>Indice 1</summary>
+
+Les quatre variantes ne diffèrent que par **deux** choses : le réseau qui donne la valeur de $s'$ dans la cible (et, pour Double DQN, celui qui choisit l'action), et la taille de la mémoire. Relis la formule de Double DQN (208.2) et ta copie de ✏️ B8.1 d) et e).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `targets_15` : la même cible que `dqn_targets_13`, sous `torch.no_grad()` ; pour `"no_target"`, le réseau en ligne remplace `frozen` ; pour `"double"`, `online(next_states).argmax(dim=1, keepdim=True)` donne l'action, et `frozen(next_states).gather(1, ...)` sa valeur.
+- `memory_size_15` : un test sur `variant`, deux clés de `settings`.
+- Pour lire la figure : regarde la médiane **et** la largeur de l'intervalle de chaque variante ; un écart de médianes plus petit que les intervalles ne permet pas de conclure avec trois graines.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def targets_15(online, frozen, next_states, rewards, terminated, gamma, variant):
+    with torch.no_grad():
+        if variant == "double":
+            best = online(next_states).argmax(dim=1, keepdim=True)
+            following = ...                                  # the value of `best` read in frozen, one per row
+        else:
+            following = ...                                  # max over the actions of the right network
+        return rewards + gamma * (1.0 - terminated.float()) * following
+```
+
+</details>
+
+### Ex B8.16 — Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ? 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « La baseline et la variance » (208.3) et ta copie de ∂ B8.7 : une baseline ne change pas l'espérance du gradient, mais sa **dispersion**. Pense à ce que vaut $G_t$ sur CartPole (tous les retours sont positifs, et d'autant plus grands que l'épisode dure) et à ce que fait chaque variante d'un pas d'Adam au learning rate fixé.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour a), demande-toi quelle variante a le gradient le moins bruité **et** des pas d'une taille raisonnable ; la normalisation centre comme une baseline, mais change aussi l'échelle de chaque épisode. Pour b), qu'est-ce qui permettrait, ou empêcherait, un gradient sans biais mais bruité d'atteindre 200 en 300 mises à jour ? Pour c), une prédiction « sur chacune des six graines » est forte : la dispersion entre graines peut-elle faire passer une graine sans baseline devant une graine avec ?
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), range les trois variantes par la dispersion attendue de leur gradient, puis demande-toi si une échelle de pas différente peut inverser l'ordre. Pour b), pars de la moyenne aléatoire (≈ 22) : combien de graines atteindraient 200 avant l'épisode 300 si la progression varie beaucoup d'une graine à l'autre ? Une moyenne glissante qui touche 200 une seule fois suffit. Pour c), compare l'écart moyen que tu attends entre les deux variantes à la dispersion entre graines.
+
+</details>
+
+### Ex B8.17 — REINFORCE avec et sans baseline : variance du gradient et vitesse d'apprentissage 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « REINFORCE » (208.3) et son bloc de code : une loss par épisode, $-\operatorname{mean}_t \log\pi(a_t \mid s_t)(G_t - b)$, dont le gradient se calcule par l'autograd. Pour un gradient **par épisode**, on calcule cette loss épisode par épisode et on demande le gradient sans toucher aux `.grad` du réseau (`torch.autograd.grad`). La dispersion se calcule ensuite sur ces lignes, sans PyTorch.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `episode_gradients_17` : les retours `mylearn.rl.returns_to_go(e["rewards"], gamma)` de chaque épisode ; $b$ = la moyenne de **tous** ces retours mis bout à bout (`np.concatenate`) pour `"mean"` ; pour chaque épisode, `torch.log_softmax(policy_net(states), dim=1)`, `gather` sur les actions, la loss, puis `torch.autograd.grad(loss, list(policy_net.parameters()))` et `torch.cat([g.reshape(-1) for g in grads])` ; une ligne par épisode, `np.stack`.
+- `train_reinforce_17` : un épisode entier (une boucle `while`), avec `torch.distributions.Categorical(logits=...)`, `.sample()` et `.log_prob(...)` à chaque pas ; puis les retours, $b$ (les 20 épisodes précédents, 0 au premier), la loss, `zero_grad`, `backward`, `step` ; garde les retours des épisodes dans une liste glissante de 20.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def episode_gradients_17(policy_net, episodes, baseline, gamma=0.99):
+    returns = [mylearn.rl.returns_to_go(e["rewards"], gamma) for e in episodes]
+    b = ...                                          # 0, or the mean of np.concatenate(returns)
+    params = list(policy_net.parameters())
+    rows = []
+    for e, G in zip(episodes, returns):
+        log_pi_a = torch.log_softmax(policy_net(torch.as_tensor(e["states"])), dim=1).gather(...).squeeze(1)
+        loss = -(log_pi_a * torch.as_tensor(G - b, dtype=torch.float32)).mean()
+        grads = torch.autograd.grad(loss, params)
+        # one flat float64 row per episode
+    return np.stack(rows)
+```
+
+</details>
+
+### Ex B8.18 — compute_gae et explained_variance 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis le tableau de 208.4 (l'exemple à rebours) et « Fin d'épisode ou limite de temps » : deux drapeaux, deux rôles. `terminated` coupe l'amorçage dans $\delta_t$ ; `terminated` **ou** `truncated` coupe la récursion. La forme `(T, n_envs)` ne demande rien de plus : écris chaque calcul pour une ligne entière (un pas de toutes les copies à la fois).
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Valide d'abord : `np.asarray(..., dtype=float)` pour les trois tableaux de valeurs, `dtype=bool` pour les drapeaux, des formes **identiques** (`a.shape == b.shape`, sans diffusion), $\gamma$ et $\lambda$ dans $[0, 1]$.
+- Les erreurs TD d'un coup, en NumPy : `delta = r + gamma * np.where(term, 0.0, next_values) - values` (`np.where` plutôt que `(1 - term) *`, qui donne `nan` avec une valeur infinie).
+- Puis une boucle `for t in reversed(range(T))` : `last = delta[t] + gamma * lam * np.where(done[t], 0.0, last)`, en partant de `last = 0` ; `advantages[t] = last`.
+- `explained_variance` : `np.var(y_true)` ; si elle vaut 0, `float("nan")` ; sinon `1 - np.var(y_true - y_pred) / var`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def compute_gae(rewards, values, next_values, terminated, truncated, gamma=0.99, lam=0.95):
+    # 1. arrays, same shapes (ValueError otherwise), gamma and lam in [0, 1]
+    done = term | trunc
+    delta = r + gamma * np.where(term, 0.0, next_values) - values
+    advantages = np.zeros_like(delta)
+    last = np.zeros_like(delta[0])                       # A_T = 0, one value per column
+    for t in reversed(range(len(delta))):
+        ...                                              # the recursion, stopped where done[t]
+    return advantages, advantages + values
+```
+
+</details>
+
+### Ex B8.19 — clipped_surrogate : valeur et gradient par rapport au ratio 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « L'objectif clippé » (208.5) et sa vérification en trois transitions, puis ta copie de ✏️ B8.5. Le minimum de deux termes a pour gradient celui du terme **qui est le minimum** ; le terme clippé ne dépend plus du ratio hors de l'intervalle, donc son gradient y est nul.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Valide : deux tableaux 1-D de même forme, aucun ratio négatif, `clip_eps > 0` (un `ValueError` sinon).
+- `unclipped = ratio * adv`, `clipped = np.clip(ratio, 1 - eps, 1 + eps) * adv`, `loss = -np.mean(np.minimum(unclipped, clipped))`.
+- Le gradient : `-adv / n` là où le terme non clippé est le minimum, **égalité comprise** (`unclipped <= clipped`), 0 ailleurs : un `np.where`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def clipped_surrogate(ratio, advantages, clip_eps=0.2):
+    # 1. arrays, the same shape (n,), no negative ratio, clip_eps > 0
+    unclipped = r * a
+    clipped = np.clip(r, 1 - clip_eps, 1 + clip_eps) * a
+    loss = -float(np.mean(np.minimum(unclipped, clipped)))
+    grad = ...                                           # -a / n where unclipped <= clipped, else 0
+    return loss, grad
+```
+
+</details>
+
+### Ex B8.20 — PPO from scratch sur CartPole : environnements vectorisés, acteur-critique, GAE, clip, entropie 📦
+
+<details><summary>Indice 1</summary>
+
+Relis « La loss complète et la boucle » (208.5) : quatre étapes, collecter, calculer GAE, mettre à jour pendant plusieurs epochs, recommencer. Puis le rappel outil de l'API vectorisée et son bloc de code : le drapeau `just_reset` se met à jour **après** chaque pas (`terminated | truncated`), et le pas suivant de cette copie n'est pas une transition. Écris et vérifie les morceaux dans l'ordre : le réseau, le rollout, la loss, la boucle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `ActorCritic20` : deux `nn.Sequential` (`self.actor`, `self.critic`) ; `value` rend `self.critic(obs).squeeze(-1)`. L'initialisation orthogonale de CleanRL (`nn.init.orthogonal_`, gain $\sqrt 2$, 0,01 pour la couche des logits, 1 pour celle de la valeur) aide, sans être exigée.
+- `rollout_20` : à chaque pas, sous `torch.no_grad()`, les log-probabilités (`torch.log_softmax`), une action par copie (`torch.multinomial(probs, 1, generator=generator)` ou `Categorical`), $V$ ; `envs.step(actions.numpy())` ; une ligne par champ (copies avec `np.array(..., copy=True)`), `valid = ~just_reset` ; puis `just_reset = terminated | truncated`. À la fin, `np.stack` et `next_values` en une passe du critique sur `next_obs`.
+- `ppo_loss_20` : `log_ratio = log π(a|s) − old_log_probs`, `ratio = log_ratio.exp()`, puis la formule ; les `parts` se calculent sous `torch.no_grad()`, en `float`.
+- `train_ppo_20` : après chaque rollout, `compute_gae` sur les tableaux `(T, N)` entiers (les pas de reset ont des drapeaux à `False` et les pas qui les précèdent arrêtent la récursion) ; puis on ne garde que `batch[k][valid]` pour la mise à jour ; `torch.randperm(n, generator=generator)` pour mélanger ; le retour des épisodes finis se suit par copie, en ajoutant les récompenses des pas valides.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def rollout_20(agent, envs, obs, just_reset, n_steps, generator):
+    rows = {k: [] for k in ("obs", "actions", "log_probs", "values", "rewards", "terminated", "truncated",
+                            "next_obs", "valid")}
+    for _ in range(n_steps):
+        # under torch.no_grad(): log-probabilities, one action per copy, values
+        next_obs, rewards, terminated, truncated, _ = envs.step(actions.numpy())
+        # append the nine fields; valid = ~just_reset
+        just_reset = terminated | truncated
+        obs = next_obs
+    batch = {k: np.stack(v) for k, v in rows.items()}
+    batch["next_values"] = ...                           # V(next_obs), shape (n_steps, N)
+    return batch, obs, just_reset
+```
+
+</details>
+
+*Les indices de B8.21 à B8.28 seront ajoutés à la prochaine session de génération.*
