@@ -803,6 +803,16 @@ def train_ppo(seed: int = 0, total_steps: int | None = None, settings: dict | No
     return agent.eval(), logs
 
 
+def log_summary(logs: dict) -> dict:
+    """Two numbers of a PPO log (the format of ``LOG_KEYS``), the reference of the learner's ``summary_22``: ``auc``,
+    the mean of the finite values of ``mean_return`` (the area under the curve divided by its length; nan if there is
+    none) and ``first_475``, the first ``step`` whose ``mean_return`` is >= 475 (an int; None if it never is)."""
+    returns = np.asarray(logs["mean_return"], dtype=float)
+    finite = returns[np.isfinite(returns)]
+    reached = np.flatnonzero(np.nan_to_num(returns, nan=-np.inf) >= SOLVED)
+    return {"auc": float(finite.mean()) if finite.size else float("nan"),
+            "first_475": int(logs["step"][reached[0]]) if reached.size else None}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # The single checkpoint of a trained PPO agent (outside the repository, atomic, with its provenance)
 # ---------------------------------------------------------------------------------------------------------------------
@@ -938,3 +948,350 @@ def band(curves) -> dict:
     contract: « médiane et intervalle sur trois graines »)."""
     arr = np.asarray(curves, dtype=float)
     return {"median": np.median(arr, axis=0), "low": arr.min(axis=0), "high": arr.max(axis=0)}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# RLHF in miniature (Ex B8.26): a hidden "true" reward, simulated preferences, a reward model of Bradley-Terry
+# ---------------------------------------------------------------------------------------------------------------------
+RLHF_WIDTH = 0.5                # the true reward of a step: exp(-(x / RLHF_WIDTH)^2), x the position of the cart
+RLHF_STEPS = 100                # a trajectory of the preference data: at most 100 steps
+OBS_SCALE = (2.4, 3.0, 0.2095, 3.0)   # the order of magnitude of each variable (the reward model divides by it)
+# The behaviours that play the trajectories of the preference data: the one-line rule of 208.1 with a share of random
+# actions (1.0: the random policy). The rule ignores the position of the cart: some of its trajectories stay near the
+# centre, others drift away.
+RLHF_BEHAVIOURS = (1.0, 0.0, 0.1, 0.3, 0.5)
+
+
+def centered_reward(obs) -> np.ndarray:
+    """The hidden "true" reward of B8.26: ``exp(-(x / RLHF_WIDTH)^2)`` for each observation (the last axis holds the
+    four variables; x the position of the cart): 1 at the centre, 0.37 at 0.5 m, almost 0 beyond 1 m."""
+    x = np.asarray(obs, dtype=float)[..., 0]
+    return np.exp(-(x / RLHF_WIDTH) ** 2)
+
+
+def _behaviour_trajectory(env, share_random: float, rng, max_steps: int) -> np.ndarray:
+    state, _ = env.reset(seed=int(rng.integers(2**31)))
+    states = []
+    for _ in range(max_steps):
+        action = int(rng.integers(2)) if rng.random() < share_random else rule_policy(state, None)
+        state, _, terminated, truncated, _ = env.step(action)
+        states.append(np.array(state, dtype=np.float32))
+        if terminated or truncated:
+            break
+    return np.stack(states)
+
+
+def preference_pairs(n_pairs: int, seed: int, max_steps: int = RLHF_STEPS) -> dict:
+    """``n_pairs`` pairs of trajectories of CartPole-v1 (at most ``max_steps`` steps each), played by the behaviours of
+    ``RLHF_BEHAVIOURS`` drawn at random, and labelled by the hidden true reward (simulated preferences, without a
+    human). Returns a dict: ``first`` and ``second`` (lists of float32 arrays (T_i, 4): the observation that FOLLOWS
+    each step, the one a reward of the step is computed on), ``true_first`` and ``true_second`` (float arrays (n,):
+    the sums of ``centered_reward`` over each trajectory), ``preferred`` (int array (n,): 0 when the first trajectory
+    has the larger true return, 1 otherwise; a tie goes to the first) and ``behaviours`` (the share of random actions
+    of each trajectory, (n, 2)). The same arguments give the same pairs."""
+    rng = np.random.default_rng(seed)
+    env = make_env()
+    trajectories, shares = [], []
+    for _ in range(2 * int(n_pairs)):
+        share = RLHF_BEHAVIOURS[int(rng.integers(len(RLHF_BEHAVIOURS)))]
+        trajectories.append(_behaviour_trajectory(env, share, rng, max_steps))
+        shares.append(share)
+    first, second = trajectories[0::2], trajectories[1::2]
+    true_first = np.array([centered_reward(t).sum() for t in first])
+    true_second = np.array([centered_reward(t).sum() for t in second])
+    return {"first": first, "second": second, "true_first": true_first, "true_second": true_second,
+            "preferred": np.where(true_first >= true_second, 0, 1).astype(int),
+            "behaviours": np.array(shares).reshape(-1, 2)}
+
+
+def _reward_model_class():
+    torch = _torch()
+    nn = torch.nn
+
+    class RewardModel(nn.Module):
+        """The reward model of the reference: obs (N, 4) -> r (N,), an MLP 4 -> hidden -> hidden -> 1 (tanh) on the
+        observations divided by OBS_SCALE."""
+
+        def __init__(self, hidden: int = 64):
+            super().__init__()
+            self.register_buffer("scale", torch.tensor(OBS_SCALE, dtype=torch.float32))
+            self.net = nn.Sequential(nn.Linear(4, hidden), nn.Tanh(), nn.Linear(hidden, hidden), nn.Tanh(),
+                                     nn.Linear(hidden, 1))
+
+        def forward(self, obs):
+            return self.net(obs / self.scale).squeeze(-1)
+
+    return RewardModel
+
+
+def reward_model(hidden: int = 64, seed: int | None = None):
+    """A new reward model of the reference (``torch.manual_seed(seed)`` first when ``seed`` is given)."""
+    if seed is not None:
+        _torch().manual_seed(seed)
+    return _reward_model_class()(hidden)
+
+
+def trajectory_returns(model, trajectories):
+    """The learned return of each trajectory: the sum of ``model(states)`` over its steps, a tensor (M,) with its
+    graph (one forward pass on all the states at once)."""
+    torch = _torch()
+    lengths = [len(t) for t in trajectories]
+    rewards = model(torch.as_tensor(np.concatenate(trajectories), dtype=torch.float32))
+    index = torch.as_tensor(np.repeat(np.arange(len(trajectories)), lengths))
+    return torch.zeros(len(trajectories), dtype=rewards.dtype).index_add(0, index, rewards)
+
+
+def train_reward_model(pairs: dict, seed: int = 0, epochs: int = 300, lr: float = 1e-3, hidden: int = 64):
+    """The reference reward model: ``epochs`` full-batch Adam steps on the Bradley-Terry loss
+    ``mean(-logsigmoid(R(chosen) - R(rejected)))`` of the pairs, R the learned return of a trajectory. Returns
+    ``(model, losses)``."""
+    torch = _torch()
+    F = torch.nn.functional
+    with single_thread():
+        model = reward_model(hidden, seed=seed)
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+        first_wins = torch.as_tensor(np.asarray(pairs["preferred"]) == 0)
+        losses = []
+        for _ in range(int(epochs)):
+            r1, r2 = trajectory_returns(model, pairs["first"]), trajectory_returns(model, pairs["second"])
+            loss = -F.logsigmoid(torch.where(first_wins, r1 - r2, r2 - r1)).mean()
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            losses.append(float(loss.detach()))
+    return model.eval(), losses
+
+
+def preference_accuracy(model, pairs: dict) -> float:
+    """The share of the pairs (those whose true returns differ) that the learned returns put in the true order."""
+    torch = _torch()
+    with torch.no_grad():
+        r1 = trajectory_returns(model, pairs["first"]).numpy()
+        r2 = trajectory_returns(model, pairs["second"]).numpy()
+    t1, t2 = np.asarray(pairs["true_first"]), np.asarray(pairs["true_second"])
+    keep = t1 != t2
+    return float(np.mean((r1 > r2)[keep] == (t1 > t2)[keep])) if keep.any() else float("nan")
+
+
+def policy_trajectories(policy, n_episodes: int, seed: int, max_steps: int = EPISODE_STEPS) -> list:
+    """The observations (T_i, 4) that follow each step of ``n_episodes`` episodes played by ``policy`` (a function,
+    or a network made deterministic as in ``evaluate``), the episode seeds drawn as ``evaluate`` draws them."""
+    if hasattr(policy, "parameters"):
+        policy = greedy_logits(policy) if hasattr(policy, "actor") else greedy_q(policy)
+    env = make_env()
+    rng = np.random.default_rng(seed)
+    out = []
+    for _ in range(int(n_episodes)):
+        state, info = env.reset(seed=int(rng.integers(2**31)))
+        states = []
+        for _ in range(max_steps):
+            state, _, terminated, truncated, info = env.step(policy(state, info))
+            states.append(np.array(state, dtype=np.float32))
+            if terminated or truncated:
+                break
+        out.append(np.stack(states))
+    return out
+
+
+def rlhf_measure(policy, model, n_episodes: int = 20, seed: int = EVAL_SEED) -> dict:
+    """What an agent earns under the learned reward and under the true one, on ``n_episodes`` deterministic episodes
+    of 500 steps at most: ``length`` (mean), ``true_return`` and ``learned_return`` (means of the sums over each
+    episode), ``true_per_step`` and ``learned_per_step``, ``abs_x`` (mean |x| of the visited states) and
+    ``onpolicy_accuracy``: the preference accuracy of the model on pairs made of the agent's own trajectories cut at
+    ``RLHF_STEPS`` steps (what a reward model has never seen)."""
+    torch = _torch()
+    episodes = policy_trajectories(policy, n_episodes, seed)
+    with torch.no_grad():
+        learned = [float(model(torch.as_tensor(e)).sum()) for e in episodes]
+    true = [float(centered_reward(e).sum()) for e in episodes]
+    lengths = [len(e) for e in episodes]
+    cut = [e[:RLHF_STEPS] for e in episodes]
+    half = len(cut) // 2
+    pairs = {"first": cut[:half], "second": cut[half:2 * half],
+             "true_first": np.array([centered_reward(e).sum() for e in cut[:half]]),
+             "true_second": np.array([centered_reward(e).sum() for e in cut[half:2 * half]])}
+    return {"length": float(np.mean(lengths)), "true_return": float(np.mean(true)),
+            "learned_return": float(np.mean(learned)), "true_per_step": float(np.sum(true) / np.sum(lengths)),
+            "learned_per_step": float(np.sum(learned) / np.sum(lengths)),
+            "abs_x": float(np.mean(np.abs(np.concatenate(episodes)[:, 0]))),
+            "onpolicy_accuracy": preference_accuracy(model, pairs)}
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# The challenge B8.28: a budget of environment steps counted by the infrastructure, a held-out evaluation
+# ---------------------------------------------------------------------------------------------------------------------
+CHALLENGE_BUDGET = 100_000      # environment steps, all copies, every CartPole created during the run
+CHALLENGE_SEEDS = (280, 281, 282)
+CHALLENGE_EVAL_SEED = 28_028    # held out: no training and no other evaluation of the notebook use it
+CHALLENGE_GUARDED = ("train_dqn", "train_reinforce", "train_ppo", "reference_agent", "load_agent", "precomputed")
+
+
+class BudgetExceeded(RuntimeError):
+    """Raised by a CartPole step beyond the budget of the challenge."""
+
+
+class ChallengeRuleBroken(RuntimeError):
+    """Raised during the challenge by a forbidden call (a reference trainer, a checkpoint, torch.load, async copies)."""
+
+
+@contextlib.contextmanager
+def counted_steps(budget: int):
+    """Count every step of every CartPole of the process inside the block, however it was created (``gym.make``,
+    ``gym.make_vec`` in "sync" mode, ``make_env``, ``make_vec``, a copy of an environment, ``env.unwrapped``):
+    ``CartPoleEnv.step`` and ``CartPoleVectorEnv.step`` are patched at the class level (the vector version counts
+    one step per copy). The step that would go beyond ``budget`` raises ``BudgetExceeded``. ``"async"`` copies, which
+    step in other processes, raise ``ChallengeRuleBroken``. Yields a dict whose ``"steps"`` is the count."""
+    from gymnasium.envs.classic_control import cartpole
+
+    counter = {"steps": 0, "budget": int(budget)}
+    single, vector = cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step
+    async_init = gym.vector.AsyncVectorEnv.__init__
+
+    def step(self, action):
+        if counter["steps"] >= counter["budget"]:
+            raise BudgetExceeded(f"les {counter['budget']} pas d'environnement du budget sont épuisés")
+        counter["steps"] += 1
+        return single(self, action)
+
+    def vector_step(self, action):
+        if counter["steps"] + self.num_envs > counter["budget"]:
+            raise BudgetExceeded(f"les {counter['budget']} pas d'environnement du budget sont épuisés")
+        counter["steps"] += self.num_envs
+        return vector(self, action)
+
+    def refuse_async(self, *args, **kwargs):
+        raise ChallengeRuleBroken("vectorization_mode='async' joue dans d'autres processus, hors du compteur : "
+                                  "utilise 'sync'")
+
+    cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step = step, vector_step
+    gym.vector.AsyncVectorEnv.__init__ = refuse_async
+    try:
+        yield counter
+    finally:
+        cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step = single, vector
+        gym.vector.AsyncVectorEnv.__init__ = async_init
+
+
+def _parameters_of(module) -> list:
+    return [p.detach().cpu().clone() for p in module.state_dict().values()]
+
+
+def _same_parameters(a: list, b: list) -> bool:
+    torch = _torch()
+    return len(a) == len(b) and all(x.shape == y.shape and torch.equal(x, y) for x, y in zip(a, b))
+
+
+def _known_agents(namespace: dict) -> dict:
+    """The trained modules that already exist before a run: the torch modules of the notebook's globals and the
+    checkpoints of this chapter (the agent of B8.20, the reference agents), as lists of parameters."""
+    torch = _torch()
+    known = {name: _parameters_of(obj) for name, obj in namespace.items()
+             if isinstance(obj, torch.nn.Module) and not name.startswith("_")}
+    for path in sorted(checkpoints_dir().glob("*.pt")):
+        try:
+            payload = torch.load(path, map_location="cpu", weights_only=True)
+            known[path.name] = [v.detach().cpu().clone() for v in payload["state_dict"].values()]
+        except Exception:  # noqa: BLE001 - an unreadable file holds no agent to compare with
+            continue
+    return known
+
+
+def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namespace: dict | None = None,
+                  eval_seed: int = CHALLENGE_EVAL_SEED, n_episodes: int = 100) -> dict:
+    """One run of the challenge B8.28: ``train_fn(seed, budget)`` trains from scratch and returns a policy (a torch
+    module, evaluated by its most probable action, or a deterministic function ``(state, info) -> int``).
+
+    During the run: every CartPole step is counted (``counted_steps``; beyond ``budget``, ``BudgetExceeded`` stops
+    the run); the trainers and checkpoints of this module (``CHALLENGE_GUARDED``) and ``torch.load`` raise
+    ``ChallengeRuleBroken``; the torch modules of ``namespace`` (the notebook's globals, such as the agent of B8.20)
+    are set to None, then restored. After the run: a module whose parameters equal those of an agent that existed
+    before is refused; the policy is evaluated on ``n_episodes`` episodes drawn from ``eval_seed`` (held out), 500
+    steps at most. Returns ``seed``, ``steps``, ``seconds``, ``mean_return``, ``min_return``, ``solved`` (mean >=
+    475) and ``error`` (None, or the reason the run does not count, in French: the notebook shows it)."""
+    import torch
+
+    namespace = namespace if namespace is not None else {}
+    known = _known_agents(namespace)
+    masked = {name: namespace[name] for name, obj in list(namespace.items())
+              if isinstance(obj, torch.nn.Module) and not name.startswith("_")}
+    module = globals()
+    saved = {name: module[name] for name in CHALLENGE_GUARDED}
+    loads = (torch.load, torch.serialization.load)
+
+    def guard(name):
+        def refuse(*args, **kwargs):
+            raise ChallengeRuleBroken(f"{name} est interdit pendant le défi : on entraîne à partir de rien, avec les "
+                                      "pas du budget")
+        return refuse
+
+    result = {"seed": int(seed), "steps": 0, "seconds": 0.0, "mean_return": float("nan"), "min_return": float("nan"),
+              "solved": False, "error": None}
+    policy = None
+    start = time.perf_counter()
+    try:
+        for name in masked:
+            namespace[name] = None
+        for name in CHALLENGE_GUARDED:
+            module[name] = guard(f"wbr.{name}")
+        torch.load = torch.serialization.load = guard("torch.load")
+        with counted_steps(budget) as counter:
+            try:
+                policy = train_fn(seed, budget)
+            except BudgetExceeded as exc:
+                result["error"] = f"budget dépassé : {exc}"
+            except ChallengeRuleBroken as exc:
+                result["error"] = f"règle enfreinte : {exc}"
+            result["steps"] = counter["steps"]
+    finally:
+        torch.load, torch.serialization.load = loads
+        module.update(saved)
+        namespace.update(masked)
+        result["seconds"] = time.perf_counter() - start
+    if result["error"] is None:
+        if policy is None or not callable(policy):
+            result["error"] = ("train_fn doit rendre une politique : un module torch, ou une fonction (state, info) -> "
+                               "int")
+        elif isinstance(policy, torch.nn.Module):
+            mine = _parameters_of(policy)
+            same = [name for name, params in known.items() if _same_parameters(mine, params)]
+            if same:
+                result["error"] = (f"l'agent rendu a les paramètres d'un agent entraîné avant le run ({same[0]}) : "
+                                   "on entraîne à partir de rien")
+    if result["error"] is None:
+        with torch.no_grad():
+            ev = evaluate(policy, n_episodes, eval_seed)
+        result.update(mean_return=ev["mean_return"], min_return=float(min(ev["returns"])),
+                      solved=ev["mean_return"] >= SOLVED)
+    return result
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# The code review B8.27: CleanRL's ppo.py at a pinned commit (MIT licence), read, never installed
+# ---------------------------------------------------------------------------------------------------------------------
+CLEANRL_COMMIT = "fe8d8a03c41a7ef5b523e2e354bd01c363e786bb"
+CLEANRL_PPO_URL = f"https://raw.githubusercontent.com/vwxyzjn/cleanrl/{CLEANRL_COMMIT}/cleanrl/ppo.py"
+CLEANRL_PPO_PAGE = f"https://github.com/vwxyzjn/cleanrl/blob/{CLEANRL_COMMIT}/cleanrl/ppo.py"
+CLEANRL_PPO_SHA256 = "d8dfbb7ac0b21e747b77d6e6673e566db4d6cdacc83bcebcd19cf87ad0e459ae"
+CLEANRL_PPO_LINES = 312
+
+
+def cleanrl_ppo_lines(download: bool = True) -> list | None:
+    """The lines of CleanRL's ``ppo.py`` at the commit ``CLEANRL_COMMIT`` (312 lines, MIT licence), downloaded once into
+    the cache and checked by its SHA-256; None when it cannot be read (no network, another file). Line ``k`` of the
+    file is ``lines[k - 1]``."""
+    import hashlib
+
+    from wb import datasets
+
+    path = datasets.cache_dir() / "cleanrl" / f"ppo_{CLEANRL_COMMIT[:7]}.py"
+    if not path.exists() and download:
+        try:
+            datasets.download(CLEANRL_PPO_URL, path, timeout=20, retries=1)
+        except ConnectionError:
+            return None
+    if not path.exists():
+        return None
+    data = path.read_bytes()
+    if hashlib.sha256(data).hexdigest() != CLEANRL_PPO_SHA256:
+        return None
+    return data.decode("utf-8").splitlines()

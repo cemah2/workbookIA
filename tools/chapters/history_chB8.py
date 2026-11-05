@@ -323,8 +323,158 @@ def c14() -> dict:
     return {"rows": rows, "worst": worst, "threshold": float(5 * np.floor(0.6 * worst / 5)), "buggy": buggy}
 
 
+
+# ======================================================================================== second half (B8.21 to B8.28)
+# --------------------------------------------------------------------------------------------------------------------- l21
+L21_SEEDS = (21, 22, 23)            # the notebook shows the first; the other two check that each signature holds
+L21_RUNS = {"healthy": {}, "lr_high": {"lr": 1e-2, "anneal_lr": False}, "no_clip": {"clip_eps": 1e6},
+            "entropy_sign": {"ent_coef": -0.05}, "no_critic": {"vf_coef": 0.0}}
+L21_LETTERS = "ABCDE"
+
+
+def _log_signature(logs: dict) -> dict:
+    """The statistics that tell the runs of B8.21 apart (computed on the logs of the reference PPO)."""
+    n = len(logs["step"])
+    first = slice(0, max(1, n // 2))
+    ev = np.array(logs["explained_variance"], dtype=float)
+    return {"kl_median": float(np.median(logs["approx_kl"][first])),
+            "clipfrac_median": float(np.median(logs["clipfrac"][first])),
+            "clipfrac_max": float(np.max(logs["clipfrac"])),
+            "entropy_quarter": float(logs["entropy"][max(0, n // 4 - 1)]),
+            "entropy_min": float(np.min(logs["entropy"])),
+            "ev_median": float(np.nanmedian(ev[first])),
+            "return_last10": float(np.nanmean(np.array(logs["mean_return"][-10:], dtype=float)))}
+
+
+def l21() -> tuple[dict, dict]:
+    from wb import deep_rl_env as R
+
+    rows, kept = [], {}
+    order = list(np.random.default_rng(21).permutation(len(L21_RUNS)))       # run i -> letter order[i]
+    letters = {name: L21_LETTERS[order[i]] for i, name in enumerate(L21_RUNS)}
+    for seed in L21_SEEDS:
+        for name, change in L21_RUNS.items():
+            agent, logs = R.train_ppo(seed, R.ppo_steps(True), {**R.PPO_SETTINGS, **change})
+            ev = R.evaluate(agent, 100, R.EVAL_SEED)["mean_return"]
+            sig = {"seed": seed, "run": name, "eval": ev, "seconds": round(logs["seconds"], 1), **_log_signature(logs)}
+            rows.append(sig)
+            print("l21", json.dumps(sig), flush=True)
+            if seed == L21_SEEDS[0]:
+                kept[letters[name]] = {k: r4(logs[k]) if k not in ("step", "iteration", "episodes") else logs[k]
+                                       for k in R.LOG_KEYS}
+    # each signature must hold on every seed
+    checks = []
+    for seed in L21_SEEDS:
+        by = {r["run"]: r for r in rows if r["seed"] == seed}
+        others = lambda key, run: [by[n][key] for n in by if n != run]       # noqa: E731
+        checks.append({"seed": seed,
+                       "lr_high_largest_kl": by["lr_high"]["kl_median"] > max(others("kl_median", "lr_high")),
+                       "no_clip_never_clips": by["no_clip"]["clipfrac_max"] == 0.0,
+                       "no_clip_kl_above_healthy": by["no_clip"]["kl_median"] > by["healthy"]["kl_median"],
+                       "entropy_sign_lowest_entropy": by["entropy_sign"]["entropy_quarter"]
+                       < min(others("entropy_quarter", "entropy_sign")),
+                       "no_critic_lowest_ev": by["no_critic"]["ev_median"] < min(others("ev_median", "no_critic"))})
+    print("l21 checks", json.dumps(checks))
+    protocol = {"seed": L21_SEEDS[0], "steps": R.ppo_steps(True), "settings": R.PPO_SETTINGS,
+                "changes": "five runs of the reference PPO; one has the reference settings, each other one changes "
+                           "one of them (see the statement)"}
+    calib = {"rows": rows, "letters": letters, "checks": checks,
+             "all_hold": all(all(v for k, v in c.items() if k != "seed") for c in checks)}
+    return calib, {"protocol": protocol, "runs": kept}
+
+
+# --------------------------------------------------------------------------------------------------------------------- p22
+P22_SEEDS = (220, 221, 222)
+P22_CONFIGS = {"reference": {}, "clip_0.1": {"clip_eps": 0.1}, "clip_0.4": {"clip_eps": 0.4},
+               "lambda_0.8": {"gae_lambda": 0.8}, "lambda_1": {"gae_lambda": 1.0},
+               "epochs_4": {"n_epochs": 4}, "epochs_20": {"n_epochs": 20}}
+
+
+def p22() -> tuple[dict, dict]:
+    from wb import deep_rl_env as R
+
+    runs, rows = {}, []
+    for name, change in P22_CONFIGS.items():
+        for seed in P22_SEEDS:
+            agent, logs = R.train_ppo(seed, R.ppo_steps(True), {**R.PPO_SETTINGS, **change})
+            ev = R.evaluate(agent, 100, R.EVAL_SEED)["mean_return"]
+            runs[f"{name}/{seed}"] = {"step": logs["step"], "mean_return": r4(logs["mean_return"]),
+                                      "approx_kl": r4(logs["approx_kl"]), "clipfrac": r4(logs["clipfrac"]),
+                                      "eval": ev, "seconds": round(logs["seconds"], 1)}
+            rows.append({"config": name, "seed": seed, "eval": ev, **R.log_summary(logs),
+                         "seconds": round(logs["seconds"], 1)})
+            print("p22", json.dumps(rows[-1]), flush=True)
+    protocol = {"seeds": list(P22_SEEDS), "steps": R.ppo_steps(True), "settings": R.PPO_SETTINGS,
+                "configs": P22_CONFIGS, "eval_seed": R.EVAL_SEED, "eval_episodes": 100}
+    return {"rows": rows, "protocol": protocol}, {"protocol": protocol, "runs": runs}
+
+
+# --------------------------------------------------------------------------------------------------------------- c23, g24
+C23_SEEDS = (0, 1, 2, 3, 4, 5)
+C23_PHYSICS = {"normal": {}, "gravity_x2": {"gravity": 19.6}, "length_x2": {"length": 1.0},
+               "length_x4": {"length": 2.0}}
+C23_EVAL_SEEDS = (8000, 2323)
+G24_GRAVITY = (0.5, 1.0, 1.5, 2.0, 3.0, 4.0)
+G24_LENGTH = (0.25, 0.5, 1.0, 2.0, 3.0, 4.0)
+G24_EPISODES = 50
+
+
+def c23() -> tuple[dict, dict]:
+    """🔮 B8.23 and 🔬 B8.24: six reference PPO agents (50 000 steps, the protocol of B8.20), evaluated on the normal
+    physics, a doubled gravity and a pole twice as long (two sets of evaluation seeds), then on the grids of B8.24."""
+    from wb import deep_rl_env as R
+
+    rows, grid = [], {}
+    for seed in C23_SEEDS:
+        agent, logs = R.train_ppo(seed, R.ppo_steps(True))
+        row = {"seed": seed}
+        for name, phys in C23_PHYSICS.items():
+            for es in C23_EVAL_SEEDS:
+                ev = R.evaluate(agent, 100, es, **phys)
+                row[f"{name}/{es}"] = {"mean": ev["mean_return"], "min": min(ev["returns"]),
+                                       "max": max(ev["returns"])}
+        for key, factors, base in (("gravity", G24_GRAVITY, 9.8), ("length", G24_LENGTH, 0.5)):
+            grid[f"{key}/{seed}"] = [R.evaluate(agent, G24_EPISODES, R.EVAL_SEED, **{key: base * f})["mean_return"]
+                                     for f in factors]
+        rows.append(row)
+        print("c23", json.dumps(row), json.dumps({k: v for k, v in grid.items() if k.endswith(f"/{seed}")}),
+              flush=True)
+    protocol = {"seeds": list(C23_SEEDS), "steps": R.ppo_steps(True), "settings": R.PPO_SETTINGS,
+                "eval_seeds": list(C23_EVAL_SEEDS), "physics": C23_PHYSICS, "gravity_factors": list(G24_GRAVITY),
+                "length_factors": list(G24_LENGTH), "grid_episodes": G24_EPISODES, "grid_eval_seed": R.EVAL_SEED}
+    return {"rows": rows, "grid": grid, "protocol": protocol}, {"protocol": protocol, "rows": rows, "grid": grid}
+
+
+# --------------------------------------------------------------------------------------------------------------------- c28b
+C28_SEEDS = tuple(range(280, 290))
+C28_SETTINGS = {"reference": ({}, C28_SEEDS),
+                "cleanrl": ({"lr": 2.5e-4, "n_epochs": 4}, C28_SEEDS[:5]),
+                "epochs_4": ({"n_epochs": 4}, C28_SEEDS[:5])}
+
+
+def c28b() -> dict:
+    """🏆 B8.28: the reference PPO through the harness of the challenge (wbr.run_challenge: the steps counted at the
+    class level, the held-out evaluation), with its settings on ten seeds, and two other reasonable settings (the
+    defaults of CleanRL, lr 2.5e-4 and 4 epochs; 4 epochs alone) on five."""
+    from wb import deep_rl_env as R
+
+    train = R.train_ppo                     # captured before the run: the harness guards the name, not this object
+    rows = []
+    for name, (change, seeds) in C28_SETTINGS.items():
+        settings = {**R.PPO_SETTINGS, **change}
+        for seed in seeds:
+            res = R.run_challenge(lambda s, budget: train(s, budget, settings)[0], seed)
+            rows.append({"settings": name, **{k: (round(v, 2) if isinstance(v, float) else v) for k, v in res.items()}})
+            print("c28b", json.dumps(rows[-1]), flush=True)
+    summary = {name: {"solved": sum(r["solved"] for r in rows if r["settings"] == name),
+                      "runs": sum(1 for r in rows if r["settings"] == name),
+                      "worst": min(r["mean_return"] for r in rows if r["settings"] == name)} for name in C28_SETTINGS}
+    print("c28b", json.dumps(summary))
+    return {"rows": rows, "summary": summary, "budget": R.CHALLENGE_BUDGET, "eval_seed": R.CHALLENGE_EVAL_SEED,
+            "settings": {k: v[0] for k, v in C28_SETTINGS.items()}}
+
 ENTRIES = {"tab26": tab26, "c14": c14, "c12": c12, "c13": c13, "a15": a15, "p16": p16, "c17": c17, "c20": c20, "c28": c28,
-           "b14": b14}
+           "b14": b14, "l21": l21, "p22": p22, "c23": c23, "c28b": c28b}
 
 
 def main() -> int:
