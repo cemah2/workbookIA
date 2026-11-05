@@ -573,9 +573,10 @@ with checked("B7.18"):                                    # running(): always st
             with serve_18.running(ARTIFACT_B, backend=backend_18) as url_a_18, \
                     serve_18.running(ARTIFACT_B, backend=backend_18) as url_b_18:
                 pass
+            twice_18 = url_a_18 is not None and url_b_18 is not None and url_a_18 != url_b_18
         except Exception as err_18:  # noqa: BLE001 - the learner's code: "Address already in use", a server that did not start
-            url_b_18 = f"une erreur ({type(err_18).__name__} : {str(err_18)[:80]})"
-        ok_18[f"free port {backend_18}"] = url_a_18 is not None and url_b_18 is not None and url_a_18 != url_b_18
+            twice_18, url_b_18 = False, f"une erreur ({type(err_18).__name__} : {str(err_18)[:80]})"
+        ok_18[f"free port {backend_18}"] = twice_18
         verdict("B7.18", ok_18[f"free port {backend_18}"], f"running(backend=\"{backend_18}\") deux fois à la fois : deux "
                 "ports libres.", f"deux running(backend=\"{backend_18}\") à la fois donnent {url_a_18} et {url_b_18} : un "
                 "port en dur ne sert qu'une fois (port 0 : le système choisit un port libre).")
