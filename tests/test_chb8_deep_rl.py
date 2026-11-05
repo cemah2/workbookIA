@@ -521,6 +521,8 @@ def _gae_args(**change):
                  "to (3, 3))", id="values-3x1-broadcast"),
     pytest.param({"terminated": np.zeros((3, 2), dtype=bool)}, "terminated of shape (3, 2), rewards (3,)",
                  id="terminated-2d"),
+    pytest.param({"truncated": np.zeros((3, 1), dtype=bool)}, "truncated of shape (3, 1), rewards (3,) (NumPy would "
+                 "broadcast them)", id="truncated-column"),
     pytest.param({"gamma": -0.1}, "gamma = -0.1 is outside [0, 1]", id="gamma-negative"),
     pytest.param({"gamma": 1.01}, "gamma = 1.01 is outside [0, 1]", id="gamma-above-1"),
     pytest.param({"lam": -0.5}, "lam = -0.5 is outside [0, 1]", id="lam-negative"),

@@ -16,7 +16,7 @@
   "Implémenter en PyTorch un DQN, REINFORCE et PPO sur CartPole, avec les calculs clés testés dans mylearn",
   "Diagnostiquer un entraînement RL à partir de ses journaux et comparer des variantes sur plusieurs graines",
   "Expliquer RLHF, DPO et GRPO et entraîner un modèle de récompense sur des préférences",
-  "Discuter les limites du RL : efficacité en échantillons, généralisation, reward hacking"
+  "Discuter les limites du RL : efficacité en échantillons, généralisation, piratage de la récompense"
  ],
  "sections": [
   {
@@ -45,7 +45,7 @@
   },
   {
    "ref": "208.7",
-   "title": "RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, reward hacking"
+   "title": "RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense"
   },
   {
    "ref": "208.8",
@@ -84,7 +84,7 @@
   "pénalité KL vers le modèle de référence",
   "DPO",
   "GRPO, récompenses vérifiables",
-  "reward hacking",
+  "piratage de la récompense (reward hacking)",
   "sim-to-real"
  ],
  "formulas": [
@@ -106,7 +106,7 @@
   "gravité doublée, mât allongé → Ex B8.23, B8.24"
  ],
  "figures": [
-  "Figure 2 de Schulman et coll. (2017) : L^CLIP en fonction du ratio, pour A > 0 et A < 0 → 📄 Ex B8.11, ✏️ Ex B8.5",
+  "Figure 1 de Schulman et coll. (2017) : L^CLIP en fonction du ratio, pour A > 0 et A < 0 → 📄 Ex B8.11, ✏️ Ex B8.5",
   "Courbes de retour moyen (médiane et intervalle sur trois graines) pour les ablations DQN et PPO → Ex B8.15, B8.22"
  ],
  "papers": [
@@ -189,7 +189,7 @@
   "évaluation multi-graines",
   "modèle de récompense Bradley-Terry",
   "RLHF, DPO, GRPO",
-  "reward hacking"
+  "piratage de la récompense (reward hacking)"
  ],
  "requires": [
   {
@@ -249,16 +249,16 @@
   {
    "topic": "Gymnasium 1.x",
    "book": "le livre décrit la boucle agent-environnement de façon abstraite",
-   "today": "gymnasium 1.3 : gym.make_vec pour les environnements vectorisés ; mode d'autoreset « next-step » par défaut (l'observation de reset arrive au pas suivant) ; terminated et truncated séparés",
+   "today": "gymnasium 1.4 : gym.make_vec pour les environnements vectorisés ; mode d'autoreset « next-step » par défaut (l'observation de reset arrive au pas suivant) ; terminated et truncated séparés",
    "keep": "oui : source de bugs silencieux (Ex B8.14, B8.20)",
-   "verify": "doc gymnasium 1.3 (Vector API, AutoresetMode)"
+   "verify": "doc gymnasium 1.4 (Vector API, AutoresetMode)"
   },
   {
    "topic": "bibliothèques de référence",
    "book": "—",
    "today": "Stable-Baselines3 (PyTorch) et CleanRL (un fichier par algorithme) ; non installés : implémentations from scratch, SB3 en option",
    "keep": "oui",
-   "verify": "compatibilité de SB3 et de CleanRL avec gymnasium 1.3 et torch 2.11"
+   "verify": "compatibilité de SB3 et de CleanRL avec gymnasium 1.4 et torch 2.11"
   },
   {
    "topic": "algorithmes de référence en 2026",
@@ -485,7 +485,7 @@
   {
    "id": "B8.Q12",
    "type": "🧠",
-   "title": "Reward hacking : quand l'agent optimise la lettre et pas l'esprit",
+   "title": "Piratage de la récompense (reward hacking) : quand l'agent optimise la lettre et pas l'esprit",
    "stars": 1,
    "minutes": 3,
    "gpu": false,
@@ -1086,7 +1086,7 @@
   {
    "id": "B8.26",
    "type": "📦",
-   "title": "RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le reward hacking",
+   "title": "RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense",
    "stars": 4,
    "minutes": 90,
    "gpu": false,
