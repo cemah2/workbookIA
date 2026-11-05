@@ -24,7 +24,8 @@ SOURCES = ["chapitres/*/*.md", "chapitres/*/flashcards.csv", "checkpoints/*/*.md
            "tools/chapters/build_*.py", "tools/chapters/figures_*.py", "tools/chapters/chapter_kit.py",
            "tools/chapters/ch*_parts*.py", "tools/chapters/ch*_code*.py",    # the notebooks of ch. 28 on
            "data/cards/*.md", "src/wb/*.py", "tools/*.py", "templates/*.py", "projets/*/*/*.py",
-           "projets/*/*/*.md", "projets/*/*/*/*.py"]
+           "projets/*/*/*.md", "projets/*/*/*/*.py",
+           "projets/*/*.md", "projets/*/*/*/*.md", "projets/*/*/*/*/*.py"]   # the final project and its kit
 
 # retained term -> (pattern of the forbidden forms, phrases where the word keeps its everyday sense;
 # a phrase is a regular expression when it starts with « re: »)

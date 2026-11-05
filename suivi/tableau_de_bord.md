@@ -1691,3 +1691,21 @@ Légende : ★ application directe · ★★ standard · ★★★ approfondi ·
 - [ ] B8.E1–E5 💼 Entretien (5 questions, 50 min)
 - [ ] Flashcards importées dans Anki (26 cartes)
 <!-- wb:end B8 -->
+
+<!-- wb:section PF -->
+## PF — Projet final : un projet de bout en bout sur ton propre dataset ⏱️ 41 h
+
+- [ ] PF.1 🗣️ Cadrage : problème, utilisateurs, métrique métier et métrique technique, critère de succès chiffré, risques ★★★ 90 min
+- [ ] PF.2 🛠️ Données : data card complète, licence vérifiée, script de téléchargement reproductible (révision figée, SHA-256) ★★★ 90 min
+- [ ] PF.3 📈 Exploration et audit de qualité : doublons, fuites, déséquilibre, valeurs manquantes, décalage entre découpages ★★★★ 180 min
+- [ ] PF.4 ✏️ Protocole d'évaluation écrit avant toute expérience : découpage, métriques, test scellé, baseline naïve, budget ★★★ 60 min
+- [ ] PF.5 📦 Baselines : prédicteur naïf et modèle classique dans un Pipeline sans fuite, en validation croisée ★★★★ 180 min
+- [ ] PF.6 📦 Modèle deep learning adapté aux données : transfer learning, Transformer ou LLM avec LoRA, réseau séquentiel ou tabulaire ★★★★ 480 min 🚀
+- [ ] PF.7 🔬 Expériences : journal, recherche d'hyperparamètres ciblée, ablations, trois graines ★★★★ 360 min 🚀
+- [ ] PF.8 📈 Évaluation honnête sur le test scellé : une seule passe, intervalles bootstrap, analyse d'erreurs, sous-groupes, robustesse ★★★★ 180 min
+- [ ] PF.9 ⚖️ Explicabilité et équité : attributions adaptées au modèle, audit par sous-groupe, limites et usages à proscrire ★★★★ 150 min
+- [ ] PF.10 🛠️ Industrialisation : paquet installable, configuration, ligne de commande, tests pytest, intégration continue ★★★★ 240 min
+- [ ] PF.11 📦 Démonstration : prédiction en ligne de commande et API HTTP (ou démo Gradio), latence mesurée ★★★★ 150 min
+- [ ] PF.12 🛠️ Rapport et portfolio : README, model card, data card, figures, dépôt GitHub propre et reproductible ★★★★ 180 min
+- [ ] PF.13 🗣️ Soutenance : dix minutes de présentation, cinq minutes de questions façon entretien, démonstration en direct ★★★★ 120 min
+<!-- wb:end PF -->

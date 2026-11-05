@@ -2,7 +2,7 @@
 
 > **Généré** par `python tools/syllabus.py build` (`tools/build_index.py`) à partir du glossaire (`annexes/glossaire.md`), du contrat de chaque chapitre (`docs/syllabus/data/*.json` : notions enseignées, concepts, notions mobilisées, exercices) et des titres des fiches : on ne l'édite pas à la main.
 
-**1570 notions**, et **1618 renvois** depuis l'autre langue ou un synonyme, dans l'ordre alphabétique (accents ignorés). Pour chaque notion :
+**1570 notions**, et **1541 renvois** depuis l'autre langue ou un synonyme, dans l'ordre alphabétique (accents ignorés). Pour chaque notion :
 
 - **enseignée** : le chapitre qui l'introduit (colonne « Ch. » du glossaire), puis ceux qui l'enseignent (leurs « notions enseignées »), chacun avec un lien vers la section de sa fiche qui la présente : un titre qui la nomme, sinon sa première définition (en gras ou suivie de sa glose), sinon la section qui en parle le plus ;
 - **exercices** : ceux qui couvrent cette section du livre, puis ceux dont le titre la nomme (10 au plus, le nombre des autres entre parenthèses) ;
@@ -34,7 +34,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - acteur → voir [acteur-critique, acteur, critique](#a)
 - **acteur-critique et GAE** — enseignée : [ch. B8, 208.4 · Acteur-critique : fonction de valeur, erreur TD, avantage, GAE][s409] · exercices : B8.4, B8.18, B8.20, B8.Q7
 - **acteur-critique, acteur, critique** (*actor-critic, actor, critic*) — enseignée : [ch. B8, 208.4 · Acteur-critique : fonction de valeur, erreur TD, avantage, GAE][s409] · exercices : 20.12, B8.4, B8.18, B8.20, B8.Q7, B8.Q11 · approfondie : ch. 5, 19
-- *action* → voir [agent, environnement, action, récompense](#a), [workflow, job, étape, action](#w)
 - action → voir [agent, environnement, action, récompense](#a), [workflow, job, étape, action](#w)
 - *action mask* → voir [masque d'actions](#m)
 - *activation function* → voir [fonction d'activation](#f)
@@ -73,9 +72,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **affine par morceaux** (*piecewise linear*) — enseignée : [ch. 17, 17.5 · Les fonctions linéaires par morceaux][s299] · exercices : 17.2, 17.5, 17.12, 17.18, 17.20, 17.23–24, 17.Q6–Q7, 17.R1 (+ 2)
 - **affirmation du conséquent** (*affirming the consequent*) — enseignée : [ch. 11, 11.4 · La déduction][s254] · exercices : 11.3, 11.5, 11.15, 11.Q7
 - *affirming the consequent* → voir [affirmation du conséquent](#a)
-- *agent* → voir [agent, environnement, action, récompense](#a)
 - **agent libre, déclenché** (*free-running, triggered agent*) — enseignée : [ch. 26, 26.3.4 · Des variantes de la version simple][s403] · exercices : 26.21, 26.35, 26.Q4
-- **agent, environnement, action, récompense** (*agent, environment, action, reward*) — enseignée : [ch. 1, 1.6 · Apprentissage par renforcement][s46] · exercices : 1.22, 1.E3, 1.Q9, 11.24, 20.10, 23.12, 26.Q1–Q4 (+ 20) · approfondie : ch. 26, B8 · réutilisée : ch. B8
+- **agent, environnement, action, récompense** (*environment, reward*) — enseignée : [ch. 1, 1.6 · Apprentissage par renforcement][s46] · exercices : 1.22, 1.E3, 1.Q9, 11.24, 20.10, 23.12, 26.Q1–Q4 (+ 20) · approfondie : ch. 26, B8 · réutilisée : ch. B8
 - **agentivité excessive** (*excessive agency*) — enseignée : [ch. B4, L'injection de prompt][s543] · exercices : B4.9–10, B4.24, B4.E1, B4.E5, B4.Q7, B4.Q12
 - *AI Act (règlement 2024/1689)* → voir [règlement européen sur l'IA](#r)
 - *AI winter* → voir [hiver de l'IA](#h)
@@ -146,8 +144,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **architectures BERT/GPT/T5** — enseignée : [ch. B3, 203.7 · Familles : encodeur (BERT), décodeur (GPT),…][s728] · exercices : B3.5, B3.11, B3.19, B3.E3, B3.Q5, B3.Q9
 - *area under the curve* → voir [AUC](#a)
 - **argparse et logging** — enseignée : [ch. B7, 207.2 · Scripts et ligne de commande : argparse, point d'entrée,…][s606] · exercices : B7.10, B7.25, B7.E1, B7.Q3
-- ***args, **kwargs, arguments keyword-only** — enseignée : [ch. 0A, 100.5.2 · Arguments positionnels et nommés, `*args`, `**kwargs`,…][s669] · exercices : 0A.6, 0A.40, 0A.Q6 · réutilisée : ch. 24
-- *argument* → voir [fonction, paramètre, argument](#f)
+- **\*args, \*\*kwargs, arguments keyword-only** — enseignée : [ch. 0A, 100.5.2 · Arguments positionnels et nommés, `*args`, `**kwargs`,…][s669] · exercices : 0A.6, 0A.40, 0A.Q6 · réutilisée : ch. 24
 - argument → voir [fonction, paramètre, argument](#f)
 - ARI → voir [indice de Rand ajusté (ARI)](#i)
 - *arithmetic coding* → voir [codage arithmétique](#c)
@@ -199,8 +196,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **autograd PyTorch** — enseignée : [ch. 20][s332] · réutilisée : ch. 27
 - *automatic differentiation* → voir [différentiation automatique](#d)
 - *automation bias* → voir [biais d'automatisation](#b)
-- *autoreset* → voir [autoreset (next-step, same-step)](#a)
-- **autoreset (next-step, same-step)** (*autoreset*) — enseignée : [ch. B8, Les environnements vectorisés][s646] · exercices : B8.5, B8.9, B8.11, B8.19–22, B8.Q8–Q9, B8.R2 (+ 2)
+- **autoreset (next-step, same-step)** — enseignée : [ch. B8, Les environnements vectorisés][s646] · exercices : B8.5, B8.9, B8.11, B8.19–22, B8.Q8–Q9, B8.R2 (+ 2)
 - **avantage** (*advantage*) — enseignée : [ch. B8, 208.4 · Acteur-critique : fonction de valeur, erreur TD, avantage, GAE][s409] · exercices : B8.4, B8.18, B8.20, B8.E1, B8.Q7
 - **average precision (AP)** (*précision moyenne*) — enseignée : [ch. 3, Au-delà du livre (2) : la courbe precision-recall et l'average…][s168] · exercices : 3.26
 - *averaged perceptron* → voir [perceptron moyenné](#p)
@@ -211,8 +207,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 ## B
 
 - **backbone** (*tronc*) — enseignée : [ch. B1, Backbone et tête][s444] · exercices : B1.7–8, B1.10, B1.16, B1.Q1–Q2, B1.R1, B1.R3
-- *backend* → voir [backend (de Keras)](#b)
-- **backend (de Keras)** (*backend*) — enseignée : [ch. 23, 23.3.3 · Installer et configurer la bibliothèque][s370] · exercices : 23.12, 23.E5, 23.Q5, 23.Q12
+- **backend (de Keras)** — enseignée : [ch. 23, 23.3.3 · Installer et configurer la bibliothèque][s370] · exercices : 23.12, 23.E5, 23.Q5, 23.Q12
 - *background* → voir [fond](#f)
 - *backprop* → voir [rétropropagation](#r)
 - *backpropagation* → voir [rétropropagation](#r)
@@ -230,7 +225,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *base rate fallacy* → voir [erreur du taux de base](#e)
 - *base value* → voir [valeur de base](#v)
 - **baseline** (*modèle de référence*) — enseignée : [ch. 0A, 100.6.4 · Sérialiser : `json` et `pickle`][s4] ; [ch. 13, 13.1 · Pourquoi ce chapitre ?][s107] ; [ch. B8, 208.3 · Gradient de politique : politique paramétrée, REINFORCE,…][s108] · exercices : 0A.39, 0A.Q8, 13.12, 13.Q1, B8.3, B8.7, B8.Q5–Q6, B8.Q9, B8.R3 (+ 6) · approfondie : ch. 22
-- **baseline (d'un gradient de politique)** (*baseline*) — enseignée : [ch. B8, 208.3 · Gradient de politique : politique paramétrée, REINFORCE,…][s108] · exercices : 13.E5, B8.3, B8.7, B8.16–17, B8.E1, B8.Q5–Q6, B8.Q9, B8.R3 (+ 2) · approfondie : ch. 22
+- **baseline (d'un gradient de politique)** — enseignée : [ch. B8, 208.3 · Gradient de politique : politique paramétrée, REINFORCE,…][s108] · exercices : 13.E5, B8.3, B8.7, B8.16–17, B8.E1, B8.Q5–Q6, B8.Q9, B8.R3 (+ 2) · approfondie : ch. 22
 - **batch** (*lot*) — enseignée : [ch. 0A, 100.8.7 · Aléatoire reproductible et mini-batches][s6] ; [ch. 19, 19.4.1 · La descente de gradient par batch][s7] · exercices : 0A.5, 0A.31, 0A.66, 0A.E4, 0A.Q11, 10.14, 19.25, 19.Q8, 23.5, 23.Q10 (+ 11) · réutilisée : ch. B3
 - *batch gradient descent* → voir [descente par batch](#d)
 - *batch inference* → voir [inférence par batches, en ligne](#i)
@@ -285,8 +280,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *binary* → voir [classification binaire, multi-classe, multi-étiquette](#c)
 - **binary relevance** (*pertinence binaire*) — enseignée : [ch. 7, 7.4.1 · Un-contre-tous (OvR)][s165] · exercices : 7.1, 7.16, 7.22, 7.Q6
 - *binomial coefficient* → voir [coefficient binomial](#c)
-- *bit* → voir [bit (d'information)](#b)
-- **bit (d'information)** (*bit, shannon, Sh*) — enseignée : [ch. 6, 6.3 · Le bit, une unité][s190] · exercices : 0B.16, 6.1–2, 6.10, 6.20, 6.Q4, 6.Q6, 6.Q12, 6.R3, 11.1 · approfondie : ch. 0B · réutilisée : ch. 13, 18
+- **bit (d'information)** (*shannon, Sh*) — enseignée : [ch. 6, 6.3 · Le bit, une unité][s190] · exercices : 0B.16, 6.1–2, 6.10, 6.20, 6.Q4, 6.Q6, 6.Q12, 6.R3, 11.1 · approfondie : ch. 0B · réutilisée : ch. 13, 18
 - **bits et nats** — enseignée : [ch. 6, Au-delà du livre (1) : bits, nats, log loss et perplexité][s191] · exercices : 0B.16 · approfondie : ch. 0B · réutilisée : ch. 18
 - *black box* → voir [boîte noire](#b)
 - *blanchiment* → voir [whitening](#w)
@@ -303,13 +297,12 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **bonus d'entropie** (*entropy bonus*) — enseignée : [ch. B8, La baseline et la variance][s643] · exercices : B8.3, B8.7, B8.16–17, B8.E1, B8.Q5–Q6, B8.Q9, B8.R3
 - *boolean mask* → voir [masque booléen](#m)
 - **boosting** — enseignée : [ch. 14, 14.7 · Le boosting][s275] · exercices : 14.2, 14.4, 14.6–8, 14.10, 14.Q8–Q11 (+ 17) · réutilisée : ch. 15, B6
-- *bootstrap* → voir [bootstrap, rééchantillon](#b)
 - *bootstrap aggregating* → voir [bagging](#b)
 - **bootstrap apparié** (*paired bootstrap*) — enseignée : [ch. 8, 8.6 · Utiliser les résultats du test][s222] · exercices : 8.2, 8.4, 8.8, 8.16, 8.18, 8.26–27, 8.E2, 8.E4, 8.Q11
 - *bootstrap sample* → voir [bootstrap, rééchantillon](#b)
 - **bootstrap stratifié (de runs)** (*stratified bootstrap*) — enseignée : [ch. B8, Rapporter plusieurs graines][s649] · exercices : B8.8, B8.15, B8.21–22, B8.27–28, B8.E3, B8.E5, B8.Q10
 - **bootstrap stratifié (par groupe)** (*stratified bootstrap*) — enseignée : [ch. B6][s576]
-- **bootstrap, rééchantillon** (*bootstrap, bootstrap sample*) — enseignée : [ch. 2, 2.6 · Le bootstrap][s145] ; [ch. 14, 14.4 · Le bagging][s146] · exercices : 2.6, 2.9–10, 2.22–24, 2.E3, 2.Q10, 14.Q4–Q5 (+ 13) · réutilisée : ch. 9, 26, B6, B7, B8
+- **bootstrap, rééchantillon** (*bootstrap sample*) — enseignée : [ch. 2, 2.6 · Le bootstrap][s145] ; [ch. 14, 14.4 · Le bagging][s146] · exercices : 2.6, 2.9–10, 2.22–24, 2.E3, 2.Q10, 14.Q4–Q5 (+ 13) · réutilisée : ch. 9, 26, B6, B7, B8
 - *bootstrapping* → voir [amorçage](#a)
 - *border point* → voir [point cœur, point de bord, bruit](#p)
 - *bottleneck* → voir [goulot](#g)
@@ -336,8 +329,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - bruit → voir [point cœur, point de bord, bruit](#p)
 - **bruit de Monte-Carlo** (*Monte Carlo error*) — enseignée : [ch. 2][s135]
 - **budget de pas (d'environnement)** (*environment step budget*) — enseignée : [ch. B8][s656]
-- *buffer* → voir [tampon (d'un optimiseur)](#t), [buffer (d'un module)](#b)
-- **buffer (d'un module)** (*buffer*) — enseignée : [ch. 20, Au-delà du livre : PyTorch en pratique][s2]
+- *buffer* → voir [tampon (d'un optimiseur)](#t)
+- **buffer (d'un module)** — enseignée : [ch. 20, Au-delà du livre : PyTorch en pratique][s2]
 - *byte fallback* → voir [repli sur les octets](#r)
 - *byte-level BPE* → voir [BPE au niveau octet](#b)
 - *byte-pair encoding* → voir [BPE](#b)
@@ -347,15 +340,13 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 
 - *C* → voir [marge souple, paramètre C](#m)
 - *C order* → voir [ordre C, ligne par ligne](#o)
-- *C2PA* → voir [métadonnées de provenance, C2PA](#m)
 - C2PA → voir [métadonnées de provenance, C2PA](#m)
 - **CACE** (*Changing Anything Changes Everything*) — enseignée : [ch. B7, La dette technique du ML][s634] · exercices : B7.4, B7.7–8, B7.16, B7.22, B7.E4, B7.Q11
 - *calibrated* → voir [calibration, calibré](#c)
-- *calibration* → voir [calibration, calibré](#c)
 - **calibration de Platt, régression isotone** (*Platt scaling, isotonic regression*) — enseignée : [ch. 15, Au-delà du livre : seuil de décision, calibration et classes…][s166]
 - **calibration par groupe** (*calibration within groups*) — enseignée : [ch. B6, Les critères][s597] · exercices : B6.5–6, B6.10, B6.23–25, B6.E3, B6.Q11, B6.R3
 - *calibration within groups* → voir [calibration par groupe](#c)
-- **calibration, calibré** (*calibration, calibrated*) — enseignée : [ch. 3, Au-delà du livre (3) : la calibration des probabilités][s169] · exercices : 3.28, 3.E5, B6.6, B6.Q11 · réutilisée : ch. 6, B6
+- **calibration, calibré** (*calibrated*) — enseignée : [ch. 3, Au-delà du livre (3) : la calibration des probabilités][s169] · exercices : 3.28, 3.E5, B6.6, B6.Q11 · réutilisée : ch. 6, B6
 - calibré → voir [calibration, calibré](#c)
 - *call stack* → voir [pile d'appels](#p)
 - **callback** — enseignée : [ch. 23, 23.10 · Callbacks][s376] · exercices : 23.25
@@ -443,8 +434,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *clip fraction* → voir [fraction clippée](#f)
 - **CLIP score** — enseignée : [ch. B5, La mémorisation][s572] · exercices : B5.10, B5.25, B5.28–29, B5.31, B5.Q10, B5.R2
 - *clipped objective* → voir [objectif clippé, PPO](#o)
-- *clone* → voir [clone (d'un estimateur)](#c)
-- **clone (d'un estimateur)** (*clone*) — enseignée : [ch. 8, 8.5.1 · La validation croisée à k folds][s218] · exercices : 8.1, 8.5, 8.14–15, 8.19, 8.21–22, 8.E3, 8.E5, 8.Q10 (+ 1) · approfondie : ch. 0A, 15 · réutilisée : ch. 14
+- **clone (d'un estimateur)** — enseignée : [ch. 8, 8.5.1 · La validation croisée à k folds][s218] · exercices : 8.1, 8.5, 8.14–15, 8.19, 8.21–22, 8.E3, 8.E5, 8.Q10 (+ 1) · approfondie : ch. 0A, 15 · réutilisée : ch. 14
 - *closed form* → voir [forme fermée (du processus direct)](#f)
 - *closed-world assumption* → voir [hypothèse du monde clos](#h)
 - *closure* → voir [fermeture](#f)
@@ -457,7 +447,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *coarse-to-fine search* → voir [recherche multirésolution](#r)
 - **codage arithmétique** (*arithmetic coding*) — enseignée : [ch. 6, Au-delà du livre (2) : le contexte réduit la surprise][s202]
 - *codage disjonctif* → voir [one-hot](#o)
-- *code* → voir [code, variables latentes](#c)
 - **code à longueur variable, code adaptatif** (*variable-length code*) — enseignée : [ch. 6, 6.6 · Les codes adaptatifs][s194] · exercices : 6.4, 6.6, 6.13, 6.15, 6.23–24, 6.27, 6.Q7
 - code adaptatif → voir [code à longueur variable, code adaptatif](#c)
 - **code de colle** (*glue code*) — enseignée : [ch. B7, La dette technique du ML][s634] · exercices : B7.4, B7.7–8, B7.16, B7.22, B7.E4, B7.Q11
@@ -468,7 +457,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *code point* → voir [point de code](#p)
 - **code préfixe** (*prefix code, prefix-free code*) — enseignée : [ch. 6, 6.6 · Les codes adaptatifs][s194] · exercices : 6.4, 6.6, 6.13, 6.15, 6.23–24, 6.27, 6.Q7
 - *code review* → voir [revue de code](#r)
-- **code, variables latentes** (*code, latent variables*) — enseignée : [ch. 25, 25.5.1 · Les variables latentes de près][s393] · exercices : 0A.Q5, 0B.35, 6.4, 6.6, 6.18, 6.24, 6.Q7, 6.Q10, 25.19, 25.Q7 (+ 13) · approfondie : ch. 6 · réutilisée : ch. 6
+- **code, variables latentes** (*latent variables*) — enseignée : [ch. 25, 25.5.1 · Les variables latentes de près][s393] · exercices : 0A.Q5, 0B.35, 6.4, 6.6, 6.18, 6.24, 6.Q7, 6.Q10, 25.19, 25.Q7 (+ 13) · approfondie : ch. 6 · réutilisée : ch. 6
 - **codes adaptatifs** — enseignée : [ch. 6, 6.6 · Les codes adaptatifs][s194] · exercices : 6.4, 6.6, 6.13, 6.15, 6.23–24, 6.27, 6.Q7
 - **codes de longueur fixe** — enseignée : [ch. 6, 6.6 · Les codes adaptatifs][s194] · exercices : 6.4, 6.6, 6.13, 6.15, 6.23–24, 6.27, 6.Q7
 - **coefficient binomial** (*binomial coefficient, « n choose k »*) — enseignée : [ch. 0B, 101.1.7 · Dénombrement : principe multiplicatif, factorielle,…][s11] · exercices : 0B.12, 0B.33, 0B.Q5 · réutilisée : ch. 7, 14, 15
@@ -489,8 +478,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **comparaison appariée** (*paired comparison*) — enseignée : [ch. 8][s220]
 - **comparaisons multiples** (*multiple comparisons*) — enseignée : [ch. B6, Des écarts avec leurs intervalles][s598] · exercices : B6.5–6, B6.10, B6.23–25, B6.E3, B6.Q11, B6.R3
 - *compatibility normalization* → voir [NFC, NFD, NFKC](#n)
-- *compilation* → voir [compilation (d'un modèle)](#c)
-- **compilation (d'un modèle)** (*compilation, torch.compile*) — enseignée : [ch. 24, Au-delà du livre : précision mixte et compilation][s391]
+- **compilation (d'un modèle)** (*torch.compile*) — enseignée : [ch. 24, Au-delà du livre : précision mixte et compilation][s391]
 - complet → voir [fine-tuning partiel, complet](#f)
 - *completeness* → voir [complétude](#c)
 - **complétude** (*completeness*) — enseignée : [ch. B6, Les gradients intégrés][s590] · exercices : B6.3, B6.18–19, B6.Q7, B6.R1
@@ -541,7 +529,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *constrained decoding* → voir [génération contrainte](#g)
 - *container* → voir [conteneur, image](#c)
 - **contamination (d'un benchmark)** (*benchmark contamination*) — enseignée : [ch. 8, 8.6 · Utiliser les résultats du test][s222] · exercices : 8.2, 8.4, 8.8, 8.16, 8.18, 8.26–27, 8.E2, 8.E4, 8.Q11 (+ 1)
-- **conteneur, image** (*container, image*) — enseignée : [ch. B7, 207.9 · Conteneurs et déploiement : Dockerfile, variables…][s626] · exercices : 0A.54, 0A.Q10, 1.10, 2.11, 2.Q11, 20.26, B7.23–25, B7.Q4 (+ 37) · approfondie : ch. 0A · réutilisée : ch. B2
+- **conteneur, image** (*container*) — enseignée : [ch. B7, 207.9 · Conteneurs et déploiement : Dockerfile, variables…][s626] · exercices : 0A.54, 0A.Q10, 1.10, 2.11, 2.Q11, 20.26, B7.23–25, B7.Q4 (+ 37) · approfondie : ch. 0A · réutilisée : ch. B2
 - *content credentials* → voir [métadonnées de provenance, C2PA](#m)
 - *content image* → voir [image de contenu, référence de style, image générée](#i)
 - *content loss* → voir [loss de contenu](#l)
@@ -654,8 +642,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *data test* → voir [test de données](#t)
 - *data type* → voir [dtype](#d)
 - **dataclasses (@dataclass)** — enseignée : [ch. 0A, 100.7.1 · `class`, `__init__`, attributs et méthodes ; `@dataclass`][s679] · exercices : 0A.47, 0A.Q9 · réutilisée : ch. B4, B7
-- *DataFrame* → voir [DataFrame, Series](#d)
-- **DataFrame, Series** (*DataFrame, Series*) — enseignée : [ch. 0A, 100.9.1 · `DataFrame` et `Series` : `read_csv`, `head`, `info`,…][s73] · exercices : 0A.32, 0A.Q12
+- **DataFrame, Series** — enseignée : [ch. 0A, 100.9.1 · `DataFrame` et `Series` : `read_csv`, `head`, `info`,…][s73] · exercices : 0A.32, 0A.Q12
 - DataLoader → voir [`Dataset`, `DataLoader`](#d)
 - Datasaurus → voir [quartet d'Anscombe, Datasaurus](#q)
 - *Datasaurus Dozen* → voir [quartet d'Anscombe, Datasaurus](#q)
@@ -664,7 +651,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **Dataset généré à la volée** — enseignée : [ch. 24][s713]
 - **dataset retiré** (*retracted dataset*) — enseignée : [ch. 29, 29.5 · Des datasets plus récents][s443] · exercices : 15.7, 29.3, 29.5, 29.9, 29.11, 29.14, 29.E4, 29.Q8
 - *dataset shift* → voir [décalage de distribution](#d)
-- **`Dataset`, `DataLoader`** (*dataset, data loader*) — enseignée : [ch. 20, Au-delà du livre : PyTorch en pratique][s2] · exercices : 0A.66, 15.7, 15.11, 15.Q12, 20.19, 23.15, 29.Q1, 29.Q5–Q7 (+ 11) · approfondie : ch. 23, 24, 29 · réutilisée : ch. 21, 22, 23, 25, 27, 28, 29, B1
+- **`Dataset`, `DataLoader`** (*data loader*) — enseignée : [ch. 20, Au-delà du livre : PyTorch en pratique][s2] · exercices : 0A.66, 15.7, 15.11, 15.Q12, 20.19, 23.15, 29.Q1, 29.Q5–Q7 (+ 11) · approfondie : ch. 23, 24, 29 · réutilisée : ch. 21, 22, 23, 25, 27, 28, 29, B1
 - **datasheet (d'un dataset)** (*datasheet for datasets*) — enseignée : [ch. 29, Au-delà du livre : documenter et télécharger][s125] · exercices : 29.6
 - *datasheet for datasets* → voir [datasheet (d'un dataset)](#d)
 - **dates avec pandas (to_datetime, dt)** — enseignée : [ch. 12, Au-delà du livre : assembler les données avec pandas et SQL][s272]
@@ -722,8 +709,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **dégel progressif** (*gradual unfreezing*) — enseignée : [ch. B1, 201.4 · Fine-tuning : partiel, complet, dégel progressif, learning…][s447] · exercices : B1.3–4, B1.6, B1.17–19, B1.Q5–Q7, B1.R2 (+ 3)
 - *delimiters* → voir [délimiteurs (d'un prompt)](#d)
 - **délimiteurs (d'un prompt)** (*delimiters*) — enseignée : [ch. B4, L'anatomie d'un prompt][s545] · exercices : B4.15–16, B4.E1, B4.Q6
-- *delta* → voir [delta (d'un neurone)](#d)
-- **delta (d'un neurone)** (*delta, error term*) — enseignée : [ch. 18, 18.6 · Étape 1 : les deltas des neurones de sortie][s304] · exercices : 18.2, 18.4, 18.8, 18.12, 18.14, 18.17, 18.E5, 18.Q4–Q6 (+ 3)
+- **delta (d'un neurone)** (*error term*) — enseignée : [ch. 18, 18.6 · Étape 1 : les deltas des neurones de sortie][s304] · exercices : 18.2, 18.4, 18.8, 18.12, 18.14, 18.17, 18.E5, 18.Q4–Q6 (+ 3)
 - **delta d'un neurone** — enseignée : [ch. 18, 18.6 · Étape 1 : les deltas des neurones de sortie][s304] · exercices : 18.2, 18.4, 18.8, 18.12, 18.14, 18.17, 18.E5, 18.Q4–Q5
 - *delta degrees of freedom* → voir [ddof](#d)
 - *demande de fusion* → voir [pull request](#p)
@@ -770,7 +756,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **dérivées partielles, gradient, pas de descente** — enseignée : [ch. 0B, 101.6.2 · Dérivées partielles][s98] · exercices : 0B.25, 0B.29, 0B.31, 0B.49–51, 0B.E1, 0B.Q11, 5.Q1, 5.Q7 (+ 81) · approfondie : ch. 5, 14, 18, 19, 22, 28, B6, B8 · réutilisée : ch. 5, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 28, B3, B6, B8
 - **dérivées usuelles (puissances, exp, ln) et règles (somme, produit, quotient)** — enseignée : [ch. 0B, 101.5.2 · Dérivées usuelles et règles (somme, produit, quotient,…][s683] · exercices : 0B.22, 0B.47, 0B.Q10
 - **déroulement** (*unrolling*) — enseignée : [ch. 22][s360] · exercices : 22.Q3
-- *descendant* → voir [parent, enfant ; ancêtre, descendant](#p)
 - descendant → voir [parent, enfant ; ancêtre, descendant](#p)
 - **descente de coordonnées** (*coordinate descent*) — enseignée : [ch. 9, La pénalité L1 : Lasso et les zéros exacts][s231] · exercices : 9.3, 9.6, 9.17–19, 9.22–23, 9.28, 9.Q7–Q8 (+ 2)
 - **descente de gradient** (*gradient descent*) — enseignée : [ch. 0B, 101.6.3 · Gradient et direction de plus grande pente][s41] ; [ch. 5, Suivre la pente jusqu'à un extremum][s13] · exercices : 0B.25, 0B.31, 0B.49–50, 0B.E1, 0B.Q11, 5.Q4–Q6, 5.Q9 (+ 21) · réutilisée : ch. 8, 9, 12, 13, 14, 18, 19, 27, 28
@@ -841,8 +826,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - divergence de Kullback-Leibler → voir [divergence KL, divergence de Kullback-Leibler](#d)
 - **divergence KL entre gaussiennes** — enseignée : [ch. 25][s721]
 - **divergence KL, divergence de Kullback-Leibler** (*KL divergence, relative entropy*) — enseignée : [ch. 6, 6.9 · La divergence KL][s199] · exercices : 6.5, 6.7, 6.16, 6.18, 6.25, 6.E2, 6.E4, 6.Q11, 25.7, 25.R3 (+ 2) · approfondie : ch. 25 · réutilisée : ch. 25, B7, B8
-- *Dockerfile* → voir [Dockerfile, couche](#d)
-- **Dockerfile, couche** (*Dockerfile, layer*) — enseignée : [ch. B7, 207.9 · Conteneurs et déploiement : Dockerfile, variables…][s626] · exercices : 1.3, 10.5, 16.3, 16.13, 16.17, 16.22, B7.23–25, B7.Q4 (+ 41) · approfondie : ch. 20 · réutilisée : ch. 20, 21, 22, 25, 27
+- **Dockerfile, couche** (*layer*) — enseignée : [ch. B7, 207.9 · Conteneurs et déploiement : Dockerfile, variables…][s626] · exercices : 1.3, 10.5, 16.3, 16.13, 16.17, 16.22, B7.23–25, B7.Q4 (+ 41) · approfondie : ch. 20 · réutilisée : ch. 20, 21, 22, 25, 27
 - **docstring** — enseignée : [ch. 0A, 100.5.5 · Docstrings au format NumPy et annotations de type][s61] · exercices : 0A.61, 0A.Q7, 2.31, 10.20 · réutilisée : ch. 10
 - **docstrings au format NumPy, annotations de type** — enseignée : [ch. 0A, 100.5.5 · Docstrings au format NumPy et annotations de type][s61] · exercices : 0A.61, 0A.Q7
 - **documentation de provenance et de licences** — enseignée : [ch. 28][s349]
@@ -859,9 +843,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *dot product* → voir [produit scalaire](#p)
 - *double descent* → voir [double descente](#d)
 - **double descente** (*double descent*) — enseignée : [ch. 9, 9.6.4 · Le compromis biais-variance, et ses limites][s239] · exercices : 9.4, 9.11, 9.25, 9.30–31, 9.E5, 9.Q9
-- *Double DQN* → voir [double estimateur, Double DQN](#d)
 - Double DQN → voir [double estimateur, Double DQN](#d)
-- **double estimateur, Double DQN** (*double estimator, Double DQN*) — enseignée : [ch. B8, 208.2 · DQN : réseau Q, mémoire de rejeu, réseau cible, loss de…][s234] · exercices : B8.1–2, B8.13–15, B8.E1, B8.Q3–Q4, B8.Q9, B8.R1
+- **double estimateur, Double DQN** (*double estimator*) — enseignée : [ch. B8, 208.2 · DQN : réseau Q, mémoire de rejeu, réseau cible, loss de…][s234] · exercices : B8.1–2, B8.13–15, B8.E1, B8.Q3–Q4, B8.Q9, B8.R1
 - *double estimator* → voir [double estimateur, Double DQN](#d)
 - **doublons et fuites entre découpages** — enseignée : [ch. 29][s442]
 - DP-SGD → voir [confidentialité différentielle (DP-SGD)](#c)
@@ -887,7 +870,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *earth mover's distance* → voir [distance de Wasserstein (1D)](#d)
 - **écart de généralisation** (*generalization gap*) — enseignée : [ch. 9, 9.2 · Overfitting et underfitting][s26] · exercices : 9.1, 9.12, 9.14, 9.E2, 9.Q1
 - **écart interquartile** (*interquartile range, IQR*) — enseignée : [ch. 12, 12.4 · Le nettoyage de base][s264] · exercices : 12.11, 12.Q4
-- **écart simulation-réalité, sim-to-real** (*reality gap, sim-to-real*) — enseignée : [ch. B8, 208.8 · Limites : efficacité en échantillons, généralisation,…][s648] · exercices : B8.8, B8.23–24, B8.Q12
+- **écart simulation-réalité, sim-to-real** (*reality gap*) — enseignée : [ch. B8, 208.8 · Limites : efficacité en échantillons, généralisation,…][s648] · exercices : B8.8, B8.23–24, B8.Q12
 - écart-type → voir [variance, écart-type](#v)
 - **écart-type par mini-batch** (*minibatch standard deviation*) — enseignée : [ch. 27, 27.5 · Un GAN en action][s423] · exercices : 27.4, 27.11, 27.13–15, 27.Q7
 - **échantillon** (*sample*) — enseignée : [ch. 1, 1.2.2 · La version pour ordinateur : échantillons, features, labels][s12] · exercices : 0B.E5, 1.5, 1.9, 1.14, 1.16–17, 1.Q3, 1.R1, 2.10, CP1.13 (+ 8)
@@ -951,7 +934,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *endpoint* → voir [API HTTP, route](#a)
 - enfant → voir [parent, enfant ; ancêtre, descendant](#p)
 - **ensemble** (*set*) — enseignée : [ch. 0A, 100.3.4 · Ensembles][s55] ; [ch. 14, 14.2 · Les ensembles][s56] · exercices : 0A.19, 0A.E2, 0A.Q4, 0B.5, 0B.Q5, 14.5, 14.9, 14.13, 14.Q1–Q2 (+ 6) · approfondie : ch. 0B · réutilisée : ch. 3, 11, 15
-- **ensemble (de modèles)** (*ensemble, ensemble learning*) — enseignée : [ch. 14, 14.2 · Les ensembles][s56] · exercices : 0A.19, 0A.E2, 0B.5, 0B.Q5, 3.R2, 14.5, 14.9, 14.13, 14.Q1–Q2 (+ 5) · approfondie : ch. 0A, 0B · réutilisée : ch. 3, 11, 15
+- **ensemble (de modèles)** (*ensemble learning*) — enseignée : [ch. 14, 14.2 · Les ensembles][s56] · exercices : 0A.19, 0A.E2, 0B.5, 0B.Q5, 3.R2, 14.5, 14.9, 14.13, 14.Q1–Q2 (+ 5) · approfondie : ch. 0A, 0B · réutilisée : ch. 3, 11, 15
 - **ensemble de prompts** (*prompt ensembling*) — enseignée : [ch. B1, Le zéro-shot][s456] · exercices : B1.5, B1.15, B1.24–25, B1.E4, B1.Q10–Q11
 - *ensemble learning* → voir [ensemble (de modèles)](#e)
 - **ensembles : union, intersection, complémentaire, cardinal** — enseignée : [ch. 0B, 101.1.6 · Ensembles : union, intersection, complémentaire, cardinal][s81] · exercices : 0B.5, 0B.11, 0B.Q5, 3.R2 · réutilisée : ch. 3
@@ -1007,7 +990,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **espérance** (*expected value, expectation*) — enseignée : [ch. 0B, 101.7.3 · Variable aléatoire discrète et espérance][s103] ; [ch. 2, 2.3.5 · L'espérance][s104] · exercices : 0B.27–28, 0B.53, 0B.E5, 0B.Q12, 2.5, 2.Q7, 2.R3, 20.5, 24.6 · réutilisée : ch. 4, 6, 11, 20, 25, 26, B8
 - *essaim d'abeilles* → voir [beeswarm](#b)
 - **estimateur (scikit-learn)** (*estimator*) — enseignée : [ch. 15, 15.4 · Les estimateurs][s285] · exercices : 8.16, 9.R3, 15.8–9, 15.29, 15.Q3, 15.Q9, 16.R1, 24.16 · approfondie : ch. 24 · réutilisée : ch. 9, 14, 29
-- **estimateur *straight-through*** (*straight-through estimator, STE*) — enseignée : [ch. 10][s245]
+- **estimateur \*straight-through\*** (*straight-through estimator, STE*) — enseignée : [ch. 10][s245]
 - **estimateur scikit-learn autour d'un réseau PyTorch** — enseignée : [ch. 24, 24.3.1 · Habiller un réseau en estimateur][s714] · exercices : 24.16, 24.Q5
 - *estimator* → voir [estimateur (scikit-learn)](#e)
 - étape → voir [workflow, job, étape, action](#w)
@@ -1016,7 +999,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **état caché (d'un notebook)** (*hidden state*) — enseignée : [ch. B7, Ce que cache un notebook][s604] · exercices : 22.9, B7.6, B7.8–9, B7.25, B7.E1, B7.Q1–Q2
 - **état porté** (*stateful RNN, carried state*) — enseignée : [ch. 24, 24.5.9 · Les RNN « stateful »][s389] · exercices : 24.27, 24.Q11
 - **état terminal, épisode tronqué** (*terminal state, truncation*) — enseignée : [ch. 26, 26.6.1 · Les valeurs Q et leur mise à jour][s406] · exercices : 26.3, 26.8, 26.20, 26.Q8, B8.1
-- **état, transition** (*state, transition*) — enseignée : [ch. 26, 26.3.1 · Premier temps : l'agent choisit une action][s401] · exercices : 22.9, 22.Q2, 22.Q4, 22.Q12, 24.27, 25.R2, 26.4, 26.13, 26.Q3, 26.Q8 (+ 7) · approfondie : ch. 24
+- **état, transition** (*state*) — enseignée : [ch. 26, 26.3.1 · Premier temps : l'agent choisit une action][s401] · exercices : 22.9, 22.Q2, 22.Q4, 22.Q12, 24.27, 25.R2, 26.4, 26.13, 26.Q3, 26.Q8 (+ 7) · approfondie : ch. 24
 - *Euler method* → voir [méthode d'Euler](#m)
 - *evaluation* → voir [évaluation](#e)
 - **évaluation** (*evaluation*) — enseignée : [ch. 11, 11.2.2 · L'évaluation][s248] · exercices : 8.23, 11.12, 11.Q1, 11.Q4, CP2.5, 12.R1, 16.4, 16.Q7, 18.R3, CP4.4 (+ 4) · approfondie : ch. B4, B5, B8
@@ -1058,11 +1041,9 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - explication locale → voir [explication globale, explication locale](#e)
 - **explication post hoc** (*post-hoc explanation*) — enseignée : [ch. 13, 13.7 · Bilan : choisir un classifieur][s273] · exercices : 13.9, 13.11–12, 13.23, 13.33, 13.35–36, 13.E5, 13.Q12
 - *exploding gradient* → voir [gradient évanescent, explosif](#g)
-- *exploitation* → voir [exploration, exploitation](#e)
 - exploitation → voir [exploration, exploitation](#e)
-- *exploration* → voir [exploration, exploitation](#e)
 - **exploration / exploitation** — enseignée : [ch. 1][s111] · exercices : 11.E1, 26.10, 26.E3, 26.Q5, B8.14, B8.R3, PF.3 · réutilisée : ch. 11, B8
-- **exploration, exploitation** (*exploration, exploitation*) — enseignée : [ch. 26, 26.6.2 · La politique du Q-learning][s260] · exercices : 11.E1, 26.5, 26.10, 26.19, 26.E3, 26.Q5, 26.Q9, 26.R3, B8.14, B8.R3 (+ 1) · réutilisée : ch. 11, B8
+- **exploration, exploitation** — enseignée : [ch. 26, 26.6.2 · La politique du Q-learning][s260] · exercices : 11.E1, 26.5, 26.10, 26.19, 26.E3, 26.Q5, 26.Q9, 26.R3, B8.14, B8.R3 (+ 1) · réutilisée : ch. 11, B8
 - *exploratory data analysis* → voir [analyse exploratoire](#a)
 - explosif → voir [gradient évanescent, explosif](#g)
 - *exponential linear unit* → voir [ELU](#e)
@@ -1102,8 +1083,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **fan-in, fan-out** (*entrées, sorties d'une couche*) — enseignée : [ch. 16, 16.2 · Les graphes de réseaux de neurones][s294] · exercices : 16.2, 16.4, 16.9, 16.16–18, 16.Q1–Q4 (+ 2)
 - fan-out → voir [fan-in, fan-out](#f)
 - *fast gradient sign method* → voir [FGSM, PGD](#f)
-- *FastAPI* → voir [FastAPI, uvicorn, pydantic](#f)
-- **FastAPI, uvicorn, pydantic** (*FastAPI, uvicorn, pydantic*) — enseignée : [ch. B7, 207.3 · Configuration : dataclasses, YAML ou JSON, surcharges,…][s610] · exercices : B7.11, B7.18, B7.25, B7.E1, B7.Q4
+- **FastAPI, uvicorn, pydantic** — enseignée : [ch. B7, 207.3 · Configuration : dataclasses, YAML ou JSON, surcharges,…][s610] · exercices : B7.11, B7.18, B7.25, B7.E1, B7.Q4
 - faux négatif → voir [vrai positif, faux positif, faux négatif, vrai négatif](#v)
 - faux positif → voir [vrai positif, faux positif, faux négatif, vrai négatif](#v)
 - *FDR* → voir [taux de fausses découvertes, de fausses omissions](#t)
@@ -1153,8 +1133,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *finite difference* → voir [différence finie (avant, arrière, centrée)](#d)
 - *fitted attribute* → voir [attribut appris](#a)
 - *fixed-length code* → voir [code de longueur fixe](#c)
-- *fixture* → voir [fixture (pytest)](#f)
-- **fixture (pytest)** (*fixture*) — enseignée : [ch. B7, Quatre familles de tests][s607] · exercices : B7.15, B7.23, B7.25, B7.E3, B7.Q7
+- **fixture (pytest)** — enseignée : [ch. B7, Quatre familles de tests][s607] · exercices : B7.15, B7.23, B7.25, B7.E3, B7.Q7
 - **flagornerie** (*sycophancy*) — enseignée : [ch. B8, Le piratage de la récompense][s653] · exercices : B8.6, B8.10, B8.25–26, B8.E4, B8.Q11–Q12
 - **FlashAttention** — enseignée : [ch. B3, 203.10 · Coût et passage à l'échelle : complexité quadratique,…][s354] · exercices : B3.8, B3.10, B3.27–28, B3.E2, B3.Q12
 - *flatten* → voir [aplatissement](#a)
@@ -1176,7 +1155,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **fonction fit() avec historique** — enseignée : [ch. 23, 23.8.3 · Analyser l'historique][s374] · exercices : 23.6, 23.19, 23.27, 23.E4
 - **fonction score** (*score function*) — enseignée : [ch. B8, Apprendre la politique elle-même][s641] · exercices : B8.3, B8.7, B8.16–17, B8.E1, B8.Q5–Q6, B8.Q9, B8.R3
 - fonction signe → voir [marche unité, marche de Heaviside, fonction signe](#m)
-- **fonction, paramètre, argument** (*function, parameter, argument*) — enseignée : [ch. 0A, 100.5 · Fonctions][s58] · exercices : 0A.6, 0A.23, 0A.30, 0A.40–42, 0A.44, 0A.Q6, 0B.36, 0B.R3 (+ 49) · approfondie : ch. 0B, 10, 16, 23 · réutilisée : ch. 0B, 1, 2, 5, 6, 7, 9, 10, 11, 13, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, B1, B8
+- **fonction, paramètre, argument** (*function, parameter*) — enseignée : [ch. 0A, 100.5 · Fonctions][s58] · exercices : 0A.6, 0A.23, 0A.30, 0A.40–42, 0A.44, 0A.Q6, 0B.36, 0B.R3 (+ 49) · approfondie : ch. 0B, 10, 16, 23 · réutilisée : ch. 0B, 1, 2, 5, 6, 7, 9, 10, 11, 13, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, B1, B8
 - **fonctions affines et polynômes** — enseignée : [ch. 0B, 101.2 · Fonctions usuelles][s681] · exercices : 0B.Q6
 - **fonctions de deux variables, lignes de niveau (lecture)** — enseignée : [ch. 0B, 101.6.1 · Fonctions de deux variables et lignes de niveau][s99] · exercices : 0B.25, 0B.49, 0B.Q11, 5.17 · approfondie : ch. 5 · réutilisée : ch. 5
 - **fonctions, valeurs par défaut, portée** — enseignée : [ch. 0A, 100.5 · Fonctions][s58] · exercices : 0A.6, 0A.23, 0A.30, 0A.41–42, 0A.44, 0A.Q6, 0B.36, 0B.40, 17.Q8 · approfondie : ch. 0B · réutilisée : ch. 0B, 6, 10, 11, 13, 16, 18
@@ -1280,15 +1259,13 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *global context* → voir [contexte global, contexte local](#c)
 - *global extremum* → voir [extremum local, extremum global](#e)
 - *global vectors* → voir [GloVe](#g)
-- *Glorot* → voir [initialisation LeCun, Glorot (Xavier), He (Kaiming)](#i)
 - Glorot → voir [initialisation LeCun, Glorot (Xavier), He (Kaiming)](#i)
 - **GloVe** (*global vectors*) — enseignée : [ch. B2, Compter ou prédire : les deux se rejoignent][s483] · exercices : B2.6–7, B2.22, B2.24–25, B2.Q10
 - *glue code* → voir [code de colle](#c)
 - *golden file* → voir [fichier de référence figé](#f)
 - *Goodhart's law* → voir [loi de Goodhart](#l)
 - **goulot** (*bottleneck*) — enseignée : [ch. 25, 25.3 · Le plus simple des autoencodeurs][s120] · exercices : 25.1, 25.9, 25.14–15, 25.22, 25.Q4–Q5, 25.R1, B3.Q1
-- *GPU* → voir [GPU, TPU, NPU](#g)
-- **GPU, TPU, NPU** (*GPU, TPU, NPU*) — enseignée : [ch. 1, 1.7 · Deep learning][s27] · exercices : 1.1, 1.3, 1.10, 1.23, 1.E4, 1.Q10–Q11, 23.Q7, 24.7, B7.12 · approfondie : ch. 20
+- **GPU, TPU, NPU** — enseignée : [ch. 1, 1.7 · Deep learning][s27] · exercices : 1.1, 1.3, 1.10, 1.23, 1.E4, 1.Q10–Q11, 23.Q7, 24.7, B7.12 · approfondie : ch. 20
 - GQA → voir [MQA, GQA](#m)
 - **Grad-CAM** (*gradient-weighted class activation mapping*) — enseignée : [ch. 21, 21.9.3 · Regarder les filtres (2) : les cartes d'activation][s350] · exercices : 21.27, 21.Q10, B6.4, B6.20–21, B6.E4, B6.Q8 · approfondie : ch. B6
 - **Grad-CAM par hooks** — enseignée : [ch. B6, 206.6 · Grad-CAM : cartes d'activation pondérées par les gradients][s738] · exercices : B6.4, B6.18, B6.20–22, B6.E4, B6.Q8–Q9, B6.R1
@@ -1350,7 +1327,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *Hadamard product* → voir [produit de Hadamard](#p)
 - **hallucination** — enseignée : [ch. 1][s111] ; [ch. B4, 204.10 · Usage responsable : hallucinations, injection de prompt,…][s132] · exercices : B4.9–10, B4.24, B4.E1, B4.E5, B4.Q7, B4.Q12
 - *halting problem* → voir [problème de l'arrêt](#p)
-- *handler* → voir [logger, handler](#l)
 - handler → voir [logger, handler](#l)
 - *hard voting* → voir [vote dur, vote souple](#v)
 - *harmonic mean* → voir [moyenne harmonique](#m)
@@ -1392,20 +1368,19 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *Hume's fork* → voir [fourche de Hume](#f)
 - *hybrid search* → voir [recherche hybride](#r)
 - *hyperbolic tangent* → voir [tangente hyperbolique](#t)
-- *hypercube* → voir [hypersphère, hypercube](#h)
 - hypercube → voir [hypersphère, hypercube](#h)
 - *hyperparameter* → voir [hyperparamètre](#h)
 - **hyperparamètre** (*hyperparameter*) — enseignée : [ch. 1, 1.2.4 · Modèle, paramètres, capacité, hyperparamètres][s38] · exercices : 1.1, 1.16–17, 1.E2, 1.Q5, 8.2, 15.5, 15.Q3, 19.11, 24.Q1 (+ 10) · approfondie : ch. 8, 24 · réutilisée : ch. 7, 8, 19
 - **hyperplan** (*hyperplane*) — enseignée : [ch. 7, 7.3 · Plusieurs classes, plusieurs dimensions][s207] ; [ch. 10, 10.3.1 · Le perceptron][s208] · exercices : 7.14, 7.24, 7.Q2, 7.Q5, 10.1, 10.3, 10.Q5–Q6, 10.R2–R3 (+ 8)
 - *hyperplane* → voir [hyperplan](#h)
 - *hypersphere* → voir [hypersphère, hypercube](#h)
-- **hypersphère, hypercube** (*hypersphere, hypercube*) — enseignée : [ch. 7][s216]
+- **hypersphère, hypercube** (*hypersphere*) — enseignée : [ch. 7][s216]
 - *hypertrucage* → voir [deepfake](#d)
 - **hypothèse de la variété** (*manifold hypothesis*) — enseignée : [ch. 7, 7.6 · La malédiction de la dimension][s148] · exercices : 7.4, 7.8, 7.20, 7.30–31, 7.E4, 7.Q9–Q10
 - **hypothèse distributionnelle** (*distributional hypothesis*) — enseignée : [ch. B2, L'hypothèse distributionnelle][s477] · exercices : B2.6–7, B2.22, B2.24–25, B2.Q10
 - **hypothèse du monde clos** (*closed-world assumption*) — enseignée : [ch. 11, 11.4 · La déduction][s254] · exercices : 11.3, 11.5, 11.15, 11.Q7
 - **hypothèse nulle** (*null hypothesis*) — enseignée : [ch. 8, 8.6 · Utiliser les résultats du test][s222] · exercices : 8.2, 8.4, 8.8, 8.16, 8.18, 8.26–27, 8.E2, 8.E4, 8.Q11
-- **hypothèse, observation** (*hypothesis, observation*) — enseignée : [ch. 4, 4.7 · Plusieurs hypothèses][s172] · exercices : 4.6–7, 4.15, 4.18, 4.21–22, 4.24–25, 4.Q7, 4.Q10 (+ 7) · réutilisée : ch. 8
+- **hypothèse, observation** (*hypothesis*) — enseignée : [ch. 4, 4.7 · Plusieurs hypothèses][s172] · exercices : 4.6–7, 4.15, 4.18, 4.21–22, 4.24–25, 4.Q7, 4.Q10 (+ 7) · réutilisée : ch. 8
 - **hypothèses multiples** — enseignée : [ch. 4, 4.7 · Plusieurs hypothèses][s172] · exercices : 4.6–7, 4.15, 4.18, 4.21–22, 4.24–25, 4.Q7, 4.Q10 (+ 1)
 - *hypothesis* → voir [hypothèse, observation](#h)
 - *hypothetico-deductive method* → voir [méthode hypothético-déductive](#m)
@@ -1422,7 +1397,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *illicit major* → voir [majeur illicite, mineur illicite](#m)
 - *illicit minor* → voir [majeur illicite, mineur illicite](#m)
 - **im2col** (*unfold*) — enseignée : [ch. 21, 21.3.2 · La vue « œil de mouche »][s346] · exercices : 21.14, 21.Q3
-- *image* → voir [conteneur, image](#c)
 - image → voir [conteneur, image](#c)
 - **image de contenu, référence de style, image générée** (*content image, style reference, generated image*) — enseignée : [ch. 28, 28.4 · Le transfert de style][s432] · exercices : 28.9–10, 28.E2, 28.Q6, 28.R2
 - image générée → voir [image de contenu, référence de style, image générée](#i)
@@ -1447,8 +1421,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *independence* → voir [indépendance](#i)
 - *independent and identically distributed* → voir [i.i.d.](#i)
 - *independent randomization* → voir [randomisation en cascade, indépendante](#r)
-- *index* → voir [index (recherche sémantique)](#i)
-- **index (recherche sémantique)** (*index*) — enseignée : [ch. B2, Un numéro n'est pas une représentation][s489] · exercices : B2.5, B2.9, B2.25, B2.E3, B2.Q9, B2.R1
+- **index (recherche sémantique)** — enseignée : [ch. B2, Un numéro n'est pas une représentation][s489] · exercices : B2.5, B2.9, B2.25, B2.E3, B2.Q9, B2.R1
 - **indicateurs d'équité par groupe** — enseignée : [ch. B6, 206.9 · Équité : indicateurs de groupe (parité démographique,…][s596] · exercices : B6.5–6, B6.10, B6.23–25, B6.E3, B6.Q11, B6.R3
 - **indice de Rand ajusté (ARI)** (*adjusted Rand index*) — enseignée : [ch. 7, 7.6.1 · Bizarreries de la grande dimension][s214] · exercices : 7.5–6, 7.19–21, 7.E4, 7.Q11
 - *individual conditional expectation* → voir [courbe ICE](#c)
@@ -1470,7 +1443,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *ingénierie des features* → voir [feature engineering](#f)
 - *inheritance* → voir [héritage](#h)
 - **initialisation des poids (LeCun, Glorot, He)** — enseignée : [ch. 16, 16.4.1 · L'initialisation][s296] · exercices : 16.6–7, 16.10, 16.14–15, 16.19–21, 16.Q9–Q10 (+ 5)
-- **initialisation LeCun, Glorot (Xavier), He (Kaiming)** (*LeCun, Glorot, He initialization*) — enseignée : [ch. 16, 16.4.1 · L'initialisation][s296] · exercices : 16.6–7, 16.10, 16.14–15, 16.19–21, 16.Q9–Q10 (+ 8) · réutilisée : ch. 21
+- **initialisation LeCun, Glorot (Xavier), He (Kaiming)** (*LeCun, He initialization*) — enseignée : [ch. 16, 16.4.1 · L'initialisation][s296] · exercices : 16.6–7, 16.10, 16.14–15, 16.19–21, 16.Q9–Q10 (+ 8) · réutilisée : ch. 21
 - **initialisation optimiste** (*optimistic initial values*) — enseignée : [ch. 11, Au-delà du livre : le bandit manchot][s121] · exercices : 11.2, 11.7–8, 11.10–11, 11.13, 11.19–21, 11.R1 (+ 8)
 - **injection de prompt** (*prompt injection*) — enseignée : [ch. B4, 204.10 · Usage responsable : hallucinations, injection de prompt,…][s132] · exercices : B4.9–10, B4.24, B4.E1, B4.E5, B4.Q7, B4.Q12
 - *inner product* → voir [produit scalaire](#p)
@@ -1498,9 +1471,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **intervalle de crédibilité** (*credible interval*) — enseignée : [ch. 4, Au-delà du livre (3) : MAP et intervalle de crédibilité][s37] · exercices : 4.25
 - *interventional* → voir [Shapley interventionnel, observationnel](#s)
 - invariance à l'implémentation → voir [sensibilité, invariance à l'implémentation](#s)
-- *inverse* → voir [inverse, déterminant](#i)
 - *inverse document frequency* → voir [TF-IDF](#t)
-- **inverse, déterminant** (*inverse, determinant*) — enseignée : [ch. 0B, 101.4.4 · Identité et idée de l'inverse][s94] · exercices : 0B.21, 0B.42, 0B.46, 0B.Q9, 4.2, 6.18, 12.16, B2.21 · approfondie : ch. 12, 18 · réutilisée : ch. 9
+- **inverse, déterminant** (*determinant*) — enseignée : [ch. 0B, 101.4.4 · Identité et idée de l'inverse][s94] · exercices : 0B.21, 0B.42, 0B.46, 0B.Q9, 4.2, 6.18, 12.16, B2.21 · approfondie : ch. 12, 18 · réutilisée : ch. 9
 - **inversion DDIM** (*DDIM inversion*) — enseignée : [ch. B5, Pourquoi c'est plus rapide][s559] · exercices : B5.5, B5.8, B5.17–18, B5.24–25, B5.30–31, B5.Q7–Q8 (+ 1)
 - *inverted dropout* → voir [dropout inversé](#d)
 - IQM → voir [moyenne interquartile (IQM)](#m)
@@ -1522,7 +1494,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **jeu d'entraînement / jeu de test** (*training set / test set*) — enseignée : [ch. 1, 1.2.3 · Généraliser : le jeu de test][s29] · exercices : 1.14, 1.18, 1.20, 1.25, 1.E2, 1.Q6, 8.7, 8.Q5, 11.R2 · approfondie : ch. 8 · réutilisée : ch. 3
 - **jeu de test** — enseignée : [ch. 1, 1.2.3 · Généraliser : le jeu de test][s29] ; [ch. 8, 8.3 · Le jeu de test][s122] · exercices : 1.14, 1.18, 1.20, 1.25, 1.E2, 1.Q6, 8.1, 8.3, 8.Q5–Q6 (+ 11) · réutilisée : ch. 3
 - **jeu de validation** (*validation set*) — enseignée : [ch. 1, 1.2.3 · Généraliser : le jeu de test][s29] ; [ch. 8, 8.4 · Le jeu de validation][s129] · exercices : 1.14, 1.18, 1.20, 1.25, 1.E2, 1.Q6, 8.1, 8.Q7–Q8, 8.R1 (+ 9) · réutilisée : ch. 13, 14
-- *job* → voir [workflow, job, étape, action](#w)
 - job → voir [workflow, job, étape, action](#w)
 - *join* → voir [jointure](#j)
 - *joint probability* → voir [probabilité jointe](#p)
@@ -1580,8 +1551,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *Laplace prior* → voir [prior de Laplace](#p)
 - *Laplace smoothing* → voir [lissage de Laplace](#l)
 - *largest remainder method* → voir [règle du plus fort reste](#r)
-- *lasso* → voir [Lasso (pénalité L1)](#l)
-- **Lasso (pénalité L1)** (*lasso, L1 penalty*) — enseignée : [ch. 9, La pénalité L1 : Lasso et les zéros exacts][s231] · exercices : 9.3, 9.6, 9.17–19, 9.22–23, 9.28, 9.Q7–Q8 (+ 2)
+- **Lasso (pénalité L1)** (*L1 penalty*) — enseignée : [ch. 9, La pénalité L1 : Lasso et les zéros exacts][s231] · exercices : 9.3, 9.6, 9.17–19, 9.22–23, 9.28, 9.Q7–Q8 (+ 2)
 - **latence** (*latency*) — enseignée : [ch. B1, 201.9 · Coût d'usage : taille, latence CPU, choix d'un backbone…][s458] · exercices : B1.7, B1.14, B1.26–27, B1.E5, B1.Q11, B4.7, B7.3, B7.19, B7.Q9 (+ 2) · approfondie : ch. B7
 - **latence et taille des modèles** — enseignée : [ch. B1, 201.9 · Coût d'usage : taille, latence CPU, choix d'un backbone…][s458] · exercices : B1.7, B1.14, B1.26–27, B1.E5, B1.Q11
 - *latency* → voir [latence](#l)
@@ -1597,7 +1567,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **layout `src/`** (*src layout*) — enseignée : [ch. B7, Une structure de dépôt][s603] · exercices : B7.6, B7.8–9, B7.25, B7.E1, B7.Q1–Q2
 - *lazy learner* → voir [algorithme paresseux](#a)
 - *leaf* → voir [racine, feuille, nœud interne](#r)
-- *leaky ReLU* → voir [ReLU, leaky ReLU, PReLU, ReLU décalée](#r)
 - leaky ReLU → voir [ReLU, leaky ReLU, PReLU, ReLU décalée](#r)
 - *learned positional embeddings* → voir [positions apprises](#p)
 - *learning curve* → voir [courbe d'apprentissage](#c)
@@ -1634,7 +1603,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **lissage des contextes** (*context distribution smoothing*) — enseignée : [ch. B2][s480]
 - lisse → voir [courbe continue, lisse, univoque](#c)
 - *list* → voir [liste, tuple](#l)
-- **liste, tuple** (*list, tuple*) — enseignée : [ch. 0A, 100.3.1 · Listes : indices, tranches, méthodes, mutabilité][s53] · exercices : 0A.2, 0A.9, 0A.16–17, 0A.E2, 0A.Q4, 2.1, B2.Q4 · réutilisée : ch. 0B
+- **liste, tuple** (*list*) — enseignée : [ch. 0A, 100.3.1 · Listes : indices, tranches, méthodes, mutabilité][s53] · exercices : 0A.2, 0A.9, 0A.16–17, 0A.E2, 0A.Q4, 2.1, B2.Q4 · réutilisée : ch. 0B
 - **listes, tuples, dictionnaires, ensembles, collections.Counter** — enseignée : [ch. 0A, 100.3.1 · Listes : indices, tranches, méthodes, mutabilité][s53] · exercices : 0A.2, 0A.9, 0A.16–19, 0A.44, 0A.E2, 0A.Q4, 0B.Q5 (+ 4) · approfondie : ch. 0B · réutilisée : ch. 0B, 3, 11, 15, 26
 - *Little's law* → voir [loi de Little](#l)
 - **LLM** (*grand modèle de langage*) — enseignée : [ch. 1, Panorama 2026 : où en est l'IA ?][s18] · exercices : 1.E4, 6.Q12, CP1.12, 19.9, 26.E5, B2.9, B2.E1, B2.Q8, B4.Q7–Q8 (+ 5) · approfondie : ch. B4 · réutilisée : ch. B8
@@ -1660,16 +1629,14 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **log-sum-exp** (*astuce du log-somme-exp*) — enseignée : [ch. 4, Au-delà du livre (1) : log-probabilités et underflow][s35] · exercices : 17.15 · approfondie : ch. 17 · réutilisée : ch. B2
 - *log-uniform distribution* → voir [distribution log-uniforme](#d)
 - **logarithme népérien** (*natural logarithm*) — enseignée : [ch. 0B, 101.2.4 · Logarithmes : ln, log₂, log₁₀, changement de base][s82] · exercices : 0B.15–16, 0B.36–37, 0B.E3, 0B.Q7 · réutilisée : ch. 11
-- *logger* → voir [logger, handler](#l)
-- **logger, handler** (*logger, handler*) — enseignée : [ch. B7, Le logging plutôt que print][s609] · exercices : B7.10, B7.25, B7.E1, B7.Q3
+- **logger, handler** — enseignée : [ch. B7, Le logging plutôt que print][s609] · exercices : B7.10, B7.25, B7.E1, B7.Q3
 - **logging** (*journalisation*) — enseignée : [ch. B7, 207.2 · Scripts et ligne de commande : argparse, point d'entrée,…][s606] · exercices : B7.10, B7.25, B7.E1, B7.Q3
 - *logistic function* → voir [sigmoïde](#s)
 - *logistic loss* → voir [log loss](#l)
 - *logistic regression* → voir [régression logistique](#r)
 - **logit** — enseignée : [ch. 0B][s34] · exercices : 18.14, 18.E5, 20.R2, 23.Q9, 24.R3, B1.1, B3.29 · approfondie : ch. 18, 23 · réutilisée : ch. 20
 - *logit scale* → voir [échelle des logits (CLIP)](#e)
-- *logits* → voir [logits (d'un classifieur)](#l)
-- **logits (d'un classifieur)** (*logits*) — enseignée : [ch. 6, Au-delà du livre (1) : bits, nats, log loss et perplexité][s191] ; [ch. 17, 17.8 · La softmax][s205] · exercices : 17.6–7, 17.15–17, 17.19, 17.E3, 17.Q11–Q12, 17.R2 (+ 7) · approfondie : ch. 18, 23 · réutilisée : ch. 20
+- **logits (d'un classifieur)** — enseignée : [ch. 6, Au-delà du livre (1) : bits, nats, log loss et perplexité][s191] ; [ch. 17, 17.8 · La softmax][s205] · exercices : 17.6–7, 17.15–17, 17.19, 17.E3, 17.Q11–Q12, 17.R2 (+ 7) · approfondie : ch. 18, 23 · réutilisée : ch. 20
 - **logsumexp** — enseignée : [ch. 13, 13.6 · Naïve Bayes][s177] · exercices : 13.6–7, 13.27–30, 13.E4, 13.Q11 · réutilisée : ch. 17
 - loi → voir [distribution de probabilité, loi](#d)
 - **loi Beta** (*Beta distribution*) — enseignée : [ch. 4, Au-delà du livre (2) : la limite continue, la loi Beta][s178] · réutilisée : ch. 11
@@ -1724,9 +1691,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **malédiction de la dimension, fléau de la dimension** (*curse of dimensionality*) — enseignée : [ch. 2, 2.7 · Espaces de grande dimension][s147] ; [ch. 7, 7.6 · La malédiction de la dimension][s148] · exercices : 2.11, 2.25, 2.Q11, 7.4, 7.8, 7.20, 7.30–31, 7.Q9–Q10 (+ 2) · réutilisée : ch. 12, 13
 - *Manhattan distance* → voir [distance de Manhattan](#d)
 - *manifold hypothesis* → voir [hypothèse de la variété](#h)
-- *many-to-many* → voir [one-to-many, many-to-one, many-to-many](#o)
 - many-to-many → voir [one-to-many, many-to-one, many-to-many](#o)
-- *many-to-one* → voir [one-to-many, many-to-one, many-to-many](#o)
 - many-to-one → voir [one-to-many, many-to-one, many-to-many](#o)
 - **MAP** (*maximum a posteriori*) — enseignée : [ch. 4, Au-delà du livre (3) : MAP et intervalle de crédibilité][s37]
 - **MAPE** (*erreur absolue moyenne en pourcentage*) — enseignée : [ch. 9][s235]
@@ -1767,7 +1732,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **max et average pooling** — enseignée : [ch. 21, 21.4.2 · Le stride pour construire une hiérarchie][s347] · exercices : 21.3, 21.5, 21.26, 21.Q6
 - **max-norm (contrainte)** (*max-norm constraint*) — enseignée : [ch. 24, 24.2.6 · Ajouter du dropout][s382] · exercices : 24.6, 24.13–14, 24.E3, 24.Q3
 - *max-norm constraint* → voir [max-norm (contrainte)](#m)
-- *maximin* → voir [minimax, maximin](#m)
 - maximin → voir [minimax, maximin](#m)
 - **maximisation d'activation** (*activation maximization*) — enseignée : [ch. 21, 21.9.2 · Regarder les filtres (1) : ce qui les excite le plus][s348] ; [ch. 28][s349] · exercices : 21.28, 21.Q10
 - *maximum mean discrepancy* → voir [MMD](#m)
@@ -1805,7 +1769,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *meta-estimator* → voir [méta-estimateur](#m)
 - *meta-learner* → voir [stacking, méta-modèle](#s)
 - méta-modèle → voir [stacking, méta-modèle](#s)
-- **métadonnées de provenance, C2PA** (*content credentials, C2PA*) — enseignée : [ch. B5, Transparence et provenance des contenus générés][s573] · exercices : B5.8, B5.10, B5.20, B5.E3, B5.E5, B5.Q11
+- **métadonnées de provenance, C2PA** (*content credentials*) — enseignée : [ch. B5, Transparence et provenance des contenus générés][s573] · exercices : B5.8, B5.10, B5.20, B5.E3, B5.E5, B5.Q11
 - *method* → voir [classe, objet, méthode, attribut](#c)
 - méthode → voir [classe, objet, méthode, attribut](#c)
 - **méthode à frontière** (*boundary method*) — enseignée : [ch. 7, 7.2.1 · Classification binaire en 2D][s160] · exercices : 7.7, 7.10–11, 7.14–15, 7.Q3–Q4, 7.R2
@@ -1818,7 +1782,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - méthode spécifique → voir [méthode agnostique, méthode spécifique](#m)
 - **méthodes spéciales : __repr__, __len__, __getitem__, __call__, surcharge d'opérateurs (__add__, __radd__, __mul__, __eq__)** — enseignée : [ch. 0A, 100.7.2 · Méthodes spéciales : `__repr__`, `__len__`,…][s674] · exercices : 0A.48–50, 0A.Q9 · réutilisée : ch. 18, 20
 - MHA → voir [attention multi-têtes (MHA)](#a)
-- *micro* → voir [moyenne macro, micro, pondérée](#m)
 - micro → voir [moyenne macro, micro, pondérée](#m)
 - **micro-autograd** — enseignée : [ch. 18, Au-delà du livre : un micro-autograd][s312] · exercices : 18.26
 - *middle term* → voir [moyen terme](#m)
@@ -1835,8 +1798,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *minibatch discrimination* → voir [discrimination par mini-batch](#d)
 - *minibatch standard deviation* → voir [écart-type par mini-batch](#e)
 - *minimal cost-complexity pruning* → voir [élagage coût-complexité](#e)
-- *minimax* → voir [minimax, maximin](#m)
-- **minimax, maximin** (*minimax, maximin*) — enseignée : [ch. 27, 27.4.4 · Le jeu][s420] · exercices : 27.2, 27.4–5, 27.10, 27.E5, 27.Q5, 27.R1
+- **minimax, maximin** — enseignée : [ch. 27, 27.4.4 · Le jeu][s420] · exercices : 27.2, 27.4–5, 27.10, 27.E5, 27.Q5, 27.R1
 - **minimisation, limitation de la conservation** (*data minimisation, storage limitation*) — enseignée : [ch. B7, Journaliser les prédictions, et le RGPD][s635] · exercices : B7.4, B7.7–8, B7.16, B7.22, B7.E4, B7.Q11
 - **minimum local** (*local minimum*) — enseignée : [ch. 7, Sans labels : k-means][s131] · exercices : 7.3, 7.7, 7.9, 7.12–14, 7.17, 7.Q8, 7.R1, 7.R3 (+ 11) · réutilisée : ch. 11
 - *minimum-norm solution* → voir [solution de norme minimale, pseudo-inverse](#s)
@@ -1863,7 +1825,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **MM-DiT** (*multimodal diffusion transformer*) — enseignée : [ch. B5, Les transformers de diffusion][s570] · exercices : B5.8, B5.10, B5.20, B5.E3, B5.E5, B5.Q11
 - **MMD** (*maximum mean discrepancy*) — enseignée : [ch. 28, 28.4.6 · Discussion][s438] · exercices : 28.3, 28.8–9, 28.24–25, 28.E4, 28.Q7
 - MNAR → voir [MCAR, MAR, MNAR](#m)
-- *mode* → voir [moyenne, médiane, mode](#m)
 - mode → voir [moyenne, médiane, mode](#m)
 - *mode collapse* → voir [effondrement de mode](#e)
 - **mode entraînement, mode évaluation** (*training mode, evaluation mode*) — enseignée : [ch. 20, 20.4.3 · Le dropout][s21] · exercices : 20.3, 20.5, 20.16, 20.24–25, 20.28–29, 20.Q5, 20.R1, 20.R3 (+ 2)
@@ -1898,13 +1859,11 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **modèle pré-entraîné torchvision** — enseignée : [ch. 20, 20.6 · Quelques exemples][s705] ; [ch. 23, 23.9.4 · Utiliser un modèle pré-entraîné][s378] · exercices : 20.6, 20.9, 20.18, 20.21, 20.26, 20.Q10, 23.10–11, 23.24 · réutilisée : ch. B1
 - **modèle unigramme, bigramme, trigramme** (*unigram, bigram, trigram model*) — enseignée : [ch. 6, Au-delà du livre (2) : le contexte réduit la surprise][s202] · exercices : 6.26
 - **modèles de fondation (DINOv2, CLIP)** — enseignée : [ch. B1, 201.8 · Modèles de fondation : auto-supervisé (DINOv2),…][s455] · exercices : B1.5, B1.15, B1.24–25, B1.E4, B1.Q10–Q11
-- *module* → voir [module, paquet](#m), [`nn.Module`](#n)
-- **module, paquet** (*module, package*) — enseignée : [ch. 0A, 100.6 · Modules, erreurs et fichiers][s64] · exercices : 0A.24, 0A.26, 0A.Q8, 20.18, B3.18, B4.27, B7.9, PF.10 · approfondie : ch. 20 · réutilisée : ch. 11, 21, 22, 23, 25, B2, B4, B7
+- *module* → voir [`nn.Module`](#n)
+- **module, paquet** (*package*) — enseignée : [ch. 0A, 100.6 · Modules, erreurs et fichiers][s64] · exercices : 0A.24, 0A.26, 0A.Q8, 20.18, B3.18, B4.27, B7.9, PF.10 · approfondie : ch. 20 · réutilisée : ch. 11, 21, 22, 23, 25, B2, B4, B7
 - **modules et imports** — enseignée : [ch. 0A, 100.6.1 · Modules, imports et bibliothèque standard][s671] · exercices : 0A.24, 0A.Q8
-- *modus ponens* → voir [*modus ponens*, *modus tollens*](#m)
-- ***modus ponens*, *modus tollens*** (*modus ponens, modus tollens*) — enseignée : [ch. 11, 11.4 · La déduction][s254] · exercices : 11.3, 11.5, 11.15, 11.Q7
-- *modus tollens* → voir [*modus ponens*, *modus tollens*](#m)
-- modus tollens → voir [*modus ponens*, *modus tollens*](#m)
+- **\*modus ponens\*, \*modus tollens\*** — enseignée : [ch. 11, 11.4 · La déduction][s254] · exercices : 11.3, 11.5, 11.15, 11.Q7
+- modus tollens → voir [\*modus ponens\*, \*modus tollens\*](#m)
 - MoE → voir [mélange d'experts (MoE)](#m)
 - **moindres carrés** (*least squares, ordinary least squares, OLS*) — enseignée : [ch. 9, Les moindres carrés (au-delà du livre)][s232] · exercices : 9.8–10, 9.12, 9.15, 9.18, 9.20, 9.Q4–Q5, 9.R1 (+ 4)
 - **momentum** (*élan*) — enseignée : [ch. 19, 19.5.1 · Le momentum][s318] · exercices : 19.2, 19.10, 19.13, 19.16, 19.20–21, 19.24, 19.E1, 19.Q9, CP4.3 · réutilisée : ch. 23, 26, B5
@@ -1924,11 +1883,11 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **moyenne harmonique** (*harmonic mean*) — enseignée : [ch. 3, 3.7.11 · Le score F1][s164] · exercices : 3.2, 3.6, 3.8, 3.16, 3.25, 3.E4, 3.Q12
 - **moyenne incrémentale** — enseignée : [ch. 11][s689] · exercices : 11.2, CP2.11
 - **moyenne interquartile (IQM)** (*interquartile mean*) — enseignée : [ch. B8, Rapporter plusieurs graines][s649] · exercices : B8.8, B8.15, B8.21–22, B8.27–28, B8.E3, B8.E5, B8.Q10
-- **moyenne macro, micro, pondérée** (*macro, micro, weighted average*) — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s33] · exercices : 0B.4, 0B.Q3, 3.5–6, 3.19, 3.22, 3.25, 3.E4, 3.Q11, 14.24 · approfondie : ch. 0B · réutilisée : ch. 16, 21
+- **moyenne macro, micro, pondérée** (*macro, weighted average*) — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s33] · exercices : 0B.4, 0B.Q3, 3.5–6, 3.19, 3.22, 3.25, 3.E4, 3.Q11, 14.24 · approfondie : ch. 0B · réutilisée : ch. 16, 21
 - **moyenne mobile** (*moving average*) — enseignée : [ch. 0B, 101.1.4 · Moyenne, moyenne pondérée, somme pondérée, moyenne mobile][s39] · exercices : 0B.4, 0B.35, 0B.Q3, 19.8 · réutilisée : ch. 19, 20, 26, B5
 - **moyenne mobile exponentielle** (*exponential moving average, EMA*) — enseignée : [ch. 19, 19.5.4 · Adadelta et RMSprop][s322] · exercices : 19.4, 19.8, 19.13, 19.17, 19.Q11 · réutilisée : ch. 20, 26, B5
 - **moyenne pondérée** (*weighted average*) — enseignée : [ch. 0B, 101.1.4 · Moyenne, moyenne pondérée, somme pondérée, moyenne mobile][s39] · exercices : 0B.4, 0B.35, 0B.Q3
-- **moyenne, médiane, mode** (*mean, median, mode*) — enseignée : [ch. 2, Résumer une liste de nombres : moyenne, médiane, mode][s133] · exercices : 0B.Q3, 2.1–2, 2.13, 2.16, 2.19, 2.E1, 2.Q1–Q2, 2.R2 (+ 30) · approfondie : ch. 0B, 3, 11, 18, 27 · réutilisée : ch. 1, 3, 5, 7, 8, 9, 12, 19, 20, 25, 26, 27, B5
+- **moyenne, médiane, mode** (*mean, median*) — enseignée : [ch. 2, Résumer une liste de nombres : moyenne, médiane, mode][s133] · exercices : 0B.Q3, 2.1–2, 2.13, 2.16, 2.19, 2.E1, 2.Q1–Q2, 2.R2 (+ 30) · approfondie : ch. 0B, 3, 11, 18, 27 · réutilisée : ch. 1, 3, 5, 7, 8, 9, 12, 19, 20, 25, 26, 27, B5
 - **moyennes macro/micro/pondérée** — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s33] · exercices : 3.5–6, 3.19, 3.22, 3.25, 3.Q11
 - **MQA, GQA** (*multi-query attention, grouped-query attention*) — enseignée : [ch. B3, Moins de têtes pour les clés : MQA et GQA][s501] · exercices : B3.3, B3.11, B3.14, B3.18, B3.24, B3.E1, B3.Q6
 - **MRR** (*mean reciprocal rank, rang réciproque moyen*) — enseignée : [ch. B4, Mesurer une recherche : recall@k et MRR][s537] · exercices : B4.2, B4.5, B4.17–20, B4.22, B4.Q9, B4.R3
@@ -2034,7 +1993,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **noyau de Shapley** (*Shapley kernel*) — enseignée : [ch. B6, SHAP, une famille d'explications additives][s582] · exercices : B6.2, B6.7, B6.11, B6.15–17, B6.E1–E2, B6.Q5–Q6
 - **noyau RBF (gaussien)** (*RBF kernel*) — enseignée : [ch. 13, 13.4 · Les machines à vecteurs de support][s244] · exercices : 13.4–5, 13.10, 13.16–18, 13.36, 13.Q5–Q6
 - **np.random.default_rng, graine, permutation, choice** — enseignée : [ch. 0A, 100.8.7 · Aléatoire reproductible et mini-batches][s6] · exercices : 0A.5, 0A.31, 0A.66, 0A.E4, 0A.Q11, 2.14, 2.E5, 2.Q3, 8.26, 14.19 (+ 19) · approfondie : ch. 2, 8, 14, 26 · réutilisée : ch. 0B, 1, 2, 3, 7, 8, 16, B6
-- *NPU* → voir [GPU, TPU, NPU](#g)
 - NPU → voir [GPU, TPU, NPU](#g)
 - *NPV* → voir [valeur prédictive négative (VPN)](#v)
 - **nuage de points** (*scatter plot*) — enseignée : [ch. 2, 2.8 · Covariance et corrélation][s150] · exercices : 2.26–28, 2.Q12
@@ -2057,7 +2015,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - objet → voir [classe, objet, méthode, attribut](#c)
 - *objet de mise à l'échelle* → voir [scaler](#s)
 - **observabilité partielle** (*partial observability*) — enseignée : [ch. 26, 26.3.5 · La vue d'ensemble][s404] · exercices : 26.10, 26.26, 26.Q5
-- *observation* → voir [hypothèse, observation](#h)
 - observation → voir [hypothèse, observation](#h)
 - *observational Shapley* → voir [Shapley interventionnel, observationnel](#s)
 - observationnel → voir [Shapley interventionnel, observationnel](#s)
@@ -2073,8 +2030,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **one-hot** (*encodage one-hot, codage disjonctif*) — enseignée : [ch. 0A][s52] ; [ch. B2, 202.7 · Embeddings : de one-hot à `nn.Embedding`, entraînement et…][s74] · exercices : 12.1, 12.Q3, 22.Q4, 23.Q9, B2.5, B2.9, B2.25, B2.E3, B2.Q9, B2.R1 (+ 1) · approfondie : ch. 12 · réutilisée : ch. 18, 20, 22, 23, 24
 - **one-hot encoding** — enseignée : [ch. 12, 12.3.1 · Le one-hot][s263] · exercices : 12.1, 12.20, 12.26, 12.33, 12.E5, 12.Q3 · réutilisée : ch. 18
 - *one-standard-error rule* → voir [règle d'une erreur type](#r)
-- *one-to-many* → voir [one-to-many, many-to-one, many-to-many](#o)
-- **one-to-many, many-to-one, many-to-many** (*one-to-many, many-to-one, many-to-many*) — enseignée : [ch. 22, 22.8.1 · Une ou plusieurs entrées et sorties][s364] · exercices : 22.8, 22.10, 22.23, 22.25, 22.28–29, 22.Q10
+- **one-to-many, many-to-one, many-to-many** — enseignée : [ch. 22, 22.8.1 · Une ou plusieurs entrées et sorties][s364] · exercices : 22.8, 22.10, 22.23, 22.25, 22.28–29, 22.Q10
 - *one-versus-one* → voir [un-contre-un (OvO)](#u)
 - *one-versus-rest* → voir [un-contre-tous (OvR)](#u)
 - *one-vs-all* → voir [un-contre-tous (OvR)](#u)
@@ -2129,17 +2085,13 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 
 - **p-valeur** (*p-value*) — enseignée : [ch. 8, 8.6 · Utiliser les résultats du test][s222] · exercices : 8.2, 8.4, 8.8, 8.16, 8.18, 8.26–27, 8.E2, 8.E4, 8.Q11
 - *p-value* → voir [p-valeur](#p)
-- *p50* → voir [p50, p95, p99](#p)
-- **p50, p95, p99** (*p50, p95, p99*) — enseignée : [ch. B7, Latence, percentiles et débit][s622] · exercices : B7.3, B7.5, B7.16–19, B7.Q8–Q9, B7.R2–R3 (+ 2)
-- *p95* → voir [p50, p95, p99](#p)
+- **p50, p95, p99** — enseignée : [ch. B7, Latence, percentiles et débit][s622] · exercices : B7.3, B7.5, B7.16–19, B7.Q8–Q9, B7.R2–R3 (+ 2)
 - p95 → voir [p50, p95, p99](#p)
-- *p99* → voir [p50, p95, p99](#p)
 - p99 → voir [p50, p95, p99](#p)
 - *package* → voir [module, paquet](#m), [paquet](#p)
 - **padding** (*remplissage, marge*) — enseignée : [ch. 20, 20.4.5 · La convolution (aperçu)][s23] ; [ch. 21, 21.3.4 · Le padding][s24] · exercices : 20.6, 20.20, 20.Q7, 21.3, 21.12, 21.15–16, 21.E2, 21.Q5, 24.R2 (+ 2) · approfondie : ch. B3
 - *padding mask* → voir [masque de padding](#m)
-- *PagedAttention* → voir [PagedAttention (attention paginée)](#p)
-- **PagedAttention (attention paginée)** (*PagedAttention*) — enseignée : [ch. B3, Ce que coûte le cache][s517] · exercices : B3.8, B3.23, B3.E4, B3.Q11
+- **PagedAttention (attention paginée)** — enseignée : [ch. B3, Ce que coûte le cache][s517] · exercices : B3.8, B3.23, B3.E4, B3.Q11
 - *paired bootstrap* → voir [bootstrap apparié](#b)
 - *paired comparison* → voir [comparaison appariée](#c)
 - **pandas : read_csv, head, info, describe, loc, iloc, filtres, isna, dropna, fillna, duplicated, value_counts, groupby, to_numpy** — enseignée : [ch. 0A, 100.9.1 · `DataFrame` et `Series` : `read_csv`, `head`, `info`,…][s73] · exercices : 0A.4, 0A.32–34, 0A.57, 0A.Q12, 1.R2, 3.R3, 21.Q4, 21.Q6 (+ 8) · approfondie : ch. 21 · réutilisée : ch. 1, 2, 3, 12, 29, B1, B6
@@ -2165,8 +2117,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **paramétrique vs non paramétrique** — enseignée : [ch. 13, 13.2 · Paramétrique ou non paramétrique ?][s251] · exercices : 13.8, 13.12, 13.31–32, 13.35, 13.E5, 13.Q2
 - *parametrized test* → voir [test paramétré](#t)
 - **parcimonieux** (*sparse*) — enseignée : [ch. 9, La pénalité L1 : Lasso et les zéros exacts][s231] · exercices : 9.3, 9.6, 9.17–19, 9.22–23, 9.28, 9.Q7–Q8 (+ 2)
-- *parent* → voir [parent, enfant ; ancêtre, descendant](#p)
-- **parent, enfant ; ancêtre, descendant** (*parent, child, ancestor, descendant*) — enseignée : [ch. 16, 16.2 · Les graphes de réseaux de neurones][s294] · exercices : 16.2, 16.4, 16.9, 16.16–18, 16.Q1–Q4 (+ 2)
+- **parent, enfant ; ancêtre, descendant** (*child, ancestor*) — enseignée : [ch. 16, 16.2 · Les graphes de réseaux de neurones][s294] · exercices : 16.2, 16.4, 16.9, 16.16–18, 16.Q1–Q4 (+ 2)
 - **parité démographique** (*demographic parity, statistical parity*) — enseignée : [ch. B6, 206.9 · Équité : indicateurs de groupe (parité démographique,…][s596] · exercices : B6.5–6, B6.10, B6.23–25, B6.E3, B6.Q11, B6.R3
 - **parité prédictive** (*predictive parity*) — enseignée : [ch. B6, Les critères][s597] · exercices : B6.5–6, B6.10, B6.23–25, B6.E3, B6.Q11, B6.R3
 - **part de variance expliquée** (*explained variance ratio*) — enseignée : [ch. 12, 12.7.1 · L'analyse en composantes principales (PCA)][s152] · exercices : 12.7–8, 12.22–23, 12.27, 12.Q9
@@ -2182,10 +2133,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **passe avant matricielle** — enseignée : [ch. 16, Au-delà du livre : la passe avant en matrices][s305]
 - **passe avant, passe arrière** (*forward pass, backward pass*) — enseignée : [ch. 16, Au-delà du livre : la passe avant en matrices][s305] · exercices : 16.2, 16.Q3, 18.Q11, CP4.2, 25.28 · réutilisée : ch. 18
 - **pasting** — enseignée : [ch. 14][s281]
-- *patch* → voir [patch (ViT)](#p)
-- **patch (ViT)** (*patch*) — enseignée : [ch. B3, 203.10 · Coût et passage à l'échelle : complexité quadratique,…][s354] · exercices : 21.Q12, B3.8, B3.10, B3.27–28, B3.E2, B3.Q12
-- *patience* → voir [patience, `min_delta`](#p)
-- **patience, `min_delta`** (*patience*) — enseignée : [ch. 9, 9.4 · L'early stopping][s225] · exercices : 9.5, 9.9, 9.20, 9.Q6, 23.6, 23.27 · réutilisée : ch. 20
+- **patch (ViT)** — enseignée : [ch. B3, 203.10 · Coût et passage à l'échelle : complexité quadratique,…][s354] · exercices : 21.Q12, B3.8, B3.10, B3.27–28, B3.E2, B3.Q12
+- **patience, `min_delta`** — enseignée : [ch. 9, 9.4 · L'early stopping][s225] · exercices : 9.5, 9.9, 9.20, 9.Q6, 23.6, 23.27 · réutilisée : ch. 20
 - **PCA** (*analyse en composantes principales, principal component analysis, ACP*) — enseignée : [ch. 12, 12.7.1 · L'analyse en composantes principales (PCA)][s152] · exercices : 12.7–8, 12.22–23, 12.27–28, 12.30, 12.E4, 12.Q9, 15.Q8 (+ 3) · réutilisée : ch. 20, 21, B1, B2
 - PDP → voir [dépendance partielle (PDP)](#d)
 - *peak signal-to-noise ratio* → voir [PSNR](#p)
@@ -2197,8 +2146,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **pénalité L2 et weight decay** — enseignée : [ch. 20, Au-delà du livre : régulariser un réseau][s227]
 - **pente centrée** (*central difference*) — enseignée : [ch. 0B, 101.5.1 · Taux d'accroissement, tangente, dérivée][s95] · exercices : 0B.10, 0B.47, 0B.Q10
 - **pente dans une direction, dérivée directionnelle** (*directional derivative*) — enseignée : [ch. 5, 5.4 · Le gradient][s186] · exercices : 5.2–3, 5.5, 5.7–10, 5.Q7–Q8, 5.Q10 (+ 15)
-- *percentile* → voir [percentile, quantile, quartile](#p)
-- **percentile, quantile, quartile** (*percentile, quantile, quartile*) — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5 · réutilisée : ch. B7
+- **percentile, quantile, quartile** — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5 · réutilisée : ch. B7
 - **percentiles** — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5 · réutilisée : ch. B7
 - **perceptron** — enseignée : [ch. 10, 10.3.1 · Le perceptron][s208] · exercices : 10.1, 10.3, 10.6, 10.11–12, 10.17, 10.Q5–Q6, 10.R2–R3 (+ 15) · réutilisée : ch. 11, 13, 16, 17
 - *perceptron convergence theorem* → voir [théorème de convergence du perceptron](#t)
@@ -2223,7 +2171,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *piecewise linear* → voir [affine par morceaux](#a)
 - **pile d'appels** (*call stack*) — enseignée : [ch. 0A, 100.5.6 · Fonctions récursives][s63] · exercices : 0A.44
 - *pinball loss* → voir [loss quantile](#l)
-- *pip-tools* → voir [uv, pip-tools, ruff, pre-commit](#u)
 - pip-tools → voir [uv, pip-tools, ruff, pre-commit](#u)
 - **pipeline** (*chaîne de traitement*) — enseignée : [ch. 12, 12.10 · Transformations et validation croisée][s15] ; [ch. 15, 15.9.5 · Les pipelines][s16] · exercices : 12.9, 12.31, 12.E1, 12.Q11, 15.1, 15.4, 15.6, 15.22–23, 15.Q11 (+ 12) · approfondie : ch. B4 · réutilisée : ch. 22, 24, B1, B4, B6, B7
 - **piratage de la récompense** (*reward hacking, specification gaming*) — enseignée : [ch. 26, Au-delà du livre : le RL et les modèles de langage][s415] ; [ch. B8, 208.7 · RL et modèles de langue : RLHF, modèle de récompense, DPO,…][s126] · exercices : B8.6, B8.10, B8.25–26, B8.E4, B8.Q11–Q12
@@ -2280,9 +2227,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - pondérée → voir [moyenne macro, micro, pondérée](#m)
 - **pooling** (*agrégation, sous-échantillonnage*) — enseignée : [ch. 20, 20.4.6 · Le pooling (aperçu)][s22] · exercices : 20.14, 20.20, 20.Q7, 21.5, 21.26, 24.2–3, 24.Q9, B2.28 · approfondie : ch. 21 · réutilisée : ch. 24, 25
 - **pooling moyen global** (*global average pooling*) — enseignée : [ch. 21, 21.4.2 · Le stride pour construire une hiérarchie][s347] · exercices : 21.3, 21.5, 21.26, 21.Q6
-- *population* → voir [population, échantillon (en statistique)](#p)
 - *population stability index* → voir [PSI (indice de stabilité de population)](#p)
-- **population, échantillon (en statistique)** (*population, sample*) — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 0B.E5, 1.Q3, 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5 (+ 13)
+- **population, échantillon (en statistique)** (*sample*) — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 0B.E5, 1.Q3, 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5 (+ 13)
 - **porte** (*gate*) — enseignée : [ch. 22, 22.7.1 · Les portes][s361] · exercices : 10.3, 10.18, 22.4, 22.16–17, 22.Q7
 - **portée** (*scope*) — enseignée : [ch. 0A, 100.5.1 · Définir une fonction : paramètres, valeurs par défaut,…][s59] · exercices : 0A.6, 0A.23, 0A.37, 0A.Q6
 - *position-wise feed-forward network* → voir [bloc feed-forward (FFN)](#b)
@@ -2291,7 +2237,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *positive class* → voir [classe positive, négative](#c)
 - *positive PMI* → voir [PMI, PPMI](#p)
 - *post-hoc explanation* → voir [explication post hoc](#e)
-- *post-LN* → voir [pré-LN, post-LN](#p)
 - post-LN → voir [pré-LN, post-LN](#p)
 - **posterior** (*a posteriori, loi a posteriori*) — enseignée : [ch. 4, 4.6.1 · La boucle posterior → prior][s36] · exercices : 4.5, 4.7, 4.16, 4.18, 4.22, 4.Q6, 4.Q9, 9.26–27, 13.7 (+ 2) · approfondie : ch. B5 · réutilisée : ch. 11, 13
 - **posterior (d'un pas)** (*forward process posterior*) — enseignée : [ch. B5, Le posterior : un pas en arrière quand on connaît $\mathbf{x}_0$][s552] · exercices : 4.Q6, B5.7, B5.11, B5.16, B5.19, B5.23, B5.E1–E2, B5.Q4, B5.R3 (+ 8) · approfondie : ch. 4 · réutilisée : ch. 11, 13
@@ -2304,12 +2249,11 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *PR baseline* → voir [ligne de base d'une courbe precision-recall](#l)
 - *pre-activation* → voir [somme pondérée, pré-activation](#s)
 - pré-activation → voir [somme pondérée, pré-activation](#s)
-- *pre-commit* → voir [uv, pip-tools, ruff, pre-commit](#u)
 - pre-commit → voir [uv, pip-tools, ruff, pre-commit](#u)
 - **pré-élagage, élagage** (*pre-pruning, pruning*) — enseignée : [ch. 13, 13.5.3 · Limiter l'overfitting][s276] · exercices : 13.19, 13.21, 13.23–25, 13.E3, 13.Q8, 13.Q10
 - **pré-entraînement** (*pre-training*) — enseignée : [ch. 1][s111] · exercices : B1.20
 - *pre-LN* → voir [pré-LN, post-LN](#p)
-- **pré-LN, post-LN** (*pre-LN, post-LN*) — enseignée : [ch. B3, Pré-LN ou post-LN][s505] · exercices : B3.5, B3.11, B3.16, B3.19, B3.25, B3.Q8, B3.R3
+- **pré-LN, post-LN** (*pre-LN*) — enseignée : [ch. B3, Pré-LN ou post-LN][s505] · exercices : B3.5, B3.11, B3.16, B3.19, B3.25, B3.Q8, B3.R3
 - *pre-pruning* → voir [pré-élagage, élagage](#p)
 - *pre-tokenizer* → voir [pré-tokenizer](#p)
 - **pré-tokenizer** (*pre-tokenizer*) — enseignée : [ch. B2, La pré-tokenisation][s466] · exercices : B2.4, B2.16–18, B2.30, B2.E3, B2.Q5–Q6
@@ -2410,7 +2354,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - punition → voir [renforcement, punition](#r)
 - **pureté (d'un clustering)** (*purity*) — enseignée : [ch. 7, Combien de clusters ?][s213] · exercices : 7.3, 7.7, 7.9, 7.12–14, 7.17, 7.Q8, 7.R1, 7.R3 (+ 9)
 - *purity* → voir [pureté (d'un clustering)](#p)
-- *pydantic* → voir [FastAPI, uvicorn, pydantic](#f)
 - pydantic → voir [FastAPI, uvicorn, pydantic](#f)
 - **pytest : assert, approx, raises, parametrize ; doctest** — enseignée : [ch. 0A, 100.11.4 · doctest : des exemples exécutables dans les docstrings][s678] · exercices : 0A.61–62, 0A.Q12, 10.20 · réutilisée : ch. 5, 10, 17
 
@@ -2424,13 +2367,11 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **QLoRA** (*quantized LoRA*) — enseignée : [ch. B4, 204.8 · Fine-tuning : complet ou PEFT ; LoRA (rang, alpha, modules…][s539] · exercices : B4.3, B4.6, B4.11, B4.25–27, B4.E2, B4.Q10–Q11, B4.R2 (+ 1)
 - **quantification** (*quantization*) — enseignée : [ch. B4, La mémoire des poids][s523] · exercices : B4.1, B4.7, B4.12, B4.29, B4.Q3, B7.20
 - **quantification dynamique, statique** (*dynamic, static quantization*) — enseignée : [ch. B7, Accélérer sur CPU][s625] · exercices : B2.29, B2.Q11, B7.1, B7.19–21, B7.25, B7.E5, B7.Q9–Q10
-- *quantile* → voir [percentile, quantile, quartile](#p)
 - quantile → voir [percentile, quantile, quartile](#p)
 - *quantile loss* → voir [loss quantile](#l)
 - *quantization* → voir [quantification](#q)
 - *quantized LoRA* → voir [QLoRA](#q)
 - **quartet d'Anscombe, Datasaurus** (*Anscombe's quartet, Datasaurus Dozen*) — enseignée : [ch. 2, 2.9 · Le quartet d'Anscombe][s149] · exercices : 2.12, 2.30, 2.32, 2.E4, 2.Q12
-- *quartile* → voir [percentile, quantile, quartile](#p)
 - quartile → voir [percentile, quantile, quartile](#p)
 - **quasi-doublon** (*near-duplicate*) — enseignée : [ch. 29, Au-delà du livre : auditer un dataset][s439]
 - *query* → voir [requête, clé, valeur](#r)
@@ -2545,10 +2486,9 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *relative entropy* → voir [divergence KL, divergence de Kullback-Leibler](#d)
 - *relative error* → voir [erreur relative (d'un gradient)](#e)
 - *reliability diagram* → voir [diagramme de fiabilité](#d)
-- *ReLU* → voir [ReLU, leaky ReLU, PReLU, ReLU décalée](#r)
 - **ReLU bruitée** (*noisy ReLU*) — enseignée : [ch. 17, 17.5 · Les fonctions linéaires par morceaux][s299] · exercices : 17.2, 17.5, 17.12, 17.18, 17.20, 17.23–24, 17.Q6–Q7, 17.R1 (+ 2)
 - ReLU décalée → voir [ReLU, leaky ReLU, PReLU, ReLU décalée](#r)
-- **ReLU, leaky ReLU, PReLU, ReLU décalée** (*ReLU, leaky ReLU, parametric ReLU, shifted ReLU*) — enseignée : [ch. 17, 17.5 · Les fonctions linéaires par morceaux][s299] · exercices : 17.2, 17.5, 17.12, 17.18, 17.20, 17.23–24, 17.Q6–Q7, 17.R1 (+ 9) · réutilisée : ch. 16, 21, 23, 25, 27
+- **ReLU, leaky ReLU, PReLU, ReLU décalée** (*parametric ReLU, shifted ReLU*) — enseignée : [ch. 17, 17.5 · Les fonctions linéaires par morceaux][s299] · exercices : 17.2, 17.5, 17.12, 17.18, 17.20, 17.23–24, 17.Q6–Q7, 17.R1 (+ 9) · réutilisée : ch. 16, 21, 23, 25, 27
 - *remplissage de zéros* → voir [zero-padding](#z)
 - **renforcement, punition** (*reinforcement, punishment*) — enseignée : [ch. 11, 11.6.1 · Sherlock Holmes, « maître de la déduction »][s253] · exercices : 1.E3, 1.Q9, 11.7, 11.14, 11.Q12, CP6.7
 - *reparameterization trick* → voir [astuce de reparamétrisation](#a)
@@ -2636,7 +2576,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *row-major order* → voir [ordre C, ligne par ligne](#o)
 - RRF → voir [reciprocal rank fusion (RRF)](#r)
 - **rsLoRA** (*rank-stabilized LoRA*) — enseignée : [ch. B4, LoRA][s540] · exercices : B4.3, B4.6, B4.11, B4.25–27, B4.E2, B4.Q10–Q11, B4.R2 (+ 1)
-- *ruff* → voir [uv, pip-tools, ruff, pre-commit](#u)
 - ruff → voir [uv, pip-tools, ruff, pre-commit](#u)
 - *rule of succession* → voir [règle de succession de Laplace](#r)
 - *rule of three* → voir [règle de trois](#r)
@@ -2675,11 +2614,10 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *scatter plot* → voir [nuage de points](#n)
 - **schedulers de learning rate** — enseignée : [ch. 23, 23.10.2 · Le learning rate][s712] · exercices : 23.7, 23.11, 23.25–26
 - *scope* → voir [portée](#p)
-- *score* → voir [score, seuil de décision](#s), [score (d'une densité)](#s)
-- **score (d'une densité)** (*score*) — enseignée : [ch. B5, La guidance sans classifieur][s566] · exercices : 1.20, 3.18, 8.5, 8.8, 8.Q8, B5.1, B5.26–27, B5.E4, B5.Q9 (+ 9) · approfondie : ch. 3, 8 · réutilisée : ch. 3
+- **score (d'une densité)** — enseignée : [ch. B5, La guidance sans classifieur][s566] · exercices : 1.20, 3.18, 8.5, 8.8, 8.Q8, B5.1, B5.26–27, B5.E4, B5.Q9 (+ 9) · approfondie : ch. 3, 8 · réutilisée : ch. 3
 - **score de Brier** (*Brier score*) — enseignée : [ch. 3, Au-delà du livre (3) : la calibration des probabilités][s169]
 - *score function* → voir [fonction score](#f)
-- **score, seuil de décision** (*score, decision threshold*) — enseignée : [ch. 3, 3.7.11 · Le score F1][s164] ; [ch. 15, Au-delà du livre : seuil de décision, calibration et classes…][s166] · exercices : 1.20, 3.2, 3.6, 3.8, 3.16, 3.18, 3.25, 3.E4, 3.Q12, 8.Q8 (+ 13) · approfondie : ch. 8
+- **score, seuil de décision** (*decision threshold*) — enseignée : [ch. 3, 3.7.11 · Le score F1][s164] ; [ch. 15, Au-delà du livre : seuil de décision, calibration et classes…][s166] · exercices : 1.20, 3.2, 3.6, 3.8, 3.16, 3.18, 3.25, 3.E4, 3.Q12, 8.Q8 (+ 13) · approfondie : ch. 8
 - *search space* → voir [espace de recherche](#e)
 - *secant* → voir [sécante](#s)
 - **sécante** (*secant*) — enseignée : [ch. 5, Tangente et dérivée][s181] · exercices : 5.1, 5.3–4, 5.6, 5.Q4–Q6, 5.Q9, 5.R2–R3 (+ 9)
@@ -2715,7 +2653,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **sérialiser** (*serialize*) — enseignée : [ch. 0A, 100.6.4 · Sérialiser : `json` et `pickle`][s4] · exercices : 0A.39, 0A.Q8
 - *serialize* → voir [sérialiser](#s)
 - **série temporelle** (*time series*) — enseignée : [ch. 8, Données dépendantes : groupes et séries temporelles (au-delà du livre)][s221] · exercices : 8.1, 8.5, 8.14–15, 8.19, 8.21–22, 8.E3, 8.E5, 8.Q10 (+ 2) · approfondie : ch. 22
-- *Series* → voir [DataFrame, Series](#d)
 - Series → voir [DataFrame, Series](#d)
 - *service level objective* → voir [SLO](#s)
 - *set* → voir [ensemble](#e)
@@ -2753,8 +2690,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *signal-to-noise ratio* → voir [rapport signal sur bruit (SNR)](#r)
 - **silhouette** — enseignée : [ch. 15, 15.5 · Le clustering][s693] · exercices : 7.28–29, 15.13, 15.Q6 · approfondie : ch. 7
 - *silhouette coefficient* → voir [coefficient de silhouette](#c)
-- **SiLU, swish** (*sigmoid linear unit, swish*) — enseignée : [ch. 17, 17.6 · Les fonctions lisses][s85] · exercices : 17.2, 17.4, 17.8, 17.10, 17.13–14, 17.17–18, 17.Q8–Q9 (+ 6)
-- *sim-to-real* → voir [écart simulation-réalité, sim-to-real](#e)
+- **SiLU, swish** (*sigmoid linear unit*) — enseignée : [ch. 17, 17.6 · Les fonctions lisses][s85] · exercices : 17.2, 17.4, 17.8, 17.10, 17.13–14, 17.17–18, 17.Q8–Q9 (+ 6)
 - sim-to-real → voir [écart simulation-réalité, sim-to-real](#e)
 - **similarité cosinus** (*cosine similarity*) — enseignée : [ch. 0B, 101.3.3 · Produit scalaire, angle, similarité cosinus][s89] ; [ch. B2, Le cosinus][s90] · exercices : 0B.18–19, 0B.39–41, 0B.E2, 0B.Q8, B2.2, B2.Q11–Q12 (+ 6) · réutilisée : ch. B1
 - **similarité cosinus et analogies** — enseignée : [ch. B2, 202.9 · Géométrie des embeddings : cosinus, voisins, analogies,…][s726] · exercices : B2.2, B2.11, B2.23–24, B2.26–27, B2.E4, B2.Q11–Q12
@@ -2765,8 +2701,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *single-valued curve* → voir [courbe continue, lisse, univoque](#c)
 - *singular value decomposition* → voir [SVD](#s)
 - *skip connection* → voir [connexion de saut](#c)
-- *skip-gram* → voir [skip-gram, CBOW](#s)
-- **skip-gram, CBOW** (*skip-gram, continuous bag of words*) — enseignée : [ch. B2, word2vec : prédire plutôt que compter][s482] · exercices : B2.6–7, B2.22, B2.24–25, B2.Q10
+- **skip-gram, CBOW** (*continuous bag of words*) — enseignée : [ch. B2, word2vec : prédire plutôt que compter][s482] · exercices : B2.6–7, B2.22, B2.24–25, B2.Q10
 - *sliding window* → voir [fenêtre glissante](#f)
 - *sliding window attention* → voir [fenêtre glissante (attention)](#f)
 - **SLO** (*service level objective*) — enseignée : [ch. B7, Latence, percentiles et débit][s622] · exercices : B7.3, B7.5, B7.16–19, B7.Q8–Q9, B7.R2–R3 (+ 2)
@@ -2823,8 +2758,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *src layout* → voir [layout `src/`](#l)
 - SSM → voir [modèle à espace d'états (SSM)](#m)
 - **stabilité numérique (log-sum-exp)** — enseignée : [ch. 17][s696]
-- *stacking* → voir [stacking, méta-modèle](#s)
-- **stacking, méta-modèle** (*stacking, meta-learner*) — enseignée : [ch. 14, 14.3 · Le vote][s280] · exercices : 14.1, 14.11–14, 14.Q3
+- **stacking, méta-modèle** (*meta-learner*) — enseignée : [ch. 14, 14.3 · Le vote][s280] · exercices : 14.1, 14.11–14, 14.Q3
 - *stagewise additive modeling using a multi-class exponential loss* → voir [SAMME](#s)
 - *standard deviation* → voir [variance, écart-type](#v)
 - *standard error* → voir [erreur type](#e)
@@ -2848,7 +2782,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **statistiques descriptives** — enseignée : [ch. 2, 2.1 · Pourquoi des statistiques ?][s685] · exercices : 2.Q1, 2.R1
 - **statistiques glissantes** (*running statistics*) — enseignée : [ch. 20, 20.4.4 · La batchnorm][s240] · exercices : 20.4, 20.8, 20.12, 20.22, 20.24, 20.28–29, 20.E2, 20.Q6 · réutilisée : ch. B1
 - *status code* → voir [code de statut](#c)
-- *STE* → voir [estimateur *straight-through*](#e)
+- *STE* → voir [estimateur \*straight-through\*](#e)
 - *stemming* → voir [racinisation](#r)
 - *step* → voir [workflow, job, étape, action](#w)
 - *step decay* → voir [planning par paliers](#p)
@@ -2858,7 +2792,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *stop string* → voir [chaîne d'arrêt](#c)
 - *stopping rule* → voir [test séquentiel, règle d'arrêt](#t)
 - *storage limitation* → voir [minimisation, limitation de la conservation](#m)
-- *straight-through estimator* → voir [estimateur *straight-through*](#e)
+- *straight-through estimator* → voir [estimateur \*straight-through\*](#e)
 - **stratégies de décodage (glouton, température, top-k, top-p)** — enseignée : [ch. 28][s349] · exercices : 28.E3
 - **stratification** — enseignée : [ch. 8, 8.3 · Le jeu de test][s122] · exercices : 8.1, 8.3–4, 8.7, 8.10–13, 8.Q5–Q6 (+ 5) · réutilisée : ch. 15, 23, 24, 29
 - *stratified bootstrap* → voir [bootstrap stratifié (par groupe)](#b), [bootstrap stratifié (de runs)](#b)
@@ -2886,8 +2820,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *supervised fine-tuning* → voir [SFT](#s)
 - *supervised learning* → voir [apprentissage supervisé](#a)
 - **supervision humaine** (*human oversight*) — enseignée : [ch. B6, 206.11 · Éthique et régulation en pratique : fiches modèles,…][s601] · exercices : B6.8–9, B6.28, B6.Q12
-- *support* → voir [support (d'une classe)](#s)
-- **support (d'une classe)** (*support*) — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s33] · exercices : 3.5–6, 3.19, 3.22, 3.25, 3.Q11, 13.16, 13.Q5
+- **support (d'une classe)** — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s33] · exercices : 3.5–6, 3.19, 3.22, 3.25, 3.Q11, 13.16, 13.Q5
 - **support (few-shot)** (*support set*) — enseignée : [ch. B1, Le few-shot et les prototypes de classe][s454] · exercices : 13.16, 13.Q5, B1.20–21, B1.25, B1.28, B1.E1–E2, B1.Q8
 - *support set* → voir [support (few-shot)](#s)
 - *support vector* → voir [vecteur de support](#v)
@@ -2908,7 +2841,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **SVD tronquée** (*truncated SVD*) — enseignée : [ch. B2, Réduire : la SVD tronquée][s481] · exercices : B2.6–7, B2.22, B2.24–25, B2.Q10
 - **SVM, machine à vecteurs de support** (*support vector machine*) — enseignée : [ch. 13, 13.4 · Les machines à vecteurs de support][s244] · exercices : 13.4–5, 13.10–11, 13.16–18, 13.36, 13.Q5–Q6 (+ 1)
 - **SwiGLU** (*unité linéaire à porte avec SiLU*) — enseignée : [ch. 16, 16.1 · Pourquoi ce chapitre ?][s293] ; [ch. 17, 17.6 · Les fonctions lisses][s85] · exercices : 16.9, 16.Q1, 16.R2, 17.2, 17.4, 17.8, 17.10, 17.13, 17.Q8–Q9 (+ 9)
-- *swish* → voir [SiLU, swish](#s)
 - swish → voir [SiLU, swish](#s)
 - *sycophancy* → voir [flagornerie](#f)
 - *syllogism* → voir [syllogisme](#s)
@@ -3033,7 +2965,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *total future reward* → voir [retour, retour total (TFR)](#r)
 - *total variation* → voir [variation totale](#v)
 - *TP* → voir [vrai positif, faux positif, faux négatif, vrai négatif](#v)
-- *TPU* → voir [GPU, TPU, NPU](#g)
 - TPU → voir [GPU, TPU, NPU](#g)
 - **trace** — enseignée : [ch. 27, Au-delà du livre : mesurer un générateur][s426]
 - *trace de la pile d'appels* → voir [traceback](#t)
@@ -3058,7 +2989,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *Transformer block* → voir [bloc Transformer](#b)
 - **transformer de diffusion (DiT)** (*diffusion transformer*) — enseignée : [ch. B5, Les transformers de diffusion][s570] · exercices : 11.E3, 18.Q3, B5.8, B5.10, B5.20, B5.E3, B5.E5, B5.Q11, B6.Q6
 - **transformers en pratique (5.x)** — enseignée : [ch. B4, 204.2 · Charger et exécuter un modèle avec transformers :…][s730] · exercices : B4.1, B4.7, B4.12, B4.29, B4.Q3
-- *transition* → voir [état, transition](#e)
 - transition → voir [état, transition](#e)
 - *transpose* → voir [transposée](#t)
 - *transposed convolution* → voir [convolution transposée](#c)
@@ -3081,7 +3011,6 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *truncation error* → voir [erreur de troncature](#e)
 - *trust region* → voir [région de confiance, TRPO](#r)
 - *Tukey's fences* → voir [règle de Tukey](#r)
-- *tuple* → voir [liste, tuple](#l)
 - tuple → voir [liste, tuple](#l)
 - *typage canard* → voir [duck typing](#d)
 - **type** — enseignée : [ch. 0A, 100.2 · Valeurs, variables et types][s50] · exercices : 0A.Q3, 8.4, 23.Q5 · approfondie : ch. 8
@@ -3123,9 +3052,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *upsampling* → voir [suréchantillonnage](#s)
 - **UTF-8** — enseignée : [ch. B2, 202.2 · Unicode, UTF-8 et normalisation][s464] · exercices : B2.1, B2.18, B2.Q2–Q3
 - *utility layer* → voir [couche utilitaire](#c)
-- *uv* → voir [uv, pip-tools, ruff, pre-commit](#u)
-- **uv, pip-tools, ruff, pre-commit** (*uv, pip-tools, ruff, pre-commit*) — enseignée : [ch. B7, pyproject.toml et installation éditable][s612] · exercices : B7.6, B7.8–9, B7.25, B7.E1, B7.Q1–Q2
-- *uvicorn* → voir [FastAPI, uvicorn, pydantic](#f)
+- **uv, pip-tools, ruff, pre-commit** — enseignée : [ch. B7, pyproject.toml et installation éditable][s612] · exercices : B7.6, B7.8–9, B7.25, B7.E1, B7.Q1–Q2
 - uvicorn → voir [FastAPI, uvicorn, pydantic](#f)
 
 ## V
@@ -3174,12 +3101,11 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *variable-length code* → voir [code à longueur variable, code adaptatif](#c)
 - **variables et types, f-strings** — enseignée : [ch. 0A, 100.2 · Valeurs, variables et types][s50] · exercices : 0A.14, 0A.Q3
 - variables latentes → voir [code, variables latentes](#c)
-- *variance* → voir [variance, écart-type](#v), [variance (d'une famille de modèles)](#v)
-- **variance (d'une famille de modèles)** (*variance*) — enseignée : [ch. 9, 9.6 · Biais et variance][s238] · exercices : 0B.27–28, 0B.Q12, 9.4, 9.8, 9.24, 9.29, 9.E1, 9.Q9, 9.R3 (+ 21) · approfondie : ch. 0B, 2, 12, 16 · réutilisée : ch. 2, 12, 13, 14, 16, 17, 25, B3, B5, B8
+- **variance (d'une famille de modèles)** — enseignée : [ch. 9, 9.6 · Biais et variance][s238] · exercices : 0B.27–28, 0B.Q12, 9.4, 9.8, 9.24, 9.29, 9.E1, 9.Q9, 9.R3 (+ 21) · approfondie : ch. 0B, 2, 12, 16 · réutilisée : ch. 2, 12, 13, 14, 16, 17, 25, B3, B5, B8
 - **variance et ddof** — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5
 - **variance expliquée (d'un critique)** (*explained variance*) — enseignée : [ch. B8, Le critique et sa variance expliquée][s647] ; [ch. 12, 12.7.1 · L'analyse en composantes principales (PCA)][s152] · exercices : 12.7–8, 12.22–23, 12.27, 12.Q9, B8.4, B8.18, B8.20, B8.Q7 (+ 1) · réutilisée : ch. 25
 - *variance preserving diffusion* → voir [diffusion à variance préservée](#d)
-- **variance, écart-type** (*variance, standard deviation*) — enseignée : [ch. 0B, 101.7.4 · Variance et écart-type][s105] · exercices : 0B.27–28, 0B.53, 0B.E5, 0B.Q12, 2.4, 2.15, 2.R3, 8.5, 9.Q9 (+ 22) · approfondie : ch. 2, 12, 16 · réutilisée : ch. 2, 7, 8, 9, 12, 13, 14, 16, 17, 25, 27, B3, B5, B8
+- **variance, écart-type** (*standard deviation*) — enseignée : [ch. 0B, 101.7.4 · Variance et écart-type][s105] · exercices : 0B.27–28, 0B.53, 0B.E5, 0B.Q12, 2.4, 2.15, 2.R3, 8.5, 9.Q9 (+ 22) · approfondie : ch. 2, 12, 16 · réutilisée : ch. 2, 7, 8, 9, 12, 13, 14, 16, 17, 25, 27, B3, B5, B8
 - **variation totale** (*total variation*) — enseignée : [ch. 28, 28.4.5 · Réaliser le transfert][s437] · exercices : 28.4, 28.6, 28.20–21, 28.23–24, 28.26, 28.29, 28.Q9
 - *variational autoencoder* → voir [VAE (autoencodeur variationnel)](#v)
 - **variations, minimum et maximum (dérivée nulle)** — enseignée : [ch. 0B, 101.5.4 · Variations, minimum et maximum][s684] · exercices : 0B.24, 0B.48, 0B.Q10, 5.4
@@ -3195,8 +3121,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **vérification du gradient** (*gradient checking, gradient check*) — enseignée : [ch. 0B, 101.6.3 · Gradient et direction de plus grande pente][s41] ; [ch. 18, Au-delà du livre : vérifier un gradient][s109] · exercices : 0B.25, 0B.31, 0B.49–50, 0B.E1, 0B.Q11
 - **vérité terrain** (*ground truth*) — enseignée : [ch. 3, 3.7.1 · Classer des échantillons][s159] · exercices : 3.15, 3.Q6, 7.Q1
 - *view / copy* → voir [vue / copie](#v)
-- *vision transformer* → voir [Vision Transformer (ViT)](#v)
-- **Vision Transformer (ViT)** (*vision transformer*) — enseignée : [ch. 21, 21.9.1 · VGG16][s353] ; [ch. B3, 203.10 · Coût et passage à l'échelle : complexité quadratique,…][s354] · exercices : 21.8, 21.26–27, 21.E5, 21.Q10, 21.Q12, B3.8, B3.10, B3.27, B3.Q12 (+ 2)
+- **Vision Transformer (ViT)** — enseignée : [ch. 21, 21.9.1 · VGG16][s353] ; [ch. B3, 203.10 · Coût et passage à l'échelle : complexité quadratique,…][s354] · exercices : 21.8, 21.26–27, 21.E5, 21.Q10, 21.Q12, B3.8, B3.10, B3.27, B3.Q12 (+ 2)
 - **visualisation de features** (*feature visualization*) — enseignée : [ch. 28, Au-delà du livre : la génération d'images aujourd'hui][s430]
 - **visualisation de filtres et de cartes d'activation** — enseignée : [ch. 21, 21.9.3 · Regarder les filtres (2) : les cartes d'activation][s350] · exercices : 21.27, 21.Q10
 - ViT → voir [Vision Transformer (ViT)](#v), [patch (ViT)](#p)
@@ -3246,9 +3171,8 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **WordPiece** — enseignée : [ch. B2, 202.5 · WordPiece, Unigram, SentencePiece ; la bibliothèque…][s470] · exercices : B2.13, B2.19, B2.30, B2.E2, B2.Q7
 - **workbook : wb.check, wb.attempt, start_chapter.py, mylearn** — enseignée : [ch. 0A, 100.1.2 · Le workbook : setup, `wb.check`, `wb.attempt`,…][s1] · exercices : 0A.26, 0A.E1, 0A.Q2, 13.35, 15.29, 25.38 · approfondie : ch. 0B · réutilisée : ch. 0B, 3, 14, 15, 16, 17, 23, 24, 25, 26, 27, 28
 - **worker (d'un `DataLoader`)** (*processus de chargement*) — enseignée : [ch. 24, 24.4.6 · L'augmentation de données][s387] · exercices : 24.8, 24.22–23, 24.31, 24.E2, 24.Q8
-- *workflow* → voir [workflow, job, étape, action](#w)
 - **workflow PyTorch complet** — enseignée : [ch. 23][s380]
-- **workflow, job, étape, action** (*workflow, job, step, action*) — enseignée : [ch. B7, L'intégration continue][s618] · exercices : 0A.E5, 10.Q2, 20.E3, 23.R2, 26.Q3, B7.15, B7.23, B7.25, B7.E3, B7.Q7 (+ 6) · approfondie : ch. 23, 26 · réutilisée : ch. 24, B8
+- **workflow, job, étape, action** (*step*) — enseignée : [ch. B7, L'intégration continue][s618] · exercices : 0A.E5, 10.Q2, 20.E3, 23.R2, 26.Q3, B7.15, B7.23, B7.25, B7.E3, B7.Q7 (+ 6) · approfondie : ch. 23, 26 · réutilisée : ch. 24, B8
 - *wrapper* → voir [adaptateur](#a)
 
 ## X
@@ -3265,8 +3189,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 
 ## Z
 
-- *z-score* → voir [z-score, standardiser](#z)
-- **z-score, standardiser** (*z-score, standardize*) — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 0A.52, 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5, 12.Q5 (+ 5) · réutilisée : ch. 7, 9, 12
+- **z-score, standardiser** (*standardize*) — enseignée : [ch. 2, Mesurer la dispersion de données : variance, écart-type, ddof][s142] · exercices : 0A.52, 2.3–4, 2.15, 2.17–18, 2.29, 2.31, 2.Q5, 12.Q5 (+ 5) · réutilisée : ch. 7, 9, 12
 - *zero terminal SNR* → voir [SNR final nul](#s)
 - *zero-initialized* → voir [adaLN-Zero](#a)
 - **zero-padding** (*remplissage de zéros*) — enseignée : [ch. 20, 20.4.5 · La convolution (aperçu)][s23] · exercices : 20.6, 20.20, 20.Q7

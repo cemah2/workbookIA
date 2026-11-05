@@ -279,10 +279,11 @@ def collect_entries(chapters: dict, root: Path = ROOT) -> tuple[list[dict], list
     for row in read_glossary(root):
         e = entry(row["term"])
         e["kind"] = e["kind"] or row["kind"]
-        e["other"] += [o for o in row["other"] if o not in e["other"] and norm(o) != norm(row["term"])]
+        same = {norm(v) for v in [row["term"], *e["variants"]]}
+        e["other"] += [o for o in row["other"] if o not in e["other"] and norm(o) not in same]
         e["taught"] += [c for c in row["chapters"] if c not in e["taught"]]
         if row["kind"] != "fr":                       # an English form leads to the retained term
-            cross += [(o, row["term"], True) for o in row["other"]]
+            cross += [(o, row["term"], True) for o in row["other"] if norm(o) not in same]
         cross += [(v, row["term"], False) for v in e["variants"][1:]]     # « PPO » leads to « objectif clippé, PPO »
     by_variant = {}
     for e in entries.values():
@@ -393,7 +394,7 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
         ids = list(dict.fromkeys(ids + titles.find(pats, probes)))
         deeper = [cid for cid in teaches.find(pats, probes) if cid not in e["taught"]]
         reused = [cid for cid in requires.find(pats, probes) if cid not in e["taught"]]
-        name = f"**{e['term']}**"
+        name = f"**{_escape(e['term'])}**"
         if e["other"]:
             name += " (*" + ", ".join(o.replace("*", "") for o in e["other"]) + "*)"
         fields = []
@@ -410,8 +411,9 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
             fields.append("réutilisée : " + _chapter_list(reused))
         lines_by_letter[_letter(e["term"])].append((fold(e["term"]), e["term"], f"- {name} — " + " · ".join(fields)))
     for (form, italic), terms in cross:
-        targets = ", ".join(f"[{t}](#{_letter(t).lower() if _letter(t) != '#' else 'symboles'})" for t in terms)
-        shown = f"*{form.replace('*', '')}*" if italic else form
+        targets = ", ".join(f"[{_escape(t)}](#{_letter(t).lower() if _letter(t) != '#' else 'symboles'})"
+                            for t in terms)
+        shown = f"*{form.replace('*', '')}*" if italic else _escape(form)
         lines_by_letter[_letter(form)].append((fold(form), form, f"- {shown} → voir {targets}"))
     letters = sorted(lines_by_letter, key=lambda k: (k == "#", k))
     n_entries, n_cross = len(entries), len(cross)
@@ -451,6 +453,12 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
         body.append("")
     body += [f"[{label}]: {target}" for target, label in links.items()]
     return "\n".join(head + body).rstrip() + "\n"
+
+
+def _escape(text: str) -> str:
+    """Asterisks of a term (« *args, **kwargs ») outside code: literal, not emphasis."""
+    parts = text.split("`")
+    return "`".join(p if i % 2 else p.replace("*", "\\*") for i, p in enumerate(parts))
 
 
 def _letter(term: str) -> str:

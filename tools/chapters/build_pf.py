@@ -14,6 +14,7 @@ the empty kit ends without an error. The sealed test opens only with ``OPEN_TEST
 The bank of questions (the 💼 of the chapters of ``chapters`` in pf.json) is read from their 02_exercices.md and
 written between the markers ``<!-- pf:bank -->`` and ``<!-- pf:end bank -->`` of projets/projet_final/SOUTENANCE.md:
 the ID, the title and the recruiter's question, never the model answer (it stays in the chapter's 05_solutions.md).
+It also copies GRILLE.md into the starter kit (depart/docs/grille.md, the learner's self-assessment).
 """
 
 from __future__ import annotations
@@ -490,6 +491,17 @@ def bank() -> str:
     return "\n".join(parts)
 
 
+GRID_COPY = FOLDER / "depart" / "docs" / "grille.md"
+GRID_HEADER = ("<!-- Ta copie de la grille du projet final (projets/projet_final/GRILLE.md du workbook), pour "
+               "l'auto-évaluation : coche les critères tenus et remplis la colonne « Preuve ». Elle n'est jamais "
+               "écrasée ; si la grille du workbook change, compare et recopie ce qui t'intéresse. -->\n\n")
+
+
+def grid_copy() -> str:
+    """The learner's copy of GRILLE.md in the starter kit (docs/grille.md): the same text, under a header."""
+    return GRID_HEADER + (FOLDER / "GRILLE.md").read_text(encoding="utf-8")
+
+
 def update_bank(check: bool = False) -> bool:
     """Write the bank into SOUTENANCE.md; with ``check``, only say whether it is up to date."""
     path = FOLDER / "SOUTENANCE.md"
@@ -508,13 +520,17 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     if args.check:
         ok = update_bank(check=True)
+        grid_ok = GRID_COPY.exists() and GRID_COPY.read_text(encoding="utf-8") == grid_copy()
         print("✅ banque à jour" if ok else "❌ banque périmée : python tools/chapters/build_pf.py")
-        return 0 if ok else 1
+        print("✅ depart/docs/grille.md à jour" if grid_ok else "❌ depart/docs/grille.md périmée : build_pf.py")
+        return 0 if ok and grid_ok else 1
     for name, cells in (("01_exploration.ipynb", exploration()), ("02_baselines.ipynb", baselines()),
                         ("03_evaluation.ipynb", evaluation())):
         print("✅", write_notebook(NOTEBOOKS / name, cells).relative_to(ROOT))
     update_bank()
     print("✅ projets/projet_final/SOUTENANCE.md (banque de questions)")
+    GRID_COPY.write_text(grid_copy(), encoding="utf-8")
+    print("✅", GRID_COPY.relative_to(ROOT))
     return 0
 
 

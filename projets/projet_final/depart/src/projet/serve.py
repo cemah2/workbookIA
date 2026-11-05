@@ -8,8 +8,6 @@ FastAPI and uvicorn are optional dependencies (``pip install -e ".[serve]"``), i
 package and its tests import without them. A Gradio demo is accepted instead of the API (README, PF.11).
 """
 
-from __future__ import annotations
-
 import argparse
 import sys
 
@@ -24,7 +22,9 @@ def create_app(predictor: Predictor):
       a body that does not follow the schema (pydantic) -> 422, without echoing the input back; at most 64 records per
       request (422 above); an error of the model -> 500 with a short message, the details in the log only.
 
-    The schema of a record is that of ``Predictor.predict``; never log the content of the inputs (B7.7).
+    The schema of a record is that of ``Predictor.predict``; never log the content of the inputs (B7.7). The pydantic
+    models can live inside this function because this module has no ``from __future__ import annotations`` (keep it
+    so): FastAPI reads the annotations of a route to find its body, and a postponed one names a class it cannot see.
     """
     # TODO PF.11: from fastapi import FastAPI; pydantic models of the request and the response; two routes
     raise NotImplementedError("TODO PF.11: create_app")

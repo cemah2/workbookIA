@@ -186,6 +186,63 @@ def test_start_chapter_checkpoint_not_generated_yet(fake_checkpoint):
     assert not (fake_checkpoint / "mon_travail").exists()
 
 
+@pytest.fixture
+def fake_final_project(fake_repo):
+    final = fake_repo / "projets" / "projet_final"
+    for folder in ("depart/src/projet", "depart/tests", "depart/.github/workflows", "depart/src/projet/__pycache__",
+                   "exemple"):
+        (final / folder).mkdir(parents=True, exist_ok=True)
+    (final / "README.md").write_text("brief")
+    (final / "GRILLE.md").write_text("grid")
+    (final / "exemple" / "cadrage.md").write_text("an example, never copied")
+    for rel in ("README.md", "pyproject.toml", ".gitignore", ".github/workflows/ci.yml", "src/projet/__init__.py",
+                "src/projet/data.py", "tests/test_structure.py", "docs/grille.md"):
+        (final / "depart" / rel).parent.mkdir(parents=True, exist_ok=True)
+        (final / "depart" / rel).write_text(f"starter {rel}")
+    (final / "depart" / "src" / "projet" / "__pycache__" / "data.cpython-313.pyc").write_bytes(b"cache")
+    return fake_repo
+
+
+def test_start_chapter_final_project_copies_the_starter_kit_and_never_overwrites(fake_final_project):
+    lines = []
+    assert start_chapter.start_chapter("PF", root=fake_final_project, out=lines.append) == 0
+    work = fake_final_project / "mon_travail" / "projet_final"
+    for rel in ("README.md", "pyproject.toml", ".gitignore", ".github/workflows/ci.yml", "src/projet/data.py",
+                "tests/test_structure.py", "docs/grille.md"):
+        assert (work / rel).read_text() == f"starter {rel}", rel
+    assert not (work / "src" / "projet" / "__pycache__").exists()
+    assert not (work / "exemple").exists() and not (work / "GRILLE.md").exists()   # only depart/ is copied
+    assert not (fake_final_project / "mon_travail" / "mylearn").exists(), "the final project does not use mylearn"
+    assert any(line.startswith("Projet final PF") for line in lines), lines
+    assert any("mon_travail/projet_final/" in line and "pytest" in line for line in lines), lines
+    # the learner works, then runs the command again (after a git pull): nothing is overwritten, new files arrive
+    (work / "src" / "projet" / "data.py").write_text("MY DATA MODULE")
+    (fake_final_project / "projets" / "projet_final" / "depart" / "Dockerfile").write_text("starter Dockerfile")
+    assert start_chapter.start_chapter("pf", root=fake_final_project, out=quiet) == 0
+    assert (work / "src" / "projet" / "data.py").read_text() == "MY DATA MODULE"
+    assert (work / "Dockerfile").read_text() == "starter Dockerfile"
+
+
+def test_start_chapter_final_project_never_copies_data_models_or_journals(fake_final_project):
+    starter = fake_final_project / "projets" / "projet_final" / "depart"
+    for rel in ("data/raw/hour.csv", "checkpoints/best.pt", "artifacts/model/meta.json", "data/splits.json",
+                "experiments/runs.jsonl", "experiments/test_access.jsonl", "src/projet.egg-info/PKG-INFO"):
+        (starter / rel).parent.mkdir(parents=True, exist_ok=True)
+        (starter / rel).write_text("output of a run inside the kit")
+    assert start_chapter.start_chapter("PF", root=fake_final_project, out=quiet) == 0
+    work = fake_final_project / "mon_travail" / "projet_final"
+    leaked = sorted(str(p.relative_to(work)) for p in work.rglob("*") if p.is_file()
+                    and p.read_text() == "output of a run inside the kit")
+    assert leaked == [], f"expected no data, model or journal in the learner's copy, got {leaked}"
+
+
+def test_start_chapter_final_project_not_generated_yet(fake_repo):
+    lines = []
+    assert start_chapter.start_chapter("PF", root=fake_repo, out=lines.append) == 1
+    assert any("n'existe pas encore" in line for line in lines), lines
+    assert not (fake_repo / "mon_travail").exists()
+
+
 def test_start_chapter_init_only(fake_repo):
     assert start_chapter.start_chapter(None, root=fake_repo, out=quiet) == 0
     assert (fake_repo / "mon_travail" / "mylearn" / "_example.py").exists()
@@ -475,7 +532,8 @@ def test_dashboard_model_holds_only_published_chapters():
     text = syllabus.build_dashboard(chapters)
     for cid, ch in chapters.items():
         assert (f"<!-- wb:section {cid} -->" in text) == syllabus.published(ch), cid
-    assert "<!-- wb:section 3 -->" in text and "<!-- wb:section PF -->" not in text   # the final project comes last
+    assert "<!-- wb:section 3 -->" in text and "<!-- wb:section PF -->" in text      # the final project, published last
+    assert text.index("<!-- wb:section B8 -->") < text.index("<!-- wb:section PF -->"), "expected PF after the bonus"
 
 
 def test_copy_no_overwrite_cleans_up_on_failure(tmp_path, monkeypatch):

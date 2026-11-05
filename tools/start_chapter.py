@@ -5,6 +5,7 @@
     python tools/start_chapter.py 0A        # prerequisites chapter 0A
     python tools/start_chapter.py B3        # bonus chapter B3
     python tools/start_chapter.py CP1       # checkpoint of part I (mock exam + mini-project)
+    python tools/start_chapter.py PF        # the final project (its starter kit: your own repository)
     python tools/start_chapter.py --init    # create mon_travail/mylearn (base files) and mon_travail/suivi
     python tools/start_chapter.py 18 --dry-run
 
@@ -17,6 +18,8 @@ What is copied (NEVER overwriting an existing file):
   checkpoints/partie_n/02_examen_notebook.ipynb and 04_mes_reponses.md
                                           -> mon_travail/checkpoints/partie_n/
   projets/partie_n_<name>/depart/*        -> mon_travail/projets/partie_n_<name>/ (mini-project starter kit)
+  for the final project PF:
+  projets/projet_final/depart/*           -> mon_travail/projet_final/ (the starter kit of your own repository)
   your tracking files (models in suivi/)  -> mon_travail/suivi/
       tableau_de_bord.md, auto_evaluation.md, journal.md: copied once; later,
       sections published by Claude (<!-- wb:section ID --> ... <!-- wb:end ID -->)
@@ -50,6 +53,7 @@ WORK = ROOT / "mon_travail"
 CHAPTER_FILES = ("03_notebook.ipynb", "06_mes_reponses.md")
 CHECKPOINT_FILES = ("02_examen_notebook.ipynb", "04_mes_reponses.md")   # the learner's copies of a checkpoint
 PROJECT_STARTER = "depart"   # sub-folder of a mini-project copied for the learner (the solution never is)
+FINAL_PROJECT = "projet_final"   # projets/projet_final/depart -> mon_travail/projet_final (the learner's repository)
 IN_PROGRESS = "EN_COURS.md"   # marker of a chapter that is still being generated
 TRACKERS = ("tableau_de_bord.md", "auto_evaluation.md", "journal.md")
 SECTION = re.compile(r"<!-- wb:section (\S+) -->.*?<!-- wb:end \1 -->\n?", re.S)
@@ -86,7 +90,11 @@ def checkpoint_number(chapter_id: str) -> int | None:
 # What a mini-project notebook writes in its own folder: never part of a starter kit, even if someone ran the
 # notebook inside depart/ (the learner's frozen test set, vault, results and figures are created in mon_travail/)
 PROJECT_OUTPUTS = {"test_indices.npy", "vault.json", "results.json", "results_rapide.json", "config.json",
-                   "config_rapide.json"}
+                   "config_rapide.json",
+                   # the final project: its split, journals and test results are the learner's, never the kit's
+                   "splits.json", "runs.jsonl", "test_access.jsonl", "test_results.json"}
+OUTPUT_DIRS = {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "figures", "runs", ".git",
+               "checkpoints", "artifacts", "raw"}     # the last three: data and models of the final project
 
 
 def starter_files(project: Path) -> list[Path]:
@@ -95,8 +103,8 @@ def starter_files(project: Path) -> list[Path]:
     if not starter.is_dir():
         return []
     return sorted(p for p in starter.rglob("*") if p.is_file()
-                  and not {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "figures", "runs"}
-                  & set(p.relative_to(starter).parts)
+                  and not OUTPUT_DIRS & set(p.relative_to(starter).parts)
+                  and not any(part.endswith(".egg-info") for part in p.relative_to(starter).parts)
                   and p.name not in PROJECT_OUTPUTS)
 
 
@@ -260,11 +268,20 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     results: list[tuple[str, str]] = []
 
     chapter_id = None
-    checkpoint_dir, projects = None, []
+    checkpoint_dir, projects, final = None, [], None
     if chapter is not None:
         chapter_id = canonical_id(chapter)
         part = checkpoint_number(chapter_id)
-    if chapter is not None and part is not None:          # a checkpoint: mock exam + mini-project starter kit
+    if chapter_id == "PF":                                 # the final project: the starter kit of a repository
+        final = root / "projets" / FINAL_PROJECT
+        if not starter_files(final):
+            out("❌ Le projet final n'existe pas encore dans projets/projet_final/.")
+            out("   Astuce : `git pull` pour récupérer la dernière version du workbook.")
+            return 1
+        for src in starter_files(final):
+            dst = f"{FINAL_PROJECT}/{src.relative_to(final / PROJECT_STARTER).as_posix()}"
+            results.append((f"mon_travail/{dst}", copy_no_overwrite(src, work / dst, dry_run)))
+    elif chapter is not None and part is not None:        # a checkpoint: mock exam + mini-project starter kit
         checkpoint_dir = root / "checkpoints" / f"partie_{part}"
         if not (checkpoint_dir / CHECKPOINT_FILES[0]).exists():
             out(f"❌ Le checkpoint {chapter_id} n'existe pas encore dans checkpoints/.")
@@ -294,7 +311,7 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
             status = copy_no_overwrite(chapter_dir / name, work / chapter_dir.name / name, dry_run)
             results.append((f"mon_travail/{chapter_dir.name}/{name}", status))
 
-    for rel in stub_files_for(chapter_id, manifest, stubs):
+    for rel in stub_files_for(chapter_id, manifest, stubs) if final is None else []:   # PF does not use mylearn
         status = copy_no_overwrite(stubs / rel, work / "mylearn" / rel, dry_run)
         results.append((f"mon_travail/mylearn/{rel}", status))
     results += sync_trackers(root / "suivi", work / "suivi", dry_run)
@@ -302,6 +319,7 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
     icons = {"copied": "✅ copié  ", "kept": "🔒 conservé", "missing": "⚠️ absent ",
              "appended": "➕ complété", "later": "⏳ plus tard", "changed": "ℹ️ à revoir"}
     title = (f"Checkpoint {chapter_id}" if checkpoint_dir is not None
+             else "Projet final PF" if final is not None
              else f"Chapitre {chapter_id}" if chapter_id else "Initialisation de mylearn et du suivi")
     out(f"{title}{' (simulation, rien n’est écrit)' if dry_run else ''} :")
     for path, status in results:
@@ -318,13 +336,19 @@ def start_chapter(chapter: str | None, *, root: Path = ROOT, dry_run: bool = Fal
         out("  ℹ️ = ces sections ont changé dans le modèle suivi/tableau_de_bord.md depuis ta copie (titres, ★ ou "
             "durées) : compare et recopie ce qui t'intéresse ; ta copie n'est jamais modifiée.")
     if chapter_id:
-        missing = missing_earlier_modules(chapter_id, manifest, work / "mylearn")
+        missing = {} if final is not None else missing_earlier_modules(chapter_id, manifest, work / "mylearn")
         if missing:
             listing = " · ".join(f"ch. {cid} : {', '.join(files)}" for cid, files in missing.items())
             out(f"ℹ️ Modules de chapitres précédents absents de ta librairie ({listing}).")
             out("   Les notebooks et les tests prendront la version de référence à leur place ;")
             first = next(iter(missing))
             out(f"   pour les écrire toi-même : python tools/start_chapter.py {first} (et de même pour les autres).")
+        if final is not None:
+            out(f"👉 Le cahier des charges : projets/{FINAL_PROJECT}/README.md (« Démarrer » : git init, GitHub, "
+                f"renommer le paquet) ; la grille : projets/{FINAL_PROJECT}/GRILLE.md (ta copie : docs/grille.md)")
+            out(f"👉 Ton dépôt : mon_travail/{FINAL_PROJECT}/ ; ses tests : cd mon_travail/{FINAL_PROJECT} && "
+                "python -m pytest -q")
+            return 0
         if checkpoint_dir is not None:
             out(f"👉 Lis checkpoints/{checkpoint_dir.name}/README.md : la synthèse d'abord, puis l'examen blanc, dans "
                 f"mon_travail/checkpoints/{checkpoint_dir.name}/ (le notebook et ta copie)")

@@ -19,7 +19,7 @@ MODULES = ["config", "data", "preprocess", "models", "train", "evaluate", "predi
 # the settings of the protocol: the same in the fast and the full mode (only the budget may change)
 PROTOCOL_KEYS = ["task", "target", "group_column", "time_column", "test_size", "val_size", "metric", "split_file",
                  "seed"]
-DOCUMENTS = ["README.md", "docs/cadrage.md", "docs/protocole.md", "docs/rapport.md", "data/card.md", "model_card.md",
+DOCUMENTS = ["README.md", "docs/cadrage.md", "docs/protocole.md", "docs/rapport.md", "docs/grille.md", "data/card.md", "model_card.md",
              "experiments/journal.md"]
 
 

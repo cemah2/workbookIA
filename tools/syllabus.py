@@ -12,7 +12,8 @@ mylearn signatures are read from the stubs in ``templates/mylearn_stubs/``
 
 Generated files: docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md,
 annexes/index_notions.md (tools/build_index.py: the index of the notions, read in the glossary, the contract
-and the sheets), templates/mylearn_stubs/MANIFEST.json (chapter -> stub files; additive only).
+and the sheets), the « plan » and « parcours » blocks of README.md, templates/mylearn_stubs/MANIFEST.json
+(chapter -> stub files; additive only).
 """
 
 from __future__ import annotations
@@ -1155,6 +1156,74 @@ def build_dashboard(chapters: dict) -> str:
     return "".join(parts)
 
 
+README_BLOCKS = ("plan", "parcours")      # the blocks of README.md written by build (repo_stats.py writes « chiffres »)
+
+
+def status(ch: dict, root: Path = ROOT) -> str:
+    """✅ published, 🛠️ being generated (EN_COURS.md), 📅 planned (no folder yet)."""
+    folder = root / ch["dir"] if is_cp(ch["id"]) else root / "chapitres" / ch["dir"]
+    if published(ch, root):
+        return "✅"
+    return "🛠️" if folder.is_dir() else "📅"
+
+
+def render_readme_plan(chapters: dict, root: Path = ROOT) -> list[str]:
+    """The plan of README.md: every chapter, checkpoint and project, with its link and its status."""
+    lines = ["| Partie | Chapitres | Checkpoint : examen blanc, synthèse, mini-projet |", "|---|---|---|"]
+    for part, ids in PARTS.items():
+        if part == "PF":
+            continue
+        cells = []
+        for cid in ids:
+            ch = chapters.get(cid)
+            if ch is None or is_cp(cid):
+                continue
+            cells.append(f"{status(ch, root)} [{cid} · {md_cell(ch['title'])}](chapitres/{ch['dir']}/01_fiche.md)")
+        cps = [chapters[c] for c in ids if c.startswith("CP") and c in chapters]
+        cp_cells = []
+        for cp in cps:
+            mp = cp.get("miniproject") or {}
+            cp_cells.append(f"{status(cp, root)} [{cp['id']}]({cp['dir']}/README.md) · mini-projet "
+                            f"[{mp.get('id', '')} {md_cell(mp.get('title', ''))}]({mp.get('dir', '')}/)")
+        lines.append(f"| **{part} · {PART_TITLES[part]}** | " + "<br>".join(cells) + " | "
+                     + ("<br>".join(cp_cells) or "—") + " |")
+    if "PF" in chapters:
+        pf = chapters["PF"]
+        lines.append(f"| **Fin** | {status(pf, root)} [{md_cell(pf['title'])}]({pf['dir']}/) | — |")
+    lines += ["", "✅ publié · 🛠️ en cours de génération · 📅 planifié. Les liens des chapitres mènent à leur fiche "
+              "(`01_fiche.md`) ; le dossier contient aussi les exercices, le notebook, les indices, les solutions, "
+              "ta feuille de réponses et les flashcards."]
+    return lines
+
+
+def render_readme_parcours(chapters: dict) -> list[str]:
+    """The four tracks of README.md, with the totals of docs/PARCOURS.md (same function, never typed by hand)."""
+    totals = track_totals(chapters)
+    lines = ["| Parcours | Pour qui | Exercices | Temps total | À 10 h par semaine |", "|---|---|---|---|---|"]
+    who = {"complet": "tout le workbook, dans l'ordre", "rapide": "l'essentiel pour être employable",
+           "maths": "comprendre en profondeur (calculs, démonstrations)",
+           "code": "devenir solide en implémentation (from scratch, bibliothèques, débogage)"}
+    for key in ("complet",) + TRACKS:
+        t = totals[key]
+        lines.append(f"| [{TRACK_TEXT[key][0]}](docs/PARCOURS.md#{key}) | {who[key]} | {t['n']} | "
+                     f"≈ {fmt_hours(t['total'])} | ≈ {t['total'] / 60 / HOURS_PER_WEEK:.0f} semaines |")
+    lines += ["", "Les temps comptent la lecture (livre et fiche), les exercices, les corrigés des prérequis hors "
+              "parcours, les flashcards, les synthèses, les mini-projets et le projet final, communs aux quatre "
+              "parcours (détail : [`docs/PARCOURS.md`](docs/PARCOURS.md), généré par `python tools/syllabus.py "
+              "build`)."]
+    return lines
+
+
+def update_readme(chapters: dict, text: str, root: Path = ROOT) -> str:
+    """README.md with its generated blocks rewritten (``<!-- wb:readme plan -->`` … ``<!-- wb:end plan -->``)."""
+    renders = {"plan": render_readme_plan(chapters, root), "parcours": render_readme_parcours(chapters)}
+    for name in README_BLOCKS:
+        block = "\n".join([f"<!-- wb:readme {name} -->", *renders[name], f"<!-- wb:end {name} -->"])
+        text = re.sub(re.escape(f"<!-- wb:readme {name} -->") + r".*?" + re.escape(f"<!-- wb:end {name} -->"),
+                      lambda _: block, text, flags=re.S)
+    return text
+
+
 def update_manifest(chapters: dict) -> dict:
     path = STUBS / "MANIFEST.json"
     current = json.loads(path.read_text(encoding="utf-8"))
@@ -1204,9 +1273,11 @@ def main(argv=None) -> int:
     import build_index      # imports this module: imported here, once the module is loaded
 
     (ROOT / build_index.OUTPUT).write_text(build_index.build_index(chapters), encoding="utf-8")
+    readme = ROOT / "README.md"
+    readme.write_text(update_readme(chapters, readme.read_text(encoding="utf-8")), encoding="utf-8")
     update_manifest(chapters)
     print("✅ docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md, annexes/index_notions.md, "
-          "MANIFEST.json générés.")
+          "README.md (plan et parcours), MANIFEST.json générés.")
     return 0
 
 

@@ -64,7 +64,7 @@ Routine conseillée pour chaque chapitre :
 6. **Notebook** (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. Règle des 15 minutes : bloqué 15 minutes, tu ouvres l'indice 1 ; encore 5 minutes, l'indice 2, puis l'indice 3. Tu peux aussi ouvrir une conversation **tuteur (P8)**, qui te guide sans donner la réponse.
 7. **Corriger** : solutions et `pytest`. Tu peux faire corriger ton travail par Claude avec **P9**.
 8. **Réponses 💼 à voix haute**, comme en entretien.
-9. **Flashcards** : `python tools/export_flashcards.py --chapter N`, puis dans Anki *Fichier > Importer* le fichier créé dans `exports/` (type de note « Basique ») ; fais tes révisions chaque jour, c'est le plus rentable.
+9. **Flashcards** : `python tools/export_flashcards.py --chapter N`, puis dans Anki *Fichier > Importer* le fichier créé dans `exports/` (type de note « Basique » ; pas à pas, deck global et suspension des chapitres pas encore étudiés : `annexes/anki.md`) ; fais tes révisions chaque jour, c'est le plus rentable.
 10. **Journal et auto-évaluation** dans `mon_travail/suivi/` (tes copies ; `suivi/` contient les modèles tenus par Claude).
 11. **Retour à Claude (P7)**, pour calibrer les chapitres suivants.
 

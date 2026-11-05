@@ -130,6 +130,38 @@ def test_generated_documents_are_up_to_date(chapters, rel, build):
     assert build(chapters) == on_disk, f"{rel} is outdated: run python tools/syllabus.py build"
 
 
+def test_readme_tables_are_up_to_date(chapters):
+    """The plan and the tracks of README.md come from the contract (durations of docs/PARCOURS.md, statuses)."""
+    on_disk = (ROOT / "README.md").read_text(encoding="utf-8")
+    for name in syllabus.README_BLOCKS:
+        assert f"<!-- wb:readme {name} -->" in on_disk, f"expected the block « {name} » in README.md"
+    assert syllabus.update_readme(chapters, on_disk) == on_disk, "README.md is outdated: run python tools/syllabus.py build"
+
+
+@pytest.mark.parametrize("rel", ["README.md", "annexes/anki.md"])
+def test_links_of_the_entrance_pages_resolve(rel):
+    """Every relative link of the README and of the Anki guide leads to a file, every #anchor to a heading."""
+    path = ROOT / rel
+    text = path.read_text(encoding="utf-8")
+    anchors = {build_index.slug(h) for h in re.findall(r"^#{1,4} (.+?)\s*$", text, re.M)}
+    broken = [a for a in re.findall(r"\]\(#([^)]+)\)", text) if a not in anchors]
+    broken += [link for link in re.findall(r"\]\(([^)#:]+)(?:#[^)]*)?\)", text)
+               if not (path.parent / link).exists()]
+    assert not broken, f"expected every link of {rel} to resolve, broken: {broken}"
+
+
+def test_readme_figures_match_the_repository(chapters):
+    """The « En chiffres » block (tools/repo_stats.py --write): every figure but the tests is recounted here."""
+    import repo_stats
+
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    block = text.split(repo_stats.BEGIN)[1].split(repo_stats.END)[0]
+    fresh = repo_stats.render(repo_stats.cheap_stats(chapters), tests=None)
+    for line in fresh.splitlines():
+        if line.startswith("| **") and not line.startswith("| **Tests**"):
+            assert line in block, f"expected « {line[:90]}… » in README.md: run python tools/repo_stats.py --write"
+
+
 @pytest.mark.parametrize("heading, anchor", [
     ("18.6 · Étape 1 : les deltas des neurones de sortie ⏩", "186--étape-1--les-deltas-des-neurones-de-sortie-"),
     ("Le workbook : `wb.check`, « Tout exécuter »", "le-workbook--wbcheck--tout-exécuter-"),
