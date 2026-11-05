@@ -105,7 +105,7 @@ def figure_dqn_loop() -> None:
     box(ax, 0.2, 3.2, 2.3, 1.6, "Environnement", ["CartPole-v1", "état s (4 nombres)", "récompense r"], light(C[5]))
     box(ax, 4.0, 3.2, 2.9, 1.6, "Réseau en ligne $Q_\\theta$", ["s → une valeur par action", "action : ε-greedy",
                                                                 "(ε décroît)"], light(C[0]))
-    box(ax, 0.2, 0.3, 2.9, 1.9, "Mémoire de rejeu", ["les N dernières transitions", "(s, a, r, s', terminé)",
+    box(ax, 0.2, 0.3, 2.9, 1.9, "Mémoire de rejeu", ["les dernières transitions", "(s, a, r, s', terminé)",
                                                      "ReplayBuffer de rl.py"], light(C[3]))
     box(ax, 4.0, 0.3, 2.9, 1.9, "Mini-batch tiré au hasard", ["B transitions", "décorrélées",
                                                               "chacune resservira"], light(C[3], 0.12))
@@ -146,7 +146,7 @@ def figure_overestimation() -> dict[int, float]:
     ax.set_xlabel("nombre d'actions m (toutes valent 0 ; chaque estimation a un bruit N(0, 1))")
     ax.set_ylabel("valeur moyenne retenue")
     ax.set_xticks([1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
-    ax.legend(fontsize=8.5, loc="upper left")
+    ax.legend(fontsize=8.5, loc="center right")
     ax.set_title("Le max d'estimations bruitées surestime ; le double estimateur, non", fontsize=10.5)
     save(fig, "surestimation.png")
     return {int(m): float(e) for m, e in zip(ms, exact)}
@@ -243,7 +243,7 @@ def figure_rlhf_dpo() -> None:
             ("Préférences", ["les mêmes paires", "$(x, y_w, y_l)$"]),
             ("Référence figée", ["π_réf (SFT) :", "log-probabilités", "des deux réponses"]),
             ("Une loss supervisée", ["$-\\log\\sigma(\\beta[\\Delta_w - \\Delta_l])$", "$\\Delta = \\log\\pi - \\log\\pi_{réf}$",
-                                     "ni récompense ni rollout"]),
+                                     "ni modèle de récompense", "ni rollout"]),
             ("Modèle aligné", ["π"])]),
         (0.6, "GRPO\n(2024)", C[2], [
             ("Une question", ["G réponses tirées", "de la politique"]),

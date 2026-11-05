@@ -2,6 +2,8 @@
 
 Notes pour le rédacteur des exercices, des indices, des solutions et du notebook. Ce fichier n'est pas destiné à l'apprenant (à supprimer ou à fondre dans `EN_COURS.md` à la fin du chapitre).
 
+> **Relecture V2 (session 77) — nombres de la fiche changés** : l'exemple GAE passe à **λ = 0,5** (γλ = 0,45 ; avec λ = 0,8, γλ = 0,72 se confondait avec γV(s₂) = 0,72) → Â = (0,4895 ; 0,31 ; 0,2), cibles (2,4895 ; 1,81 ; 1,0) ; variante tronquée δ₂ = 0,83 inchangée (Â = 0,617075 ; 0,5935 ; 0,83, non écrits). Coûts CPU remesurés : passe avant 35-50 µs, `Categorical` 0,1-0,3 ms, mise à jour DQN 1,5-1,7 ms. **Ajouts qui touchent 🧮 B8.8** : la fiche (208.8) explique maintenant les 38 jours du DQN (l'agent voit une image sur quatre : 50 M d'images vues = 200 M d'images du jeu à 60 par seconde) ; GRPO dans DeepSeekMath utilisait encore un modèle de récompense appris (dit dans la fiche). `evaluate_policy(..., rng=np.random.default_rng(7))` dans la fiche (le stub de `rl.py` n'annonce pas d'entier pour `rng`).
+
 ## État
 
 - `01_fiche.md` : ≈ 13 900 mots (125 mots/min → 110 min, soit la lecture de 1,8 h déjà prévue par le contrat ; en-tête « ≈ 21 h » inchangé). Sections 208.1 à 208.8, toutes ⏩ (le chapitre n'a pas de livre : `rapide_sections` ne s'applique pas, et toutes les sections ont des exercices du parcours rapide).
@@ -17,7 +19,7 @@ Notes pour le rédacteur des exercices, des indices, des solutions et du noteboo
 - `make_vec` : `vectorization_mode="sync"` et `"vector_entry_point"` (CartPoleVectorEnv) sont tous deux en `AutoresetMode.NEXT_STEP` ; l'appel qui suit une fin rend la première observation, r = 0, deux drapeaux False, l'action est ignorée ; au pas de fin, l'observation rendue est la vraie dernière. `reset(seed=42)` donne 42, 43, 44… aux copies (vérifié contre des envs simples). `vector_kwargs={"autoreset_mode": AutoresetMode.SAME_STEP}` → `infos["final_obs"]`. `gym.wrappers.vector.RecordEpisodeStatistics` → `infos["episode"]` (`r`, `l`, `t`) et `infos["_episode"]`.
 - Paramètres : DQN de CleanRL 4-120-84-2 (ReLU) **10 934** ; DQN du RL Zoo pour CartPole (256-256) **67 586** ; PPO de CleanRL acteur 4-64-64-2 **4 610**, critique 4-64-64-1 **4 545** (total 9 155) ; 4-64-64-2 = 4 610 ; 4-128-128-2 = 17 410.
 - Mémoire de rejeu : `ReplayBuffer(capacity, obs_shape=(4,), obs_dtype="float32")` de la référence fonctionne ; 1 M transitions = 32 Mo pour s et s'.
-- Coûts CPU (2 cœurs, machine partagée, d'où des fourchettes) : `step` nu ≈ 12 µs, via `gym.make` ≈ 18 µs, vectorisé ≈ 20 µs par copie ; passe avant d'un MLP sur 1 observation 40-50 µs ; `Categorical(...).sample()` 150-300 µs (`validate_args=False` ≈ 160, défaut ≈ 240-300) ; mise à jour DQN (batch 128, 10 934 param., Adam, Huber) ≈ 1,7 ms ; pas d'Adam PPO (mini-batch 128, acteur + critique + entropie + clipping) ≈ 3,1 ms. La fiche donne ces coûts **sans** faire la chaîne de Fermi de CartPole, d'Atari ni d'AlphaGo Zero (🧮 B8.8) ; son exemple de Fermi est OpenAI Five (10^6 images/s × 10 mois ≈ 10^13).
+- Coûts CPU (2 cœurs, machine partagée, d'où des fourchettes) : `step` nu ≈ 12 µs, via `gym.make` ≈ 18 µs, vectorisé ≈ 20 µs par copie ; passe avant d'un MLP sur 1 observation 40-50 µs ; `Categorical(...).sample()` 150-300 µs (`validate_args=False` ≈ 160, défaut ≈ 240-300) ; mise à jour DQN (batch 128, 10 934 param., Adam, Huber) ≈ 1,5-1,7 ms ; pas d'Adam PPO (mini-batch 128, acteur + critique + entropie + clipping) ≈ 3,1 ms. La fiche donne ces coûts **sans** faire la chaîne de Fermi de CartPole, d'Atari ni d'AlphaGo Zero (🧮 B8.8) ; son exemple de Fermi est OpenAI Five (10^6 images/s × 10 mois ≈ 10^13).
 
 ## Valeurs que la fiche utilise déjà (à ne pas reprendre dans les exercices)
 
@@ -27,7 +29,7 @@ Notes pour le rédacteur des exercices, des indices, des solutions et du noteboo
 - Bandit jouet (figure) : bras N(10, 1) et N(11, 1), logits nuls, gradient vrai 0,25 ; écart-type 5,27 sans baseline, 0,50 avec b = 10,5.
 - Entropie de 2 actions : ln 2 = 0,693 ; (0,9 ; 0,1) → 0,325 ; (0,99 ; 0,01) → 0,056.
 - Surestimation : E[max de m N(0,1)] = 0,564 (m = 2), 1,029 (4), 1,539 (10), 1,868 (20).
-- GAE : 3 pas, r = 1, V = (2,0 ; 1,5 ; 0,8), terminé au 3ᵉ, γ = 0,9, λ = 0,8 → δ = (0,35 ; 0,22 ; 0,2), Â = (0,61208 ; 0,364 ; 0,2), cibles (2,61208 ; 1,864 ; 1,0) ; λ = 1 et V = 0 → (2,71 ; 1,9 ; 1) ; variante tronquée au 3ᵉ pas avec V(dernière obs.) = 0,7 → δ₂ = 0,83 (Â = 0,93867 ; 0,8176 ; 0,83, non écrits).
+- GAE : 3 pas, r = 1, V = (2,0 ; 1,5 ; 0,8), terminé au 3ᵉ, γ = 0,9, λ = 0,5 → δ = (0,35 ; 0,22 ; 0,2), Â = (0,4895 ; 0,31 ; 0,2), cibles (2,4895 ; 1,81 ; 1,0) ; λ = 1 et V = 0 → (2,71 ; 1,9 ; 1) ; variante tronquée au 3ᵉ pas avec V(dernière obs.) = 0,7 → δ₂ = 0,83 (Â = 0,617075 ; 0,5935 ; 0,83, non écrits).
 - Variance expliquée : retours (1, 2, 3, 4), prédictions (1,5 ; 1,5 ; 3,5 ; 3,5) → 0,8 ; prédictions décalées de 5 → 1 ; constante → 0.
 - Clip (ε = 0,2) : ratios (0,7 ; 1,1 ; 1,35), avantages (−1 ; 2 ; −1) → loss −0,0167, gradient (0 ; −0,6667 ; 0,3333).
 - KL approchée : π_old = (0,5 ; 0,5), π_θ = (0,6 ; 0,4) → KL 0,0204 ; action 0 : k1 = −0,182, k3 = 0,018.
