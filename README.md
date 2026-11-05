@@ -18,7 +18,7 @@ Objectif : une **reconversion professionnelle** vers les métiers de l'IA et de 
 | **Exercices** | **2 028** : 1 933 dans les 39 chapitres (0A, 0B, 1 à 29, B1 à B8), 82 dans les 6 examens blancs, 13 étapes du projet final |
 | **Par type** | 🧠 448 · 🔁 114 · ✏️ 250 · ∂ 71 · 🔨 197 · 📦 191 · 🔬 116 · 🔮 87 · 🐛 50 · 📈 47 · 🧮 37 · 🗣️ 45 · ⚖️ 39 · 📄 34 · 🎨 27 · 🏆 39 · 💼 190 · 🛠️ 46 |
 | **Vérifications automatiques** | 5 671 réponses vérifiées par `wb.check` (empreinte, jamais la réponse en clair) |
-| **Tests** | **5 854 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 851 pour l'outillage du workbook |
+| **Tests** | **5 855 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 852 pour l'outillage du workbook |
 | **Notebooks** | 107 : 78 dans les chapitres (exercices et solutions exécutées), 12 pour les examens blancs, 15 pour les mini-projets et le projet final, 2 pour la mise en place |
 | **Flashcards** | 967 cartes en 39 sous-paquets Anki |
 | **mylearn** | 38 modules, 273 fonctions et classes publiques aux signatures figées |

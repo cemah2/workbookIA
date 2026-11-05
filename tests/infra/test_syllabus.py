@@ -407,3 +407,18 @@ def test_recall_headers_of_the_exercises_show_their_stars_and_minutes(chapters):
                 wrong.append(f"{ch['dir']}/{name}:{number}: expected « …{end} » at the end of « {line} »")
         wrong += [f"{ch['dir']}/02_exercices.md: expected a header for {rid}" for rid in sorted(set(recalls) - seen)]
     assert not wrong, f"{len(wrong)} header(s): " + " | ".join(wrong[:20])
+
+
+def test_build_index_has_a_command_line_that_writes_only_when_asked(tmp_path, monkeypatch, capsys):
+    """``--help`` prints the help and writes nothing; ``--check`` compares; no argument writes (to a copy here)."""
+    out = tmp_path / "annexes" / "index_notions.md"
+    out.parent.mkdir()
+    monkeypatch.setattr(build_index, "ROOT", tmp_path)
+    monkeypatch.setattr(build_index, "build_index", lambda chapters: "# Index des notions\n")
+    with pytest.raises(SystemExit) as stop:
+        build_index.main(["--help"])
+    assert stop.value.code == 0 and "--check" in capsys.readouterr().out
+    assert not out.exists(), "--help must not write the index"
+    assert build_index.main(["--check"]) == 1 and not out.exists()
+    assert build_index.main([]) == 0 and out.read_text(encoding="utf-8") == "# Index des notions\n"
+    assert build_index.main(["--check"]) == 0

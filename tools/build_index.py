@@ -3,6 +3,7 @@
 
     python tools/syllabus.py build      # writes the index with the other generated documents
     python tools/build_index.py         # the index alone
+    python tools/build_index.py --check # exit 1 if the index is outdated, without writing it
 
 The index is never written by hand. Its entries come from two sources:
 
@@ -626,12 +627,14 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
                         found.append((4, _rank(cid), cid, page(cid)[0], sec))
                         deeper = [c for c in deeper if c != cid]
         if all(f[0] < 2 for f in found):             # defined nowhere it is listed: look in every page
-            candidates = digests.find(probes)
+            # not under one side of « exploration / exploitation » (« Exploration et audit de qualité »)
+            sure = [v for v in strong if v == strong[0] or " / " not in strong[0] or v not in strong[0].split(" / ")]
+            candidates = digests.find([norm(v).strip() for v in sure if pattern(v)])
             for cid in syllabus.ORDER:
                 if cid not in candidates or cid in e["taught"] or cid in [f[2] for f in found]:
                     continue
                 path, secs = page(cid)
-                sec, strength = find_definition(secs, strong)
+                sec, strength = find_definition(secs, sure)
                 if sec is not None:     # after the chapters of the entry: a bold word may be another sense
                     found.append((1, _rank(cid), cid, path, sec))
                     break
@@ -645,10 +648,13 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
         # the exercises that practise it
         shown_ids = {f[2] for f in taught}
         scope = {f[2] for f in found}
-        said = statements.find(probes)
+        sides = [norm(v).strip() for v in strong if " / " in strong[0] and v in strong[0].split(" / ")]
+        said = statements.find([p for p in probes if p not in sides])
+        said |= {i for i in statements.find(sides) if chapter_of[i] in scope}   # « exploration » alone: its chapters
         if len(said) > MAX_SAID:        # a word too common to tell (« trace » is also a verb): the chapters only
             said = {i for i in said if chapter_of[i] in scope}
-        named = [i for i in titles.find(probes) if not homonym or chapter_of[i] in scope]
+        named = [i for i in titles.find([p for p in probes if p not in sides]) if not homonym or chapter_of[i] in scope]
+        named += [i for i in titles.find(sides) if chapter_of[i] in scope and i not in named]
         covering = [i for _, _, cid, _, sec in taught if sec is not None and sec["ref"] and cid in chapters
                     for i in covers.get((cid, sec["ref"]), [])]
         ids = named + [i for i in covering if i in said]
@@ -764,11 +770,26 @@ def _relpath(path: Path, start: Path) -> str:
     return os.path.relpath(path, start)
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    """``python tools/build_index.py`` writes the index; ``--check`` only says whether it is up to date."""
+    import argparse
+
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(errors="replace")
-    chapters = syllabus.load()
-    (ROOT / OUTPUT).write_text(build_index(chapters), encoding="utf-8")
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--check", action="store_true",
+                        help=f"do not write: exit 1 if {OUTPUT} differs from what the sources give")
+    args = parser.parse_args(argv)
+    text = build_index(syllabus.load())
+    path = ROOT / OUTPUT
+    if args.check:
+        current = path.read_text(encoding="utf-8") if path.exists() else ""
+        if current != text:
+            print(f"❌ {OUTPUT} n'est pas à jour : python tools/syllabus.py build (ou python tools/build_index.py).")
+            return 1
+        print(f"✅ {OUTPUT} est à jour.")
+        return 0
+    path.write_text(text, encoding="utf-8")
     print(f"✅ {OUTPUT} généré.")
     return 0
 
