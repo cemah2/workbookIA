@@ -107,26 +107,53 @@ def test_run_stops_at_the_timeout_and_survives_a_missing_program(tmp_path):
 
 
 @pytest.mark.skipif(os.name == "nt", reason="process groups (POSIX)")
-def test_run_stops_what_a_command_leaves_alive(tmp_path):
-    """Session 76 (V4b, 25c): a demo that ends while the server it started still holds stdout made the caller wait
-    for the whole timeout, and the server survived. Now: the group is stopped after a short grace, ``leftover`` says
-    it, and a command that hangs is stopped with all its children at the timeout."""
+def test_run_never_signals_the_group_or_the_session_of_the_caller():
+    """Session 76 (V5): run() kills process groups; it must never aim at the caller's group or session, nor 0, 1, -1."""
+    for pgid in (os.getpgid(0), os.getsid(0), os.getpid(), 0, 1, -1, None):
+        assert not wbp._signallable_group(pgid), pgid
+        assert not wbp._group_alive(pgid) if pgid is not None else True
+
+
+@pytest.mark.skipif(os.name == "nt", reason="process groups (POSIX)")
+def test_run_a_grandchild_that_keeps_stdout_open(tmp_path):
+    """Session 76 (V4b, 25c): a demo that ends while the server it started still holds stdout made the caller wait for
+    the whole timeout, and the server survived. Now: no wait, the server is stopped, ``leftover`` says it."""
     import time
     marker = tmp_path / "alive.txt"
-    child = (f"import time, pathlib; time.sleep(3); pathlib.Path({str(marker)!r}).write_text('still alive')")
+    child = f"import time, pathlib; time.sleep(3); pathlib.Path({str(marker)!r}).write_text('still alive')"
     holds_stdout = f"import subprocess, sys; subprocess.Popen([sys.executable, '-c', {child!r}]); print('done')"
     start = time.perf_counter()
-    result = wbp.run([sys.executable, "-c", holds_stdout], tmp_path, timeout=30, grace=0.5)
-    assert time.perf_counter() - start < 10, "expected no wait for the whole timeout"
-    assert result.ok and result.leftover and not result.timed_out and result.stdout == "done\n"
-    quiet = (f"import subprocess, sys; subprocess.Popen([sys.executable, '-c', {child!r}], "
-             "stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)")
-    assert wbp.run([sys.executable, "-c", quiet], tmp_path, timeout=30).leftover, "expected a detached child to be seen"
-    hangs = f"import subprocess, sys, time; subprocess.Popen([sys.executable, '-c', {child!r}]); time.sleep(60)"
-    result = wbp.run([sys.executable, "-c", hangs], tmp_path, timeout=1)
-    assert result.timed_out and result.returncode is None
+    result = wbp.run([sys.executable, "-c", holds_stdout], tmp_path, timeout=8)
+    assert time.perf_counter() - start < 5, "expected no wait for the timeout"
+    assert result.ok and result.leftover and not result.timed_out and result.stdout == "done\n", result
     time.sleep(3.5)
-    assert not marker.exists(), "expected the children stopped with the command"
+    assert not marker.exists(), "expected the grandchild stopped"
+
+
+@pytest.mark.skipif(os.name == "nt", reason="process groups (POSIX)")
+def test_run_a_server_thread_that_is_never_stopped(tmp_path):
+    """Session 76 (V4b, 25c): serve_forever in a thread that is not a daemon: the command never ends; it is stopped at
+    the timeout, with what it printed so far."""
+    code = ("import threading, http.server\nserver = http.server.ThreadingHTTPServer(('127.0.0.1', 0), "
+            "http.server.BaseHTTPRequestHandler)\nthreading.Thread(target=server.serve_forever).start()\n"
+            "print('serving', flush=True)\n")
+    result = wbp.run([sys.executable, "-c", code], tmp_path, timeout=5)
+    assert result.timed_out and result.returncode is None and result.stdout == "serving\n", result
+    assert not result.leftover
+
+
+@pytest.mark.skipif(os.name == "nt", reason="process groups (POSIX)")
+def test_run_stops_a_command_that_writes_without_end(tmp_path, monkeypatch):
+    monkeypatch.setattr(wbp, "OUTPUT_LIMIT", 2_000_000)
+    result = wbp.run([sys.executable, "-c", "while True: print('x' * 1000)"], tmp_path, timeout=10)
+    assert result.returncode is None and not result.timed_out and "a été arrêtée" in result.stderr
+    assert len(result.stdout) <= 1_100_000
+
+
+def test_run_input_and_a_clean_command(tmp_path):
+    result = wbp.run([sys.executable, "-c", "import sys; print(sys.stdin.read().upper()); sys.exit(3)"], tmp_path,
+                     input="abc")
+    assert (result.returncode, result.stdout, result.leftover) == (3, "ABC\n", False)
     clean = wbp.run([sys.executable, "-c", "import subprocess, sys; subprocess.run([sys.executable, '-c', 'print(2)'])"],
                     tmp_path)
     assert clean.ok and not clean.leftover and clean.stdout == "2\n"

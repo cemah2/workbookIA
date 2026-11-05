@@ -81,13 +81,18 @@ def later_files_pending(ex_id):
     defines that module."""
     cli_file = PROJECT / "src" / "cifarprod" / "cli.py"
     text = cli_file.read_text(encoding="utf-8", errors="replace") if cli_file.is_file() else ""
-    absent = [f"{module}.py (la cellule de {name}, Ex {ex})" for module, (name, ex) in LATER_FILES.items()
-              if re.search(rf"^\s*(from\s+(\.|cifarprod\.)\s*{module}\b|from\s+(\.|cifarprod)\s+import\s.*\b{module}\b"
-                           rf"|import\s+cifarprod\.{module}\b)", text, re.M)
-              and not (PROJECT / "src" / "cifarprod" / f"{module}.py").is_file()]
+    absent = []
+    for module, (name, ex) in LATER_FILES.items():
+        target = PROJECT / "src" / "cifarprod" / f"{module}.py"
+        imported = re.search(rf"^\s*(from\s+(\.|cifarprod\.)\s*{module}\b|from\s+(\.|cifarprod)\s+import\s.*\b{module}\b"
+                             rf"|import\s+cifarprod\.{module}\b)", text, re.M)
+        if imported and (not target.is_file() or "raise NotImplementedError(" in target.read_text(encoding="utf-8",
+                                                                                                errors="replace")):
+            absent.append(f"{module}.py (la cellule de {name}, Ex {ex})")
     if absent:
-        print(f"⏳ Ex {ex_id} : ton cli.py importe {' et '.join(absent)}, que ton projet n'a pas encore (sur un projet "
-              "neuf, « Tout exécuter » arrive ici avant cette cellule) : exécute-la, puis réexécute celle-ci.")
+        print(f"⏳ Ex {ex_id} : ton cli.py importe {' et '.join(absent)}, que ton projet n'a pas encore, ou pas fini (sur "
+              "un projet neuf, « Tout exécuter » arrive ici avant cette cellule) : fais cet exercice, puis réexécute "
+              "celle-ci.")
     return bool(absent)
 
 

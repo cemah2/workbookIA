@@ -276,85 +276,131 @@ def _pythonpath(src: list) -> str:
     return os.pathsep.join(parts)
 
 
-def _group_alive(pgid: int) -> bool:
+def _signallable_group(pgid) -> bool:
+    """True only for a process group that this module may signal: a real group (> 1) that is neither the group nor
+    the session of the calling process (the notebook's kernel, pytest, a terminal)."""
+    if os.name == "nt" or not isinstance(pgid, int) or pgid <= 1:
+        return False
     try:
-        os.killpg(pgid, 0)
+        own = {os.getpid(), os.getpgid(0), os.getsid(0)}
+    except OSError:
+        return False
+    return pgid not in own
+
+
+def _group_alive(pgid: int) -> bool:
+    if not _signallable_group(pgid):
+        return False
+    try:
+        os.killpg(pgid, 0)                        # signal 0: only asks whether the group has a member
     except (ProcessLookupError, PermissionError):
         return False
     return True
 
 
 def _stop_group(process: subprocess.Popen) -> bool:
-    """Kill the process group of ``process`` (POSIX: its own session); True if something was still alive."""
+    """Kill what is left of the process group of ``process``, which :func:`run` started in its own session (its group
+    id is its pid); True if something was still alive. Never signals the group or the session of the caller, nor a
+    group id <= 1; a process that turns out not to lead its group is killed alone."""
     if os.name == "nt":                          # no process groups here: the process itself
         alive = process.poll() is None
-        process.kill()
+        if alive:
+            process.kill()
         return alive
-    if not _group_alive(process.pid):
+    pgid = process.pid
+    if process.poll() is None:                   # still running: make sure it leads its own group
+        try:
+            leads = os.getpgid(pgid) == pgid
+        except OSError:
+            leads = False
+        if not leads or not _signallable_group(pgid):
+            process.kill()
+            return True
+    if not _group_alive(pgid):
         return False
     if process.poll() is not None:                # orphans that are ending (zombies) leave the group at once
         time.sleep(0.2)
-        if not _group_alive(process.pid):
+        if not _group_alive(pgid):
             return False
-    try:
-        os.killpg(process.pid, 9)
-    except (ProcessLookupError, PermissionError):
-        pass
+    if _signallable_group(pgid):
+        try:
+            os.killpg(pgid, 9)
+        except (ProcessLookupError, PermissionError):
+            pass
     return True
 
 
+OUTPUT_LIMIT = 32 * 1024 * 1024        # bytes of stdout + stderr kept by run(): a command that writes more is stopped
+
+
+def _read_output(path: Path, limit: int) -> str:
+    """The text of an output file, its beginning and its end only when it is longer than ``limit`` bytes."""
+    size = path.stat().st_size
+    with path.open("rb") as f:
+        if size <= limit:
+            data = f.read()
+        else:
+            head = f.read(limit // 2)
+            f.seek(size - limit // 2)
+            data = head + f"\n[… {size - limit} octets coupés …]\n".encode() + f.read()
+    return data.decode("utf-8", "replace").replace("\r\n", "\n")
+
+
 def run(args, cwd, *, timeout: float = 120, src=(), env: dict | None = None, input: str | None = None,
-        grace: float = 2.0) -> RunResult:
+        grace: float = 0.2) -> RunResult:
     """Run ``args`` (a list; items converted to str) in the folder ``cwd`` (made absolute) and wait at most
     ``timeout`` seconds. The ``PYTHONPATH`` of the process starts with the folders ``src`` (absolute), then the
     ``src`` folder of ``wb``, then the current ``PYTHONPATH``; ``env`` adds or replaces variables. Never raises for a
     failing command: read ``returncode`` (None after a timeout, ``timed_out`` True).
 
-    The command runs in its own session (a new process group): at the timeout, the whole group is killed, not only
-    the command; and a command that ends while processes it started are still alive (a server never stopped, which
-    may also keep stdout open) does not make the caller wait: after ``grace`` seconds the group is killed and
-    ``leftover`` is True."""
+    The command runs in its own session (a new process group, never the caller's): at the timeout the whole group is
+    killed, not only the command; when the command ends while processes it started are still alive (a server never
+    stopped), they are killed too and ``leftover`` is True. stdout and stderr go to temporary files, not pipes: a
+    process left alive cannot keep the caller waiting, and a command that writes more than :data:`OUTPUT_LIMIT` bytes
+    is stopped (``returncode`` None, a note at the end of ``stderr``) instead of filling the memory. ``grace`` is
+    unused (kept for the callers)."""
     cwd = Path(cwd).resolve()
     args = [str(a) for a in args]
     full_env = {**os.environ, "PYTHONPATH": _pythonpath(list(src)), "PYTHONIOENCODING": "utf-8",
                 "PYTHONDONTWRITEBYTECODE": "1", "PYTHON_COLORS": "0", "NO_COLOR": "1", **(env or {})}
     full_env.pop("FORCE_COLOR", None)
     start = time.perf_counter()
-    try:
-        process = subprocess.Popen(args, cwd=cwd, stdin=subprocess.PIPE if input is not None else subprocess.DEVNULL,
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8",
-                                   errors="replace", env=full_env, start_new_session=os.name != "nt")
-    except OSError as exc:                       # the program does not exist
-        return RunResult(args, None, "", f"{type(exc).__name__}: {exc}", time.perf_counter() - start)
-    deadline, ended_at, timed_out, leftover = start + timeout, None, False, False
-    pending_input = input
-    while True:
-        now = time.perf_counter()
+    with tempfile.TemporaryDirectory(prefix="wb_b7_run_") as tmp:
+        out_path, err_path = Path(tmp) / "stdout", Path(tmp) / "stderr"
         try:
-            out, err = process.communicate(input=pending_input, timeout=max(0.01, min(0.5, deadline - now)))
-            break
-        except subprocess.TimeoutExpired:
-            pending_input = None                 # sent once: communicate() goes on from where it was
-            now = time.perf_counter()
-            if process.poll() is not None:       # the command has ended, but its pipes are still open
-                ended_at = ended_at if ended_at is not None else now
-                stop = now - ended_at >= grace
-                leftover = leftover or stop
-            else:
-                stop = now >= deadline
-                timed_out = timed_out or stop
-            if stop:
-                _stop_group(process)
-                try:
-                    out, err = process.communicate(timeout=10)
-                except subprocess.TimeoutExpired:   # a process outside the group holds the pipes: give up on them
-                    out, err = "", ""
+            with out_path.open("wb") as out_file, err_path.open("wb") as err_file:
+                process = subprocess.Popen(args, cwd=cwd, env=full_env, stdout=out_file, stderr=err_file,
+                                           stdin=subprocess.PIPE if input is not None else subprocess.DEVNULL,
+                                           start_new_session=os.name != "nt")
+        except OSError as exc:                   # the program does not exist
+            return RunResult(args, None, "", f"{type(exc).__name__}: {exc}", time.perf_counter() - start)
+        if input is not None:
+            try:
+                process.stdin.write(input.encode("utf-8"))
+                process.stdin.close()
+            except OSError:                      # the command does not read its input
+                pass
+        timed_out = flooded = False
+        while True:
+            try:
+                process.wait(timeout=max(0.01, min(0.5, start + timeout - time.perf_counter())))
                 break
-    if _stop_group(process):                     # ended with its pipes closed, but something it started lives on
-        leftover = True
-    process.wait()
-    code = None if timed_out else process.returncode
-    return RunResult(args, code, out or "", err or "", time.perf_counter() - start, timed_out, leftover)
+            except subprocess.TimeoutExpired:
+                if out_path.stat().st_size + err_path.stat().st_size > OUTPUT_LIMIT:
+                    flooded = True
+                elif time.perf_counter() < start + timeout:
+                    continue
+                else:
+                    timed_out = True
+                _stop_group(process)
+                process.wait()
+                break
+        leftover = _stop_group(process) and not (timed_out or flooded)   # something it started lives on: stopped here
+        stdout, stderr = _read_output(out_path, OUTPUT_LIMIT // 2), _read_output(err_path, OUTPUT_LIMIT // 2)
+    if flooded:
+        stderr += f"\n[wb : la commande a écrit plus de {OUTPUT_LIMIT // 2**20} Mo : elle a été arrêtée]\n"
+    code = None if timed_out or flooded else process.returncode
+    return RunResult(args, code, stdout, stderr, time.perf_counter() - start, timed_out, leftover)
 
 
 def cli(project: str | Path, *args, timeout: float = 120, env: dict | None = None) -> RunResult:
