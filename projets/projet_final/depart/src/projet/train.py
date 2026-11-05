@@ -46,7 +46,9 @@ def cross_validate(estimator, df, config: Config) -> dict:
 def fit(model, train_ds, val_ds, config: Config) -> dict:
     """Train ``model`` on ``train_ds``, choose the best epoch on ``val_ds``, and return
     ``{"model": the model at its best epoch, "history": {"train_loss": [...], "val_loss": [...], "val_metric": [...]},
-    "best_epoch": int, "best_score": float, "checkpoint": path of best.pt, "seconds": float}``.
+    "best_epoch": int, "best_score": float, "checkpoint": path of best.pt, "seconds": float}``. ``best_score`` is
+    ``config.metric`` on ``val_ds`` with the definition of ``sklearn.metrics.get_scorer(config.metric)`` (higher is
+    better: a ``neg_`` metric is negative), the number the baselines also get on the same validation (cli.py).
 
     Contract: AdamW with ``config.lr`` and ``config.weight_decay`` (or the optimizer your model needs, 19.18); a
     learning rate schedule if it helps (19.19, 23.26); ``model.train()`` then ``model.eval()`` and

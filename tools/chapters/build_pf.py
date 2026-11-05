@@ -219,7 +219,7 @@ Recopie dans `docs/rapport.md` (« Les données ») et dans `data/card.md` (« C
 **La suite (PF.4)** : remplis `docs/protocole.md`, puis fige-le **avant toute expérience** :
 
 ```bash
-git add docs/protocole.md data/splits.json && git commit -m "Protocole d'évaluation" && git tag protocole && git push --tags
+git add docs/protocole.md data/splits.json && git commit -m "Protocole d'évaluation" && git tag -a protocole -m "Protocole d'évaluation" && git push --tags
 ```
 """),
     ]
@@ -261,15 +261,17 @@ with step("le journal (train.read_runs)"):
     need(runs=runs or None)
     rows = []
     for run in runs[-10:]:
-        cv = (run.get("metrics") or {}).get("cv") or {}
+        metrics = run.get("metrics") or {}
+        cv = metrics.get("cv") or {}
         rows.append({"run_id": run["run_id"], "modèle": run.get("model"), "statut": run["status"],
-                     config.metric: cv.get("mean"), "écart-type": cv.get("std"), "secondes": run.get("seconds")})
+                     f"{config.metric} (validation croisée)": cv.get("mean"), "écart-type": cv.get("std"),
+                     f"{config.metric} (validation)": metrics.get("best_val"), "secondes": run.get("seconds")})
     display(pd.DataFrame(rows))
 """),
         md("""
 ## Ce que tu retiens
 
-Recopie dans `docs/rapport.md` (« Les baselines ») : les deux scores de validation croisée (moyenne ± écart-type sur les folds), les `run_id`, et ce qu'ils disent du problème (une baseline classique très au-dessus du naïf : il y a du signal ; à peine au-dessus : le deep learning devra le prouver). Puis commite le journal.
+Recopie dans `docs/rapport.md` (« Les baselines ») : les deux scores de validation croisée (moyenne ± écart-type sur les folds), leur score sur la validation (`best_val` : réentraînées sur les mêmes exemples que le modèle deep learning, notées sur la même validation, c'est le chiffre que PF.6 comparera), les `run_id`, et ce qu'ils disent du problème (une baseline classique très au-dessus du naïf : il y a du signal ; à peine au-dessus : le deep learning devra le prouver). Puis commite le journal.
 
 **La suite (PF.6)** : le modèle deep learning, entraîné par `projet train --config configs/fast.yaml`, puis `configs/full.yaml` (🚀 GPU Colab conseillé).
 """),
@@ -298,12 +300,14 @@ Coche tout avant de passer `OPEN_TEST = True` :
 - `docs/protocole.md` est tagué `protocole`, et toute modification depuis le tag est écrite dans sa section « Modifications » ;
 - tout est commité (`git status` est vide).
 
-Après l'exécution : commite **aussitôt** `experiments/test_access.jsonl` et `experiments/test_results.json`, puis le notebook exécuté. Le relancer ensuite (un relecteur, « Tout exécuter » dans un clone) ne rouvre pas le test : la cellule d'ouverture voit la ligne du journal, le dit, et les cellules suivantes affichent ⏳ ; les sorties qui comptent sont celles du notebook commité. Pour refaire une évaluation interrompue ou fausse, `ALLOW_REOPEN = True` : la réouverture est notée dans le journal du test, et tu la rapportes, avec les deux résultats.
+Après l'exécution : `open_sealed_test` a déjà commité sa ligne de `experiments/test_access.jsonl` ; commite **aussitôt** `experiments/test_results.json` et `experiments/test_predictions.csv` (une prédiction par exemple du test, pour les trois modèles : une analyse faite plus tard les relit sans rouvrir le test), puis le notebook exécuté. Le relancer ensuite (un relecteur, « Tout exécuter » dans un clone) ne rouvre pas le test : la cellule d'ouverture voit la ligne du journal, le dit, et les cellules suivantes affichent ⏳ ; les sorties qui comptent sont celles du notebook commité. Pour refaire une évaluation interrompue ou fausse, `ALLOW_REOPEN = True` : la réouverture est notée dans le journal du test, et tu la rapportes, avec les deux résultats.
 """),
         code("""
 OPEN_TEST = False      # True ONCE, when the model is final (the checklist above)
 ALLOW_REOPEN = False   # True only to redo an interrupted or wrong evaluation: it is logged, say it in the report
 REASON = "TODO: final evaluation of the model of run <run_id>"
+DELIVERED = config.out_dir   # the artifact of the retained run; say in the protocol which seed it is (chosen before
+                             # the seeds are compared) and on which rows it was trained
 """),
         code("""
 with step("état du protocole (evaluate.protocol_status)"):
@@ -318,22 +322,23 @@ with step("état du protocole (evaluate.protocol_status)"):
         md("""
 ## 1. Les trois modèles
 
-Le modèle retenu, rechargé depuis son artefact (`predict.load_artifact`) comme le fera l'API, et les deux baselines, réentraînées sur l'entraînement (et la validation, si ton protocole le prévoit) avec leurs réglages de PF.5.
+Le modèle retenu, rechargé depuis son artefact (`predict.load_artifact`) comme le fera l'API, et les deux baselines, réentraînées sur **les mêmes exemples d'entraînement que lui** (le sous-échantillon du mode rapide compris) avec leurs réglages de PF.5.
 """),
         code("""
 predictor = naive = classical = None
 with step("le modèle retenu (predict.load_artifact)"):
     from projet.predict import load_artifact
 
-    if not Path(config.out_dir).exists():
-        raise Pending(f"l'artefact {config.out_dir} (projet train --config {CONFIG_PATH.as_posix()})")
-    predictor = load_artifact(config.out_dir)
+    if not Path(DELIVERED).exists():
+        raise Pending(f"l'artefact {DELIVERED} (projet train --config {CONFIG_PATH.as_posix()})")
+    predictor = load_artifact(DELIVERED)
 with step("les deux baselines, réentraînées"):
-    from projet.data import load_examples, load_splits, select
+    from projet.data import load_examples, load_splits, select, subsample
     from projet.models import build_classical, build_naive
 
     examples = load_examples(config)
-    fit_df = select(examples, load_splits(config.split_file), "train")
+    # the same training rows as the deep model (cli.py): the fast mode subsamples them for both
+    fit_df = subsample(select(examples, load_splits(config.split_file), "train"), config.max_train_examples, config.seed)
     # TODO PF.8: pd.concat with the validation split if your protocol refits the baselines on train + val
     naive = build_naive(config).fit(fit_df, fit_df[config.target])
     classical = build_classical(config).fit(fit_df, fit_df[config.target])
@@ -365,42 +370,59 @@ else:
                   "évaluation interrompue ou fausse : ALLOW_REOPEN = True, et dis-le dans le rapport.")
         else:
             eval_df = open_sealed_test(config, reason=REASON, allow_reopen=ALLOW_REOPEN)
-            print(f"🔓 test ouvert : {len(eval_df)} exemples. Commite experiments/test_access.jsonl maintenant.")
+            print(f"🔓 test ouvert : {len(eval_df)} exemples (l'ouverture est notée et commitée).")
 """),
         md("""
 ## 3. Les métriques, avec leurs intervalles
 
-Pour chaque modèle : les métriques du protocole (`evaluate.compute_metrics`) et l'intervalle bootstrap à 95 % de la métrique principale (`evaluate.bootstrap_ci`, par groupes si le découpage en a) ; puis la différence entre le modèle retenu et chaque baseline, sur les **mêmes** tirages (`evaluate.paired_bootstrap`). Un chiffre sans intervalle ni baseline ne se rapporte pas.
+Pour chaque modèle : les métriques du protocole (`evaluate.compute_metrics`, avec les probabilités de toutes les classes pour ROC-AUC et PR-AUC ; une métrique principale de probabilités se bootstrape sur elles) et l'intervalle bootstrap à 95 % de la métrique principale (`evaluate.bootstrap_ci`, par groupes si le découpage en a) ; puis la différence entre le modèle retenu et chaque baseline, sur les **mêmes** tirages (`evaluate.paired_bootstrap`). Un chiffre sans intervalle ni baseline ne se rapporte pas.
 """),
         code("""
 import json
 
 import numpy as np
 
-predictions = results = None
+predictions = scores = results = None
 with step("prédictions des trois modèles"):
     need(eval_df=eval_df, predictor=predictor, naive=naive, classical=classical)
     y_true = eval_df[config.target].to_numpy()
     out = predictor.predict(eval_df.drop(columns=[config.target]).to_dict("records"))
     predictions = {"naive": np.asarray(naive.predict(eval_df)), "classical": np.asarray(classical.predict(eval_df)),
                    "model": np.array([o.get("label", o.get("prediction")) for o in out])}
-    model_scores = np.array([o.get("score", np.nan) for o in out], dtype=float)
+    confidence = np.array([o.get("score", np.nan) for o in out], dtype=float)   # of the PREDICTED class: sorts errors
+    if config.task == "classification" and all("proba" in o for o in out):
+        classes = list(classical.classes_)                  # the order of the columns of predict_proba
+        scores = {"naive": naive.predict_proba(eval_df), "classical": classical.predict_proba(eval_df),
+                  "model": np.array([[o["proba"][str(c)] for c in classes] for o in out])}
+        if len(classes) == 2:                                # binary: the probability of the positive class
+            scores = {name: s[:, 1] for name, s in scores.items()}
 with step("métriques et intervalles bootstrap"):
     need(predictions=predictions)
     from projet.evaluate import bootstrap_ci, compute_metrics, paired_bootstrap
 
+    # a main metric of probabilities is bootstrapped on the scores, any other on the labels
+    USES_SCORES = config.metric.startswith(("roc_auc", "average_precision", "neg_log_loss", "neg_brier_score"))
+    if USES_SCORES:
+        need(scores=scores)                                  # Predictor.predict must give "proba"
+
     def main_metric(y, p):
+        if USES_SCORES:
+            return compute_metrics(y, None, config, y_score=p)[config.metric]
         return compute_metrics(y, p, config)[config.metric]
+
+    measured = scores if USES_SCORES else predictions
 
     groups = eval_df[config.group_column].to_numpy() if config.group_column else None
     boot = {"n_boot": config.n_bootstrap, "seed": config.seed, "groups": groups}
     results = {"split": EVAL_SPLIT, "metric": config.metric, "n_examples": int(len(eval_df)), "models": {},
                "differences": {}}
     for name, p in predictions.items():
-        low, high = bootstrap_ci(y_true, p, main_metric, **boot)
-        results["models"][name] = {**compute_metrics(y_true, p, config), "ci95_low": low, "ci95_high": high}
+        low, high = bootstrap_ci(y_true, measured[name], main_metric, **boot)
+        y_score = None if scores is None else scores[name]
+        results["models"][name] = {**compute_metrics(y_true, p, config, y_score=y_score), "ci95_low": low,
+                                   "ci95_high": high}
     for base in ("naive", "classical"):
-        results["differences"][f"model - {base}"] = paired_bootstrap(y_true, predictions["model"], predictions[base],
+        results["differences"][f"model - {base}"] = paired_bootstrap(y_true, measured["model"], measured[base],
                                                                       main_metric, **boot)
     display(pd.DataFrame(results["models"]).T.round(4))
     display(pd.DataFrame(results["differences"]).T.round(4))
@@ -415,7 +437,15 @@ with step("écrire experiments/test_results.json"):
         path = path.with_name(f"test_results_reopened_{len(list(path.parent.glob('test_results*.json')))}.json")
         print(f"⚠️ le test a déjà été évalué : ce résultat va dans {path.name}, à signaler dans le rapport")
     path.write_text(json.dumps(results, indent=1, default=float) + "\\n", encoding="utf-8")
-    print(f"✅ {path} écrit : commite-le maintenant, avec experiments/test_access.jsonl")
+    # one row per test example: its id, the truth, the three predictions (and scores): no input, so reading it later
+    # is not a new opening (error analysis, subgroups computed afterwards from the ids)
+    table = pd.DataFrame({"id": eval_df["id"].astype(str).to_numpy(), "y_true": y_true,
+                          **{f"pred_{name}": p for name, p in predictions.items()}})
+    if scores is not None and all(np.ndim(s) == 1 for s in scores.values()):
+        table = table.assign(**{f"score_{name}": s for name, s in scores.items()})
+    table_path = path.with_name(path.name.replace("test_results", "test_predictions").replace(".json", ".csv"))
+    table.to_csv(table_path, index=False)
+    print(f"✅ {path} et {table_path} écrits : commite-les maintenant, avec le notebook exécuté")
 """),
         md("""
 ## 4. L'analyse d'erreurs
@@ -427,8 +457,12 @@ with step("les erreurs les plus sûres d'elles (evaluate.worst_errors)"):
     need(predictions=predictions)
     from projet.evaluate import worst_errors
 
-    display(worst_errors(eval_df, y_true, predictions["model"], y_score=model_scores, k=20))
-    # TODO PF.8: your reading of the errors, grouped by cause (in the report)
+    errors = worst_errors(eval_df, y_true, predictions["model"], y_score=confidence, k=20)
+    with pd.option_context("display.max_columns", None, "display.width", 250):
+        display(errors)                                       # every column: the ones that explain an error too
+    # TODO PF.8: your reading of the errors, grouped by cause (in the report). Tabular data: read an error by its
+    # profile, e.g. errors[features] - train_rows.groupby(config.target)[features].median() for its true class
+    # (train_rows: select(examples, splits, "train")), and look at the features that pull it away
 """),
         md("""
 ## 5. Les sous-groupes et la robustesse

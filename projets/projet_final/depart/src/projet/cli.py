@@ -4,6 +4,7 @@
     projet split --config configs/fast.yaml             # PF.3   writes data/splits.json once, prints its SHA-256
     projet baselines --config configs/fast.yaml         # PF.5   cross-validation of the naive and classical models
     projet train --config configs/fast.yaml --set seed=1 --set lr=3e-4      # PF.6, PF.7
+    projet train --set "model_params={hidden: 32}"      # a mapping: quotes, and a space after each colon (YAML)
     projet predict --model artifacts/model --input examples.jsonl           # PF.11
     projet latency --model artifacts/model --input examples.jsonl           # PF.11
     projet serve --model artifacts/model --port 8000                        # PF.11
@@ -11,7 +12,9 @@
 Exit codes: 0 success; 2 bad usage or invalid configuration; 1 the command failed (the run is logged as failed);
 3 a function of the package is not written yet (« ⏳ »). Messages go to stderr (logging); stdout only receives the
 JSON summary of the command (or the predictions), so that a script can read it. Every ``baselines`` and ``train`` run
-is appended to the journal ``config.runs_file``, failed ones included. The sealed test is not opened here: that is
+is appended to the journal ``config.runs_file``, failed ones included; both write ``metrics["best_val"]``, the main
+metric on the same validation split (the baselines refitted on the same training rows as the deep model), which is
+what the summary table compares. ``train`` logs its run even before ``predict.save_artifact`` is written (PF.11). The sealed test is not opened here: that is
 notebooks/03_evaluation.ipynb (``evaluate.open_sealed_test``), once.
 """
 
@@ -100,10 +103,16 @@ def _baseline(kind: str):
         from .models import build_classical, build_naive
         from .train import cross_validate, set_seed
 
+        from sklearn.metrics import get_scorer
+
         set_seed(config.seed, config.deterministic)
-        train_df, _ = _training_frames(config)
+        train_df, val_df = _training_frames(config)
         estimator = build_naive(config) if kind == "naive" else build_classical(config)
-        return {"cv": cross_validate(estimator, train_df, config), "n_train": int(len(train_df))}
+        cv = cross_validate(estimator, train_df, config)
+        # then refit on the same training rows as the deep model and score on the same validation (PF.6 compares them)
+        fitted = estimator.fit(train_df, train_df[config.target])
+        best_val = float(get_scorer(config.metric)(fitted, val_df, val_df[config.target]))
+        return {"cv": cv, "best_val": best_val, "n_train": int(len(train_df))}
     return work
 
 
@@ -122,9 +131,13 @@ def _train(config, args) -> dict:
     result = fit(model, train_ds, val_ds, config)
     metrics = {"best_epoch": result["best_epoch"], "best_val": result["best_score"], "history": result["history"],
                "n_parameters": n_parameters(result["model"]), "n_train": int(len(train_df))}
-    meta = save_artifact(args.out or config.out_dir, result["model"], preprocessor, config,
-                         metrics={"val_" + config.metric: result["best_score"]})
-    return {**metrics, "artifact": str(meta), "checkpoint": str(result["checkpoint"])}
+    try:
+        meta = save_artifact(args.out or config.out_dir, result["model"], preprocessor, config,
+                             metrics={"val_" + config.metric: result["best_score"]})
+    except NotImplementedError as err:              # PF.11 not written yet: the run still counts (PF.6, PF.7)
+        log.warning("⏳ %s: no artifact yet; the best checkpoint is %s", err, result["checkpoint"])
+        meta = None
+    return {**metrics, "artifact": None if meta is None else str(meta), "checkpoint": str(result["checkpoint"])}
 
 
 def _logged(command: str, model: str, work, config, args) -> int:
@@ -135,6 +148,9 @@ def _logged(command: str, model: str, work, config, args) -> int:
     record = {"run_id": run_id, "command": command, "model": model,
               "started": datetime.now(timezone.utc).isoformat(timespec="seconds"),
               "config": config.to_dict(), "environment": environment(), "status": "failed"}
+    if record["environment"]["git_dirty"]:
+        log.warning("uncommitted changes: this run cannot be rebuilt from commit %s; commit before the runs you report",
+                    record["environment"]["git_commit"])
     start = time.perf_counter()
     try:
         record["metrics"] = work(config, args)
@@ -180,8 +196,19 @@ def _latency(args) -> int:
     from .serve import measure_latency
     from .train import dumps, environment
 
+    import os
+    import platform
+
+    import torch
+
     result = measure_latency(load_artifact(args.model), _read_records(args.input), batch_size=args.batch_size)
-    print(dumps({**result, "platform": environment()["platform"]}))
+    cpu = platform.processor()
+    if Path("/proc/cpuinfo").exists():                       # Linux: platform.processor() is often empty
+        names = [l.split(":", 1)[1].strip() for l in Path("/proc/cpuinfo").read_text().splitlines()
+                 if l.startswith("model name")]
+        cpu = names[0] if names else cpu
+    print(dumps({**result, "platform": environment()["platform"], "cpu": cpu, "cpu_count": os.cpu_count(),
+                 "torch_threads": torch.get_num_threads()}))
     return 0
 
 

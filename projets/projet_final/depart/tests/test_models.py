@@ -1,6 +1,6 @@
 """Tests of models.py and train.py (PF.5 to PF.7), marked « todo ».
 
-Two of them are generic (the naive model is constant, a seed fixes the weights). The others need a small batch of
+Three of them are generic (the naive model is constant, a seed fixes the weights, a typo in model_params fails). The others need a small batch of
 YOUR inputs: write the fixture ``batch`` (a few examples built in memory, not the dataset), then the shape test and
 the overfitting test (a model that cannot learn 8 examples by heart has a bug: B7.15).
 """
@@ -34,6 +34,11 @@ def test_the_same_seed_gives_the_same_weights():
     second = models.build_model(Config())
     different = [k for k, v in first.state_dict().items() if not torch.equal(v, second.state_dict()[k])]
     assert not different, f"expected the same initial weights after set_seed(0), different: {different[:5]}"
+
+
+def test_an_unknown_model_param_is_refused():
+    with pytest.raises(ValueError):
+        models.build_model(Config(model_params={"not_a_setting_of_any_model": 1}))   # a typo must not pass silently
 
 
 @pytest.fixture

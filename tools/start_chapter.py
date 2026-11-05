@@ -92,7 +92,8 @@ def checkpoint_number(chapter_id: str) -> int | None:
 PROJECT_OUTPUTS = {"test_indices.npy", "vault.json", "results.json", "results_rapide.json", "config.json",
                    "config_rapide.json",
                    # the final project: its split, journals and test results are the learner's, never the kit's
-                   "splits.json", "runs.jsonl", "test_access.jsonl", "test_results.json"}
+                   "splits.json", "runs.jsonl", "test_access.jsonl", "test_results.json",
+                   "test_predictions.csv"}
 OUTPUT_DIRS = {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "figures", "runs", ".git",
                "checkpoints", "artifacts", "raw"}     # the last three: data and models of the final project
 

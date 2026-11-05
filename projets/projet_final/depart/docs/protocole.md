@@ -1,6 +1,6 @@
 # Protocole d'évaluation · TODO : le titre du projet
 
-<!-- PF.4 : écrit AVANT toute expérience (après l'exploration de PF.3), puis figé : `git add docs/protocole.md data/splits.json && git commit -m "Protocole d'évaluation" && git tag protocole && git push --tags`. Une modification ultérieure n'est pas interdite, mais elle se fait dans un nouveau commit, s'ajoute à la section « Modifications » ci-dessous et se signale dans le rapport (une modification non signalée coûte 3 points). Remplace chaque paragraphe qui commence par TODO. Un exemple rempli : projets/projet_final/exemple/protocole.md du workbook. -->
+<!-- PF.4 : écrit AVANT toute expérience (après l'exploration de PF.3), puis figé : `git add docs/protocole.md data/splits.json && git commit -m "Protocole d'évaluation" && git tag -a protocole -m "Protocole figé" && git push --tags`. Une modification ultérieure n'est pas interdite, mais elle se fait dans un nouveau commit, s'ajoute à la section « Modifications » ci-dessous et se signale dans le rapport (une modification non signalée coûte 3 points). Remplace chaque paragraphe qui commence par TODO. Un exemple rempli : projets/projet_final/exemple/protocole.md du workbook. -->
 
 ## Le découpage
 
@@ -32,7 +32,7 @@ TODO : les sous-groupes que tu rapporteras (classes, sources, périodes, une var
 
 ## Le budget
 
-TODO : le temps et le matériel par run (FAST_MODE sur CPU en moins de 10 minutes ; le mode complet sur GPU Colab), le nombre de runs de la recherche d'hyperparamètres (une vingtaine au plus), trois graines pour le modèle retenu et ses ablations.
+TODO : le temps et le matériel par run (FAST_MODE sur CPU en moins de 10 minutes ; le mode complet sur GPU Colab), le nombre de runs de la recherche d'hyperparamètres (une vingtaine au plus), trois graines pour le modèle retenu et ses ablations. Le modèle livré (l'artefact que le notebook 03 évalue) : quelle graine de la configuration retenue, décidée maintenant (par exemple « la graine 0, entraînée sur l'entraînement seul »), jamais la meilleure des trois.
 
 ## Modifications
 

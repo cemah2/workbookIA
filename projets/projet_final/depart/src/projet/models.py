@@ -43,7 +43,9 @@ def build_model(config: Config, *, n_inputs: int | None = None, n_outputs: int |
     Adapted to the data and justified in the report (PF.6): a pre-trained CNN or ViT fine-tuned (B1.17, B1.19), an
     encoder or a small LLM with LoRA (B4.25 to B4.28), an LSTM or a small Transformer for a series (22.23, B3.19), an MLP
     with embeddings for a table, a DQN or PPO agent for RL (B8.13, B8.20). Its output is the logits (classification) or
-    the prediction (regression); same seed, same weights (``train.set_seed`` before the call).
+    the prediction (regression); same seed, same weights (``train.set_seed`` before the call). ValueError for a key of
+    ``config.model_params`` that the model does not know: a typo must not give another model in silence (on the
+    command line, ``--set "model_params={hidden: 32}"``: YAML needs a space after each colon, ``{hidden:32}`` is a key).
     """
     # TODO PF.6: a few named variants selected by config.model (for the ablations of PF.7)
     raise NotImplementedError("TODO PF.6: build_model")

@@ -60,14 +60,16 @@ Un projet multimodal ou génératif est possible s'il reste mesurable (une métr
 
 ## La règle du test scellé
 
-Le test scellé est la seule mesure de ton projet qui ne soit pas optimiste : tous les choix (features, architecture, hyperparamètres, seuil, epoch d'arrêt) se font sans lui. Il obéit à quatre règles.
+Le test scellé (*held-out test set*, *sealed test*) est la part des données mise de côté avant toute expérience et regardée une seule fois, à la fin. C'est la seule mesure de ton projet qui ne soit pas optimiste : tous les choix (features, architecture, hyperparamètres, seuil, epoch d'arrêt) se font sans lui. Il obéit à quatre règles.
 
 1. **Un découpage figé et haché.** Le découpage (`data/splits.json`, les identifiants de chaque exemple en entraînement, validation et test) s'écrit **une fois** (`projet split`), se commite, et son SHA-256 se recopie dans `docs/protocole.md`. Toutes les expériences le relisent ; `evaluate.open_sealed_test` refuse d'ouvrir le test si le fichier a changé.
-2. **Le protocole tagué dans git avant les expériences.** `docs/protocole.md` (découpage, métriques, baselines, critère de succès, sous-groupes, budget) se commite puis se tague : `git tag protocole && git push --tags`. Le tag date le protocole : sa date doit précéder la première ligne de `experiments/runs.jsonl`, et le commit de chaque run (le champ `environment.git_commit` du journal) doit descendre du commit tagué (`git merge-base --is-ancestor protocole <commit>`), ce qu'un tag déplacé après coup ne peut pas simuler.
+2. **Le protocole tagué dans git avant les expériences.** `docs/protocole.md` (découpage, métriques, baselines, critère de succès, sous-groupes, budget) se commite puis se tague, par un tag **annoté**, qui garde sa propre date : `git tag -a protocole -m "Protocole d'évaluation" && git push --tags`. Le tag date le protocole : sa date doit précéder la première ligne de `experiments/runs.jsonl`, et le commit de chaque run (le champ `environment.git_commit` du journal) doit descendre du commit tagué (`git merge-base --is-ancestor protocole <commit>`), ce qu'un tag déplacé après coup ne peut pas simuler.
 3. **Une seule évaluation finale.** Le test s'ouvre une fois, à la fin, pour le modèle retenu et les deux baselines, dans `notebooks/03_evaluation.ipynb` (`OPEN_TEST = True`) ; tant que `OPEN_TEST = False`, ce notebook répète toute l'évaluation sur la validation, sans rien écrire, pour que l'unique passe sur le test ne bute sur aucune cellule. `evaluate.open_sealed_test` note chaque ouverture dans `experiments/test_access.jsonl` (date, commit, commit du tag, raison) et refuse une seconde ouverture ; relancé, le notebook ne rouvre pas le test. Commite ce fichier et `experiments/test_results.json` aussitôt : le journal du test ne perd jamais une ligne (son historique git le montre), et le supprimer pour rouvrir le test compte comme un test consulté.
 4. **Toute modification signalée.** Changer le protocole après le tag n'est pas interdit (une métrique mal choisie, un défaut découvert tard) : la modification se fait dans un nouveau commit, s'écrit dans la section « Modifications » du protocole et dans le rapport, **avant** l'ouverture du test. Une réouverture du test (`allow_reopen=True`) se rapporte de même, avec les deux résultats.
 
 Pénalité : un test consulté avant l'évaluation finale, ou un protocole modifié après coup sans le signaler, coûte **3 points** (la grille le vérifie par `git log`, le tag et `experiments/test_access.jsonl`).
+
+**Ce que l'outil garantit, et ce qu'il ne garantit pas.** `open_sealed_test` refuse un découpage changé et une seconde ouverture, et commite lui-même sa ligne du journal du test : une ouverture ne s'efface plus en supprimant un fichier. Mais rien n'empêche de lire `data/splits.json` à la main, ni de réécrire l'historique git avant de le pousser : le test scellé reste une règle d'honneur, outillée pour laisser des traces. Le correcteur les cherche : un accès au test ailleurs que dans `evaluate.py`, un run qui lit un autre fichier de découpage (le champ `config.split_file` du journal), un tag postérieur aux runs, un modèle retenu dont les prédictions sur le test sont exactement celles d'une baseline.
 
 **L'exploration et le test.** L'audit de PF.3 se fait avant le découpage, sur tout le dataset, mais seulement sur sa structure : tailles, identifiants, doublons, valeurs manquantes, groupes, dates, répartition de la cible. Il sert à choisir la règle du découpage. Les relations entre les entrées et la cible, celles qui inspirent tes choix, ne s'explorent que sur l'entraînement. Comparer la répartition de la cible ou des entrées entre découpages (le décalage) est permis : ce sont des comptages, sans modèle.
 
@@ -93,6 +95,8 @@ Pénalité : un test consulté avant l'évaluation finale, ou un protocole modif
 
 Le seul jalon qui ne se rattrape pas est le tag de la semaine 1 : sans lui, rien ne prouve que le protocole précède les résultats.
 
+Les durées de PF.6 et PF.7 supposent un modèle pré-entraîné (images, texte) entraîné sur un GPU. Sur un petit dataset tabulaire, un run prend quelques secondes : ces deux étapes prennent plutôt la moitié du temps annoncé, et le temps gagné va à PF.8 et PF.9.
+
 <a id="demarrer"></a>
 
 ## Démarrer
@@ -106,15 +110,23 @@ copie le kit de départ dans `mon_travail/projet_final/`, sans jamais écraser u
 ```bash
 cd mon_travail/projet_final
 git init -b main && git add -A && git commit -m "Kit de départ du projet final"
-echo "mon_travail/projet_final/" >> ../../.git/info/exclude    # le workbook ignore ce dépôt imbriqué, sans toucher à son .gitignore
+echo "mon_travail/projet_final/" >> ../../.git/info/exclude    # si le workbook est un clone git : il ignore ce dépôt imbriqué
 # crée un dépôt vide sur GitHub, puis :
 git remote add origin https://github.com/<ton-compte>/<ton-depot>.git && git push -u origin main
 ```
 
 Puis, dans cet ordre :
 
-1. **Renomme le paquet** : `src/projet/` devient un nom court (`velo_demande`, `birdclf`) ; remplace `projet` dans `pyproject.toml`, `scripts/`, `tests/` et `notebooks/` (`git grep -n "projet"` les liste). Garder `projet` est permis, mais moins parlant.
-2. **Installe** : `pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu` (sur CPU), puis `pip install -e ".[dev,serve,notebooks]"`. Sur Colab, clone ton dépôt dans Drive et donne son chemin à `REPO_ON_DRIVE` dans la cellule de setup des notebooks.
+1. **Renomme le paquet** : `src/projet/` devient un nom court (`velo_demande`, `birdclf`). Garder `projet` est permis, mais moins parlant. Ces commandes changent le nom dans le code, sans toucher à la prose française (« ton projet ») :
+
+   ```bash
+   N=velo_demande                                   # ton nom : minuscules, chiffres et _
+   git mv src/projet src/$N
+   git grep -lwz projet -- pyproject.toml configs src scripts tests | xargs -0 sed -i -E "s/\bprojet\b/$N/g"
+   git grep -lz -E '\bprojet\.' -- notebooks | xargs -0 sed -i -E "s/\bprojet\./$N./g"
+   python -m pytest -q && git commit -am "Paquet renommé en $N"   # les mentions restantes sont de la prose
+   ```
+2. **Installe**, dans un environnement virtuel neuf (`python -m venv .venv && source .venv/bin/activate`) : **d'abord** PyTorch pour CPU, `pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu`, puis `pip install -e ".[dev,serve,notebooks]"`. Sans la première commande, pip prend sur PyPI la version CUDA de PyTorch (plusieurs Go). Vérifie : `python -c "import torch; print(torch.__version__)"` doit finir par `+cpu`. Sur Colab, PyTorch est déjà là : clone ton dépôt dans Drive et donne son chemin à `REPO_ON_DRIVE` dans la cellule de setup des notebooks.
 3. **Lance les tests** : `python -m pytest -q`. Les tests de structure passent dès le départ ; les tests marqués `todo` sont sautés avec ⏳ tant que leurs fonctions ne sont pas écrites.
 4. **Pousse** : l'intégration continue (`.github/workflows/ci.yml`) tourne sur GitHub à chaque push ; ajoute son badge en haut du README.
 
@@ -168,7 +180,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 - une métrique métier (ce que compte l'utilisateur) et une métrique technique qui la suit, avec la raison du choix (déséquilibre, coûts asymétriques) ;
 - un critère de succès **chiffré** (une différence avec la baseline classique, un seuil, son intervalle) et une contrainte (latence, taille, CPU) ;
 - le périmètre (ce que le projet ne fait pas) et deux ou trois risques, chacun avec une parade ;
-- le commit du cadrage précède ceux des données (`git log`).
+- le commit qui remplit le cadrage précède ceux qui remplissent la data card et `data.py` (`git log`, après le commit du kit).
 
 **Erreurs à éviter** : l'accuracy sur des classes déséquilibrées ; un critère vague (« le meilleur possible ») ; un problème trop large pour 41 h ; un critère écrit après les premiers résultats.
 
@@ -214,6 +226,8 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 **Chapitres mobilisés** : ch. 8, le test sous clé (🗣️ 8.7, 🔮 8.17, 💼 8.E1), les fuites (🐛 8.24), comparer deux modèles honnêtement (🔬 8.26, 💼 8.E2) ; ch. 3, les moyennes macro, micro et pondérée (🔨 3.25) ; ch. 12, la fuite par le prétraitement (🗣️ 12.9, 🔬 12.31).
 
 **Livrable** : `docs/protocole.md` figé par un commit tagué « protocole ».
+
+La métrique principale se calcule sur les étiquettes (le seuil de décision fait alors partie du protocole), ou sur les probabilités (ROC-AUC, PR-AUC : `Predictor.predict` rend `proba`, et le notebook 03 bootstrape sur elles) ; dans les deux cas, son nom est celui de `sklearn.metrics.get_scorer`, que les baselines et le modèle partagent.
 
 **Critères de réussite**
 - la règle du découpage, ses tailles et le SHA-256 de `data/splits.json` ;

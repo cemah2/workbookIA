@@ -20,7 +20,7 @@ Dans l'ordre : (1) l'utilisateur et sa décision ; (2) ce qu'il fait aujourd'hui
 </details>
 <details><summary>Indice 3</summary>
 
-Un exemple complet sur un autre dataset (la demande de vélos de Washington) : `exemple/cadrage.md`. Liste de contrôle du tien : le pitch tient en cinq lignes lisibles par quelqu'un qui ne fait pas de deep learning · la métrique métier a une unité · la métrique technique est nommée exactement (« F1 macro », « MAE en vélos par heure ») · le critère de succès contient un nombre **et** une baseline · une contrainte (latence, CPU, taille) · le périmètre dit au moins une chose que tu ne feras pas · chaque risque a sa parade · le fichier est commité avant tout fichier de données.
+Un exemple complet sur un autre dataset (la demande de vélos de Washington) : `exemple/cadrage.md`. Liste de contrôle du tien : le pitch tient en cinq lignes lisibles par quelqu'un qui ne fait pas de deep learning · la métrique métier a une unité · la métrique technique est nommée exactement (« F1 macro », « MAE en vélos par heure ») · le critère de succès contient un nombre **et** une baseline · une contrainte (latence, CPU, taille) · le périmètre dit au moins une chose que tu ne feras pas · chaque risque a sa parade · le fichier est commité avant que tu remplisses la data card et `data.py`.
 
 </details>
 
@@ -170,8 +170,9 @@ Le cœur de `summarize` : la clé qui regroupe les graines d'une même configura
 def config_key(run):
     settings = {k: v for k, v in run["config"].items() if k != "seed"}
     return run["command"], run["model"], json.dumps(settings, sort_keys=True)
-# then: group the "ok" runs by config_key, count the failed ones apart, the validation metric of each run
-# (metrics["cv"]["mean"] for baselines, metrics["best_val"] for train), its mean and std per group,
+# then: group the "ok" runs by config_key, count the failed ones apart, keep one run per seed (a second run of
+# the same seed checks reproducibility, it is not a new seed), the validation metric metrics["best_val"] (the
+# same validation split for baselines and train), its mean and std per group,
 # one Markdown row per group, best first, a mark when there are fewer than three seeds
 ```
 
@@ -190,7 +191,7 @@ Une seule passe, préparée comme une expérience : tout est écrit et testé **
 </details>
 <details><summary>Indice 2</summary>
 
-(1) Écris et teste `compute_metrics`, `bootstrap_ci`, `paired_bootstrap`, `subgroup_table`, `worst_errors` sur la **validation** (les tests de `test_evaluate.py`, puis le notebook 03 en répétition : avec `OPEN_TEST = False`, il tourne en entier sur la validation, tes cellules de robustesse et d'explication comprises) ; (2) fige le modèle (artefact, run du journal), commite tout ; (3) passe `OPEN_TEST = True` et « Tout exécuter », une fois ; (4) commite `experiments/test_access.jsonl` et `experiments/test_results.json` ; (5) lis les vingt erreurs et range-les par cause ; (6) écris la section « Résultats ».
+(1) Écris et teste `compute_metrics`, `bootstrap_ci`, `paired_bootstrap`, `subgroup_table`, `worst_errors` sur la **validation** (les tests de `test_evaluate.py`, puis le notebook 03 en répétition : avec `OPEN_TEST = False`, il tourne en entier sur la validation, tes cellules de robustesse et d'explication comprises) ; (2) fige le modèle (artefact, run du journal), commite tout ; (3) passe `OPEN_TEST = True` et « Tout exécuter », une fois ; (4) commite `experiments/test_access.jsonl` et `experiments/test_results.json` ; (5) lis les vingt erreurs et range-les par cause (sur un tabulaire, une erreur se lit par son profil : les features qui l'éloignent de la médiane de sa vraie classe) ; (6) écris la section « Résultats ».
 
 </details>
 <details><summary>Indice 3</summary>
@@ -283,12 +284,18 @@ Le squelette de `create_app` (le schéma d'un enregistrement est le tien) :
 ```python
 def create_app(predictor):
     from fastapi import FastAPI
+    from fastapi.exceptions import RequestValidationError
+    from fastapi.responses import JSONResponse
     from pydantic import BaseModel, Field
 
     class Request(BaseModel):
         records: list[dict] = Field(min_length=1, max_length=64)    # or a model of YOUR fields
 
     app = FastAPI()
+
+    @app.exception_handler(RequestValidationError)                 # the default 422 echoes the input back
+    def invalid(request, exc):
+        return JSONResponse(status_code=422, content={"detail": [{"loc": e["loc"], "msg": e["msg"]} for e in exc.errors()]})
 
     @app.get("/health")
     def health(): ...
@@ -298,7 +305,7 @@ def create_app(predictor):
     return app
 ```
 
-Liste de contrôle : un processus neuf prédit · le prétraitement vient de l'artefact · `eval()` · 422 sur une entrée invalide · même prédiction par les trois chemins · p50 et p95 avec la machine.
+Liste de contrôle : un processus neuf prédit · le prétraitement vient de l'artefact · `eval()` · `proba` de toutes les classes à côté du `score` · 422 sur une entrée invalide, sans l'entrée dans la réponse · même prédiction par les trois chemins · p50 et p95 avec la machine.
 
 </details>
 

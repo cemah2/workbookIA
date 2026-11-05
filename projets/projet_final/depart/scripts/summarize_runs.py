@@ -6,10 +6,11 @@
 
 Contract (TODO PF.7): one row per configuration, that is the same ``command``, the same ``model`` and the same
 ``config`` except its ``seed`` (the naive and the classical baselines share their config: ``model`` tells them apart);
-with the number of seeds, the mean and the standard deviation of the validation metric (``metrics["cv"]["mean"]`` for
-``projet baselines``, ``metrics["best_val"]`` for ``projet train``), the mean duration (``seconds``); the failed runs
-counted apart; sorted by mean, best first (the lowest first for an error such as the MAE); Markdown. A row with fewer
-than three seeds is marked. The test never appears here: its numbers are
+with the number of seeds, the mean and the standard deviation of the validation metric ``metrics["best_val"]`` (the
+same validation split for the baselines and the deep model; the cross-validation of the baselines is in
+``metrics["cv"]``), the mean duration (``seconds``); the failed runs counted apart; two runs of the same seed are a
+check of reproducibility, not two seeds: keep one; sorted by mean, best first (``get_scorer`` convention: higher is
+better); Markdown. A row with fewer than three seeds is marked. The test never appears here: its numbers are
 in experiments/test_results.json, written once by notebooks/03_evaluation.ipynb.
 """
 

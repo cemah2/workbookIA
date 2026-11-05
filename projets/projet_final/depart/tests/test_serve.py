@@ -42,3 +42,5 @@ def test_predict_answers_one_prediction_per_record(client):
 def test_a_malformed_body_is_refused_with_422(client):
     response = client.post("/predict", json={"records": "not a list"})
     assert response.status_code == 422, f"expected 422 for a body that is not {{'records': [...]}}, got {response.status_code}"
+    assert "not a list" not in response.text, \
+        "expected a 422 that does not echo the input back (FastAPI does by default: an exception handler, B7.18)"

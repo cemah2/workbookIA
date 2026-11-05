@@ -31,6 +31,11 @@ def compute_metrics(y_true, y_pred, config: Config, *, y_score=None) -> dict:
     """The metrics of the protocol, as ``{name: float}``: the main metric ``config.metric`` first, then the secondary
     ones written in docs/protocole.md.
 
+    ``y_pred`` holds labels (or values); ``y_score`` the probabilities: of the positive class for a binary problem, an
+    array (n, classes) otherwise, in the order of ``classes_``. A metric of probabilities (ROC-AUC, PR-AUC, log-loss,
+    Brier) reads ``y_score``; with ``y_pred=None``, only those are computed (the bootstrap of such a main metric,
+    notebook 03). Keys: the names of ``sklearn.metrics.get_scorer`` (``f1_macro``, ``roc_auc``, ``average_precision``).
+
     Classification: accuracy, ``f1_macro``, the precision and recall of the class that matters, ROC-AUC and PR-AUC if
     ``y_score`` is given (3.16, 3.24 to 3.26), and the calibration if decisions read the probabilities (3.28);
     regression and forecasting: MAE, RMSE, and a relative error that a user understands. Use ``sklearn.metrics``:
@@ -123,10 +128,13 @@ def open_sealed_test(config: Config, *, reason: str, root: str | Path = ".", all
     3. refuses a second opening (RuntimeError) unless ``allow_reopen=True``, which is written in the log: say it, and
        why, in the report (BIBLE: a test seen twice is a validation set);
     4. appends one line to the test log: the UTC time, ``reason``, the number of test examples, the SHA-256 of the
-       split, the git commit, the commit of the tag ``protocole`` and whether the protocol changed since the tag.
+       split, the git commit, the commit of the tag ``protocole``, whether the protocol changed since the tag, and
+       whether the first run of the journal descends from the tag (``runs_descend_from_tag``);
+    5. commits the test log at once (``git commit -- <test log>``, nothing else), before returning the test: an
+       opening cannot be erased by deleting a file that was never committed (if git refuses, a ⚠️ says to commit).
 
-    Nothing is written if a step fails (a function not written yet, a wrong split): the test stays sealed. Commit the
-    test log right after: it is the proof that the test was opened once, after the protocol.
+    Nothing is written if a step fails (a function not written yet, a wrong split): the test stays sealed. The test
+    log is the proof that the test was opened once, after the protocol: it only ever grows.
     """
     root = Path(root)
     if not reason or not reason.strip():
@@ -144,19 +152,35 @@ def open_sealed_test(config: Config, *, reason: str, root: str | Path = ".", all
         raise RuntimeError(f"the sealed test was already opened {len(previous)} time(s) (first: "
                            f"{previous[0].get('opened')}); reopening it needs allow_reopen=True and a line in the report")
     status = protocol_status(root)
+    runs = Path(config.runs_file) if Path(config.runs_file).is_absolute() else root / config.runs_file
+    first = next((l for l in runs.read_text(encoding="utf-8").splitlines() if l.strip()), None) if runs.exists() else None
+    first_commit = ((json.loads(first).get("environment") or {}).get("git_commit") if first else None)
+    descends = None
+    if status["tag_commit"] and first_commit:
+        ancestry = _git(root, "merge-base", "--is-ancestor", status["tag_commit"], first_commit)
+        descends = None if ancestry is None or ancestry.returncode not in (0, 1) else ancestry.returncode == 0
     record = {"opened": datetime.now(timezone.utc).isoformat(timespec="seconds"), "reason": reason.strip(),
               "n_examples": int(len(test)), "split_sha256": digest, "git_commit": status["head_commit"],
               "protocol_tag_commit": status["tag_commit"],
               "protocol_changed_since_tag": status["protocol_changed_since_tag"],
-              "uncommitted_protocol_or_split": status["uncommitted"], "reopening": bool(previous)}
+              "uncommitted_protocol_or_split": status["uncommitted"], "runs_descend_from_tag": descends,
+              "reopening": bool(previous)}
     log = root / config.test_log
     log.parent.mkdir(parents=True, exist_ok=True)
     with log.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+    added = _git(root, "add", "--", str(log.relative_to(root)) if log.is_relative_to(root) else str(log))
+    done = _git(root, "commit", "-q", "-m", f"Ouverture du test scellé : {reason.strip()}", "--", str(log))
+    if added is None or done is None or added.returncode != 0 or done.returncode != 0:
+        print(f"⚠️ {log} could not be committed by git: commit it NOW, before reading the results")
+    else:
+        print(f"✅ the opening is committed ({config.test_log})")
     if status["tag_commit"] is None:
         print("⚠️ no git tag « protocole »: the protocol was not frozen before the experiments (PF.4)")
     elif status["protocol_changed_since_tag"]:
         print("⚠️ docs/protocole.md changed since the tag « protocole »: report every change in the report")
+    if descends is False:
+        print("⚠️ the first run of the journal does not descend from the tag « protocole »: the tag came after it")
     if status["uncommitted"]:
         print("⚠️ docs/protocole.md or data/splits.json has uncommitted changes: commit them, and say it in the report")
     return test

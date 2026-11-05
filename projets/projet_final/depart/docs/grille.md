@@ -11,8 +11,8 @@
 ```bash
 git clone <ton dépôt> /tmp/pf && cd /tmp/pf          # un clone neuf, pas ta copie de travail
 git log --reverse --format="%h %ad %s" --date=iso | head -20
-git show --no-patch --format="%h %ad" protocole      # le commit tagué et sa date
-head -1 experiments/runs.jsonl ; cat experiments/test_access.jsonl
+git for-each-ref --format="%(taggerdate:iso) %(*objectname:short)" refs/tags/protocole   # date du tag annoté, commit tagué
+head -1 experiments/runs.jsonl ; cat experiments/test_access.jsonl    # avant de relancer les notebooks, qui ajoutent des runs
 git merge-base --is-ancestor protocole <environment.git_commit de la première ligne de runs.jsonl> && echo "runs après le tag"
 git log -p --format="%h %ad" -- experiments/test_access.jsonl | grep -c '^-{'     # 0 : le journal du test n'a jamais perdu de ligne
 pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
@@ -28,7 +28,7 @@ projet train --config configs/fast.yaml          # l'artefact du mode rapide (ar
 | [ ] | `docs/cadrage.md` tient en une page et commence par le pitch de cinq lignes (problème et utilisateurs, données, entrée et sortie, métrique et baseline, risque) | 0,25 | lecture ; les cinq points du pitch de 29.4 sont là | |
 | [ ] | une métrique métier et une métrique technique qui la suit, et la raison du choix (déséquilibre, coût des erreurs dans chaque sens) | 0,25 | lecture ; l'accuracy seule sur des classes déséquilibrées ne compte pas | |
 | [ ] | un critère de succès **chiffré** (écart à la baseline classique et son intervalle, ou un seuil) et une contrainte (latence, taille, CPU) | 0,25 | un nombre écrit, pas « le meilleur possible » | |
-| [ ] | le périmètre et deux ou trois risques avec leur parade ; le cadrage commité avant les données | 0,25 | `git log -- docs/cadrage.md` précède `git log -- data/` | |
+| [ ] | le périmètre et deux ou trois risques avec leur parade ; le cadrage commité avant les données | 0,25 | `git log --reverse --format="%h %s" -- docs/cadrage.md data/card.md "src/*/data.py"` : après le commit du kit (qui contient déjà les deux modèles), le premier commit est celui du cadrage | |
 
 ## PF.2 — Données et data card (1 point)
 
@@ -58,7 +58,7 @@ projet train --config configs/fast.yaml          # l'artefact du mode rapide (ar
 | [ ] | une métrique principale, des secondaires, la méthode d'intervalle (bootstrap, par groupes s'il y en a) | 0,25 | lecture de `docs/protocole.md` | |
 | [ ] | la baseline naïve **nommée** et la baseline classique, la validation croisée et la règle de ses folds | 0,25 | lecture | |
 | [ ] | le critère de succès chiffré, les sous-groupes et la robustesse, le budget (runs, graines, machine) | 0,25 | lecture | |
-| [ ] | le tag `protocole` existe, poussé, et précède les expériences : sa date avant la première ligne de `experiments/runs.jsonl`, et le commit de chaque run descend du commit tagué | 0,25 | `git show protocole` contre `head -1 experiments/runs.jsonl` ; `git merge-base --is-ancestor protocole <git_commit du run>` | |
+| [ ] | le tag `protocole` (annoté) existe, poussé, et précède les expériences : sa date avant la première ligne de `experiments/runs.jsonl`, et le commit de chaque run descend du commit tagué | 0,25 | la date du tag contre `head -1 experiments/runs.jsonl` ; `git merge-base --is-ancestor protocole <git_commit du run>` ; le champ `runs_descend_from_tag` de `experiments/test_access.jsonl` | |
 | [ ] | la section « Modifications » liste chaque changement après le tag (date, commit, pourquoi), ou dit « Aucune » et `git diff protocole -- docs/protocole.md` est vide | 0,25 | `git log protocole..HEAD -- docs/protocole.md` | |
 
 ## PF.5 — Baselines (1 point)
@@ -95,7 +95,7 @@ projet train --config configs/fast.yaml          # l'artefact du mode rapide (ar
 
 | Fait | Critère | Pts | Comment le vérifier | Preuve |
 |---|---|---|---|---|
-| [ ] | une seule ligne dans `experiments/test_access.jsonl`, après le tag (`protocol_tag_commit` présent, `protocol_changed_since_tag` faux ou signalé), commitée avec `experiments/test_results.json` | 0,5 | `cat experiments/test_access.jsonl` ; `git log -- experiments/` | |
+| [ ] | une seule ligne dans `experiments/test_access.jsonl`, après le tag (`protocol_tag_commit` présent, `protocol_changed_since_tag` faux ou signalé), dans le commit « Ouverture du test scellé » ; `experiments/test_results.json` et `experiments/test_predictions.csv` commités juste après | 0,5 | `cat experiments/test_access.jsonl` ; `git log -- experiments/` | |
 | [ ] | les trois modèles (naïf, classique, retenu) évalués sur le test, chacun avec l'**intervalle bootstrap à 95 %** de la métrique principale | 0,5 | `experiments/test_results.json` ; le tableau du rapport | |
 | [ ] | la différence avec la baseline classique et son intervalle apparié ; le critère de succès déclaré atteint ou non, sans détour | 0,5 | la section « Résultats » | |
 | [ ] | l'analyse d'erreurs : vingt erreurs lues, rangées par cause, trois exemples commentés | 0,5 | la cellule `worst_errors` et le rapport | |
@@ -152,7 +152,7 @@ projet train --config configs/fast.yaml          # l'artefact du mode rapide (ar
 
 | Fait | Pénalité | Pts | Comment le vérifier | Preuve |
 |---|---|---|---|---|
-| [ ] | le test consulté avant l'évaluation finale (plus d'une ligne dans `experiments/test_access.jsonl` sans réouverture signalée, une ligne effacée de ce journal, une métrique de test dans les `metrics` de `runs.jsonl`, un `select(..., "test")` contourné), **ou** le protocole modifié après le tag sans le signaler | −3 | `git log protocole..HEAD -- docs/protocole.md data/splits.json` ; `git log -p -- experiments/test_access.jsonl` (aucune ligne retirée) ; les clés des `metrics` du journal ; `git grep -n "_sealed=True"` hors de `evaluate.py` | |
+| [ ] | le test consulté avant l'évaluation finale (plus d'une ligne dans `experiments/test_access.jsonl` sans réouverture signalée, une ligne effacée de ce journal, une métrique de test dans les `metrics` de `runs.jsonl`, un `select(..., "test")` contourné), **ou** le protocole modifié après le tag sans le signaler | −3 | `git log protocole..HEAD -- docs/protocole.md data/splits.json` ; `git log -p -- experiments/test_access.jsonl` (aucune ligne retirée ; le commit noté dans la ligne est le parent du commit « Ouverture du test scellé ») ; les clés des `metrics` du journal ; `grep -c '"split_file": "data/splits.json"' experiments/runs.jsonl` égale `wc -l` (aucun run sur un autre découpage) ; `git grep -n -F -e '_sealed=True' -e '["test"]' -e '"test")' -- ':!src/*/evaluate.py' ':!docs/' ':!tests/'` (un accès au test hors de l'évaluation ; deux lignes du kit sont normales : `SPLIT_NAMES` et la docstring de `select`) ; dans `test_results.json`, une différence « model − classical » exactement nulle (le modèle retenu serait la baseline) | |
 | [ ] | un notebook livré qui ne s'exécute pas de bout en bout : des sorties d'erreur dans le notebook commité, ou « Tout exécuter » qui s'arrête sur une erreur dans le clone (après les vérifications communes ; le notebook 03 n'y rouvre pas le test, il le dit) | −2 | lecture des sorties ; `jupyter nbconvert --to notebook --execute --output-dir /tmp/pf_nb notebooks/*.ipynb` | |
 | [ ] | un résultat rapporté sans intervalle **ni** baseline (README, rapport, model card ou soutenance) | −1 | lecture | |
 

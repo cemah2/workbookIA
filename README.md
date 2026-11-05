@@ -22,7 +22,7 @@ Objectif : une **reconversion professionnelle** vers les métiers de l'IA et de 
 | **Notebooks** | 107 : 78 dans les chapitres (exercices et solutions exécutées), 12 pour les examens blancs, 15 pour les mini-projets et le projet final, 2 pour la mise en place |
 | **Flashcards** | 967 cartes en 39 sous-paquets Anki |
 | **mylearn** | 38 modules, 273 fonctions et classes publiques aux signatures figées |
-| **Index et glossaire** | 1 565 notions et 1 602 renvois, 1 261 termes au glossaire |
+| **Index et glossaire** | 1 566 notions et 1 604 renvois, 1 262 termes au glossaire |
 
 *Compté le 2026-11-05 par `python tools/repo_stats.py --write` : exercices du contrat (`docs/syllabus/data/*.json`), réponses de `src/wb/answers.json`, cartes acceptées par `export_flashcards.py --check`, tests de `pytest --collect-only --impl=ref`, fichiers `.ipynb` hors `mon_travail/`, stubs de `MANIFEST.json`, en-tête de l'index.*
 <!-- wb:end chiffres -->

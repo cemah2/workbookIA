@@ -39,8 +39,9 @@ class Predictor:
 
     def predict(self, records: list[dict]) -> list[dict]:
         """One prediction per input record (a dict with the raw fields of an example, as ``load_examples`` gives them,
-        without the target), in the same order: ``{"label": ..., "score": ...}`` for a classification (the
-        probability of the predicted class), ``{"prediction": ...}`` for a regression. ValueError with a clear message
+        without the target), in the same order: ``{"label": ..., "score": ..., "proba": {...}}`` for a classification
+        (``score``: the probability of the predicted class, a confidence; ``proba``: the probability of EVERY class,
+        keyed by ``str(class)``, what ROC-AUC and PR-AUC need), ``{"prediction": ...}`` for a regression. ValueError with a clear message
         for a record without a required field. The model in ``eval()`` mode, ``torch.inference_mode()``, the same
         preprocessing as in training (B7.16)."""
         # TODO PF.11: preprocessor.transform, model forward, softmax, classes of meta

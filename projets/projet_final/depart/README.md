@@ -80,7 +80,8 @@ TODO : trois lignes honnêtes (ce qui a marché moins bien que prévu, ce que tu
 
 Ce dépôt part du kit du projet final du workbook *Deep Learning* (d'après A. Glassner). Le cahier des charges, la grille, les indices et la banque de questions de la soutenance sont dans le workbook, `projets/projet_final/`.
 
-- **Renommer le paquet** : choisis un nom court (`velo_demande`, `birdclf`), puis renomme le dossier `src/projet/` et remplace `projet` dans `pyproject.toml` (nom, `[project.scripts]`), `scripts/`, `tests/` et `notebooks/` (`git grep -n "projet"` les liste ; garde `projet_final` et les phrases en français).
-- **Installer** : `pip install -e ".[dev,serve,notebooks]"` ; les notebooks et les tests marchent aussi sans installation (ils ajoutent `src/` au chemin).
+- **Renommer le paquet** : choisis un nom court (`velo_demande`, `birdclf`), puis, depuis la racine du dépôt :
+  `N=velo_demande && git mv src/projet src/$N && git grep -lwz projet -- pyproject.toml configs src scripts tests | xargs -0 sed -i -E "s/\bprojet\b/$N/g" && git grep -lz -E '\bprojet\.' -- notebooks | xargs -0 sed -i -E "s/\bprojet\./$N./g"` (le code seulement : la prose française reste).
+- **Installer** : d'abord `pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu` (sinon pip prend la version CUDA, plusieurs Go ; `torch.__version__` doit finir par `+cpu`), puis `pip install -e ".[dev,serve,notebooks]"` ; les notebooks et les tests marchent aussi sans installation (ils ajoutent `src/` au chemin).
 - **Tester** : `python -m pytest -q`. Les tests de structure passent dès le départ ; les tests marqués `todo` sont sautés avec ⏳ tant que leurs fonctions lèvent `NotImplementedError`, puis doivent passer. À la fin : `PF_STRICT=1 python -m pytest -q` ne doit plus rien sauter.
 - **Les fonctions à écrire** : chacune a sa docstring (le contrat) et lève `NotImplementedError("TODO PF.n: nom")` ; celles qui disent « Provided » sont fournies et peuvent être adaptées.
