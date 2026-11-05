@@ -227,7 +227,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 
 **Livrable** : `docs/protocole.md` figé par un commit tagué « protocole ».
 
-La métrique principale se calcule sur les étiquettes (le seuil de décision fait alors partie du protocole), ou sur les probabilités (ROC-AUC, PR-AUC : `Predictor.predict` rend `proba`, et le notebook 03 bootstrape sur elles) ; dans les deux cas, son nom est celui de `sklearn.metrics.get_scorer`, que les baselines et le modèle partagent.
+La métrique principale se calcule sur les classes prédites (le seuil de décision fait alors partie du protocole), ou sur les probabilités (ROC-AUC, PR-AUC : `Predictor.predict` rend `proba`, et le notebook 03 bootstrape sur elles) ; dans les deux cas, son nom est celui de `sklearn.metrics.get_scorer`, que les baselines et le modèle partagent.
 
 **Critères de réussite**
 - la règle du découpage, ses tailles et le SHA-256 de `data/splits.json` ;
