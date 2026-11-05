@@ -773,9 +773,6 @@ for _part in PARTS:
     for _ex in _part.exercises:
         check_unique_keys(_ex.record or "x = 1", _ex.id)
 
-NEXT_SESSION: list = []          # every exercise is written (session 78)
-
-
 def kind_part(part, kind: str):
     """The part with its tools for this notebook: «KIND» is "learner" (exercise notebook) or "solution"."""
     return dataclasses.replace(part, given=part.given.replace("«KIND»", "learner" if kind == "exercise" else "solution"))
@@ -788,8 +785,6 @@ def header_cells(kind: str) -> list:
     for part in PARTS:
         for i, ex in enumerate(part.exercises):
             rows.append(ex.table_row(part.key if i == 0 else ""))
-    rows += [f"| {key} | {ids} | {title} (*prochaine session de génération*) | | | |"
-             for key, ids, title in NEXT_SESSION]
     if kind == "exercise":
         title = "# B8 · RL moderne : DQN, gradient de politique, PPO et RLHF — notebook d'exercices"
         how = ("La partie 0 vérifie tes réponses courtes aux quiz, aux rappels et aux exercices papier. Chaque "
@@ -831,10 +826,6 @@ def objectives_cell() -> list:
 
 
 def footer_cells(kind: str) -> list:
-    later = ("" if not NEXT_SESSION else
-             "\n\n*Les exercices B8.21 à B8.28 (la fin de la politique, les préférences et le défi) seront ajoutés à "
-             "la prochaine session de génération ; relance alors `python tools/start_chapter.py B8` pour obtenir le "
-             "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
                "1. Sais-tu calculer une cible DQN et Double DQN, en distinguant une vraie fin d'une limite de temps, et "
@@ -846,8 +837,8 @@ def footer_cells(kind: str) -> list:
                "4. Sais-tu calculer une loss de Bradley-Terry et une loss DPO, entraîner un modèle de récompense, et "
                "dire où un agent qui l'optimise peut le pirater ?\n\n"
                "**Pour aller plus loin** : l'article de Schulman et coll. (📄 B8.11) et les « 37 détails » de "
-               "Huang et coll., cités dans la fiche. B8 est le dernier chapitre bonus."
-               + later)]
+               "Huang et coll., cités dans la fiche ; ta revue de B8.27 (`revue_ppo_cleanrl.md`) pour ton portfolio. "
+               "B8 est le dernier chapitre bonus.")]
 
 
 def build(kind: str) -> list:

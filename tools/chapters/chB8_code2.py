@@ -68,6 +68,7 @@ if logs_own_21 is None or not all(k in logs_own_21 for k, _ in PANELS_21):
 else:
     fig_own_21, axes_own_21 = plt.subplots(1, len(PANELS_21), figsize=(13, 2.2))
     plot_logs_21(axes_own_21, logs_own_21, color="C1", lw=1.2)
+    axes_own_21[1].set_yscale("log")                     # as in the figure of the five runs
     axes_own_21[0].set_ylabel("ton PPO", fontsize=11)
     plt.tight_layout()
     plt.show()'''
@@ -557,8 +558,10 @@ else:
             ax_24.fill_between(factors_24, b_24["low"], b_24["high"], color="gray", alpha=0.15)
             ax_24.plot(factors_24, mine_24[name_24], marker="o", color="C1", label=f"ton agent ({source_24})")
             ax_24.axhline(wbr.SOLVED, color="k", ls=":", lw=1)
-            ax_24.set(xscale="log", xticks=factors_24, xticklabels=[f"×{f:g}" for f in factors_24],
-                      xlabel="gravité" if name_24 == "gravity" else "longueur du mât", title=f"{name_24} × facteur")
+            ax_24.set(xscale="log", xlabel="facteur (échelle logarithmique)",
+                      title="gravité × facteur" if name_24 == "gravity" else "longueur du mât × facteur")
+            ax_24.minorticks_off()
+            ax_24.set_xticks(factors_24, [f"×{f:g}" for f in factors_24])
             ax_24.legend(fontsize=8)
         axes_24[0].set_ylabel("retour moyen")
         plt.tight_layout()

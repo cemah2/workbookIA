@@ -374,4 +374,167 @@ Le gradient d'un minimum est celui du terme qui est le minimum ; le terme clipp�
 **Erreurs fréquentes** : apprendre sur les pas de reset (le bug silencieux d'un code écrit pour gymnasium 0.29) ; prendre `values[t + 1]` pour la valeur suivante ; oublier de porter `just_reset` d'un rollout au suivant ; normaliser les avantages avant de calculer les retours du critique ; `.item()` ou `.detach()` sur la loss du critique (le critique n'apprend plus : la vérification le voit) ; un bonus d'entropie de mauvais signe (la politique se fige plus vite) ; un learning rate qui ne décroît pas, et une politique qui se dégrade à la fin.
 **Variante** : sans normaliser les avantages (`norm_adv=False`), le PPO de référence (`wbr.train_ppo`, 50 000 pas) fait encore 500,0 en évaluation déterministe sur les graines 20, 21 et 22 : sur CartPole, ce détail ne change rien de visible ; la normalisation fixe l'échelle des pas, ce qui compte quand l'échelle des récompenses change d'un problème à l'autre.
 
-*Les solutions de B8.21 à B8.28 seront ajoutées à la prochaine session de génération, avec la fin du notebook ; elles seront aussi exécutées dans `05_solutions.ipynb`.*
+### Ex B8.21 — Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée 📈
+**Réponse** : a) `"D"` (le run sain), b) `"C"` (le learning rate trop grand), c) `"B"` (sans clipping), d) `"E"` (l'entropie de mauvais signe), e) `"A"` (le critique qui n'apprend pas).
+**Démarche** : chaque réglage se lit d'abord sur **une** colonne, dès les premières itérations (médianes sur la première moitié du run, graine 21) :
+- **B, sans clipping** : la fraction clippée vaut **exactement 0** du début à la fin (aucun ratio n'est rogné), alors que la KL approchée est la plus haute des cinq (0,027 contre 0,003 pour le run sain) : la politique bouge beaucoup, et rien ne la retient ; le retour finit vers 230 ;
+- **C, learning rate ×10** : la fraction clippée la plus haute (0,16 contre 0,03), une KL quatre fois celle du run sain ; le clip travaille sans cesse, et le retour, qui ne bénéficie pas de la décroissance du learning rate, oscille encore à la fin (468 sur les 10 dernières itérations) ;
+- **E, entropie de mauvais signe** : l'entropie plonge jusqu'à 0,02 (une politique presque déterministe) quand les autres restent au-dessus de 0,12 ; le retour atteint quand même 500 : sur CartPole, une politique déterministe peut être bonne, mais elle n'explore plus ;
+- **A, critique sans loss** : la variance expliquée reste à 0 (médiane 0,003) **pendant tout le run** : le critique garde son initialisation et ne prédit rien ; les avantages de GAE ne sont plus que des retours bruités, et l'apprentissage est lent et instable (le retour finit vers 320) ;
+- **D, le run sain** : aucune colonne ne le désigne. KL et fraction clippée petites et qui tombent à 0 à la fin (le learning rate décroît jusqu'à 0), entropie qui baisse doucement (de 0,69 à 0,45). Sa variance expliquée monte puis **baisse** : dès que presque tous les épisodes durent 500 pas, les retours à prédire se ressemblent, $\operatorname{Var}(y_{\text{true}})$ devient petite et le moindre écart du critique fait chuter le rapport. Ce n'est pas un critique cassé : c'est la limite d'une mesure relative.
+
+La calibration (`history_chB8.json`, entrée `l21`, graines 21, 22 et 23) vérifie que chaque signature tient sur les trois graines : la plus grande fraction clippée pour le learning rate ×10, une fraction clippée nulle et une KL au-dessus du run sain sans clipping, l'entropie la plus basse atteinte pour le mauvais signe, la variance expliquée la plus basse pour le critique sans loss. Le retour, lui, ne tranche pas : sur la graine 22, le run sans clipping finit à 500 et le run sain aussi.
+**Erreurs fréquentes** : lire le retour avant les journaux (deux runs malades peuvent finir à 500) ; prendre la variance expliquée qui baisse à la fin du run sain pour un critique cassé ; attribuer la grande KL au learning rate alors que la fraction clippée nulle désigne l'absence de clip ; juger une colonne à la fin du run, quand le learning rate décroissant a tout aplati.
+**Variante** : sur ton propre PPO (la figure suivante), la KL et la fraction clippée de la solution ont l'allure du run D ; avec `n_epochs = 20` (B8.22), la KL approchée médiane passe de 0,002 à 0,004 et la fraction clippée de 0,02 à 0,04, sans rien de malade : une KL plus haute n'est un symptôme que si elle grimpe sans que la fraction clippée suive, ou si le retour se dégrade.
+
+### Ex B8.22 — Hyperparamètres de PPO : ε du clip, λ, nombre d'epochs — robustesse sur trois graines 🔬
+**Réponse** : `summary_22` rend l'aire et le premier pas à 475 des quatre journaux d'essai. Aire sous la courbe (moyenne des retours des rollouts) et évaluation déterministe finale, par graine (220, 221, 222 ; 50 000 pas, PPO de référence) :
+
+| Réglage | Aire par graine (médiane) | 1er pas à 475 | Évaluation finale |
+|---|---|---|---|
+| référence (ε 0,2, λ 0,95, 10 epochs) | 321, 340, 336 (336) | 11 k, 24 k, 20 k | 500, 500, 500 |
+| ε = 0,1 | 318, 319, 329 (319) | 10 k, 22 k, 21 k | 500, 500, 500 |
+| ε = 0,4 | 372, 384, 320 (372) | 16 k, 15 k, 11 k | 500, 500, 491 |
+| λ = 0,8 | 274, 322, 346 (322) | 16 k, 20 k, 15 k | 500, 500, 500 |
+| λ = 1 | 349, 293, 311 (311) | 21 k, 16 k, 16 k | 500, 224, 500 |
+| 4 epochs | 279, 290, 214 (279) | 26 k, 24 k, 22 k | 494, 500, 191 |
+| 20 epochs | 408, 406, 409 (408) | 12 k, 6 k, 12 k | 500, 500, 500 |
+
+**Démarche** :
+```python
+def summary_22(logs):
+    returns = np.asarray(logs["mean_return"], dtype=float)          # an iteration without a finished episode: nan
+    finite = returns[np.isfinite(returns)]
+    first = next((int(step) for step, r in zip(logs["step"], returns) if r >= 475), None)   # nan >= 475 is False
+    return {"auc": float(finite.mean()), "first_475": first}
+```
+Le **nombre d'epochs** est l'hyperparamètre qui compte le plus ici : 20 epochs donnent la plus grande aire **et** la plus petite dispersion (406 à 409), 4 epochs la plus petite aire et le seul effondrement net (191 en évaluation). Avec 50 000 pas seulement, chaque rollout doit servir davantage : 20 passages font 20 × 4 pas d'Adam par itération ; la KL approchée médiane double (de 0,002 à 0,004) et la fraction clippée aussi (0,02 à 0,04), mais le clip tient la politique près de l'ancienne. Avec 4 epochs, la KL tombe à 0,0008 : la politique bouge trop peu par itération pour ce budget. ε et λ se recouvrent avec la référence : leurs intervalles se chevauchent, et une graine sur trois suffit à inverser l'ordre (ε = 0,4 : 372 et 384, puis 320 ; λ = 1 : un run qui finit à 224). Avec trois graines, on peut affirmer ce qui est net sur **toutes** (20 epochs au-dessus de la référence sur chaque graine, 4 epochs en dessous) ; pas un classement fin de ε ou de λ, qui demanderait bien plus de graines et des intervalles bootstrap (208.6). Pour le défi B8.28, deux fois plus de pas qu'ici : les réglages de référence suffisent peut-être, et plus d'epochs sont une sécurité, au prix du temps (30 à 34 s par run au lieu de 17 à 19).
+**Erreurs fréquentes** : `np.mean` sur des retours qui contiennent des `nan` (le résultat est `nan`) ; `first_475` en `float` ou en numéro d'itération au lieu du pas ; `>` au lieu de `>=` ; conclure d'une seule graine ou des médianes seules, sans regarder les intervalles ; lire l'aire sous la courbe comme l'évaluation finale (un run qui apprend vite peut finir moins bien).
+**Variante** : classe les sept réglages par le **premier pas à 475** (médiane des trois graines) plutôt que par l'aire : 20 epochs (12 k), ε = 0,4 (15 k), λ = 0,8 et λ = 1 (16 k), référence (20 k), ε = 0,1 (21 k), 4 epochs (24 k). Le haut et le bas du classement ne bougent pas ; le milieu change avec la mesure.
+
+### Ex B8.23 — Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long 🔮
+**Réponse** : a) `0` (gravité doublée : les cinq agents qui résolvent CartPole tiennent encore 500 pas sur les 100 épisodes ; médiane des six, 500) ; b) `0` (mât deux fois plus long : de même, médiane 500) ; c) `0` (mât quatre fois plus long : aucun agent ne tient 475 ; les cinq qui résolvent CartPole tombent en 18 à 19 pas en moyenne, et le sixième, qui ne fait que 284 sur la physique normale, en garde 262). Les trois réponses sont les mêmes sur le second jeu de graines d'évaluation. Le PPO de la solution (B8.20, graine 20) fait de même : 500,0 sur les trois premières physiques, puis 18,6 avec le mât quatre fois plus long (le plus court des épisodes : 16 pas).
+**Démarche** : une politique de CartPole est un **contrôleur en boucle fermée** : elle regarde l'état 50 fois par seconde et pousse du côté où le mât penche, en anticipant avec sa vitesse angulaire. Doubler la gravité fait tomber le mât plus vite, mais ne change pas le sens de la bonne poussée, et 50 corrections par seconde suffisent encore : l'agent compense sans l'avoir appris. Un mât deux fois plus long tombe plus lentement (son inertie croît plus vite que le couple de son poids) : c'est plus facile, et l'agent tient. Le mât quatre fois plus long est plus facile encore pour un humain, et la règle d'une ligne de 208.1 le tient presque (474,9 de moyenne sur 20 épisodes), mais l'agent tombe en 19 pas : rejoué, il pousse **dix-neuf fois de suite du même côté** ; le chariot atteint 3,7 m/s et le mât, trop lent pour renvoyer à temps le signal (sa vitesse angulaire) qui ferait changer l'agent de sens, bascule de l'autre côté. L'agent n'a pas appris « tenir un mât » mais « tenir **ce** mât » : une fonction de l'état ajustée à une dynamique, qui reste juste dans un voisinage (×2) et devient fausse au-delà, brutalement. L'agent de la graine 3, qui ne résout pas CartPole, réagit autrement (262 au lieu de 18) : il n'a pas appris la même politique, et une mesure de robustesse ne vaut que pour l'agent mesuré.
+**Erreurs fréquentes** : croire qu'un mât plus long est plus dur (c'est l'inverse : un balai tient mieux qu'un crayon) ; conclure d'un seul agent ; prendre `length` pour la longueur du mât entier (c'est sa moitié) ; changer `length` sans recalculer `polemass_length` (B8.24 le mesure) ; confondre « l'agent tient » et « l'agent a compris la physique ».
+**Variante** : avec une poussée **deux fois plus faible** (`force_mag = 5`, `wbr.evaluate(agent, 100, EVAL_SEED, force_mag=5.0)`), les cinq agents qui résolvent CartPole tiennent encore 500 sur 100 épisodes (le sixième, 260), et un mât dix fois plus lourd (`masspole = 1.0`) ne les gêne pas davantage : ce qui casse ces agents n'est pas une physique plus dure, c'est une dynamique plus **lente** que celle qu'ils ont apprise.
+
+### Ex B8.24 — Robustesse : modifier la physique de CartPole et mesurer la chute du retour 🔬
+**Réponse** : les deux fonctions coïncident avec la référence (les constantes, un épisode rejoué avec les mêmes actions, la règle de 208.1). Le PPO de la solution tient 500 sur 20 épisodes pour toute la gravité, de ×0,5 à ×4, et pour la longueur de ×0,25 à ×2 ; il tombe à 16 pas à ×3 et à 18 pas à ×4 (−97 % et −96 %).
+**Démarche** :
+```python
+def set_physics_24(env, gravity=None, length=None):
+    core = env.unwrapped
+    if gravity is not None:
+        core.gravity = float(gravity)
+    if length is not None:
+        core.length = float(length)
+    core.total_mass = core.masspole + core.masscart          # computed once by __init__...
+    core.polemass_length = core.masspole * core.length      # ...and used by step(): recompute both
+    return env
+
+
+def robustness_24(policy, name, factors, n_episodes=EPISODES_24, seed=EVAL_SEED):
+    out = []
+    for factor in factors:
+        env = set_physics_24(wbr.make_env(), **{name: DEFAULTS_24[name] * factor})
+        out.append(float(wbr.evaluate(policy, n_episodes, seed, env=env)["mean_return"]))
+    return out
+```
+`CartPoleEnv.__init__` calcule une fois `total_mass` et `polemass_length` ; `step` s'en sert à chaque pas, avec `length` dans une autre formule (l'inertie du mât). Changer `length` seul donne un mât dont le moment et l'inertie ne sont plus ceux du même objet : une physique qui n'existe pas. Sur les six agents de référence (grille de `wbr.precomputed("c23")`, 50 épisodes par point), la gravité se tolère jusqu'à ×3 (500 pour cinq agents, 471 pour un), et à ×4 trois agents sur cinq tiennent encore ; la longueur, elle, ne se tolère que de ×0,5 à ×2 : à ×3, les cinq agents qui résolvent CartPole tombent en 16 à 39 pas. La chute est **brutale** : un agent qui fait 500 à ×2 en fait une vingtaine à ×3, sans rien entre les deux. Le PPO de la solution suit la médiane des agents de référence, avec la même falaise entre ×2 et ×3 pour la longueur.
+**Erreurs fréquentes** : oublier `polemass_length` (la vérification compare les constantes et rejoue un épisode) ; modifier l'environnement enveloppé plutôt que `env.unwrapped` (`TimeLimit` ne transmet pas les affectations : `env.gravity = …` crée un attribut de l'enveloppe, que `step` ne lit jamais) ; réutiliser le même environnement d'un facteur à l'autre sans le refaire ; évaluer chaque facteur sur d'autres graines (les courbes ne se comparent plus point à point).
+**Variante** : l'oubli du recalcul ne se voit pas toujours sur le retour : avec le mât quatre fois plus long, le PPO de la solution fait 18,4 que `polemass_length` soit recalculé ou non, parce qu'il tombe avant que la différence de physique compte. Un oubli peut donc passer inaperçu sur un retour : la vérification compare les constantes et rejoue un épisode, ce qui le voit à coup sûr.. Pour un agent qui tienne toute la plage, la **randomisation de domaine** (208.8) : tirer `gravity` et `length` au hasard à chaque épisode d'entraînement (dans `[0,5 ; 4]` fois les valeurs par défaut), ce que `wbr.set_physics` permet sur chaque copie d'un `make_vec`.
+
+### Ex B8.25 — bradley_terry_loss et dpo_loss 🔨
+**Réponse** : les 46 tests passent ; sur les nombres de ✏️ B8.6, `bradley_terry_loss([2.3], [1.1])` rend la loss 0,2633 et le gradient −0,2315, et `dpo_loss` la marge 0,22 (β = 0,1).
+**Démarche** :
+```python
+def bradley_terry_loss(r_chosen, r_rejected):
+    rc, rr = np.array(r_chosen, dtype=float), np.array(r_rejected, dtype=float)
+    if rc.ndim != 1 or rc.shape != rr.shape:
+        raise ValueError("r_chosen and r_rejected need the same shape (n,)")
+    d = rc - rr
+    loss = float(np.mean(np.logaddexp(0.0, -d)))         # -log sigmoid(d), finite for d = -1000
+    grad_chosen = -np.exp(-np.logaddexp(0.0, d)) / d.size  # -sigmoid(-d) / n, between -1/n and 0
+    return loss, grad_chosen, -grad_chosen
+
+
+def dpo_loss(policy_chosen_logps, policy_rejected_logps, ref_chosen_logps, ref_rejected_logps, beta=0.1):
+    pc, pr, rc, rr = (np.array(a, dtype=float) for a in (policy_chosen_logps, policy_rejected_logps,
+                                                         ref_chosen_logps, ref_rejected_logps))
+    if pc.ndim != 1 or not (pc.shape == pr.shape == rc.shape == rr.shape):
+        raise ValueError("the four arrays need the same shape (n,)")
+    if not beta > 0:
+        raise ValueError("beta must be > 0")
+    margins = beta * ((pc - rc) - (pr - rr))
+    return float(np.mean(np.logaddexp(0.0, -margins))), margins
+```
+(La référence `solutions/mylearn_ref/deep_rl.py` refuse aussi les NaN et les types de β qui ne sont pas des nombres.) Bradley-Terry est une régression logistique sur la différence $d = r_c - r_r$ : $-\log\sigma(d) = \ln(1 + e^{-d})$, de dérivée $-\sigma(-d)$. Les deux écritures stables évitent de calculer $e^{|d|}$ : `np.logaddexp(0, -d)` vaut $d$ ou presque 0 aux grands écarts, et `np.exp(-np.logaddexp(0, d))` vaut $\sigma(-d)$ sans jamais diviser l'infini par l'infini. Le gradient est celui de la loss **moyenne** : chaque paire pèse $1/n$, d'où la division. Ajouter une constante aux deux récompenses ne change pas $d$ : seules les différences comptent, et un modèle de récompense n'a pas de niveau (B8.26 s'en souviendra). DPO calcule la même loss sur une marge de quatre log-probabilités ; quand la politique égale la référence, toutes les marges sont nulles et la loss vaut $\ln 2$.
+**Erreurs fréquentes** : `-np.log(1 / (1 + np.exp(-d)))` (`inf` pour $d = -1000$, et un avertissement d'overflow) ; `1 - np.exp(d) / (1 + np.exp(d))` pour $\sigma(-d)$ (`nan` pour $d = 1000$) ; oublier la division par $n$ ; rendre les marges sans β ; échanger préféré et rejeté (la loss vaut alors celle de $-d$) ; laisser NumPy diffuser un `(n, 1)` contre un `(n,)` en matrice `(n, n)`.
+**Variante** : avec β = 0,5 sur les nombres de ✏️ B8.6, la marge passe à 1,1 et la loss à 0,2873 : la même politique « satisfait » plus la loss quand β grandit, parce qu'un même écart à la référence compte cinq fois plus.
+
+### Ex B8.26 — RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense 📦
+**Réponse** : ta `bradley_terry_loss` est appelée à chaque epoch, la loss de la première epoch est celle de Bradley-Terry sur le modèle de départ, `reward_fn_26` rend `model(next_obs)`. Sur la graine 26 (la solution : quatre agents de 30 000 pas, ≈ 70 s en tout), le modèle large classe 89 % de ses paires tenues à l'écart, le modèle étroit 99 % des siennes mais 81 % des paires larges. Vraie récompense par pas : RLHF large **0,214** (l'agent dérive à 0,95 m du centre en moyenne, et tombe parfois : 481 pas), RLHF étroit 0,533 (319 pas), vraie récompense 0,945, survie 0,819. Récompense apprise par pas selon le modèle large : 1,050, 1,044, 1,073 et 1,072 : le modèle ne distingue pas un agent centré d'un agent qui dérive.
+**Démarche** :
+```python
+def train_reward_model_26(pairs, seed, epochs=EPOCHS_26, lr=LR_26):
+    torch.manual_seed(seed)
+    model = make_reward_model_26()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    first_wins = torch.as_tensor(np.asarray(pairs["preferred"]) == 0)
+    losses = []
+    for _ in range(epochs):
+        r1 = trajectory_returns_26(model, pairs["first"])
+        r2 = trajectory_returns_26(model, pairs["second"])
+        chosen, rejected = torch.where(first_wins, r1, r2), torch.where(first_wins, r2, r1)
+        loss, g_chosen, g_rejected = mylearn.deep_rl.bradley_terry_loss(chosen.detach().double().numpy(),
+                                                                        rejected.detach().double().numpy())
+        optimizer.zero_grad()
+        torch.autograd.backward([chosen, rejected], [torch.as_tensor(g_chosen, dtype=chosen.dtype),
+                                                     torch.as_tensor(g_rejected, dtype=rejected.dtype)])
+        optimizer.step()
+        losses.append(float(loss))
+    return model.eval(), losses
+```
+(Le modèle, `trajectory_returns_26` et `reward_fn_26` sont dans `05_solutions.ipynb`.) Ta `bradley_terry_loss` rend le gradient de la loss par rapport aux **retours** des trajectoires ; `torch.autograd.backward(tenseurs, gradients)` applique la règle de la chaîne à partir de là, comme si la loss avait été calculée en PyTorch : c'est ainsi qu'on branche une fonction NumPy testée dans un entraînement. Ensuite, trois constats, que la calibration confirme sur cinq graines (données, modèle et PPO de graines 26 à 30, 30 000 pas, la référence `wbr.train_ppo` ; `history_chB8.json`, entrée `r26`) :
+1. **un modèle de récompense n'est juste que là où il a vu des données**. Le modèle étroit (des trajectoires de 22 pas en moyenne, presque toujours à moins de 0,75 m du centre) classe 97 à 99 % de **ses** paires tenues à l'écart, mais 69 à 86 % des paires larges ; le modèle large en classe 83 à 95 % ;
+2. **les préférences récompensent surtout la durée**. Une trajectoire de 100 pas rapporte presque toujours plus qu'une trajectoire de 20, même mal centrée : la longueur explique la plupart des choix, et le modèle apprend d'abord « rester en vie ». C'est le **biais de longueur** des modèles de récompense des modèles de langue, qui préfèrent les réponses longues ;
+3. **l'agent optimise ce que le modèle a appris, pas l'intention**. Vraie récompense par pas, médiane des cinq graines : 0,945 pour l'agent entraîné sur la vraie récompense (0,915 à 0,996), 0,812 pour celui du +1 de CartPole (0,60 à 0,87), 0,733 pour le RLHF large (0,66 à 0,97) et 0,764 pour le RLHF étroit (0,41 à 0,77). Le RLHF ne bat la survie seule que dans 3 runs sur 10, et n'atteint l'agent de la vraie récompense qu'une fois. Et le modèle large note les quatre agents presque pareil : dans la calibration, graine 26 (PPO de référence), de 1,064 à 1,073 de récompense apprise par pas, alors que leur vraie récompense par pas va de 0,664 à 0,945.
+
+C'est le piratage de la récompense en petit : la récompense apprise est maximisée (les agents tiennent 500 pas), la vraie ne suit pas, et rien, dans la mesure qu'on optimise, ne le signale ; seule une mesure qu'on ne récompense pas (la vraie récompense, ici connue parce qu'on l'a cachée nous-mêmes) le montre. Les résultats d'une seule graine varient beaucoup (le RLHF large va de 0,66 à 0,97) : il faut plusieurs graines pour en dire quelque chose, comme en B8.22. Une récompense apprise ne se compare qu'à elle-même : Bradley-Terry ne fixe que les différences, son niveau (ici de 0,6 à 5 par pas selon la graine) n'a pas de sens. La pénalité KL du RLHF (208.7) garderait la politique près d'une politique de référence, là où le modèle a vu des données.
+**Erreurs fréquentes** : `.item()` ou `.detach()` dans `trajectory_returns_26` (le modèle n'apprend plus : la loss ne baisse pas) ; un modèle qui rend `(N, 1)` (la somme par trajectoire mélange alors les pas) ; inverser préféré et rejeté (le modèle apprend l'inverse de la vraie récompense) ; des gradients NumPy en float64 passés à des retours float32 (`backward` refuse les types différents) ; une boucle Python d'une passe avant par trajectoire (juste, mais dix fois plus lente) ; comparer la récompense apprise d'un agent à sa vraie récompense en valeur absolue.
+**Variante** : des préférences qui ne parlent **que** de centrage : des paires de trajectoires de **même** longueur (100 pas, celles qui ne tombent pas), classées par la vraie récompense (200 paires de la règle bruitée, graines 26 à 28, le reste du protocole inchangé). Le modèle classe 94 à 99 % des paires larges tenues à l'écart, et l'agent RLHF fait 0,776, 0,840 et 0,711 de vraie récompense par pas, contre 0,664, 0,702 et 0,968 avec les préférences larges : mieux sur deux graines sur trois, moins bien sur la troisième, et toujours sous l'agent entraîné sur la vraie récompense (0,945, 0,992, 0,915). Retirer le biais de longueur aide, sans suffire : le modèle n'a vu que des trajectoires de 100 pas, l'agent en joue 500.
+
+### Ex B8.27 — Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart 🛠️
+**Réponse** (une revue possible, celle de `05_solutions.ipynb`, dix écarts ; elle passe la vérification de structure) :
+
+| # | Sujet | ppo.py | Chez moi | Effet | Décision |
+|---|---|---|---|---|---|
+| 1 | fin d'épisode et limite de temps | l. 206 : `next_done = np.logical_or(terminations, truncations)` | `terminated` coupe l'amorçage, `terminated` ou `truncated` arrête la récursion, une troncature amorce sur V de la vraie dernière observation | ppo.py traite la limite de 500 pas comme une chute : la valeur des états proches de la fin d'un bon épisode est trop basse, alors que l'état ne dit rien du temps écoulé | garder |
+| 2 | autoreset next-step de gymnasium 1.x | l. 162-164 : `envs = gym.vector.SyncVectorEnv(` | autoreset next-step explicite et masque `valid` | écrit pour gymnasium 0.29 (same-step), ppo.py garde sous la 1.x le pas de reset comme une transition (action ignorée, récompense 0, faux passage de la dernière observation à la première) | garder |
+| 3 | retours des épisodes dans les journaux | l. 210-211 : `if "final_info" in infos:` | retour suivi par copie sur les pas valides | en next-step, `infos` n'a plus `final_info` : aucun retour affiché, sans erreur | garder |
+| 4 | valeur de l'état suivant dans GAE | l. 226-228 : `nextvalues = values[t + 1]` | `next_values[t]`, V de l'observation que rend le pas t | identique tant que l'épisode continue ; à une fin, ppo.py masque une valeur d'un autre épisode, et ne peut donc pas amorcer une troncature | garder |
+| 5 | clip de la loss du critique | l. 271-280 : `v_clipped = b_values[mb_inds] + torch.clamp(` | loss quadratique simple | limite le changement de V à ± `clip_coef` par mise à jour ; sans avantage net d'après les 37 détails, et lent pour des retours de plusieurs centaines | tester |
+| 6 | KL approchée dans les journaux | l. 305 : `writer.add_scalar("losses/approx_kl", approx_kl.item(), global_step)` | moyenne sur tous les mini-batches | ppo.py écrit la valeur du dernier mini-batch de la dernière epoch, la plus éloignée de l'ancienne politique : les courbes ne se comparent pas directement | garder |
+| 7 | arrêt des epochs sur la KL | l. 292-293 : `if args.target_kl is not None and approx_kl > args.target_kl:` | toujours `n_epochs` passages | désactivé par défaut des deux côtés ; activé, il protégerait d'un learning rate trop grand (le run malade de B8.21) | tester |
+| 8 | taille des mini-batches | l. 246-248 : `for start in range(0, args.batch_size, args.minibatch_size):` | transitions valides seulement, coupées en 4, reste écarté | 4 × 128 transitions fixes, pas de reset compris, contre une taille qui varie de quelques transitions | garder |
+| 9 | learning rate et nombre d'epochs | l. 41-56 : `learning_rate: float = 2.5e-4` | 1e-3 et 10 epochs pour 50 000 pas | quatre fois plus de pas d'Adam par itération, quatre fois plus grands : KL et fraction clippée plus hautes, le prix d'un budget dix fois plus petit (B8.22) | tester |
+| 10 | graine du mélange des mini-batches | l. 245 : `np.random.shuffle(b_inds)` | `torch.randperm` avec le générateur à graine des actions | reproductibles des deux côtés ; ppo.py dépend du générateur global de NumPy, qu'un autre appel peut déplacer | garder |
+
+**Démarche** : lire `ppo.py` dans l'ordre d'exécution (lignes 129 à 312) avec `train_ppo_20` à côté, bloc par bloc, puis repasser la liste des 13 détails de base des « 37 détails ». Les deux premiers écarts sont ceux de la fiche, et ce sont les seuls qui changent ce que l'agent **apprend** sous gymnasium 1.x ; ils ne plantent pas, ce qui les rend dangereux. Les écarts 3 et 6 ne changent rien à l'agent mais trompent sa **lecture** : un journal vide ou une KL d'un seul mini-batch. Les écarts 5, 7 et 9 sont des choix qui se décident sur plusieurs graines (B8.22), pas sur une lecture. Ne sont **pas** des écarts : l'acteur et le critique séparés, l'initialisation orthogonale (gain $\sqrt 2$, 0,01 pour les logits, 1 pour la valeur), `eps=1e-5`, la décroissance du learning rate, `max_grad_norm = 0.5`, la normalisation des avantages par mini-batch, l'estimateur $(\rho - 1) - \ln\rho$, la variance expliquée calculée sur les valeurs du rollout : ce PPO les reprend tous.
+**Erreurs fréquentes** : lister des différences de style (les noms, `torch.max` des opposés au lieu de `-torch.min`, qui est la même loss) au lieu de différences de comportement ; noter « bug » ce qui était juste pour gymnasium 0.29 (ppo.py a été écrit pour lui : l'écart vient de la version, pas d'une erreur) ; un effet sans le cas où il compte ; décider « adopter » sans mesure.
+**Variante** : relis `dqn.py` du même commit face à ton DQN de B8.13 ; deux écarts à trouver d'abord : `F.mse_loss` au lieu de la loss de Huber, et le rangement de `terminations` seul dans la mémoire (`rb.add(..., terminations, ...)`), que ton DQN fait aussi.
+
+### Ex B8.28 — Défi : CartPole-v1 résolu (≥ 475 sur 100 épisodes) en au plus 100 000 pas, trois graines sur trois 🏆
+**Réponse** : `3` (trois graines sur trois). Les trois runs de la solution font 500,0 (le plus court des 100 épisodes : 500 pas), avec 99 510, 99 527 et 99 510 pas d'environnement, en 35 à 43 s chacun selon la charge de la machine.
+**Démarche** :
+```python
+SETTINGS_28 = {**SETTINGS_20}          # the reference settings of B8.20 (10 epochs, lr 1e-3 decreasing to 0)
+
+
+def train_28(seed, budget):
+    agent, _ = train_ppo_20(seed, budget, SETTINGS_28)   # budget // 512 iterations: 99 840 steps at most
+    return agent
+```
+Le budget se compte en **pas d'environnement**, pas en itérations : `train_ppo_20` fait `budget // (4 × 128) = 195` itérations, soit 99 840 appels de `step` sur les 4 copies, dont environ 300 ne font que remettre une copie à zéro et ne touchent pas la physique ; le compteur de l'infrastructure, qui compte les appels à `CartPoleEnv.step` quel que soit le chemin, en trouve 99 500 environ. Les réglages de B8.20 suffisent : B8.22 a montré qu'avec 50 000 pas, 10 epochs résolvent CartPole sur trois graines sur trois ; avec deux fois plus de pas, le learning rate qui décroît jusqu'à 0 finit sur une politique stable, et l'évaluation déterministe joue 100 épisodes de 500 pas. La calibration (`history_chB8.json`, entrée `c28b`, dans le même harnais `wbr.run_challenge`) : avec ces réglages, **10 graines sur 10** (280 à 289) font 500,0, le plus court des épisodes compris, en 34 à 38 s chacune ; les défauts de CleanRL (lr $2{,}5 \times 10^{-4}$, 4 epochs) passent 5 graines sur 5, mais de peu (478,8 à 499,5, des épisodes de 262 pas seulement) ; 4 epochs avec lr $10^{-3}$ n'en passent que 2 sur 5 (250,8 au pire). Le titre du contrat tient. Les règles empêchent d'acheter des pas ailleurs : tout `step` de tout CartPole compte, y compris d'un environnement copié ou de `env.unwrapped` (la méthode est remplacée au niveau de la classe), le mode `"async"` est refusé, et un agent rendu identique à un agent qui existait avant le run (celui de B8.20, ceux de B8.26, un checkpoint) ne compte pas. Ce que l'infrastructure ne peut pas voir (un simulateur recopié des équations de CartPole, un compteur contourné) relève de la règle d'honneur.
+**Erreurs fréquentes** : évaluer l'agent pendant l'entraînement sans compter ces pas (le run s'arrête sur « budget dépassé ») ; rendre une politique stochastique (l'évaluation la veut déterministe) ; régler ses hyperparamètres en relançant la cellule du défi (les graines d'évaluation tenues à l'écart deviennent des graines de réglage : on se règle sur des graines à soi, B8.22) ; un learning rate constant (la politique bouge encore au dernier pas) ; rendre l'agent de B8.20.
+**Variante** : avec la moitié du budget (50 000 pas), le protocole de B8.20 : le PPO de référence résout CartPole sur 5 graines sur 6 (284 sur la sixième) ; et B8.22 a montré que 20 epochs y résolvent les trois graines plus tôt (premier rollout à 475 entre 6 000 et 12 000 pas). Un défi à 50 000 pas serait atteignable, mais pas avec les réglages de B8.20 seuls sur toutes les graines.

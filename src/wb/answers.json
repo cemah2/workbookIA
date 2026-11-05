@@ -61903,6 +61903,142 @@
       "prediction": true,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
+    "B8.21a": {
+      "hash": "87e63a630780ef752ab937330eb6142187219b9d8cce21f0b1de0a29a0cb45a3",
+      "kind": "str",
+      "mistakes": {
+        "1b453e29e5546a0974cf0d557abcd516f4f5b98713700eb9397115bd0a575dfd": "le run aux réglages de référence n'a aucune courbe anormale : reprends tes cinq panneaux un par un",
+        "81681540b534c0f297abce896f867c6162f91602497d70c42c06d224d1d81778": "le run aux réglages de référence n'a aucune courbe anormale : reprends tes cinq panneaux un par un",
+        "8e8b06dcc9178a4812d0d79472979fb5ec6aeebcebf788acd5dbd3d60334cbab": "le run aux réglages de référence n'a aucune courbe anormale : reprends tes cinq panneaux un par un",
+        "9749e9c0709fa4f507d02b391c722f6a44e07ff0a59b9c01484440614a5a5cbd": "le run aux réglages de référence n'a aucune courbe anormale : reprends tes cinq panneaux un par un"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.21b": {
+      "hash": "38c415fc649804993b51c71639888e94a338c797e618bfd129672b0224cdf1b0",
+      "kind": "str",
+      "mistakes": {
+        "01b56f0e78bf49111d06b69646db13c30ce43707ca8f2c505002cf6306b59b2d": "des pas trop grands poussent sans cesse des ratios hors de l'intervalle du clip : quelle courbe le compte ?",
+        "5cacb330315b838147d0586458cca8af622b796c8f7d09a838a1833d5be0e6ef": "des pas trop grands poussent sans cesse des ratios hors de l'intervalle du clip : quelle courbe le compte ?",
+        "92d414a08dbe4c08c34f2c384a23eedf35e42cb7fa97b78df73966b894e227fe": "des pas trop grands poussent sans cesse des ratios hors de l'intervalle du clip : quelle courbe le compte ?",
+        "f40f1fa589842bdb43d0743d4e3b33b59c9a2981283709e527e434ba344455f9": "des pas trop grands poussent sans cesse des ratios hors de l'intervalle du clip : quelle courbe le compte ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.21c": {
+      "hash": "854776fd4b782c317f51b857fd6b31923da4a4161f8e08e465aad9f4d4737a8a",
+      "kind": "str",
+      "mistakes": {
+        "224c15546242a308a84f6a49b051b796f8a69d8cbc8eed2c97d889a9902d581c": "sans clipping, aucun ratio n'est jamais rogné : quelle courbe compte les ratios rognés ?",
+        "932abbb45be55609ce9f543afa2373b93ddf5ba33881cc75dd79098643cd16bd": "sans clipping, aucun ratio n'est jamais rogné : quelle courbe compte les ratios rognés ?",
+        "db7feb8499ee792187e7ff715c5b414469449b20f235459cf6116570574f4888": "sans clipping, aucun ratio n'est jamais rogné : quelle courbe compte les ratios rognés ?",
+        "e2f3ed5fbfe5d771f665a0e0e3593c6f0c40ff7dce37aaecb887cef1dbd26cc6": "sans clipping, aucun ratio n'est jamais rogné : quelle courbe compte les ratios rognés ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.21d": {
+      "hash": "a5d504118d6f99e636dcabaf0ea08e1afbed78953a6e77b6d2a45b2c850c9ee9",
+      "kind": "str",
+      "mistakes": {
+        "941b57dddd116686aee2664156353bb4878c33ee77b5190b09f1357da3b33227": "un bonus d'entropie de mauvais signe récompense une politique qui ne doute plus : quelle courbe le montre ?",
+        "98abc8e10f8f566895e75015c2762b1a6b955590e271dbb5000eeb311da0e13c": "un bonus d'entropie de mauvais signe récompense une politique qui ne doute plus : quelle courbe le montre ?",
+        "aa22b02ea27486167829a65ec24006f2aa84f179c80d7e0eb1544083e8f2193d": "un bonus d'entropie de mauvais signe récompense une politique qui ne doute plus : quelle courbe le montre ?",
+        "b2cf7029e4532f666709ee45797ab0426adabd8e35dd7cfa707ab00124fb911b": "un bonus d'entropie de mauvais signe récompense une politique qui ne doute plus : quelle courbe le montre ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.21e": {
+      "hash": "8ed595b33a7577ab7ed1555f08bf9038947636111a78e7af6bba16f1a942fd2d",
+      "kind": "str",
+      "mistakes": {
+        "b85c4ec92d97ca2235450e9ee39041bb9ccaf036b92370014a77d0622967905e": "un critique qui n'apprend pas ne prédit pas les retours : quelle courbe le mesure ?",
+        "bb33fdd07a3205ed57a3b2a90bb4cf8e76fab6809d2c708e0a2e4e301845d9de": "un critique qui n'apprend pas ne prédit pas les retours : quelle courbe le mesure ?",
+        "dc7eb02beb2624e9cfa01a48b6ff44fc902341b141e53296bb5a829e75952d4c": "un critique qui n'apprend pas ne prédit pas les retours : quelle courbe le mesure ?",
+        "e2b44ea106c0aecb50ac4f6c6fd34cc406f1518f30f35dee05c3774d0fe8d99c": "un critique qui n'apprend pas ne prédit pas les retours : quelle courbe le mesure ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.23a": {
+      "choices": [
+        "0",
+        "1",
+        "2"
+      ],
+      "fractional": "la réponse est le numéro d'une tranche : 0, 1 ou 2",
+      "hash": "78f3c00ed530caf32532255f4ca6b8a3b782fca35457f7ee06cec3cdc29fb07c",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "22ca29ee494f79d3437be5472704b9d0cfb7dacae223ba74d2ce972cfe0c9b42": "lis la ligne « gravité doublée » du tableau : la médiane des six agents",
+        "7abdafcb67def6a929f76d794b1aba576b09dc2d1f8efa4cb0ab061f6039bebc": "lis la ligne « gravité doublée » du tableau : la médiane des six agents"
+      },
+      "prediction": true,
+      "sign": 0,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.23b": {
+      "choices": [
+        "0",
+        "1",
+        "2"
+      ],
+      "fractional": "la réponse est le numéro d'une tranche : 0, 1 ou 2",
+      "hash": "406ee76636a44fd545b10500c9de82659f3d45955ab3ccbc7734686a8bb6b078",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "2ea9f5d5457b0dd49b3cf0678bc379383c8c318a828b868e16379b0d9ef93eed": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents",
+        "330ba13590a440c35127005fda78737c2a790865037bba89350033d532c3390d": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents"
+      },
+      "prediction": true,
+      "sign": 0,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.23c": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "fractional": "la réponse est un nombre d'agents, de 0 à 6",
+      "hash": "8384bdd39229d8ca6b8cbb390be52c747f258278faa8ab1fa0c84ab51289a242",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "06f2033785ef880382a6cc7c05d42294e3d8e96aa022b62a6b5dba443ada5402": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475",
+        "136037001e89f472ea5a3acf7fbf64f229c8700629c30c953f6365c458e0076a": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475",
+        "14860dc531f9db835b76943cb2becba18472c6c2f05882b47dbe28cc005abd1c": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475",
+        "46413b194d15090b12a1453783ebf39f06bb8694d4beed53bfdb7f1e3ba69e00": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475",
+        "5379f491d11f8b323192110d65fc9e2d60f38c72de6882a2b0202b4540cfdbca": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475",
+        "641ddc1f036de15f9c5fd725bdb91ebef506720ca4d6219d0cf97cca25f23763": "compte, ligne « mât quatre fois plus long », les agents au-dessus de 475"
+      },
+      "prediction": true,
+      "sign": 0,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.28": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "fractional": "la réponse est un nombre de graines, de 0 à 3",
+      "hash": "76ad5c9b35206e9cc8ad3c0d358df6f299a5f517026a473a307cb58a882fc3ef",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "474f0f43fb3f8cdc4c4eb38770e6ad28c69a67a52703e01236a307166e6e7c62": "deux runs sur trois seulement : un réglage qui réussit sur une graine doit tenir sur toutes (relis B8.22)",
+        "5905e180c921d1e76379c0df936118c36f041f1b2e3c64494d69cc9bf03f7911": "aucun run ne tient 475 : vérifie d'abord ton PPO avec les réglages de B8.20, sur ce budget",
+        "c17936e6182cc95aec5cb5e7aa67643b21a0466a96fddff02cb66818d734bb63": "un run sur trois seulement : regarde la courbe de chaque graine, et relis B8.22"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
     "B8.Q1a": {
       "hash": "d2fa5a37ad88529b6d0be6d384471d428548b2c7bd4f9a9a8a66151d0670fd3d",
       "kind": "int",
