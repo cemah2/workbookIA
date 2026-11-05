@@ -61965,15 +61965,15 @@
         "2"
       ],
       "fractional": "la réponse est le numéro d'une tranche : 0, 1 ou 2",
-      "hash": "78f3c00ed530caf32532255f4ca6b8a3b782fca35457f7ee06cec3cdc29fb07c",
+      "hash": "22ca29ee494f79d3437be5472704b9d0cfb7dacae223ba74d2ce972cfe0c9b42",
       "kind": "int",
-      "magnitude": null,
+      "magnitude": 0,
       "mistakes": {
-        "22ca29ee494f79d3437be5472704b9d0cfb7dacae223ba74d2ce972cfe0c9b42": "lis la ligne « gravité doublée » du tableau : la médiane des six agents",
+        "78f3c00ed530caf32532255f4ca6b8a3b782fca35457f7ee06cec3cdc29fb07c": "lis la ligne « gravité doublée » du tableau : la médiane des six agents",
         "7abdafcb67def6a929f76d794b1aba576b09dc2d1f8efa4cb0ab061f6039bebc": "lis la ligne « gravité doublée » du tableau : la médiane des six agents"
       },
       "prediction": true,
-      "sign": 0,
+      "sign": 1,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
     "B8.23b": {
@@ -61983,15 +61983,15 @@
         "2"
       ],
       "fractional": "la réponse est le numéro d'une tranche : 0, 1 ou 2",
-      "hash": "406ee76636a44fd545b10500c9de82659f3d45955ab3ccbc7734686a8bb6b078",
+      "hash": "2ea9f5d5457b0dd49b3cf0678bc379383c8c318a828b868e16379b0d9ef93eed",
       "kind": "int",
-      "magnitude": null,
+      "magnitude": 0,
       "mistakes": {
-        "2ea9f5d5457b0dd49b3cf0678bc379383c8c318a828b868e16379b0d9ef93eed": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents",
-        "330ba13590a440c35127005fda78737c2a790865037bba89350033d532c3390d": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents"
+        "330ba13590a440c35127005fda78737c2a790865037bba89350033d532c3390d": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents",
+        "406ee76636a44fd545b10500c9de82659f3d45955ab3ccbc7734686a8bb6b078": "lis la ligne « mât deux fois plus long » du tableau : la médiane des six agents"
       },
       "prediction": true,
-      "sign": 0,
+      "sign": 1,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
     "B8.23c": {
