@@ -5539,11 +5539,11 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 - Implémenter en PyTorch un DQN, REINFORCE et PPO sur CartPole, avec les calculs clés testés dans mylearn
 - Diagnostiquer un entraînement RL à partir de ses journaux et comparer des variantes sur plusieurs graines
 - Expliquer RLHF, DPO et GRPO et entraîner un modèle de récompense sur des préférences
-- Discuter les limites du RL : efficacité en échantillons, généralisation, reward hacking
+- Discuter les limites du RL : efficacité en échantillons, généralisation, piratage de la récompense
 
-**Sections du chapitre** : 208.1 Des tables aux réseaux : approximation de fonction, états continus, instabilité · 208.2 DQN : réseau Q, mémoire de rejeu, réseau cible, loss de Huber, Double DQN · 208.3 Gradient de politique : politique paramétrée, REINFORCE, baseline, variance · 208.4 Acteur-critique : fonction de valeur, erreur TD, avantage, GAE · 208.5 PPO : ratio de probabilités, objectif clippé, entropie, environnements vectorisés · 208.6 Pratique du deep RL : hyperparamètres, graines, évaluation, bibliothèques de référence · 208.7 RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, reward hacking · 208.8 Limites : efficacité en échantillons, généralisation, sim-to-real, sécurité
+**Sections du chapitre** : 208.1 Des tables aux réseaux : approximation de fonction, états continus, instabilité · 208.2 DQN : réseau Q, mémoire de rejeu, réseau cible, loss de Huber, Double DQN · 208.3 Gradient de politique : politique paramétrée, REINFORCE, baseline, variance · 208.4 Acteur-critique : fonction de valeur, erreur TD, avantage, GAE · 208.5 PPO : ratio de probabilités, objectif clippé, entropie, environnements vectorisés · 208.6 Pratique du deep RL : hyperparamètres, graines, évaluation, bibliothèques de référence · 208.7 RL et modèles de langue : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense · 208.8 Limites : efficacité en échantillons, généralisation, sim-to-real, sécurité
 
-**Notions enseignées** : DQN et ses stabilisateurs ; Double DQN ; théorème du gradient de politique ; REINFORCE avec baseline ; acteur-critique et GAE ; PPO from scratch ; environnements vectorisés gymnasium ; diagnostic par les journaux RL ; évaluation multi-graines ; modèle de récompense Bradley-Terry ; RLHF, DPO, GRPO ; reward hacking
+**Notions enseignées** : DQN et ses stabilisateurs ; Double DQN ; théorème du gradient de politique ; REINFORCE avec baseline ; acteur-critique et GAE ; PPO from scratch ; environnements vectorisés gymnasium ; diagnostic par les journaux RL ; évaluation multi-graines ; modèle de récompense Bradley-Terry ; RLHF, DPO, GRPO ; piratage de la récompense (reward hacking)
 
 **Notions mobilisées** : Q-learning, retours actualisés, ReplayBuffer, evaluate_policy (rl.py) (ch. 26) ; Adam, gradient clipping (ch. 19) ; softmax, log-softmax, température (ch. 17) ; rétropropagation, autograd (ch. 18) ; boucle d'entraînement PyTorch (ch. 20) ; exploration, bandits, softmax d'actions (ch. 11) ; espérance, variance (ch. 0B) ; bootstrap et intervalles de confiance (ch. 2) ; cross-entropy, divergence KL (ch. 6) ; LLM, fine-tuning, modèles instruct (ch. B4) ; espérance sous une loi qui dépend d'un paramètre : ∇E[f] = E[f ∇ log p] (astuce de la log-dérivée) (introduite ici, encadré 🧮) ; API vectorisée de gymnasium (gym.make_vec, autoreset) (introduite ici, encadré 🧮) ; loss de Huber (smooth L1) : quadratique près de 0, linéaire au-delà (introduite ici, encadré 🧮)
 
@@ -5551,21 +5551,21 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 
 | ID | Type | Titre | ★ | ⏱️ | Fil rouge | Fichier | Prérequis | Parcours | Vérif. |
 |---|---|---|---|---|---|---|---|---|---|
-| B8.Q1 | 🧠 | Pourquoi une table Q ne suffit plus pour CartPole | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q2 | 🧠 | La triade mortelle : approximation, amorçage et apprentissage hors politique | ★★ | 3 | — | 02 | — | – | manual |
-| B8.Q3 | 🧠 | Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q4 | 🧠 | Double DQN : d'où vient la surestimation des valeurs Q ? | ★★ | 3 | — | 02 | — | R | manual |
-| B8.Q5 | 🧠 | Méthodes par valeur ou par politique : actions continues et politiques aléatoires | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q6 | 🧠 | REINFORCE : pourquoi soustraire une baseline ne biaise pas le gradient | ★★ | 3 | — | 02 | — | RM | manual |
-| B8.Q7 | 🧠 | Avantage, erreur TD et GAE : ce que règle λ | ★★ | 3 | — | 02 | — | R | manual |
-| B8.Q8 | 🧠 | PPO : à quoi sert le clip, et pourquoi réutiliser plusieurs fois le même lot ? | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q9 | 🧠 | On-policy ou off-policy : DQN, REINFORCE et PPO | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q10 | 🧠 | Évaluer un agent : graines, épisodes, politique déterministe | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q11 | 🧠 | RLHF, DPO, GRPO : qui a besoin d'un modèle de récompense ou d'un critique ? | ★ | 3 | — | 02 | — | R | manual |
-| B8.Q12 | 🧠 | Reward hacking : quand l'agent optimise la lettre et pas l'esprit | ★ | 3 | — | 02 | — | R | manual |
-| B8.R1 | 🔁 | La mise à jour du Q-learning et le rôle de la mémoire de rejeu | ★ | 5 | — | 02 | 26 | R | manual |
-| B8.R2 | 🔁 | Adam et le gradient clipping | ★ | 5 | — | 02 | 19 | R | manual |
-| B8.R3 | 🔁 | Exploration, softmax et bandits | ★ | 5 | — | 02 | 11 | R | manual |
+| B8.Q1 | 🧠 | Pourquoi une table Q ne suffit plus pour CartPole | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q2 | 🧠 | La triade mortelle : approximation, amorçage et apprentissage off-policy | ★★ | 3 | — | 02 | — | – | wb.check |
+| B8.Q3 | 🧠 | Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q4 | 🧠 | Double DQN : d'où vient la surestimation des valeurs Q ? | ★★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q5 | 🧠 | Méthodes par valeur ou par politique : actions continues et politiques aléatoires | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q6 | 🧠 | REINFORCE : pourquoi soustraire une baseline ne biaise pas le gradient | ★★ | 3 | — | 02 | — | RM | wb.check |
+| B8.Q7 | 🧠 | Avantage, erreur TD et GAE : ce que règle λ | ★★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q8 | 🧠 | PPO : à quoi sert le clip, et pourquoi réutiliser plusieurs fois le même lot ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q9 | 🧠 | On-policy ou off-policy : DQN, REINFORCE et PPO | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q10 | 🧠 | Évaluer un agent : graines, épisodes, politique déterministe | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q11 | 🧠 | RLHF, DPO, GRPO : qui a besoin d'un modèle de récompense ou d'un critique ? | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q12 | 🧠 | Piratage de la récompense (reward hacking) : quand l'agent optimise la lettre et pas l'esprit | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.R1 | 🔁 | La mise à jour du Q-learning et le rôle de la mémoire de rejeu | ★ | 5 | — | 02 | 26 | R | wb.check |
+| B8.R2 | 🔁 | Adam et le gradient clipping | ★ | 5 | — | 02 | 19 | R | wb.check |
+| B8.R3 | 🔁 | Exploration, softmax et bandits | ★ | 5 | — | 02 | 11 | R | wb.check |
 | B8.1 | ✏️ | Cible DQN à la main : état terminal, puis cible Double DQN | ★ | 15 | — | 02 | 26 | RM | wb.check |
 | B8.2 | ✏️ | Loss de Huber et son gradient pour trois erreurs TD | ★ | 10 | — | 02 | 5 | M | wb.check |
 | B8.3 | ✏️ | Gradient du log d'une politique softmax à trois actions | ★★ | 15 | — | 02 | 17 | M | wb.check |
@@ -5591,7 +5591,7 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 | B8.23 | 🔮 | Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long | ★ | 10 | CartPole | 03 | B8.20 | C | manual |
 | B8.24 | 🔬 | Robustesse : modifier la physique de CartPole et mesurer la chute du retour | ★★ | 25 | CartPole | 03 | B8.23 | C | manual |
 | B8.25 | 🔨 | bradley_terry_loss et dpo_loss | ★★ | 20 | — | 03 | B8.6 | MC | pytest |
-| B8.26 | 📦 | RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le reward hacking | ★★★★ | 90 | CartPole | 03 | B8.25, B8.20 | C | manual |
+| B8.26 | 📦 | RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense | ★★★★ | 90 | CartPole | 03 | B8.25, B8.20 | C | manual |
 | B8.27 | 🛠️ | Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart | ★★ | 30 | CartPole | 03 | B8.20 | C | manual |
 | B8.28 | 🏆 | Défi : CartPole-v1 résolu (≥ 475 sur 100 épisodes) en au plus 100 000 pas, trois graines sur trois | ★★★★ | 120 | CartPole | 03 | B8.22 | C | wb.check |
 | B8.E1 | 💼 | Méthodes par valeur ou par gradient de politique : avantages et inconvénients | ★★ | 10 | — | 02 | — | R | manual |
@@ -5614,8 +5614,8 @@ def dpo_loss(policy_chosen_logps: ArrayLike, policy_rejected_logps: ArrayLike, r
 
 **Points 🕰️ à traiter** (à vérifier par recherche web à la génération)
 
-- **Gymnasium 1.x** — livre : le livre décrit la boucle agent-environnement de façon abstraite · aujourd'hui : gymnasium 1.3 : gym.make_vec pour les environnements vectorisés ; mode d'autoreset « next-step » par défaut (l'observation de reset arrive au pas suivant) ; terminated et truncated séparés · à vérifier : doc gymnasium 1.3 (Vector API, AutoresetMode)
-- **bibliothèques de référence** — livre : — · aujourd'hui : Stable-Baselines3 (PyTorch) et CleanRL (un fichier par algorithme) ; non installés : implémentations from scratch, SB3 en option · à vérifier : compatibilité de SB3 et de CleanRL avec gymnasium 1.3 et torch 2.11
+- **Gymnasium 1.x** — livre : le livre décrit la boucle agent-environnement de façon abstraite · aujourd'hui : gymnasium 1.4 : gym.make_vec pour les environnements vectorisés ; mode d'autoreset « next-step » par défaut (l'observation de reset arrive au pas suivant) ; terminated et truncated séparés · à vérifier : doc gymnasium 1.4 (Vector API, AutoresetMode)
+- **bibliothèques de référence** — livre : — · aujourd'hui : Stable-Baselines3 (PyTorch) et CleanRL (un fichier par algorithme) ; non installés : implémentations from scratch, SB3 en option · à vérifier : compatibilité de SB3 et de CleanRL avec gymnasium 1.4 et torch 2.11
 - **algorithmes de référence en 2026** — livre : — · aujourd'hui : PPO reste la baseline par défaut ; SAC pour les actions continues ; DQN et variantes (Rainbow) sur actions discrètes ; approches à base de modèle (DreamerV3) et AlphaZero/MuZero pour les jeux · à vérifier : revues récentes ; documentation SB3
 - **RL et modèles de langue** — livre : — · aujourd'hui : RLHF (modèle de récompense + PPO avec pénalité KL), DPO sans RL explicite, GRPO et récompenses vérifiables (RLVR) pour les modèles de raisonnement ; bibliothèque TRL (non installée) · à vérifier : Ouyang et coll. (2022), Rafailov et coll. (2023), Shao et coll. (2024), rapport DeepSeek-R1 (2025) ; doc TRL
 - **rapporter des résultats RL** — livre : — · aujourd'hui : plusieurs graines, IQM et intervalles bootstrap (rliable) plutôt qu'une courbe unique · à vérifier : Agarwal et coll. (2021)
