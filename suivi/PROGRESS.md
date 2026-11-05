@@ -684,7 +684,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - **Vérifications indépendantes** : deux apprenants simulés, un sur B7.9 à B7.16 (74 erreurs plantées), un sur B7.17 à B7.25 (47 erreurs). Un relecteur a appliqué leurs constats et relu le chapitre. Voir BIBLE §22.
 - **Vérification finale** :
   - `syllabus.py check` : 0 problème ;
-  - tests : mode apprenant 771, `--impl=ref` REFCOUNT, paquet de référence 31 (3 ignorés) ;
+  - tests : mode apprenant 771, `--impl=ref` 5 596 (29 ignorés), paquet de référence 31 (3 ignorés) ;
   - `build_answers.py --check`, `export_flashcards.py --check` (941 cartes) et `check_env.py` passent ;
   - solutions exécutées en ≈ 2 min sans ❌ ni ⏳ ; « Run all » du notebook vide en ≈ 6 s, sans erreur ;
   - `mon_travail/` intact ; en-tête de la fiche : 18 h, lecture 1,5 h, comme le SYLLABUS.
