@@ -406,6 +406,9 @@ def test_run_challenge_guards_the_trainers_the_checkpoints_and_the_agents_of_the
     assert res["error"] is None and res["steps"] == 1 and res["solved"] and namespace["AGENT_20"] is kept
     assert "interdit" in R.run_challenge(lambda s, b: R.train_ppo(s, 512)[0], 1, budget=50, n_episodes=1)["error"]
     assert "interdit" in R.run_challenge(lambda s, b: torch.load("x.pt"), 1, budget=50, n_episodes=1)["error"]
+    alias, load_alias = R.train_ppo, torch.load              # taken before the run: not the guarded module names
+    assert "autre nom" in R.run_challenge(lambda s, b: alias(s, 512)[0], 1, budget=50, n_episodes=1)["error"]
+    assert "autre nom" in R.run_challenge(lambda s, b: load_alias("x.pt"), 1, budget=50, n_episodes=1)["error"]
     assert "paramètres" in R.run_challenge(lambda s, b, a=kept: a, 1, budget=50, namespace=namespace,
                                            n_episodes=1)["error"]
     assert "AGENTS_26" in R.run_challenge(lambda s, b, a=namespace["AGENTS_26"]["a"]: a, 1, budget=50,

@@ -1258,6 +1258,8 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
     475) and ``error`` (None, or the reason the run does not count, in French: the notebook shows it)."""
     import torch
 
+    from wb.nbtools import ReferenceCalled, watched
+
     namespace = namespace if namespace is not None else {}
     known = _known_agents(namespace)
     masked = {name: namespace[name] for name in _holders_of_modules(namespace)}
@@ -1283,11 +1285,15 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
         torch.load = torch.serialization.load = guard("torch.load")
         with counted_steps(budget) as counter:
             try:
-                policy = train_fn(seed, budget)
+                with watched({**{f"wbr.{name}": saved[name] for name in CHALLENGE_GUARDED}, "torch.load": loads[0]}):
+                    policy = train_fn(seed, budget)        # the same functions under another name (an alias) too
             except BudgetExceeded as exc:
                 result["error"] = f"budget dépassé : {exc}"
             except ChallengeRuleBroken as exc:
                 result["error"] = f"règle enfreinte : {exc}"
+            except ReferenceCalled as exc:
+                result["error"] = (f"règle enfreinte : {exc.label} est interdit pendant le défi (appelé sous un autre "
+                                   "nom) : on entraîne à partir de rien, avec les pas du budget")
             result["steps"] = counter["steps"]
     finally:
         torch.load, torch.serialization.load = loads

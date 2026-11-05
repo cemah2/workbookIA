@@ -28,8 +28,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from wb import deep_rl_env as wbr
-from wb.nbtools import (StopCheck, checked, filled, fr, own_code, pair, refuses, returned, run_pytest_group, same,
-                        verdict, written)
+from wb.nbtools import (StopCheck, as_numpy, checked, filled, fr, own_code, pair, refuses, returned, run_pytest_group,
+                        same, verdict, written)
 
 torch.set_num_threads(1)           # tiny networks: one thread is faster, and a seed gives the same numbers every time
 SOURCE = "«KIND»"                  # who trained the agents this notebook saves ("solution" in the solutions notebook)
@@ -329,9 +329,15 @@ with checked("B8.13"):
 eps_ok_13 = False
 with checked("B8.13"):
     eps_steps_13 = [0, 1500, 3000, 6000, 9999]
-    eps_ok_13 = same("B8.13", "epsilon_13 aux pas 0, 1 500, 3 000, 6 000 et 9 999 d'un entraînement de 10 000 pas",
-         [epsilon_13(k, 10_000) for k in eps_steps_13],
-         [wbr.linear_epsilon(k, 10_000, 1.0, 0.05, SETTINGS_13["eps_fraction"]) for k in eps_steps_13])
+    eps_got_13 = [epsilon_13(k, 10_000) for k in eps_steps_13]
+    if all(isinstance(e, (int, float, np.floating)) for e in eps_got_13) and len(set(map(float, eps_got_13))) == 1:
+        print(f"❌ Ex B8.13 : epsilon_13 vaut {fr(float(eps_got_13[0]), 3)} aux pas 0, 1 500, 3 000, 6 000 et 9 999 d'un "
+              "entraînement de 10 000 pas : ε doit descendre de eps_start à eps_end sur les eps_fraction × total_steps "
+              "premiers pas, puis rester à eps_end.")
+    else:
+        eps_ok_13 = same("B8.13", "epsilon_13 aux pas 0, 1 500, 3 000, 6 000 et 9 999 d'un entraînement de 10 000 pas",
+                         eps_got_13,
+                         [wbr.linear_epsilon(k, 10_000, 1.0, 0.05, SETTINGS_13["eps_fraction"]) for k in eps_steps_13])
 
 with checked("B8.13"):
     if not targets_ok_13:
@@ -1080,8 +1086,18 @@ CHECK_19 = r'''with checked("B8.19"):
     loss_19, grad_19 = pair("B8.19", "clipped_surrogate", mylearn.deep_rl.clipped_surrogate([0.7, 1.1, 1.35],
                                                                                            [-1.0, 2.0, -1.0], 0.2),
                             names=("loss", "gradient"), floats=("loss",))
-    same("B8.19", "l'exemple de 208.5 (loss)", loss_19, -(-0.8 + 2.2 - 1.35) / 3)
-    same("B8.19", "l'exemple de 208.5 (gradient)", grad_19, [0.0, -2 / 3, 1 / 3])
+    r_ex_19, a_ex_19 = np.array([0.7, 1.1, 1.35]), np.array([-1.0, 2.0, -1.0])
+    if abs(loss_19 + np.mean(np.minimum(r_ex_19 * a_ex_19, r_ex_19 * np.clip(a_ex_19, -0.2, 0.2)))) < 1e-9:
+        print(f"❌ Ex B8.19 : l'exemple de 208.5 (loss) : attendu {-(-0.8 + 2.2 - 1.35) / 3:.6g}, reçu {loss_19:.6g}, "
+              "le résultat d'un clip sur l'avantage : ε borne le ratio, clip(ρ, 1 − ε, 1 + ε), pas Â.")
+    else:
+        same("B8.19", "l'exemple de 208.5 (loss)", loss_19, -(-0.8 + 2.2 - 1.35) / 3)
+    grad_ex_19 = np.asarray(as_numpy(grad_19) if as_numpy(grad_19) is not None else [np.nan] * 3, dtype=float).reshape(-1)
+    if grad_ex_19.shape == (3,) and np.allclose(grad_ex_19, [0.0, 0.0, 1 / 3]):     # the ratio 1.1 is inside the interval
+        print("❌ Ex B8.19 : l'exemple de 208.5 (gradient) : attendu [0, −0,667, 0,333], reçu [0, 0, 0,333] : au ratio "
+              "1,1, dans l'intervalle, les deux termes sont égaux et le gradient vaut −Â/n (égalité comprise : <=, pas <).")
+    else:
+        same("B8.19", "l'exemple de 208.5 (gradient)", grad_19, [0.0, -2 / 3, 1 / 3])
     rng_19 = np.random.default_rng(19)
     for eps_19 in (0.2, 0.5, 1.5):
         ratio_19 = np.concatenate([rng_19.uniform(0.0, 2.5, 6), [1 - eps_19 if eps_19 < 1 else 0.0, 1 + eps_19, 1.0]])
@@ -1386,16 +1402,16 @@ with checked("B8.20"):
                     "obs": "obs[t] est l'observation AVANT le pas t ; le second rollout repart de l'observation rendue "
                            "par le premier",
                     "log_probs": "log_probs est le log de la probabilité de l'action jouée, sous la politique de l'agent",
-                    "values": "values est V(obs[t]) du critique de l'agent",
-                    "actions": "les 40 actions sont toutes celles de plus grande probabilité : elles doivent être "
-                               "tirées dans la politique (torch.multinomial ou Categorical, avec generator)"}
+                    "values": "values est V(obs[t]) du critique de l'agent"}
         for k_20 in problems_20:
+            if k_20 == "actions":
+                print("❌ Ex B8.20 : rollout_20 : les 40 actions sont toutes celles de plus grande probabilité ; "
+                      "l'évaluation est déterministe, pas le rollout : ses actions sont tirées dans la politique "
+                      "(torch.multinomial ou Categorical, avec generator), sinon les log-probabilités et les ratios de "
+                      "PPO ne décrivent pas ce qui a été joué.")
+                continue
             print(f"❌ Ex B8.20 : rollout_20, « {k_20} » ne correspond pas à l'environnement rejoué avec tes actions"
                   + (f" : {hints_20[k_20]}." if k_20 in hints_20 else "."))
-        if problems_20 == ["actions"]:
-            print("❌ Ex B8.20 : rollout_20 joue l'action la plus probable : l'évaluation est déterministe, pas le "
-                  "rollout, dont les données doivent suivre la politique (sinon les log-probabilités et les ratios de "
-                  "PPO ne décrivent pas ce qui a été joué).")
 
 loss_ok_20 = False
 with checked("B8.20"):

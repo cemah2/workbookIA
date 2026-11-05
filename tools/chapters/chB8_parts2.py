@@ -85,12 +85,12 @@ def c23_answers() -> dict:
 
     rows = C23.get("rows", [])
     if not rows:
-        return {"a": 0, "b": 0, "c": 0, "robust": False}
+        return {"a": 2, "b": 2, "c": 0, "robust": False}
     seeds = C23["protocol"]["eval_seeds"]
 
     def band(name, es):
         median = float(np.median([r[f"{name}/{es}"]["mean"] for r in rows]))
-        return 0 if median >= 475 else (1 if median >= 200 else 2)
+        return 2 if median >= 475 else (1 if median >= 200 else 0)          # the higher, the better it holds
 
     def held(name, es):
         return sum(r[f"{name}/{es}"]["mean"] >= 475 for r in rows)
@@ -167,7 +167,7 @@ Dans tes notes : quel hyperparamètre change le plus l'aire sous la courbe, et l
        "Ex B8.20 · fiche §208.1 (« CartPole, vu de près »), §208.8 (« Généraliser au-delà de son environnement »)",
        hypothesis=True,
        body=r"""Ton agent de B8.20 a appris sur CartPole-v1 : $g = 9{,}8$ m/s², un mât de 1 m (`length = 0.5`, la **moitié** du mât, comme dans gymnasium). Que devient-il sur une autre physique, **sans réentraînement** ? Six agents PPO de référence (le protocole de B8.20 : `wbr.train_ppo`, 50 000 pas, graines 0 à 5) ont été évalués sur 100 épisodes déterministes (`wbr.evaluate(..., gravity=...)` ou `length=...`, qui recalcule ce qu'il faut). **Avant d'exécuter**, écris tes trois prédictions sur ces six agents :
-- a) `gravity_23` : avec une **gravité doublée** (19,6 m/s²), la **médiane** des six retours moyens : `0` si elle reste au moins à 475, `1` si elle est entre 200 et 475, `2` si elle tombe sous 200 ;
+- a) `gravity_23` : avec une **gravité doublée** (19,6 m/s²), la **médiane** des six retours moyens : `0` si elle tombe sous 200, `1` si elle est entre 200 et 475, `2` si elle reste au moins à 475 ;
 - b) `length_23` : avec un mât **deux fois plus long** (`length = 1.0`), la même question, les mêmes tranches ;
 - c) `longer_23` : avec un mât **quatre fois plus long** (`length = 2.0`), combien des six agents tiennent-ils encore au moins 475 ? Un entier de 0 à 6.
 

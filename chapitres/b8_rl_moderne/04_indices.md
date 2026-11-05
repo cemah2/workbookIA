@@ -628,7 +628,7 @@ Relis l'algorithme en cinq étapes de 208.2 (« Les deux stabilisateurs ») et l
 - `make_q_net_13` : `nn.Sequential` de trois `nn.Linear` séparés par deux `nn.ReLU`.
 - `dqn_targets_13` : `q_target(next_states).max(dim=1).values` donne une valeur par ligne ; `terminated.float()` transforme les booléens en 0 et 1 (on ne soustrait pas un booléen d'un nombre en PyTorch).
 - `epsilon_13` : la progression `min(1, step / (eps_fraction × total_steps))`, puis une interpolation entre `eps_start` et `eps_end`.
-- `train_dqn_13`, dans l'ordre : les graines et le réseau, `copy.deepcopy` pour le réseau cible, Adam, le générateur de l'exploration, la `ReplayBuffer` ; puis la boucle `for step in range(total_steps)` : l'action (`rng.random() < ε` → `int(rng.integers(2))`, sinon `argmax` sans gradient), `env.step`, `buffer.push(..., terminated)`, la fin d'épisode (les deux listes de `history`, `env.reset()`), la mise à jour (`buffer.sample`, les tenseurs, la cible, `gather`, `F.huber_loss`, `zero_grad`, `backward`, `clip_grad_norm_`, `step`), la copie du réseau cible quand `(step + 1) % target_every == 0`.
+- `train_dqn_13`, dans l'ordre : les graines et le réseau, `copy.deepcopy` pour le réseau cible, Adam, le générateur de l'exploration, la `ReplayBuffer` ; puis la boucle `for step in range(total_steps)` : l'action (`rng.random() < ε` → `int(rng.integers(2))`, sinon `argmax` sans gradient), `env.step`, `buffer.push(..., terminated)`, la fin d'épisode (les deux listes de `history`, `env.reset()`), la mise à jour (`buffer.sample`, les tenseurs, la cible par `dqn_targets_13`, appelée par son nom, `gather`, `F.huber_loss`, `zero_grad`, `backward`, `clip_grad_norm_`, `step`), la copie du réseau cible quand `(step + 1) % target_every == 0` ; `env.reset()` sans graine après le premier épisode.
 - Les tableaux de `buffer.sample` sont en NumPy : `torch.as_tensor(...)` ; les récompenses sont en float64, à passer en float32 (`dtype=torch.float32`) pour les mêler aux sorties du réseau.
 
 </details>
@@ -830,7 +830,7 @@ Relis « La loss complète et la boucle » (208.5) : quatre étapes, collecter, 
 - `ActorCritic20` : deux `nn.Sequential` (`self.actor`, `self.critic`) ; `value` rend `self.critic(obs).squeeze(-1)`. L'initialisation orthogonale de CleanRL (`nn.init.orthogonal_`, gain $\sqrt 2$, 0,01 pour la couche des logits, 1 pour celle de la valeur) aide, sans être exigée.
 - `rollout_20` : à chaque pas, sous `torch.no_grad()`, les log-probabilités (`torch.log_softmax`), une action par copie (`torch.multinomial(probs, 1, generator=generator)` ou `Categorical`), $V$ ; `envs.step(actions.numpy())` ; une ligne par champ (copies avec `np.array(..., copy=True)`), `valid = ~just_reset` ; puis `just_reset = terminated | truncated`. À la fin, `np.stack` et `next_values` en une passe du critique sur `next_obs`.
 - `ppo_loss_20` : `log_ratio = log π(a|s) − old_log_probs`, `ratio = log_ratio.exp()`, puis la formule ; les `parts` se calculent sous `torch.no_grad()`, en `float`.
-- `train_ppo_20` : après chaque rollout, `compute_gae` sur les tableaux `(T, N)` entiers (les pas de reset ont des drapeaux à `False` et les pas qui les précèdent arrêtent la récursion) ; puis on ne garde que `batch[k][valid]` pour la mise à jour ; `torch.randperm(n, generator=generator)` pour mélanger ; le retour des épisodes finis se suit par copie, en ajoutant les récompenses des pas valides.
+- `train_ppo_20` : `rollout_20`, `compute_gae` et `ppo_loss_20` appelées par leur nom (la vérification les observe) ; après chaque rollout, `compute_gae` sur les tableaux `(T, N)` entiers, tels que le rollout les rend (les pas de reset ont des drapeaux à `False` et les pas qui les précèdent arrêtent la récursion) ; puis on ne garde que `batch[k][valid]` pour la mise à jour ; `torch.randperm(n, generator=generator)` pour mélanger ; dans chaque mini-batch, `a = (a - a.mean()) / (a.std() + 1e-8)` ; le retour des épisodes finis se suit par copie, en ajoutant les récompenses des pas valides.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -1068,8 +1068,8 @@ SETTINGS_28 = {**SETTINGS_20, ...}            # your choice, from B8.22
 
 
 def train_28(seed, budget):
-    agent, logs = train_ppo_20(seed, budget, SETTINGS_28)
-    return agent                              # a module: evaluated by its most probable action
+    # 1. your PPO of B8.20 with SETTINGS_28, on `budget` steps (its number of iterations never goes beyond)
+    # 2. return the agent: a module, evaluated by its most probable action
 ```
 
 Essaie d'abord tes réglages sur une graine à toi (pas une de `SEEDS_28`), évaluée par `wbr.evaluate(agent, 100, EVAL_SEED)`, pour voir le temps et le retour ; garde les graines d'évaluation du défi pour la cellule de vérification.

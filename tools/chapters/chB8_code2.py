@@ -426,7 +426,7 @@ RECORD_28 = r'''wb.record("B8.28", 3, choices=[0, 1, 2, 3], mistakes={
 
 # --- 🔮 B8.23 ---------------------------------------------------------------------------------------------------------
 TODO_23 = r'''# Your predictions, BEFORE running the next cell (integers)
-gravity_23 = ...   # a) gravity doubled: 0 (the median of the six agents stays >= 475), 1 (between 200 and 475), 2 (below 200)
+gravity_23 = ...   # a) gravity doubled: 0 (the median of the six agents falls below 200), 1 (between 200 and 475), 2 (>= 475)
 length_23 = ...    # b) a pole twice as long: 0, 1 or 2 (the same bands)
 longer_23 = ...    # c) a pole four times as long: how many of the six agents still hold 475? An int from 0 to 6'''
 
