@@ -1268,6 +1268,9 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | RL hors ligne | offline RL | apprendre une politique à partir de données déjà collectées, sans nouvelle interaction | B8 |
 | loi de Goodhart | Goodhart's law | « une mesure qui devient un objectif cesse d'être une bonne mesure » : un agent qui optimise une récompense substitut finit par la séparer de ce qu'elle mesurait | B8 |
 | résidu de Bellman | Bellman residual | l'écart $Q_\theta(s, a) - (r + \gamma \max_{a'} Q_\theta(s', a'))$ minimisé en dérivant **aussi** à travers la cible : une autre méthode que le semi-gradient, qui apprend en général moins bien | B8 |
+| biais de longueur (d'un modèle de récompense) | length bias | un modèle de récompense qui préfère surtout les réponses (ou les trajectoires) les plus longues, parce que la longueur explique la plupart des préférences de ses données ; un agent qui l'optimise allonge ses réponses sans les améliorer | B8 |
+| revue de code | code review | relire une implémentation ligne à ligne (face à une référence, ou avant de la fusionner) et documenter chaque écart : ce qu'il change, dans quel cas, et la décision prise | B8 |
+| budget de pas (d'environnement) | environment step budget | le nombre maximal d'interactions qu'un entraînement de RL peut consommer, toutes copies et évaluations comprises : la mesure de son efficacité en échantillons | B8 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

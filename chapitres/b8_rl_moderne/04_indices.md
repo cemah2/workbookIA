@@ -852,4 +852,226 @@ def rollout_20(agent, envs, obs, just_reset, n_steps, generator):
 
 </details>
 
-*Les indices de B8.21 à B8.28 seront ajoutés à la prochaine session de génération.*
+### Ex B8.21 — Lire les journaux de PPO : KL approchée, fraction clippée, entropie, variance expliquée 📈
+
+<details><summary>Indice 1</summary>
+
+Relis « Les journaux de PPO » (208.5) et « Le critique et sa variance expliquée » (208.4) : chaque réglage changé agit d'abord sur **une** des quatre mesures. Ne commence pas par le retour : deux runs malades peuvent finir à 500, et un run sain peut avoir une mauvaise fin. Lis colonne par colonne, en comparant les cinq runs à la même échelle.
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour chaque réglage changé, demande-toi ce qu'il touche :
+- le learning rate fixe la taille de chaque pas d'Adam : combien la politique bouge pendant une itération ;
+- sans clipping, la part des ratios rognés ne peut valoir qu'une seule valeur ;
+- le bonus d'entropie est le seul terme de la loss qui agit directement sur l'entropie ;
+- `vf_coef = 0` retire la loss du critique : que devient sa prédiction des retours ?
+
+Puis cherche, dans chaque colonne, le run qui sort du lot dès le début (pas seulement à la fin), et garde pour le run sain celui qu'aucune colonne ne désigne.
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le critique d'abord, comme modèle : `vf_coef = 0` laisse le critique à son initialisation ; sa prédiction ne suit pas les retours, et la variance expliquée reste près de 0 **pendant tout le run**, pas seulement à la fin (où celle du run sain peut aussi baisser, quand presque tous les épisodes durent 500 pas). Pour les trois autres, regarde la colonne que l'indice 2 associe à chaque réglage et cherche le run dont la courbe y est la plus haute, la plus basse ou constante, dès les premières itérations ; vérifie ensuite qu'aucune autre colonne ne le désigne pour une autre cause.
+
+</details>
+
+### Ex B8.22 — Hyperparamètres de PPO : ε du clip, λ, nombre d'epochs — robustesse sur trois graines 🔬
+
+<details><summary>Indice 1</summary>
+
+`summary_22` ne demande que deux lectures d'un journal ; le piège est le `nan` d'une itération où aucun épisode ne finit (fréquent quand les épisodes durent 500 pas), qui empoisonne une moyenne et ne vaut jamais « au moins 475 ». Pour l'expérience, relis « Rapporter plusieurs graines » (208.6) : une médiane de trois graines et leur intervalle, puis la question de savoir si les intervalles se recouvrent.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `auc` : `np.asarray(logs["mean_return"], dtype=float)`, puis les valeurs finies (`np.isfinite`) et leur moyenne.
+- `first_475` : parcours `logs["step"]` et `logs["mean_return"]` ensemble (`zip`) ; le premier retour `>= 475` donne son pas, en `int` ; `None` sinon. Une comparaison avec `nan` vaut toujours `False`.
+- Ne modifie pas le journal (pas de `.pop`, pas d'affectation dans ses listes).
+- Pour lire l'expérience : la KL et la fraction clippée de chaque run sont dans `runs_22[f"{réglage}/{graine}"]["approx_kl"]` et `["clipfrac"]` ; compare leurs médianes entre `epochs_4`, `reference` et `epochs_20`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def summary_22(logs):
+    returns = np.asarray(logs["mean_return"], dtype=float)
+    finite = ...                                         # the values that are not nan
+    first = next((int(step) for step, r in zip(logs["step"], returns) if ...), None)
+    return {"auc": float(finite.mean()), "first_475": first}
+```
+
+</details>
+
+### Ex B8.23 — Prédire : l'agent PPO face à une gravité doublée ou à un mât deux fois plus long 🔮
+
+<details><summary>Indice 1</summary>
+
+Relis « CartPole, vu de près » (208.1) et « Généraliser au-delà de son environnement » (208.8). Deux questions séparées : la physique devient-elle plus dure ou plus facile à tenir (pour n'importe quel contrôleur) ? Et l'agent, qui n'a vu qu'une physique, sait-il réagir à une autre ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Pour la physique : un mât plus long a plus d'inertie et tombe plus lentement (pense à tenir un balai et un crayon en équilibre sur ta main) ; une gravité plus forte le fait tomber plus vite. Pour l'agent : sa politique est une fonction de l'état ; elle pousse d'un côté ou de l'autre selon l'angle et les vitesses. Elle peut rester juste tant que la bonne poussée garde le même signe, et devenir fausse quand la dynamique change assez pour qu'il faille pousser autrement (plus tôt, plus longtemps).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Pour a), demande-toi si une gravité doublée change le **signe** de la bonne réaction à un mât qui penche, ou seulement sa **vitesse** ; une politique qui réagit à chaque pas (50 fois par seconde) a-t-elle le temps de corriger ? Pour b) et c), pose la même question avec un mât plus lent : ce qui était une bonne poussée au bon moment le reste-t-il quand le mât réagit deux, puis quatre fois plus lentement ? Les tranches de a) et b) portent sur la médiane de six agents ; c) compte les agents, un par un.
+
+</details>
+
+### Ex B8.24 — Robustesse : modifier la physique de CartPole et mesurer la chute du retour 🔬
+
+<details><summary>Indice 1</summary>
+
+Relis la fin de « Généraliser au-delà de son environnement » (208.8) : `gravity` et `length` sont des attributs de l'environnement nu (`env.unwrapped`), mais deux constantes en sont déduites une fois pour toutes dans `__init__`. Lis `CartPoleEnv.__init__` (`inspect.getsource`) pour les trouver. `robustness_24` ne fait qu'une boucle sur les facteurs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `set_physics_24` : `core = env.unwrapped` ; change `core.gravity` et `core.length` quand ils ne valent pas `None` ; puis recalcule `core.total_mass` et `core.polemass_length` à partir des masses et de la longueur ; rends `env`.
+- `robustness_24` : pour chaque facteur, un `wbr.make_env()` neuf, ta `set_physics_24` avec `{name: DEFAULTS_24[name] * factor}` (un dictionnaire passé par `**`), puis `wbr.evaluate(policy, n_episodes, seed, env=env)["mean_return"]` en `float`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def set_physics_24(env, gravity=None, length=None):
+    core = env.unwrapped
+    # 1. the constants you are given (None: unchanged)
+    core.total_mass = core.masspole + core.masscart
+    core.polemass_length = ...                           # the other constant derived by __init__
+    return env
+
+
+def robustness_24(policy, name, factors, n_episodes=EPISODES_24, seed=EVAL_SEED):
+    out = []
+    for factor in factors:
+        env = set_physics_24(wbr.make_env(), **{name: DEFAULTS_24[name] * factor})
+        ...                                              # one wbr.evaluate per factor
+    return out
+```
+
+</details>
+
+### Ex B8.25 — bradley_terry_loss et dpo_loss 🔨
+
+<details><summary>Indice 1</summary>
+
+Relis « Le modèle de récompense de Bradley-Terry » et « DPO » (208.7), et ta copie de ✏️ B8.6. Bradley-Terry est une régression logistique sur la **différence** $d = r_c - r_r$ : la loss d'une paire est $-\log\sigma(d)$, et sa dérivée par rapport à $d$ vaut $-(1 - \sigma(d)) = -\sigma(-d)$. DPO est la même loss, appliquée à une marge calculée à partir de quatre log-probabilités.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- Valide d'abord : `np.asarray(..., dtype=float)`, des tableaux 1-D de **même** forme (pas de diffusion), $\beta > 0$ pour DPO (un `ValueError` sinon).
+- La loss stable : `np.logaddexp(0, -d)` vaut $\ln(1 + e^{-d}) = -\log\sigma(d)$ sans jamais calculer $e^{1000}$ ; sa moyenne.
+- Le gradient : $\sigma(-d)$ = `np.exp(-np.logaddexp(0, d))`, toujours entre 0 et 1 ; `grad_chosen = -σ(-d) / n`, `grad_rejected = -grad_chosen`.
+- DPO : `margins = beta * ((pc - rc) - (pr - rr))`, puis la même loss sur les marges.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def bradley_terry_loss(r_chosen, r_rejected):
+    # 1. float arrays, the same shape (n,) (ValueError otherwise)
+    d = rc - rr
+    loss = float(np.mean(np.logaddexp(0.0, -d)))
+    grad_chosen = ...                                    # -sigma(-d) / n, computed with logaddexp
+    return loss, grad_chosen, -grad_chosen
+```
+
+</details>
+
+### Ex B8.26 — RLHF miniature : un modèle de récompense appris sur des préférences simulées, puis PPO — et le piratage de la récompense 📦
+
+<details><summary>Indice 1</summary>
+
+Le modèle de récompense note un **état** ; une trajectoire reçoit la somme des notes de ses états, et Bradley-Terry compare deux sommes. Ta `bradley_terry_loss` (NumPy) rend la loss **et** son gradient par rapport aux deux sommes : il reste à pousser ce gradient dans le réseau, ce que fait `torch.autograd.backward(tenseurs, gradients)` (la règle de la chaîne du ch. 18). Pour l'expérience, relis « Le piratage de la récompense » (208.7) : un agent optimise la récompense qu'on lui donne, là où elle a été apprise… et ailleurs.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `make_reward_model_26` : un `nn.Module` qui garde l'échelle (`register_buffer("scale", torch.tensor(wbr.OBS_SCALE))`) et un `nn.Sequential` ; `forward` divise, applique le réseau et rend `.squeeze(-1)`.
+- `trajectory_returns_26` : une seule passe sur toutes les observations (`np.concatenate`), puis une somme par trajectoire (`torch.tensor_split` aux longueurs cumulées, ou `index_add`) ; pas de `.detach()`.
+- `train_reward_model_26` : `torch.where(gagnant_premier, r1, r2)` choisit le préféré de chaque paire ; `bradley_terry_loss` sur leurs valeurs détachées en float64 ; puis `optimizer.zero_grad()`, `torch.autograd.backward([chosen, rejected], [g_chosen, g_rejected])` (des tenseurs du type des retours), `optimizer.step()`.
+- `reward_fn_26` : une fonction interne qui appelle le modèle sous `torch.no_grad()` et rend `.numpy()`.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+def train_reward_model_26(pairs, seed, epochs=EPOCHS_26, lr=LR_26):
+    torch.manual_seed(seed)
+    model = make_reward_model_26()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    first_wins = torch.as_tensor(np.asarray(pairs["preferred"]) == 0)
+    losses = []
+    for _ in range(epochs):
+        r1, r2 = trajectory_returns_26(model, pairs["first"]), trajectory_returns_26(model, pairs["second"])
+        chosen, rejected = torch.where(first_wins, r1, r2), torch.where(first_wins, r2, r1)
+        loss, g_c, g_r = mylearn.deep_rl.bradley_terry_loss(...)       # NumPy, float64
+        # zero_grad, torch.autograd.backward([chosen, rejected], [...]), step
+        losses.append(float(loss))
+    return model, losses
+```
+
+</details>
+
+### Ex B8.27 — Revue de code : comparer ton PPO à une implémentation de référence et documenter chaque écart 🛠️
+
+<details><summary>Indice 1</summary>
+
+Lis `ppo.py` dans l'ordre où il s'exécute (de la ligne 129 à la fin), avec ton `train_ppo_20` ouvert à côté, et compare bloc par bloc : la création des environnements, la boucle de collecte, GAE, l'aplatissement du batch, les epochs et mini-batches, la loss, les journaux. Puis parcours les « 37 détails » (les 13 premiers, ceux de base) : pour chacun, `ppo.py` et toi faites-vous la même chose ?
+
+</details>
+<details><summary>Indice 2</summary>
+
+Les deux écarts de la fiche se trouvent là où `ppo.py` calcule `next_done` et là où il cherche les retours des épisodes dans `infos`. Pour les autres, cherche dans `ppo.py` : la loss du critique (`clip_vloss`), ce qui est écrit dans les journaux et pour quel mini-batch, `target_kl`, la taille des mini-batches et ce qu'ils contiennent, les réglages par défaut (`Args`), la source du hasard du mélange. Un détail identique chez toi et chez lui (l'init orthogonale, `eps=1e-5`) n'est pas un écart. Pour chaque écart, l'« effet » dit **dans quel cas** il compte (CartPole, un autre environnement, la lecture des journaux).
+
+</details>
+<details><summary>Indice 3</summary>
+
+Le premier écart, comme modèle de forme (à toi d'écrire son contenu) :
+
+```python
+{"sujet": "fin d'épisode et limite de temps",
+ "lignes": ...,                       # the line of ppo.py where next_done is computed
+ "extrait": "next_done = ...",        # copied from that line
+ "chez_moi": "...",                   # what your compute_gae does with terminated and truncated
+ "effet": "...",                      # what a time limit of 500 steps becomes in ppo.py
+ "decision": "garder"},
+```
+
+Pour les suivants, une ligne de `ppo.py` par écart, l'extrait recopié de cette ligne, et une phrase de chaque côté.
+
+</details>
+
+### Ex B8.28 — Défi : CartPole-v1 résolu (≥ 475 sur 100 épisodes) en au plus 100 000 pas, trois graines sur trois 🏆
+
+<details><summary>Indice 1</summary>
+
+Ton PPO de B8.20 est déjà un bon point de départ : relis tes notes de B8.22 (quel réglage apprend vite, lequel apprend **sûrement**) et les journaux de B8.21. Le budget de 100 000 pas est celui du RL Zoo pour PPO sur CartPole (208.6) ; la difficulté n'est pas d'y arriver une fois, mais sur trois graines.
+
+</details>
+<details><summary>Indice 2</summary>
+
+- `train_28` peut appeler `train_ppo_20(seed, budget, réglages)` : le nombre d'itérations, `budget // (n_envs × n_steps)`, ne dépasse jamais le budget.
+- Un learning rate qui décroît jusqu'à 0 finit sur une politique stable ; la politique rendue est évaluée de façon déterministe (l'action la plus probable).
+- Toute évaluation pendant l'entraînement coûte des pas du budget : si tu en fais, compte-les.
+
+</details>
+<details><summary>Indice 3</summary>
+
+```python
+SETTINGS_28 = {**SETTINGS_20, ...}            # your choice, from B8.22
+
+
+def train_28(seed, budget):
+    agent, logs = train_ppo_20(seed, budget, SETTINGS_28)
+    return agent                              # a module: evaluated by its most probable action
+```
+
+Essaie d'abord tes réglages sur une graine à toi (pas une de `SEEDS_28`), évaluée par `wbr.evaluate(agent, 100, EVAL_SEED)`, pour voir le temps et le retour ; garde les graines d'évaluation du défi pour la cellule de vérification.
+
+</details>

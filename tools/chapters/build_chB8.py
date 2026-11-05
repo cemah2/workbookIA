@@ -15,9 +15,9 @@ context cell of the solutions notebook, then checked against the libraries: the 
 F.logsigmoid, torch.distributions.Categorical), and gymnasium (CartPole-v1 spaces, the seeds of reset and of the
 action space), with exact enumerations for the overestimation quiz: part 0 downloads nothing and trains no agent.
 The notebook exercises come in three phases: A, the value (B8.12 to B8.15); B, the policy (B8.16 to B8.24); C, the
-preferences (B8.25 to B8.28). Session 78 writes them in two halves: B8.12 to B8.20 (chB8_parts.py, chB8_code.py,
-infrastructure wb.deep_rl_env), then B8.21 to B8.28 (NEXT_SESSION); history_chB8.py precomputes the calibrations and the
-multi-seed protocols (tools/chapters/history_chB8.json, src/wb/deep_rl_protocols.json).
+preferences (B8.25 to B8.28). Session 78 wrote them in two halves: B8.12 to B8.20 (chB8_parts.py, chB8_code.py,
+infrastructure wb.deep_rl_env), then B8.21 to B8.28 (chB8_parts2.py, chB8_code2.py); history_chB8.py precomputes the
+calibrations and the multi-seed protocols (tools/chapters/history_chB8.json, src/wb/deep_rl_protocols.json).
 """
 
 from __future__ import annotations
@@ -758,25 +758,22 @@ PAPER_INTRO = ("## Partie 0 · Vérifier tes réponses courtes (quiz, rappels, �
                "l'entretien se corrigent avec `05_solutions.md`.")
 
 # ---------------------------------------------------------------------------
-# Parts A to C (exercises B8.12 to B8.28). Session 78 writes them in two halves: B8.12 to B8.20 (chB8_parts.py,
-# chB8_code.py: part A and the start of part B), then B8.21 to B8.28 (NEXT_SESSION: the end of part B and part C).
+# Parts A to C (exercises B8.12 to B8.28), written by session 78 in two halves: B8.12 to B8.20 (chB8_parts.py,
+# chB8_code.py: part A and the start of part B), then B8.21 to B8.28 (chB8_parts2.py, chB8_code2.py: the end of part B
+# and part C).
 # history_chB8.py precomputes the calibrations and the multi-seed protocols.
 # ---------------------------------------------------------------------------
 import dataclasses  # noqa: E402
 
 import chB8_code  # noqa: E402,F401  (the cells; history_chB8.py reuses them)
 from chB8_parts import PART_B, PARTS  # noqa: E402,F401
+import chB8_parts2  # noqa: E402,F401  (appends B8.21 to B8.24 to part B, and part C)
 
 for _part in PARTS:
     for _ex in _part.exercises:
         check_unique_keys(_ex.record or "x = 1", _ex.id)
 
-NEXT_SESSION = [
-    ("B", "B8.21 à B8.24", "la fin de la politique : les journaux de ton PPO, ses hyperparamètres sur trois graines, "
-                           "sa robustesse face à une autre physique"),
-    ("C", "B8.25 à B8.28", "les préférences : Bradley-Terry et DPO dans ta librairie, un RLHF miniature sur "
-                           "CartPole, la revue de code face à CleanRL, et le défi"),
-]
+NEXT_SESSION: list = []          # every exercise is written (session 78)
 
 
 def kind_part(part, kind: str):
@@ -840,11 +837,14 @@ def footer_cells(kind: str) -> list:
              "notebook complet.*")
     return [md("## ✅ Bilan\n\n"
                "**Auto-évaluation** (note-toi de 0 à 3 dans `mon_travail/suivi/auto_evaluation.md`) :\n"
-               "1. Sais-tu calculer une cible DQN et Double DQN, en distinguant une vraie fin d'une limite de temps ?\n"
-               "2. Sais-tu dériver le gradient du log d'une politique softmax, et dire pourquoi une baseline ne "
-               "biaise pas le gradient ?\n"
-               "3. Sais-tu calculer GAE à rebours et l'objectif clippé de PPO avec son gradient, cas par cas ?\n"
-               "4. Sais-tu calculer une loss de Bradley-Terry et une loss DPO, et dire ce que règle $\\beta$ ?\n\n"
+               "1. Sais-tu calculer une cible DQN et Double DQN, en distinguant une vraie fin d'une limite de temps, et "
+               "dire ce que le réseau cible et le rejeu changent à un DQN ?\n"
+               "2. Sais-tu écrire GAE et l'objectif clippé de PPO, puis reconnaître dans les journaux d'un PPO un "
+               "learning rate trop grand, un clip absent ou un critique qui n'apprend pas ?\n"
+               "3. Sais-tu comparer des réglages sur plusieurs graines, et tester un agent sur une physique qu'il n'a "
+               "pas vue ?\n"
+               "4. Sais-tu calculer une loss de Bradley-Terry et une loss DPO, entraîner un modèle de récompense, et "
+               "dire où un agent qui l'optimise peut le pirater ?\n\n"
                "**Pour aller plus loin** : l'article de Schulman et coll. (📄 B8.11) et les « 37 détails » de "
                "Huang et coll., cités dans la fiche. B8 est le dernier chapitre bonus."
                + later)]

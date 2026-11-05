@@ -328,7 +328,7 @@ def c14() -> dict:
 # --------------------------------------------------------------------------------------------------------------------- l21
 L21_SEEDS = (21, 22, 23)            # the notebook shows the first; the other two check that each signature holds
 L21_RUNS = {"healthy": {}, "lr_high": {"lr": 1e-2, "anneal_lr": False}, "no_clip": {"clip_eps": 1e6},
-            "entropy_sign": {"ent_coef": -0.05}, "no_critic": {"vf_coef": 0.0}}
+            "entropy_sign": {"ent_coef": -0.2}, "no_critic": {"vf_coef": 0.0}}
 L21_LETTERS = "ABCDE"
 
 
@@ -368,7 +368,8 @@ def l21() -> tuple[dict, dict]:
         by = {r["run"]: r for r in rows if r["seed"] == seed}
         others = lambda key, run: [by[n][key] for n in by if n != run]       # noqa: E731
         checks.append({"seed": seed,
-                       "lr_high_largest_kl": by["lr_high"]["kl_median"] > max(others("kl_median", "lr_high")),
+                       "lr_high_largest_clipfrac": by["lr_high"]["clipfrac_median"]
+                       > max(others("clipfrac_median", "lr_high")),
                        "no_clip_never_clips": by["no_clip"]["clipfrac_max"] == 0.0,
                        "no_clip_kl_above_healthy": by["no_clip"]["kl_median"] > by["healthy"]["kl_median"],
                        "entropy_sign_lowest_entropy": by["entropy_sign"]["entropy_quarter"]
@@ -473,8 +474,62 @@ def c28b() -> dict:
     return {"rows": rows, "summary": summary, "budget": R.CHALLENGE_BUDGET, "eval_seed": R.CHALLENGE_EVAL_SEED,
             "settings": {k: v[0] for k, v in C28_SETTINGS.items()}}
 
+
+# --------------------------------------------------------------------------------------------------------------------- r26
+R26_RUNS = 5                         # data seed 26 + k, held-out pairs 126 + k, reward model and PPO seed 26 + k
+R26_PAIRS, R26_HELD = 200, 100
+R26_STEPS = 30_000
+R26_DATA = {"broad": None, "narrow": (1.0,)}
+
+
+def r26() -> dict:
+    """📦 B8.26: the miniature RLHF on five seeds (k = 0 is the notebook's): for the broad preferences (the noisy rule
+    and the random policy) and the narrow ones (the random policy only), the reference reward model, its preference
+    accuracy (its own held-out pairs, broad held-out pairs), then the reference PPO (30 000 steps) on it; and two
+    PPO agents for comparison, on the true reward and on the +1 of CartPole (survival). Each agent is measured by
+    wbr.rlhf_measure (20 deterministic episodes)."""
+    import torch
+
+    from wb import deep_rl_env as R
+
+    rows = []
+    for k in range(R26_RUNS):
+        seed = 26 + k
+        broad_held = R.preference_pairs(R26_HELD, 126 + k)
+        models, row = {}, {"k": k, "seed": seed}
+        for name, behaviours in R26_DATA.items():
+            extra = {} if behaviours is None else {"behaviours": behaviours}
+            start = time.perf_counter()
+            pairs = R.preference_pairs(R26_PAIRS, seed, **extra)
+            held = R.preference_pairs(R26_HELD, 126 + k, **extra)
+            model, losses = R.train_reward_model(pairs, seed)
+            models[name] = model
+            row[f"rm_{name}"] = {"acc_train": R.preference_accuracy(model, pairs), "acc_held": R.preference_accuracy(model, held),
+                                 "acc_broad": R.preference_accuracy(model, broad_held), "loss_first": losses[0],
+                                 "loss_last": losses[-1], "seconds": round(time.perf_counter() - start, 1),
+                                 "mean_length": float(np.mean([len(t) for t in pairs["first"] + pairs["second"]])),
+                                 "max_abs_x": float(max(np.abs(t[:, 0]).max() for t in pairs["first"] + pairs["second"]))}
+
+        def learned(model):
+            def reward(obs, actions, next_obs):
+                with torch.no_grad():
+                    return model(torch.as_tensor(next_obs, dtype=torch.float32)).numpy()
+            return reward
+
+        fns = {"rlhf_broad": learned(models["broad"]), "rlhf_narrow": learned(models["narrow"]),
+               "true": lambda obs, actions, next_obs: R.centered_reward(next_obs), "survival": None}
+        for name, fn in fns.items():
+            agent, logs = R.train_ppo(seed, R26_STEPS, reward_fn=fn)
+            row[name] = {"broad": R.rlhf_measure(agent, models["broad"], 20, R.EVAL_SEED),
+                         "narrow_learned_per_step": R.rlhf_measure(agent, models["narrow"], 20, R.EVAL_SEED)["learned_per_step"],
+                         "seconds": round(logs["seconds"], 1)}
+        rows.append(row)
+        print("r26", json.dumps(row), flush=True)
+    return {"rows": rows, "pairs": R26_PAIRS, "held": R26_HELD, "steps": R26_STEPS,
+            "settings": {"epochs": 200, "lr": 3e-3, "hidden": 32, "width": R.RLHF_WIDTH, "max_steps": R.RLHF_STEPS}}
+
 ENTRIES = {"tab26": tab26, "c14": c14, "c12": c12, "c13": c13, "a15": a15, "p16": p16, "c17": c17, "c20": c20, "c28": c28,
-           "b14": b14, "l21": l21, "p22": p22, "c23": c23, "c28b": c28b}
+           "b14": b14, "l21": l21, "p22": p22, "c23": c23, "c28b": c28b, "r26": r26}
 
 
 def main() -> int:

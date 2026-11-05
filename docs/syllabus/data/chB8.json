@@ -1000,7 +1000,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.22",
@@ -1041,7 +1041,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.24",
@@ -1053,7 +1053,8 @@
    "thread": "CartPole",
    "file": "03",
    "prereq": [
-    "B8.23"
+    "B8.23",
+    "B8.20"
    ],
    "covers": [
     "208.8"

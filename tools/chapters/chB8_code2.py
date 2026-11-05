@@ -42,7 +42,7 @@ TODO_21 = r'''# Your readings of the figure: one letter each, between quotes ("A
 healthy_21 = ...        # a) the run with the reference settings
 lr_high_21 = ...        # b) a learning rate ten times larger (1e-2), which never decreases
 no_clip_21 = ...        # c) no clipping (clip_eps so large that no ratio is ever clipped)
-entropy_sign_21 = ...   # d) the entropy bonus with the wrong sign (ent_coef = -0.05)
+entropy_sign_21 = ...   # d) the entropy bonus with the wrong sign (ent_coef = -0.2)
 no_critic_21 = ...      # e) a critic that does not learn (vf_coef = 0)'''
 
 CHECK_21 = r'''answers_21 = [healthy_21, lr_high_21, no_clip_21, entropy_sign_21, no_critic_21]
@@ -456,7 +456,7 @@ wb.check("B8.23c", longer_23)'''
 RECORD_23 = r'''«RECORD_23»'''
 
 # --- 🔬 B8.24 ---------------------------------------------------------------------------------------------------------
-GIVEN_24 = r'''GRID_24 = wbr.precomputed("c23")               # the six reference agents of B8.23 on the grids below (20 x ... episodes)
+GIVEN_24 = r'''GRID_24 = wbr.precomputed("c23")               # the six reference agents of B8.23, evaluated on the grids below
 FACTORS_24 = {"gravity": GRID_24["protocol"]["gravity_factors"], "length": GRID_24["protocol"]["length_factors"]}
 DEFAULTS_24 = {"gravity": 9.8, "length": 0.5}  # CartPole-v1: g in m/s², length = HALF the pole, in m
 EPISODES_24 = 20                               # episodes per point for your agent (the reference: «GRID_EPISODES_24»)
@@ -574,3 +574,226 @@ else:
         ev_right_24 = wbr.evaluate(agent_24, EPISODES_24, EVAL_SEED, env=set_physics_24(wbr.make_env(), length=2.0))
         print(f"mât quatre fois plus long, polemass_length oublié : {fr(ev_naive_24, 1)} ; recalculé : "
               f"{fr(ev_right_24['mean_return'], 1)} ({time.perf_counter() - start_24:.0f} s en tout)")'''
+
+# --- 📦 B8.26 ---------------------------------------------------------------------------------------------------------
+GIVEN_26 = r'''SEED_26 = 26
+PAIRS_26 = wbr.preference_pairs(200, seed=SEED_26)          # broad: the rule of 208.1 with 0 to 50 % of random actions,
+HELD_26 = wbr.preference_pairs(100, seed=126)               # and the random policy; HELD_26: other pairs, held out
+NARROW_26 = wbr.preference_pairs(200, seed=SEED_26, behaviours=(1.0,))     # narrow: the random policy only
+NARROW_HELD_26 = wbr.preference_pairs(100, seed=126, behaviours=(1.0,))
+HIDDEN_26, EPOCHS_26, LR_26 = 32, 200, 3e-3
+STEPS_26 = «STEPS_26»                           # the PPO of each agent (all copies)
+THRESHOLD_26 = «THRESHOLD_26»                   # the held-out accuracy asked of your broad reward model (5 seeds of the reference)
+
+
+def true_reward_26(obs, actions, next_obs):
+    """The hidden "true" reward, as a reward_fn of train_ppo_20: exp(-(x / 0.5)^2) on the observation after each step."""
+    return wbr.centered_reward(next_obs)
+
+
+for name_26, pairs_26 in (("larges", PAIRS_26), ("étroites", NARROW_26)):
+    trajs_26 = pairs_26["first"] + pairs_26["second"]
+    print(f"préférences {name_26} : {len(pairs_26['preferred'])} paires, {np.mean([len(t) for t in trajs_26]):.0f} pas par "
+          f"trajectoire en moyenne, |x| jusqu'à {max(float(np.abs(t[:, 0]).max()) for t in trajs_26):.2f} m, la "
+          f"première préférée dans {100 * np.mean(pairs_26['preferred'] == 0):.0f} % des paires")'''
+
+TODO_26 = r'''def make_reward_model_26(hidden=HIDDEN_26):
+    """A new reward model: an nn.Module whose forward(obs) maps observations (N, 4) to rewards (N,): an MLP
+    4 -> hidden -> hidden -> 1 (tanh) on the observations divided by wbr.OBS_SCALE."""
+    raise NotImplementedError("make_reward_model_26")
+
+
+def trajectory_returns_26(model, trajectories):
+    """The learned return of each trajectory (a list of float32 arrays (T_i, 4)): the sum of model(states) over its
+    steps, a tensor (M,) with its graph."""
+    raise NotImplementedError("trajectory_returns_26")
+
+
+def train_reward_model_26(pairs, seed, epochs=EPOCHS_26, lr=LR_26):
+    """Learn a reward model from preferences (the dict of wbr.preference_pairs). Returns (model, losses), losses the
+    list of the loss of each epoch (floats)."""
+    raise NotImplementedError("train_reward_model_26")
+
+
+def reward_fn_26(model):
+    """A reward function for train_ppo_20: (obs, actions, next_obs) -> a float NumPy array (N,), model(next_obs)
+    without gradient."""
+    raise NotImplementedError("reward_fn_26")'''
+
+SOLUTION_26 = r'''class RewardModel26(nn.Module):
+    def __init__(self, hidden=HIDDEN_26):
+        super().__init__()
+        self.register_buffer("scale", torch.tensor(wbr.OBS_SCALE, dtype=torch.float32))
+        self.net = nn.Sequential(nn.Linear(4, hidden), nn.Tanh(), nn.Linear(hidden, hidden), nn.Tanh(),
+                                 nn.Linear(hidden, 1))
+
+    def forward(self, obs):
+        return self.net(obs / self.scale).squeeze(-1)
+
+
+def make_reward_model_26(hidden=HIDDEN_26):
+    """A new reward model: an nn.Module whose forward(obs) maps observations (N, 4) to rewards (N,): an MLP
+    4 -> hidden -> hidden -> 1 (tanh) on the observations divided by wbr.OBS_SCALE."""
+    return RewardModel26(hidden)
+
+
+def trajectory_returns_26(model, trajectories):
+    """The learned return of each trajectory (a list of float32 arrays (T_i, 4)): the sum of model(states) over its
+    steps, a tensor (M,) with its graph."""
+    rewards = model(torch.as_tensor(np.concatenate(trajectories), dtype=torch.float32))   # one pass on all the states
+    ends = np.cumsum([len(t) for t in trajectories])
+    return torch.stack([part.sum() for part in torch.tensor_split(rewards, ends[:-1].tolist())])
+
+
+def train_reward_model_26(pairs, seed, epochs=EPOCHS_26, lr=LR_26):
+    """Learn a reward model from preferences (the dict of wbr.preference_pairs). Returns (model, losses), losses the
+    list of the loss of each epoch (floats)."""
+    torch.manual_seed(seed)
+    model = make_reward_model_26()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    first_wins = np.asarray(pairs["preferred"]) == 0
+    losses = []
+    for _ in range(epochs):
+        r1 = trajectory_returns_26(model, pairs["first"])
+        r2 = trajectory_returns_26(model, pairs["second"])
+        chosen = torch.where(torch.as_tensor(first_wins), r1, r2)
+        rejected = torch.where(torch.as_tensor(first_wins), r2, r1)
+        loss, g_chosen, g_rejected = mylearn.deep_rl.bradley_terry_loss(chosen.detach().double().numpy(),
+                                                                        rejected.detach().double().numpy())
+        optimizer.zero_grad()
+        torch.autograd.backward([chosen, rejected], [torch.as_tensor(g_chosen, dtype=chosen.dtype),
+                                                     torch.as_tensor(g_rejected, dtype=rejected.dtype)])
+        optimizer.step()
+        losses.append(float(loss))
+    return model.eval(), losses
+
+
+def reward_fn_26(model):
+    """A reward function for train_ppo_20: (obs, actions, next_obs) -> a float NumPy array (N,), model(next_obs)
+    without gradient."""
+    def reward(obs, actions, next_obs):
+        with torch.no_grad():
+            return model(torch.as_tensor(np.asarray(next_obs), dtype=torch.float32)).double().numpy()
+    return reward'''
+
+CHECK_26 = r'''ok_26 = False
+with checked("B8.26"):
+    torch.manual_seed(0)
+    model_26 = make_reward_model_26()
+    obs_26 = torch.as_tensor(np.random.default_rng(26).normal(0, 0.5, (5, 4)), dtype=torch.float32)
+    out_26 = model_26(obs_26)
+    n_params_26 = sum(p.numel() for p in model_26.parameters())
+    verdict("B8.26", isinstance(model_26, nn.Module) and tuple(out_26.shape) == (5,) and out_26.requires_grad,
+            f"make_reward_model_26 : forward rend (5,) pour 5 observations, {n_params_26} paramètres.",
+            f"make_reward_model_26 : attendu un nn.Module dont forward rend un tenseur (5,) avec son graphe pour 5 "
+            f"observations, reçu {tuple(getattr(out_26, 'shape', ()))}.")
+    fixed_26 = wbr.reward_model(HIDDEN_26, seed=1)              # a fixed reward model, so that only your sum is tested
+    some_26 = PAIRS_26["first"][:6]
+    got_26 = trajectory_returns_26(fixed_26, [t.copy() for t in some_26])
+    same("B8.26", "trajectory_returns_26 sur 6 trajectoires (un modèle fixé)", got_26.detach(),
+         wbr.trajectory_returns(fixed_26, some_26).detach(), rtol=1e-5, atol=1e-5)
+    verdict("B8.26", getattr(got_26, "requires_grad", False), "trajectory_returns_26 garde le graphe (le modèle apprendra).",
+            "trajectory_returns_26 rend un tenseur sans graphe : un .detach(), .item() ou NumPy de trop ?")
+    calls_26 = {"n": 0}
+    real_bt_26 = mylearn.deep_rl.bradley_terry_loss
+
+    def spy_bt_26(*args, **kwargs):
+        calls_26["n"] += 1
+        return real_bt_26(*args, **kwargs)
+
+    small_26 = {k: v[:30] for k, v in PAIRS_26.items()}
+    torch.manual_seed(7)
+    start_model_26 = make_reward_model_26()                      # the model your function starts from (same seed)
+    with torch.no_grad():
+        r1_26 = wbr.trajectory_returns(start_model_26, small_26["first"])
+        r2_26 = wbr.trajectory_returns(start_model_26, small_26["second"])
+        wins_26 = torch.as_tensor(np.asarray(small_26["preferred"]) == 0)
+        want_first_26 = float(-F.logsigmoid(torch.where(wins_26, r1_26 - r2_26, r2_26 - r1_26)).mean())
+    mylearn.deep_rl.bradley_terry_loss = spy_bt_26
+    try:
+        model_s_26, losses_s_26 = pair("B8.26", "train_reward_model_26", train_reward_model_26(small_26, 7, epochs=5),
+                                       names=("model", "losses"))
+    finally:
+        mylearn.deep_rl.bradley_terry_loss = real_bt_26
+    good_26 = [calls_26["n"] == 5]
+    verdict("B8.26", good_26[-1], "train_reward_model_26 appelle ta bradley_terry_loss à chaque epoch (5 sur 5).",
+            f"attendu un appel de mylearn.deep_rl.bradley_terry_loss par epoch (5), reçu {calls_26['n']} : l'appelles-tu "
+            "par ce nom (la vérification l'observe) ?")
+    good_26.append(len(losses_s_26) == 5 and abs(float(losses_s_26[0]) - want_first_26) <= 1e-4 * max(1.0, want_first_26))
+    verdict("B8.26", good_26[-1], f"la loss de la première epoch, {fr(want_first_26, 4)}, est celle de Bradley-Terry sur "
+                                  "les paires (le préféré d'abord).",
+            f"la loss de la première epoch : attendu {want_first_26:.6g} (Bradley-Terry du modèle de départ, "
+            f"torch.manual_seed(seed) puis make_reward_model_26()), reçu "
+            f"{(float(losses_s_26[0]) if len(losses_s_26) else None)!r} sur {len(losses_s_26)} valeurs ; le préféré est "
+            "pairs['first'] quand pairs['preferred'] vaut 0.")
+    good_26.append(len(losses_s_26) == 5 and float(losses_s_26[-1]) < float(losses_s_26[0]))
+    verdict("B8.26", good_26[-1], "la loss baisse en 5 epochs.",
+            "la loss ne baisse pas en 5 epochs : le gradient atteint-il le réseau (torch.autograd.backward avec les "
+            "gradients de ta bradley_terry_loss, puis optimizer.step()) ?")
+    fn_26 = reward_fn_26(fixed_26)
+    batch_26 = np.random.default_rng(260).normal(0, 0.5, (4, 4)).astype(np.float32)
+    r_26 = fn_26(batch_26, np.zeros(4, dtype=np.int64), batch_26.copy())
+    with torch.no_grad():
+        want_r_26 = fixed_26(torch.as_tensor(batch_26)).double().numpy()
+    good_26.append(isinstance(r_26, np.ndarray) and r_26.shape == (4,) and np.allclose(r_26, want_r_26, atol=1e-5))
+    verdict("B8.26", good_26[-1], "reward_fn_26 rend un tableau NumPy (4,) : model(next_obs).",
+            f"reward_fn_26 : attendu un tableau NumPy (4,) égal à model(next_obs), reçu {type(r_26).__name__} "
+            f"{np.shape(r_26)}.")
+    ok_26 = all(good_26)'''
+
+EXPERIMENT_26 = r'''# The two reward models (broad, narrow), then four PPO agents: on each learned reward, on the true reward, on the +1 of
+# CartPole; each measured by the true reward and by the broad model, on 20 deterministic episodes
+if not (ok_26 and ok_20):
+    print("⏳ Ex B8.26 : l'expérience attend que les vérifications de B8.26 et de B8.20 (ton PPO) passent.")
+else:
+    with checked("B8.26"):
+        start_26 = time.perf_counter()
+        models_26 = {}
+        for name_26, pairs_26, held_26 in (("larges", PAIRS_26, HELD_26), ("étroites", NARROW_26, NARROW_HELD_26)):
+            models_26[name_26], losses_26 = train_reward_model_26(pairs_26, SEED_26)
+            print(f"modèle de récompense, préférences {name_26} : loss {fr(losses_26[0], 3)} → {fr(losses_26[-1], 3)} ; "
+                  f"accuracy {fr(wbr.preference_accuracy(models_26[name_26], held_26), 2)} sur ses paires tenues à "
+                  f"l'écart, {fr(wbr.preference_accuracy(models_26[name_26], HELD_26), 2)} sur les paires larges")
+        accuracy_26 = wbr.preference_accuracy(models_26["larges"], HELD_26)
+        verdict("B8.26", accuracy_26 >= THRESHOLD_26,
+                f"ton modèle de récompense (préférences larges) classe {fr(100 * accuracy_26, 0)} % des paires tenues à "
+                f"l'écart dans le bon ordre (au moins {fr(100 * THRESHOLD_26, 0)} % attendus).",
+                f"ton modèle de récompense (préférences larges) ne classe que {fr(100 * accuracy_26, 0)} % des paires tenues "
+                f"à l'écart dans le bon ordre (au moins {fr(100 * THRESHOLD_26, 0)} % attendus).")
+        rewards_26 = {"RLHF, préférences larges": reward_fn_26(models_26["larges"]),
+                      "RLHF, préférences étroites": reward_fn_26(models_26["étroites"]),
+                      "vraie récompense": true_reward_26, "+1 par pas (survie)": None}
+        AGENTS_26, rows_26 = {}, {}
+        for name_26, fn_26 in rewards_26.items():
+            AGENTS_26[name_26], _ = train_ppo_20(SEED_26, STEPS_26, reward_fn=fn_26)
+            rows_26[name_26] = wbr.rlhf_measure(AGENTS_26[name_26], models_26["larges"], 20, EVAL_SEED)
+            rows_26[name_26]["narrow"] = wbr.rlhf_measure(AGENTS_26[name_26], models_26["étroites"], 20,
+                                                          EVAL_SEED)["learned_per_step"]
+        print(f"\n{'agent (PPO, ' + str(STEPS_26) + ' pas)':28s} | longueur | vraie récompense par pas | |x| moyen | "
+              "récompense apprise par pas (modèle large ; étroit)")
+        for name_26, m_26 in rows_26.items():
+            print(f"{name_26:28s} | {m_26['length']:8.0f} | {fr(m_26['true_per_step'], 3):>24s} | "
+                  f"{fr(m_26['abs_x'], 2):>9s} | {fr(m_26['learned_per_step'], 3)} ; {fr(m_26['narrow'], 3)}")
+        xs_26 = np.linspace(-2.4, 2.4, 241)
+        grid_26 = np.zeros((len(xs_26), 4), dtype=np.float32)
+        grid_26[:, 0] = xs_26
+        fig_26, (ax1_26, ax2_26) = plt.subplots(1, 2, figsize=(12, 3.4))
+        ax1_26.plot(xs_26, wbr.centered_reward(grid_26), color="k", lw=2, label="vraie récompense (cachée)")
+        for name_26, model_26 in models_26.items():
+            with torch.no_grad():
+                r_26 = model_26(torch.as_tensor(grid_26)).numpy()
+            ax1_26.plot(xs_26, (r_26 - r_26.min()) / (r_26.max() - r_26.min() + 1e-12), label=f"modèle appris ({name_26})")
+        ax1_26.set(xlabel="position du chariot x (les trois autres variables à 0)", ylabel="récompense (min-max)",
+                   title="Ce que chaque modèle a appris, le long de x")
+        ax1_26.legend(fontsize=8)
+        data_x_26 = {"préférences larges": np.concatenate([t[:, 0] for t in PAIRS_26["first"] + PAIRS_26["second"]]),
+                     "préférences étroites": np.concatenate([t[:, 0] for t in NARROW_26["first"] + NARROW_26["second"]])}
+        for name_26, agent_26 in AGENTS_26.items():
+            data_x_26[name_26] = np.concatenate([t[:, 0] for t in wbr.policy_trajectories(agent_26, 5, EVAL_SEED)])
+        for name_26, x_26 in data_x_26.items():
+            ax2_26.hist(x_26, bins=40, range=(-2.4, 2.4), density=True, histtype="step", lw=1.5, label=name_26)
+        ax2_26.set(xlabel="position du chariot x", title="Où vont les données, et où vont les agents")
+        ax2_26.legend(fontsize=7)
+        plt.tight_layout()
+        plt.show()
+        print(f"({time.perf_counter() - start_26:.0f} s en tout)")'''

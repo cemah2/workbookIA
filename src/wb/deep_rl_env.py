@@ -981,9 +981,10 @@ def _behaviour_trajectory(env, share_random: float, rng, max_steps: int) -> np.n
     return np.stack(states)
 
 
-def preference_pairs(n_pairs: int, seed: int, max_steps: int = RLHF_STEPS) -> dict:
-    """``n_pairs`` pairs of trajectories of CartPole-v1 (at most ``max_steps`` steps each), played by the behaviours of
-    ``RLHF_BEHAVIOURS`` drawn at random, and labelled by the hidden true reward (simulated preferences, without a
+def preference_pairs(n_pairs: int, seed: int, max_steps: int = RLHF_STEPS, behaviours=RLHF_BEHAVIOURS) -> dict:
+    """``n_pairs`` pairs of trajectories of CartPole-v1 (at most ``max_steps`` steps each), played by ``behaviours``
+    drawn at random (shares of random actions; by default ``RLHF_BEHAVIOURS``; ``(1.0,)``: the random policy only),
+    and labelled by the hidden true reward (simulated preferences, without a
     human). Returns a dict: ``first`` and ``second`` (lists of float32 arrays (T_i, 4): the observation that FOLLOWS
     each step, the one a reward of the step is computed on), ``true_first`` and ``true_second`` (float arrays (n,):
     the sums of ``centered_reward`` over each trajectory), ``preferred`` (int array (n,): 0 when the first trajectory
@@ -993,7 +994,7 @@ def preference_pairs(n_pairs: int, seed: int, max_steps: int = RLHF_STEPS) -> di
     env = make_env()
     trajectories, shares = [], []
     for _ in range(2 * int(n_pairs)):
-        share = RLHF_BEHAVIOURS[int(rng.integers(len(RLHF_BEHAVIOURS)))]
+        share = float(behaviours[int(rng.integers(len(behaviours)))])
         trajectories.append(_behaviour_trajectory(env, share, rng, max_steps))
         shares.append(share)
     first, second = trajectories[0::2], trajectories[1::2]
@@ -1012,7 +1013,7 @@ def _reward_model_class():
         """The reward model of the reference: obs (N, 4) -> r (N,), an MLP 4 -> hidden -> hidden -> 1 (tanh) on the
         observations divided by OBS_SCALE."""
 
-        def __init__(self, hidden: int = 64):
+        def __init__(self, hidden: int = 32):
             super().__init__()
             self.register_buffer("scale", torch.tensor(OBS_SCALE, dtype=torch.float32))
             self.net = nn.Sequential(nn.Linear(4, hidden), nn.Tanh(), nn.Linear(hidden, hidden), nn.Tanh(),
@@ -1024,7 +1025,7 @@ def _reward_model_class():
     return RewardModel
 
 
-def reward_model(hidden: int = 64, seed: int | None = None):
+def reward_model(hidden: int = 32, seed: int | None = None):
     """A new reward model of the reference (``torch.manual_seed(seed)`` first when ``seed`` is given)."""
     if seed is not None:
         _torch().manual_seed(seed)
@@ -1041,7 +1042,7 @@ def trajectory_returns(model, trajectories):
     return torch.zeros(len(trajectories), dtype=rewards.dtype).index_add(0, index, rewards)
 
 
-def train_reward_model(pairs: dict, seed: int = 0, epochs: int = 300, lr: float = 1e-3, hidden: int = 64):
+def train_reward_model(pairs: dict, seed: int = 0, epochs: int = 200, lr: float = 3e-3, hidden: int = 32):
     """The reference reward model: ``epochs`` full-batch Adam steps on the Bradley-Terry loss
     ``mean(-logsigmoid(R(chosen) - R(rejected)))`` of the pairs, R the learned return of a trajectory. Returns
     ``(model, losses)``."""
@@ -1181,12 +1182,34 @@ def _same_parameters(a: list, b: list) -> bool:
     return len(a) == len(b) and all(x.shape == y.shape and torch.equal(x, y) for x, y in zip(a, b))
 
 
+def _holders_of_modules(namespace: dict) -> list:
+    """The names of the notebook's globals that hold a torch module: the module itself, or a dict, list or tuple with
+    at least one module among its values (one level deep)."""
+    torch = _torch()
+    names = []
+    for name, obj in list(namespace.items()):
+        if name.startswith("_"):
+            continue
+        values = obj.values() if isinstance(obj, dict) else obj if isinstance(obj, (list, tuple)) else [obj]
+        try:
+            if any(isinstance(v, torch.nn.Module) for v in values):
+                names.append(name)
+        except Exception:  # noqa: BLE001 - an exotic container: not an agent
+            continue
+    return names
+
+
 def _known_agents(namespace: dict) -> dict:
     """The trained modules that already exist before a run: the torch modules of the notebook's globals and the
     checkpoints of this chapter (the agent of B8.20, the reference agents), as lists of parameters."""
     torch = _torch()
-    known = {name: _parameters_of(obj) for name, obj in namespace.items()
-             if isinstance(obj, torch.nn.Module) and not name.startswith("_")}
+    known = {}
+    for name in _holders_of_modules(namespace):
+        obj = namespace[name]
+        items = obj.items() if isinstance(obj, dict) else enumerate(obj) if isinstance(obj, (list, tuple)) else [("", obj)]
+        for key, value in items:
+            if isinstance(value, torch.nn.Module):
+                known[f"{name}[{key!r}]" if key != "" else name] = _parameters_of(value)
     for path in sorted(checkpoints_dir().glob("*.pt")):
         try:
             payload = torch.load(path, map_location="cpu", weights_only=True)
@@ -1204,7 +1227,7 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
     During the run: every CartPole step is counted (``counted_steps``; beyond ``budget``, ``BudgetExceeded`` stops
     the run); the trainers and checkpoints of this module (``CHALLENGE_GUARDED``) and ``torch.load`` raise
     ``ChallengeRuleBroken``; the torch modules of ``namespace`` (the notebook's globals, such as the agent of B8.20)
-    are set to None, then restored. After the run: a module whose parameters equal those of an agent that existed
+    and the dicts, lists or tuples that hold one, are set to None, then restored. After the run: a module whose parameters equal those of an agent that existed
     before is refused; the policy is evaluated on ``n_episodes`` episodes drawn from ``eval_seed`` (held out), 500
     steps at most. Returns ``seed``, ``steps``, ``seconds``, ``mean_return``, ``min_return``, ``solved`` (mean >=
     475) and ``error`` (None, or the reason the run does not count, in French: the notebook shows it)."""
@@ -1212,8 +1235,7 @@ def run_challenge(train_fn, seed: int, *, budget: int = CHALLENGE_BUDGET, namesp
 
     namespace = namespace if namespace is not None else {}
     known = _known_agents(namespace)
-    masked = {name: namespace[name] for name, obj in list(namespace.items())
-              if isinstance(obj, torch.nn.Module) and not name.startswith("_")}
+    masked = {name: namespace[name] for name in _holders_of_modules(namespace)}
     module = globals()
     saved = {name: module[name] for name in CHALLENGE_GUARDED}
     loads = (torch.load, torch.serialization.load)

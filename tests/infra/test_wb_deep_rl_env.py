@@ -303,3 +303,115 @@ def test_precomputed_protocols_have_their_protocol():
     assert all(len(p16["runs"][f"{b}/{s}"]["episode_returns"]) == p16["protocol"]["episodes"]
                for b in R.BASELINES for s in p16["protocol"]["seeds"])
     assert set(R.precomputed("c17")["state_dict"]) == set(R.policy_network(64).state_dict())
+
+
+def test_precomputed_protocols_of_the_second_half():
+    l21 = R.precomputed("l21")
+    assert sorted(l21["runs"]) == list("ABCDE")
+    assert all(set(R.LOG_KEYS) <= set(logs) for logs in l21["runs"].values())
+    p22 = R.precomputed("p22")
+    assert all(f"{c}/{s}" in p22["runs"] for c in p22["protocol"]["configs"] for s in p22["protocol"]["seeds"])
+    c23 = R.precomputed("c23")
+    assert len(c23["rows"]) == len(c23["protocol"]["seeds"])
+    assert all(len(c23["grid"][f"{k}/{s}"]) == len(c23["protocol"][f"{k}_factors"])
+               for k in ("gravity", "length") for s in c23["protocol"]["seeds"])
+
+
+# ------------------------------------------------------------------------------------------------- B8.22: a log summary
+def test_log_summary_skips_nan_and_finds_the_first_step_at_475():
+    nan = float("nan")
+    assert R.log_summary({"step": [512, 1024, 1536], "mean_return": [20.0, nan, 475.0]}) == {"auc": 247.5,
+                                                                                             "first_475": 1536}
+    assert R.log_summary({"step": [512, 1024], "mean_return": [474.9, nan]})["first_475"] is None
+
+
+# ------------------------------------------------------------------------------------------------ B8.26: miniature RLHF
+def test_centered_reward_and_preference_pairs():
+    assert np.allclose(R.centered_reward([[0.0, 1, 2, 3], [0.5, 0, 0, 0]]), [1.0, np.exp(-1.0)])
+    a, b = R.preference_pairs(12, 3), R.preference_pairs(12, 3)
+    assert all(np.array_equal(x, y) for x, y in zip(a["first"] + a["second"], b["first"] + b["second"]))
+    assert len(a["first"]) == len(a["second"]) == 12 and all(t.dtype == np.float32 and t.shape[1] == 4
+                                                             for t in a["first"])
+    assert np.allclose(a["true_first"], [R.centered_reward(t).sum() for t in a["first"]])
+    assert np.array_equal(a["preferred"], np.where(a["true_first"] >= a["true_second"], 0, 1))
+    narrow = R.preference_pairs(12, 3, behaviours=(1.0,))
+    assert set(narrow["behaviours"].ravel()) == {1.0}
+    assert max(len(t) for t in a["first"]) <= R.RLHF_STEPS
+
+
+def test_reward_model_learns_the_preferences_and_trajectory_returns_sums_the_steps():
+    pairs, held = R.preference_pairs(60, 0), R.preference_pairs(40, 100)
+    model = R.reward_model(seed=0)
+    trajs = pairs["first"][:4]
+    want = torch.stack([model(torch.as_tensor(t)).sum() for t in trajs])
+    assert torch.allclose(R.trajectory_returns(model, trajs), want, atol=1e-5)
+    model, losses = R.train_reward_model(pairs, seed=0, epochs=60)
+    assert losses[-1] < losses[0]
+    assert R.preference_accuracy(model, held) > 0.7
+    m = R.rlhf_measure(R.rule_policy, model, n_episodes=2, seed=5)
+    assert m["length"] == 500.0 and 0.0 <= m["true_per_step"] <= 1.0 and set(m) >= {"learned_return", "abs_x",
+                                                                                     "onpolicy_accuracy"}
+
+
+# ----------------------------------------------------------------------------------- B8.28: the budget of the challenge
+def test_counted_steps_counts_every_cartpole_and_stops_at_the_budget():
+    import copy as copymod
+
+    from gymnasium.envs.classic_control import cartpole
+
+    before = (cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step, gym.vector.AsyncVectorEnv.__init__)
+    with R.counted_steps(1_000) as counter:
+        env = gym.make("CartPole-v1")
+        env.reset(seed=0)
+        env.step(0)
+        env.unwrapped.step(1)                          # the core, without the wrappers
+        copymod.deepcopy(env).step(0)                  # a copy
+        envs = R.make_vec(3, seed=0)
+        envs.step(np.zeros(3, dtype=np.int64))
+        assert counter["steps"] == 6
+        with pytest.raises(R.ChallengeRuleBroken):
+            gym.make_vec("CartPole-v1", 2, vectorization_mode="async")
+    with R.counted_steps(5), pytest.raises(R.BudgetExceeded):
+        env = R.make_env()
+        env.reset(seed=0)
+        for _ in range(6):
+            env.step(0)
+    assert (cartpole.CartPoleEnv.step, cartpole.CartPoleVectorEnv.step, gym.vector.AsyncVectorEnv.__init__) == before
+
+
+def test_run_challenge_guards_the_trainers_the_checkpoints_and_the_agents_of_the_notebook():
+    namespace = {"AGENT_20": R.ActorCritic(16), "AGENTS_26": {"a": R.ActorCritic(16)}, "N": 3}
+    kept = namespace["AGENT_20"]
+
+    def honest(seed, budget):
+        env = R.make_env()
+        env.reset(seed=seed)
+        env.step(0)
+        assert namespace["AGENT_20"] is None and namespace["AGENTS_26"] is None and namespace["N"] == 3   # masked
+        return R.rule_policy
+
+    res = R.run_challenge(honest, 1, budget=50, namespace=namespace, n_episodes=2)
+    assert res["error"] is None and res["steps"] == 1 and res["solved"] and namespace["AGENT_20"] is kept
+    assert "interdit" in R.run_challenge(lambda s, b: R.train_ppo(s, 512)[0], 1, budget=50, n_episodes=1)["error"]
+    assert "interdit" in R.run_challenge(lambda s, b: torch.load("x.pt"), 1, budget=50, n_episodes=1)["error"]
+    assert "paramètres" in R.run_challenge(lambda s, b, a=kept: a, 1, budget=50, namespace=namespace,
+                                           n_episodes=1)["error"]
+    assert "AGENTS_26" in R.run_challenge(lambda s, b, a=namespace["AGENTS_26"]["a"]: a, 1, budget=50,
+                                          namespace=namespace, n_episodes=1)["error"]
+    assert "politique" in R.run_challenge(lambda s, b: None, 1, budget=50, n_episodes=1)["error"]
+    def greedy(seed, budget):
+        env = R.make_env()
+        env.reset(seed=seed)
+        for _ in range(9):
+            env.step(0)
+
+    over = R.run_challenge(greedy, 1, budget=5, n_episodes=1)
+    assert "budget" in over["error"] and over["steps"] == 5
+    assert callable(R.train_ppo) and torch.load is not None and R.train_ppo.__name__ == "train_ppo"
+
+
+@pytest.mark.network
+def test_cleanrl_ppo_is_read_at_its_pinned_commit():
+    lines = R.cleanrl_ppo_lines()
+    assert lines is not None and len(lines) == R.CLEANRL_PPO_LINES
+    assert "np.logical_or(terminations, truncations)" in lines[205]
