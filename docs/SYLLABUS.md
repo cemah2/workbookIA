@@ -5577,11 +5577,11 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 | B8.9 | 🗣️ | PPO expliqué en cinq lignes | ★ | 10 | — | 02 | — | R | manual |
 | B8.10 | ⚖️ | RLHF : qui choisit les préférences ? Annotateurs, valeurs et flagornerie des modèles | ★★ | 25 | — | 02 | B4 | R | manual |
 | B8.11 | 📄 | Schulman et coll. (2017) : « Proximal Policy Optimization Algorithms » | ★★★ | 45 | — | 02 | B8.5 | M | manual |
-| B8.12 | 📦 | CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26 | ★ | 15 | CartPole | 03 | 26 | RC | wb.check |
-| B8.13 | 📦 | DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant | ★★★ | 60 | CartPole | 03 | B8.12, B8.1, B8.2 | RC | manual |
+| B8.12 | 📦 | CartPole pour le deep RL : espaces, politique aléatoire, evaluate_policy et la référence tabulaire du ch. 26 | ★ | 15 | CartPole | 03 | 26, 26.21 | RC | wb.check |
+| B8.13 | 📦 | DQN sur CartPole : réseau Q, ReplayBuffer de rl.py, réseau cible, Huber, ε décroissant | ★★★ | 60 | CartPole | 03 | B8.12, B8.1, B8.2, 26.31 | RC | manual |
 | B8.14 | 🐛 | Le DQN qui diverge : quatre erreurs de cible, de fin d'épisode et d'exploration | ★★ | 30 | CartPole | 03 | B8.13 | C | manual |
 | B8.15 | 🔬 | Ablations du DQN : sans réseau cible, sans rejeu, avec Double DQN — trois graines 🚀 | ★★★ | 50 | CartPole | 03 | B8.13 | C | manual |
-| B8.16 | 🔮 | Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ? | ★ | 10 | CartPole | 03 | B8.7 | C | manual |
+| B8.16 | 🔮 | Prédire : REINFORCE sans baseline, avec baseline, avec retours normalisés — lequel apprend le plus vite ? | ★ | 10 | CartPole | 03 | B8.7 | C | wb.check |
 | B8.17 | 📦 | REINFORCE avec et sans baseline : variance du gradient et vitesse d'apprentissage | ★★★ | 45 | CartPole | 03 | B8.16, 26.14 | C | manual |
 | B8.18 | 🔨 | compute_gae et explained_variance | ★★ | 30 | — | 03 | B8.4 | MC | pytest |
 | B8.19 | 🔨 | clipped_surrogate : valeur et gradient par rapport au ratio | ★★ | 20 | — | 03 | B8.5 | MC | pytest |
