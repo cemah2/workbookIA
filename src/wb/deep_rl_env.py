@@ -146,12 +146,14 @@ def single_thread():
 
 
 class StepCounter(gym.Wrapper):
-    """Counts the steps, the true ends (``terminated``) and the time limits (``truncated``) of an environment, and keeps
-    the last ``keep`` transitions ``(obs, action, reward, next_obs, terminated, truncated)`` (copies)."""
+    """Counts the steps, the true ends (``terminated``) and the time limits (``truncated``) of an environment, keeps
+    the seed given to each ``reset`` (``reset_seeds``: None for a reset without seed) and the last ``keep`` transitions
+    ``(obs, action, reward, next_obs, terminated, truncated)`` (copies)."""
 
     def __init__(self, env, keep: int = 0):
         super().__init__(env)
         self.steps = self.terminations = self.truncations = self.resets = 0
+        self.reset_seeds: list = []
         self.keep = int(keep)
         self.transitions: list = []
         self._obs = None
@@ -159,6 +161,7 @@ class StepCounter(gym.Wrapper):
     def reset(self, **kwargs):
         obs, info = self.env.reset(**kwargs)
         self.resets += 1
+        self.reset_seeds.append(kwargs.get("seed"))
         self._obs = np.array(obs, copy=True)
         return obs, info
 
@@ -925,6 +928,28 @@ def reference_agent(fast: bool = True, folder: str | Path | None = None, verbose
     elif verbose:
         print(f"ℹ️ agent PPO de référence relu ({loaded[1]['path'].name})")
     return loaded
+
+
+def same_weights(a, b) -> bool:
+    """True when two torch modules hold exactly the same parameters and buffers, in the same order (an agent handed
+    back in place of one trained from scratch)."""
+    return _same_parameters(_parameters_of(a), _parameters_of(b))
+
+
+ANSWER_FUNCTIONS = ("linear_epsilon", "dqn_targets", "train_dqn", "discounted_returns", "reinforce_weights",
+                    "play_episode", "train_reinforce", "episode_gradients", "gae_numpy", "explained_variance_numpy",
+                    "collect_rollout", "ppo_loss", "ppo_update", "train_ppo", "reference_agent", "load_agent",
+                    "precomputed")
+
+
+def reference_answers() -> dict:
+    """``{"wbr.<name>": function}`` for the functions of this module that compute what the learner writes in the
+    notebook (``ANSWER_FUNCTIONS``: ε, the DQN targets and trainer, REINFORCE and its gradients, GAE, the explained
+    variance, the PPO rollout, loss, update and trainer, the reference agent, the checkpoints and the precomputed
+    runs), plus ``torch.load``: what the learner's code must not call during a check (``wb.nbtools.own_code``)."""
+    torch = _torch()
+    module = globals()
+    return {**{f"wbr.{name}": module[name] for name in ANSWER_FUNCTIONS}, "torch.load": torch.load}
 
 
 # ---------------------------------------------------------------------------------------------------------------------

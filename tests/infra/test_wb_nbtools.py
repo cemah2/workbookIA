@@ -13,8 +13,8 @@ import pytest
 
 import wb
 from wb.errors import MylearnMissingError
-from wb.nbtools import (StopCheck, as_numpy, checked, filled, fitted, fr, letters_text, pair, print_answer, refuses,
-                        returned, run_pytest_group, same, shape_text, verdict, written)
+from wb.nbtools import (StopCheck, as_numpy, checked, filled, fitted, fr, letters_text, own_code, pair, print_answer,
+                        refuses, returned, run_pytest_group, same, shape_text, verdict, written)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -337,6 +337,74 @@ def test_pair_a_loss_that_is_not_a_float(capsys):
         pair("18.12", "mse_loss", (np.array([0.5]), np.ones(2)), names=("loss", "grad"), floats=("loss",))
     assert out(capsys) == ("❌ Ex 18.12 : mse_loss : loss doit être un float Python, reçu ndarray "
                            "(convertis avec float(...)).\n")
+
+
+# ---------------------------------------------------------------------------
+# own_code: the learner's code must not hand back the reference
+# ---------------------------------------------------------------------------
+def _reference_answer(x):
+    return 2 * x
+
+
+class _ReferenceAgent:
+    def act(self, x):
+        return x + 1
+
+
+def test_own_code_stops_on_a_reference_called_under_any_name(capsys):
+    """Scenarios B8.13, B8.17, B8.20 (session 78): the learner's function returns what the reference computes, by
+    its name, an alias, a stored function or a method; a broad except of the learner does not hide it."""
+    alias = _reference_answer
+    table = {"f": _reference_answer}
+
+    def by_alias(x):
+        return alias(x)
+
+    def by_table(x):
+        return table["f"](x)
+
+    def by_method(x):
+        return _ReferenceAgent().act(x)
+
+    def swallowing(x):
+        try:
+            return _reference_answer(x)
+        except Exception:                 # noqa: BLE001 - a broad except of the learner
+            return 0
+
+    refs = {"wbr.answer": _reference_answer, "wbr.Agent": _ReferenceAgent}
+    for learner in (by_alias, by_table, by_method, swallowing):
+        with checked("B8.13"):
+            with own_code("B8.13", "train_13", refs):
+                learner(3)
+            print("not reached")
+        print("suite")
+        text = out(capsys)
+        assert text.startswith("❌ Ex B8.13 : train_13 appelle wbr.") and "not reached" not in text, learner.__name__
+        assert text.endswith("suite\n") and "la référence" in text
+    assert _reference_answer(3) == 6, "the watch ends with the block"
+
+
+def test_own_code_lets_the_learners_own_code_and_its_errors_through(capsys):
+    def mine(x):
+        return 3 * x
+
+    with checked("B8.13"):
+        with own_code("B8.13", "train_13", {"wbr.answer": _reference_answer}):
+            value = mine(2)
+        print(f"value {value}")
+    assert out(capsys) == "value 6\n"
+    run_checked(lambda: own_code_raising(), ex_id="B8.13")
+    assert out(capsys) == "❌ Ex B8.13 : ton code lève ZeroDivisionError : division by zero\nsuite\n"
+    with pytest.raises(NotImplementedError):          # code not written yet goes up (checked prints ⏳)
+        with own_code("B8.13", "train_13", {"wbr.answer": _reference_answer}):
+            raise NotImplementedError("train_13")
+    assert _reference_answer(1) == 2
+
+
+def own_code_raising():
+    with own_code("B8.13", "train_13", {"wbr.answer": _reference_answer}):
+        return 1 / 0
 
 
 def test_refuses(capsys):

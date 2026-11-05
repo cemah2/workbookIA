@@ -1,6 +1,7 @@
 """Tests of wb.deep_rl_env: environments and physics, seeds, the evaluation of a policy, the reference agents (DQN,
 REINFORCE, PPO) and their pieces, the checkpoint of an agent and the precomputed protocols (bonus chapter B8)."""
 
+import copy
 import importlib
 import sys
 from pathlib import Path
@@ -75,6 +76,7 @@ def test_step_counter_counts_terminations_and_truncations_apart():
     assert env.steps == 200 and env.truncations > 0
     assert env.terminations + env.truncations in (env.resets - 1, env.resets)
     assert len(env.transitions) == 5 and len(env.transitions[0]) == 6
+    assert env.reset_seeds[0] == 0 and len(env.reset_seeds) == env.resets and set(env.reset_seeds[1:]) == {None}
 
 
 # ------------------------------------------------------------------------------------------------ policies, evaluation
@@ -290,6 +292,16 @@ def test_agent_checkpoint_roundtrip_key_and_corruption(tmp_path):
     assert R.delete_agent(key, folder=tmp_path) and not R.delete_agent(key, folder=tmp_path)
     with pytest.raises(ValueError, match="source"):
         R.agent_key({}, source="teacher", fast=True, seed=0, total_steps=1)
+
+
+def test_same_weights_and_the_reference_answers():
+    torch.manual_seed(0)
+    a, b = R.ActorCritic(8), R.ActorCritic(8)
+    assert R.same_weights(a, a) and R.same_weights(a, copy.deepcopy(a)) and not R.same_weights(a, b)
+    answers = R.reference_answers()
+    assert answers["wbr.train_ppo"] is R.train_ppo and answers["torch.load"] is torch.load
+    assert {f"wbr.{name}" for name in R.ANSWER_FUNCTIONS} <= set(answers)
+    assert "wbr.make_env" not in answers and "wbr.evaluate" not in answers, "the tools the learner may call"
 
 
 # --------------------------------------------------------------------------------------------- precomputed protocols

@@ -46,6 +46,7 @@ __all__ = [
     "same",
     "pair",
     "refuses",
+    "own_code",
     "fitted",
     "shape_text",
     "letters_text",
@@ -338,6 +339,85 @@ def refuses(ex_id: str, label: str, call, error=ValueError) -> bool:
         return False
     print(f"❌ Ex {ex_id} : {label} : attendu {error.__name__}, mais rien n'a été levé.")
     return False
+
+
+class _Borrowed(BaseException):
+    """Raised inside the learner's code by :func:`own_code` when it starts a watched reference function. A
+    BaseException, so that a broad ``except Exception`` of the learner's code does not swallow it."""
+
+
+_WATCH_TOOLS = (4, 3)          # sys.monitoring tool ids without a reserved use (0 debugger, 1 coverage, 2 profiler...)
+
+
+def _code_objects(obj) -> list:
+    """The code objects of a function, a method or the functions of a class (none for a builtin)."""
+    import inspect
+
+    if isinstance(obj, type):
+        return [code for value in vars(obj).values() if not isinstance(value, type) for code in _code_objects(value)]
+    obj = inspect.unwrap(getattr(obj, "__func__", obj))
+    code = getattr(obj, "__code__", None)
+    return [code] if code is not None else []
+
+
+@contextlib.contextmanager
+def own_code(ex_id: str, name: str, references: dict):
+    """Run the learner's code ``name`` (inside the block) while the reference functions are watched: when one of
+    them starts, under any name (an alias, a ``from ... import``, a function stored in a dict: its code object is
+    watched with ``sys.monitoring``), the block stops and prints one line
+    ``❌ Ex <id> : <name> appelle <label>, une fonction de la référence...``, then raises :class:`StopCheck`
+    (caught by :func:`checked`). The check would otherwise measure the reference instead of the learner's code.
+
+    ``references`` maps a label shown to the learner (``"wbr.train_dqn"``) to a function, a method or a class.
+    Only the learner's call goes inside the block: the check computes its expected values outside. Without
+    ``sys.monitoring`` (Python < 3.12) or a free tool id, nothing is watched.
+
+    >>> with checked("B8.13"):
+    ...     with own_code("B8.13", "train_dqn_13", wbr.reference_answers()):
+    ...         out = train_dqn_13(env, 0, 600)
+    """
+    monitoring = getattr(sys, "monitoring", None)
+    codes = {}
+    for label, reference in references.items():
+        for code in _code_objects(reference):
+            codes.setdefault(code, label)
+    tool = None
+    if monitoring is not None and codes:
+        for candidate in _WATCH_TOOLS:
+            try:
+                monitoring.use_tool_id(candidate, "wb.nbtools.own_code")
+            except ValueError:                          # taken by another tool (or by an enclosing own_code)
+                continue
+            tool = candidate
+            break
+    seen = []
+    if tool is not None:
+        def on_start(code, offset):
+            label = codes.get(code)
+            if label is not None:
+                seen.append(label)
+                raise _Borrowed(label)
+
+        monitoring.register_callback(tool, monitoring.events.PY_START, on_start)
+        for code in codes:
+            monitoring.set_local_events(tool, code, monitoring.events.PY_START)
+    try:
+        yield
+    except _Borrowed:
+        pass
+    except BaseException:
+        if not seen:                                    # an error of the learner's code: checked reports it
+            raise
+    finally:                                            # (after a borrowed call, any later error is its consequence)
+        if tool is not None:
+            for code in codes:
+                monitoring.set_local_events(tool, code, 0)
+            monitoring.register_callback(tool, monitoring.events.PY_START, None)
+            monitoring.free_tool_id(tool)
+    if seen:
+        print(f"❌ Ex {ex_id} : {name} appelle {seen[0]}, une fonction de la référence du notebook : la vérification "
+              "mesurerait la référence, pas ton code. Écris ce calcul toi-même, d'après le contrat de l'énoncé.")
+        raise StopCheck
 
 
 def fitted(model, X, y=None, **fit_params):

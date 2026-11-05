@@ -28,7 +28,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from wb import deep_rl_env as wbr
-from wb.nbtools import StopCheck, checked, filled, fr, pair, refuses, returned, run_pytest_group, same, verdict, written
+from wb.nbtools import (StopCheck, checked, filled, fr, own_code, pair, refuses, returned, run_pytest_group, same,
+                        verdict, written)
 
 torch.set_num_threads(1)           # tiny networks: one thread is faster, and a seed gives the same numbers every time
 SOURCE = "«KIND»"                  # who trained the agents this notebook saves ("solution" in the solutions notebook)
@@ -36,6 +37,7 @@ TEST_DEEP_RL = "tests/test_chb8_deep_rl.py"   # the tests of your library deep_r
 EVAL_SEED = wbr.EVAL_SEED          # the seeds of every evaluation of the notebook (never used to train)
 EPISODE_STEPS = wbr.EPISODE_STEPS  # 500: the time limit of CartPole-v1
 RANDOM_LEVEL = 22.3                # the mean return of a random policy (fiche, 208.1)
+REFERENCE_CODE = wbr.reference_answers()   # what your code must not call: the checks would measure the reference
 
 _RL_PROBES = {
     "evaluate_policy": (lambda: mylearn.rl.evaluate_policy(wbr.make_env(), lambda s, i: 0, 1, max_steps=3,
@@ -129,11 +131,16 @@ CHECK_12 = r'''with checked("B8.12"):
             verdict("B8.12", got_12 == want_12 and isinstance(got_12["n_actions"], int),
                     "describe_12 lit les espaces et env.spec de CartPole-v1.",
                     f"describe_12 sur CartPole-v1 : reçu {got_12} ; relis 208.1 (« CartPole, vu de près »).")
-            short_12 = describe_12(gym.make("CartPole-v1", max_episode_steps=200))
-            verdict("B8.12", short_12.get("max_steps") == 200,
-                    "la limite de temps vient bien de l'environnement (200 pour gym.make(..., max_episode_steps=200)).",
-                    f"pour gym.make(\"CartPole-v1\", max_episode_steps=200), describe_12 rend max_steps = "
-                    f"{short_12.get('max_steps')!r} : lit-elle vraiment env.spec ?")
+            import dataclasses                      # a CartPole whose spec says 200 steps and a threshold of 195
+            short_spec_12 = dataclasses.replace(gym.spec("CartPole-v1"), max_episode_steps=200, reward_threshold=195.0)
+            short_12 = describe_12(gym.make(short_spec_12))
+            limits_12 = {k: short_12.get(k) for k in ("max_steps", "threshold")}
+            verdict("B8.12", limits_12 == {"max_steps": 200, "threshold": 195.0},
+                    "la limite de temps et le seuil viennent bien de env.spec (200 et 195 sur un CartPole dont la spec "
+                    "le dit).",
+                    f"sur un CartPole dont env.spec dit 200 pas et un seuil de 195, describe_12 rend "
+                    f"max_steps = {limits_12['max_steps']!r} et threshold = {limits_12['threshold']!r} : les lit-elle "
+                    "vraiment dans env.spec ?")
 
 with checked("B8.12"):
     actions_12 = [random_policy_12(SEED_12)(None, {}) for _ in range(3)]
@@ -154,7 +161,14 @@ with checked("B8.12"):
 
 with checked("B8.12"):
     if rl_ready("B8.12", "evaluate_policy"):
-        rule_12 = evaluate_12(gym.make("CartPole-v1"), wbr.rule_policy, 1, n_episodes=5)
+        try:
+            rule_12 = evaluate_12(gym.make("CartPole-v1"), wbr.rule_policy, 1, n_episodes=5)
+        except AttributeError as error:          # an int given as rng to an evaluate_policy that wants a generator
+            if "object has no attribute 'integers'" not in str(error):
+                raise
+            print("❌ Ex B8.12 : evaluate_12 lève AttributeError (" + str(error)[:80] + ") : evaluate_policy attend un "
+                  "générateur, rng=np.random.default_rng(seed), pas un entier.")
+            raise StopCheck
         if returned("B8.12", "evaluate_12", rule_12):
             verdict("B8.12", rule_12["mean_length"] == EPISODE_STEPS,
                     "la règle d'une ligne de 208.1 tient 500 pas : tes épisodes vont jusqu'à la limite de CartPole-v1.",
@@ -325,8 +339,21 @@ with checked("B8.13"):
     elif rl_ready("B8.13", "ReplayBuffer"):
         small_13 = {**SETTINGS_13, "learning_starts": 200, "capacity": 1_000, "batch_size": 32, "target_every": 100}
         counter_13 = wbr.StepCounter(wbr.make_env(max_episode_steps=15))   # many episodes cut by a 15-step time limit
-        q_a_13, buf_a_13, hist_a_13 = pair("B8.13", "train_dqn_13", train_dqn_13(counter_13, 0, 600, small_13),
-                                           names=("q_net", "buffer", "history"))
+        targets_seen_13 = []                      # the target network given to each call of dqn_targets_13 (by name)
+        real_targets_13 = dqn_targets_13
+
+        def spy_targets_13(q_target, *args, **kwargs):
+            with torch.no_grad():
+                targets_seen_13.append(torch.cat([p.detach().reshape(-1) for p in q_target.parameters()]).clone())
+            return real_targets_13(q_target, *args, **kwargs)
+
+        dqn_targets_13 = spy_targets_13
+        try:
+            with own_code("B8.13", "train_dqn_13", REFERENCE_CODE):
+                out_a_13 = train_dqn_13(counter_13, 0, 600, small_13)
+        finally:
+            dqn_targets_13 = real_targets_13
+        q_a_13, buf_a_13, hist_a_13 = pair("B8.13", "train_dqn_13", out_a_13, names=("q_net", "buffer", "history"))
         good_13 = []
         good_13.append(counter_13.steps == 600)
         verdict("B8.13", good_13[-1], "600 pas d'environnement pour total_steps = 600.",
@@ -356,6 +383,24 @@ with checked("B8.13"):
                 f"history doit avoir \"returns\" et \"ends\", une valeur par épisode fini ({n_ends_13} ici), les fins "
                 "comptées en pas d'environnement (1, 2, …) et la somme des retours égale au pas de la dernière fin ; "
                 f"reçu {len(returns_a_13) if returns_a_13 is not None else '?'} retours.")
+        seeds_13 = counter_13.reset_seeds
+        later_13 = sum(s is not None for s in seeds_13[1:])
+        good_13.append(bool(seeds_13) and seeds_13[0] == 0 and later_13 == 0)
+        verdict("B8.13", good_13[-1], f"la graine va au premier reset seulement ({len(seeds_13)} resets en 600 pas).",
+                f"env.reset reçoit {seeds_13[0] if seeds_13 else None!r} au premier épisode et une graine à {later_13} "
+                f"des {max(len(seeds_13) - 1, 0)} suivants : le contrat la donne au premier épisode seulement "
+                "(reset(seed=seed), puis reset()) ; sinon chaque épisode repart du même état.")
+        changes_13 = sum(not torch.equal(a, b) for a, b in zip(targets_seen_13, targets_seen_13[1:]))
+        good_13.append(bool(targets_seen_13) and 3 <= changes_13 <= 5)
+        verdict("B8.13", good_13[-1],
+                f"le réseau cible que reçoit dqn_targets_13 change {changes_13} fois en 600 pas : une copie tous les "
+                "target_every = 100 pas, une fois les mises à jour commencées.",
+                "train_dqn_13 n'appelle pas dqn_targets_13 : le contrat calcule les cibles avec elle (appelle-la par ce "
+                "nom : la vérification l'observe)." if not targets_seen_13 else
+                f"le réseau cible que reçoit dqn_targets_13 change {changes_13} fois en 600 pas (mises à jour du pas "
+                "200 au pas 600, target_every = 100), au lieu de 4 : " + ("est-ce le réseau en ligne lui-même ?"
+                if changes_13 > len(targets_seen_13) // 2 else "est-il recopié (load_state_dict) tous les "
+                "target_every pas ?") + " Relis « Les deux stabilisateurs » (208.2).")
         counter_b_13 = wbr.StepCounter(wbr.make_env(max_episode_steps=15))
         q_b_13, _, hist_b_13 = train_dqn_13(counter_b_13, 0, 600, small_13)
         probe_states_13 = torch.as_tensor(np.random.default_rng(13).normal(0, 0.1, (64, 4)), dtype=torch.float32)
@@ -373,7 +418,8 @@ EXPERIMENT_13 = r'''if not ok_13:
 else:
     with checked("B8.13"):
         start_13 = time.perf_counter()
-        Q_NET_13, BUFFER_13, HISTORY_13 = train_dqn_13(wbr.make_env(), SEED_13, STEPS_13)
+        with own_code("B8.13", "train_dqn_13", REFERENCE_CODE):
+            Q_NET_13, BUFFER_13, HISTORY_13 = train_dqn_13(wbr.make_env(), SEED_13, STEPS_13)
         seconds_13 = time.perf_counter() - start_13
         returns_13 = np.asarray(HISTORY_13["returns"], dtype=float)
         eval_13 = wbr.evaluate(wbr.greedy_q(Q_NET_13), 100, EVAL_SEED)
@@ -389,12 +435,15 @@ else:
               f"sur 100 épisodes : {fr(eval_13['mean_return'], 1)} (écart-type {fr(eval_13['std_return'], 1)})")
         verdict("B8.13", returns_13[-20:].mean() >= 2 * returns_13[:20].mean(),
                 "le retour d'entraînement monte : les 20 derniers épisodes valent au moins le double des 20 premiers.",
-                "le retour d'entraînement ne monte pas : les 20 derniers épisodes ne valent pas le double des 20 premiers.")
+                "le retour d'entraînement ne monte pas : les 20 derniers épisodes ne valent pas le double des 20 premiers ; "
+                "l'essai de 600 pas passe, alors relis la loss : Q(s, a) de l'action jouée (gather), pas max_a Q(s, a) "
+                "(208.2).")
         verdict("B8.13", eval_13["mean_return"] >= THRESHOLD_13,
                 f"la politique gloutonne dépasse {THRESHOLD_13:g} (la référence, sur 8 graines, fait au moins "
                 f"«WORST_13»).",
                 f"la politique gloutonne tient {fr(eval_13['mean_return'], 1)} pas en moyenne : moins que les "
-                f"{THRESHOLD_13:g} attendus (la référence, sur 8 graines, fait au moins «WORST_13»).")'''
+                f"{THRESHOLD_13:g} attendus (la référence, sur 8 graines, fait au moins «WORST_13») ; relis la loss : "
+                "Q(s, a) de l'action jouée (gather), pas max_a Q(s, a) (208.2).")'''
 
 # --- 🐛 B8.14 ---------------------------------------------------------------------------------------------------------
 GIVEN_14 = r'''STEPS_14 = 8_000 if FAST_MODE else 20_000
@@ -527,7 +576,7 @@ def diagnose_14():
             memory.push(np.array([k, 0, 0, 0], np.float32), 0, 1.0, np.array([k + 1, 0, 0, 0], np.float32), False)
         drawn = np.concatenate([memory.sample(MINI_BATCH)["states"][:, 0] for _ in range(20)])
         recent = float(np.mean(drawn >= 1900))
-        if recent <= 0.5:
+        if recent <= 0.15:
             return True, (f"après 2 000 pas, {fr(100 * recent, 0)} % des transitions tirées datent des 100 derniers pas "
                           "(les mini-batches mêlent des moments éloignés)"), ""
         return False, (f"après 2 000 pas, {fr(100 * recent, 0)} % des transitions de 20 mini-batches de {MINI_BATCH} "
@@ -555,8 +604,8 @@ def diagnose_14():
     print("✅ Ex B8.14 : les quatre diagnostics passent.")
     return True'''
 
-TODO_14 = r'''# The DQN of a colleague, to repair IN PLACE (same names, same signatures). It learns nothing on CartPole; four
-# mistakes slipped into its pieces (run_colleague_14, the loop of the cell above that calls them, is right).
+TODO_14 = r'''# The DQN of a colleague, to repair IN PLACE (same names, same signatures). It does not learn as it should on
+# CartPole; four mistakes slipped into its pieces (run_colleague_14, the loop of the cell above that calls them, is right).
 LEARNING_RATE = 5e-4
 MINI_BATCH = 64
 MEMORY_SLOTS = 100
@@ -605,9 +654,9 @@ FIXES_14 = {
 
 def repaired_14(fixed=FIX_ORDER_14) -> str:
     """The colleague's code with the repairs ``fixed`` applied (all of them: the solution)."""
-    text = TODO_14.replace("# The DQN of a colleague, to repair IN PLACE (same names, same signatures). It learns nothing "
-                           "on CartPole; four\n# mistakes slipped into its pieces (run_colleague_14, the loop of the cell "
-                           "above that calls them, is right).",
+    text = TODO_14.replace("# The DQN of a colleague, to repair IN PLACE (same names, same signatures). It does not learn "
+                           "as it should on\n# CartPole; four mistakes slipped into its pieces (run_colleague_14, the loop "
+                           "of the cell above that calls them, is right).",
                            "# The DQN of the colleague, repaired: four changes, numbered in the comments")
     for name in fixed:
         for old, new in FIXES_14[name]:
@@ -639,7 +688,8 @@ with checked("B8.14"):
     axes_14[2].set(xlabel="pas", ylabel="moyenne de max Q", title="valeurs de 256 états de départ")
     plt.tight_layout()
     plt.show()
-    print(f"{STEPS_14} pas en {time.perf_counter() - start_14:.0f} s, {len(log_14['returns'])} épisodes · politique "
+    print(f"{STEPS_14} pas en {time.perf_counter() - start_14:.0f} s, {len(log_14['returns'])} épisodes · 20 derniers "
+          f"épisodes d'entraînement : {fr(np.mean(log_14['returns'][-20:]), 1) if log_14['returns'] else '?'} · politique "
           f"gloutonne sur 100 épisodes : {fr(eval_14['mean_return'], 1)} · max Q moyen à la fin : "
           f"{fr(log_14['q_mean'][-1], 1) if log_14['q_mean'] else '?'}")
     if repaired_14_ok:
@@ -695,8 +745,10 @@ with checked("B8.15"):
     with torch.no_grad():
         disagree_15 = int((online_15(next_15).argmax(1) != frozen_15(next_15).argmax(1)).sum())
     good_15 = []
+    swapped_15 = wbr.dqn_targets(frozen_15, online_15, next_15, rewards_15, term_15, 0.99, "double")   # roles swapped
     for variant_15 in VARIANTS_15:
-        y_15 = targets_15(online_15, frozen_15, next_15.clone(), rewards_15.clone(), term_15.clone(), 0.99, variant_15)
+        with own_code("B8.15", "targets_15", REFERENCE_CODE):
+            y_15 = targets_15(online_15, frozen_15, next_15.clone(), rewards_15.clone(), term_15.clone(), 0.99, variant_15)
         if not returned("B8.15", f"targets_15(..., {variant_15!r})", y_15):
             good_15.append(False)
             continue
@@ -704,9 +756,16 @@ with checked("B8.15"):
             print(f"❌ Ex B8.15 : targets_15(..., {variant_15!r}) porte un gradient (requires_grad=True).")
             good_15.append(False)
             continue
+        want_15 = wbr.dqn_targets(online_15, frozen_15, next_15, rewards_15, term_15, 0.99, variant_15)
+        flat_15 = np.asarray(torch.as_tensor(y_15, dtype=torch.float32).detach()).reshape(-1)
+        if (variant_15 == "double" and flat_15.shape == (6,) and not np.allclose(flat_15, want_15.numpy(), atol=1e-6)
+                and np.allclose(flat_15, swapped_15.numpy(), atol=1e-6)):
+            print("❌ Ex B8.15 : targets_15(..., 'double') : les rôles sont inversés ; le réseau en ligne choisit l'action "
+                  "(argmax), le réseau cible donne sa valeur (208.2, « La surestimation, et Double DQN »).")
+            good_15.append(False)
+            continue
         good_15.append(same("B8.15", f"targets_15, variante {variant_15!r} (6 transitions, la 2ᵉ terminée)", y_15,
-                            wbr.dqn_targets(online_15, frozen_15, next_15, rewards_15, term_15, 0.99, variant_15),
-                            rtol=1e-6, atol=1e-6))
+                            want_15, rtol=1e-6, atol=1e-6))
     sizes_15 = {v: memory_size_15(v) for v in VARIANTS_15}
     want_sizes_15 = {v: (SETTINGS_13["batch_size"] if v == "no_replay" else SETTINGS_13["capacity"]) for v in VARIANTS_15}
     good_15.append(sizes_15 == want_sizes_15)
@@ -898,7 +957,8 @@ with checked("B8.17"):
         for name_17, net_17 in POLICIES_17.items():
             for baseline_17 in ("none", "mean"):
                 copy_17 = copy.deepcopy(net_17)
-                got_17 = episode_gradients_17(copy_17, EPISODES_17[name_17], baseline_17)
+                with own_code("B8.17", "episode_gradients_17", REFERENCE_CODE):
+                    got_17 = episode_gradients_17(copy_17, EPISODES_17[name_17], baseline_17)
                 want_17 = wbr.episode_gradients(net_17, EPISODES_17[name_17], baseline_17)
                 if not returned("B8.17", "episode_gradients_17", got_17):
                     raise StopCheck
@@ -941,8 +1001,9 @@ else:
         runs_17 = {}
         for baseline_17 in ("none", "mean"):
             start_17 = time.perf_counter()
-            net_17, returns_17 = pair("B8.17", "train_reinforce_17", train_reinforce_17(SEED_17, N_17, baseline_17),
-                                      names=("policy_net", "returns"))
+            with own_code("B8.17", "train_reinforce_17", REFERENCE_CODE):
+                out_17 = train_reinforce_17(SEED_17, N_17, baseline_17)
+            net_17, returns_17 = pair("B8.17", "train_reinforce_17", out_17, names=("policy_net", "returns"))
             runs_17[baseline_17] = (net_17, np.asarray(returns_17, dtype=float), time.perf_counter() - start_17)
         fig_17, axes_17 = plt.subplots(1, 2, figsize=(10, 3), sharey=True)
         for ax_17, baseline_17 in zip(axes_17, ("none", "mean")):
@@ -960,49 +1021,59 @@ else:
             print(f"{baseline_17:5s} : {len(returns_17)} épisodes en {seconds_17:.0f} s · 50 derniers : "
                   f"{fr(returns_17[-50:].mean(), 1)} · politique déterministe sur 100 épisodes : {fr(ev_17['mean_return'], 1)}")
         mean_17 = runs_17["mean"][1]
+        rose_17 = len(mean_17) >= 20 and float(wbr.moving_average(mean_17, 20).max()) >= 50
         verdict("B8.17", len(mean_17) == N_17 and mean_17[-50:].mean() >= THRESHOLD_17,
                 f"avec la baseline, tes 50 derniers épisodes dépassent {THRESHOLD_17:g} (la pire des 6 graines de la "
                 f"référence fait «WORST_17»).",
                 f"avec la baseline, attendu {N_17} épisodes dont les 50 derniers dépassent {THRESHOLD_17:g} en moyenne, "
-                f"reçu {len(mean_17)} épisodes et {fr(float(mean_17[-50:].mean()), 1) if len(mean_17) else '?'} ; si ta "
-                "courbe monte puis retombe vers 9 (une politique devenue déterministe, qui pousse toujours du même côté), "
-                "relance avec une autre SEED_17 avant de chercher une erreur : REINFORCE s'effondre parfois.")'''
+                f"reçu {len(mean_17)} épisodes et {fr(float(mean_17[-50:].mean()), 1) if len(mean_17) else '?'} ; "
+                + ("ta courbe monte puis retombe : si elle finit vers 9 (une politique devenue déterministe, qui pousse "
+                   "toujours du même côté), relance avec une autre SEED_17 avant de chercher une erreur : REINFORCE "
+                   "s'effondre parfois." if rose_17 else
+                   "ta courbe ne décolle jamais (sa moyenne glissante reste sous 50) : tes actions sont-elles tirées "
+                   "dans la politique (Categorical(...).sample()), et la loss a-t-elle le signe de 208.3 ?"))'''
 
 # --- 🔨 B8.18 ---------------------------------------------------------------------------------------------------------
 CHECK_18 = r'''with checked("B8.18"):
-    r_18, v_18 = [1.0, 1.0, 1.0], [0.0, 0.0, 0.0]
-    out_18 = mylearn.deep_rl.compute_gae(r_18, v_18, v_18, [False, False, True], [False, False, False], gamma=0.5,
-                                         lam=1.0)
-    adv_18, ret_18 = pair("B8.18", "compute_gae", out_18, names=("advantages", "returns"))
-    same("B8.18", "exemple 1 de la docstring (avantages)", adv_18, [1.75, 1.5, 1.0])
-    adv_18, _ = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(
-        r_18, [0.5, 0.5, 0.5], [0.5, 0.5, 2.0], [False, False, False], [False, True, False], gamma=0.9, lam=0.5),
-        names=("advantages", "returns"))
-    same("B8.18", "exemple 2 de la docstring (troncature au pas 1)", adv_18, [1.3775, 0.95, 2.3])
-    v_fiche_18 = [2.0, 1.5, 0.8]
-    adv_18, ret_18 = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(
-        r_18, v_fiche_18, [1.5, 0.8, 0.0], [False, False, True], [False, False, False], gamma=0.9, lam=0.5),
-        names=("advantages", "returns"))
-    same("B8.18", "le tableau de 208.4 (avantages)", adv_18, [0.4895, 0.31, 0.2])
-    same("B8.18", "le tableau de 208.4 (cibles du critique)", ret_18, [2.4895, 1.81, 1.0])
-    rng_18 = np.random.default_rng(18)
-    cols_18 = [rng_18.normal(size=(9, 3)) for _ in range(3)] + [rng_18.random((9, 3)) < 0.2, rng_18.random((9, 3)) < 0.2]
-    passed_18 = [c.copy() for c in cols_18]
-    adv2_18, _ = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(*passed_18, 0.95, 0.9),
-                      names=("advantages", "returns"))
-    verdict("B8.18", all(np.array_equal(a, b) for a, b in zip(passed_18, cols_18)), "compute_gae laisse ses entrées intactes.",
-            "compute_gae a modifié un de ses tableaux d'entrée : travaille sur des copies.")
+    rng_18 = np.random.default_rng(18)                  # the expected values first, then your library, watched
+    cols_18 = [rng_18.normal(size=(9, 3)) for _ in range(3)] + [rng_18.random((9, 3)) < 0.2,
+                                                                 rng_18.random((9, 3)) < 0.2]
     one_18 = np.stack([wbr.gae_numpy(*[c[:, j] for c in cols_18], 0.95, 0.9)[0] for j in range(3)], axis=1)
-    same("B8.18", "un rollout (9, 3) : chaque colonne comme un rollout à elle seule", adv2_18, one_18, rtol=1e-6, atol=1e-6)
-    ev_18 = mylearn.deep_rl.explained_variance([1.5, 1.5, 3.5, 3.5], [1.0, 2.0, 3.0, 4.0])
-    same("B8.18", "variance expliquée de 208.4 (prédictions d'abord)", ev_18, 0.8)
-    same("B8.18", "une prédiction décalée de 5 partout", mylearn.deep_rl.explained_variance([6.0, 7.0, 8.0, 9.0],
-                                                                                         [1.0, 2.0, 3.0, 4.0]), 1.0)
-    same("B8.18", "des retours tous égaux", mylearn.deep_rl.explained_variance([1.0, 2.0], [3.0, 3.0]), np.nan)
-    b84_18 = mylearn.deep_rl.compute_gae([1.0] * 4, [4.0, 3.8, 2.0, 2.4], [3.8, 3.6, 2.4, 2.6], [False] * 4,
-                                         [False, True, False, False], gamma=0.9, lam=0.95)[0]
-    print("le rollout de ✏️ B8.4 (λ = 0,95) avec ta fonction :", np.round(np.asarray(b84_18, dtype=float), 4).tolist(),
-          "← compare à tes réponses de B8.4 d) et e)")'''
+    with own_code("B8.18", "ta librairie deep_rl.py", REFERENCE_CODE):
+        r_18, v_18 = [1.0, 1.0, 1.0], [0.0, 0.0, 0.0]
+        out_18 = mylearn.deep_rl.compute_gae(r_18, v_18, v_18, [False, False, True], [False, False, False], gamma=0.5,
+                                             lam=1.0)
+        adv_18, ret_18 = pair("B8.18", "compute_gae", out_18, names=("advantages", "returns"))
+        same("B8.18", "exemple 1 de la docstring (avantages)", adv_18, [1.75, 1.5, 1.0])
+        adv_18, _ = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(
+            r_18, [0.5, 0.5, 0.5], [0.5, 0.5, 2.0], [False, False, False], [False, True, False], gamma=0.9, lam=0.5),
+            names=("advantages", "returns"))
+        same("B8.18", "exemple 2 de la docstring (troncature au pas 1)", adv_18, [1.3775, 0.95, 2.3])
+        v_fiche_18 = [2.0, 1.5, 0.8]
+        adv_18, ret_18 = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(
+            r_18, v_fiche_18, [1.5, 0.8, 0.0], [False, False, True], [False, False, False], gamma=0.9, lam=0.5),
+            names=("advantages", "returns"))
+        same("B8.18", "le tableau de 208.4 (avantages)", adv_18, [0.4895, 0.31, 0.2])
+        same("B8.18", "le tableau de 208.4 (cibles du critique)", ret_18, [2.4895, 1.81, 1.0])
+        passed_18 = [c.copy() for c in cols_18]
+        adv2_18, _ = pair("B8.18", "compute_gae", mylearn.deep_rl.compute_gae(*passed_18, 0.95, 0.9),
+                          names=("advantages", "returns"))
+        verdict("B8.18", all(np.array_equal(a, b) for a, b in zip(passed_18, cols_18)), "compute_gae laisse ses entrées intactes.",
+                "compute_gae a modifié un de ses tableaux d'entrée : travaille sur des copies.")
+        same("B8.18", "un rollout (9, 3) : chaque colonne comme un rollout à elle seule", adv2_18, one_18, rtol=1e-6, atol=1e-6)
+        ev_18 = mylearn.deep_rl.explained_variance([1.5, 1.5, 3.5, 3.5], [1.0, 2.0, 3.0, 4.0])
+        if isinstance(ev_18, (int, float, np.floating)) and abs(float(ev_18) - 0.75) < 1e-9:     # 1 - Var(y - p) / Var(p)
+            print("❌ Ex B8.18 : variance expliquée de 208.4 : attendu 0.8, reçu 0.75, la variance des prédictions au "
+                  "dénominateur : l'ordre est (y_pred, y_true), l'inverse de scikit-learn.")
+        else:
+            same("B8.18", "variance expliquée de 208.4 (prédictions d'abord)", ev_18, 0.8)
+        same("B8.18", "une prédiction décalée de 5 partout", mylearn.deep_rl.explained_variance([6.0, 7.0, 8.0, 9.0],
+                                                                                             [1.0, 2.0, 3.0, 4.0]), 1.0)
+        same("B8.18", "des retours tous égaux", mylearn.deep_rl.explained_variance([1.0, 2.0], [3.0, 3.0]), np.nan)
+        b84_18 = mylearn.deep_rl.compute_gae([1.0] * 4, [4.0, 3.8, 2.0, 2.4], [3.8, 3.6, 2.4, 2.6], [False] * 4,
+                                             [False, True, False, False], gamma=0.9, lam=0.95)[0]
+        print("le rollout de ✏️ B8.4 (λ = 0,95) avec ta fonction :", np.round(np.asarray(b84_18, dtype=float), 4).tolist(),
+              "← compare à tes réponses de B8.4 d) et e)")'''
 
 # --- 🔨 B8.19 ---------------------------------------------------------------------------------------------------------
 CHECK_19 = r'''with checked("B8.19"):
@@ -1039,7 +1110,14 @@ def load_agent_20(verbose=True):
     """(agent, source) for the rest of the chapter: the agent trained by Ex B8.20 in this session (AGENT_20), else the
     one an earlier session saved under AGENT_KEY_20, else the reference PPO agent of wbr (an explicit fallback, said).
     The solutions notebook never reads the learner's agent: its key has the source "solution"."""
+    def weak(score):
+        if verbose and score is not None and score < THRESHOLD_20:
+            print(f"⚠️ ton agent de B8.20 ne tient que {score:.1f} pas en évaluation (seuil {THRESHOLD_20:g}) : la suite "
+                  "s'en sert quand même ; refais B8.20, ou supprime-le (wbr.delete_agent(AGENT_KEY_20)) pour prendre "
+                  "l'agent de référence.")
+
     if globals().get("AGENT_20") is not None:
+        weak(globals().get("eval_20", {}).get("mean_return"))
         return AGENT_20, SOURCE
     try:
         loaded = wbr.load_agent(AGENT_KEY_20, build=ActorCritic20)
@@ -1048,6 +1126,7 @@ def load_agent_20(verbose=True):
     if loaded is not None:
         if verbose:
             print(f"ℹ️ agent de B8.20 relu ({loaded[1]['path'].name}, enregistré le {loaded[1]['saved_at']})")
+        weak(loaded[1]["extra"].get("eval"))
         return loaded[0], SOURCE
     agent, _ = wbr.reference_agent(FAST_MODE, verbose=verbose)
     if verbose:
@@ -1249,9 +1328,11 @@ with checked("B8.20"):
     ref_agent_20 = wbr.ActorCritic(64)                    # a fixed agent of the reference, so that only rollout_20 is tested
     envs_20 = wbr.make_vec(2, seed=5, max_episode_steps=12)
     gen_20 = torch.Generator().manual_seed(20)
-    out_a_20 = rollout_20(ref_agent_20, envs_20, envs_20.first_obs.copy(), np.zeros(2, bool), 10, gen_20)
+    with own_code("B8.20", "rollout_20", REFERENCE_CODE):
+        out_a_20 = rollout_20(ref_agent_20, envs_20, envs_20.first_obs.copy(), np.zeros(2, bool), 10, gen_20)
     batch_a_20, obs_a_20, reset_a_20 = pair("B8.20", "rollout_20", out_a_20, names=("batch", "obs", "just_reset"))
-    out_b_20 = rollout_20(ref_agent_20, envs_20, obs_a_20, reset_a_20, 10, gen_20)
+    with own_code("B8.20", "rollout_20", REFERENCE_CODE):
+        out_b_20 = rollout_20(ref_agent_20, envs_20, obs_a_20, reset_a_20, 10, gen_20)
     batch_b_20, _, _ = pair("B8.20", "rollout_20", out_b_20, names=("batch", "obs", "just_reset"))
     keys_20 = ("obs", "actions", "log_probs", "values", "rewards", "terminated", "truncated", "next_obs", "next_values",
                "valid")
@@ -1285,6 +1366,9 @@ with checked("B8.20"):
         v_want_20 = ref_agent_20.value(x_20).numpy().reshape(20, 2)
         nv_want_20 = ref_agent_20.value(torch.as_tensor(both_20["next_obs"].reshape(-1, 4), dtype=torch.float32)
                                         ).numpy().reshape(20, 2)
+        greedy_20 = ref_agent_20(x_20).argmax(1).numpy().reshape(20, 2)      # p close to 0.5: 40 argmax have p ≈ 2^-40
+    if np.array_equal(actions_20, greedy_20):
+        problems_20.append("actions")
     for k_20, want_20 in (("log_probs", lp_want_20), ("values", v_want_20), ("next_values", nv_want_20)):
         if not np.allclose(both_20[k_20].astype(float), want_20, atol=1e-5):
             problems_20.append(k_20)
@@ -1302,10 +1386,16 @@ with checked("B8.20"):
                     "obs": "obs[t] est l'observation AVANT le pas t ; le second rollout repart de l'observation rendue "
                            "par le premier",
                     "log_probs": "log_probs est le log de la probabilité de l'action jouée, sous la politique de l'agent",
-                    "values": "values est V(obs[t]) du critique de l'agent"}
+                    "values": "values est V(obs[t]) du critique de l'agent",
+                    "actions": "les 40 actions sont toutes celles de plus grande probabilité : elles doivent être "
+                               "tirées dans la politique (torch.multinomial ou Categorical, avec generator)"}
         for k_20 in problems_20:
             print(f"❌ Ex B8.20 : rollout_20, « {k_20} » ne correspond pas à l'environnement rejoué avec tes actions"
                   + (f" : {hints_20[k_20]}." if k_20 in hints_20 else "."))
+        if problems_20 == ["actions"]:
+            print("❌ Ex B8.20 : rollout_20 joue l'action la plus probable : l'évaluation est déterministe, pas le "
+                  "rollout, dont les données doivent suivre la politique (sinon les log-probabilités et les ratios de "
+                  "PPO ne décrivent pas ce qui a été joué).")
 
 loss_ok_20 = False
 with checked("B8.20"):
@@ -1318,16 +1408,33 @@ with checked("B8.20"):
         mb_20["old_log_probs"] = torch.log_softmax(ref_agent_20(mb_20["obs"]), 1).gather(
             1, mb_20["actions"][:, None]).squeeze(1) + torch.as_tensor(rng_20.normal(0, 0.3, 16), dtype=torch.float32)
     args_20 = (mb_20["obs"], mb_20["actions"], mb_20["old_log_probs"], mb_20["advantages"], mb_20["returns"])
-    loss_20, parts_20 = pair("B8.20", "ppo_loss_20", ppo_loss_20(ref_agent_20, *args_20, SETTINGS_20),
-                             names=("loss", "parts"))
+    with own_code("B8.20", "ppo_loss_20", REFERENCE_CODE):
+        out_loss_20 = ppo_loss_20(ref_agent_20, *args_20, SETTINGS_20)
+    loss_20, parts_20 = pair("B8.20", "ppo_loss_20", out_loss_20, names=("loss", "parts"))
     want_loss_20, want_parts_20 = wbr.ppo_loss(ref_agent_20, *args_20, SETTINGS_20)
+    with torch.no_grad():
+        log_ratio_20 = torch.log_softmax(ref_agent_20(mb_20["obs"]), 1).gather(
+            1, mb_20["actions"][:, None]).squeeze(1) - mb_20["old_log_probs"]
     good_20 = [same("B8.20", "ppo_loss_20 sur un mini-batch de 16 (la loss)", loss_20.detach(), want_loss_20.detach(),
                     rtol=1e-5, atol=1e-6)]
+    wrong_20 = {}
     for k_20, v_20 in want_parts_20.items():
         got_20 = parts_20.get(k_20) if isinstance(parts_20, dict) else None
         good_20.append(got_20 is not None and abs(float(got_20) - v_20) <= 1e-5 * max(1.0, abs(v_20)))
         if not good_20[-1]:
-            print(f"❌ Ex B8.20 : ppo_loss_20, parts[{k_20!r}] : attendu {v_20:.6g}, reçu {got_20!r}.")
+            wrong_20[k_20] = got_20
+    for k_20, got_20 in wrong_20.items():
+        hint_20 = ""
+        if (k_20 == "approx_kl" and isinstance(got_20, (int, float, np.floating))
+                and abs(float(got_20) + float(log_ratio_20.mean())) < 1e-5):
+            hint_20 = (" : c'est l'estimateur naïf −mean(ln ρ), qui peut être négatif ; le contrat demande la moyenne de "
+                       "(ρ − 1) − ln ρ, jamais négative (208.5, « Les journaux de PPO »)")
+        elif k_20 in ("approx_kl", "clipfrac") and got_20 == 0 and {"approx_kl", "clipfrac"} <= set(wrong_20):
+            hint_20 = (" : ton ratio vaut 1 partout ; ρ compare la politique courante aux log-probabilités du rollout "
+                       "(old_log_probs), pas à elle-même détachée")
+        elif k_20 == "policy_loss" and not ({"value_loss", "entropy", "approx_kl", "clipfrac"} & set(wrong_20)):
+            hint_20 = " : relis L^π, le min de ρ Â et de clip(ρ, 1 − ε, 1 + ε) Â : ε borne le ratio, pas l'avantage"
+        print(f"❌ Ex B8.20 : ppo_loss_20, parts[{k_20!r}] : attendu {want_parts_20[k_20]:.6g}, reçu {got_20!r}{hint_20}.")
     if not good_20[0] and all(good_20[1:]):
         print("❌ Ex B8.20 : les cinq parties sont justes, mais la loss ne les combine pas comme le contrat : "
               "policy_loss + vf_coef × value_loss − ent_coef × entropy (signes et coefficients de SETTINGS_20).")
@@ -1349,8 +1456,23 @@ with checked("B8.20"):
         print("⏳ Ex B8.20 : ta boucle se sert de compute_gae et de clipped_surrogate de ta librairie (B8.18, B8.19), pas "
               "encore écrites.")
     else:
-        seen_20 = {"gae": [], "surrogate": 0}
+        seen_20 = {"gae": [], "surrogate": 0, "rollouts": [], "minibatches": []}
         real_gae_20, real_clip_20 = mylearn.deep_rl.compute_gae, mylearn.deep_rl.clipped_surrogate
+        real_rollout_20, real_loss_20, real_make_vec_20 = rollout_20, ppo_loss_20, gym.make_vec
+
+        def spy_rollout_20(*args, **kwargs):                # each rollout opens an iteration
+            out = real_rollout_20(*args, **kwargs)
+            seen_20["rollouts"].append(out[0] if isinstance(out, (tuple, list)) and out else {})
+            seen_20["minibatches"].append([])
+            return out
+
+        def spy_loss_20(*args, **kwargs):                   # the size and the advantages of each mini-batch
+            adv = torch.as_tensor(inspect.signature(real_loss_20).bind(*args, **kwargs).arguments["advantages"])
+            adv = adv.detach().double().reshape(-1)
+            if seen_20["minibatches"]:
+                seen_20["minibatches"][-1].append((len(adv), float(adv.mean()) if len(adv) else 0.0,
+                                                   float(adv.std(unbiased=False)) if len(adv) > 1 else 1.0))
+            return real_loss_20(*args, **kwargs)
 
         def spy_gae_20(*args, **kwargs):
             out = real_gae_20(*args, **kwargs)
@@ -1364,13 +1486,17 @@ with checked("B8.20"):
             return real_clip_20(*args, **kwargs)
 
         mylearn.deep_rl.compute_gae, mylearn.deep_rl.clipped_surrogate = spy_gae_20, spy_clip_20
+        rollout_20, ppo_loss_20 = spy_rollout_20, spy_loss_20
+        gym.make_vec = lambda *a, **k: real_make_vec_20(*a, **{**k, "max_episode_steps": 20})   # time limits, here only
         try:
             short_20 = {**SETTINGS_20, "n_epochs": 2}
             per_iter_20 = short_20["n_envs"] * short_20["n_steps"]
-            agent_s_20, logs_s_20 = pair("B8.20", "train_ppo_20", train_ppo_20(3, 2 * per_iter_20, short_20),
-                                         names=("agent", "logs"))
+            with own_code("B8.20", "train_ppo_20", REFERENCE_CODE):
+                out_s_20 = train_ppo_20(3, 2 * per_iter_20, short_20)
         finally:
             mylearn.deep_rl.compute_gae, mylearn.deep_rl.clipped_surrogate = real_gae_20, real_clip_20
+            rollout_20, ppo_loss_20, gym.make_vec = real_rollout_20, real_loss_20, real_make_vec_20
+        agent_s_20, logs_s_20 = pair("B8.20", "train_ppo_20", out_s_20, names=("agent", "logs"))
         want_keys_20 = set(wbr.LOG_KEYS) | {"surrogate_gap"}
         good_20 = []
         good_20.append(isinstance(logs_s_20, dict) and want_keys_20 <= set(logs_s_20)
@@ -1384,6 +1510,48 @@ with checked("B8.20"):
                 f"attendu un appel de mylearn.deep_rl.compute_gae par itération (2) sur des tableaux {shape_20} (le temps "
                 f"d'abord), reçu {len(seen_20['gae'])} appels" + (f" de formes {seen_20['gae'][0][0]}" if seen_20["gae"] else "")
                 + " ; l'appelles-tu par ce nom (la vérification l'observe) ?")
+        if good_20[-1] and len(seen_20["rollouts"]) == 2:
+            gae_args_20 = [inspect.signature(real_gae_20).bind(*a, **k).arguments for _, a, k in seen_20["gae"]]
+            arrays_20 = ("rewards", "values", "next_values", "terminated", "truncated")
+            differ_20 = sorted({k for b, r in zip(gae_args_20, seen_20["rollouts"]) for k in arrays_20
+                                if not np.allclose(np.asarray(b[k], dtype=float), np.asarray(r[k], dtype=float),
+                                                   atol=1e-6)})
+            flag_20 = lambda r, k: np.asarray(r[k]).astype(bool)
+            cut_20 = sum(int(np.sum(flag_20(r, "truncated") & ~flag_20(r, "terminated"))) for r in seen_20["rollouts"])
+            good_20.append(not differ_20)
+            if not differ_20:
+                print(f"✅ Ex B8.20 : compute_gae reçoit les tableaux du rollout de son itération ({cut_20} limites de "
+                      "temps, ici à 20 pas, gardées distinctes des fins).")
+            elif "terminated" in differ_20 and all(np.array_equal(flag_20(b, "terminated"), flag_20(r, "terminated")
+                                                                  | flag_20(r, "truncated"))
+                                                   for b, r in zip(gae_args_20, seen_20["rollouts"])):
+                print(f"❌ Ex B8.20 : compute_gae reçoit comme terminated les {cut_20} limites de temps du rollout (ici à "
+                      "20 pas) : GAE n'amorce plus sur next_values à une limite de temps ; terminated et truncated vont "
+                      "chacun à sa place (208.4, « Fin d'épisode ou limite de temps »).")
+            else:
+                print(f"❌ Ex B8.20 : compute_gae ne reçoit pas les tableaux {differ_20} du rollout de son itération : "
+                      "GAE prend rewards, values, next_values, terminated et truncated tels que rollout_20 les rend.")
+            rows_20 = [(sum(n for n, _, _ in mbs), int(np.sum(r["valid"])))
+                       for mbs, r in zip(seen_20["minibatches"], seen_20["rollouts"])]
+            epochs_20, n_split_20 = short_20["n_epochs"], short_20["n_minibatches"]
+            good_20.append(all(epochs_20 * (v - v % n_split_20) <= n <= epochs_20 * v for n, v in rows_20))
+            verdict("B8.20", good_20[-1],
+                    f"la mise à jour passe {epochs_20} fois sur les transitions valides ({', '.join(str(v) for _, v in rows_20)} "
+                    "par itération) : les pas de reset sont écartés.",
+                    f"ppo_loss_20 voit {', '.join(str(n) for n, _ in rows_20)} transitions par itération, pour "
+                    f"{', '.join(str(v) for _, v in rows_20)} transitions valides du rollout et {epochs_20} epochs : "
+                    + ("les pas qui ne font que le reset (valid False) sont-ils écartés de la mise à jour ?"
+                       if any(n > epochs_20 * v for n, v in rows_20) else
+                       "chaque epoch passe-t-elle sur toutes les transitions valides ?"))
+            normed_20 = [(m, s) for mbs in seen_20["minibatches"] for n, m, s in mbs if n > 1]
+            good_20.append(bool(normed_20) and all(abs(m) < 1e-4 and abs(s - 1) < 0.02 for m, s in normed_20))
+            verdict("B8.20", good_20[-1], f"les avantages de chacun des {len(normed_20)} mini-batches sont normalisés "
+                    "(moyenne 0, écart-type 1).",
+                    "les avantages que reçoit ppo_loss_20 ne sont pas centrés réduits dans chaque mini-batch (norm_adv) : "
+                    f"moyennes de {fr(min(m for m, _ in normed_20), 3)} à {fr(max(m for m, _ in normed_20), 3)}, "
+                    f"écarts-types de {fr(min(s for _, s in normed_20), 3)} à {fr(max(s for _, s in normed_20), 3)} ; "
+                    "moins la moyenne du mini-batch, divisés par son écart-type (208.5)." if normed_20 else
+                    "ppo_loss_20 n'est pas appelée par ce nom dans train_ppo_20 (la vérification l'observe).")
         n_mb_20 = 2 * short_20["n_epochs"] * short_20["n_minibatches"]
         good_20.append(seen_20["surrogate"] >= n_mb_20)
         verdict("B8.20", good_20[-1], f"clipped_surrogate de ta librairie : appelée à chaque mini-batch ({seen_20['surrogate']} fois).",
@@ -1402,9 +1570,21 @@ if not ok_20:
     print("⏳ Ex B8.20 : l'entraînement attend que la vérification ci-dessus passe.")
 else:
     with checked("B8.20"):
+        AGENT_20 = None                                      # a new training replaces the agent of a former one
+        wbr.delete_agent(AGENT_KEY_20)
         start_20 = time.perf_counter()
-        AGENT_20, LOGS_20 = train_ppo_20(SEED_20, STEPS_20)
+        with own_code("B8.20", "train_ppo_20", REFERENCE_CODE):
+            trained_20, LOGS_20 = train_ppo_20(SEED_20, STEPS_20)
         seconds_20 = time.perf_counter() - start_20
+        reference_20 = wbr.load_agent(wbr.reference_key(FAST_MODE))
+        if not isinstance(trained_20, ActorCritic20) or (reference_20 is not None
+                                                       and wbr.same_weights(trained_20, reference_20[0])):
+            print("❌ Ex B8.20 : train_ppo_20 doit rendre l'agent qu'il vient d'entraîner, un ActorCritic20 neuf, reçu "
+                  + ("l'agent PPO de référence" if isinstance(trained_20, nn.Module) and reference_20 is not None
+                     and wbr.same_weights(trained_20, reference_20[0]) else type(trained_20).__name__) + " : rien n'est "
+                  "enregistré.")
+            raise StopCheck
+        AGENT_20 = trained_20
         eval_20 = wbr.evaluate(wbr.greedy_logits(AGENT_20), 100, EVAL_SEED)
         steps_20, returns_20 = np.asarray(LOGS_20["step"]), np.asarray(LOGS_20["mean_return"], dtype=float)
         fig_20, ax_20 = plt.subplots(figsize=(7, 3))
@@ -1427,6 +1607,5 @@ else:
                 f"la politique déterministe dépasse {THRESHOLD_20:g} (la référence, sur 6 graines : «C20_EVALS»).",
                 f"la politique déterministe tient {fr(eval_20['mean_return'], 1)} pas : moins que les {THRESHOLD_20:g} "
                 f"attendus (la référence, sur 6 graines : «C20_EVALS»).")
-        wbr.delete_agent(AGENT_KEY_20)
         print(f"agent enregistré pour la suite du chapitre (source {SOURCE!r}) : "
               f"{wbr.save_agent(AGENT_KEY_20, AGENT_20, LOGS_20, extra={'eval': eval_20['mean_return']}).name}")'''
