@@ -647,3 +647,19 @@ Les compétences de chaque chapitre (issues des objectifs de sa fiche) sont ajou
 | Exporter un modèle avec `torch.export`, vérifier l'équivalence et mesurer ce que rapportent bfloat16 et int8 | |
 | Lire et compléter un Dockerfile ; surveiller la dérive (PSI, test KS) et journaliser dans le respect du RGPD | |
 <!-- wb:end B7 -->
+<!-- wb:section B8 -->
+## B8 — RL moderne : DQN, gradient de politique, PPO et RLHF
+
+| Compétence | Niveau |
+|---|:-:|
+| Expliquer pourquoi un réseau remplace la table Q, et ce qui rend DQN instable (triade mortelle) puis stable (rejeu, réseau cible) | |
+| Calculer une cible DQN et Double DQN, en distinguant une vraie fin (`terminated`) d'une limite de temps (`truncated`) | |
+| Écrire un DQN en PyTorch avec la mémoire de rejeu de `rl.py`, un réseau cible, la loss de Huber et un ε décroissant | |
+| Dériver le gradient de politique par l'astuce de la log-dérivée, et montrer qu'une baseline ne biaise pas le gradient | |
+| Calculer l'avantage par GAE à rebours, et choisir λ en connaissant le compromis biais-variance | |
+| Calculer l'objectif clippé de PPO et son gradient, et écrire PPO sur des environnements vectorisés (autoreset compris) | |
+| Lire les journaux de PPO (KL approchée, fraction clippée, entropie, variance expliquée) pour diagnostiquer un entraînement | |
+| Comparer des variantes sur plusieurs graines et rapporter le résultat honnêtement (évaluation à part, médiane et intervalle, IQM) | |
+| Expliquer RLHF, DPO et GRPO, calculer une loss de Bradley-Terry et une loss DPO, et entraîner un modèle de récompense | |
+| Reconnaître le piratage de la récompense et proposer une mesure non récompensée pour le détecter | |
+<!-- wb:end B8 -->

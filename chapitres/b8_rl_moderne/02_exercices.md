@@ -24,7 +24,7 @@ c) Vrai ou faux : avec un réseau Q, un pas de gradient sur la valeur d'un état
 d) Vrai ou faux : si l'on laisse le gradient traverser aussi la cible $y$, on obtient la même mise à jour qu'avec `y.detach()`, seulement plus lente.
 e) `states` est un tenseur de 32 états de CartPole, de forme `(32, 4)`. Quelle est la forme de `q_net(states)` ?
 
-### B8.Q2 — La triade mortelle : approximation, amorçage et apprentissage hors politique 🧠 ★★ ⏱️ 3 min
+### B8.Q2 — La triade mortelle : approximation, amorçage et apprentissage off-policy 🧠 ★★ ⏱️ 3 min
 *Fiche §208.1, §208.2 · parcours —*
 
 a) Lesquels sont les trois ingrédients de la triade mortelle ? (A) l'approximation de fonction ; (B) un learning rate trop grand ; (C) l'amorçage ; (D) l'apprentissage off-policy ; (E) la loss de Huber. (une ou plusieurs lettres)
@@ -109,7 +109,7 @@ e) Sur un robot réel, chaque épisode prend une heure. Quel choix de départ es
 *Fiche §208.6 · parcours R*
 
 a) Une politique parfaite pour CartPole-v1 est évaluée par `evaluate_policy(env, policy, n_episodes=100, max_steps=300, rng=rng)`. Quel retour moyen affiche-t-elle ?
-b) 100 épisodes d'évaluation donnent un retour moyen de 412 et un écart-type de 40. Que vaut l'erreur type de la moyenne ?
+b) 100 épisodes d'évaluation donnent un retour moyen de 412 et un écart-type de 40. Que vaut l'erreur type de la moyenne, à 1 décimale ?
 c) Vrai ou faux : après `env.reset(seed=3)`, un second `env.reset()` sans graine redonne le même état initial.
 d) Pour comparer DQN et Double DQN sur CartPole : (A) une graine chacun, mais 1 000 épisodes d'évaluation ; (B) au moins trois graines chacun, et les mêmes graines d'évaluation pour les deux ; (C) la meilleure de cinq graines pour chacun.
 e) Vrai ou faux : pour qu'une politique aléatoire qui tire ses actions par `env.action_space.sample()` soit reproductible, `env.reset(seed=...)` ne suffit pas.
@@ -164,7 +164,7 @@ e) Vrai ou faux : le clipping par la norme globale garde la direction du gradien
 
 a) Une politique ε-greedy avec $\varepsilon = 0{,}2$, sur les deux actions de CartPole : avec quelle probabilité joue-t-elle l'action gloutonne, à 2 décimales ?
 b) Une politique softmax de température $\tau = 0{,}5$ sur deux actions de valeurs $Q = (1{,}0 ;\ 1{,}5)$ : probabilité de l'action 1, à 3 décimales ?
-c) Un bras a reçu les récompenses 2, 4 et 6 ($Q = 4$) ; il reçoit 8. Que devient $Q$ avec la moyenne incrémentale ?
+c) Un bras a reçu les récompenses 2, 4 et 6 ($Q = 4$) ; il reçoit 8. Que devient $Q$ avec la moyenne incrémentale, à 1 décimale ?
 d) Vrai ou faux : une politique softmax de très grande température se rapproche de la politique gloutonne.
 e) Le « gradient bandit » de Sutton et Barto (§2.8), qui monte la préférence du bras tiré quand sa récompense dépasse la moyenne des récompenses, est : (A) ε-greedy avec un ε qui décroît ; (B) REINFORCE sur un seul état, avec une baseline ; (C) UCB.
 

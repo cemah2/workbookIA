@@ -323,6 +323,28 @@
 | `torch.export.export(model.eval(), (torch.zeros(2, 3, 32, 32),), dynamic_shapes=...)` | un exemple de **2** images : une dimension de taille 1 serait figée par l'export (B7.21) |
 | `with torch.device("meta"): model = build_model()` ; `sd = torch.load(path, mmap=True, weights_only=True)` ; `model.load_state_dict(sd, assign=True)` | charger un modèle avec une seule copie des poids en mémoire |
 
+## Deep RL : DQN, gradient de politique, PPO, préférences (bonus B8)
+
+| Code | Effet |
+|---|---|
+| `q = q_net(states)` (forme `(B, n_actions)`) ; `q_sa = q.gather(1, actions[:, None]).squeeze(1)` | la valeur de l'action **jouée**, ligne par ligne : la loss ne porte que sur elle |
+| `with torch.no_grad(): y = r + gamma * (1 - term.float()) * target_net(s2).max(dim=1).values` | la cible DQN, sans gradient (semi-gradient), avec `terminated` seul (pas `truncated`) |
+| `a2 = q_net(s2).argmax(dim=1, keepdim=True)` ; `target_net(s2).gather(1, a2).squeeze(1)` | la cible Double DQN : le réseau en ligne choisit, le réseau cible note |
+| `target_net.load_state_dict(q_net.state_dict())` ; `with torch.no_grad(): for pt, p in zip(target_net.parameters(), q_net.parameters()): pt.lerp_(p, tau)` | copier le réseau cible, ou la mise à jour douce de Polyak |
+| `F.huber_loss(q_sa, y, delta=1.0)` ; `F.smooth_l1_loss(q_sa, y, beta=b)` | la loss de Huber ; `smooth_l1_loss` vaut la loss de Huber de seuil `b` **divisée par** `b` |
+| `dist = torch.distributions.Categorical(logits=logits)` ; `a = dist.sample()` ; `dist.log_prob(a)` ; `dist.entropy()` | la politique softmax : tirer une action, son log-probabilité, l'entropie (`validate_args=False` accélère la construction) |
+| `action = int(policy_net(torch.as_tensor(obs)).argmax())` | une action entière pour `env.step` et `evaluate_policy` (un tenseur 0-D est refusé par gymnasium) |
+| `loss = -(torch.stack(log_probs) * (returns - baseline)).mean()` | la loss de REINFORCE (on minimise l'opposé de l'objectif) |
+| `with torch.no_grad(): logp_old = dist.log_prob(actions)` ; puis `ratio = (new_logp - logp_old).exp()` | les log-probabilités du rollout, gardées sans gradient avant les epochs, et le ratio de PPO |
+| `pg_loss = -torch.min(ratio * adv, ratio.clamp(1 - eps, 1 + eps) * adv).mean()` | l'objectif clippé de PPO, écrit comme une loss à minimiser |
+| `approx_kl = ((ratio - 1) - ratio.log()).mean()` ; `clipfrac = ((ratio - 1).abs() > eps).float().mean()` | deux journaux de PPO, calculés sous `torch.no_grad()` |
+| `adv = (adv - adv.mean()) / (adv.std() + 1e-8)` | la normalisation des avantages par mini-batch |
+| `values = critic(obs).squeeze(-1)` | une valeur par observation, de forme `(B,)` : sans `squeeze`, `values - returns` diffuse en `(B, B)` |
+| `torch.optim.Adam(params, lr=2.5e-4, eps=1e-5)` ; `nn.utils.clip_grad_norm_(params, 0.5)` | les réglages d'Adam et du clipping de PPO dans CleanRL |
+| `-F.logsigmoid(r_chosen - r_rejected).mean()` | la loss de Bradley-Terry d'un modèle de récompense, stable pour de grands écarts |
+| `margin = beta * ((pc - rc) - (pr - rr))` ; `-F.logsigmoid(margin).mean()` | la loss DPO, à partir des log-probabilités des réponses entières sous la politique et la référence figée |
+| `envs = gym.make_vec("CartPole-v1", num_envs=4, vectorization_mode="sync")` ; `obs, _ = envs.reset(seed=42)` | quatre copies de CartPole, graines 42 à 45 ; autoreset next-step par défaut |
+
 ## Dataset et DataLoader
 
 | Code | Effet |

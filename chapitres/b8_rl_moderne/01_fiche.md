@@ -30,7 +30,7 @@ La fiche pose les idées, les formules et les ordres de grandeur ; les exercices
 | 208.4 Acteur-critique et GAE | Q7 | B8.4 | B8.18, B8.20 | |
 | 208.5 PPO | Q8, Q9, R2 | B8.5, B8.9, B8.11 | B8.19, B8.20, B8.21, B8.22, B8.28 | E2 |
 | 208.6 Pratique du deep RL | Q10 | B8.8 | B8.15, B8.21, B8.22, B8.27, B8.28 | E3, E5 |
-| 208.7 RL et modèles de langage | Q11, Q12 | B8.6, B8.10 | B8.25, B8.26 | E4 |
+| 208.7 RL et modèles de langue | Q11, Q12 | B8.6, B8.10 | B8.25, B8.26 | E4 |
 | 208.8 Limites | Q12 | B8.8 | B8.23, B8.24 | |
 
 ## Objectifs d'apprentissage
@@ -510,7 +510,7 @@ Un agent qui n'apprend pas ne lève aucune erreur. Une méthode, de la plus simp
 
 > 🕰️ **Mise à jour (2026) — les algorithmes de référence** — **Le livre :** des méthodes tabulaires (ch. 26). · **Aujourd'hui :** **PPO** reste la baseline par défaut, sur actions discrètes comme continues ; **SAC** (T. Haarnoja et coll., 2018), off-policy et à maximum d'entropie, est le choix courant pour les actions continues quand les données coûtent cher ; la famille **DQN** (Rainbow) pour les actions discrètes ; les méthodes **à base de modèle** apprennent un modèle du monde et s'entraînent « en imagination » : **DreamerV3** (D. Hafner et coll., publié dans *Nature* en 2025) règle plus de 150 tâches avec les mêmes hyperparamètres ; pour les jeux à deux joueurs, la recherche arborescente guidée par un réseau d'**AlphaZero** et de **MuZero**. · **Faut-il quand même l'apprendre ?** Oui : ce chapitre couvre les deux familles de base (valeur et politique) dont tous ces algorithmes sont des combinaisons. · *Sources :* T. Haarnoja et coll., « [Soft Actor-Critic](https://arxiv.org/abs/1801.01290) », ICML 2018 ; D. Hafner et coll., « [Mastering diverse control tasks through world models](https://doi.org/10.1038/s41586-025-08744-2) », *Nature* 640, 2025 ([arXiv:2301.04104](https://arxiv.org/abs/2301.04104)) ; J. Schrittwieser et coll., « [MuZero](https://arxiv.org/abs/1911.08265) », *Nature* 588, 2020.
 
-## 208.7 · RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense ⏩
+## 208.7 · RL et modèles de langue : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense ⏩
 
 ### Un modèle de langue est une politique
 

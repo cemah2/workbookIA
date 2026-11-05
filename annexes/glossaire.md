@@ -427,7 +427,7 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | résidu | residual | l'écart $y_i - \hat{y}_i$ entre la cible et la prédiction | 9 |
 | équations normales | normal equations | $\mathbf{X}^\top \mathbf{X}\,\mathbf{w} = \mathbf{X}^\top \mathbf{y}$ : la condition « gradient nul » des moindres carrés | 9 |
 | ordonnée à l'origine | intercept | le terme constant $b$ d'un modèle linéaire (`intercept_` dans scikit-learn) ; à ne pas confondre avec le biais statistique | 9 |
-| loss de Huber | Huber loss | quadratique pour les petits résidus, linéaire au-delà d'un seuil $\delta$ : un compromis robuste entre MSE et MAE (`HuberRegressor`, `torch.nn.HuberLoss`) | 9 |
+| loss de Huber | Huber loss | quadratique pour les petits résidus, linéaire au-delà d'un seuil $\delta$ : un compromis robuste entre MSE et MAE (`HuberRegressor`, `torch.nn.HuberLoss`) ; en RL (B8), elle borne le gradient des cibles amorcées, et `F.smooth_l1_loss(beta)` vaut cette loss divisée par $\beta$ | 9, B8 |
 | MAPE | erreur absolue moyenne en pourcentage (*mean absolute percentage error*) | moyenne des $\lvert y_i - \hat{y}_i \rvert / \lvert y_i \rvert$ : une erreur relative, qui compare des cibles d'ordres de grandeur différents ; inutilisable quand une cible vaut 0 | 9 |
 | loss quantile | pinball loss, quantile loss | loss asymétrique : une erreur par défaut coûte plus (ou moins) qu'une erreur par excès, et le modèle vise un quantile plutôt que la moyenne (`mean_pinball_loss`) | 9 |
 | prior de Laplace | Laplace prior | loi pointue en 0, de densité proportionnelle à $e^{-\lvert w \rvert / s}$ ; le MAP avec ce prior est un Lasso, comme le MAP avec un prior gaussien est une Ridge | 9 |
@@ -1225,6 +1225,47 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | CACE | Changing Anything Changes Everything | dans un système de ML, changer une entrée, une feature ou un réglage change tout le reste du modèle | B7 |
 | minimisation, limitation de la conservation | data minimisation, storage limitation | principes du RGPD (art. 5, 1 c et e) : des données limitées à ce qui est nécessaire, gardées une durée écrite | B7 |
 | pseudonymisation | pseudonymisation | remplacer un identifiant par un pseudonyme ; les données restent personnelles tant qu'on peut refaire le lien (RGPD, art. 4, point 5) | B7 |
+| approximation de fonction | function approximation | remplacer une table par une fonction paramétrée qu'on ajuste (un réseau $Q_\theta$) : elle généralise d'un état aux états voisins | B8 |
+| triade mortelle | deadly triad | approximation de fonction, amorçage et apprentissage off-policy réunis : les valeurs peuvent diverger (Sutton et Barto, §11.3) | B8 |
+| semi-gradient | semi-gradient | mise à jour qui traite la cible amorcée comme une constante (`torch.no_grad()`, `.detach()`) : la version standard du Q-learning avec un réseau | B8 |
+| mise à jour douce (de Polyak) | soft (Polyak) update | $\bar\theta \leftarrow \tau\theta + (1 - \tau)\bar\theta$ à chaque pas, au lieu d'une copie complète du réseau cible ; $\tau = 1$ redonne la copie | B8 |
+| surestimation | overestimation bias | le max d'estimations bruitées est biaisé vers le haut, même quand chacune est juste en moyenne ; l'amorçage le propage | B8 |
+| double estimateur, Double DQN | double estimator, Double DQN | choisir l'action avec un jeu d'estimations et lire sa valeur dans un autre ; dans Double DQN, le réseau en ligne choisit, le réseau cible note | B8 |
+| politique paramétrée | parameterized policy | un réseau qui reçoit l'état et rend une loi de probabilité sur les actions, $\pi_\theta(a \mid s)$ (une softmax pour des actions discrètes) | B8 |
+| astuce de la log-dérivée | log-derivative trick | $\nabla_\theta \mathbb{E}_{p_\theta}[f] = \mathbb{E}_{p_\theta}[f\,\nabla_\theta \log p_\theta]$ : un gradient d'espérance devient une espérance, estimée par tirage | B8 |
+| fonction score | score function | $\nabla_\theta \log p_\theta(x)$ ; son espérance est nulle, d'où l'absence de biais d'une baseline | B8 |
+| théorème du gradient de politique | policy gradient theorem | $\nabla J = \mathbb{E}[\sum_t \nabla \log \pi_\theta(a_t \mid s_t)(G_t - b(s_t))]$ : seul $\log \pi_\theta$ se dérive, pas l'environnement | B8 |
+| REINFORCE | REINFORCE | le gradient de politique de Monte-Carlo de Williams (1992) : un épisode, ses retours, un pas de gradient ; sans biais, on-policy, de forte variance | B8 |
+| baseline (d'un gradient de politique) | baseline | valeur $b(s)$ soustraite au retour : ne change pas l'espérance du gradient, en réduit la variance si elle est proche des retours (autre sens que la baseline à battre, ch. 13) | B8 |
+| bonus d'entropie | entropy bonus | $-c\,H(\pi_\theta)$ ajouté à la loss (avec $c \approx 0{,}01$) pour que la politique ne devienne pas déterministe trop tôt | B8 |
+| acteur-critique, acteur, critique | actor-critic, actor, critic | l'acteur est la politique, le critique une fonction de valeur $V_w(s)$ apprise en même temps, qui sert de baseline et estime l'avantage | B8 |
+| fonction de valeur (RL) | value function | $V(s)$, le retour espéré depuis $s$ en suivant la politique ; à ne pas confondre avec la fonction de valeur d'une coalition (B6) | B8 |
+| avantage | advantage | $A(s, a) = Q(s, a) - V(s)$ : de combien une action fait mieux que la moyenne de la politique dans cet état | B8 |
+| GAE | generalized advantage estimation | $\hat A_t = \sum_l (\gamma\lambda)^l \delta_{t+l}$, calculé à rebours ; $\lambda$ règle le compromis biais-variance | B8 |
+| rollout | rollout | les $T$ pas que la politique joue dans chacun des $N$ environnements, sans mise à jour entre-temps, avant une itération d'apprentissage | B8 |
+| ratio de probabilités | probability ratio | $\rho_t = \pi_\theta(a_t \mid s_t) / \pi_{\text{old}}(a_t \mid s_t)$, calculé comme `exp(logp - logp_old)` | B8 |
+| objectif de substitution | surrogate objective | $\mathbb{E}_t[\rho_t \hat A_t]$ : même gradient que le gradient de politique en $\rho = 1$, mais dangereux à maximiser loin de 1 | B8 |
+| région de confiance, TRPO | trust region | maximiser l'objectif de substitution sous une contrainte de KL entre ancienne et nouvelle politique (TRPO, résolu au second ordre) | B8 |
+| objectif clippé, PPO | clipped objective, proximal policy optimization | $\mathbb{E}_t[\min(\rho_t \hat A_t, \operatorname{clip}(\rho_t, 1 \pm \varepsilon)\hat A_t)]$ : le gradient s'annule quand le ratio a assez bougé dans la direction qui améliore l'objectif | B8 |
+| KL approchée | approximate KL | estimation de la KL entre $\pi_{\text{old}}$ et $\pi_\theta$ sur le rollout, souvent par la moyenne de $(\rho - 1) - \ln\rho$ | B8 |
+| fraction clippée | clip fraction | la part des transitions où $\lvert \rho - 1 \rvert > \varepsilon$ ; ce n'est pas la part des gradients nuls | B8 |
+| environnements vectorisés | vectorized environments | $N$ copies d'un environnement pilotées par batch (`gym.make_vec`) ; chaque copie repart seule quand son épisode finit | B8 |
+| autoreset (next-step, same-step) | autoreset | remise à zéro automatique d'une copie vectorisée ; en next-step (défaut de gymnasium 1.x), l'appel qui suit la fin ne fait que le reset, et cette transition s'écarte | B8 |
+| variance expliquée (d'un critique) | explained variance | $1 - \operatorname{Var}(G - V)/\operatorname{Var}(G)$ : 1 critique parfait, 0 pas mieux qu'une constante ; ignore un décalage constant | B8 |
+| efficacité en échantillons | sample efficiency | le nombre d'interactions avec l'environnement qu'il faut à un algorithme pour atteindre un niveau donné | B8 |
+| moyenne interquartile (IQM) | interquartile mean | la moyenne des 50 % de runs du milieu : moins sensible qu'une moyenne aux runs aberrants, moins bruitée qu'une médiane (rliable) | B8 |
+| bootstrap stratifié (de runs) | stratified bootstrap | en RL, rééchantillonner les runs à l'intérieur de chaque tâche pour un intervalle de confiance sur un score agrégé (rliable) | B8 |
+| modèle de récompense | reward model | un réseau $r_\phi$ qui note une réponse, appris sur des préférences ; souvent le modèle SFT avec une sortie scalaire | B8 |
+| modèle de Bradley-Terry | Bradley-Terry model | $P(y_w \succ y_l) = \sigma(r(y_w) - r(y_l))$ ; sa loss, $-\log\sigma(r_w - r_l)$, est une régression logistique sur la différence des scores | B8 |
+| pénalité KL | KL penalty | $-\beta\,\mathrm{KL}(\pi \,\|\, \pi_{\text{ref}})$ dans l'objectif du RLHF : la laisse qui garde la politique près de la référence | B8 |
+| DPO | direct preference optimization | loss supervisée sur des paires de préférences, Bradley-Terry appliqué aux récompenses implicites $\beta\log(\pi_\theta/\pi_{\text{ref}})$ : ni modèle de récompense, ni critique, ni échantillonnage | B8 |
+| GRPO | group relative policy optimization | PPO sans critique : l'avantage d'une réponse est sa récompense normalisée dans un groupe de réponses à la même question | B8 |
+| RL à récompenses vérifiables (RLVR) | RL with verifiable rewards | RL dont la récompense se calcule par une règle (réponse juste, tests passés), pour les modèles qui raisonnent | B8 |
+| sur-optimisation du modèle de récompense | reward model overoptimization | la récompense apprise monte toujours, la vraie monte, plafonne puis redescend quand la politique s'éloigne de la référence (Gao et coll., 2022) | B8 |
+| flagornerie | sycophancy | un modèle de langue qui répond ce que l'utilisateur semble vouloir entendre plutôt que ce qui est vrai | B8 |
+| écart simulation-réalité, sim-to-real | reality gap, sim-to-real | l'écart entre le simulateur et le monde réel (frottements, délais, capteurs) ; le passage d'un agent entraîné en simulation au réel | B8 |
+| randomisation de domaine | domain randomization | entraîner sur de nombreuses variantes tirées au hasard du simulateur, pour que le réel n'en soit qu'une de plus | B8 |
+| RL hors ligne | offline RL | apprendre une politique à partir de données déjà collectées, sans nouvelle interaction | B8 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

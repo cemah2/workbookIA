@@ -61138,6 +61138,1593 @@
       },
       "source": "chapitres/b7_production/05_solutions.ipynb"
     },
+    "B8.1a": {
+      "decimals": 2,
+      "hash": "32572da77da782676ccb7ee70316252ef3e9586bced625a276a1fa1cec88fc2b",
+      "hash_coarse": "02b9e5904a8106f2b0dc25b63011b4e5fea0866ac32c5fc9b1fc81107b8b68de",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "0f98787a3419ccd2033d6a6453b73693a70a0f06517b0bf013c1b9054492c954": "γ multiplie la valeur de la suite : n'oublie pas la récompense r = 1",
+        "a3323d3ed86eaeaab607ec1db1f1377dcf86e2a021fc886b65db58c3753e2e5f": "DQN prend le max du réseau cible, pas du réseau en ligne",
+        "a8502818a26ff7796c64f8ef47880bc6130f62cc62efd4770f80b2c9e68964b7": "la cible prend le maximum sur les actions de s', pas la première"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1b": {
+      "decimals": 2,
+      "hash": "5fd072be759f4289f7d45293b1f4ca68bca3d4dec904b262b81e9570e37f8dec",
+      "hash_coarse": "1f12cbda99aa464cf0d94beddb133954b8ef110b21f68676b400f089ee56d380",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "20996a8807b06573bc9d5cf899fd80443c0f25be485bda5cc0c56d9d4454136d": "relis « la cible se réduit à r » (§208.2) : s' est-il terminal ?",
+        "af2669fb6cb02b68e0629afd7fb6f718f055ab17b950de4dc374a6ffdb6c5430": "même terminale, la transition a reçu sa récompense"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1c": {
+      "decimals": 2,
+      "hash": "e3b6d24e0d93a6355385b4fbfe78f02d7bb4067a2f2e9b1f515e2aa103b81ceb",
+      "hash_coarse": "6d3922a214ca2f5ecebd219a16275d038727d8d8390c386b3b5b6ee4371d2963",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "52c372130c449756aa7f9c3fab89abf2dc33871094f02348ab6acf595bc4dc76": "DQN prend le max du réseau cible, pas du réseau en ligne",
+        "540a66d6061018a844fcf79885c8a2dee73dffdecd51b8960a7469af2ee59e51": "relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (§208.2)",
+        "a1fdecda6c7bca0fd32b8e304087f15d3d5add34d957a98f019e1576abb70077": "γ multiplie la valeur de la suite : n'oublie pas la récompense r = 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1d": {
+      "decimals": 2,
+      "hash": "e512a5a9f007121db12b4a8eda3d200dd388a5ef714a7234f3a9e4f059748314",
+      "hash_coarse": "36cd0635d5b9057fe835e4581eac2d3f38d0808cdec8520cf3356f24c18a29a1",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "ca0c418a786103fa5b6df3858f7e5c553099d06ed212281c8679095fe6009830": "Double DQN lit la valeur dans le réseau cible, pas dans le réseau en ligne",
+        "dd2515223013c3a32a4df4816dc56c4d3a40da81792a5b077e10c130fe8f080f": "relis la formule de Double DQN (§208.2) : quel réseau choisit l'action ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1e": {
+      "decimals": 2,
+      "hash": "cd30c5776716c4ad85607063d9c570e5342922201762d4d849c725df44af26fb",
+      "hash_coarse": "a24cee4af8be5800deeff645ba0d2a4f590e5df2eb06dcddb8401e3c12e829b9",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "03d3aee37e3556b927e525a80f8be9ed2f7ade74c5e52174790c49fcf964607c": "relis la formule de Double DQN (§208.2) : quel réseau choisit l'action ?",
+        "1df7088691758d83f19f0c99274b5661858b6406ec1db5dbee9ccdb539023601": "Double DQN lit la valeur dans le réseau cible, pas dans le réseau en ligne",
+        "d3fe7f79a9456ea2478852980b4af799da6df1521bb288fd17718c5e7a4960c8": "relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (§208.2)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1f": {
+      "decimals": 2,
+      "hash": "5c3628422f0a15ef3db9c9514aec97dc397453ecd786b3d0fc8c27968a0bc2d2",
+      "hash_coarse": "a42a44fb96b32251546556d239f3c7e8322c2771cdab5b69a23cd4566085f808",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "42fd06972f3bc3259faad0aeac60a4b2a3ed1834bca0685b956545c18b0af7b9": "relis la question : la moyenne, pas la somme",
+        "6087a8ce902029d409fd9d145cb202c0c55c79c88b4b3f5150bbb6b7e63fc428": "relis la question : la moyenne sur les trois transitions, la transition 2 comprise",
+        "66c19a4cc1636c59ca4f4aa14df07c93a2bc0b8a95b93379e88cc5425313906b": "vérifie le sens : la cible de DQN moins celle de Double DQN"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1g": {
+      "hash": "1ea5b5ebffb38bdc66adc30b75bd0df3a476ed51e0498ede0b9da8c8a6219d9f",
+      "kind": "bool",
+      "mistakes": {
+        "3c7c71013f513c3d40387c1af793421942b022e584ed7250ea83988a4bab0627": "prends l'argmax de chacun des deux réseaux, puis compare"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.1h": {
+      "decimals": 2,
+      "hash": "8655998ff36dbe4276d0d82a4be52f05228a2efc31083fe69e38a49c81261a81",
+      "hash_coarse": "9c1d8a30a6d4d25b18e7ce22c4ff62c8bbfcab9d3a6b5a488727aec9a3d8eeb6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0b8fc2748989f15b0dd22541e75fad47cdcada7d4556493fdbd17d80fd6a5679": "vérifie le sens : la prédiction moins la cible",
+        "5a9f941523ac109e4718eed1956d006719acc69a751b6691f299e4368e2e5f50": "relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (§208.2) : que vaut la cible de la transition 3 ?",
+        "b8f8a58e9b3c5d4fc2d2eefe374af825c24f3ffc7248c97634be5a3cb1c7ac63": "relis la question : l'écart à la cible DQN, pas à celle de Double DQN"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2a": {
+      "decimals": 2,
+      "hash": "c0ec5ac196cf368edc2726d0ca5a9a2241ff9f46ba82d52087f1fcbb7e5f3aea",
+      "hash_coarse": "53fff6fd0bf2ab965951d166e95cb6a1b8a48748252a76c6b4bbb3b7b85047ca",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1b281158b261bcebefd68b0af4b87fe4d976906d1553752c3e2cff33fd339ed3": "|0,6| est sous le seuil : la branche linéaire ne s'applique pas",
+        "6aad6098b75ac180446f0da83181942046662ec9f04dec8fbd82f61aeb4aa310": "|0,6| est sous le seuil : relis la branche quadratique, avec son ½"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2b": {
+      "decimals": 3,
+      "hash": "d3e93d0f44868a4fae30f77c250a74ada99997df4c8d429aa6502444bee8f372",
+      "hash_coarse": "33fc58d1d07458109d717ba221a7c516e8e66992dc566626386a8743c79fa1b1",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1892bd418ef530ec85d964ccc429110ea387f0cb81f76e6e256e2fd12344976f": "|−2,4| dépasse le seuil : relis la branche linéaire",
+        "2822fa7aee702bc95180de2ce6bec5508f484ef05adf7446d46277ba7abead59": "la branche linéaire multiplie par δ",
+        "b17f791dd4ad3b1fa7359ed104d561c830444f9d9a5534f194c8f683eeab6b4b": "la branche linéaire retranche δ/2 à |x|, pas δ",
+        "f586e38c6dd0d275c9f5b1c8d0a3c50b9d3db6a8d09e3c2e82f3ed096586fc7e": "vérifie le signe : la loss de Huber prend la valeur absolue"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2c": {
+      "decimals": 2,
+      "hash": "f3826e29c26b189baf7bfece2097958456516fd6fb2fa950a0be8029fced2dc9",
+      "hash_coarse": "3dd93fca9ceeb5743013b0f50a23e79306ca5d9a07514160eb4d687917ff6cd3",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2b3195d90b48a3912d03996e21acc2db3f30331aea7c05259ecec76ec257f07e": "c'est la moyenne des ½x² : relis le seuil",
+        "9720624d659bb7498eec6c8175ad8bc915450715b69394ec5f205a32bb90c5b4": "relis l'énoncé : la moyenne des trois termes, pas leur somme",
+        "d7873472b991cb20e7ad0e3182e533caa9366c65abf5f389cf18b7f5d34744f1": "tu as divisé par δ : relis l'énoncé, F.huber_loss"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2d": {
+      "decimals": 1,
+      "hash": "ba77c5dc13f19ac8c6ca2313b914342b42bc386ee8051966f5df04c0b803027e",
+      "hash_coarse": "9399d3ddbfe2b5484a86ab894a3cef123e6e65e726b63e17071ce3289bea378d",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1f44b666ed6ccb7656a0e91347684e4c2a02ef52c0aa87c0837f28a4aee48f10": "c'est la dérivée de smooth_l1_loss : relis la question, ℓ_δ",
+        "6b8e0084f0c32cce7fcfc4efe192a0f997edbfb038efbd75622f8d4ccb1302a9": "au-delà du seuil, la dérivée ne dépend plus de x : relis le rappel maths de 208.2",
+        "9b9f4d4606c17379c4ca2aa741759bd261dfe9a9d857766ac9054f7d5b1307fa": "vérifie le signe : x est négatif"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2e": {
+      "decimals": 2,
+      "hash": "d4ac9b18587f365550dec4c6b3e7a8911be883eb26352154be3ddbf8f3fc5f23",
+      "hash_coarse": "1fc3abe42683ed5851858373ca03c70fb4bd44c5897c2e5cf4c4a9c5010ff13e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0500f3c89b6b095d74d19640748e724bf6fe200a2c284d00af289ab36ff758c3": "vérifie le signe : x = Q − y, et Q monte avec x",
+        "0ebc637bf1f68a567b60fcebcb4e6a76a7aba275a659566dde185576d37c5ba1": "la loss du mini-batch est une moyenne : divise par 3",
+        "11e83030aeb7663d94bb01cbeedb944ab0c6f4dfa6188e9abdd10b7d8d2e76bf": "au-delà du seuil, la dérivée ne dépend plus de x"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2f": {
+      "decimals": 3,
+      "hash": "d8fb22fc80909947262b37a8d0cb4ec6a6e273050c99a4182c6408bf8fa98088",
+      "hash_coarse": "499eba57d5afa93772d17889551d92ee7da43ab98950ece0945dd9e202153b7e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4cfff5fa888c187e99cb21b09a5dea3fa9dd6031ea11446e2ec0c6c0ee5bd87f": "la dérivée de ½x² vaut x, pas 2x",
+        "6f6ed4e8fac36d9f62a9260083b3f18d28f88edb95ed089af65f20a22ec44ec0": "la loss du mini-batch est une moyenne : divise par 3",
+        "92683bd14136ede87b06398951c54d712e0a85d7930daee3b09cd064b4eda83c": "relis la question : la moyenne des ½x², sans seuil"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2g": {
+      "decimals": 3,
+      "hash": "c1735d26d16c21e8e245c3159b5ee3d78688bcc8ce715dad540f235581b43f84",
+      "hash_coarse": "3b4ff9e4f428134cbeba7fad43730bd2a938276f28aef104aebdf3e23f30d10c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "0ae801ad0c731aa4effbb8fecd232a4d5e221cd48feb7b26c564e4c7c669e890": "relis l'énoncé : la moyenne, pas la somme",
+        "952cfd99d6a3d1b14e2a510d035075d3a1ce2de2856f3e77230e180a6fe85f88": "smooth_l1_loss divise la loss de Huber par β, elle ne la multiplie pas",
+        "fed7c0a516def06020253742d0e1ad2d4b1921533e7945c0c5a79c518abd93a4": "relis le rappel maths de 208.2 : smooth_l1_loss(beta) et huber_loss(delta) ne coïncident qu'en 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.2h": {
+      "hash": "45e92c2bc889c4cb2d2f6cd4674b94fc87e3f4f25affc42fc82530e09d1a2017",
+      "kind": "bool",
+      "mistakes": {
+        "262c803e5681ff362a85f0e6425c5feeab1d2705d1a4d24d4ea00e89f1b08ae4": "|0,6| est-il sous le seuil 1,5 ? Compare les deux dérivées dans ce cas"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3a": {
+      "decimals": 4,
+      "hash": "7d7cd8388ce92425173f47354411e4eddd02b9c62e725e9a91a73a0d51624ff5",
+      "hash_coarse": "9c715087552e759c8cb272a1b876b968e3c4983ac2d3a0c70d9389e37239f41d",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "270eb07e933a84d59f3d88325879f7ec538f0945b5aacffc8caa537d9c7b0104": "les logits ne sont pas des probabilités : passe par l'exponentielle",
+        "65894e2f80412a29da5404cafa9bb552f680bf0a70ccd641f9730107a6614a16": "la softmax normalise les exponentielles par leur somme",
+        "65f328962dd95c44b0c7e99ff7323a1a54c2361c9f5326af6056aad82f0b2e77": "c'est la probabilité d'une autre action : relis la numérotation à partir de 0"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3b": {
+      "decimals": 4,
+      "hash": "997efebaa3783a05ab41c7456605b511db6984071ad974ff88c699ab4dac8153",
+      "hash_coarse": "629305c866cf45c8329e671948ec752540ca30d60b998ae08119fad5a321dd1f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "20c5cd61943b1c62a0e58dc0a268165eec0b82989ae04044de049a4abc90be34": "la softmax normalise les exponentielles par leur somme",
+        "23192faa698533c4e9fb0e77b0f1dc91b8f7f0449d7d2f78cf767960181d7f46": "c'est la probabilité d'une autre action : relis la numérotation à partir de 0"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3c": {
+      "decimals": 4,
+      "hash": "f5988548299d4b3fd7084e9b706b848efafa3e9304d169e9f0e3ca13e8ee6510",
+      "hash_coarse": "8433c071223bedefffe3d7bc90a5bb9c2dfccaddd50aaba2ff83b6fc3169c1ac",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "75aabbaa8e0a083ab4fc27385984e5cd2e84f6eaf6fba771f74c92b827baf799": "vérifie le signe : e_a − softmax(z), et z_0 n'est pas l'action jouée",
+        "aef5a8424f9e1a12a4a19fa38c6b539811db63360cf3554d96b82a4ff8efdb82": "relis la question : la composante de z_0",
+        "dfc822921e0065789602fc92c2851b983fd82ca542abd8ea6a81b41e6885a81b": "relis la formule de 208.3 : e_a vaut 0 en position 0 ici, l'action jouée est la 2"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3d": {
+      "decimals": 4,
+      "hash": "ca1015f8856f417b0905690ce9ac548958cc1e3374711a338d244a30d24f6381",
+      "hash_coarse": "fa30055592dfe939a46a661fe485f3b1a93848b3e8a6ee41583e7f248ddfab46",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "8b9ffb3864fc9c543153bae5ded50bc5e23f6e79da9358e4838ddcb9fcb7542d": "relis la question : la dérivée de log π(2), pas celle de π(2)",
+        "ea07eac49ff3ef3aac3f836fef2c177fd131d9fae76277fa7517f809c5c0bb79": "relis la formule de 208.3 : e_a vaut 1 en position a"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3e": {
+      "hash": "fd4b74c1ce38d2795c25fca791f5e2dca59186f614d5bdc6d3640593b9587343",
+      "kind": "bool",
+      "mistakes": {
+        "e4b74b6e7b128db749e9f4b690697a01ccf6e50c543da4750ccb094fc137e8c0": "additionne e_a − softmax(z) composante par composante : que vaut la somme de la softmax ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3f": {
+      "decimals": 3,
+      "hash": "8404f478530836bad3c299a566c204a252da7dbb4500be303560b4d62def1e8e",
+      "hash_coarse": "4f061fbbf07de5ca1d8cfaf5812add8724f9ea26324a87abb37e0f7abb2a6e1b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "5bbb3dd3f6e0aea7988757a7fba53aa894d37dfe1d600d386aa92090d8e7600a": "vérifie le signe : l'avantage est négatif, le logit de l'action jouée doit baisser",
+        "6634459f8b2bef01a8ef8d6a21412bfd39c01d306624b6564adce22971df0994": "relis l'énoncé : le pas multiplie aussi l'avantage",
+        "b1656c2757fa0677774efadf61dcdf49c52c6205772d13106e103d9c3f85d054": "relis l'énoncé : le pas vaut 0,1"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3g": {
+      "decimals": 4,
+      "hash": "0cb43b5fd58d87beaed1abd3bca051677f2463f6503bf7c2c3256456195c72f3",
+      "hash_coarse": "94f9b38868f85da5653f0829ad6af64dcde63e0116eb8f01d661c6f6f49cea96",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "8d3ae282c3529ccb29aabb28776ff3b3789b8fed8d732a5d3cb0edca1e12d610": "les trois logits bougent : refais la softmax avec les trois nouveaux",
+        "e148711cadb33710b77a409679af2663cbcddbe8cc49b10d6947efe9c7bfcde7": "relis la question : après le pas, avec les trois nouveaux logits",
+        "fc5071eab023bdc4e77ac4805fd2e833a3160cfac9ecb479606774e39d5067a8": "vérifie le signe du pas : l'avantage est négatif"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.3h": {
+      "decimals": 3,
+      "hash": "524c70c2f126d8d9f8acff21a573393e7ce8a434c40844cd3f6a0e317f1d6f84",
+      "hash_coarse": "7521797e69f77c1c8e9d79f47ffa48483d2b2fba59e4210e085fce6f3b9b322b",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "09dfccc0b77cdfe16146389fe86696290c424739ee72ae672b3dbf0e6acf9a84": "l'entropie de la fiche est en nats : le logarithme naturel",
+        "64c753b03090639ce57cab7711c85057ecc59126ebe39bd9e4c4b39ed8e40847": "relis la question : l'entropie avant le pas",
+        "d1fcf2c4a36e939c3f33f7b6d2e9c799597fc132036ce160f074ac87e636609f": "vérifie le signe : H = −Σ π ln π est positive"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4a": {
+      "decimals": 2,
+      "hash": "d0daabeb219f05f5a3def9b3ac12fa6281dfa3f06ceaae13fc9f2c9dcdc35576",
+      "hash_coarse": "7100509f33b121eaf4f47661c07f1e33641fad3d13538c155416a8a84e9fbe49",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0ae4312f8aa2cfbe34bbb0cd0756846026a8f9a08c06e495c6a4fd16bc3b75ee": "relis « Fin d'épisode ou limite de temps » (§208.4) : un pas tronqué amorce-t-il ?",
+        "4cf85a1886b0a985ff75fa93195e9eba377cd4fd535cd3374560ef8898eedc11": "γ multiplie la valeur de l'état suivant",
+        "7accc9c201380db53f03c4ca1df9cbdd44a1faf0aec7603101adb66b0706d8af": "next_values[1] est la valeur de la vraie dernière observation : relis l'énoncé"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4b": {
+      "decimals": 2,
+      "hash": "1805263bc6c6b30c6aa0b2b831cb973bac03eae3ed5d2d8a9f7d31a32e1b0eae",
+      "hash_coarse": "bd9b629d0eb6aeb5ed71bae56b6c1a033a64e791c2fb2c161df8e3b8ebc1d6f1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0d35e01befee5243643a8f9ceca326afed9dc88358ccf91dea0b901a5f2cfbb3": "le rollout s'arrête, pas l'épisode : relis la docstring de compute_gae (next_values)",
+        "cf17ea54dff2ed97b48da37789b0d2974d64526245ad4dd0b8fd1ab55194c80d": "γ multiplie la valeur de l'état suivant"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4c": {
+      "decimals": 2,
+      "hash": "e2569a06aab302a86afb7524c426766fdd1e8fe5398ccdd6742873809a8a469e",
+      "hash_coarse": "92bfcbb3e5ae50379e052f44173d78e65ed2568035ea0780b55fc23987c0fbfe",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9514ff50eb80010e7071ad708b4a37a6261bd61c402a37884aa79bdc695b9910": "relis le cas λ = 0 (§208.4) : avantage et cible du critique sont deux sorties différentes",
+        "f27d96588d9c356677400a1a782c9d284a939796e9124e5516764abb15610ff9": "relis le cas λ = 0 (§208.4)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4d": {
+      "decimals": 4,
+      "hash": "5cc4d82f8633702a6963380be47b02bdcb4f44609ee0953bb3e85903d8b26f31",
+      "hash_coarse": "bb5e8da2d4e423caaa87eb9be9d60676a69a6de3dd8bfcc571af76364076de96",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4ddee1763c46eee9465f8a33dd328508be6e841e10edcf8622981fe847d3d1db": "la récursion multiplie par γλ, pas par γ seul",
+        "7d293acd05a74d64e08ef1445c3f2e6572cc6a5584e187abf5c05faec4fd53f1": "la récursion multiplie par γλ, pas par λ seul",
+        "a32e4b5c3a095a2c0054a0cd0e415b6a8e944c46b2d4fd3121e7a52711b18c27": "relis la question : λ = 0,95, l'erreur TD suivante compte aussi",
+        "fac9d0b41a281381c0fe9daf16f75c5536ed63cad9c3c7bdafb199ec34e1d39a": "relis la question : l'avantage, pas la cible du critique"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4e": {
+      "decimals": 4,
+      "hash": "ff3397a320037c0a40d6edbf5e840631620e287ee10badb98f260b5ecf56c428",
+      "hash_coarse": "f162ca613ef34e174246207af198122f7352048f74939cf1f2568d8a541f8971",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7dbc4a8b7181607e4e146715318f60194777938445486b284b517d9014b30851": "relis « Fin d'épisode ou limite de temps » (§208.4) : la récursion s'arrête-t-elle au pas 1 ?",
+        "a79d5fca9957a97adc09a8c11408a39512984ef28bc1c61fef8a3e31a41a90fb": "relis « Fin d'épisode ou limite de temps » (§208.4) : le pas tronqué amorce encore",
+        "c00807c8a53bb2b0297e86011f006cbf1cc4e67dfc22e42ae11331f0fe56bb90": "la récursion multiplie par γλ, pas par λ seul"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4f": {
+      "decimals": 4,
+      "hash": "360eeb9c1380b69075c4a20c1090b0e7d2971c33986ddd738baa5ff8d4a0e315",
+      "hash_coarse": "52d83776cc38b143c3083557f03adec73207e304ff74dd5900202cb8a22f8e2e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "8bb048de808cb488c642ec941e73fa962e3f5adc64ed6a133ce258f0d8f9e966": "relis la docstring de compute_gae : les cibles valent avantages + values",
+        "cb400531e044903d09602518585aee9e063f2d096d0d67ea02318dd677e1a7a2": "relis la question : la cible du critique (avantage + valeur)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4g": {
+      "decimals": 3,
+      "hash": "d939515a886626862b63b8f6721610209e0309c2ba4f99a424e9ca054d599096",
+      "hash_coarse": "f6abb9e3715fefc0aa1768bdfc5a6ea916c96b3b38cd8f0154305ecb2c941893",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "602374eb7553c0109ac7f53a9e16e388bed30b93c8dede9a88d977c8d5b013fd": "relis la question : l'avantage, pas la cible du critique",
+        "6f5b754db239f01c949b7d49a64fa738eb0f85b45a24a3f1413d9fdd17d1c421": "relis « Fin d'épisode ou limite de temps » (§208.4) : la récursion s'arrête-t-elle au pas 1 ?",
+        "e4630ed50c51056156203a120ad0fbb0825f11115b3999af7ce2b26f58a8a810": "relis la question : λ = 1"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4h": {
+      "decimals": 3,
+      "hash": "ceb93dbcbbcbf38f51d5befea5d0e6124f40ffe796369c8cafac5b0a9928078a",
+      "hash_coarse": "89f910d8840d7e6d525f01e8a1d1b186e9c4debe8a4b5c0d7a85617032b33099",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "1005896e8066fa7e9f9ce01ece62e71ad64eb6cd8bd8f936e1f0fb415cc63d42": "relis la question : λ = 1",
+        "80b1082e536c4a6881e6a6c137837c27cce8fa6c5114aa80a2ccc31829a77e29": "le pas 3 n'est pas la fin de l'épisode : son erreur TD compte aussi"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4i": {
+      "decimals": 3,
+      "hash": "c9a4784c76eaa077a3492ef80b4810d75b19e74e0e0df50847e990cb73d2366b",
+      "hash_coarse": "17a5361a0fe6cf5a6ea4e743db90f38f744aa51131f07e241cde77a303fe7104",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "7c8abea004621813a027617fee74a1dc5e34cd8528ca45dd7fdec9a2f9dce8f2": "relis la question : λ = 0,95",
+        "bc3d2cdfb7591dd38e946d9e69538dc3388bc7c0c94c589f115f1011518bc7b9": "relis la question : sans amorçage au pas 1, l'erreur TD de ce pas change"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.4j": {
+      "hash": "16031e9df40dfe2903f6942a30f45e0d77d62098df3979858baa21096dc5f60b",
+      "kind": "bool",
+      "mistakes": {
+        "bf700330e6b1d861ba08f6deaf879fe3b39f990170f4761fba8fd40cf3ae2840": "écris Â_0 = δ_0 + γ δ_1 avec λ = 1, puis ajoute V(s_0) : les valeurs intermédiaires se simplifient-elles ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5a": {
+      "decimals": 2,
+      "hash": "f16e79cf37ad5156447e9a8c8a0ef58a02747aedfdf10001ca3d36c8e5623c2c",
+      "hash_coarse": "7cf08f369f360cce552c3c6e5243804eeccc51fdf6bbdad3a45a753fa3e6366e",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "a6bd8f9f0f9849f7d78e7f440924321f4506608cb47e664c0edd58c7294894bb": "le clip porte sur le ratio, pas sur le produit",
+        "d1e05531bf4623a8e5035b3bedae3c2f9ff50f3d201e1ca51a78cb1720ed2d23": "le min prend le plus petit des deux termes : relis le cas de l'avantage positif (§208.5)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5b": {
+      "decimals": 2,
+      "hash": "9eff3385217f072f6555dd10a8eb3f2e3957fada1c069709103a62cc004bb6e0",
+      "hash_coarse": "401ba529191f6b0692bc2cba28e7db06d3fe81668be29c5a976dacf20fe5b428",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "287b69c80b811a4622c15efa8d7e7b4b6c5cd770822244a5383ceca69eb6988b": "le min prend le plus petit des deux termes : avec un avantage négatif, lequel est le plus petit ?",
+        "8af0aad1d687c4e01d972d932e6eb0ba870d28986f2609750f7558035578c794": "relis la borne basse de l'intervalle : 1 − ε"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5c": {
+      "decimals": 2,
+      "hash": "4a670b73fb45a8bd456e34b35c0d48638429e47e5d0b37dfbcfaac5ebd0ca148",
+      "hash_coarse": "5edc070721569d7592da5c998715fcf5baeddf74c00036dacb71d30d0ca5a2c5",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "42848b950f9a280e048962538e68dc071b64f1c547d330e070828bce2f6ccb85": "vérifie le signe : l'avantage est négatif",
+        "786af114bf5cd0c4da61c1a3048d4e3c972ad0c7ca85fc16980e1b0e4eac21b6": "le min prend le plus petit des deux termes : avec un avantage négatif, lequel est le plus petit ?"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5d": {
+      "decimals": 3,
+      "hash": "0d9d93dc5a99adaf4c34528f46af0843ab1318f32d0f48fc9c54b6fc10fc3241",
+      "hash_coarse": "d9df2d097b0409f02aea2a54a473c99467f030b2092d6b2fea1695e7b380133f",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9bef614b40adf3d79a0ebc04e41106198324e574a872734f15255ce81d4e3400": "relis l'énoncé : la moyenne des quatre termes, pas leur somme",
+        "9efeafb8cdb5d75db98b757c8e33d47d71cdc9b093c19efb3c0a8d6b0c851f7f": "vérifie le signe : la loss est l'opposé de l'objectif",
+        "a263f1bf4a56488c596a3689fca0802c75304e1671bff5ce3197ecb4a0593a2d": "relis le rôle du min (§208.5) : il prend le plus pessimiste des deux termes"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5e": {
+      "decimals": 3,
+      "hash": "2ceaecad429d9bff06d99211165018c700546c30676f7d3c99928ee560e099e0",
+      "hash_coarse": "5c9446bacaca8e20d5b45519445ea913094cabd45397abdbcca2a0e98237a801",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "492e2887fb550a8675b8e89400f6e9700bdbffcfd084a9e61fc28706c34752a3": "compare les deux termes de la transition 1 : lequel est le minimum ?",
+        "52d8cee90f088afc1fe3357aeb94b4ba7d4c8a82b47d58e83bfe7975e7a51a95": "vérifie le signe : la loss baisse si ce ratio monte",
+        "649b2a7c1c51b3f02581cfca7a217d7c978e66666d41484d853db8368be48d16": "le gradient de la loss moyenne divise par le nombre de transitions"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5f": {
+      "decimals": 2,
+      "hash": "833bdb9b0d978c4f38398594b22316dffd95cfba07a28e59a177b98484ac63ee",
+      "hash_coarse": "3242068ebc6d5f832c9b36252db10468222e74b3004f72cfd5410a0a5eb12195",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "0d02f3dc3007635112050a52440027c2cb238ea621b87e3935c0bbc72e8339ac": "vérifie le signe : la loss baisse si ce ratio redescend",
+        "a47bbc9bc48b70629b8d53fc4fc04bf2fc26158434dc91ae766af6e3541786a7": "compare les deux termes de la transition 3 : le non clippé est-il le minimum ?",
+        "b0afe087c6ec59c7ca79523228df7c8082c223a509f0f40ccb1f52b549bec776": "le gradient de la loss moyenne divise par le nombre de transitions"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5g": {
+      "hash": "b59272abe18ef6491bac09c7be56b3c51f1986d50cfb686ebc02de8675767efc",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "0a5fb20261c9bb97cc7b54ef526547ec8746b8bf9f5602674135f2f2ac1499db": "relis la figure 1 de l'article : dans quelles zones le gradient s'annule-t-il ?",
+        "4328b856ace0600f34c0c7ca9f0f1042ee8125c53ae901b836144af39d8a9c82": "un ratio hors de l'intervalle n'a pas toujours un gradient nul : compare les deux termes, transition par transition",
+        "e84e339a8fed5b24e327af27088be0bd66aa8f8611764c81360c0da5e2a380fb": "compare les deux termes de chaque transition : où le terme clippé est-il strictement le plus petit ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5h": {
+      "decimals": 2,
+      "hash": "f1731cad31cbb0f89097c8a015fd019b827f835d9d87e45662e6232819e7e5f1",
+      "hash_coarse": "96c2331a53a7299598212bae91d08de4a5008fb2e337af80c1f1793e4354eb39",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "4a0376258f007a9c6bc9c9201a61c7dd3186a3c348cd9422047b4cae62371fa7": "la fraction clippée compte les ratios hors de l'intervalle, pas les gradients nuls",
+        "f2132ea6b95b87c8846fb3cc22251cc99f0cd5b2b1116971354bcc4821953062": "relis la définition : |ρ − 1| > ε, pour chaque transition"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.5i": {
+      "hash": "3997f2214ed3d3bdf4228b70dc41d1dd8eead5aacd47e04dff3da7298896d2ab",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "314b50fbcf163f916d565145f75672cf2a1b24cf7fc47d7fe0519ad8c0719d52": "avec ε = 0,3, une transition reste au-delà de l'intervalle dans la zone à gradient nul : laquelle ?",
+        "a0e1e4d526b0710afb5e483c7f06fd501359c710d39a735a72eb8c04e040499b": "avec ε = 0,3, l'intervalle devient [0,7 ; 1,3] : refais la comparaison des deux termes",
+        "e9b609f3f3637e2864b3f34432fd6cbbe388256e939921c8ba478b76794f07fd": "relis les quatre ratios contre [0,7 ; 1,3]"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6a": {
+      "decimals": 3,
+      "hash": "5f0a4ef8d963156f2209d70c90d01d2783e94cfbfc32fdb637aaea93f3981c19",
+      "hash_coarse": "c747a1f19c039d57d1063cc4c7758f9c49baf01a92d2f4d4e6c55df8d6db63c2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "25b11d155b145d36257e2d20d31f619594f0d18725a0d23e663b59fd4c00ebf2": "vérifie le sens de la différence : la préférée moins l'autre",
+        "53249d4f1bad9782d8ccd5fb371edadb12c206c2e8f318d754abbca39d0f44b9": "Bradley-Terry passe la différence par une sigmoïde"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6b": {
+      "decimals": 3,
+      "hash": "1e374a23f0289ea000accdd1f2e619dd0ee1ef07b24e49ddc7fbac0ece948e97",
+      "hash_coarse": "1521f53fbd0e54aaa0e7f8b68cd335e97274bc141b24e22b0e439491838f7dd6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4e6cb7e4fafebd72e128ff6769de3312844b8facb501b7896ecd36bd7ff5806f": "la loss est −log σ(d), le logarithme naturel",
+        "ac2787295a1c6338e5f7abdcebff7471e0fdf30ebce767fd8d605d17f3d2d5e8": "relis la question : la loss, pas la probabilité",
+        "d2e2190e78f0576b24c2112d81badfe9cfe2af22cb2a9c64317209a7f9b122c2": "vérifie le sens de la différence : la préférée moins l'autre"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6c": {
+      "decimals": 3,
+      "hash": "ab76c830c0b55aa8c49b6814c7781f019d75f249df19e3110a3a3843f2454069",
+      "hash_coarse": "effa7646580e7b6570488b460078f72372a7cab2ec893d4b2e7761635305e5dd",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4830d7152def7672f11eb0cc910f2be38b539330df4f70d35d83bb58112dcf8e": "vérifie le signe : monter r(y_w) fait baisser la loss",
+        "cf8f9feea02be7f8fea8316b37b94e4320f3f4d07e5af5f1034a771b7ab855b6": "la dérivée de −log σ(d) vaut −(1 − σ(d)), pas −σ(d)"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6d": {
+      "decimals": 3,
+      "hash": "20468f96f03b036647c60a02abd7f4436e00c524a462dbcb4b6db89c29a37fed",
+      "hash_coarse": "4e0fa0c1bc437e793d8535d37a23d21a519446345039a0a4e172afef0d725675",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "20d4e1d1ec424fa7a63f6c2bcc71a32a3eeefe80e0c7432c8ca55866a8a41e2b": "la loss est −log σ(d), le logarithme naturel",
+        "225c1b7b9b673b4ae740e95a568e273827ff8fe12b69de3c544670807789b1e3": "relis la question : le choix inverse, avec les mêmes récompenses"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6e": {
+      "hash": "f580aff55c4530b13a656287cf5d2383927206f648f7c341f9734d7823b27640",
+      "kind": "bool",
+      "mistakes": {
+        "111893f1d110d04a21b7c9ea5b658c869085a3e35284c4b7418756b4512ce40b": "relis « Le modèle de récompense de Bradley-Terry » (§208.7) : de quoi dépend la loss ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6f": {
+      "decimals": 2,
+      "hash": "f6480667857506e367174dfbfa0363802cf471104cae5a5f9ca31ad61e3eb2e6",
+      "hash_coarse": "b65cc043bd77a0533d2ee5418dacfec4ac98735061e15faa8096ca7b10545cc1",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "74cfd5fdfbf84378a7ce1b762dfbde0d6d76aa20bd7594eeb601bf4ff92f5d4a": "vérifie le sens du logarithme : la politique sur la référence",
+        "7cf75dc987dc5c6d9bf55a22c73b7b57892f4d3b59de17a17dff2fe0aa291b1e": "relis la question : multiplie par β",
+        "9cf21722f4bf0e3e2f334e0853c437a94376a9afab3ed32cb4d8716878eb5446": "relis la question : la récompense implicite de y_w seule"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6g": {
+      "decimals": 2,
+      "hash": "2c737e6a8841d2bfc1323d4416ca16a38d14f6cca839d35b69c59608992d6158",
+      "hash_coarse": "2a0837d73c2224f31d924a9c3deaf8d5a239c1fa85426b4c4d024b923c0f43a6",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2a0fafebd245bf51411c06940eeaf1e63d5f9e0c4bd12ab15961d62c2b8d9e10": "vérifie le signe de la partie de y_l : on retranche son log-ratio",
+        "a1868e9b581d1e045f40b3568e959622a25dedbe6fd5db8a88c251794aed35e3": "vérifie le sens des log-ratios : la politique moins la référence",
+        "e6fdc8a9ad1f75216cd21fa38b7ce31dbe44bd7d9fc1add4836fb45566cb2a27": "relis la formule de DPO (§208.7) : β multiplie la différence"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6h": {
+      "decimals": 3,
+      "hash": "e40930b8d606c7f3511219db80d2426d65f246d8008f8eae582255ac07bfb42d",
+      "hash_coarse": "9841d7074f4526257fa39ea503d61b97f9dee87c2c702f1a1ebe93158e7263a2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "01e3f4fe802d7b4856d9472016cf38b79401831e5fc7ec68356f16dc6ce9abf0": "vérifie le signe de la marge dans −log σ(·)",
+        "ced69c2a658af2b796a9689536d1192b6ac1b9919bb4f1140bfcdbb8080719e9": "la loss est −log σ(marge), le logarithme naturel",
+        "fc92b5eee0dd508d02732ffb48a4d150e89e0c38af40aefd452fd4d9dee670ff": "relis la formule de DPO : β multiplie la différence"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6i": {
+      "decimals": 3,
+      "hash": "017f477e08e9e1e45d08b8ac365cf2fb686251f1cdb262eac6160bcff034e864",
+      "hash_coarse": "3842a7326b5111ba6790d0ba2c8e727e73f5ea644745433636b8ea8ed59570e7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4357d801ed8fd5c67ef90ef6abcabb4b997a06c3fed2f0aa7f28c7d0b1a83d9f": "relis la question : β = 0,5",
+        "f05c14025240e3ebfe13c7cf85ddb68ac35542189d1d991192ba12a0ca65def5": "vérifie le signe de la marge dans −log σ(·)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.6j": {
+      "decimals": 4,
+      "hash": "25bc1faff80c139dba6764d57a9ec929ebc8fe0fc91ecd01f9102bea3628e559",
+      "hash_coarse": "b6341fef1bc2892cdda0ce714f7e2236cf8b0f4c688bb8c229993e48c08b4427",
+      "kind": "float",
+      "magnitude": -2,
+      "mistakes": {
+        "4586e4e48fbb635fdd86723a4a8ec7dfba232cc037255945ad06027bbfa976a0": "la dérivée de −log σ(m) vaut −σ(−m), pas −σ(m)",
+        "d75b6119151458cd1869fe22fdcb8eb3d7dcd47a2c311a217c98f27803914226": "vérifie le signe : monter log π(y_w) fait baisser la loss",
+        "fa266c4026d33108e8a282a06d3d341d35f34bbb72def5dcea3d79af9f1c3e49": "la dérivée de la marge par rapport à log π(y_w) vaut β : n'oublie pas ce facteur"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q1a": {
+      "hash": "d2fa5a37ad88529b6d0be6d384471d428548b2c7bd4f9a9a8a66151d0670fd3d",
+      "kind": "int",
+      "magnitude": 3,
+      "mistakes": {
+        "30fd59084e4b088d912ea30af167c8546d7b614a99ebc07561bd41a01ffdfc8f": "une case par état discrétisé et par action : n'oublie pas les actions",
+        "9d4f016d4beaeb1ab2a37ea4fe3c68e3186f48c11457aeb58ae8f924f7c33317": "les intervalles des quatre variables se combinent : ils se multiplient, ils ne s'additionnent pas",
+        "d310ca425a3d252a219fe6736169238c20e88306f825fff358b0c745c8e773b4": "relis la question : 6 intervalles par variable, et quatre variables",
+        "f72571d3ea2c6ee99dbc554700dbed511840c1ffcc39777f6330a291c0a5fb4c": "6 intervalles pour chacune des 4 variables : vérifie la base et l'exposant"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q1b": {
+      "hash": "13c28f05d5fc79a998845407e2f5cbd7b7c0de1e6547569629c06d215a474536",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "88ca780ed2dd1acc60bddf06801bf0252b62e46a0d06a25f470be74c643e22a7": "il faut bien calculer les valeurs pour choisir : relis « Pourquoi la table ne suffit plus » (§208.1)",
+        "a174d0e340263cdd917605d71ca5214ac117a880c7d150452ab7fe45a5c5ae81": "relis ce que rend le réseau de 208.1 : une valeur pour un couple (état, action), ou un vecteur ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q1c": {
+      "hash": "3146cdd3657408227dcfea39590ab92633be3055955b462355c7bebb45ab267b",
+      "kind": "bool",
+      "mistakes": {
+        "068841dd3df8c42ea3425cf7287fe0db498078dcede618919f8039eaad4a52dd": "relis « Pourquoi la table ne suffit plus » (§208.1) : que partagent deux états voisins dans un réseau ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q1d": {
+      "hash": "c859c8bf624910a923dffbb64d28e7ea90164917c1844ebb60ca4053cbab4546",
+      "kind": "bool",
+      "mistakes": {
+        "a098a6c38d71632fc937036b3785cddd507f3b50fe12d6936f5f24eed01f1727": "relis « Apprendre une valeur par régression » (§208.1) : que devient la méthode si la cible est dérivée aussi ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q1e": {
+      "hash": "5aa612ace62cbd45c562d0e5340d004360b29a274e4ec827c061590c7b987aad",
+      "kind": "str",
+      "mistakes": {
+        "07faae4b8a46a525672c7a87420d0c8a42949589f6efcab96e08e2ecaef1e6b2": "la forme commence par l'axe des exemples",
+        "610182bd9d9f9c7937753c462e3a08540f395cd5140957804ba868ec0c204437": "4 est la dimension de l'entrée : que rend le réseau ?",
+        "8856f261fea29ff26a8ec6f5a9d5e06a3a282455a92f69864f2147c1b37870f1": "le réseau rend une valeur par action : combien d'actions a CartPole ?",
+        "b67f6bcb900aabb5fbdc523e7dfb7265a9eab1c49d2b92b2b249ea36f9d62cd6": "le réseau garde l'axe des 32 états, puis rend un vecteur par état"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2a": {
+      "hash": "0d0aa6cd1868543159c78e36e26b846e6238a4c0ef6b5d82e8d86b600d14b4cc",
+      "kind": "str",
+      "mistakes": {
+        "140f221fee457f71db71d17fb043a92dc0ea384e861f1b7bc2417888cc56db31": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "18f06a5eb269408bea690252c17b1fcb7165911e1a300f36e917021b99633e96": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "22cac5f1cd24d54268048d8a1f468b4a40b9cf16dabada34e14e398adafc278b": "au moins une des lettres choisies n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "24ed11aa4d17fd3ad455b7eb1a5472e4bac5653bc981e6479104ed34ddfb8961": "au moins une des lettres choisies n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "28c66432e0cdef45f696d929f1a6eb927235693ada951db7c10830582f2c4dbb": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "2fe45fbc433efa684bd1e60cabc101ed0abcea28fea742cd0fc28c95c1b8bc76": "au moins une des lettres choisies n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "3408ca9eef9d189ce3ae99141295b6bc234ae7a3c6b2f85ba10c8b8a32688c6e": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "34b031813462ab7e1280c29abc8ef640d8672e441f44fdb70e2ab88b3dd0c328": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "42ee0d16b665e20aa3cf13f553389e3b97a34e3ca100c535ea149962c07b3a1d": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "46e54ae51fc028f2d898f648efa069008781be3e820c679ffd2006f28c301259": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "4ae8f7cb2f3c7a19c2acbb4e8e3cc97c25b72df3cffb6d246bcf632e9b16bee9": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "5b5d92bfc2220031bbda2f15c0d74b0945fc6c23156dc895693a7543c9ae63a6": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "5b806089205fdcb5681d73b9217336fdb31ef68b69726e19c0942dad54de7942": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "670531efbb368af037ff37c1b608a1edd7f757934913e430b7d76fc875727c12": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "6f8c17b8b55d2737c222b2f239f252b6d1aaa840f6622fcdbbbaab9bf2a462d2": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "80e0723a6154afa00f0ce00b8f95bf5e9534d2cef8ad3e5b7f99c137da10a4ec": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "85a2a44ef34b00327eef1a9bfded93dfc2973f722f6235db217119b288ed79b7": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "85f6855bd5ec7c5b6c612c556827faa073c5432c05e2e1ffc6b9a31dbffcfcc5": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "8d71d4b17ed90d1aadfff396c66be964fca883184109d16b5449f6d2630596bb": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "9adb5b16e12f922fcc5838196293cd35a191ab3a6489fa7948a526424d7d9af3": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "a8f0176df820a174abae42888d7ae9333629dd0bdffb5d190a3e93d2b5a2d6ec": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "aa3bfa2c9a966f093c9618bd3923720b88842b6125bce766ff5470ba916e5bbf": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "abb75957589cc87863d44d236a7c0d0626856ab65466cfe2508d27781e8572a7": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "af04631fc4150eb43ff4108c1220a96139128365953c430202a72e4c7be88166": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "c4ca49c26ba2d4c99dc4d66db6591dfd13c6144ae39ce6d19dfa9df19480f338": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "d04fe733b0a802400858a6d287034e48d045bb6526a2f5a97cce2202bab8cf8b": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "d988a8e1abbbc814f6eef6a0e19d5db3de5e09c6b642457c563d69c26fbe3495": "il manque au moins une lettre : relis « Instabilité : la triade mortelle » (§208.1)",
+        "dd0e8774fdba8d4c854e326ae299ccb33b8372db5556290450c2d52e2c4558e4": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "e422e3d75759e3eec420cdc75e7f1047c303b5b07eb503f7a2d672ad765281c7": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)",
+        "ea6795ddbe3f25e7018a8040435b706a57992bd80f00c3a4b121159ad2af86d6": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Instabilité : la triade mortelle » (§208.1)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2b": {
+      "hash": "3a65222724aa2263aac4f18c2142db69bafacea9500ef8ea7297218fcc8cc24f",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1e81e18555b5466d5b2002e4858c7acdcc8d31fac10392fbb02223aa4f6b3063": "compte chaque ingrédient séparément : approximation, amorçage, off-policy",
+        "d1f4263fbca5db73ebb51c5cdf1ad8bf76f09b159a50417b729d4f25a2ef9309": "relis la cible du Q-learning (ch. 26) : amorce-t-elle ? Et apprend-elle la valeur de la politique qui explore ?",
+        "f890e3c9571ddf2bbcb59387bfaa85b7e20c9a177923ecd19053b9f8eb0bbe04": "une table est-elle une approximation de fonction ? Relis la triade (§208.1)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2c": {
+      "hash": "dcb09f630562d2d1c29b7eb1b6a98b95656fb845e22581bbf96ce12e281967c5",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "00305b4fbd21b5ffa5aafe21a4dd0d249799324d846dbc7c2612ed425be8ad3a": "des retours observés jusqu'à la fin d'un épisode : y a-t-il une estimation dans la cible ?",
+        "30734a44dffd72bb3be2a7c7a04ed8b5c9cb78d1eac657f7c73de84c94da1895": "relis les trois ingrédients : les transitions viennent-elles d'une autre politique ?",
+        "6ba3f0d69484423b1adf00c391d3552300313f9e2ac0fb5f67966d486e348494": "un réseau qui estime V est-il une approximation de fonction ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2d": {
+      "hash": "3ee1b9785bb4140fe7e654430c44a1bf5fc0154fe68ac67e6ca59f04b543decf",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "832d1ecc2bd3825947f7dd30dff72977b9146cae1932eee4f2cbeeabbae79739": "la cible de SARSA contient Q(s', a') : est-ce un amorçage ? Et un réseau, une approximation ?",
+        "db3b96320aabb41acfc06423054bfd537462ae56449e7ccca58b7b1cc4480b06": "compte chaque ingrédient séparément : approximation, amorçage, off-policy",
+        "e7c39dc499b62c0f0cb7883de4274831ed59b8829d5a3fd210a4f1697584fa47": "SARSA apprend la valeur de la politique qu'il suit (ch. 26) : est-ce off-policy ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2e": {
+      "hash": "790f219ea52ea2abfbdfcf22dec8e8006cdc73419edfcee7e6895e76a770cdb1",
+      "kind": "bool",
+      "mistakes": {
+        "ec97f8ea9972d8ed925dd68949546b4972e440faea216cf0e28acf364e4b1b53": "relis la fin de « Instabilité : la triade mortelle » (§208.1) : DQN renonce-t-il à l'un des trois ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q2f": {
+      "hash": "03c251de67c94826b0ef6e029e1337e8cd150832456ca07dfe483df224a5873b",
+      "kind": "bool",
+      "mistakes": {
+        "6d6ce373db5a41e2f30e105b8169a877ac827436d1adce3f14384c6acd7b51d3": "relis le troisième ingrédient (§208.1) : de quelle politique viennent les transitions de la mémoire ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q3a": {
+      "fractional": "compte les tirages d'une transition pendant tout son séjour : un nombre entier en moyenne ici",
+      "hash": "0ab77d41892dfa45ebe2aebcf6eef896b528e5be6e9e0e4f8235341c7c724d50",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "3f06b79c65509de91d7203204cea7c87c2f1d8429cd99e01d043851bed5c6a42": "multiplie la durée du séjour (en pas) par la probabilité d'être tirée à chaque pas",
+        "970e3e1cdd6ce7a18765e891100b7f855c019fe9be1f2b653b3f35620e8f6356": "relis la question : combien de fois une même transition est-elle tirée, pas combien de mini-batches tient la mémoire",
+        "d4ee8d1a04948066577cb296ab8310adafb461e7b05417dbb7ba538b4fb4fcb5": "une transition reste dans la mémoire plus d'un pas : combien de pas, et quelle chance d'être tirée à chacun ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q3b": {
+      "hash": "90cc7240c6adba6b59a4c5a9358facfbedfdd22c26a4a7fc4a7179e01154dbf1",
+      "kind": "bool",
+      "mistakes": {
+        "d8e6dba4b1614a67ab4f1a575220f5bc43a64465b93ab5bb132de401833a89f5": "refais le calcul de a) avec 1 000 : la durée du séjour et la probabilité d'être tirée changent toutes les deux"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q3c": {
+      "hash": "096acdeafb16f31e69d8a2bec05551f8445790368cf62e475b664258f5568a89",
+      "kind": "bool",
+      "mistakes": {
+        "1035377d1b55fcd25888e2ffd3931177a306d69112c1ee6af5da7d133a593119": "relis « Les deux stabilisateurs » (§208.2) : quels poids calculent la cible entre deux copies ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q3d": {
+      "decimals": 2,
+      "hash": "a3aacb93fce59cede91faa10e8b061e4de1c5a2012be3983fd73671f37697e46",
+      "hash_coarse": "44a511ab86335467915a5a84a390e963c840d427317f9df82befbeb0e237aed2",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "4341b35fe9d29d579abcf7844f63af6c2f8b32a41316c155be3d0c30a281779c": "les parts se multiplient d'un pas à l'autre, elles ne se retranchent pas",
+        "bbe76f6163a89d378de1f84d10adbb6fa53365998029187fce62e29a487fbb3a": "relis la question : 200 pas, pas un seul",
+        "f56b4cd86f82e0918ae9f7bfdfe040b6de553ddffc8da1a884a99f48115021cc": "relis la formule : à chaque pas, l'ancienne valeur est multipliée par 1 − τ, pas par τ"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q3e": {
+      "hash": "5916813e1d94cfae351972aaf3bd96a7613b84c36e3712f7b4587ce60905a20d",
+      "kind": "bool",
+      "mistakes": {
+        "8ce2e85928cdc202e63f94738ee736a82f05dbe15e7b555458f8daf8eccf8209": "relis « Les deux stabilisateurs » (§208.2) : combien de fois sert chaque transition de la mémoire ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4a": {
+      "hash": "37847f32439eb9d6dec2de6f5742f47e43b2c89a823edc62297372128dc538bf",
+      "kind": "str",
+      "mistakes": {
+        "540e066f30f4ec6aaf5d00569a177b51771c552488cfb3b1a82f4bedb036c130": "le max choisit l'estimation la plus haute : dans quel sens penche-t-il ?",
+        "830af59c0f6fbba9f6a6ac0451ecde9ed733123b41ac413cfdaf7ea55e677f77": "chaque estimation est juste en moyenne, mais leur maximum ? Relis « La surestimation, et Double DQN » (§208.2)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4b": {
+      "decimals": 2,
+      "hash": "a59dc9b18a46fb76c948ae716233240f878e04510ffc10623710f089d72b1eef",
+      "hash_coarse": "8d7f55e1beacba85ce6c1b1b9f0e76dc783688b97c7fe294be53f3b986493574",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "65a44f5b0683174e602f13d0e51b8ef70bcd7ef6ad72f893cbc93a333683cfda": "relis la question : l'espérance du maximum, pas la probabilité qu'il vaille +1",
+        "de7722eea6f2c515b1320d8f8a926679cb1c21b74bbc3fced57f49160ac1169c": "compte les huit cas de trois estimations, pas les quatre cas de deux",
+        "f9ae47edacba8c1ad2b0c7094f4478e794d9ccf253913e58d1203018bafd665d": "le maximum vaut −1 dans un cas : lequel, et avec quelle probabilité ?",
+        "fab5e54334ae308bdac44b495f9b378758c831616f7df14f67bc37f1a3c2bb86": "chaque estimation est juste en moyenne, mais le maximum des trois ?"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4c": {
+      "fractional": "la valeur lue ne profite plus du bruit qui a fait gagner l'action : son espérance est un entier ici",
+      "hash": "7f4d2992a4d4ede585309311f101ea6e9facde97b1584f6eb16d297e583743e7",
+      "kind": "int",
+      "magnitude": null,
+      "mistakes": {
+        "33dd21151398214a4e8862124d63a98464742e7372a3cd488f8a2b1019b4fc3a": "les deux jeux sont indépendants : relis « La surestimation, et Double DQN » (§208.2)",
+        "cbabf24aee9267f83bad83d7667d93b60cac5f42cd6c4d775fb50b0540087053": "le bruit qui a fait gagner l'action dans le premier jeu est-il celui qu'on lit dans le second ?"
+      },
+      "sign": 0,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4d": {
+      "hash": "518a528cd17c41d51e634e9d0be298d5a95598a0530d4c8a40ed9723cf76b7d7",
+      "kind": "str",
+      "mistakes": {
+        "562ec66fc276e40e8e3991003dcd75ba87b282a3f249393c82eb0511ee165cb1": "relis la formule de Double DQN (§208.2) : quel réseau prend l'argmax ?",
+        "6b58af299933d91e42041b43ea2cef2bc791c4a2f293d765bd6992938c12f2f5": "Double DQN n'ajoute aucun réseau : relis la fin de « La surestimation, et Double DQN »"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4e": {
+      "hash": "7dbd951df7cae57a0ca3eabf206d572ada7d34c338c3d2ddb7032c5974cddc0d",
+      "kind": "bool",
+      "mistakes": {
+        "adeb31c3a8b2f8dad25b222b685f4d4b24801f09500efaffa9024e88dc8ea464": "relis la fin de « La surestimation, et Double DQN » (§208.2) : combien de paramètres le changement ajoute-t-il ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q4f": {
+      "hash": "c60f45308f9c8a16953eeee79f5cff9ab894879150ebae6abe7e189267afcd2b",
+      "kind": "bool",
+      "mistakes": {
+        "a755058a10b473c4c2abc95217403a1c5cc6a5a611d66d07ac1dd15bfbd15aa9": "la politique gloutonne prend l'argmax : que lui fait une même constante ajoutée à toutes les valeurs ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q5a": {
+      "hash": "3c4cc7e12cbcfec7abb6dc40df4e27d36397db651c5ccd7b213400b115ad34f1",
+      "kind": "str",
+      "mistakes": {
+        "77002c747651795c17489eda989c9beb00c6f6f4cbb5cadbc9c36467887bb74c": "un DQN prend un argmax sur une liste d'actions : relis la première raison de « Apprendre la politique elle-même » (§208.3)",
+        "7a0f3c58b0689b2b14f6b044141e5dc5d766d054f73b99f7c191582c64c0844e": "calcule b) : combien de colonnes aurait cette table, et que perd-on entre deux valeurs d'un moteur ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q5b": {
+      "hash": "ef534a8d9b751970c1acded11fc6f74f77d7751cf878d5221c261d36ae7d9662",
+      "kind": "int",
+      "magnitude": 6,
+      "mistakes": {
+        "0b5b6639794901c3d4fd3e08dbc95a5992487f535df3363240420247a04ac57a": "relis la question : 10 valeurs possibles par moteur",
+        "0cfbed4c23f1a3a95e4ef368303924c1ed4c76c957446d865b407122bb9c5229": "les choix des six moteurs se combinent : ils se multiplient",
+        "a64cbed8e28db4bcb7d9b963b9455af5556e346f09a19f6ab7db3d2e1096f08e": "relis : 10 valeurs pour chacun des 6 moteurs (vérifie la base et l'exposant)"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q5c": {
+      "decimals": 2,
+      "hash": "9a4bf2d74855af5437691307feb6c8344d3c1ea04e8224e11587369e18f89c51",
+      "hash_coarse": "158232dd1690887722eccbfa16c2e4f51e8a88973ba81fdbac25ff018455d597",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "02e46bdf60b7ad3e8260b950999dda1554c93cc2a4223b0c0fea4fb563ab01b1": "c'est la probabilité d'une autre action : relis la numérotation à partir de 0",
+        "5f2d21bdce4b91f215489cbca558a77f0950ee66fb1233db7086edf880d64af9": "trois logits différents ne donnent pas trois probabilités égales",
+        "bf5899e3f71dca5aebd936630e401b207383b7a96d7dc5d56fdb5b8c5e6634a4": "relis la question : trois actions, et l'exponentielle de 0 vaut 1",
+        "c38e688c5a98de2e950dc67893689a6bc1013260e8d8f383f776930c2d89c11a": "la softmax passe par l'exponentielle des logits, pas par les logits eux-mêmes"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q5d": {
+      "hash": "44de34714f4506366ea1ec782010aab59505913f4b72a0ad6025cf223018f3f8",
+      "kind": "str",
+      "mistakes": {
+        "01c4f48334e009ad38576133d134730e386dbc57c4021583eba559105312a51c": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "034604ccb20be896c2a2a74d88cb474f75bc4532d790f7c329e5d00f03768253": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "38da5c7f841db49dce2f99487f6490a56a9aeae2792ae158f2ad7fb8084fe871": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "40bf6dbf855adf09fdfa85a0e63f6f5bc6dca3f4ff6092bc06fe28865fee64aa": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "43668ae5e7bfbc09b4fcb8e7a3f39b63f48117b629d9c0c0a8510dc82e11f5de": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "54f2aa9a3e510195251631ea6a2a06504b0c956d42bea9a6ffa4347a3c470670": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "5cf022eb208b99dcf3e86d4128ab238ca9ba472809e2af39c87f0efd776951fa": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "69d767e2da5c577bc3db85a2e360a40192ef4d49496e9d780b19e5d1b15f9f71": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "83d61244c6e6ddc962f0ac0cacb7744fc580d726a6bd41cf4e7d1cca3758d8fa": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "87e9e0b51f34402307e6c9f510e1e0a94ed347c47af4a3a8f99acafd3bbaeaf1": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "bfa00f2394835ad6450e16000a9cced0c9662161586c3f2410813b1954af6e2c": "au moins une des lettres choisies n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "c5da58460dfbfe622385f03f2d3dc51342611a94c54210f0c3b5c24959f6b1ad": "il manque au moins une lettre : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "e98bc23393b172628d24489c6482ec01ada9ee6f53771823f944529b7f004162": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)",
+        "efe29a02f152a23b36419a913ac1736742e52027fa9479a1a7a94c7a0dd4c1e1": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Apprendre la politique elle-même » (§208.3) et la mémoire de rejeu (§208.2)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q5e": {
+      "hash": "9b622d9d28d1c3eb2d0a22b44f3f95eebd00cec3308fbcb33d54572e081727bf",
+      "kind": "bool",
+      "mistakes": {
+        "480d001a55ee84213e8bc07d7e8bfc1bf76eca406434f4f7e0b9179523dc1cc7": "si ta politique est déterministe, que fait un adversaire qui l'a devinée ? Relis la deuxième raison de « Apprendre la politique elle-même » (§208.3)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q6a": {
+      "decimals": 2,
+      "hash": "eca824caab7cfe7a2ed225449dfab4b80ce0eda846a364dbb7d2292c499c0ae7",
+      "hash_coarse": "c35035e61a2c6f512d8b17a67c14af2d22cd6682dcd981a7af666dc294828fa6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "9324794d40697fb771d1119d7690249c5eec47a06a354ea104082571d2e896cc": "c'est le score de pile : relis la question",
+        "d6331dc6caf9596dc85d590e91434fc4ef917bdcf336d6bbe9cf3899ce1c8552": "dérive ln(1 − θ), pas ln θ",
+        "fd3da39c97fa7edb5496495bd03895f243cf80a7a5eeb443e11da0a87fdfc9ca": "vérifie le signe : ln(1 − θ) baisse quand θ monte"
+      },
+      "sign": -1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q6b": {
+      "decimals": 2,
+      "hash": "f7bd168d1fbebc6d0db9e3e5cb88af21654d077b22b62bf33fe2335e0cf0bc2f",
+      "hash_coarse": "61c8022cd72da67df00cae57bb8e9611c8a573a2e9f4b948012371c4f36f4285",
+      "kind": "float",
+      "magnitude": null,
+      "mistakes": {
+        "a342fb9f40c9e4a679aae5925b06110d65232b3eea03c94c56f4937939bf24c1": "relis la question : l'espérance sur les deux issues, pas le score d'une seule",
+        "cbc18df6e436a673c8c90e0b8a74760b79b168e813d871910d57125b592a84d6": "pondère chaque issue par sa probabilité"
+      },
+      "sign": 0,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q6c": {
+      "hash": "505aa657b44f056467d725cb270fc0627d54246f91a4e9e1a24b4198de842498",
+      "kind": "str",
+      "mistakes": {
+        "4ffb4e6f028bc0fb4bf27bec44d76022cef40471c8b78d23d92af6eb188e484f": "un critique dépend de l'état, pas de l'action : relis « La baseline et la variance » (§208.3)",
+        "b94988cf3bcd1b7c79c3fde691141bb04daea9f2fb0e8f1d5e18c5420d993f31": "une moyenne d'épisodes passés dépend-elle de l'action jouée maintenant ? Relis « La baseline et la variance » (§208.3)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q6d": {
+      "hash": "c4c3b424a5edaae09dda636a4f11fcc63b54bb0a31ae4b8d02765f3b2258efca",
+      "kind": "bool",
+      "mistakes": {
+        "5a68812eea25a5261b0c7e0de04bffacd9967f607f21d08a7e899d7f3de983fc": "une constante ne dépend pas de l'action : que devient l'espérance ? Et (G − b)², quand b est loin des retours ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q6e": {
+      "hash": "51182e064a64f1ee69bfcadca9d267a15cecf1318727cf866d34c34dd35ec424",
+      "kind": "bool",
+      "mistakes": {
+        "c0450945664a90314249c2ffff93261c2cbf6c8b1136ba112991bb3b52499e16": "relis la fin de « REINFORCE » (§208.3) : l'estimation de REINFORCE a-t-elle un biais à corriger ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7a": {
+      "alt_coarse": [
+        "428601344d41ede56fc6ea84751f6d022826cc360cbdbcbc4e610ad617f605fb"
+      ],
+      "decimals": 2,
+      "hash": "d666846928b7f02f895f1a912038a178af742127cece4667fa8b3913df0f3f9a",
+      "hash_coarse": "1693c13ec06df28033337d664b310b0a854bd38959de7133e06359cc5125cee3",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "1165a39bf3807647a8b72ea43b3166b9adbe4d413f3c16895a925b315be75e06": "l'épisode continue : la cible amorce sur V(s_{t+1})",
+        "a06b4294e1e0663336ac35ad799da82abb4ff054f80795d4ea2f9c6cc42cf584": "vérifie le signe : la cible moins la valeur prévue",
+        "aa419b6627c540fbbaff96bbbda9c476a56cdd7983c7bd04008857889557610e": "l'erreur TD retranche la valeur de l'état actuel",
+        "f25ec8aeba47a42f0fcbe3b0b20776ced5746d1faf2fbc6aa0f1f678d22390ee": "γ multiplie la valeur de l'état suivant"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7b": {
+      "hash": "3b5018ff2cfa6231110897ba3983c1057c778b882acb96c3f56ec63aa0f64952",
+      "kind": "str",
+      "mistakes": {
+        "27ba71749c531d25b4248d490905c109180261b819d87b703ccd7b6ae73b8eff": "relis les cas particuliers de GAE (§208.4) : quel λ redonne G_t − V(s_t) ?",
+        "7022f65e73557c24d7f3043625c0fb23b24f4202a8edc97ba782215bd67543b4": "relis la formule de GAE (§208.4) : que reste-t-il de la somme quand γλ = 0 ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7c": {
+      "hash": "fcc7c834d0a2fa07735603e3a563de8607e7e83edf8d43a7c112df068c94d324",
+      "kind": "str",
+      "mistakes": {
+        "a06359b14e41c6234622416341cfe255eb8c41deeca825bd45492bf4ea7de814": "relis les cas particuliers de GAE (§208.4) : quel réglage porte le hasard de tout le reste de l'épisode ?",
+        "f9adc1667bf7f5e15d2951ddd3577a5dd3827db263c462533d6a648416439a89": "λ = 0 ne garde qu'un pas de hasard : relis « L'erreur TD, première estimation de l'avantage »"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7d": {
+      "decimals": 2,
+      "hash": "34999986b6744d9b2c037ae46bd9179882c22142ccac7aa0dd884b354451e59f",
+      "hash_coarse": "0f59edcf458e12c9f53f7a063c4d9b884560ef42dd4d0053dc41dcdd6ad828c7",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7e4af1a8ae421c954e7d5480d72de53364d4de8202894ddd98d4943b205d2074": "relis la question : dix pas plus loin, pas un seul",
+        "84b3745235e5cbbe14fe5e567ac36c3bcd576700c065f34b85fd02217655ee60": "le poids combine γ et λ, à chaque pas",
+        "a1838edd14bab06c3e727b4cdfc49487fed9ba27d611342983b2013c2cb7b37d": "le poids combine γ et λ, à chaque pas : λ manque",
+        "ba6187c23ec703d3c607a28667d03abcc42086e612ea4d561226c3f3f5b47f17": "vérifie l'exposant : δ_{t+10} est dix pas après δ_t"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7e": {
+      "hash": "efeed7ae2f67c6f98a3332b078b2d64a56d00b5734df259c4ea70e88c6da8a90",
+      "kind": "bool",
+      "mistakes": {
+        "16ad6f9747ae507326ba38b91c8820ebd5a5ac211855ef6453d1405f1647ea63": "relis le cas λ = 1 (§208.4) : que reste-t-il du critique dans G_t − V(s_t) ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q7f": {
+      "hash": "df4c472ddd70f75e2b68d4bd9ad3917f872d07fd377952beab2c41f9e5288c1b",
+      "kind": "bool",
+      "mistakes": {
+        "781ed2702cf82032cefd3d300cc11788481c21fed04c1dd0a9404e0b5592c9e2": "relis « Fin d'épisode ou limite de temps » (§208.4) : la récursion continue-t-elle après un pas tronqué ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8a": {
+      "hash": "c0c7fffeeb39be3b52a599f7f1a843013348c264db2f5df5095d813007415bcd",
+      "kind": "str",
+      "mistakes": {
+        "246c1c6b75a0a68a095ac040926748d1a017af98c0a8bfe9ae4ceb471b459a7a": "relis « Réutiliser un rollout sans tout casser » (§208.5) : le clip rend-il l'estimation exacte ?",
+        "c99755ef4d0e3a16f3345bbc3cb14f7f2bd527ab1d74f54de3d4899ab6de6fb3": "relis le début de « Réutiliser un rollout sans tout casser » (§208.5) : un gradient de politique est-il off-policy ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8b": {
+      "hash": "6c9e05ce913f77dc589d79551daf8b42ae6dcbb7f9384090a32cd0e192d5a991",
+      "kind": "bool",
+      "mistakes": {
+        "15756c8b84145a550bf54bbb75ee353579f46c1bf09f9f15a429a03ca2732767": "relis le cas de l'avantage négatif (§208.5) : quel terme est le minimum quand le ratio est monté ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8c": {
+      "hash": "5d14b064c091a5e8f96d3833204303cf4eca19876dc7a683d7ec1e62e10eb728",
+      "kind": "int",
+      "magnitude": 1,
+      "mistakes": {
+        "38f8b1a9edb9fff32289e23361e0f9e577112f4538ebc139cefb2fb6aa246354": "chaque epoch découpe tout le rollout en mini-batches : combien en tient-il ?",
+        "72d62ee9288cb305c4ec531e0e7c309330fd9cc5503b74d8f707a42648d0cc73": "relis la question : on demande des pas d'Adam, pas des transitions",
+        "821ac59f1fa8040519b29ccb03c8b4883e2ffc653b50231acd1450cf756f2f56": "relis la question : 4 epochs, pas une seule"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8d": {
+      "decimals": 2,
+      "hash": "62107d35310709a86d1ece76c4740f956ad486f0566dde654d5a99a5d1711051",
+      "hash_coarse": "d732ee7f251f1152e44d9b6208950459007e222fef90a39b6bae5cc5e64dce58",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "2ef86eb9a333f38c4a463d7b40f617019319145cc29dc41741302e42736a724f": "le ratio est l'exponentielle de la différence des log-probabilités",
+        "4b14ced51c60429e1eb9299a9e514da802c99e701e8cd5a563fa1dfe468f9e82": "vérifie le sens du ratio : la nouvelle politique sur l'ancienne",
+        "e41659970dff9172853c5f64a34cec9957a4da24925a2841c55334de34a2bea8": "on divise des probabilités, pas des log-probabilités"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8e": {
+      "hash": "1595f6d12bbdfd173913a8aa0c1d4ddc63547ba906767304cc6262e37d1346b7",
+      "kind": "bool",
+      "mistakes": {
+        "20c933745c4916de62b3cd450bb77390c7698e92c82700f150c0617f64c075f8": "relis « Une région de confiance » (§208.5) : comment TRPO résout-il son problème ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q8f": {
+      "hash": "22f99f8d0de000ad11e3bac9395dbbcfb57d4cb31afa1416c2b15dc049f57d20",
+      "kind": "bool",
+      "mistakes": {
+        "86cc3ff7d60dffbb2da3d950c3ef91c2ebb4918a2b955d2b631e4e5633fe1f0f": "relis le gradient par rapport au ratio (§208.5) : que vaut −A/n quand A = 0 ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q9a": {
+      "hash": "121ab4387789a8492e7b71836e8a2c5cda67a23fb59dccb9075c47db4d599ba6",
+      "kind": "str",
+      "mistakes": {
+        "2da6d51117d3ac88db23386a976e6bd5927aa784ecbe7475b06112ba9e9ac425": "relis la fin de « REINFORCE » (§208.3) : un épisode sert-il encore après le pas ?",
+        "b76cf330b6199d9d2ef2f8485158181390d2775bfb78ad9c9403569dd71c66ac": "PPO corrige l'écart par un ratio : relis « Réutiliser un rollout sans tout casser » (§208.5)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q9b": {
+      "hash": "3bb327d869ab76c608eda78d4ce77298575ff83738d869255325b37b9ea0d55b",
+      "kind": "bool",
+      "mistakes": {
+        "d3dc298d8c719f0e923ae86ed19e96bb8dc48435ae890770f47d6c898b518d7c": "relis l'encadré 💼 de 208.5 : quelle famille consomme beaucoup d'interactions, et pourquoi ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q9c": {
+      "hash": "f9b17c26694b67f290ff7080635de1d936b7f1a4f2ddfe1921b90c51a7244f20",
+      "kind": "bool",
+      "mistakes": {
+        "f8442743e1cb24a4dc8dca00a8b4f9af04e16480627735414927e6d9349715e7": "relis la fin de « REINFORCE » (§208.3) : pour quelle politique le gradient vaut-il ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q9d": {
+      "hash": "d9ad6ba4efdc6c9a108f6fe2b2fd74739a8bd64c343e8404d20899e6af0e4fe8",
+      "kind": "str",
+      "mistakes": {
+        "443bc9b1e006158233e9fe58164bbde9502036321dd87e4014fd564413d48709": "le ratio de probabilités appartient à PPO : relis la cible de DQN (§208.2)",
+        "496818f2cf8423aeca81052b09257d5fc55042c8dbe0edc333e1edaeb6251341": "même avec ε = 0,1, la cible reste celle de la politique gloutonne : relis la cible de DQN (§208.2)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q9e": {
+      "hash": "fb98dd5f02ecb5c921e8eff0409d07372541db0cdc9d7cb51c60a71cc7790958",
+      "kind": "str",
+      "mistakes": {
+        "4fd7e328b7257d0e87cbf021c6db1d8dd866a6dba5d20b2b3055645fe9e18463": "relis l'encadré 💼 de 208.5 : que coûte PPO en interactions ?",
+        "a93c260afbb42674fe1111efe41f26e0bac54e43f91ea4f242af631492ee6ae4": "une estimation sans biais mais très dispersée demande beaucoup d'épisodes : relis « La baseline et la variance » (§208.3)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10a": {
+      "hash": "b36430aeb04c607fafd98c70d6875f0a38d9c5d25ce56191ecc1fedd02c3efbb",
+      "kind": "int",
+      "magnitude": 2,
+      "mistakes": {
+        "09237e2aece28fddfbed32487f397459412dc7c179c0ffefd31a30e05513c43a": "relis l'appel : max_steps n'a pas sa valeur par défaut ici",
+        "b8fb9d1cea478a7296a070c8dcbd1806a2d5ee192e144aeadb8af7cb63aab1f1": "relis l'encadré ⚠️ « un plafond caché dans l'évaluation » (§208.6) : que fait max_steps ?",
+        "cb48d90df213eb8ceacc72559c882a6ee06b7d9fd7ba783170b283edd1f2a375": "relis la question : une politique parfaite, qui ne tombe jamais"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10b": {
+      "decimals": 1,
+      "hash": "b41a1243209fa378f74e2ced5bc6f2e8795d9f65430469701bcb80dfceec70bb",
+      "hash_coarse": "622889d20ef39413406ff9edcd74c053cb8cdd70bcfd4ff84ab8907f0a8acad6",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "17a22be6631c69e8f8a8a554a22cf52638d7ac2de954e25aabf25f3c45fd5407": "relis la question : l'erreur type de la moyenne, pas l'écart-type des retours",
+        "fe664a493ae2500a12d2c6f60a101c4a5c5cd3d1baa5750ddac95cea496a87d9": "l'erreur type ne divise pas l'écart-type par le nombre d'épisodes : relis le ch. 2"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10c": {
+      "hash": "9baf53b9c46ee096c2d8b9b5717212080e7cfede7cbb9a160732bc09ed1f5c07",
+      "kind": "bool",
+      "mistakes": {
+        "baa1c18e676ffb5861d79b1e3751fb92a9d090de85f6eea87b67bc440fa62510": "relis « Les graines » (§208.6) : que font les reset() suivants, sans graine ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10d": {
+      "hash": "f04e59792dcc47f76843ce93da1dac09d2813e85a370d04e539996cedf0dcc23",
+      "kind": "str",
+      "mistakes": {
+        "6ed6c3ed0f578f017da44cb2e69c73d4a7065ac0bf70a08d798b56aafc96458b": "garder la meilleure graine, c'est choisir un tirage favorable : relis « Rapporter plusieurs graines » (§208.6)",
+        "77ebfd117f8717848932fbf722d1231d23c00298cfc130b27ef15c62f1625f6c": "plus d'épisodes d'évaluation réduisent le bruit de l'évaluation, pas celui de l'entraînement : relis « Les graines » (§208.6)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10e": {
+      "hash": "7acffa8fa8ea36597e19bd7ee445432fe97b3c841bab09fa99fd334b590d93ec",
+      "kind": "bool",
+      "mistakes": {
+        "f208f47ecc5d2b2ad2c9c26f50653e0b252825e9759ef04f66d2496958683657": "relis « Les graines » (§208.6) : l'espace d'actions a-t-il son propre générateur ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q10f": {
+      "hash": "b9126b6dc784f3e0ad616872225f8d40b4bf2acdf7bb6ef633f8fb4f45545e38",
+      "kind": "str",
+      "mistakes": {
+        "1848f764dbad144942c01f18fd1e9cea87480a0feacff892182906f8ed23ecbb": "relis « Évaluer un agent » (§208.6) : quelle politique évalue-t-on, et sans quel hasard ?",
+        "db163682d6617a839667523dba04437f3f7f1f79e658e94ea63ca67218eca86c": "V dépend de l'état seul : peut-il choisir une action ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11a": {
+      "hash": "56fa5eb299b0dbba107d38d52061df7d3ee9843396dd2c468938982df5678f4d",
+      "kind": "str",
+      "mistakes": {
+        "02a5d98de0da64e6a780813d7678d47fc1873f62f8ca702075f595e2a5c054df": "au moins une des lettres choisies n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?",
+        "2403b10ca6373d88fb5c66a9f3230fc219b79cdcc04a0a046ac49de896166886": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?",
+        "870f04294670b351467284f90c51ed3c2c3f063a31e3c428c88149d9b4f9c7bd": "au moins une des lettres choisies n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?",
+        "8b69f75625da79ff844b65f60000b36da4eecb5703908e3262439996f57bbb5b": "au moins une des lettres choisies n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?",
+        "9c78c42b306169516555148e691f122dd771d872aa82b6eda32a1b3e1936c78d": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?",
+        "d3b146304957da025212be44c2212392b744357d485e3f9ea7809d61563d58b5": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : DPO apprend-il une récompense à part, et d'où vient celle de GRPO ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11b": {
+      "hash": "7205ba53d55f2c1c1b2ef9c8bd3b0b161527a379dfb50137f811c38fb91f9247",
+      "kind": "str",
+      "mistakes": {
+        "035c30d0896d524f79ae27d099d4ac328202efd11a6da510873e73a4d2482409": "au moins une des lettres choisies n'a pas sa place : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?",
+        "2edfdab24cdcb76127bb7790ba2bcf123f098bd85a523f287af9619570ceba9d": "il manque au moins une lettre : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?",
+        "4aa3b518634e564dea7d433c126d9a9f982beb9e50142c23a9c0f1e7f4e95a89": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?",
+        "abca47e8a1ec932ea051a8c1a012a71086ca897d8efaaad0edc89280f37783e2": "il manque au moins une lettre : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?",
+        "db9b3b731136ef5c3cf71b7f412d3132194a4088e94e47a6ab340904171949d2": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?",
+        "e65db31e2a7bcb270245008205787a8fb42e90ac819e75e03d930a7ec87b183d": "il manque au moins une lettre, et une autre n'a pas sa place : relis 208.7 : lesquelles sont des méthodes de RL, et laquelle est une loss supervisée ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11c": {
+      "decimals": 2,
+      "hash": "8ce435f71ef8672b06bf4e0f4e21653a92c981d546db42b8117cd2526d445f2c",
+      "hash_coarse": "de9cd1a6e8e62a07e61263e1ddfd8d2cb2020e53d763dddf2d71eeacf4b7550c",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "28bb2d566a91e1806e924daf98b3e5f4e17b939f71e7ed083e54914292ec83c8": "relis la question : l'avantage de la première réponse, celle qui a la récompense 1",
+        "b5d5f9ebe02ebda087c6b378c4cbd32e88990a51cb64ff2db0e8f019f09a498d": "l'avantage divise l'écart à la moyenne par l'écart-type du groupe",
+        "c90137b925c528776e68c8aff1528b4a83d27b1fa931ed2a343f80a62df399ed": "relis la question : l'écart-type de population, divisé par le nombre de réponses"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11d": {
+      "hash": "2e9cd9f36b63517900a66b70082839ca532bcebb50cce22828b52509a03d54ff",
+      "kind": "bool",
+      "mistakes": {
+        "cca69d6798f34136b6a0def61121dea7764f35fcaa8cfdf01073837947199626": "relis le dernier piège du tableau de la fiche : π_ref bouge-t-elle ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11e": {
+      "hash": "be3e5431e238bf487f91191794475f4802f03e0528bf3589f9c95a482e07cce9",
+      "kind": "str",
+      "mistakes": {
+        "8ed803cc069a9c73a974a3451272c28d0f679a9167e03c0d572c0fd42304a340": "relis « GRPO et les récompenses vérifiables » (§208.7) : que coûte le critique de PPO ?",
+        "f2ac20d27f18c5aba2269762443b9fb0cdaf5a06ef5166e6fe61c7d25ea2864f": "une récompense 0 ou 1 varie d'une réponse à l'autre : relis « GRPO et les récompenses vérifiables » (§208.7)"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q11f": {
+      "hash": "d58818f7b17393fe35983715dc6469a310a9b5144c4c6f7cf1d3bc7c870bd3cc",
+      "kind": "bool",
+      "mistakes": {
+        "a18509dcbd4fbe51b541ad86c4a0fee870cd49d9d610eee3593b24104ab83188": "calcule les avantages d'un groupe de récompenses toutes égales : que pousse le gradient ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q12a": {
+      "hash": "e470854ae25d5f2e8910b7cfd4ccc5d03881bb3e00108b7c8f97ee3219ab46b0",
+      "kind": "str",
+      "mistakes": {
+        "19c4d20a626d3adc1885e2305fc1e081eb9abdcc632344340bde95f86e975095": "au moins une des lettres choisies n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "202dc24a0be20d5fade616fd1b26c7ebbd176bc529134fecea95e347f1288b8d": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "2e5fdd534effb66dce04cca02d788f352904093f08c0069746fdcca7d262b7fb": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "3516b7efe7556433dab924785edb150d7bef0e3adcfc038b42479ff057970e7c": "il manque au moins une lettre : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "3b5f75e49d1435281d8403415b8e3d30ccdf0bdb1b6525e41a52e362c33103ca": "au moins une des lettres choisies n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "4e5ae7fb1483883d82f7e3c4edd4999fb697392a60586687346b0f50e6f638bc": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "5720069c699e8349139811c1e67600a9fbca79a403a55ba8938c8beda89e15ff": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "96ab9c8c35a51606749f2d51656af249258c200fa3043ac13a2b6435ad52a73a": "il manque au moins une lettre : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "97fa6bfa66e4197d6ff8fba9e6a73c557b29ba1644f88a6a6945e35bfc60a5a4": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "c690685fc3e4f3cfb3c74520fc640fb107c3edc8cffe78061cd6d1483f3dfebc": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "cd148c58c7194f6f85717ca23c55117c172eb985faf778a24936c49cee44b6a4": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "d5cf0dcae8c41c26a8352951f9c01a52e613667950db3b03b34a90b1837b30ad": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "e2eec64abe53334ae29b65fb26d6e92f692a3f57ccf3109af1afae7685fa4651": "au moins une des lettres choisies n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?",
+        "f74799fc2b9f585a48b2abef294b7fc646718fe454ee8d9efd634c049b62f68b": "il manque au moins une lettre, et une autre n'a pas sa place : relis « Le piratage de la récompense » (§208.7) : l'agent atteint-il la récompense sans faire ce qu'on voulait ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q12b": {
+      "hash": "fc2409937618bb77289e0f199bd7f859703951bf14ae640359a1271f709df3dd",
+      "kind": "str",
+      "mistakes": {
+        "9b9b6533c7adb557fe0f21104d4f99783d100b9acff6170047de5e25378a2b61": "relis « Le piratage de la récompense » (§208.7) : la vraie récompense monte-t-elle d'abord ?",
+        "d045811ef27b19a727a19ea744e56a0d30d40b5d025713407895a5912a18f22b": "relis « Le piratage de la récompense » (§208.7) : que fait la vraie récompense après un moment ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q12c": {
+      "hash": "bcdaeea08c0987b451ec9f717d6e690514d1d006f7785d8d67ce196ae1b4aab0",
+      "kind": "bool",
+      "mistakes": {
+        "cadb065b202431be2bbd12e6dd63c07ac03ff6cf519dc4cfd79725783e307b45": "relis « Le RLHF : PPO sous une laisse KL » (§208.7) : que fait une laisse plus forte ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q12d": {
+      "hash": "e1ed924fe468b1a067987340335d01e7f2f78ae81a52d5e7446f5dbf9fc319cf",
+      "kind": "str",
+      "mistakes": {
+        "79a4ac53115bee3dfbc5bcd3bed39e9fe3a214fb6ae3e4fde0ceecb229e1f132": "relis le rôle de la pénalité KL (§208.7) : que se passe-t-il loin des réponses de la référence ?",
+        "bd3555b0231865e6918fcede8042c53b5df6549b94cff48d854c0bfb0e99f568": "plus d'optimisation contre le même modèle aggrave-t-elle ou corrige-t-elle le piratage ? Relis la courbe de Gao et coll."
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.Q12e": {
+      "hash": "553d216efc1ebd623588b9f12dd99650000371c01d513fdfcb5f4d2ff59b7bee",
+      "kind": "bool",
+      "mistakes": {
+        "e3d0e58c12db042cbf940dce3bcab37bfa8486f0f615f59d85ac314c19d36391": "relis le paragraphe sur la flagornerie (§208.7) : d'où viennent les préférences pour une réponse flatteuse ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1a": {
+      "decimals": 2,
+      "hash": "15ec256e28bb1ddb8e96783ac64438eeaa2cf4801f4e917c906fb7f74dd1c882",
+      "hash_coarse": "6e31ddac038df001826aac948fad6f8f6445b6606c2ec1a806b5e7f40f4dfb8a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "9cdb8c36470502c4e7e76770bb5a01510d5607a17fc3fdd46e2fee141972b69b": "γ multiplie la valeur de la suite",
+        "c131dba18954bcd3167fcf31caa3559250f261aea6bf9ac395e51e20c5679a63": "s' n'est pas terminal : la cible amorce sur la ligne de s'",
+        "e3e003b3efa22f244d16086cb962c1d6a00265b6f0fdfe7321236c5967449104": "la cible prend le maximum de la ligne de s', pas la valeur de la case actuelle"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1b": {
+      "decimals": 3,
+      "hash": "01c63f68b25181a2485f4924898aac3cf4ac9e8c1e6b19948a9bbfe53233e2e0",
+      "hash_coarse": "1efe128d941c61f94f0ad49e2277604f1c85a7636bb59b60c464d3eed89b2fd1",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "2abb0b33a3fbeb834da0fe02e7ac65ad9fc445fefaa8ef0a1d893d24dc3a281b": "α mélange la cible et l'ancienne valeur : relis la mise à jour du ch. 26 (§26.6.1)",
+        "746256f4669dc454c41d0aca5373f3d25841c6ec224e2f94d6dd58efda6aefc9": "la mise à jour ajoute α δ à l'ancienne valeur, sans la remplacer",
+        "f43717490b258bba6476b6ee4b9ad3d8064247e2a0b76eb2b1e4f714dc7c1abc": "relis la question : la nouvelle valeur de la case, pas l'erreur TD"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1c": {
+      "decimals": 2,
+      "hash": "8c79c7e881f3b3e7b244c20804eb51ac304d7d74dc04859a44bcc1d8c2fa1c18",
+      "hash_coarse": "96bc42593b06e8a59d604944db1ded8b2e9ed379be635a585bf180127b47b5d9",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "33846e2044b36adf514d52ce139fabd8dd288feb1f2b7eb331dc004f16c1d92c": "un état terminal n'a pas de suite : relis le rappel maths du ch. 26 (§26.6.1)",
+        "e4a0584e43512328f1842c6edb182f7b3251af99af9c151a31ba40508bd4193e": "α mélange la cible et l'ancienne valeur"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1d": {
+      "hash": "74209f0eb2f1567cf78c184069e2512b4a577bfce07daefed6c413ffcb856217",
+      "kind": "str",
+      "mistakes": {
+        "796fb6e0ac1682649e929b6612f9250e820869ea06654b065b937f7263252b31": "relis la docstring de ReplayBuffer (🔨 26.31) : que range push ?",
+        "a5f53a24398bfa51498eb0d034351e43985d4ccd9814a962f01c2e1205aa16bb": "c'est le rejeu du livre : relis l'encadré 🕰️ de 26.9 et la docstring de ReplayBuffer"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1e": {
+      "hash": "d6e090c80b583e975fa8d517fcfd6d1074dbeabf7a22595e4105c31ca642cff0",
+      "kind": "bool",
+      "mistakes": {
+        "d5550d6ccce154caae83503b5cfb71367e8501c46eab315734bbe5f142088329": "relis la docstring de ReplayBuffer (🔨 26.31) : que devient la transition la plus ancienne ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R1f": {
+      "hash": "e99b1545bf42fe06b0ecf040d5de535db8dd7c516e6fd8f77ac925db57df24f6",
+      "kind": "bool",
+      "mistakes": {
+        "26457f45d41fb90b19938c59b287ca727ee6277570ce83b32e4a72a5527469ce": "relis le ⚠️ du ch. 26 sur SARSA (§26.7) : de quelle politique SARSA apprend-il la valeur ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R2a": {
+      "decimals": 4,
+      "hash": "05631aaffda7a75d7103adee423c37ff74fda203b05bc3ad430976a3ae52e324",
+      "hash_coarse": "7af90db83d37790929b6a9337d9e20ab27497dd4e5281dca1297fc85aa7c3620",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "146f7901695e303c4d4e2fdd239c2060609093249799638433e8eaaa77497464": "c'est le pas de la descente de gradient simple : relis Adam au ch. 19 (§19.5.5)",
+        "446a614ab22d387ab0c490113edf90227e21af494babf69428f5c5de23b73660": "vérifie le signe : le gradient est négatif, le poids monte",
+        "d89d636214d432e048ed2c4e99397e26ac7c85531d7ecfc0db6d0e6939bb77ad": "relis la correction de biais d'Adam (ch. 19, §19.5.5) : m et v partent de 0"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R2b": {
+      "decimals": 3,
+      "hash": "2b4791b0904fea104e365ba812800dabf8f243f6d72fe24523a6827bb770e3c4",
+      "hash_coarse": "446555837e96f517fdd8c67457002a34f4cee8f5fdae78c9e16c324e07c2f97a",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "56b80f08408f1dec3b52e7a33eb3b66b64a1585eeb1990ac128981c0b2a1dd47": "le clipping par la norme ne borne pas chaque composante à ±0,5",
+        "c27ba7aaf665236b659befdaed53f85a3534a16b7b8ac706af742281c4ef73e5": "la norme est globale : tous les gradients mis bout à bout, et un seul facteur",
+        "d868009cc674572a93852282b62675cbaac570e014b5a7ab2b7ba9241ddfde81": "la norme globale dépasse 0,5 : le gradient est réduit"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R2c": {
+      "hash": "aa8003c345bf642054371500645a32eca6aebc199520423e13532870c31c0ae5",
+      "kind": "bool",
+      "mistakes": {
+        "c2629a1ea0355acb4f4cff6c4235e6ae603dba6f126be8fff59fd2ec6a8c4e59": "relis « le gradient clipping » (ch. 19) : à quel moment les gradients existent-ils, et quand sont-ils utilisés ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R2d": {
+      "hash": "b7ec19086ef1fa7d8bc29ca1b5c3eca61751879d93531407365481f94b4b3bcb",
+      "kind": "str",
+      "mistakes": {
+        "1c41524c44a6753fa0a26a0455de9feca6dc34abfd870efe4e43a481aab57209": "borner la norme est le rôle de max_grad_norm : relis la formule d'Adam",
+        "d8c7b4b28412b5984facb7cf468a525ec9149435fa97194077d03436cb23478e": "relis la formule d'Adam (ch. 19, §19.5.5) : où ε apparaît-il ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R2e": {
+      "hash": "096e1b2f8fcfec7ab8cecccce87213427a0cfc2fbf8d13ce3d69569cbe13ab82",
+      "kind": "bool",
+      "mistakes": {
+        "cce1e342bf4972ccb65ee36e035893db1c7f6f31014268d54f89e109e0db094e": "relis « le gradient clipping » (ch. 19) : tous les gradients sont-ils multipliés par le même facteur ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R3a": {
+      "decimals": 2,
+      "hash": "108bc0431bae5782a7c91ba866b2305f1fd08362c8ec932e6569d910b6aa929a",
+      "hash_coarse": "7562f524261e00f6753dfff6de965a87130155fb1bf87c6393db3282c7f8df94",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "275e491820c961889c8164bd2515c0eae09a80e41bd4b23ba17e4f1fed8caab5": "en exploration, ε-greedy tire parmi toutes les actions, l'action gloutonne comprise",
+        "33a89dce7f5db9055e265ade44852ca9c3686e1a7bcdd5b449b0d86a1f438991": "relis la question : deux actions pour CartPole",
+        "70e3aa0151212dc016d27563122a10c5948cf733a39d0f75001b0fb77152bf18": "relis la question : la probabilité de jouer l'action gloutonne, pas d'explorer"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R3b": {
+      "decimals": 3,
+      "hash": "836acf4c5deb0d31789c5860eb637e23318beaf93685d874f1faf31019cbd1c8",
+      "hash_coarse": "407d07060a568cb9fa4a7b142969f1a71e4d0d9ee3dc89d8262527c4d580f01e",
+      "kind": "float",
+      "magnitude": -1,
+      "mistakes": {
+        "7f43af3351f10e3dbf5f147f525af7f10a908df4ac5d54d78579366167e1a6ce": "relis la question : la température vaut 0,5, pas 1",
+        "9693f90fba2bacc6c5b3919a7f4da2d3a551b42b9e478d513fffe704f253421c": "la softmax passe par l'exponentielle, pas par Q / ΣQ",
+        "a186b166da3538c5862780f7da228f91e46a17d9ad7ac8061175db876a7f761f": "la température divise les valeurs, elle ne les multiplie pas"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R3c": {
+      "decimals": 1,
+      "hash": "2d3a8fa7067248e6ddaf171a1cf812c379a64438cda5d8489a9f11f38d317ff2",
+      "hash_coarse": "6b3ab00a651b38f6d4f76a49e6f1cecee90d00dcfaf8a299ca4fe373e590d151",
+      "kind": "float",
+      "magnitude": 0,
+      "mistakes": {
+        "29e52ab915bf77a1d44d16b12d61d74256cb480b5299f5fceb570882acfdae36": "relis la question : la nouvelle moyenne, après la récompense 8",
+        "2f055dbdf826508331800e1ee469bfd07194820af498b866b4480e5641a3835e": "compte les récompenses reçues par ce bras, la nouvelle comprise : quel n ?",
+        "82c09e27d7837d4ae695dec52fc37c80460cc004b1725b1a0f783e9724a80fd4": "la moyenne incrémentale ajoute (R − Q)/n, elle ne remplace pas Q par R"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R3d": {
+      "hash": "ad7b131ffb47a67f5e5a4485e8cd09f1979f1577e722b252f6464a47858129ed",
+      "kind": "bool",
+      "mistakes": {
+        "8a79c8d365479d9e30a1876ec9d85b8f2cb296daeeabcf7638f9fbba4d981c65": "relis la softmax du ch. 26 (§26.6.2) : grande température, presque uniforme ou presque gloutonne ?"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.R3e": {
+      "hash": "b9bdb77ed679d4c6425b0249deb8c354424b6b5136dcd22d3a498148b565d4d8",
+      "kind": "str",
+      "mistakes": {
+        "d70dba51e3a286dbf251757e3addf2ad0145ed0f86037d9f45691e5c1d6e32a9": "ε-greedy ne monte aucune préférence : relis l'encadré 🔗 de 208.3",
+        "e8ea0d8ba7976f22027c805a0b10e9eb7bff07d9ae292028d98516ac5ecd219e": "UCB ajoute un bonus d'incertitude : relis l'encadré 🔗 de 208.3"
+      },
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
     "CP1.1a": {
       "hash": "8f35ee50d1ca708638280f95cab0a03a353052a0b9c57023055770427e3d5540",
       "kind": "bool",

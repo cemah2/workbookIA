@@ -873,5 +873,29 @@ Notations : $n$ graines, $a_i$ l'accuracy du run $i$, $\bar a$ leur moyenne, $s$
 | statistique de Kolmogorov-Smirnov | $D = \sup_x \lvert F_{\text{réf}}(x) - F_{\text{prod}}(x)\rvert$ | `scipy.stats.ks_2samp(ref, prod)` |
 | correction de Bonferroni | $m$ tests : chaque p-valeur comparée à $0{,}05/m$ | |
 
-### B8
-*(à compléter)*
+### B8 · RL moderne : DQN, gradient de politique, PPO et RLHF
+
+Notations : $Q_\theta$ le réseau en ligne, $Q_{\bar\theta}$ le réseau cible ; $d = 1$ quand $s'$ termine **vraiment** l'épisode (`terminated`) ; $\pi_\theta$ la politique, $V$ le critique, $\delta_t$ l'erreur TD, $\hat A_t$ l'avantage, $\lambda$ le paramètre de GAE ; $\rho_t$ le ratio de probabilités, $\varepsilon$ la largeur du clip ; $r_\phi$ un modèle de récompense, $y_w$ et $y_l$ la réponse préférée et l'autre, $\beta$ la force de la contrainte KL, $\sigma$ la sigmoïde.
+
+| Notion | Formule | En code |
+|---|---|---|
+| cible DQN | $y = r + \gamma(1 - d)\max_{a'} Q_{\bar\theta}(s', a')$, calculée sans gradient | `with torch.no_grad(): y = r + gamma * (1 - term.float()) * q_target(s2).max(1).values` |
+| cible Double DQN | $y = r + \gamma(1 - d)\,Q_{\bar\theta}\big(s', \arg\max_{a'} Q_\theta(s', a')\big)$ | `q_target(s2).gather(1, q_net(s2).argmax(1, keepdim=True)).squeeze(1)` |
+| mise à jour douce | $\bar\theta \leftarrow \tau\theta + (1 - \tau)\bar\theta$ | `pt.lerp_(p, tau)` sous `torch.no_grad()` |
+| loss de Huber | $\ell_\delta(x) = \frac12 x^2$ si $\lvert x \rvert \le \delta$, $\delta(\lvert x \rvert - \frac{\delta}{2})$ sinon ; $\ell'_\delta(x) = \operatorname{clip}(x, -\delta, \delta)$ | `F.huber_loss(pred, y, delta=d)` ; `F.smooth_l1_loss(pred, y, beta=b)` $= \ell_b / b$ |
+| astuce de la log-dérivée | $\nabla_\theta \mathbb{E}_{p_\theta}[f] = \mathbb{E}_{p_\theta}[f\,\nabla_\theta \log p_\theta]$ ; $\mathbb{E}_{p_\theta}[\nabla_\theta \log p_\theta] = 0$ | |
+| gradient de politique | $\nabla_\theta J = \mathbb{E}\big[\sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t)\,(G_t - b(s_t))\big]$ | `loss = -(log_probs * (returns - baseline)).mean()` |
+| gradient du log d'une softmax | $\nabla_{\mathbf z} \log \operatorname{softmax}(\mathbf z)_a = \mathbf e_a - \operatorname{softmax}(\mathbf z)$ | `Categorical(logits=z).log_prob(a)` |
+| entropie de la politique | $H(\pi) = -\sum_a \pi(a)\ln\pi(a)$ | `Categorical(logits=z).entropy()` |
+| erreur TD et GAE | $\delta_t = r_t + \gamma(1 - \text{terminated}_t)V(s_{t+1}) - V(s_t)$ ; $\hat A_t = \delta_t + \gamma\lambda(1 - \text{done}_t)\hat A_{t+1}$, $\text{done} = \text{terminated}$ ou $\text{truncated}$ ; cibles du critique $\hat A_t + V(s_t)$ | `compute_gae(rewards, values, next_values, terminated, truncated, gamma, lam)` |
+| variance expliquée | $\mathrm{EV} = 1 - \operatorname{Var}(G - V) / \operatorname{Var}(G)$ (non définie si $\operatorname{Var}(G) = 0$) | `explained_variance(y_pred, y_true)` ; `sklearn.metrics.explained_variance_score(y_true, y_pred)` |
+| ratio de probabilités | $\rho_t = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)} = e^{\log\pi_\theta - \log\pi_{\text{old}}}$ | `ratio = (logp - logp_old).exp()` |
+| objectif clippé (loss) | $L = -\frac1n\sum_i \min\big(\rho_i \hat A_i,\ \operatorname{clip}(\rho_i, 1 - \varepsilon, 1 + \varepsilon)\hat A_i\big)$ ; $\partial L / \partial \rho_i = -\hat A_i / n$ si le terme non clippé est le minimum, 0 sinon | `-torch.min(ratio * adv, ratio.clamp(1 - eps, 1 + eps) * adv).mean()` ; `clipped_surrogate` |
+| loss complète de PPO | $L = -L^{\text{CLIP}} + c_1 L^{V} - c_2\,\mathbb{E}_t[H(\pi_\theta(\cdot \mid s_t))]$ ($c_1 = 0{,}5$, $c_2 = 0{,}01$ dans CleanRL) | |
+| KL approchée | $\widehat{\mathrm{KL}} = \operatorname{moyenne}\big((\rho - 1) - \ln\rho\big)$ | `((ratio - 1) - ratio.log()).mean()` |
+| fraction clippée | part des transitions où $\lvert \rho - 1 \rvert > \varepsilon$ | `((ratio - 1).abs() > eps).float().mean()` |
+| Bradley-Terry | $P(y_w \succ y_l) = \sigma(r_w - r_l)$ ; $L_{\text{RM}} = -\log\sigma(r_w - r_l) = \ln(1 + e^{-(r_w - r_l)})$ ; $\partial L / \partial r_w = -(1 - \sigma(r_w - r_l))$ | `np.logaddexp(0, -d)` ; `-F.logsigmoid(d)` ; `bradley_terry_loss` |
+| objectif du RLHF | $\max_\pi \mathbb{E}[r_\phi(x, y)] - \beta\,\mathrm{KL}(\pi \,\|\, \pi_{\text{ref}})$ | |
+| DPO | marge $m = \beta\big[(\log\pi_\theta(y_w) - \log\pi_{\text{ref}}(y_w)) - (\log\pi_\theta(y_l) - \log\pi_{\text{ref}}(y_l))\big]$ ; $L_{\text{DPO}} = -\log\sigma(m)$ ($\ln 2$ au départ) | `-F.logsigmoid(margin).mean()` ; `dpo_loss` |
+| avantage de GRPO | $\hat A_i = \frac{r_i - \operatorname{moyenne}(r_1, \dots, r_G)}{\operatorname{écart\text{-}type}(r_1, \dots, r_G)}$ | |
+| espérance du max (surestimation) | $m$ actions de valeur 0, bruit $\mathcal N(0, 1)$ : $\mathbb{E}[\max] \approx 0{,}56$ ($m = 2$), 1,03 (4), 1,54 (10) | |

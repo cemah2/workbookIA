@@ -45,7 +45,7 @@
   },
   {
    "ref": "208.7",
-   "title": "RL et modèles de langage : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense"
+   "title": "RL et modèles de langue : RLHF, modèle de récompense, DPO, GRPO, piratage de la récompense"
   },
   {
    "ref": "208.8",
@@ -299,12 +299,12 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q2",
    "type": "🧠",
-   "title": "La triade mortelle : approximation, amorçage et apprentissage hors politique",
+   "title": "La triade mortelle : approximation, amorçage et apprentissage off-policy",
    "stars": 2,
    "minutes": 3,
    "gpu": false,
@@ -315,7 +315,7 @@
     "208.1"
    ],
    "tracks": [],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q3",
@@ -333,7 +333,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q4",
@@ -351,7 +351,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q5",
@@ -369,7 +369,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q6",
@@ -388,7 +388,7 @@
     "rapide",
     "maths"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q7",
@@ -406,7 +406,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q8",
@@ -424,7 +424,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q9",
@@ -444,7 +444,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q10",
@@ -462,7 +462,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q11",
@@ -480,7 +480,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.Q12",
@@ -499,7 +499,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.R1",
@@ -519,7 +519,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.R2",
@@ -539,7 +539,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.R3",
@@ -559,7 +559,7 @@
    "tracks": [
     "rapide"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.1",
