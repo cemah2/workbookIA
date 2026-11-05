@@ -537,10 +537,12 @@ with checked("B8.24"):
                                    "pas sont ceux de la référence.",
                 f"set_physics_24, {label_24} : un épisode joué avec les mêmes actions s'écarte de la référence.")
     rule_24 = wbr.rule_policy
-    for name_24 in ("gravity", "length"):
-        got_24 = robustness_24(rule_24, name_24, [1.0, 2.0], n_episodes=5, seed=2424)
-        want_24 = [wbr.evaluate(rule_24, 5, 2424, **{name_24: DEFAULTS_24[name_24] * f})["mean_return"] for f in (1.0, 2.0)]
-        good_24.append(same("B8.24", f"robustness_24(règle de 208.1, {name_24!r}, [1, 2], 5 épisodes)", got_24, want_24))
+    for name_24, factors_24 in (("gravity", [2.0, 1.5]), ("length", [2.0, 4.0])):   # not sorted, on purpose
+        got_24 = robustness_24(rule_24, name_24, list(factors_24), n_episodes=5, seed=2424)
+        want_24 = [wbr.evaluate(rule_24, 5, 2424, **{name_24: DEFAULTS_24[name_24] * f})["mean_return"]
+                   for f in factors_24]
+        good_24.append(same("B8.24", f"robustness_24(règle de 208.1, {name_24!r}, {factors_24}, 5 épisodes) : chaque "
+                                     "facteur multiplie la valeur par défaut", got_24, want_24))
     ok_24 = all(good_24)'''
 
 EXPERIMENT_24 = r'''# Your agent of B8.20 on the two grids (EPISODES_24 episodes per point), against the six reference agents of B8.23

@@ -867,7 +867,7 @@ Pour chaque réglage changé, demande-toi ce qu'il touche :
 - le bonus d'entropie est le seul terme de la loss qui agit directement sur l'entropie ;
 - `vf_coef = 0` retire la loss du critique : que devient sa prédiction des retours ?
 
-Puis cherche, dans chaque colonne, le run qui sort du lot dès le début (pas seulement à la fin), et garde pour le run sain celui qu'aucune colonne ne désigne.
+Puis cherche, dans chaque colonne, le run qui se distingue des autres dès le début (pas seulement à la fin), et garde pour le run sain celui qu'aucune colonne ne désigne.
 
 </details>
 <details><summary>Indice 3</summary>
