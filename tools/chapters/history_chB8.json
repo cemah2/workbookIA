@@ -1315,11 +1315,11 @@
    }
   ],
   "letters": {
-   "healthy": "A",
-   "lr_high": "B",
-   "no_clip": "D",
+   "healthy": "D",
+   "lr_high": "C",
+   "no_clip": "B",
    "entropy_sign": "E",
-   "no_critic": "C"
+   "no_critic": "A"
   },
   "checks": [
    {
@@ -1343,11 +1343,11 @@
     "lr_high_largest_clipfrac": true,
     "no_clip_never_clips": true,
     "no_clip_kl_above_healthy": true,
-    "entropy_sign_lowest_entropy": false,
+    "entropy_sign_lowest_entropy": true,
     "no_critic_lowest_ev": true
    }
   ],
-  "all_hold": false,
+  "all_hold": true,
   "computed_in_s": 318.2
  },
  "c23": {
@@ -1993,5 +1993,239 @@
    "eval_episodes": 100
   },
   "computed_in_s": 519.5
+ },
+ "c28b": {
+  "rows": [
+   {
+    "settings": "reference",
+    "seed": 280,
+    "steps": 99510,
+    "seconds": 38.34,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 281,
+    "steps": 99527,
+    "seconds": 37.14,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 282,
+    "steps": 99510,
+    "seconds": 35.43,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 283,
+    "steps": 99532,
+    "seconds": 36.85,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 284,
+    "steps": 99546,
+    "seconds": 35.53,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 285,
+    "steps": 99522,
+    "seconds": 33.59,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 286,
+    "steps": 99536,
+    "seconds": 35.94,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 287,
+    "steps": 99499,
+    "seconds": 35.63,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 288,
+    "steps": 99537,
+    "seconds": 35.16,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "reference",
+    "seed": 289,
+    "steps": 99515,
+    "seconds": 35.0,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "cleanrl",
+    "seed": 280,
+    "steps": 99266,
+    "seconds": 20.95,
+    "mean_return": 484.1,
+    "min_return": 321.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "cleanrl",
+    "seed": 281,
+    "steps": 99159,
+    "seconds": 23.02,
+    "mean_return": 478.76,
+    "min_return": 262.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "cleanrl",
+    "seed": 282,
+    "steps": 99207,
+    "seconds": 24.44,
+    "mean_return": 497.03,
+    "min_return": 383.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "cleanrl",
+    "seed": 283,
+    "steps": 99210,
+    "seconds": 25.0,
+    "mean_return": 499.52,
+    "min_return": 475.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "cleanrl",
+    "seed": 284,
+    "steps": 99195,
+    "seconds": 26.34,
+    "mean_return": 496.47,
+    "min_return": 380.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "epochs_4",
+    "seed": 280,
+    "steps": 99429,
+    "seconds": 25.01,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "epochs_4",
+    "seed": 281,
+    "steps": 99329,
+    "seconds": 24.02,
+    "mean_return": 321.17,
+    "min_return": 226.0,
+    "solved": false,
+    "error": null
+   },
+   {
+    "settings": "epochs_4",
+    "seed": 282,
+    "steps": 99468,
+    "seconds": 25.31,
+    "mean_return": 250.84,
+    "min_return": 220.0,
+    "solved": false,
+    "error": null
+   },
+   {
+    "settings": "epochs_4",
+    "seed": 283,
+    "steps": 99442,
+    "seconds": 24.44,
+    "mean_return": 500.0,
+    "min_return": 500.0,
+    "solved": true,
+    "error": null
+   },
+   {
+    "settings": "epochs_4",
+    "seed": 284,
+    "steps": 99404,
+    "seconds": 23.57,
+    "mean_return": 419.31,
+    "min_return": 279.0,
+    "solved": false,
+    "error": null
+   }
+  ],
+  "summary": {
+   "reference": {
+    "solved": 10,
+    "runs": 10,
+    "worst": 500.0
+   },
+   "cleanrl": {
+    "solved": 5,
+    "runs": 5,
+    "worst": 478.76
+   },
+   "epochs_4": {
+    "solved": 2,
+    "runs": 5,
+    "worst": 250.84
+   }
+  },
+  "budget": 100000,
+  "eval_seed": 28028,
+  "settings": {
+   "reference": {},
+   "cleanrl": {
+    "lr": 0.00025,
+    "n_epochs": 4
+   },
+   "epochs_4": {
+    "n_epochs": 4
+   }
+  },
+  "computed_in_s": 693.4
  }
 }

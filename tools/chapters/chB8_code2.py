@@ -711,24 +711,24 @@ with checked("B8.26"):
         want_first_26 = float(-F.logsigmoid(torch.where(wins_26, r1_26 - r2_26, r2_26 - r1_26)).mean())
     mylearn.deep_rl.bradley_terry_loss = spy_bt_26
     try:
-        model_s_26, losses_s_26 = pair("B8.26", "train_reward_model_26", train_reward_model_26(small_26, 7, epochs=5),
+        model_s_26, losses_s_26 = pair("B8.26", "train_reward_model_26", train_reward_model_26(small_26, 7, epochs=20),
                                        names=("model", "losses"))
     finally:
         mylearn.deep_rl.bradley_terry_loss = real_bt_26
-    good_26 = [calls_26["n"] == 5]
-    verdict("B8.26", good_26[-1], "train_reward_model_26 appelle ta bradley_terry_loss à chaque epoch (5 sur 5).",
-            f"attendu un appel de mylearn.deep_rl.bradley_terry_loss par epoch (5), reçu {calls_26['n']} : l'appelles-tu "
+    good_26 = [calls_26["n"] == 20]
+    verdict("B8.26", good_26[-1], "train_reward_model_26 appelle ta bradley_terry_loss à chaque epoch (20 sur 20).",
+            f"attendu un appel de mylearn.deep_rl.bradley_terry_loss par epoch (20), reçu {calls_26['n']} : l'appelles-tu "
             "par ce nom (la vérification l'observe) ?")
-    good_26.append(len(losses_s_26) == 5 and abs(float(losses_s_26[0]) - want_first_26) <= 1e-4 * max(1.0, want_first_26))
+    good_26.append(len(losses_s_26) == 20 and abs(float(losses_s_26[0]) - want_first_26) <= 1e-4 * max(1.0, want_first_26))
     verdict("B8.26", good_26[-1], f"la loss de la première epoch, {fr(want_first_26, 4)}, est celle de Bradley-Terry sur "
                                   "les paires (le préféré d'abord).",
             f"la loss de la première epoch : attendu {want_first_26:.6g} (Bradley-Terry du modèle de départ, "
             f"torch.manual_seed(seed) puis make_reward_model_26()), reçu "
             f"{(float(losses_s_26[0]) if len(losses_s_26) else None)!r} sur {len(losses_s_26)} valeurs ; le préféré est "
             "pairs['first'] quand pairs['preferred'] vaut 0.")
-    good_26.append(len(losses_s_26) == 5 and float(losses_s_26[-1]) < float(losses_s_26[0]))
-    verdict("B8.26", good_26[-1], "la loss baisse en 5 epochs.",
-            "la loss ne baisse pas en 5 epochs : le gradient atteint-il le réseau (torch.autograd.backward avec les "
+    good_26.append(len(losses_s_26) == 20 and float(losses_s_26[-1]) < float(losses_s_26[0]))
+    verdict("B8.26", good_26[-1], "la loss baisse en 20 epochs.",
+            "la loss ne baisse pas en 20 epochs : le gradient atteint-il le réseau (torch.autograd.backward avec les "
             "gradients de ta bradley_terry_loss, puis optimizer.step()) ?")
     fn_26 = reward_fn_26(fixed_26)
     batch_26 = np.random.default_rng(260).normal(0, 0.5, (4, 4)).astype(np.float32)

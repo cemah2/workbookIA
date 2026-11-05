@@ -61,7 +61,8 @@ LETTERS_21 = L21["letters"]
 CAUSES_21 = ("healthy", "lr_high", "no_clip", "entropy_sign", "no_critic")
 HINTS_21 = {
     "healthy": "le run aux réglages de référence n'a aucune courbe anormale : reprends tes cinq panneaux un par un",
-    "lr_high": "des pas trop grands éloignent chaque politique de la précédente : quelle courbe mesure cet écart ?",
+    "lr_high": "des pas trop grands poussent sans cesse des ratios hors de l'intervalle du clip : quelle courbe le "
+               "compte ?",
     "no_clip": "sans clipping, aucun ratio n'est jamais rogné : quelle courbe compte les ratios rognés ?",
     "entropy_sign": "un bonus d'entropie de mauvais signe récompense une politique qui ne doute plus : quelle courbe "
                     "le montre ?",
@@ -345,7 +346,7 @@ Une paire est un dictionnaire de listes : `pairs["first"]` et `pairs["second"]`,
 - `train_reward_model_26(pairs, seed, epochs=EPOCHS_26, lr=LR_26)` : `torch.manual_seed(seed)`, puis `make_reward_model_26()` et Adam (`lr`) ; puis `epochs` pas sur **toutes** les paires à la fois (le batch complet) : les retours appris des deux listes, préféré et rejeté selon `pairs["preferred"]`, la loss et ses gradients par rapport aux retours par `mylearn.deep_rl.bradley_terry_loss` (ta fonction de B8.25, **appelée par ce nom** : la vérification l'observe), ces gradients poussés dans le réseau par `torch.autograd.backward`, et un pas d'Adam. Elle rend `(model, losses)`, `losses` la liste des loss de chaque epoch ;
 - `reward_fn_26(model)` rend une fonction `(obs, actions, next_obs) -> ` tableau NumPy float `(N,)`, `model(next_obs)` sans gradient : la `reward_fn` de ton `train_ppo_20`.
 
-La vérification essaie `make_reward_model_26`, compare `trajectory_returns_26` à la référence sur un modèle fixé, entraîne 5 epochs sur 30 paires (ta `bradley_terry_loss` appelée à chaque epoch, la loss de la première epoch, une loss qui baisse) et essaie `reward_fn_26`. Puis l'expérience (une minute environ) : tes deux modèles de récompense, leur accuracy sur les paires tenues à l'écart (au moins `THRESHOLD_26` attendu pour le modèle large), puis **quatre** agents de ton PPO, `STEPS_26` pas chacun : sur chaque modèle appris, sur la vraie récompense, et sur le +1 par pas de CartPole. Chacun est mesuré sur 20 épisodes déterministes : longueur, vraie récompense par pas, $|x|$ moyen, récompense apprise par pas. Deux figures : ce que chaque modèle a appris le long de $x$, et où vont les données et les agents.
+La vérification essaie `make_reward_model_26`, compare `trajectory_returns_26` à la référence sur un modèle fixé, entraîne 20 epochs sur 30 paires (ta `bradley_terry_loss` appelée à chaque epoch, la loss de la première epoch, une loss qui baisse) et essaie `reward_fn_26`. Puis l'expérience (une minute environ) : tes deux modèles de récompense, leur accuracy sur les paires tenues à l'écart (au moins `THRESHOLD_26` attendu pour le modèle large), puis **quatre** agents de ton PPO, `STEPS_26` pas chacun : sur chaque modèle appris, sur la vraie récompense, et sur le +1 par pas de CartPole. Chacun est mesuré sur 20 épisodes déterministes : longueur, vraie récompense par pas, $|x|$ moyen, récompense apprise par pas. Deux figures : ce que chaque modèle a appris le long de $x$, et où vont les données et les agents.
 
 Dans tes notes : le modèle étroit a-t-il une bonne accuracy sur **ses** paires tenues à l'écart ? Sur les paires larges ? Que récompense-t-il vraiment, et que fait l'agent qui l'optimise ? Compare, pour chaque agent, sa récompense apprise par pas et sa vraie récompense par pas : où vois-tu le piratage de la récompense, et pourquoi une récompense apprise ne se compare-t-elle qu'à elle-même (Bradley-Terry ne fixe que les différences) ? Ces chiffres viennent d'une seule graine : que faudrait-il pour les affirmer ? Qu'ajouterait une pénalité KL vers une politique de référence (208.7) ?""",
        given=fill(C2.GIVEN_26, VALUES), todo=C2.TODO_26, check=C2.CHECK_26,
@@ -386,8 +387,8 @@ Dans tes notes : quel écart changerait le plus un résultat sur CartPole, et le
 La cellule de vérification lance les trois runs l'un après l'autre (avec les réglages de B8.20, environ 40 s chacun), affiche pour chacun le retour moyen, le plus court des 100 épisodes, le nombre de pas joués et le temps, puis vérifie par `wb.check` le nombre de graines résolues. Rien à taper.
 
 Dans tes notes : tes réglages, et pourquoi (B8.22) ; le retour de chaque graine ; ce que tu aurais fait avec deux fois moins de pas.""",
-       given=C2.GIVEN_28, todo=C2.TODO_28, check=C2.CHECK_28, solution=C2.SOLUTION_28 + "\n\n\n" + C2.CHECK_28,
-       record=C2.RECORD_28),
+       given=C2.GIVEN_28, todo=C2.TODO_28, solution=C2.SOLUTION_28, record=C2.RECORD_28,
+       after=[("code", C2.CHECK_28)]),
 ])
 
 for _ex in PART_C.exercises:

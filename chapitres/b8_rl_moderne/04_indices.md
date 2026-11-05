@@ -862,7 +862,7 @@ Relis « Les journaux de PPO » (208.5) et « Le critique et sa variance expliqu
 <details><summary>Indice 2</summary>
 
 Pour chaque réglage changé, demande-toi ce qu'il touche :
-- le learning rate fixe la taille de chaque pas d'Adam : combien la politique bouge pendant une itération ;
+- le learning rate fixe la taille de chaque pas d'Adam : combien la politique bouge pendant une itération, et donc combien de ratios le clip doit rogner ;
 - sans clipping, la part des ratios rognés ne peut valoir qu'une seule valeur ;
 - le bonus d'entropie est le seul terme de la loss qui agit directement sur l'entropie ;
 - `vf_coef = 0` retire la loss du critique : que devient sa prédiction des retours ?
