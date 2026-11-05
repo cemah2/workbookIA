@@ -569,7 +569,7 @@ PAPER = [
         ("e", TF, "True", r'''mistakes={"relis la docstring de ReplayBuffer (🔨 26.31) : que devient la transition la plus ancienne ?": False}'''),
         ("f", TF, "False", r'''mistakes={"relis le ⚠️ du ch. 26 sur SARSA (§26.7) : de quelle politique SARSA apprend-il la valeur ?": True}'''),
     ]),
-    Paper("B8.R2", "Adam et le gradient clipping", [
+    Paper("B8.R2", "L'optimiseur Adam et le gradient clipping", [
         ("a", DEC4, "R2A", r'''decimals=4, mistakes={"c'est le pas de la descente de gradient simple : relis Adam au ch. 19 (§19.5.5)": W_R2 - LR_R2 * G_R2,
           "vérifie le signe : le gradient est négatif, le poids monte": 2 * W_R2 - R2A,
           "relis la correction de biais d'Adam (ch. 19, §19.5.5) : m et v partent de 0": R2A_NO_CORRECTION}'''),

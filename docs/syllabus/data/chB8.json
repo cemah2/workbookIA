@@ -524,7 +524,7 @@
   {
    "id": "B8.R2",
    "type": "🔁",
-   "title": "Adam et le gradient clipping",
+   "title": "L'optimiseur Adam et le gradient clipping",
    "stars": 1,
    "minutes": 5,
    "gpu": false,

@@ -150,7 +150,7 @@ d) La classe `ReplayBuffer` de `rl.py` garde : (A) des épisodes entiers, qu'on 
 e) Vrai ou faux : une fois pleine, la mémoire remplace la transition la plus ancienne par la nouvelle.
 f) Vrai ou faux : SARSA peut, sans rien changer, apprendre sur des mini-batches tirés d'une mémoire remplie par d'anciennes versions de sa politique.
 
-### B8.R2 — Ch. 19 : Adam et le gradient clipping 🔁 ★ ⏱️ 5 min
+### B8.R2 — Ch. 19 : l'optimiseur Adam et le gradient clipping 🔁 ★ ⏱️ 5 min
 *Ch. 19 (§19.5.5, « le gradient clipping ») · fiche §208.5 · parcours R*
 
 a) Un poids vaut $w = 1{,}0$ ; son premier gradient vaut $g = -40$. Adam ($\eta = 0{,}001$, $\beta_1 = 0{,}9$, $\beta_2 = 0{,}999$, $\epsilon = 10^{-8}$, correction de biais comprise) : que vaut $w$ après le premier pas, à 4 décimales ?

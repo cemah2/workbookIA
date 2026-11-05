@@ -5564,7 +5564,7 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 | B8.Q11 | 🧠 | RLHF, DPO, GRPO : qui a besoin d'un modèle de récompense ou d'un critique ? | ★ | 3 | — | 02 | — | R | wb.check |
 | B8.Q12 | 🧠 | Piratage de la récompense (reward hacking) : quand l'agent optimise la lettre et pas l'esprit | ★ | 3 | — | 02 | — | R | wb.check |
 | B8.R1 | 🔁 | La mise à jour du Q-learning et le rôle de la mémoire de rejeu | ★ | 5 | — | 02 | 26 | R | wb.check |
-| B8.R2 | 🔁 | Adam et le gradient clipping | ★ | 5 | — | 02 | 19 | R | wb.check |
+| B8.R2 | 🔁 | L'optimiseur Adam et le gradient clipping | ★ | 5 | — | 02 | 19 | R | wb.check |
 | B8.R3 | 🔁 | Exploration, softmax et bandits | ★ | 5 | — | 02 | 11 | R | wb.check |
 | B8.1 | ✏️ | Cible DQN à la main : état terminal, puis cible Double DQN | ★ | 15 | — | 02 | 26 | RM | wb.check |
 | B8.2 | ✏️ | Loss de Huber et son gradient pour trois erreurs TD | ★ | 10 | — | 02 | 5 | M | wb.check |

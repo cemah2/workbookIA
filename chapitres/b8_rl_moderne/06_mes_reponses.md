@@ -144,7 +144,7 @@
 
 
 
-### B8.R2 — Ch. 19 : Adam et le gradient clipping
+### B8.R2 — Ch. 19 : l'optimiseur Adam et le gradient clipping
 
 - a) :
 - b) :

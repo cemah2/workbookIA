@@ -246,7 +246,7 @@ a) $y = 0{,}3 + 0{,}8 \times 0{,}6 =$ **0,78**. Pour b), calcule $0{,}5 + 0{,}2 
 
 </details>
 
-### B8.R2 — Ch. 19 : Adam et le gradient clipping
+### B8.R2 — Ch. 19 : l'optimiseur Adam et le gradient clipping
 
 <details><summary>Indice 1</summary>
 
