@@ -205,7 +205,7 @@ if runs_22 and ok_22:
         hs_22 = [runs_22[f"{name_22}/{s}"] for s in SEEDS_22]
         sums_22 = [summary_22(h) for h in hs_22]
         aucs_22 = [s["auc"] for s in sums_22]
-        firsts_22 = ["jamais" if s["first_475"] is None else f"{s['first_475'] // 1000} k" for s in sums_22]
+        firsts_22 = ["jamais" if s["first_475"] is None else f"{round(s['first_475'] / 1000)} k" for s in sums_22]
         evals_22 = [round(h["eval"]) for h in hs_22]
         print(f"{name_22:11s} | {[round(a) for a in aucs_22]} ({fr(float(np.median(aucs_22)), 0)}) | {firsts_22} | "
               f"{evals_22}")'''

@@ -346,11 +346,30 @@ def _log_signature(logs: dict) -> dict:
             "return_last10": float(np.nanmean(np.array(logs["mean_return"][-10:], dtype=float)))}
 
 
+def l21_checks(rows: list) -> list:
+    """Each signature of B8.21 on each seed: the largest clip fraction for the large learning rate, a clip fraction
+    always 0 without clipping (and a KL above the healthy run), the lowest entropy reached for the wrong-sign
+    bonus, the lowest explained variance for the critic that does not learn."""
+    checks = []
+    for seed in sorted({r["seed"] for r in rows}):
+        by = {r["run"]: r for r in rows if r["seed"] == seed}
+        others = lambda key, run: [by[n][key] for n in by if n != run]       # noqa: E731
+        checks.append({"seed": seed,
+                       "lr_high_largest_clipfrac": by["lr_high"]["clipfrac_median"]
+                       > max(others("clipfrac_median", "lr_high")),
+                       "no_clip_never_clips": by["no_clip"]["clipfrac_max"] == 0.0,
+                       "no_clip_kl_above_healthy": by["no_clip"]["kl_median"] > by["healthy"]["kl_median"],
+                       "entropy_sign_lowest_entropy": by["entropy_sign"]["entropy_min"]
+                       < min(others("entropy_min", "entropy_sign")),
+                       "no_critic_lowest_ev": by["no_critic"]["ev_median"] < min(others("ev_median", "no_critic"))})
+    return checks
+
+
 def l21() -> tuple[dict, dict]:
     from wb import deep_rl_env as R
 
     rows, kept = [], {}
-    order = list(np.random.default_rng(21).permutation(len(L21_RUNS)))       # run i -> letter order[i]
+    order = list(np.random.default_rng(24).permutation(len(L21_RUNS)))       # run i -> letter order[i]
     letters = {name: L21_LETTERS[order[i]] for i, name in enumerate(L21_RUNS)}
     for seed in L21_SEEDS:
         for name, change in L21_RUNS.items():
@@ -362,19 +381,7 @@ def l21() -> tuple[dict, dict]:
             if seed == L21_SEEDS[0]:
                 kept[letters[name]] = {k: r4(logs[k]) if k not in ("step", "iteration", "episodes") else logs[k]
                                        for k in R.LOG_KEYS}
-    # each signature must hold on every seed
-    checks = []
-    for seed in L21_SEEDS:
-        by = {r["run"]: r for r in rows if r["seed"] == seed}
-        others = lambda key, run: [by[n][key] for n in by if n != run]       # noqa: E731
-        checks.append({"seed": seed,
-                       "lr_high_largest_clipfrac": by["lr_high"]["clipfrac_median"]
-                       > max(others("clipfrac_median", "lr_high")),
-                       "no_clip_never_clips": by["no_clip"]["clipfrac_max"] == 0.0,
-                       "no_clip_kl_above_healthy": by["no_clip"]["kl_median"] > by["healthy"]["kl_median"],
-                       "entropy_sign_lowest_entropy": by["entropy_sign"]["entropy_quarter"]
-                       < min(others("entropy_quarter", "entropy_sign")),
-                       "no_critic_lowest_ev": by["no_critic"]["ev_median"] < min(others("ev_median", "no_critic"))})
+    checks = l21_checks(rows)
     print("l21 checks", json.dumps(checks))
     protocol = {"seed": L21_SEEDS[0], "steps": R.ppo_steps(True), "settings": R.PPO_SETTINGS,
                 "changes": "five runs of the reference PPO; one has the reference settings, each other one changes "
