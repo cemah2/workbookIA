@@ -216,8 +216,27 @@
     "cos": 0.9879897254865737
    }
   ],
-  "min_ratio": 0.9262120832075194,
-  "computed_in_s": 14.1
+  "min_ratio_trained": 1.8208572355509502,
+  "kept_seed": 1,
+  "notebook": {
+   "untrained": {
+    "ratio": 1.1037512543209032,
+    "spreads": {
+     "none": 17.19468736674978,
+     "mean": 15.578407996762847
+    },
+    "mean_length": 21.40625
+   },
+   "trained": {
+    "ratio": 4.196134643856762,
+    "spreads": {
+     "none": 54.63205042773477,
+     "mean": 13.019613302379929
+    },
+    "mean_length": 373.28125
+   }
+  },
+  "computed_in_s": 18.7
  },
  "c13": {
   "rows": [
@@ -495,5 +514,211 @@
    "eval_seed": 8000
   },
   "computed_in_s": 407.9
+ },
+ "a15": {
+  "table": {
+   "dqn": {
+    "final_median": 117.14,
+    "finals": [
+     139.83,
+     117.14,
+     109.1
+    ],
+    "auc_median": 136.8075,
+    "aucs": [
+     148.1775,
+     136.8075,
+     134.105
+    ]
+   },
+   "no_target": {
+    "final_median": 9.29,
+    "finals": [
+     9.43,
+     9.29,
+     9.29
+    ],
+    "auc_median": 9.25,
+    "aucs": [
+     9.55,
+     9.25,
+     9.25
+    ]
+   },
+   "no_replay": {
+    "final_median": 175.46,
+    "finals": [
+     95.22,
+     175.46,
+     223.7
+    ],
+    "auc_median": 124.17,
+    "aucs": [
+     102.4325,
+     141.3025,
+     124.17
+    ]
+   },
+   "double": {
+    "final_median": 122.69,
+    "finals": [
+     173.47,
+     105.84,
+     122.69
+    ],
+    "auc_median": 133.705,
+    "aucs": [
+     133.705,
+     113.84,
+     142.33
+    ]
+   }
+  },
+  "protocol": {
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "steps": 20000,
+   "eval_every": 1000,
+   "eval_episodes": 20,
+   "eval_seed": 8000,
+   "settings": {
+    "hidden": 64,
+    "lr": 0.0005,
+    "batch_size": 128,
+    "capacity": 10000,
+    "learning_starts": 1000,
+    "train_freq": 1,
+    "target_every": 500,
+    "gamma": 0.99,
+    "eps_start": 1.0,
+    "eps_end": 0.05,
+    "eps_fraction": 0.3,
+    "huber_delta": 1.0,
+    "max_grad_norm": 10.0
+   },
+   "variants": [
+    "dqn",
+    "no_target",
+    "no_replay",
+    "double"
+   ]
+  },
+  "computed_in_s": 495.1
+ },
+ "b14": {
+  "versions": 16,
+  "messages": {
+   "none": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "target": "❌ Ex B8.14 : point 2, les fins d'épisode : une limite de temps (terminated=False, truncated=True) entre dans la mémoire avec le drapeau de fin True : sa cible n'amorcera pas sur l'état suivant ; relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (208.2)",
+   "done": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "epsilon": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "memory": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "target,done": "❌ Ex B8.14 : point 3, l'exploration : ε vaut 1,000 au pas 0, 1,000 au pas 1500, 1,000 au pas 3000, 1,000 au pas 6000 : la politique ne quitte jamais le même niveau d'exploration ; que doit valoir ε à la fin annoncée par la docstring ?",
+   "target,epsilon": "❌ Ex B8.14 : point 2, les fins d'épisode : une limite de temps (terminated=False, truncated=True) entre dans la mémoire avec le drapeau de fin True : sa cible n'amorcera pas sur l'état suivant ; relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (208.2)",
+   "target,memory": "❌ Ex B8.14 : point 2, les fins d'épisode : une limite de temps (terminated=False, truncated=True) entre dans la mémoire avec le drapeau de fin True : sa cible n'amorcera pas sur l'état suivant ; relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (208.2)",
+   "done,epsilon": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "done,memory": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "epsilon,memory": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "target,done,epsilon": "❌ Ex B8.14 : point 4, la mémoire : après 2 000 pas, 100 % des transitions de 20 mini-batches de 64 datent des 100 derniers pas, soit deux épisodes d'un agent qui tient 50 pas : chaque mini-batch reste fait de pas qui se suivent ; relis « Ces nombres montrent surtout… » (208.2) et 🧠 Q3 : que doit garder la mémoire ?",
+   "target,done,memory": "❌ Ex B8.14 : point 3, l'exploration : ε vaut 1,000 au pas 0, 1,000 au pas 1500, 1,000 au pas 3000, 1,000 au pas 6000 : la politique ne quitte jamais le même niveau d'exploration ; que doit valoir ε à la fin annoncée par la docstring ?",
+   "target,epsilon,memory": "❌ Ex B8.14 : point 2, les fins d'épisode : une limite de temps (terminated=False, truncated=True) entre dans la mémoire avec le drapeau de fin True : sa cible n'amorcera pas sur l'état suivant ; relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (208.2)",
+   "done,epsilon,memory": "❌ Ex B8.14 : point 1, la cible : les cibles de 5 transitions portent un gradient (requires_grad=True) : loss.backward() dériverait aussi à travers elles ; relis « Apprendre une valeur par régression » (208.1) : qu'est la cible pendant le calcul du gradient ?",
+   "target,done,epsilon,memory": ""
+  },
+  "computed_in_s": 0.5
+ },
+ "c14": {
+  "rows": [
+   {
+    "seed": 0,
+    "eval": 201.29,
+    "episodes": 120,
+    "last20": 213.55,
+    "q_end": 14.610384941101074,
+    "seconds": 16.1
+   },
+   {
+    "seed": 1,
+    "eval": 156.21,
+    "episodes": 153,
+    "last20": 146.05,
+    "q_end": 14.78541374206543,
+    "seconds": 15.8
+   },
+   {
+    "seed": 2,
+    "eval": 309.31,
+    "episodes": 121,
+    "last20": 288.1,
+    "q_end": 14.451143264770508,
+    "seconds": 17.7
+   },
+   {
+    "seed": 3,
+    "eval": 239.97,
+    "episodes": 112,
+    "last20": 245.9,
+    "q_end": 14.495246887207031,
+    "seconds": 16.6
+   },
+   {
+    "seed": 4,
+    "eval": 227.19,
+    "episodes": 164,
+    "last20": 218.35,
+    "q_end": 14.636364936828613,
+    "seconds": 15.3
+   }
+  ],
+  "worst": 156.21,
+  "threshold": 90.0,
+  "buggy": {
+   "all_bugs": {
+    "eval": 141.87,
+    "q_mean": [
+     0.13688163459300995,
+     1.0332214832305908,
+     2.4409682750701904,
+     4.680768013000488,
+     7.181761264801025,
+     9.234528541564941,
+     10.606424331665039,
+     11.567198753356934,
+     12.278237342834473,
+     12.520435333251953,
+     14.03687858581543,
+     12.960208892822266,
+     13.37790298461914,
+     13.492751121520996,
+     14.928799629211426,
+     14.5684814453125
+    ],
+    "last20": 20.6
+   },
+   "target": {
+    "eval": 156.61,
+    "q_mean": 16.096115112304688,
+    "last20": 217.85
+   },
+   "done": {
+    "eval": 201.29,
+    "q_mean": 14.610384941101074,
+    "last20": 213.55
+   },
+   "epsilon": {
+    "eval": 145.34,
+    "q_mean": 15.330339431762695,
+    "last20": 20.6
+   },
+   "memory": {
+    "eval": 156.99,
+    "q_mean": 14.978157997131348,
+    "last20": 134.65
+   }
+  },
+  "computed_in_s": 158.8
  }
 }

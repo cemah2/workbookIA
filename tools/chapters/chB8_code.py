@@ -1016,7 +1016,7 @@ CHECK_19 = r'''with checked("B8.19"):
                                 mylearn.deep_rl.clipped_surrogate(ratio_19.copy(), adv_19.copy(), eps_19),
                                 names=("loss", "gradient"), floats=("loss",))
         same("B8.19", f"9 ratios (deux sur un bord exact), ε = {fr(eps_19, 1)} : la loss contre l'autograd", loss_19,
-             float(want_19), rtol=1e-9, atol=1e-12)
+             want_19.item(), rtol=1e-9, atol=1e-12)
         same("B8.19", f"9 ratios, ε = {fr(eps_19, 1)} : le gradient contre l'autograd", grad_19, r_t.grad.numpy(),
              rtol=1e-9, atol=1e-12)'''
 
@@ -1403,7 +1403,8 @@ else:
         ax_20.set(xlabel="pas d'environnement (4 copies)", ylabel="retour", title=f"Ton PPO, graine {SEED_20}")
         ax_20.legend(fontsize=8)
         plt.show()
-        print(f"{STEPS_20} pas en {seconds_20:.0f} s ({len(steps_20)} itérations) · politique déterministe : "
+        print(f"{STEPS_20} pas en {seconds_20:.0f} s ({len(steps_20)} itérations, {int(np.sum(LOGS_20['episodes']))} "
+              "épisodes finis) · politique déterministe : "
               f"{fr(eval_20['mean_return'], 1)} sur 100 épisodes (écart-type {fr(eval_20['std_return'], 1)}) · écart "
               f"maximal entre ta clipped_surrogate et la loss torch : {max(LOGS_20['surrogate_gap']):.1e}")
         finite_20 = returns_20[np.isfinite(returns_20)]          # an iteration where no episode ends has nan

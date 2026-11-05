@@ -796,7 +796,8 @@
    "thread": "CartPole",
    "file": "03",
    "prereq": [
-    "26"
+    "26",
+    "26.21"
    ],
    "covers": [
     "208.1"
@@ -819,7 +820,8 @@
    "prereq": [
     "B8.12",
     "B8.1",
-    "B8.2"
+    "B8.2",
+    "26.31"
    ],
    "covers": [
     "208.2"
@@ -889,7 +891,7 @@
    "tracks": [
     "code"
    ],
-   "check": "manual"
+   "check": "wb.check"
   },
   {
    "id": "B8.17",

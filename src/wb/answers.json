@@ -61836,6 +61836,73 @@
       "sign": -1,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
+    "B8.12": {
+      "decimals": 4,
+      "hash": "5c62c133afad9b12c8cb4f16269b15815f45f50d2442f3fa91572a653d405a73",
+      "hash_coarse": "fc4011cda881cd258ace3b6a2b516b698c6935655b9989baaf4e010a0fd3a193",
+      "kind": "float",
+      "magnitude": 1,
+      "mistakes": {
+        "1fdc3ebc82d6c0ebcaf2b23fcaabfe319a147d4bc9e04c2568115a068d42b800": "relis le contrat : chaque appel tire int(rng.integers(2))",
+        "33a7a5e8219c0338613a459a566bdd64de19b195dee4f14dd4779c3f73fdfe7f": "ta politique joue-t-elle toujours la même action ? Où le générateur est-il créé ?",
+        "45cbb2e5625ce2277541a161da2b6f989b00d3f9b33ef27024353e1127a05e79": "les actions et les graines des épisodes viennent-elles du même générateur ? Relis les contrats de random_policy_12 et d'evaluate_12"
+      },
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.16a": {
+      "choices": [
+        "0",
+        "1",
+        "2"
+      ],
+      "fractional": "la réponse est le numéro d'une variante : 0, 1 ou 2",
+      "hash": "cfebcf0acbb6a2b802da13eed1b7fe4008e45ff0eb2950996bad56022f73d8c1",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "1f3b3bc1d646703619ad51687745a70d39d744a3cb4184cadb9541e7405cb141": "lis la médiane de chaque variante sous la figure",
+        "375bdebcb5833e42daee1a99d39a527d57efe7831d9edd2709dd74435b617217": "lis la médiane de chaque variante sous la figure"
+      },
+      "prediction": true,
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.16b": {
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "fractional": "la réponse est un nombre de graines, de 0 à 6",
+      "hash": "d8420435e98741a9de174e7c39e0d1ccbae11bb7e9bb6859f9cdb40c222d5c1e",
+      "kind": "int",
+      "magnitude": 0,
+      "mistakes": {
+        "2139111104fb25e9076e78afa73e2d980828089f059de4c4bfefeed4546c2c67": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200",
+        "255b4f00cf0c549b55a751756db8bf11c23aa4a7e0bb77247cb398bd60e6875f": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200",
+        "5870f04517eaea35b5d79a54ed26f858b92c100d8957d4b735b1b5adc1aa7c58": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200",
+        "65657b85c4d06dc0b78a42e532d5264f92411378d505935132bdb8665dff66d1": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200",
+        "98f6051179dc78b55fe5d67882dc2adf81f0954403819aefa16af6a896676666": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200",
+        "b2eec642d4b69ff5067e7f70d3e537a78866bed285969ccb15bdd606a81331f7": "compte, ligne « sans baseline », les graines où la moyenne glissante atteint 200"
+      },
+      "prediction": true,
+      "sign": 1,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
+    "B8.16c": {
+      "hash": "98c3b1fe83f26543a9289784292b8ec23f6c9b8b7b6ccdd0d30689f3592e7dc2",
+      "kind": "bool",
+      "mistakes": {
+        "7fdef2d25946e4576c2287fc6cf05633717945719a26bcf623277cff27f6296e": "compare, graine par graine, les 50 derniers épisodes avec et sans baseline"
+      },
+      "prediction": true,
+      "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
+    },
     "B8.Q1a": {
       "hash": "d2fa5a37ad88529b6d0be6d384471d428548b2c7bd4f9a9a8a66151d0670fd3d",
       "kind": "int",
