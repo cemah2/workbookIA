@@ -18,11 +18,11 @@ Objectif : une **reconversion professionnelle** vers les métiers de l'IA et de 
 | **Exercices** | **2 028** : 1 933 dans les 39 chapitres (0A, 0B, 1 à 29, B1 à B8), 82 dans les 6 examens blancs, 13 étapes du projet final |
 | **Par type** | 🧠 448 · 🔁 114 · ✏️ 250 · ∂ 71 · 🔨 197 · 📦 191 · 🔬 116 · 🔮 87 · 🐛 50 · 📈 47 · 🧮 37 · 🗣️ 45 · ⚖️ 39 · 📄 34 · 🎨 27 · 🏆 39 · 💼 190 · 🛠️ 46 |
 | **Vérifications automatiques** | 5 671 réponses vérifiées par `wb.check` (empreinte, jamais la réponse en clair) |
-| **Tests** | **5 838 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 835 pour l'outillage du workbook |
+| **Tests** | **5 848 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 845 pour l'outillage du workbook |
 | **Notebooks** | 107 : 78 dans les chapitres (exercices et solutions exécutées), 12 pour les examens blancs, 15 pour les mini-projets et le projet final, 2 pour la mise en place |
 | **Flashcards** | 967 cartes en 39 sous-paquets Anki |
 | **mylearn** | 38 modules, 273 fonctions et classes publiques aux signatures figées |
-| **Index et glossaire** | 1 570 notions et 1 541 renvois, 1 261 termes au glossaire |
+| **Index et glossaire** | 1 565 notions et 1 606 renvois, 1 261 termes au glossaire |
 
 *Compté le 2026-11-05 par `python tools/repo_stats.py --write` : exercices du contrat (`docs/syllabus/data/*.json`), réponses de `src/wb/answers.json`, cartes acceptées par `export_flashcards.py --check`, tests de `pytest --collect-only --impl=ref`, fichiers `.ipynb` hors `mon_travail/`, stubs de `MANIFEST.json`, en-tête de l'index.*
 <!-- wb:end chiffres -->
