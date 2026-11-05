@@ -1266,6 +1266,8 @@ Règle du workbook (BIBLE §5) : on garde le terme anglais quand c'est l'usage p
 | écart simulation-réalité, sim-to-real | reality gap, sim-to-real | l'écart entre le simulateur et le monde réel (frottements, délais, capteurs) ; le passage d'un agent entraîné en simulation au réel | B8 |
 | randomisation de domaine | domain randomization | entraîner sur de nombreuses variantes tirées au hasard du simulateur, pour que le réel n'en soit qu'une de plus | B8 |
 | RL hors ligne | offline RL | apprendre une politique à partir de données déjà collectées, sans nouvelle interaction | B8 |
+| loi de Goodhart | Goodhart's law | « une mesure qui devient un objectif cesse d'être une bonne mesure » : un agent qui optimise une récompense substitut finit par la séparer de ce qu'elle mesurait | B8 |
+| résidu de Bellman | Bellman residual | l'écart $Q_\theta(s, a) - (r + \gamma \max_{a'} Q_\theta(s', a'))$ minimisé en dérivant **aussi** à travers la cible : une autre méthode que le semi-gradient, qui apprend en général moins bien | B8 |
 
 ## Termes des checkpoints et des mini-projets (parties I à VI)
 

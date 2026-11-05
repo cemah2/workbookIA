@@ -37,12 +37,12 @@ d) SARSA avec un réseau Q à la place de la table, sans mémoire de rejeu, sur 
 e) Vrai ou faux : le réseau cible de DQN retire l'un des trois ingrédients de la triade.
 f) Vrai ou faux : une mémoire de rejeu, qui garde des transitions jouées par d'anciennes versions de la politique, rend l'apprentissage off-policy, même si l'agent n'explore plus.
 
-### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux 🧠 ⏱️ 3 min
+### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? 🧠 ⏱️ 3 min
 *Fiche §208.2 · parcours R*
 
-a) Une mémoire de rejeu de 10 000 transitions est pleine ; à chaque pas, une transition nouvelle remplace la plus ancienne, et une mise à jour tire un mini-batch de 64 transitions distinctes, uniformément. Pendant son séjour dans la mémoire, combien de fois une transition est-elle tirée, en moyenne ?
+a) Une mémoire de rejeu de 10 000 transitions est pleine ; à chaque pas, une transition nouvelle remplace la plus ancienne, puis **une** mise à jour tire un mini-batch de 64 transitions distinctes, uniformément. Pendant son séjour dans la mémoire, combien de fois une transition est-elle tirée, en moyenne ?
 b) Vrai ou faux : avec une mémoire de 1 000 transitions au lieu de 10 000, et les mêmes réglages, chaque transition serait tirée moins souvent pendant son séjour.
-c) Vrai ou faux : entre deux copies du réseau cible, deux calculs de la cible d'une même transition donnent la même valeur, même si le réseau en ligne a fait 300 pas d'Adam entre-temps.
+c) Vrai ou faux : entre deux copies du réseau cible, deux calculs de la cible DQN (pas Double DQN) d'une même transition donnent la même valeur, même si le réseau en ligne a fait 300 pas d'Adam entre-temps.
 d) Avec la mise à jour douce $\bar\theta \leftarrow \tau\theta + (1 - \tau)\bar\theta$, appliquée à chaque pas avec $\tau = 0{,}005$ : quelle part des poids qu'avait le réseau cible il y a 200 pas compte encore dans ses poids actuels, à 2 décimales ?
 e) Vrai ou faux : une mémoire de rejeu permet d'apprendre plusieurs fois d'une transition rare (la chute qui suit un long épisode) au lieu de l'oublier aussitôt.
 
@@ -62,7 +62,7 @@ f) Vrai ou faux : si toutes les valeurs Q d'un état sont surestimées de la mê
 a) Un bras robotique règle le couple de 6 moteurs, des nombres réels. Quelle approche convient directement ? (A) une table Q où chaque moteur prend 10 valeurs possibles, sans aucun réseau, dont on lit l'action gloutonne par un `argmax` sur chaque ligne ; (B) un DQN ; (C) une politique qui rend une moyenne et un écart-type par moteur.
 b) Dans l'approche (A) de a), combien d'actions discrètes la table compte-t-elle par état ?
 c) Une politique softmax à trois actions a les logits $(\ln 2 ;\ \ln 6 ;\ 0)$. Quelle est la probabilité de l'action 1, à 2 décimales ?
-d) Lesquels sont des avantages d'un gradient de politique sur DQN ? (A) il traite directement des actions continues ; (B) il peut représenter une politique aléatoire, quand c'est elle la meilleure ; (C) il réutilise chaque transition de nombreuses fois ; (D) l'exploration est intégrée à la politique, sans ε. (une ou plusieurs lettres)
+d) Lesquels sont des avantages d'un gradient de politique sur DQN ? (A) il traite directement des actions continues ; (B) il peut représenter une politique aléatoire, quand c'est elle la meilleure ; (C) il réutilise chaque transition de nombreuses fois ; (D) il explore en tirant ses actions dans sa propre loi, sans paramètre d'exploration à part. (une ou plusieurs lettres)
 e) Vrai ou faux : au jeu de « pair ou impair » (chaque joueur montre un ou deux doigts ; l'un gagne si la somme est paire, l'autre sinon), contre un adversaire qui exploite toute régularité, la meilleure politique est déterministe.
 
 ### B8.Q6 — REINFORCE : pourquoi soustraire une baseline ne biaise pas le gradient 🧠 ★★ ⏱️ 3 min
@@ -72,8 +72,8 @@ Une pièce truquée tombe sur pile avec la probabilité $p_\theta(\text{pile}) =
 
 a) Que vaut la fonction score $\frac{d}{d\theta} \ln p_\theta(\text{face})$, à 2 décimales ?
 b) Que vaut l'espérance de la fonction score, sur les deux issues, à 2 décimales ?
-c) Laquelle de ces baselines **biaise** le gradient de REINFORCE ? (A) la moyenne des retours des 20 derniers épisodes ; (B) un critique $V_w(s_t)$ ; (C) le retour $G_t$ de l'épisode en cours, au même pas.
-d) Vrai ou faux : sur CartPole, une baseline constante $b = 1\,000$, très loin des retours observés, laisse l'espérance du gradient inchangée mais en augmente la variance.
+c) Laquelle de ces baselines **biaise** le gradient de REINFORCE ? (A) la moyenne des retours des 20 épisodes précédents ; (B) un critique $V_w(s_t)$ ; (C) le retour $G_t$ du même pas.
+d) Vrai ou faux : sur CartPole, une baseline constante $b = 1\,000$, très loin des retours observés, laisse l'espérance du gradient inchangée mais en augmente la variance, par rapport à l'absence de baseline.
 e) Vrai ou faux : la baseline corrige aussi un biais de l'estimation de REINFORCE.
 
 ### B8.Q7 — Avantage, erreur TD et GAE : ce que règle λ 🧠 ★★ ⏱️ 3 min
@@ -84,12 +84,12 @@ b) Avec $\lambda = 0$, l'avantage GAE $\hat A_t$ vaut : (A) l'erreur TD $\delta_
 c) Lequel de ces réglages donne l'estimation de plus forte variance ? (A) $\lambda = 0{,}95$ ; (B) $\lambda = 0$ ; (C) $\lambda = 1$.
 d) Avec $\gamma = 0{,}99$ et $\lambda = 0{,}95$, quel poids porte l'erreur TD $\delta_{t+10}$ dans $\hat A_t$, à 2 décimales (on suppose que l'épisode continue) ?
 e) Vrai ou faux : avec $\lambda = 1$, l'avantage GAE ne dépend plus du tout du critique.
-f) Vrai ou faux : pour un pas tronqué, $\delta_t$ amorce sur la valeur de la vraie dernière observation, mais $\hat A_t$ n'ajoute aucune erreur TD des pas suivants du rollout.
+f) Vrai ou faux : dans un rollout où le pas 5 est tronqué, l'avantage $\hat A_5$ ne dépend ni de $\delta_6$ ni de $V(s_6)$, la valeur de la première observation de l'épisode suivant.
 
 ### B8.Q8 — PPO : à quoi sert le clip, et pourquoi réutiliser plusieurs fois le même lot ? 🧠 ⏱️ 3 min
 *Fiche §208.5 · parcours R*
 
-a) PPO fait plusieurs epochs sur le même rollout parce que : (A) le clip rend l'estimation exacte quelle que soit la distance entre $\pi_\theta$ et $\pi_{\text{old}}$ ; (B) chaque transition coûte une interaction, et le ratio corrige l'écart entre les deux politiques tant qu'elles restent proches ; (C) un gradient de politique est off-policy.
+a) PPO fait plusieurs epochs sur le même rollout parce que : (A) le clip rend l'estimation exacte quelle que soit la distance entre $\pi_\theta$ et $\pi_{\text{old}}$ ; (B) une interaction coûte, et le ratio corrige l'écart entre deux politiques proches ; (C) un gradient de politique est off-policy : il vaut pour les données de n'importe quelle politique passée.
 b) Vrai ou faux : pour un avantage négatif, le clip empêche aussi de faire redescendre un ratio monté à 1,5.
 c) Un rollout de $N = 8$ environnements et $T = 256$ pas, 4 epochs, des mini-batches de 256 transitions : combien de pas d'Adam par itération ?
 d) $\log \pi_\theta(a \mid s) = -0{,}9$ et $\log \pi_{\text{old}}(a \mid s) = -1{,}2$. Que vaut le ratio, à 2 décimales ?
@@ -102,8 +102,8 @@ f) Vrai ou faux : une transition d'avantage nul ne contribue pas au gradient de 
 a) Laquelle de ces méthodes apprend, sans aucune correction, sur des transitions jouées par d'anciennes versions de sa politique ? (A) REINFORCE ; (B) DQN ; (C) PPO.
 b) Vrai ou faux : PPO, qui réutilise un rollout pendant plusieurs epochs, est une méthode off-policy, comme DQN.
 c) Vrai ou faux : REINFORCE n'utilise plus un épisode une fois qu'il a servi à un pas de gradient.
-d) Pourquoi DQN peut-il apprendre la valeur de la politique gloutonne à partir de transitions jouées en ε-greedy ? (A) sa cible prend le max sur $a'$, quelle que soit l'action que jouera ensuite la politique qui explore ; (B) le réseau cible corrige chaque transition par un ratio de probabilités ; (C) ε finit par décroître jusqu'à 0.
-e) Sur un robot réel, chaque épisode prend une heure. Quel choix de départ est le plus raisonnable ? (A) PPO, robuste et simple à régler ; (B) REINFORCE, dont l'estimation est sans biais ; (C) une méthode off-policy, qui réutilise chaque transition de nombreuses fois.
+d) Pourquoi DQN peut-il apprendre la valeur de la politique gloutonne à partir de transitions jouées en ε-greedy ? (A) sa cible prend le max sur $a'$, sans regarder l'action que jouera la politique qui explore ; (B) le réseau cible corrige chaque transition par un ratio de probabilités ; (C) ε finit par décroître jusqu'à 0, et les transitions de la mémoire redeviennent celles de la politique gloutonne.
+e) Sur un robot réel, chaque épisode prend une heure. Quel choix de départ est le plus raisonnable ? (A) PPO, robuste, simple à régler et présent dans toutes les bibliothèques ; (B) REINFORCE, dont l'estimation du gradient est sans biais ; (C) une méthode off-policy, qui réutilise ses transitions.
 
 ### B8.Q10 — Évaluer un agent : graines, épisodes, politique déterministe 🧠 ⏱️ 3 min
 *Fiche §208.6 · parcours R*
@@ -111,7 +111,7 @@ e) Sur un robot réel, chaque épisode prend une heure. Quel choix de départ es
 a) Une politique parfaite pour CartPole-v1 est évaluée par `evaluate_policy(env, policy, n_episodes=100, max_steps=300, rng=rng)`. Quel retour moyen affiche-t-elle ?
 b) 100 épisodes d'évaluation donnent un retour moyen de 412 et un écart-type de 40. Que vaut l'erreur type de la moyenne, à 1 décimale ?
 c) Vrai ou faux : après `env.reset(seed=3)`, un second `env.reset()` sans graine redonne le même état initial.
-d) Pour comparer DQN et Double DQN sur CartPole : (A) une graine chacun, mais 1 000 épisodes d'évaluation ; (B) au moins trois graines chacun, et les mêmes graines d'évaluation pour les deux ; (C) la meilleure de cinq graines pour chacun.
+d) Pour comparer DQN et Double DQN sur CartPole : (A) une graine chacun, mais 1 000 épisodes d'évaluation, pour que la moyenne soit très précise ; (B) au moins trois graines chacun, évaluées sur les mêmes graines ; (C) la meilleure de cinq graines pour chacun, pour comparer les deux méthodes à leur meilleur niveau.
 e) Vrai ou faux : pour qu'une politique aléatoire qui tire ses actions par `env.action_space.sample()` soit reproductible, `env.reset(seed=...)` ne suffit pas.
 f) Pour rapporter ce que vaut un agent PPO, on l'évalue avec : (A) l'action de plus grande probabilité ; (B) une action tirée avec une température de 2 ; (C) l'action qui maximise la valeur $V$ du critique.
 
@@ -122,16 +122,16 @@ a) Lesquels entraînent un modèle de récompense séparé ? (A) le RLHF d'Instr
 b) Lesquels tirent de nouvelles réponses de la politique pendant l'entraînement ? (A) le RLHF avec PPO ; (B) DPO ; (C) GRPO. (une ou plusieurs lettres)
 c) GRPO, un groupe de 4 réponses de récompenses $(1 ;\ 0 ;\ 0 ;\ 0)$ : quel est l'avantage de la première réponse, avec l'écart-type de population (divisé par le nombre de réponses du groupe), à 2 décimales ?
 d) Vrai ou faux : dans DPO, $\pi_{\text{ref}}$ reste figée pendant tout l'entraînement.
-e) GRPO se passe de critique parce que : (A) les récompenses vérifiables n'ont aucune variance ; (B) un critique serait un second modèle de la taille de la politique ; (C) PPO interdit un critique quand les actions sont des tokens.
-f) Vrai ou faux : si les $G$ réponses d'un groupe GRPO ont toutes la même récompense, cette question ne fait pas bouger la politique.
+e) GRPO se passe de critique parce que : (A) les récompenses vérifiables n'ont aucune variance ; (B) un critique coûterait un second modèle de langue ; (C) PPO interdit un critique quand les actions sont des tokens.
+f) Vrai ou faux : si les $G$ réponses d'un groupe GRPO ont toutes la même récompense, cette question ne fait pas bouger la politique par l'objectif clippé (la pénalité KL mise à part).
 
 ### B8.Q12 — Piratage de la récompense (reward hacking) : quand l'agent optimise la lettre et pas l'esprit 🧠 ⏱️ 3 min
 *Fiche §208.7, §208.8 · parcours R*
 
-a) Lesquels sont des piratages de la récompense ? (A) un agent qui atteint le seuil de 475 sur CartPole ; (B) un assistant noté par un modèle de récompense qui allonge toutes ses réponses, parce que ce modèle préfère les réponses longues ; (C) un agent qui joue presque au hasard au début de son entraînement ; (D) un robot de ménage récompensé quand sa caméra ne voit plus de désordre, qui pousse le désordre hors du champ. (une ou plusieurs lettres)
-b) Gao et coll. (2022) optimisent une politique contre un modèle de récompense appris, en mesurant aussi une récompense « vraie ». À mesure que la KL entre la politique et la référence grandit, la vraie récompense : (A) monte toujours, moins vite que la récompense apprise ; (B) monte, plafonne, puis redescend ; (C) baisse dès le début.
+a) Lesquels sont des piratages de la récompense ? (A) un agent qui atteint le seuil de 475 sur CartPole en tenant le mât jusqu'à la limite de temps ; (B) un assistant qui allonge toutes ses réponses, parce que son modèle de récompense préfère les longues ; (C) un agent qui joue presque au hasard au début de son entraînement, avant d'avoir appris quoi que ce soit ; (D) un robot de ménage récompensé quand sa caméra ne voit plus de désordre, qui pousse le désordre hors du champ. (une ou plusieurs lettres)
+b) Gao et coll. (2022) optimisent une politique contre un modèle de récompense appris, en mesurant aussi une récompense « vraie ». À mesure que la KL entre la politique et la référence grandit, la vraie récompense : (A) monte toujours, moins vite que la récompense apprise ; (B) atteint un maximum, puis baisse ; (C) baisse dès le début.
 c) Vrai ou faux : augmenter $\beta$, la force de la pénalité KL du RLHF, laisse la politique s'éloigner davantage de la référence.
-d) Quelle parade attaque le mieux la cause du piratage ? (A) entraîner plus longtemps contre le même modèle de récompense ; (B) retirer la pénalité KL, pour que la politique explore davantage ; (C) surveiller une mesure qu'on ne récompense pas, par exemple des évaluations humaines sur un échantillon de réponses.
+d) Quelle parade attaque le mieux la cause du piratage ? (A) entraîner plus longtemps contre le même modèle de récompense, jusqu'à ce que la politique converge ; (B) retirer la pénalité KL, pour que la politique explore des réponses plus variées ; (C) suivre une mesure qu'on n'optimise pas, comme un audit humain d'un échantillon de réponses.
 e) Vrai ou faux : si les annotateurs préfèrent, une fois sur cinq, une réponse convaincante mais fausse à une réponse correcte, le modèle de récompense peut apprendre à favoriser les réponses convaincantes.
 
 <a id="rappels"></a>
@@ -146,7 +146,7 @@ Une case de la table vaut $Q(s, a) = 0{,}5$. On joue $a$, on reçoit $r = 0{,}3$
 a) Que vaut la cible $y$, à 2 décimales ?
 b) Que devient $Q(s, a)$ après la mise à jour, à 3 décimales ?
 c) Même transition, mais $s'$ est terminal : que devient $Q(s, a)$, à 2 décimales ?
-d) La classe `ReplayBuffer` de `rl.py` garde : (A) des épisodes entiers, qu'on rejoue depuis leur état de départ ; (B) les dernières transitions $(s, a, r, s', \text{terminated})$, dans lesquelles on tire des mini-batches au hasard ; (C) les valeurs Q des états visités, pour ne pas les recalculer.
+d) La classe `ReplayBuffer` de `rl.py` garde : (A) des épisodes entiers, qu'on rejoue depuis leur état de départ pour revoir les mêmes situations ; (B) les dernières transitions $(s, a, r, s', \text{terminated})$, tirées en mini-batches au hasard ; (C) les valeurs Q des états visités, pour ne pas avoir à les recalculer à chaque mise à jour.
 e) Vrai ou faux : une fois pleine, la mémoire remplace la transition la plus ancienne par la nouvelle.
 f) Vrai ou faux : SARSA peut, sans rien changer, apprendre sur des mini-batches tirés d'une mémoire remplie par d'anciennes versions de sa politique.
 
@@ -162,11 +162,11 @@ e) Vrai ou faux : le clipping par la norme globale garde la direction du gradien
 ### B8.R3 — Ch. 11 : exploration, softmax et bandits 🔁 ★ ⏱️ 5 min
 *Ch. 11 (« Au-delà du livre : le bandit manchot ») · ch. 26 (§26.6.2) · fiche §208.3 · parcours R*
 
-a) Une politique ε-greedy avec $\varepsilon = 0{,}2$, sur les deux actions de CartPole : avec quelle probabilité joue-t-elle l'action gloutonne, à 2 décimales ?
+a) Une politique ε-greedy avec $\varepsilon = 0{,}2$, sur les deux actions de CartPole (en exploration, elle tire parmi toutes les actions, comme au ch. 26) : avec quelle probabilité joue-t-elle l'action gloutonne, à 2 décimales ?
 b) Une politique softmax de température $\tau = 0{,}5$ sur deux actions de valeurs $Q = (1{,}0 ;\ 1{,}5)$ : probabilité de l'action 1, à 3 décimales ?
 c) Un bras a reçu les récompenses 2, 4 et 6 ($Q = 4$) ; il reçoit 8. Que devient $Q$ avec la moyenne incrémentale, à 1 décimale ?
 d) Vrai ou faux : une politique softmax de très grande température se rapproche de la politique gloutonne.
-e) Le « gradient bandit » de Sutton et Barto (§2.8), qui monte la préférence du bras tiré quand sa récompense dépasse la moyenne des récompenses, est : (A) ε-greedy avec un ε qui décroît ; (B) REINFORCE sur un seul état, avec une baseline ; (C) UCB.
+e) Le « gradient bandit » de Sutton et Barto (§2.8), qui monte la préférence du bras tiré quand sa récompense dépasse la moyenne des récompenses, est : (A) ε-greedy avec un ε qui décroît à mesure que les estimations se précisent ; (B) un gradient de politique sans critique, sur un problème à un seul état ; (C) UCB, qui ajoute un bonus aux bras peu essayés.
 
 <a id="papier"></a>
 
@@ -319,7 +319,7 @@ où $\mu$ est la loi de l'état initial et $P$ la dynamique de l'environnement, 
 **Prérequis :** ch. 26 (le DQN et AlphaGo Zero en quelques lignes) · fiche §208.6 (« ce que coûte un pas sur CPU », rappel maths « une estimation de Fermi en RL »), §208.8 · **Parcours :** R, M
 
 Hypothèses (des ordres de grandeur, à prendre telles quelles) :
-- **ton CPU** (mesures de la fiche) : un pas de CartPole vectorisé ≈ 20 µs par copie ; une passe avant d'un petit MLP sur un batch d'observations ≈ 50 µs ; un tirage par `Categorical` ≈ 200 µs ; un pas d'Adam de PPO sur un mini-batch de 128 ≈ 3 ms ; une mise à jour de DQN (mini-batch de 128) ≈ 1,7 ms ;
+- **ton CPU** (mesures de la fiche) : un pas de CartPole vectorisé ≈ 20 µs par copie ; une passe avant d'un petit MLP sur un batch d'observations ≈ 50 µs (PPO en fait deux à chaque appel de `step` : l'acteur et le critique) ; un tirage par `Categorical` ≈ 200 µs ; un pas d'Adam de PPO sur un mini-batch de 128 ≈ 3 ms ; une mise à jour de DQN (mini-batch de 128) ≈ 1,7 ms ;
 - **PPO de CleanRL sur CartPole** : 500 000 pas d'environnement, 4 copies, des rollouts de 128 pas, 4 epochs de 4 mini-batches par itération ;
 - **DQN 2015** (V. Mnih et coll., *Nature*) : 49 jeux ; par jeu, « 50 millions d'images, environ 38 jours de jeu » ; l'agent ne voit qu'une image sur 4 de l'émulateur et répète son action sur les autres ; une mise à jour tous les 4 choix d'action, sur un mini-batch de 32 ; un jeu Atari tourne à 60 images par seconde ;
 - **AlphaGo Zero** (D. Silver et coll., *Nature*, 2017, version de 3 jours) : 4,9 millions de parties contre lui-même, 1 600 simulations par coup (chacune évalue une fois le réseau), environ 0,4 s par coup ; on suppose 200 coups par partie ; sur ton CPU, une passe du réseau de 20 blocs résiduels sur une position prendrait environ 0,2 s ;
@@ -327,7 +327,7 @@ Hypothèses (des ordres de grandeur, à prendre telles quelles) :
 
 Réponds dans ta copie, avec des ordres de grandeur ; des fourchettes sont bienvenues.
 
-1. **CartPole.** Combien d'itérations, de rollouts vectorisés (appels de `step` sur les 4 copies) et de pas d'Adam fait le PPO de CleanRL ? Estime le temps de collecte, le temps des mises à jour, puis le total. Combien de temps prendrait le budget de 100 000 pas du défi B8.28 ?
+1. **CartPole.** Combien d'itérations, de rollouts vectorisés (appels de `step` sur les 4 copies) et de pas d'Adam fait le PPO de CleanRL ? Estime le temps de collecte, le temps des mises à jour, puis le total. Combien de temps prendrait, avec les mêmes réglages, le budget de 100 000 pas du défi B8.28 ?
 2. **Atari.** Combien d'images de l'émulateur font 38 jours à 60 images par seconde ? Qu'en déduis-tu sur ce que comptent les « 50 millions d'images » de l'article ? Combien de mises à jour et combien de transitions tirées dans la mémoire, par jeu, puis pour les 49 jeux ? Compare aux 2 heures du testeur humain.
 3. **AlphaGo Zero.** Combien de positions jouées, et combien de passes du réseau pour les 4,9 millions de parties ? À 0,4 s par coup, combien de parties devaient tourner en même temps pour tenir en 3 jours ? Combien de temps prendraient toutes ces passes sur ton CPU ? Compare au nombre de parties d'une vie de joueur.
 4. En deux phrases : qu'est-ce que ces trois chiffres disent de l'efficacité en échantillons du RL, et pourquoi ce n'est un problème que hors d'un simulateur ?

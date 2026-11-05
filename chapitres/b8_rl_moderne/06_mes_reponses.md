@@ -26,7 +26,7 @@
 
 
 
-### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux
+### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ?
 
 - a) :
 - b) :

@@ -44,7 +44,7 @@ a) Les trois ingrédients nommés par Sutton et Barto : l'approximation (A), l'a
 
 </details>
 
-### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux
+### B8.Q3 — Réseau cible et mémoire de rejeu : quel problème chacun résout-il ?
 
 <details><summary>Indice 1</summary>
 
@@ -130,7 +130,7 @@ $\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)$ quand l'épisode continue. $\hat A
 </details>
 <details><summary>Indice 3</summary>
 
-a) $1 + 0{,}9 \times 2{,}5 - 3{,}0 =$ **0,25**. Pour b), que reste-t-il de la somme quand $\gamma\lambda = 0$ ? Pour c), quel réglage porte le hasard de tout le reste de l'épisode ? Pour d), calcule $(0{,}99 \times 0{,}95)^{10}$. Pour e), que reste-t-il du critique dans $G_t - V(s_t)$ ? Pour f), que vaut $1 - \text{done}_t$ pour un pas tronqué ?
+a) $1 + 0{,}9 \times 2{,}5 - 3{,}0 =$ **0,25**. Pour b), que reste-t-il de la somme quand $\gamma\lambda = 0$ ? Pour c), quel réglage porte le hasard de tout le reste de l'épisode ? Pour d), calcule $(0{,}99 \times 0{,}95)^{10}$. Pour e), que reste-t-il du critique dans $G_t - V(s_t)$ ? Pour f), sur quelle valeur $\delta_5$ amorce-t-il, et que vaut $1 - \text{done}_5$ ?
 
 </details>
 
@@ -408,7 +408,7 @@ Relis le rappel maths « l'astuce de la log-dérivée » et « Le théorème du 
 </details>
 <details><summary>Indice 3</summary>
 
-1. $\nabla \sum_x p_\theta(x) f(x) = \sum_x f(x)\,\nabla p_\theta(x) = \sum_x f(x)\,p_\theta(x)\,\nabla \ln p_\theta(x)$ : c'est $\mathbb{E}[f\,\nabla \ln p_\theta]$ ; le $\ln$ exige $p_\theta(x) > 0$ là où $f(x) \ne 0$. Pour 2, écris $\ln p_\theta(\tau) = \ln\mu(s_0) + \sum_t [\ln \pi_\theta(a_t \mid s_t) + \ln P(s_{t+1} \mid s_t, a_t)]$ et dérive, puis applique 1. avec $f = R$. Pour 3, $\sum_a \nabla \pi_\theta(a \mid s) = \nabla 1$. Pour 4, écris $\mathbb{E}[\,\cdot\,] = \mathbb{E}_{\text{début}}\big[\gamma^{t'} r_{t'}\,\mathbb{E}_{a_t}[\nabla \ln \pi_\theta(a_t \mid s_t) \mid s_t]\big]$. Pour 5, sors $b(s_t)$ de l'espérance sur $a_t$. Pour 6, $\frac{\partial}{\partial z}\ln\pi(1) = 1 - \pi(1)$ et $\frac{\partial}{\partial z}\ln\pi(0) = -\pi(1)$ : écris $g$ dans les deux cas, puis $\mathbb{E}[g]$ et $\mathbb{E}[g^2] - \mathbb{E}[g]^2$ comme des fonctions de $b$.
+1. $\nabla \sum_x p_\theta(x) f(x) = \sum_x f(x)\,\nabla p_\theta(x) = \sum_x f(x)\,p_\theta(x)\,\nabla \ln p_\theta(x)$ : c'est $\mathbb{E}[f\,\nabla \ln p_\theta]$ ; le $\ln$ exige $p_\theta(x) > 0$ : on somme sur les issues possibles, un ensemble qui ne dépend pas de $\theta$. Pour 2, écris $\ln p_\theta(\tau) = \ln\mu(s_0) + \sum_t [\ln \pi_\theta(a_t \mid s_t) + \ln P(s_{t+1} \mid s_t, a_t)]$ et dérive, puis applique 1. avec $f = R$. Pour 3, $\sum_a \nabla \pi_\theta(a \mid s) = \nabla 1$. Pour 4, écris $\mathbb{E}[\,\cdot\,] = \mathbb{E}_{\text{début}}\big[\gamma^{t'} r_{t'}\,\mathbb{E}_{a_t}[\nabla \ln \pi_\theta(a_t \mid s_t) \mid s_t]\big]$. Pour 5, sors $b(s_t)$ de l'espérance sur $a_t$. Pour 6, $\frac{\partial}{\partial z}\ln\pi(1) = 1 - \pi(1)$ et $\frac{\partial}{\partial z}\ln\pi(0) = -\pi(1)$ : écris $g$ dans les deux cas, puis $\mathbb{E}[g]$ et $\mathbb{E}[g^2] - \mathbb{E}[g]^2$ comme des fonctions de $b$.
 
 </details>
 
@@ -421,12 +421,12 @@ Relis « Ce que coûte un pas sur CPU » et le rappel maths « une estimation de
 </details>
 <details><summary>Indice 2</summary>
 
-CartPole : itérations $= 500\,000 / (4 \times 128)$ ; chaque itération fait 128 appels de `step` vectorisés (4 copies, une passe avant, un tirage) et $4 \times 4$ pas d'Adam. Atari : jours $\times$ 86 400 s $\times$ 60 images ; une mise à jour tous les 4 choix d'action, 32 transitions chacune. AlphaGo Zero : parties $\times$ coups $\times$ simulations ; durée d'une partie $= 200 \times 0{,}4$ s. Compare toujours à un ordre de grandeur humain.
+CartPole : itérations $= 500\,000 / (4 \times 128)$ ; chaque itération fait 128 appels de `step` vectorisés (4 copies, deux passes avant, un tirage) et $4 \times 4$ pas d'Adam. Atari : jours $\times$ 86 400 s $\times$ 60 images ; une mise à jour tous les 4 choix d'action, 32 transitions chacune. AlphaGo Zero : parties $\times$ coups $\times$ simulations ; durée d'une partie $= 200 \times 0{,}4$ s. Compare toujours à un ordre de grandeur humain.
 
 </details>
 <details><summary>Indice 3</summary>
 
-1. $500\,000 / 512 \approx 976$ itérations ; $976 \times 128 \approx 125\,000$ appels vectorisés à $4 \times 20 + 50 + 200 \approx 330$ µs, soit environ 40 s de collecte ; $976 \times 16 \approx 15\,600$ pas d'Adam à 3 ms, soit environ 47 s : **un peu moins de 2 minutes** en tout, et environ cinq fois moins pour les 100 000 pas du défi. Pour 2, calcule $38 \times 86\,400 \times 60$ et compare à 50 millions ; puis $50 \times 10^6 / 4$ mises à jour, $\times 32$, $\times 49$ ; et 38 jours contre 2 heures. Pour 3, $4{,}9 \times 10^6 \times 200$ positions, $\times 1\,600$ passes ; $4{,}9 \times 10^6 \times 80$ s divisés par $3 \times 86\,400$ s ; les passes $\times 0{,}2$ s, en années. Pour 4, mets ces nombres face à ceux d'un humain.
+1. $500\,000 / 512 \approx 976$ itérations ; $976 \times 128 \approx 125\,000$ appels vectorisés à $4 \times 20 + 2 \times 50 + 200 \approx 380$ µs (l'acteur et le critique), soit environ 48 s de collecte ; $976 \times 16 \approx 15\,600$ pas d'Adam à 3 ms, soit environ 47 s : **un peu plus d'une minute et demie** en tout, et environ cinq fois moins pour les 100 000 pas du défi. Pour 2, calcule $38 \times 86\,400 \times 60$ et compare à 50 millions ; puis $50 \times 10^6 / 4$ mises à jour, $\times 32$, $\times 49$ ; et 38 jours contre 2 heures. Pour 3, $4{,}9 \times 10^6 \times 200$ positions, $\times 1\,600$ passes ; $4{,}9 \times 10^6 \times 80$ s divisés par $3 \times 86\,400$ s ; les passes $\times 0{,}2$ s, en années. Pour 4, mets ces nombres face à ceux d'un humain.
 
 </details>
 

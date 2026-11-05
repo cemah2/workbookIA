@@ -61147,7 +61147,7 @@
       "mistakes": {
         "0f98787a3419ccd2033d6a6453b73693a70a0f06517b0bf013c1b9054492c954": "γ multiplie la valeur de la suite : n'oublie pas la récompense r = 1",
         "a3323d3ed86eaeaab607ec1db1f1377dcf86e2a021fc886b65db58c3753e2e5f": "DQN prend le max du réseau cible, pas du réseau en ligne",
-        "a8502818a26ff7796c64f8ef47880bc6130f62cc62efd4770f80b2c9e68964b7": "la cible prend le maximum sur les actions de s', pas la première"
+        "a8502818a26ff7796c64f8ef47880bc6130f62cc62efd4770f80b2c9e68964b7": "relis la question : on demande la cible DQN ; quelle action de s' retient-elle ?"
       },
       "sign": 1,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
@@ -61256,6 +61256,9 @@
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
     "B8.2b": {
+      "alt_coarse": [
+        "7105ea1a43e276ad9b197523d66592805bc4bf02276f69e062a3c3643190ddd2"
+      ],
       "decimals": 3,
       "hash": "d3e93d0f44868a4fae30f77c250a74ada99997df4c8d429aa6502444bee8f372",
       "hash_coarse": "33fc58d1d07458109d717ba221a7c516e8e66992dc566626386a8743c79fa1b1",
@@ -61622,6 +61625,9 @@
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
     "B8.5d": {
+      "alt_coarse": [
+        "1c4f6adcdfd127ecdc6c825a9ca712bad1b23aa704035a3442a1bfc90ec0aa49"
+      ],
       "decimals": 3,
       "hash": "0d9d93dc5a99adaf4c34528f46af0843ab1318f32d0f48fc9c54b6fc10fc3241",
       "hash_coarse": "d9df2d097b0409f02aea2a54a473c99467f030b2092d6b2fea1695e7b380133f",
@@ -61693,7 +61699,7 @@
       "kind": "int",
       "magnitude": 0,
       "mistakes": {
-        "314b50fbcf163f916d565145f75672cf2a1b24cf7fc47d7fe0519ad8c0719d52": "avec ε = 0,3, une transition reste au-delà de l'intervalle dans la zone à gradient nul : laquelle ?",
+        "314b50fbcf163f916d565145f75672cf2a1b24cf7fc47d7fe0519ad8c0719d52": "avec ε = 0,3, compare encore les deux termes de chaque transition : le terme clippé est-il quelque part strictement le plus petit ?",
         "a0e1e4d526b0710afb5e483c7f06fd501359c710d39a735a72eb8c04e040499b": "avec ε = 0,3, l'intervalle devient [0,7 ; 1,3] : refais la comparaison des deux termes",
         "e9b609f3f3637e2864b3f34432fd6cbbe388256e939921c8ba478b76794f07fd": "relis les quatre ratios contre [0,7 ; 1,3]"
       },
@@ -61877,7 +61883,7 @@
         "07faae4b8a46a525672c7a87420d0c8a42949589f6efcab96e08e2ecaef1e6b2": "la forme commence par l'axe des exemples",
         "610182bd9d9f9c7937753c462e3a08540f395cd5140957804ba868ec0c204437": "4 est la dimension de l'entrée : que rend le réseau ?",
         "8856f261fea29ff26a8ec6f5a9d5e06a3a282455a92f69864f2147c1b37870f1": "le réseau rend une valeur par action : combien d'actions a CartPole ?",
-        "b67f6bcb900aabb5fbdc523e7dfb7265a9eab1c49d2b92b2b249ea36f9d62cd6": "le réseau garde l'axe des 32 états, puis rend un vecteur par état"
+        "b67f6bcb900aabb5fbdc523e7dfb7265a9eab1c49d2b92b2b249ea36f9d62cd6": "relis la question : un batch de 32 états passe d'un coup, pas un seul état"
       },
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
     },
@@ -61976,7 +61982,7 @@
       "kind": "int",
       "magnitude": 1,
       "mistakes": {
-        "3f06b79c65509de91d7203204cea7c87c2f1d8429cd99e01d043851bed5c6a42": "multiplie la durée du séjour (en pas) par la probabilité d'être tirée à chaque pas",
+        "3f06b79c65509de91d7203204cea7c87c2f1d8429cd99e01d043851bed5c6a42": "une mise à jour tire 64 transitions, pas une seule : ta probabilité d'être tirée à chaque pas en tient-elle compte ?",
         "970e3e1cdd6ce7a18765e891100b7f855c019fe9be1f2b653b3f35620e8f6356": "relis la question : combien de fois une même transition est-elle tirée, pas combien de mini-batches tient la mémoire",
         "d4ee8d1a04948066577cb296ab8310adafb461e7b05417dbb7ba538b4fb4fcb5": "une transition reste dans la mémoire plus d'un pas : combien de pas, et quelle chance d'être tirée à chacun ?"
       },
@@ -62006,9 +62012,9 @@
       "kind": "float",
       "magnitude": -1,
       "mistakes": {
+        "3e614c5dc6c2d67e5dc4264234b4d8c4024e4d93aad444fe4c35b0e076e6b746": "relis la question : la part des poids d'il y a 200 pas qui reste, pas celle de ce qui a été ajouté depuis",
         "4341b35fe9d29d579abcf7844f63af6c2f8b32a41316c155be3d0c30a281779c": "les parts se multiplient d'un pas à l'autre, elles ne se retranchent pas",
-        "bbe76f6163a89d378de1f84d10adbb6fa53365998029187fce62e29a487fbb3a": "relis la question : 200 pas, pas un seul",
-        "f56b4cd86f82e0918ae9f7bfdfe040b6de553ddffc8da1a884a99f48115021cc": "relis la formule : à chaque pas, l'ancienne valeur est multipliée par 1 − τ, pas par τ"
+        "bbe76f6163a89d378de1f84d10adbb6fa53365998029187fce62e29a487fbb3a": "relis la question : 200 pas, pas un seul"
       },
       "sign": 1,
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
@@ -62363,7 +62369,7 @@
       "hash": "fb98dd5f02ecb5c921e8eff0409d07372541db0cdc9d7cb51c60a71cc7790958",
       "kind": "str",
       "mistakes": {
-        "4fd7e328b7257d0e87cbf021c6db1d8dd866a6dba5d20b2b3055645fe9e18463": "relis l'encadré 💼 de 208.5 : que coûte PPO en interactions ?",
+        "4fd7e328b7257d0e87cbf021c6db1d8dd866a6dba5d20b2b3055645fe9e18463": "relis l'encadré 💼 de 208.5 : que coûte PPO en interactions, ici où chacune prend du temps réel ?",
         "a93c260afbb42674fe1111efe41f26e0bac54e43f91ea4f242af631492ee6ae4": "une estimation sans biais mais très dispersée demande beaucoup d'épisodes : relis « La baseline et la variance » (§208.3)"
       },
       "source": "chapitres/b8_rl_moderne/05_solutions.ipynb"
@@ -62569,7 +62575,7 @@
       "magnitude": -1,
       "mistakes": {
         "2abb0b33a3fbeb834da0fe02e7ac65ad9fc445fefaa8ef0a1d893d24dc3a281b": "α mélange la cible et l'ancienne valeur : relis la mise à jour du ch. 26 (§26.6.1)",
-        "746256f4669dc454c41d0aca5373f3d25841c6ec224e2f94d6dd58efda6aefc9": "la mise à jour ajoute α δ à l'ancienne valeur, sans la remplacer",
+        "746256f4669dc454c41d0aca5373f3d25841c6ec224e2f94d6dd58efda6aefc9": "relis la question : la nouvelle valeur de la case, pas seulement sa variation",
         "f43717490b258bba6476b6ee4b9ad3d8064247e2a0b76eb2b1e4f714dc7c1abc": "relis la question : la nouvelle valeur de la case, pas l'erreur TD"
       },
       "sign": 1,

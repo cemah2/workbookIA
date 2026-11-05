@@ -710,6 +710,23 @@ def test_too_few_decimals_is_recognized_on_a_rounding_boundary():
     assert "juste à 2" not in message("n.1", e, 0.61)
 
 
+def test_too_few_decimals_on_a_tie_stored_under_the_half():
+    """Session 77 (B8, solver V1): a tie computed just under the half (1.5 * 1.65 is 2.4749999..., the loss of
+    B8.5d is -0.31499999...) gives « presque » for Python's rounding and for the school one (half away from zero); a
+    truncation of a tie (0.7 for 0.75, -0.37 for -0.375) stays a wrong value, as 0.6 for 0.65 (d.19)."""
+    cases = ((1.5 * (2.4 - 0.75), 3, (2.47, 2.48), None),                 # 2.4749999999999996 (B8.2b)
+             (-(2.4 + 0.9 - 0.96 - 1.08) / 4, 3, (-0.31, -0.32), None),     # -0.31499999999999995 (B8.5d)
+             (0.75, 2, (0.8,), 0.7), (-0.375, 3, (-0.38,), -0.37))
+    for value, decimals, neighbours, truncated in cases:
+        e = entry("n.10", value, decimals=decimals)
+        for given in neighbours:
+            assert f"juste à {decimals - 1} décimale(s)" in message("n.10", e, given), (value, given)
+        if truncated is not None:
+            assert "presque" not in message("n.10", e, truncated), (value, truncated)
+    e = entry("n.11", 2.4751, decimals=4)                 # not a tie at 3 decimals: only the right rounding
+    assert "juste à 3" in message("n.11", e, 2.475) and "juste à 3" not in message("n.11", e, 2.476)
+
+
 def test_magnitude_messages_for_negative_answers_speak_of_absolute_value():
     """-1000.313 is smaller than -999.687: 'too large' would be wrong without 'in absolute value'."""
     e = entry("n.2", -999.687, decimals=3)

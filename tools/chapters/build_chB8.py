@@ -413,7 +413,7 @@ PAPER = [
         ("d", TF, "False", r'''mistakes={"relis « Apprendre une valeur par régression » (§208.1) : que devient la méthode si la cible est dérivée aussi ?": True}'''),
         ("e", SHAPE, '"(32, 2)"', r'''mistakes={"le réseau rend une valeur par action : combien d'actions a CartPole ?": "(32, 1)",
           "4 est la dimension de l'entrée : que rend le réseau ?": "(32, 4)",
-          "le réseau garde l'axe des 32 états, puis rend un vecteur par état": "(2,)",
+          "relis la question : un batch de 32 états passe d'un coup, pas un seul état": "(2,)",
           "la forme commence par l'axe des exemples": "(2, 32)"}'''),
     ]),
     Paper("B8.Q2", "La triade mortelle : approximation, amorçage et apprentissage off-policy", [
@@ -430,8 +430,8 @@ PAPER = [
         ("e", TF, "False", r'''mistakes={"relis la fin de « Instabilité : la triade mortelle » (§208.1) : DQN renonce-t-il à l'un des trois ?": True}'''),
         ("f", TF, "True", r'''mistakes={"relis le troisième ingrédient (§208.1) : de quelle politique viennent les transitions de la mémoire ?": False}'''),
     ]),
-    Paper("B8.Q3", "Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux", [
-        ("a", WHOLE, "round(Q3A)", r'''mistakes={"multiplie la durée du séjour (en pas) par la probabilité d'être tirée à chaque pas": 1,
+    Paper("B8.Q3", "Réseau cible et mémoire de rejeu : quel problème chacun résout-il ?", [
+        ("a", WHOLE, "round(Q3A)", r'''mistakes={"une mise à jour tire 64 transitions, pas une seule : ta probabilité d'être tirée à chaque pas en tient-elle compte ?": 1,
           "relis la question : combien de fois une même transition est-elle tirée, pas combien de mini-batches tient la mémoire": 156,
           "une transition reste dans la mémoire plus d'un pas : combien de pas, et quelle chance d'être tirée à chacun ?": 0},
           fractional="compte les tirages d'une transition pendant tout son séjour : un nombre entier en moyenne ici"'''),
@@ -439,7 +439,7 @@ PAPER = [
         ("c", TF, "True", r'''mistakes={"relis « Les deux stabilisateurs » (§208.2) : quels poids calculent la cible entre deux copies ?": False}'''),
         ("d", DEC2, "Q3D", r'''decimals=2, mistakes={"les parts se multiplient d'un pas à l'autre, elles ne se retranchent pas": 0.0,
           "relis la question : 200 pas, pas un seul": 0.995,
-          "relis la formule : à chaque pas, l'ancienne valeur est multipliée par 1 − τ, pas par τ": 0.005}'''),
+          "relis la question : la part des poids d'il y a 200 pas qui reste, pas celle de ce qui a été ajouté depuis": 1 - Q3D}'''),
         ("e", TF, "True", r'''mistakes={"relis « Les deux stabilisateurs » (§208.2) : combien de fois sert chaque transition de la mémoire ?": False}'''),
     ]),
     Paper("B8.Q4", "Double DQN : d'où vient la surestimation des valeurs Q ?", [
@@ -517,7 +517,7 @@ PAPER = [
         ("c", TF, "True", r'''mistakes={"relis la fin de « REINFORCE » (§208.3) : pour quelle politique le gradient vaut-il ?": False}'''),
         ("d", LETTER, '"A"', letters("A", {"B": "le ratio de probabilités appartient à PPO : relis la cible de DQN (§208.2)",
                                            "C": "même avec ε = 0,1, la cible reste celle de la politique gloutonne : relis la cible de DQN (§208.2)"})),
-        ("e", LETTER, '"C"', letters("C", {"A": "relis l'encadré 💼 de 208.5 : que coûte PPO en interactions ?",
+        ("e", LETTER, '"C"', letters("C", {"A": "relis l'encadré 💼 de 208.5 : que coûte PPO en interactions, ici où chacune prend du temps réel ?",
                                            "B": "une estimation sans biais mais très dispersée demande beaucoup d'épisodes : relis « La baseline et la variance » (§208.3)"})),
     ]),
     Paper("B8.Q10", "Évaluer un agent : graines, épisodes, politique déterministe", [
@@ -559,7 +559,7 @@ PAPER = [
           "γ multiplie la valeur de la suite": R_R1 + MAX_R1}'''),
         ("b", DEC3, "R1B", r'''decimals=3, mistakes={"α mélange la cible et l'ancienne valeur : relis la mise à jour du ch. 26 (§26.6.1)": R1A,
           "relis la question : la nouvelle valeur de la case, pas l'erreur TD": R1A - Q_R1,
-          "la mise à jour ajoute α δ à l'ancienne valeur, sans la remplacer": ALPHA_R1 * (R1A - Q_R1)}'''),
+          "relis la question : la nouvelle valeur de la case, pas seulement sa variation": ALPHA_R1 * (R1A - Q_R1)}'''),
         ("c", DEC2, "R1C", r'''decimals=2, mistakes={"un état terminal n'a pas de suite : relis le rappel maths du ch. 26 (§26.6.1)": R1B,
           "α mélange la cible et l'ancienne valeur": R_R1}'''),
         ("d", LETTER, '"B"', letters("B", {"A": "c'est le rejeu du livre : relis l'encadré 🕰️ de 26.9 et la docstring de ReplayBuffer",
@@ -596,7 +596,7 @@ PAPER = [
     Paper("B8.1", "Cible DQN à la main : état terminal, puis cible Double DQN", [
         ("a", DEC2, "DQN_B81[0]", r'''decimals=2, mistakes={"DQN prend le max du réseau cible, pas du réseau en ligne": 1 + GAMMA_B81 * QO_B81[0].max(),
           "γ multiplie la valeur de la suite : n'oublie pas la récompense r = 1": GAMMA_B81 * QT_B81[0].max(),
-          "la cible prend le maximum sur les actions de s', pas la première": 1 + GAMMA_B81 * QT_B81[0, 0]}'''),
+          "relis la question : on demande la cible DQN ; quelle action de s' retient-elle ?": 1 + GAMMA_B81 * QT_B81[0, 0]}'''),
         ("b", DEC2, "DQN_B81[1]", r'''decimals=2, mistakes={"relis « la cible se réduit à r » (§208.2) : s' est-il terminal ?": 1 + GAMMA_B81 * QT_B81[1].max(),
           "même terminale, la transition a reçu sa récompense": 0.0}'''),
         ("c", DEC2, "DQN_B81[2]", r'''decimals=2, mistakes={"relis l'encadré ⚠️ « la limite de temps n'est pas une fin » (§208.2)": 1.0,
@@ -709,7 +709,7 @@ PAPER = [
         ("h", DEC2, "CLIPFRAC_B85", r'''decimals=2, mistakes={"la fraction clippée compte les ratios hors de l'intervalle, pas les gradients nuls": ZERO_B85 / 4,
           "relis la définition : |ρ − 1| > ε, pour chaque transition": 0.75}'''),
         ("i", WHOLE, "ZERO_EPS3_B85", r'''mistakes={"avec ε = 0,3, l'intervalle devient [0,7 ; 1,3] : refais la comparaison des deux termes": ZERO_B85,
-          "avec ε = 0,3, une transition reste au-delà de l'intervalle dans la zone à gradient nul : laquelle ?": 0,
+          "avec ε = 0,3, compare encore les deux termes de chaque transition : le terme clippé est-il quelque part strictement le plus petit ?": 0,
           "relis les quatre ratios contre [0,7 ; 1,3]": 3}'''),
     ]),
     Paper("B8.6", "Préférences : loss de Bradley-Terry puis loss DPO sur une paire de réponses", [

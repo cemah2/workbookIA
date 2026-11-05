@@ -543,15 +543,18 @@ _COMPUTED_NEAR = ("Tout près, mais pas égal : cette valeur vient de ta fonctio
 
 def _coarse_texts(x: float, decimals: int) -> list[str]:
     """The right value written with one decimal less: as Python rounds it, plus, on an exact tie, the rounding
-    taught at school, half away from zero, when Python's differs (0.625 -> "0.62" for Python, "0.63" at school)."""
+    taught at school, half away from zero, when Python's differs (0.625 -> "0.62" for Python, "0.63" at school).
+    A tie computed just under the half (1.5 * 1.65 gives 2.4749999..., a mean gives -0.31499999...) is still a tie:
+    school rounding gives 2.48 and -0.32 (session 77: floor(scaled + 0.5) gave 2.47 and -0.31 again)."""
     texts = [_fmt_float(x, decimals - 1)]
     scale = 10 ** (decimals - 1)
     scaled = abs(x) * scale
-    if math.isfinite(x) and abs(scaled - math.floor(scaled) - 0.5) < 1e-6:
-        half_up = math.copysign(math.floor(scaled + 0.5) / scale, x)
-        text = _fmt_float(half_up, decimals - 1)
-        if text not in texts:
-            texts.append(text)
+    if math.isfinite(x):
+        low = math.floor(scaled + 1e-6)          # 247.49999999999997 and 247.5 both give 247
+        if abs(scaled - low - 0.5) < 1e-6:
+            text = _fmt_float(math.copysign((low + 1) / scale, x), decimals - 1)
+            if text not in texts:
+                texts.append(text)
     return texts
 
 
