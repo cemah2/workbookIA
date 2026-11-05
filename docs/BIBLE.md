@@ -367,6 +367,7 @@ On privilégie la documentation officielle (PyTorch, scikit-learn, Hugging Face)
 | shap | **0.54.1** | | 2026-10-29 |
 | diffusers (oracle des tests de B5, facultatif) | **0.40.0** (Colab du 2026-09-30) | Colab du 2026-11-02 : 0.42.1, à revérifier au prochain checkpoint | 2026-11-02 |
 | fastapi / uvicorn / pydantic (B7) | **0.141.1 / 0.53.0 / 2.13.5** (Colab du 2026-09-30) | | 2026-11-04 |
+| genanki (export `.apkg` des flashcards, facultatif : extra `anki`, absent de `requirements.txt`) | **0.13.1** (pas sur Colab ; dépendances : cached-property, chevron, frozendict, pyyaml) | 0.13.1 (2023-11-12) | 2026-11-05 |
 | pytest / nbformat / nbclient | **8.4.2 / 5.11.1 / 0.10.4** | 9.1.1 / 5.11.1 / 0.11.0 | 2026-09-29 |
 | jupyterlab (local uniquement) | **4.5.4** | 4.5.4 | 2026-09-29 |
 | Keras (non utilisé, §4) | Colab : 3.13.2 | 3.15.1 (2026-07-29) | 2026-09-29 |

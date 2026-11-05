@@ -11,7 +11,8 @@ mylearn signatures are read from the stubs in ``templates/mylearn_stubs/``
     python tools/syllabus.py stats     # totals per type and per part, length of the 🔨/📦 statements
 
 Generated files: docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md,
-templates/mylearn_stubs/MANIFEST.json (chapter -> stub files; additive only).
+annexes/index_notions.md (tools/build_index.py: the index of the notions, read in the glossary, the contract
+and the sheets), templates/mylearn_stubs/MANIFEST.json (chapter -> stub files; additive only).
 """
 
 from __future__ import annotations
@@ -1200,8 +1201,12 @@ def main(argv=None) -> int:
     (ROOT / "docs" / "SYLLABUS.md").write_text(build_syllabus(chapters), encoding="utf-8")
     (ROOT / "docs" / "PARCOURS.md").write_text(build_parcours(chapters), encoding="utf-8")
     (ROOT / "suivi" / "tableau_de_bord.md").write_text(build_dashboard(chapters), encoding="utf-8")
+    import build_index      # imports this module: imported here, once the module is loaded
+
+    (ROOT / build_index.OUTPUT).write_text(build_index.build_index(chapters), encoding="utf-8")
     update_manifest(chapters)
-    print("✅ docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md, MANIFEST.json générés.")
+    print("✅ docs/SYLLABUS.md, docs/PARCOURS.md, suivi/tableau_de_bord.md, annexes/index_notions.md, "
+          "MANIFEST.json générés.")
     return 0
 
 

@@ -30,6 +30,7 @@ xai = ["shap>=0.46"]
 serve = ["fastapi>=0.110", "uvicorn>=0.30", "pydantic>=2.6"]
 prod = ["onnx", "onnxscript", "onnxruntime", "mlflow", "ruff", "pre-commit"]
 dev = ["pytest>=8.0", "nbformat>=5.10", "nbclient>=0.10", "ipykernel>=6.0"]
+anki = ["genanki>=0.13"]   # optional: tools/export_flashcards.py --apkg (annexes/anki.md)
 all = ["dl-workbook[torch,boost,umap,rl,hf,xai,serve,dev]"]
 
 [tool.setuptools]

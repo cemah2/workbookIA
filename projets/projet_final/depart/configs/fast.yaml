@@ -1,0 +1,23 @@
+# FAST_MODE: the whole project runs on a CPU in less than 10 minutes (notebooks, training, evaluation).
+# Every setting is a field of projet.config.Config; an unknown key is refused.
+name: projet-fast
+seed: 0
+fast: true
+task: classification          # TODO PF.1: classification, regression, forecasting, generation or rl
+target: label                 # TODO PF.2: the target column of load_examples
+group_column: ""              # TODO PF.3: the column whose examples must stay together, if any
+time_column: ""               # TODO PF.3: the time column, if the test must come after the training
+test_size: 0.2
+val_size: 0.1
+max_train_examples: 2000      # a subsample of the training split: minutes, not hours
+metric: f1_macro              # TODO PF.4: the main metric of docs/protocole.md
+n_bootstrap: 500
+model: deep
+model_params: {}
+epochs: 2
+batch_size: 64
+lr: 0.001
+patience: 2
+device: cpu
+out_dir: artifacts/model_fast
+runs_file: experiments/runs.jsonl

@@ -299,15 +299,82 @@ def test_export_flashcards(tmp_path):
     code = export_flashcards.export(out_file, root=tmp_path, out=lines.append)
     assert code == 1 and any("colonne" in line for line in lines)
     text = out_file.read_text(encoding="utf-8")
-    assert text.startswith("#separator:semicolon\n#html:true\n#tags column:3\n")
+    assert text.startswith("#separator:semicolon\n#html:true\n#tags column:3\n#deck column:4\n")
     assert "dlwb::ch02::mean" in text and "dlwb::ch03::proba" in text
     assert export_flashcards.export(out_file, root=tmp_path, check_only=True, out=quiet) == 1
     one = tmp_path / "ch02.csv"
     assert export_flashcards.export(one, root=tmp_path, chapter="2", out=quiet) == 0
     text = one.read_text(encoding="utf-8")
-    assert "#deck:Deep Learning Workbook::ch02_stats\n" in text and "dlwb::ch02::mean" in text
-    assert "dlwb::ch03" not in text
+    assert "dlwb::ch02::mean" in text and "dlwb::ch03" not in text
     assert export_flashcards.export(one, root=tmp_path, chapter="5", out=quiet) == 2   # no such chapter
+
+
+def _deck_rows(path):
+    import csv
+
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if not line.startswith("#")]
+    return list(csv.reader(lines, delimiter=";"))
+
+
+def test_export_flashcards_files_each_card_in_its_part_and_chapter(tmp_path):
+    """One deck, one sub-deck per part and chapter (4th column, « #deck column »), and a hierarchical tag."""
+    folder = tmp_path / "chapitres" / "ch18_backprop"
+    folder.mkdir(parents=True)
+    (folder / "flashcards.csv").write_text('front;back;tags\n"Delta ; définition ?";"dL/dz";dlwb::ch18::delta\n',
+                                           encoding="utf-8")
+    whole, one = tmp_path / "deck.csv", tmp_path / "one.csv"
+    assert export_flashcards.export(whole, root=tmp_path, out=quiet) == 0
+    assert export_flashcards.export(one, root=tmp_path, chapter="18", out=quiet) == 0
+    rows = _deck_rows(whole)
+    assert rows == [["Delta ; définition ?", "dL/dz", "dlwb::ch18::delta dlwb::partie_IV::ch18",
+                     "Deep Learning Workbook::Partie IV::Ch. 18 Rétropropagation"]], rows
+    assert _deck_rows(one) == rows, "a chapter export must land in the same sub-deck as the whole deck"
+
+
+def test_real_deck_sorts_its_sub_decks_in_study_order():
+    """Anki sorts decks by name: « Partie 0 » to « Partie VII », « Ch. 07 » before « Ch. 10 » (two digits)."""
+    folders = sorted((f.parent for f in ROOT.glob("chapitres/*/flashcards.csv")),
+                     key=lambda folder: syllabus.ORDER.index(export_flashcards.chapter_of(folder)))
+    decks = [export_flashcards.deck_of(folder) for folder in folders]          # in study order
+    assert decks == sorted(decks), f"expected sub-decks whose names sort in study order, got {decks[:6]}…"
+    assert all(d.startswith("Deep Learning Workbook::Partie ") and d.count("::") == 2 for d in decks), decks[:3]
+
+
+def test_export_apkg_stops_cleanly_without_genanki(tmp_path, monkeypatch):
+    folder = tmp_path / "chapitres" / "ch02_stats"
+    folder.mkdir(parents=True)
+    (folder / "flashcards.csv").write_text("Moyenne ?;2;dlwb::ch02::mean\n", encoding="utf-8")
+    monkeypatch.setitem(sys.modules, "genanki", None)           # « import genanki » now raises ImportError
+    lines = []
+    out_file = tmp_path / "deck.apkg"
+    assert export_flashcards.export(out_file, root=tmp_path, apkg=True, out=lines.append) == 2
+    assert not out_file.exists() and any("pip install genanki" in line for line in lines), lines
+    assert export_flashcards.export(out_file, root=tmp_path, apkg=True, check_only=True, out=quiet) == 0
+
+
+def test_export_apkg_writes_one_deck_per_chapter(tmp_path):
+    pytest.importorskip("genanki")
+    import sqlite3
+    import zipfile
+
+    for name, rows in {"ch02_stats": "Moyenne ?;2;dlwb::ch02::mean\n",
+                       "b3_transformers": "Masque causal ?;triangulaire;dlwb::b3::mask\nRoPE ?;rotation;dlwb::b3::rope\n"}.items():
+        (tmp_path / "chapitres" / name).mkdir(parents=True)
+        (tmp_path / "chapitres" / name / "flashcards.csv").write_text(rows, encoding="utf-8")
+    out_file = tmp_path / "deck.apkg"
+    assert export_flashcards.export(out_file, root=tmp_path, apkg=True, out=quiet) == 0
+    with zipfile.ZipFile(out_file) as archive:
+        archive.extract("collection.anki2", tmp_path)
+    db = sqlite3.connect(tmp_path / "collection.anki2")
+    try:
+        assert db.execute("select count(*) from notes").fetchone()[0] == 3
+        decks = {d["name"] for d in json.loads(db.execute("select decks from col").fetchone()[0]).values()}
+        assert {"Deep Learning Workbook::Partie I::Ch. 02 Hasard et statistiques de base",
+                "Deep Learning Workbook::Partie VII::Ch. B3 Attention et Transformers : un mini-GPT from scratch"} <= decks
+        tags = {t for (row,) in db.execute("select tags from notes") for t in row.split()}
+        assert "dlwb::partie_VII::b3" in tags
+    finally:
+        db.close()
 
 
 # ---------------------------------------------------------------- run_all_notebooks

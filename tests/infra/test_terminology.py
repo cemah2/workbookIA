@@ -92,8 +92,13 @@ def _lines():
     return out
 
 
+REFERENCE_DEFINITION = re.compile(r"^\[[^\]]+\]: \S+$")     # « [s12]: ../chapitres/…#avec-ou-sans-perte »
+
+
 def _scannable(path, line):
-    """The line, with the second column of a glossary table blanked out."""
+    """The line, with the second column of a glossary table and the target of a reference link blanked out."""
+    if REFERENCE_DEFINITION.match(line):
+        return ""
     if path.name == "glossaire.md" and line.startswith("|"):
         cells = line.split("|")
         if len(cells) > 3:

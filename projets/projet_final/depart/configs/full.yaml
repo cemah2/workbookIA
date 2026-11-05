@@ -1,0 +1,23 @@
+# Full mode: all the training data and enough epochs; 🚀 GPU Colab advised when it takes more than 15 min on CPU.
+# Same keys as fast.yaml: only the budget changes (data, epochs, bootstrap), never the protocol.
+name: projet-full
+seed: 0
+fast: false
+task: classification
+target: label
+group_column: ""
+time_column: ""
+test_size: 0.2
+val_size: 0.1
+max_train_examples: 0         # 0 = all the training split
+metric: f1_macro
+n_bootstrap: 2000
+model: deep
+model_params: {}
+epochs: 30
+batch_size: 128
+lr: 0.001
+patience: 5
+device: auto
+out_dir: artifacts/model
+runs_file: experiments/runs.jsonl

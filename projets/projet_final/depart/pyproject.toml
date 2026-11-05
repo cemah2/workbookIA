@@ -1,0 +1,34 @@
+# The package of the final project (PF.10). Rename « projet » here, in src/, tests/, notebooks/ and scripts/ (README).
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "projet"
+version = "0.1.0"
+description = "TODO PF.12: one line that says what the model does, on which data."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "TODO" }]
+# TODO PF.12: a LICENSE file for YOUR code (MIT, Apache-2.0...); the data keep their own licence (data/card.md)
+# loose bounds: what the code needs; the exact versions of a run are in its journal line (train.environment)
+dependencies = ["numpy>=2.0", "pandas>=2.2", "pyyaml>=6.0", "scikit-learn>=1.5", "torch>=2.5"]
+
+[project.optional-dependencies]
+serve = ["fastapi>=0.110", "uvicorn>=0.30", "pydantic>=2.6"]
+dev = ["pytest>=8.0", "httpx>=0.27"]          # httpx: the TestClient of FastAPI
+notebooks = ["jupyterlab>=4.0", "matplotlib>=3.8", "nbclient>=0.10"]
+
+[project.scripts]
+projet = "projet.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-rfs"
+markers = [
+    "todo: a test to complete or whose functions are not written yet (skipped with ⏳ until then; PF_STRICT=1 fails)",
+    "slow: a long test (an end-to-end training); skipped with -m 'not slow'",
+]

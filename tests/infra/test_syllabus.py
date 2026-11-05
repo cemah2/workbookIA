@@ -3,6 +3,7 @@ up to date (BIBLE §22, session 2)."""
 
 import importlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -11,6 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 
+import build_index  # noqa: E402
 import syllabus  # noqa: E402
 
 
@@ -121,10 +123,65 @@ def test_tracking_templates_follow_the_study_order(rel):
     ("docs/SYLLABUS.md", syllabus.build_syllabus),
     ("docs/PARCOURS.md", syllabus.build_parcours),
     ("suivi/tableau_de_bord.md", syllabus.build_dashboard),
+    ("annexes/index_notions.md", build_index.build_index),
 ])
 def test_generated_documents_are_up_to_date(chapters, rel, build):
     on_disk = (ROOT / rel).read_text(encoding="utf-8")
     assert build(chapters) == on_disk, f"{rel} is outdated: run python tools/syllabus.py build"
+
+
+@pytest.mark.parametrize("heading, anchor", [
+    ("18.6 · Étape 1 : les deltas des neurones de sortie ⏩", "186--étape-1--les-deltas-des-neurones-de-sortie-"),
+    ("Le workbook : `wb.check`, « Tout exécuter »", "le-workbook--wbcheck--tout-exécuter-"),
+    ("Au-delà du livre : l'**early stopping**", "au-delà-du-livre--learly-stopping"),
+    ("Lire la [doc](https://pytorch.org) de `nn.Module`", "lire-la-doc-de-nnmodule"),
+])
+def test_index_anchors_are_those_of_github(heading, anchor):
+    assert build_index.slug(heading) == anchor
+
+
+def test_index_sorts_like_a_french_dictionary():
+    words = ["zêta", "École", "eau", "écart", "Œil", "ordre", "`nn.Module`", "à quelques exemples"]
+    assert sorted(words, key=build_index.fold) == ["à quelques exemples", "eau", "écart", "École", "`nn.Module`",
+                                                   "Œil", "ordre", "zêta"]
+
+
+def test_index_of_notions_finds_the_key_notions():
+    """A few entries checked by hand (session 79): the chapter, the section of the sheet, the cross-references."""
+    text = (ROOT / "annexes" / "index_notions.md").read_text(encoding="utf-8")
+    targets = dict(re.findall(r"^\[(s\d+)\]: (\S+)$", text, re.M))
+    entries = {m.group(1): m.group(0) for m in re.finditer(r"^- \*\*(.+?)\*\*.*$", text, re.M)}
+
+    def links(term):
+        return [targets[label] for label in re.findall(r"\]\[(s\d+)\]", entries[term])]
+
+    assert links("rétropropagation")[0].startswith("../chapitres/ch18_backprop/01_fiche.md#18")
+    assert "réutilisée : ch. 19" in entries["rétropropagation"]
+    assert any(t.startswith("../chapitres/ch17_activations/01_fiche.md#178--la-softmax") for t in links("softmax"))
+    assert any(t.startswith("../chapitres/ch20_deep_learning/01_fiche.md#2043--le-dropout") for t in links("dropout"))
+    assert links("attention multi-têtes (MHA)")[0].startswith("../chapitres/b3_transformers/01_fiche.md#2034--")
+    assert links("objectif clippé, PPO")[0].startswith("../chapitres/b8_rl_moderne/01_fiche.md#2085--ppo")
+    assert any("ch29_datasets" in t for t in links("data card"))
+    for line in ("- *backpropagation* → voir [rétropropagation](#r)", "- PPO → voir [objectif clippé, PPO](#o)",
+                 "- *multi-head attention* → voir [attention multi-têtes (MHA)](#a)"):
+        assert line in text.splitlines(), f"expected the cross-reference « {line} »"
+    # every reference link is defined, and points to a heading of an existing page
+    used = set(re.findall(r"\]\[(s\d+)\]", text))
+    assert used == set(targets), f"undefined or unused reference links: {sorted(used ^ set(targets))[:5]}"
+    anchors = {}
+    for target in targets.values():
+        path, _, anchor = target.partition("#")
+        page = (ROOT / "annexes" / path).resolve()
+        assert page.exists(), f"expected an existing page for {target}"
+        if page not in anchors:
+            anchors[page] = {s["anchor"] for s in build_index.sections_of(page)}
+        assert not anchor or anchor in anchors[page], f"expected a heading of {path} with the anchor #{anchor}"
+    # letters in order, and the entries of each letter in alphabetical order (accents ignored)
+    sections = re.split(r"^## ", text, flags=re.M)[1:]
+    for section in sections:
+        names = [build_index.fold(bold or form) for bold, form in
+                 re.findall(r"^- (?:\*\*(.+?)\*\*|\*?([^*\n]+?)\*? →)", section, re.M)]
+        assert names == sorted(names), f"entries out of order under « {section.splitlines()[0]} »"
 
 
 def test_manifest_lists_every_planned_module(chapters):

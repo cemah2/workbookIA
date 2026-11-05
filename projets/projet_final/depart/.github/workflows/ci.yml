@@ -1,0 +1,30 @@
+# Continuous integration (PF.10): on every push and pull request, install the package on a clean machine and run the
+# tests. A step that fails stops the job. The data is not in git: the tests that need it skip themselves.
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install PyTorch (CPU index) and the package
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[dev,serve]"
+      - name: Tests
+        run: python -m pytest -q
+        # TODO PF.10: once everything is written, fail on the ⏳ too:
+        # env:
+        #   PF_STRICT: "1"
+      - name: The command line answers
+        run: projet --help
+      # TODO PF.10: a smoke run on synthetic data of the shape of yours (no download in the CI), for example
+      # python scripts/make_synthetic.py data/synthetic && projet train --config configs/fast.yaml --set data_dir=data/synthetic --set epochs=1
