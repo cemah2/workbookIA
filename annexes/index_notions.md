@@ -484,7 +484,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *column transformer* → voir [ColumnTransformer](#c)
 - **ColumnTransformer** (*column transformer*) — enseignée : [ch. 15, Au-delà du livre : les données hétérogènes][s335] · exercices : 15.8, 15.28, 15.31, 15.E3, CP3.2, PF.5 · réutilisée : ch. B6
 - *combining character* → voir [caractère combinant](#c)
-- **commit** — enseignée : [ch. 0A, 100.11.1 · git : `status`, `add`, `commit`, `push`, `pull` ;…][s100] · exercices : 0A.10, 0A.E5, 11.25, 14.27, 24.15, 26.34, 29.10, B1.11, B4.29, B7.14 (+ 10) · réutilisée : ch. B7
+- **commit** — enseignée : [ch. 0A, 100.11.1 · git : `status`, `add`, `commit`, `push`, `pull` ;…][s100] · exercices : 0A.10, 0A.E5, 11.25, 14.27, 24.15, 26.34, 29.10, B1.11, B4.29, B7.14 (+ 9) · réutilisée : ch. B7
 - **comparaison appariée** (*paired comparison*) — enseignée : [ch. 8][s268]
 - **comparaisons multiples** (*multiple comparisons*) — enseignée : [ch. B6, Des écarts avec leurs intervalles][s650] · exercices : B6.10, B6.25
 - *compatibility normalization* → voir [NFC, NFD, NFKC](#n)
@@ -707,7 +707,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - décodeur → voir [encodeur, décodeur](#e)
 - **décomposition biais-variance** (*bias-variance decomposition*) — enseignée : [ch. 9, 9.6 · Biais et variance][s285]
 - *décomposition en valeurs singulières* → voir [SVD](#s)
-- **découpage (des données)** (*data split*) — enseignée : [ch. 8, 8.5.1 · La validation croisée à k folds][s264] ; [ch. B3, 203.4 · Attention multi-têtes : projections, découpage en têtes,…][s265] · exercices : 8.1, 8.19, 8.E3, 8.E5, 12.31, 23.15, 29.2, B4.22, PF.3–4 (+ 47) · approfondie : ch. 23, 29 · réutilisée : ch. 12, 22, 29
+- **découpage (des données)** (*data split*) — enseignée : [ch. 8, 8.5.1 · La validation croisée à k folds][s264] ; [ch. B3, 203.4 · Attention multi-têtes : projections, découpage en têtes,…][s265] · exercices : 8.1, 8.19, 8.E3, 8.E5, 12.31, 23.15, 29.2, B4.22, PF.3–4 (+ 48) · approfondie : ch. 23, 29 · réutilisée : ch. 12, 22, 29
 - **découpage par groupes** (*group k-fold*) — enseignée : [ch. 8, Données dépendantes : groupes et séries temporelles (au-delà du livre)][s269]
 - *découpe* → voir [split](#s)
 - *deduction* → voir [déduction](#d)
@@ -754,7 +754,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **déployer** (*deploy*) — enseignée : [ch. 1][s144] · exercices : 11.4, CP3.10, 23.E3, 26.28, B7.E1
 - **déployeur** (*deployer*) — enseignée : [ch. B6, L'AI Act][s653] · exercices : B6.9, B6.Q12
 - *deployment bias* → voir [biais de labels, de mesure, de déploiement](#b)
-- **dépôt** (*repository*) — enseignée : [ch. 0A, 100.1.3 · Le terminal : dossiers, chemins, lancer python, pytest…][s65] ; [ch. B7, 207.1 · Du notebook au projet : limites du notebook, structure…][s99] · exercices : 0A.10–12, B7.9, B7.14, B7.23, B7.25, B7.Q2, B7.Q4, PF.12 (+ 17)
+- **dépôt** (*repository*) — enseignée : [ch. 0A, 100.1.3 · Le terminal : dossiers, chemins, lancer python, pytest…][s65] ; [ch. B7, 207.1 · Du notebook au projet : limites du notebook, structure…][s99] · exercices : 0A.10–12, B7.9, B7.14, B7.23, B7.25, B7.Q2, B7.Q4, PF.12 (+ 16)
 - *deprecation cycle* → voir [cycle de dépréciation](#c)
 - *depth* → voir [profondeur (d'un arbre)](#p)
 - *depthwise convolution* → voir [convolution par canal](#c)
@@ -1536,7 +1536,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *journalisation* → voir [logging](#l)
 - *JSON Lines* → voir [JSONL](#j)
 - **json, pickle** — enseignée : [ch. 0A, 100.6.4 · Sérialiser : `json` et `pickle`][s88] · exercices : 0A.39, 11.25, 15.30, 23.22, 24.15, 26.34, B1.5, B1.27, B2.30, B4.15 (+ 26) · réutilisée : ch. 11, 23, B4, B7
-- **JSONL** (*JSON Lines*) — enseignée : [ch. B7, 207.5 · Suivi d'expériences : runs, métriques, artefacts, comparaison][s438] · exercices : 24.15, B7.14, B7.R1, PF.4–5, PF.7–8
+- **JSONL** (*JSON Lines*) — enseignée : [ch. B7, 207.5 · Suivi d'expériences : runs, métriques, artefacts, comparaison][s438] · exercices : 24.15, B7.14, B7.R1, PF.4–5, PF.7–8, PF.11
 - **juge LLM** (*LLM-as-a-judge*) — enseignée : [ch. B4, Le juge LLM][s591] · exercices : B4.Q8
 
 ## K
