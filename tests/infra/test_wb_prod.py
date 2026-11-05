@@ -106,6 +106,32 @@ def test_run_stops_at_the_timeout_and_survives_a_missing_program(tmp_path):
     assert missing.returncode is None and "Error" in missing.stderr
 
 
+@pytest.mark.skipif(os.name == "nt", reason="process groups (POSIX)")
+def test_run_stops_what_a_command_leaves_alive(tmp_path):
+    """Session 76 (V4b, 25c): a demo that ends while the server it started still holds stdout made the caller wait
+    for the whole timeout, and the server survived. Now: the group is stopped after a short grace, ``leftover`` says
+    it, and a command that hangs is stopped with all its children at the timeout."""
+    import time
+    marker = tmp_path / "alive.txt"
+    child = (f"import time, pathlib; time.sleep(3); pathlib.Path({str(marker)!r}).write_text('still alive')")
+    holds_stdout = f"import subprocess, sys; subprocess.Popen([sys.executable, '-c', {child!r}]); print('done')"
+    start = time.perf_counter()
+    result = wbp.run([sys.executable, "-c", holds_stdout], tmp_path, timeout=30, grace=0.5)
+    assert time.perf_counter() - start < 10, "expected no wait for the whole timeout"
+    assert result.ok and result.leftover and not result.timed_out and result.stdout == "done\n"
+    quiet = (f"import subprocess, sys; subprocess.Popen([sys.executable, '-c', {child!r}], "
+             "stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)")
+    assert wbp.run([sys.executable, "-c", quiet], tmp_path, timeout=30).leftover, "expected a detached child to be seen"
+    hangs = f"import subprocess, sys, time; subprocess.Popen([sys.executable, '-c', {child!r}]); time.sleep(60)"
+    result = wbp.run([sys.executable, "-c", hangs], tmp_path, timeout=1)
+    assert result.timed_out and result.returncode is None
+    time.sleep(3.5)
+    assert not marker.exists(), "expected the children stopped with the command"
+    clean = wbp.run([sys.executable, "-c", "import subprocess, sys; subprocess.run([sys.executable, '-c', 'print(2)'])"],
+                    tmp_path)
+    assert clean.ok and not clean.leftover and clean.stdout == "2\n"
+
+
 def test_stderr_lines_by_level():
     result = wbp.RunResult(["x"], 0, "", "2026 INFO a: one\n[DEBUG] b - two\nERRORS are not ERROR lines\n")
     assert len(result.stderr_lines("INFO")) == 1 and len(result.stderr_lines("DEBUG")) == 1
@@ -395,6 +421,36 @@ def test_a_faulty_workflow_fails_its_point(old, new, key):
     assert text.count(old) >= 1, old
     got = review(wbp.review_workflow(text.replace(old, new), REF))
     assert got[key] is False, (key, got)
+
+
+@pytest.mark.parametrize("quoted", ['--set data="$RUNNER_TEMP/synthetic.npz"', '--set "data=$RUNNER_TEMP/synthetic.npz"',
+                                    "--set 'data=data/synthetic.npz'"])
+def test_a_quoted_data_override_passes(quoted):
+    """Session 76 (V4b): quoting the argument of --set is good bash; it must not be refused."""
+    text = (REF / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    assert "--set data=data/synthetic.npz" in text
+    got = review(wbp.review_workflow(text.replace("--set data=data/synthetic.npz", quoted), REF))
+    assert got["smoke"] is True, got
+
+
+def test_a_refused_smoke_step_says_what_is_missing():
+    text = (REF / ".github/workflows/ci.yml").read_text(encoding="utf-8").replace("--set data=data/synthetic.npz", "")
+    item = next(i for i in wbp.review_workflow(text, REF) if i.key == "smoke")
+    assert not item.ok and "introuvable" in item.failure, item.failure
+
+
+def test_undeclared_imports_of_the_tests_and_scripts(tmp_path):
+    """Session 76 (V4b): requests and httpx (TestClient) were imported by the tests and the demo of the reference but
+    not declared: a new machine fails. The reference declares them now; an extra without them is caught."""
+    assert wbp.undeclared_imports(REF) == []
+    shutil.copytree(REF, tmp_path / "p", ignore=shutil.ignore_patterns("__pycache__", "*.egg-info", "data", "runs"))
+    toml = tmp_path / "p" / "pyproject.toml"
+    text = toml.read_text(encoding="utf-8")
+    line = next(l for l in text.splitlines() if l.startswith("dev = "))
+    toml.write_text(text.replace(line, 'dev = ["pytest>=8.0"]'), encoding="utf-8")
+    missing = wbp.undeclared_imports(tmp_path / "p")
+    assert "requests (scripts/demo.py)" in missing and any(m.startswith("httpx, pour fastapi.testclient") for m in missing)
+    assert not any(m.split()[0] in ("numpy", "torch", "pytest", "json") for m in missing), missing
 
 
 def test_a_workflow_that_is_not_yaml_is_refused():

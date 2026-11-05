@@ -324,11 +324,12 @@ else:
             if install_25.ok:
                 tests_25 = install_25.run(["python", "-m", "pytest", "-q", "-p", "no:cacheprovider", "--strict-markers",
                                            "-c", str(clone_25 / "pyproject.toml"), "--rootdir", str(clone_25)], clone_25,
-                                          timeout=600)
+                                          timeout=300)
                 summary_25 = (tests_25.stdout.strip().splitlines() or ["(rien)"])[-1]
-                steps_25["tests"] = (tests_25.ok, tests_25.seconds, summary_25)
-                demo_25 = install_25.run(["python", "scripts/demo.py"], clone_25, timeout=600)
-                steps_25["demo"] = (demo_25.ok, demo_25.seconds, f"code {demo_25.returncode}")
+                steps_25["tests"] = (tests_25.ok and not tests_25.leftover, tests_25.seconds, summary_25)
+                demo_25 = install_25.run(["python", "scripts/demo.py"], clone_25, timeout=300)
+                steps_25["demo"] = (demo_25.ok and not demo_25.leftover, demo_25.seconds,
+                                    "délai dépassé" if demo_25.timed_out else f"code {demo_25.returncode}")
         finally:
             install_25.cleanup()
         total_25 = time.perf_counter() - t_25
@@ -343,36 +344,65 @@ else:
                 f"de la copie à la prédiction servie : {fr(total_25, 0)} s ici ({fr(equivalent_25, 0)} s sur la machine de "
                 f"référence) ; attendu chaque étape réussie, en moins de {«LIMIT_S» // 60} min avec ≈ {«DOWNLOAD_S» // 60} "
                 "min de téléchargement de PyTorch CPU.")
+        for what_25, done_25 in (("la démo", demo_25), ("les tests", tests_25)):
+            if done_25 is not None and done_25.leftover:
+                print(f"❌ Ex B7.25 : {what_25} laisse un processus en vie après sa fin (un serveur jamais arrêté ?), "
+                      "arrêté ici : arrête-le dans un finally (with running(...) as url:).")
+            elif done_25 is not None and done_25.timed_out:
+                print(f"❌ Ex B7.25 : {what_25} ne rend pas la main en {fr(done_25.seconds, 0)} s : un serveur jamais "
+                      "arrêté (un thread qui n'est pas daemon, serve_forever sans shutdown) ? Arrête-le dans un finally.")
         if demo_25 is not None and not demo_25.ok:
             print(f"   la démo : {demo_25.tail(4)[:400]}")
         if tests_25 is not None and not tests_25.ok:
             print("   les tests : " + " ⏎ ".join(l for l in tests_25.stdout.splitlines() if l.startswith(("FAILED", "ERROR")))[:400])
         summary_demo_25 = demo_25.last_json() if demo_25 is not None and demo_25.ok else None
-        meta_25 = {}
+        meta_25, fresh_25 = {}, False
         if isinstance(summary_demo_25, dict) and summary_demo_25.get("artifact"):
+            art_25 = Path(str(summary_demo_25["artifact"]))
+            art_25 = (clone_25 / art_25 if not art_25.is_absolute() else art_25).resolve()
             try:
-                meta_25 = json.loads((Path(summary_demo_25["artifact"]) / "meta.json").read_text(encoding="utf-8"))
+                meta_25 = json.loads((art_25 / "meta.json").read_text(encoding="utf-8"))
+                fresh_25 = (art_25.is_relative_to(clone_25.resolve())
+                            and (art_25 / "meta.json").stat().st_mtime >= time.time() - demo_25.seconds - 5)
             except (OSError, ValueError):
                 meta_25 = {}
+            if not fresh_25:
+                print("❌ Ex B7.25 : l'artefact du résumé de ta démo n'a pas été écrit par elle dans le clone : il doit "
+                      "sortir de ton entraînement fumée, dans le dépôt cloné, pas d'un autre dossier.")
+        if isinstance(summary_demo_25, dict) and "direct1_19" in globals():
+            try:
+                fast_25 = float(summary_demo_25.get("p50_ms")) < 0.5 * float(np.percentile(direct1_19, 50))
+            except (TypeError, ValueError):
+                fast_25 = True
+            if fast_25:
+                print(f"ℹ️ le p50 de ta démo ({summary_demo_25.get('p50_ms')} ms) est plus rapide que la moitié d'un appel "
+                      "direct du modèle (B7.19) : ta latence est-elle vraiment mesurée sur des requêtes HTTP ?")
+        undeclared_25 = wbp.undeclared_imports(clone_25)
+        if undeclared_25:
+            print(f"❌ Ex B7.25 : dépendances non déclarées : {', '.join(undeclared_25[:4])} : sur une machine neuve, "
+                  "pip install -e \".[dev,serve]\" ne les installe pas (ici, l'environnement du notebook les a) ; "
+                  "ajoute-les à l'extra dev de pyproject.toml (ou utilise urllib.request).")
         readme_25 = (clone_25 / "README.md").read_text(encoding="utf-8") if (clone_25 / "README.md").is_file() else ""
         card_25 = (clone_25 / "MODEL_CARD.md").read_text(encoding="utf-8") if (clone_25 / "MODEL_CARD.md").is_file() else ""
         ci_25 = (clone_25 / ".github/workflows/ci.yml")
         ci_ok_25 = ci_25.is_file() and all(r.ok for r in wbp.review_workflow(ci_25.read_text(encoding="utf-8"), clone_25))
         configs_25 = [p.name for p in (clone_25 / "configs").glob("*.yaml")] if (clone_25 / "configs").is_dir() else []
         evidence_25 = [
-            ("installation sur un clone neuf", steps_25.get("install", (False,))[0] and how_25 == "git clone",
-             f"{how_25}, puis pip install -e dans un environnement neuf"),
-            ("make ou script unique", steps_25.get("demo", (False,))[0], "python scripts/demo.py, code 0"
+            ("installation sur un clone neuf", steps_25.get("install", (False,))[0] and how_25 == "git clone"
+             and not undeclared_25, f"{how_25}, puis pip install -e dans un environnement neuf"
+             + (f" ; non déclarées : {', '.join(undeclared_25[:3])}" if undeclared_25 else ", dépendances déclarées")),
+            ("make ou script unique", steps_25.get("demo", (False,))[0] and fresh_25, "python scripts/demo.py, code 0"
              + (" ; un Makefile aussi" if (clone_25 / "Makefile").is_file() else "")),
             ("tests verts", steps_25.get("tests", (False,))[0], steps_25.get("tests", (0, 0, "pas lancés"))[2]),
             ("intégration continue", ci_ok_25, ".github/workflows/ci.yml, relu comme en B7.23"),
             ("configuration", {"fast.yaml", "smoke.yaml"} <= set(configs_25), f"configs/ : {', '.join(sorted(configs_25)) or 'vide'}"),
-            ("artefact versionné", bool(meta_25.get("package_version") and meta_25.get("weights_sha256")
+            ("artefact versionné", bool(fresh_25 and meta_25.get("package_version") and meta_25.get("weights_sha256")
                                          and re.fullmatch(r"[0-9a-f]{64}", str((meta_25.get("data") or {}).get("sha256")))),
              "meta.json : version du paquet, SHA-256 des poids et empreinte des données"),
-            ("API qui répond", isinstance(summary_demo_25, dict) and summary_demo_25.get("status") == 200
+            ("API qui répond", fresh_25 and isinstance(summary_demo_25, dict) and summary_demo_25.get("status") == 200
              and summary_demo_25.get("label") in CLASSES, f"la démo : {str(summary_demo_25)[:120]}"),
-            ("latence mesurée", bool(re.search(r"p95[^\n]{0,80}\d+([.,]\d+)?\s*ms", readme_25)), "le README donne un p95 en ms"),
+            ("latence mesurée", bool(re.search(r"p95\D{0,40}?(?<![\w.,])\d+(?:[.,]\d+)?(?:\s*(?:à|-|–|to)\s*\d+(?:[.,]\d+)?)?\s*ms|p95\s*\(ms\)\D{0,20}?(?<![\w.,])\d+(?:[.,]\d+)?", readme_25)),
+             "le README donne un p95 en ms (un nombre mesuré)"),
             ("README", len(readme_25.split()) >= 150 and "pip install" in readme_25 and "demo" in readme_25,
              f"README.md : {len(readme_25.split())} mots, installation et démo citées"),
             ("fiche modèle", len(card_25.split()) >= 150 and all(w in card_25.lower() for w in ("usage", "données", "limite")),

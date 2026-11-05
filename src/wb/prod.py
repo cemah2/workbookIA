@@ -224,6 +224,7 @@ class RunResult:
     stderr: str = ""
     seconds: float = 0.0
     timed_out: bool = False
+    leftover: bool = False              # processes it started were still alive after it ended (they were stopped)
 
     @property
     def ok(self) -> bool:
@@ -275,11 +276,44 @@ def _pythonpath(src: list) -> str:
     return os.pathsep.join(parts)
 
 
-def run(args, cwd, *, timeout: float = 120, src=(), env: dict | None = None, input: str | None = None) -> RunResult:
+def _group_alive(pgid: int) -> bool:
+    try:
+        os.killpg(pgid, 0)
+    except (ProcessLookupError, PermissionError):
+        return False
+    return True
+
+
+def _stop_group(process: subprocess.Popen) -> bool:
+    """Kill the process group of ``process`` (POSIX: its own session); True if something was still alive."""
+    if os.name == "nt":                          # no process groups here: the process itself
+        alive = process.poll() is None
+        process.kill()
+        return alive
+    if not _group_alive(process.pid):
+        return False
+    if process.poll() is not None:                # orphans that are ending (zombies) leave the group at once
+        time.sleep(0.2)
+        if not _group_alive(process.pid):
+            return False
+    try:
+        os.killpg(process.pid, 9)
+    except (ProcessLookupError, PermissionError):
+        pass
+    return True
+
+
+def run(args, cwd, *, timeout: float = 120, src=(), env: dict | None = None, input: str | None = None,
+        grace: float = 2.0) -> RunResult:
     """Run ``args`` (a list; items converted to str) in the folder ``cwd`` (made absolute) and wait at most
     ``timeout`` seconds. The ``PYTHONPATH`` of the process starts with the folders ``src`` (absolute), then the
     ``src`` folder of ``wb``, then the current ``PYTHONPATH``; ``env`` adds or replaces variables. Never raises for a
-    failing command: read ``returncode`` (None after a timeout, ``timed_out`` True)."""
+    failing command: read ``returncode`` (None after a timeout, ``timed_out`` True).
+
+    The command runs in its own session (a new process group): at the timeout, the whole group is killed, not only
+    the command; and a command that ends while processes it started are still alive (a server never stopped, which
+    may also keep stdout open) does not make the caller wait: after ``grace`` seconds the group is killed and
+    ``leftover`` is True."""
     cwd = Path(cwd).resolve()
     args = [str(a) for a in args]
     full_env = {**os.environ, "PYTHONPATH": _pythonpath(list(src)), "PYTHONIOENCODING": "utf-8",
@@ -287,15 +321,40 @@ def run(args, cwd, *, timeout: float = 120, src=(), env: dict | None = None, inp
     full_env.pop("FORCE_COLOR", None)
     start = time.perf_counter()
     try:
-        done = subprocess.run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace",
-                              timeout=timeout, env=full_env, input=input)
-    except subprocess.TimeoutExpired as exc:
-        out = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
-        err = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
-        return RunResult(args, None, out, err, time.perf_counter() - start, True)
+        process = subprocess.Popen(args, cwd=cwd, stdin=subprocess.PIPE if input is not None else subprocess.DEVNULL,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8",
+                                   errors="replace", env=full_env, start_new_session=os.name != "nt")
     except OSError as exc:                       # the program does not exist
         return RunResult(args, None, "", f"{type(exc).__name__}: {exc}", time.perf_counter() - start)
-    return RunResult(args, done.returncode, done.stdout, done.stderr, time.perf_counter() - start)
+    deadline, ended_at, timed_out, leftover = start + timeout, None, False, False
+    pending_input = input
+    while True:
+        now = time.perf_counter()
+        try:
+            out, err = process.communicate(input=pending_input, timeout=max(0.01, min(0.5, deadline - now)))
+            break
+        except subprocess.TimeoutExpired:
+            pending_input = None                 # sent once: communicate() goes on from where it was
+            now = time.perf_counter()
+            if process.poll() is not None:       # the command has ended, but its pipes are still open
+                ended_at = ended_at if ended_at is not None else now
+                stop = now - ended_at >= grace
+                leftover = leftover or stop
+            else:
+                stop = now >= deadline
+                timed_out = timed_out or stop
+            if stop:
+                _stop_group(process)
+                try:
+                    out, err = process.communicate(timeout=10)
+                except subprocess.TimeoutExpired:   # a process outside the group holds the pipes: give up on them
+                    out, err = "", ""
+                break
+    if _stop_group(process):                     # ended with its pipes closed, but something it started lives on
+        leftover = True
+    process.wait()
+    code = None if timed_out else process.returncode
+    return RunResult(args, code, out or "", err or "", time.perf_counter() - start, timed_out, leftover)
 
 
 def cli(project: str | Path, *args, timeout: float = 120, env: dict | None = None) -> RunResult:
@@ -1142,11 +1201,16 @@ def review_workflow(text: str, project: str | Path | None = None) -> list[Review
                     r"[^\n]*\n?[^\n]*configs/smoke\.yaml")
     synth_at = find(r"synthetic")
     smoke_text = dict(runs).get(smoke_at[0], "") if smoke_at else ""
+    data_set = re.search(r"--set\s+[\"']?data=", smoke_text) is not None      # --set data="$X" or --set "data=$X"
     add("smoke", smoke_at is not None and test_at is not None and smoke_at > test_at and synth_at is not None
-        and synth_at < smoke_at and "--set data=" in smoke_text,
+        and synth_at < smoke_at and data_set,
         "un entraînement fumée (configs/smoke.yaml) sur des données synthétiques, après les tests.",
         "attendu, après pytest, une étape qui écrit des données synthétiques (scripts/make_synthetic.py) puis "
-        "cifarprod train --config configs/smoke.yaml --set data=<ce fichier> (les données du projet ne sont pas dans git)")
+        "cifarprod train --config configs/smoke.yaml --set data=<ce fichier> (les données du projet ne sont pas dans "
+        "git) ; " + ("aucune étape run: ne lance cifarprod train avec configs/smoke.yaml" if smoke_at is None else
+                     "aucune étape run: ne lance pytest avant lui" if test_at is None or smoke_at < test_at else
+                     "aucune commande avant lui n'écrit de données synthétiques" if synth_at is None or synth_at > smoke_at
+                     else f"son --set data=... est introuvable dans « {' '.join(smoke_text.split())[:160]} »"))
     swallowed = [k for k, t in runs if re.search(r"\|\|\s*(true|:|exit 0)\b", t)] + \
         [k for k, s in enumerate(steps) if s.get("continue-on-error") is True]
     add("failures", not swallowed, "aucune erreur avalée (pas de || true ni de continue-on-error).",
@@ -1363,6 +1427,77 @@ def review_dockerfile(dockerfile: str, dockerignore: str, requirements: str,
             add("runs", done.ok, f"la commande de CMD existe dans ton paquet ({' '.join(command[:3])} ... --help : code 0).",
                 f"la commande de CMD ne répond pas dans ton paquet ({done.tail(2)[:200]})")
     return out
+
+
+# imports that need a distribution which the package that provides them does not require
+_IMPORT_NEEDS = {"fastapi.testclient": "httpx", "starlette.testclient": "httpx"}
+
+
+def _norm(name: str) -> str:
+    return re.sub(r"[-_.]+", "-", name).lower()
+
+
+def undeclared_imports(project: str | Path, extras=("dev", "serve"), folders=("tests", "scripts")) -> list[str]:
+    """The imports of ``tests/`` and ``scripts/`` (``"requests (scripts/demo.py)"``) that ``pip install -e
+    ".[dev,serve]"`` of ``project`` would not bring on a new machine: their distribution is not in the closure of
+    the dependencies and of the ``extras`` declared in ``pyproject.toml`` (read through the metadata of this
+    environment, without network). The standard library and the package itself are left out."""
+    import ast
+    import tomllib
+    from importlib import metadata
+
+    from packaging.requirements import Requirement
+
+    project = Path(project)
+    try:
+        table = tomllib.loads((project / "pyproject.toml").read_text(encoding="utf-8")).get("project", {})
+    except (OSError, ValueError):
+        return []
+    own = _norm(str(table.get("name", "")))
+    todo = [Requirement(r).name for r in table.get("dependencies", [])]
+    todo += [Requirement(r).name for e in extras for r in table.get("optional-dependencies", {}).get(e, [])]
+    seen: set[str] = set()
+    while todo:
+        name = _norm(todo.pop())
+        if name in seen:
+            continue
+        seen.add(name)
+        try:
+            needs = metadata.requires(name) or []
+        except metadata.PackageNotFoundError:
+            continue
+        for text in needs:
+            req = Requirement(text)
+            if req.marker is None or req.marker.evaluate({"extra": ""}):
+                todo.append(req.name)
+    owners = metadata.packages_distributions()
+    missing = set()
+    for folder in folders:
+        for path in sorted((project / folder).rglob("*.py")) if (project / folder).is_dir() else []:
+            try:
+                tree = ast.parse(path.read_text(encoding="utf-8"))
+            except (OSError, SyntaxError, ValueError):
+                continue
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    modules = [a.name for a in node.names]
+                elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+                    modules = [node.module]
+                else:
+                    continue
+                for module in modules:
+                    top = module.split(".")[0]
+                    if top in sys.stdlib_module_names or _norm(top) == own or top == PACKAGE:
+                        continue
+                    dists = {_norm(d) for d in owners.get(top, [])}
+                    rel = path.relative_to(project).as_posix()
+                    if dists and not dists & seen:
+                        missing.add(f"{top} ({rel})")
+                    extra = next((need for prefix, need in _IMPORT_NEEDS.items()
+                                  if module == prefix or module.startswith(prefix + ".")), None)
+                    if extra and _norm(extra) not in seen:
+                        missing.add(f"{extra}, pour {module} ({rel})")
+    return sorted(missing)
 
 
 def is_git_repository(project: str | Path) -> bool:

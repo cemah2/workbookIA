@@ -523,7 +523,7 @@ Pars de ton `cifarkit` du MP5 et de la fiche : 207.1 donne un `pyproject.toml` p
 </details>
 <details><summary>Indice 2</summary>
 
-- `pyproject.toml` : la fiche, plus `safetensors` dans `dependencies`, l'extra `serve` avec `pydantic`, et la table `[tool.pytest.ini_options]` (`testpaths`, `markers = ["slow: ..."]`). Avec le layout `src/`, setuptools trouve le paquet tout seul.
+- `pyproject.toml` : la fiche, plus `safetensors` dans `dependencies`, l'extra `serve` avec `pydantic`, l'extra `dev` avec `httpx` et `requests`, et la table `[tool.pytest.ini_options]` (`testpaths`, `markers = ["slow: ..."]`). Avec le layout `src/`, setuptools trouve le paquet tout seul.
 - `load_npz` : `np.load(path)` dans un `with`, puis les tableaux `x_<part>` et `y_<part>` ; vérifie `X.dtype == np.uint8`, `X.ndim == 4`, `X.shape[1:] == (32, 32, 3)`, `y.shape == (len(X),)`, `np.issubdtype(y.dtype, np.integer)` et `0 <= y <= 9` avant de rendre `y.astype(np.int64)`.
 - `channel_stats` : `x = images / 255.0` en float64, puis `x.mean(axis=(0, 1, 2))` et `x.std(axis=(0, 1, 2))`, convertis en floats Python (`float(v)`).
 - `preprocess` : `torch.from_numpy(images).permute(0, 3, 1, 2)` (NHWC vers NCHW), `.to(torch.float32) / 255`, puis la moyenne et l'écart-type mis en forme `(1, 3, 1, 1)` pour diffuser sur chaque canal.
@@ -989,7 +989,7 @@ Mets-toi à la place de quelqu'un qui découvre ton dépôt sur une autre machin
 </details>
 <details><summary>Indice 2</summary>
 
-- `scripts/demo.py` enchaîne ce que tu as déjà : `scripts/make_synthetic.py` si le fichier de données manque, `subprocess.run([sys.executable, "-m", "cifarprod", "train", "--config", "configs/smoke.yaml", "--set", f"data={...}", "--out", ...])`, puis `with running(dossier) as url:` (B7.18), `requests.get(url + "/health")` et une boucle de `requests.post(url + "/predict", json={"pixels": image.tolist()})` chronométrée, enfin `print(json.dumps({...}))` et `return 0`.
+- `scripts/demo.py` enchaîne ce que tu as déjà : `scripts/make_synthetic.py` si le fichier de données manque, `subprocess.run([sys.executable, "-m", "cifarprod", "train", "--config", "configs/smoke.yaml", "--set", f"data={...}", "--out", ...])`, puis `with running(dossier) as url:` (B7.18), `requests.get(url + "/health")` (`requests` doit être dans l'extra `dev` de ton `pyproject.toml` ; sinon, `urllib.request` de la bibliothèque standard) et une boucle de `requests.post(url + "/predict", json={"pixels": image.tolist()})` chronométrée, enfin `print(json.dumps({...}))` et `return 0`.
 - Le README : ce que fait le projet, l'installation (torch CPU d'abord), la démo, les tests, l'entraînement, le service, les résultats avec leur dispersion (B7.13) et la latence mesurée (B7.19).
 - La fiche modèle : les rubriques du ch. 23 et de B6 (modèle, usage prévu et exclu, données, performances, limites), et ce que tu as mesuré en B7.20 et B7.22.
 - Commite, puis relance l'auto-contrôle : il ne voit que ce qui est commité.

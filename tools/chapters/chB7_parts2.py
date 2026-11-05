@@ -127,8 +127,7 @@ Ce sont des **rapports** de durées mesurées sur la même machine : ils dépend
                           {"A": "relis le tableau : le p95 de /predict_batch contre celui de /predict",
                            "C": "relis le tableau : le p95 de /predict_batch contre celui de /predict"},
                           prediction=True)]),
-       after=[("code", guarded(fill(C2.EXPERIMENT_19, {"DIRECT_P50": fr_num(L19["direct_p50_default"], 2),
-                                                       "ANSWER_A": L19["answers"]["a"], "ANSWER_B": L19["answers"]["b"]}),
+       after=[("code", guarded(fill(C2.EXPERIMENT_19, {"DIRECT_P50": fr_num(L19["direct_p50_default"], 2)}),
                                ["http_19", "batch_19"],
                                "⏳ Ex B7.19 : écris d'abord tes deux prédictions dans la cellule précédente.")),
               ("code", guarded(C2.EXPERIMENT_19_OWN, ["http_19", "batch_19"],
@@ -199,7 +198,7 @@ La cellule de vérification compare tes fonctions à un calcul écrit autrement,
 - d) `harm_22` : les fenêtres où l'accuracy perd plus de 10 points par rapport à la référence ;
 - e) `psi_d_22` : le PSI de la luminosité de la fenêtre D, à 2 décimales.
 
-Dans tes notes : pour chaque fenêtre, que ferais-tu de l'alerte (rien, surveiller de plus près, vérifier la chaîne d'acquisition, revenir en arrière ou réentraîner, 207.10) ? Quelle fenêtre une surveillance des seules entrées laisserait-elle passer, et pourquoi ? Pourquoi le test KS rejette-t-il D alors que l'accuracy ne bouge pas, et que deviendrait sa p-valeur avec 50 000 images par fenêtre ? Que changerait une référence prise sur les images d'entraînement plutôt que sur le test ?""",
+Dans tes notes : pour chaque fenêtre, que ferais-tu de l'alerte (rien, surveiller de plus près, vérifier la chaîne d'acquisition, revenir en arrière ou réentraîner, 207.10) ? Quelle fenêtre une surveillance des seules entrées laisserait-elle passer, et pourquoi ? Le test KS et l'accuracy disent-ils la même chose pour chaque fenêtre, et que deviendrait la p-valeur du test KS de D avec 50 000 images par fenêtre ? Que changerait une référence prise sur les images d'entraînement plutôt que sur le test ?""",
        given=C3.GIVEN_22, todo=C3.TODO_22, check=C3.CHECK_22, solution=C3.SOLUTION_22 + "\n\n\n" + C3.CHECK_22,
        after=[("code", C3.EXPERIMENT_22),
               ("todo", C3.TODO_ANSWERS_22),
@@ -262,7 +261,7 @@ Dans tes notes : pour chaque ligne fausse du collègue, que se serait-il passé 
 
 **À écrire** dans la cellule suivante : `README_MD`, `MODEL_CARD_MD` et `DEMO_PY` (`scripts/demo.py`, dont la docstring est le contrat : dans un clone neuf, sans `data/` ni `runs/`, des données synthétiques si le fichier manque, un entraînement fumée par ta ligne de commande, l'artefact, l'API sur un port libre et toujours arrêtée, `/health`, des requêtes `/predict` pour la latence, et pour dernière ligne de stdout un résumé JSON `{"status": 200, "label", "probability", "p50_ms", "p95_ms", "artifact"}`). Puis **commite** ton projet (`git init`, `git add -A`, `git commit`, dans un terminal, dans son dossier) : l'auto-contrôle clone ce que tu as commité, comme le ferait une autre machine. Ton projet devient ainsi un dépôt git **dans** celui du workbook : `git add mon_travail` (00_setup) n'en enregistre plus les fichiers, seulement une référence (git avertit : *embedded git repository*). C'est voulu, ton projet a son propre historique : publie-le comme un dépôt à part (c'est le but du défi), et note son adresse dans ta copie de `06_mes_reponses.md`.
 
-**L'auto-contrôle** (la cellule de vérification) clone ton dépôt dans un dossier temporaire (ou le copie, s'il n'est pas un dépôt git), l'installe dans un environnement virtuel neuf, y lance `pytest`, puis ta démo, et chronomètre chaque étape. Il ne télécharge rien (il réutilise les bibliothèques du notebook) : il compte ≈ 3 min pour PyTorch CPU sur une machine neuve, et ramène la durée mesurée à la vitesse de la machine de référence du chapitre (`wbp.machine_speed()`, un petit calcul fixe). Il affiche ensuite, pour chaque critère, un indice (✅ ou ❌) tiré de ce qu'il a vu : **une aide pour ta grille, pas une note** ; aucune note n'est calculée, ni avant ni après.
+**L'auto-contrôle** (la cellule de vérification) clone ton dépôt dans un dossier temporaire (ou le copie, s'il n'est pas un dépôt git), l'installe dans un environnement virtuel neuf, y lance `pytest`, puis ta démo, et chronomètre chaque étape. Il ne télécharge rien (il réutilise les bibliothèques du notebook, et vérifie donc à part que tes tests et tes scripts n'importent que des dépendances déclarées dans `pyproject.toml`) : il compte ≈ 3 min pour PyTorch CPU sur une machine neuve, et ramène la durée mesurée à la vitesse de la machine de référence du chapitre (`wbp.machine_speed()`, un petit calcul fixe). Il affiche ensuite, pour chaque critère, un indice (✅ ou ❌) tiré de ce qu'il a vu : **une aide pour ta grille, pas une note** ; aucune note n'est calculée, ni avant ni après.
 
 Dans tes notes : ta note sur 10, critère par critère, et ce qui manque pour chaque demi-point perdu. Qu'est-ce que l'auto-contrôle ne peut pas voir (la qualité de ton README, la justesse de ta fiche modèle, ce qui n'est pas commité) ? Si tu publies le dépôt sur GitHub, que montre l'onglet Actions après ton premier push ? Quel test du ML Test Score (207.6) ton dépôt passe-t-il, et lequel ajouterais-tu en premier ?""",
        todo=C3.TODO_25, check=fill(C3.CHECK_25, {"CALIB_SPEED": round(C25["calib_speed"], 4), "DOWNLOAD_S": DOWNLOAD_25,

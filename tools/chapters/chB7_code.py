@@ -59,7 +59,7 @@ PROJECT = wbp.project_dir("«KIND»")             # the folder of your project
 DATA_FILE = wbp.write_subset(PROJECT / "data")  # the 2 000 + 500 images of the chapter (.npz, 7.7 MB, not for git)
 SUBSET = wbp.cifar_subset()                     # the same arrays, for the checks
 CLASSES = wbp.CLASSES
-GITIGNORE = "data/\nruns/\n__pycache__/\n*.egg-info/\n.pytest_cache/\n"
+GITIGNORE = "data/\nruns/\n__pycache__/\n*.egg-info/\n.pytest_cache/\n.wb_written.json\n"   # the last: what the notebook wrote
 DEFAULTS = {"seed": 0, "epochs": 1, "lr": 0.05, "batch_size": 128, "n_train": 2000, "arch": "cnn", "widths": [16, 32],
             "data": "data/cifar10_2000.npz", "deterministic": True, "num_workers": 0}   # TrainConfig().to_dict()
 
@@ -101,6 +101,9 @@ def run_line(ex_id, result, ok, success, failure):
         return False
     if result.timed_out:
         ok, failure = False, f"délai dépassé ({result.seconds:.0f} s) : {failure}"
+    if result.leftover:
+        ok, failure = False, (f"{failure} ; et elle laisse un processus en vie après sa fin (arrêté ici) : arrête ce "
+                              "qu'elle lance dans un finally")
     seen = " ; ".join(part for part in [
         f"stderr : {result.tail(2)[:400]}" if result.stderr.strip() else "rien sur stderr",
         f"stdout : {result.stdout.strip()[-300:]!r}" if result.stdout.strip() else ""] if part)

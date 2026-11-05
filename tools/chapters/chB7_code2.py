@@ -126,9 +126,16 @@ with checked("B7.17"):
     if not ok_17["files"]:
         raise StopCheck
     from safetensors import safe_open
-    with safe_open(str(weights_17), "pt") as f_17:
-        header_17 = f_17.metadata() or {}
-    tensors_17 = load_file(str(weights_17))
+    try:
+        with safe_open(str(weights_17), "pt") as f_17:
+            header_17 = f_17.metadata() or {}
+        tensors_17 = load_file(str(weights_17))
+    except Exception as err_17:  # noqa: BLE001 - not a safetensors file: say it plainly
+        ok_17["weights"] = False
+        verdict("B7.17", False, "", f"model.safetensors n'est pas un fichier safetensors ({type(err_17).__name__} : "
+                f"{str(err_17)[:80]}) : un pickle de torch.save ? Écris-le par safetensors.torch.save_file("
+                "model.state_dict(), ...).")
+        raise StopCheck
     state_17 = MODEL_B.state_dict()
     ok_17["weights"] = tensors_17.keys() == state_17.keys() and all(torch.equal(tensors_17[k], state_17[k]) for k in state_17)
     verdict("B7.17", ok_17["weights"], f"model.safetensors : les {len(state_17)} tenseurs du state_dict, au bit près.",
@@ -189,14 +196,17 @@ with checked("B7.17"):                                    # a NEW process reload
             f"dans un processus neuf : {agree_17} noms sur 200 comme le notebook, modèle en mode "
             f"{'entraînement' if seen_17['training'] else 'eval()'}, probabilités {seen_17['dtype']} de forme "
             f"{proba_17.shape}, écart {float(np.abs(proba_17 - PROBA_B).max()) if proba_17.shape == PROBA_B.shape else '?'} "
-            "(attendu 200, eval(), float32 (200, 10), au plus 1e-5).")
+            "(attendu 200, eval(), float32 (200, 10), au plus 1e-5)"
+            + (" : un écart sur les probabilités, predict_images normalise-t-il par meta['mean'] et meta['std'] ?"
+               if not seen_17["training"] and proba_17.shape == PROBA_B.shape else "") + ".")
     with wbp.torch_state_kept():
         model_17, meta_l_17 = art_17.load_artifact(ARTIFACT_B)
         alone_17, p_alone_17 = art_17.predict_images(model_17, meta_l_17, X_B[3])
     ok_17["one"] = list(alone_17) == [NAMES_B[3]] and np.allclose(np.asarray(p_alone_17).reshape(-1), PROBA_B[3], atol=1e-5)
     verdict("B7.17", ok_17["one"], "une image seule (32, 32, 3) reçoit le nom et les probabilités qu'elle a dans le batch.",
             f"predict_images d'une image (32, 32, 3) : attendu [{NAMES_B[3]!r}] et ses probabilités du batch, reçu "
-            f"{list(alone_17)!r}.")
+            f"{list(alone_17)!r}, écart des probabilités "
+            f"{float(np.abs(np.asarray(p_alone_17, dtype=float).reshape(-1)[:10] - PROBA_B[3]).max()) if np.asarray(p_alone_17).size == 10 else '?'}.")
     perm_model_17, perm_classes_17 = permuted_b()
     folder_p_17 = scratch("artifact") / "permuted"
     with wbp.torch_state_kept():
@@ -207,7 +217,7 @@ with checked("B7.17"):                                    # a NEW process reload
     ok_17["classes"] = list(names_p_17) == ref_names_17
     verdict("B7.17", ok_17["classes"], "un modèle aux sorties rangées dans un autre ordre garde les bons noms : les "
             "classes voyagent avec l'artefact.",
-            f"un modèle dont les sorties sont rangées dans un autre ordre (et classes dans cet ordre) ne reçoit le bon "
+            ("(les prédictions sont déjà fausses ci-dessus) " if not ok_17.get("fresh", True) else "") + f"un modèle dont les sorties sont rangées dans un autre ordre (et classes dans cet ordre) ne reçoit le bon "
             f"nom que pour {sum(a == b for a, b in zip(names_p_17, ref_names_17))} images sur 200 : d'où viennent les "
             "noms de predict_images ?")
     save_file(wbp.reference_model()[0].state_dict(), str(folder_p_17 / "model.safetensors"))   # another weights file
@@ -387,8 +397,9 @@ def logged_18():
         logger.propagate, logger.level = keep[0], keep[1]
 
 
-def api_cases_18(get, post, label):
-    """The same cases for both servers: get(path) and post(path, body) return (status, body as a dict or a text)."""
+def api_cases_18(get, post, label, records=()):
+    """The same cases for both servers: get(path) and post(path, body) return (status, body as a dict or a text);
+    records: the log records of the server (logged_18), to show the cause of a 500."""
     oks = {}
     status, body = get("/health")
     body = body if isinstance(body, dict) else {}
@@ -414,6 +425,10 @@ def api_cases_18(get, post, label):
             f"{label} POST /predict sur 8 images : attendu 200, les noms {NAMES_B[:8]}, la probabilité de chacun à 4 "
             f"décimales et model_version = les 12 premiers caractères du SHA-256 des poids ; reçu "
             f"{[s for s, _ in answers]} {labels} {str(answers[0][1])[:120]}.")
+    if any(s == 500 for s, _ in answers):
+        last = next((r for r in reversed(list(records)) if r.exc_info), None)
+        if last is not None:
+            print(f"   côté serveur : {last.exc_info[0].__name__} : {str(last.exc_info[1])[:200]}")
     refused = {}
     for what, body_bad in {**BAD_18, **{k: v for k, v in BAD_BATCH_18.items()}}.items():
         path = "/predict_batch" if what in BAD_BATCH_18 else "/predict"
@@ -422,9 +437,15 @@ def api_cases_18(get, post, label):
         refused[what] = (status, status == 422 and isinstance(answer, dict) and '"input"' not in text
                          and "a cat" not in text)
     oks["422"] = all(good for _, good in refused.values())
+    not_422 = [f"{w} ({s})" for w, (s, good) in refused.items() if s != 422]
+    echoed = [w for w, (s, good) in refused.items() if s == 422 and not good]
     verdict("B7.18", oks["422"], f"{label} {len(refused)} requêtes mal formées : 422, sans l'entrée envoyée dans la réponse.",
-            f"{label} attendu 422 en JSON, SANS le champ input (une donnée personnelle, peut-être), pour chaque requête "
-            "mal formée ; en échec : " + ", ".join(f"{w} ({s})" for w, (s, good) in refused.items() if not good) + ".")
+            f"{label} attendu 422 en JSON, sans l'entrée envoyée, pour chaque requête mal formée ; "
+            + " ; ".join(part for part in [
+                f"pas de 422 : {', '.join(not_422)} (les modèles pydantic doivent refuser ces entrées : forme, bornes, "
+                "taille du batch)" if not_422 else "",
+                f"422 avec l'entrée renvoyée : {', '.join(echoed)} (retire input de chaque erreur : une donnée "
+                "personnelle, peut-être)" if echoed else ""] if part) + ".")
     status, body = post("/predict_batch", {"images": X_B[:32].tolist()})
     batch_labels = [p.get("label") for p in body.get("predictions", [])] if isinstance(body, dict) else []
     oks["batch"] = status == 200 and batch_labels == NAMES_B[:32] and body.get("model_version") == META_18["weights_sha256"][:12]
@@ -458,11 +479,11 @@ with checked("B7.18"):
             except ValueError:
                 return response.text
 
-        with logged_18():                                 # the server's log lines are kept, not printed
+        with logged_18() as kept_records_18:              # the server's log lines are kept, not printed
             ok_18.update({f"fastapi {k}": v for k, v in api_cases_18(
                 lambda path: (lambda r: (r.status_code, as_body_18(r)))(client_18.get(path)),
                 lambda path, body: (lambda r: (r.status_code, as_body_18(r)))(client_18.post(path, json=body)),
-                "FastAPI :").items()})
+                "FastAPI :", kept_records_18).items()})
         kept_18 = app_18.state.service.model
         app_18.state.service.model = Failing_18()
         try:
@@ -495,11 +516,11 @@ with checked("B7.18"):                                    # the fallback, starte
             except ValueError:
                 return response.status_code, response.text
 
-        with logged_18():
+        with logged_18() as kept_records_18:
             ok_18.update({f"stdlib {k}": v for k, v in api_cases_18(
                 lambda path: answer_18(session_18.get(url_18 + path, timeout=10)),
                 lambda path, body: answer_18(session_18.post(url_18 + path, json=body, timeout=10)),
-                "http.server :").items()})
+                "http.server :", kept_records_18).items()})
         kept_18 = server_18.service.model
         server_18.service.model = Failing_18()
         try:
@@ -517,6 +538,8 @@ with checked("B7.18"):                                    # the fallback, starte
         verdict("B7.18", ok_18["stdlib 404"], "http.server : 404 pour une autre route.",
                 f"http.server : GET /nowhere doit rendre 404, reçu {status_18}.")
     finally:
+        if "session_18" in globals():
+            session_18.close()                               # the keep-alive connection: its handler thread ends with it
         server_18.shutdown()
         server_18.server_close()
         thread_18.join(10)
@@ -545,6 +568,17 @@ with checked("B7.18"):                                    # running(): always st
                 f"{'encore ouvert' if port_18 and not stopped_18 else 'fermé'}, threads {threads_before_18} → "
                 f"{threading.active_count()} : attendu 200, puis le serveur arrêté (shutdown, server_close, ou "
                 "should_exit pour uvicorn) dans un finally.")
+        url_a_18 = url_b_18 = None
+        try:
+            with serve_18.running(ARTIFACT_B, backend=backend_18) as url_a_18, \
+                    serve_18.running(ARTIFACT_B, backend=backend_18) as url_b_18:
+                pass
+        except Exception as err_18:  # noqa: BLE001 - the learner's code: "Address already in use", a server that did not start
+            url_b_18 = f"une erreur ({type(err_18).__name__} : {str(err_18)[:80]})"
+        ok_18[f"free port {backend_18}"] = url_a_18 is not None and url_b_18 is not None and url_a_18 != url_b_18
+        verdict("B7.18", ok_18[f"free port {backend_18}"], f"running(backend=\"{backend_18}\") deux fois à la fois : deux "
+                "ports libres.", f"deux running(backend=\"{backend_18}\") à la fois donnent {url_a_18} et {url_b_18} : un "
+                "port en dur ne sert qu'une fois (port 0 : le système choisit un port libre).")
     try:
         with wbp.serve_process(PROJECT / "src", ARTIFACT_B, backend="stdlib", timeout=60) as proc_18:
             code_health_18 = requests.get(f"{proc_18.url}/health", timeout=10).status_code
@@ -588,9 +622,10 @@ with wbp.torch_state_kept(), torch.inference_mode():        # one thread, as the
     direct32_19 = wbp.latencies(lambda: model_19(x_19[:32]), 50, 5)
 one_body_19, batch_body_19 = {"pixels": X_B[0].tolist()}, {"images": X_B[:32].tolist()}
 with wbp.serve_process(wbp.reference_package() / "src", folder_19, backend="auto", env={"OMP_NUM_THREADS": "1"}) as server_19:
-    session_19 = requests.Session()
-    http1_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict", json=one_body_19, timeout=30), 200, 20)
-    http32_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict_batch", json=batch_body_19, timeout=30), 40, 3)
+    with requests.Session() as session_19:                  # closed at the end: no connection left open
+        http1_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict", json=one_body_19, timeout=30), 200, 20)
+        http32_19 = wbp.latencies(lambda: session_19.post(f"{server_19.url}/predict_batch", json=batch_body_19, timeout=30),
+                                  40, 3)
 rows_19 = {"appel direct, 1 image": (direct1_19, 1), "appel direct, batch de 32": (direct32_19, 32),
            "POST /predict, 1 image": (http1_19, 1), "POST /predict_batch, 32 images": (http32_19, 32)}
 print(f"{'':34s} {'p50 (ms)':>9s} {'p95 (ms)':>9s} {'images/s':>9s}")
@@ -605,21 +640,26 @@ print(f"b) p95 de /predict_batch (32 images) ÷ p95 de /predict : {fr(ratio_b_19
 print(f"ℹ️ vitesse de cette machine : un appel direct à une image, p50 {fr(np.percentile(direct1_19, 50), 2)} ms (machine de "
       f"génération du chapitre : «DIRECT_P50» ms) ; les catégories sont des rapports, qui dépendent peu de la machine. "
       f"Mesures en {fr(time.perf_counter() - start_19, 0)} s, serveur arrêté.")
-if (category_19("a", ratio_a_19), category_19("b", ratio_b_19)) != ("«ANSWER_A»", "«ANSWER_B»"):
-    print("ℹ️ sur cette machine, une mesure tombe dans une autre catégorie que sur la machine de génération : compare "
-          "aussi ta prédiction à 05_solutions.md, qui donne les mesures de plusieurs exécutions.")
+if (category_19("a", ratio_a_19), category_19("b", ratio_b_19)) != (str(http_19).strip().upper(), str(batch_19).strip().upper()):
+    print("ℹ️ ta prédiction et la mesure de cette machine diffèrent : la vérification ci-dessous juge la catégorie "
+          "mesurée sur la machine de génération ; compare aussi aux mesures de plusieurs exécutions (05_solutions.md).")
 wb.check("B7.19a", http_19)
 wb.check("B7.19b", batch_19)'''
 
 EXPERIMENT_19_OWN = r'''# The same measures on YOUR API (B7.18), if it passed: nothing is checked here
 if "ok_18" in globals() and ok_18 and all(ok_18.values()):
     try:
-        with serve_18.running(ARTIFACT_B) as url_own_19:
-            s_own_19 = requests.Session()
+        with serve_18.running(ARTIFACT_B) as url_own_19, requests.Session() as s_own_19:
             own1_19 = wbp.latencies(lambda: s_own_19.post(f"{url_own_19}/predict", json=one_body_19, timeout=30), 100, 10)
             own32_19 = wbp.latencies(lambda: s_own_19.post(f"{url_own_19}/predict_batch", json=batch_body_19, timeout=30), 20, 2)
         print(f"ton API : /predict p50 {fr(np.percentile(own1_19, 50), 2)} ms, p95 {fr(np.percentile(own1_19, 95), 2)} ms ; "
               f"/predict_batch p50 {fr(np.percentile(own32_19, 50), 1)} ms, p95 {fr(np.percentile(own32_19, 95), 1)} ms.")
+        slow_19 = np.percentile(own1_19, 50) / np.percentile(http1_19, 50)
+        if slow_19 > 3:
+            print(f"ℹ️ ton API est {fr(slow_19, 0)} fois plus lente que celle de référence pour la même requête : ≈ 40 ms de "
+                  "plus par requête est le signe d'un accusé de réception retardé (algorithme de Nagle) : un socket sans "
+                  "TCP_NODELAY (uvicorn avec sockets=[...]), ou des en-têtes et un corps envoyés en plusieurs fois ; "
+                  "compare avec running(..., backend=\"stdlib\").")
     except Exception as error_19:  # noqa: BLE001 - the learner's code: say it, nothing else depends on it
         print(f"ℹ️ ton API n'a pas pu être mesurée : {type(error_19).__name__} : {str(error_19)[:160]}")
 else:

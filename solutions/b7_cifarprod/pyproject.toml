@@ -11,7 +11,7 @@ dependencies = ["numpy>=2.0", "torch>=2.5", "pyyaml>=6.0", "safetensors>=0.4"]  
 
 [project.optional-dependencies]
 serve = ["fastapi>=0.110", "uvicorn>=0.30", "pydantic>=2.6"]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "httpx>=0.27", "requests>=2.31"]   # httpx: TestClient of FastAPI; requests: the tests of the API and the demo
 
 [project.scripts]
 cifarprod = "cifarprod.cli:main"
