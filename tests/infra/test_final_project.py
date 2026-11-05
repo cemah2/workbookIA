@@ -118,6 +118,15 @@ def test_the_structure_tests_of_the_kit_pass_and_the_others_wait(tmp_path):
     strict = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"], cwd=copy,
                             capture_output=True, text=True, env={**env, "PF_STRICT": "1"}, timeout=300)
     assert strict.returncode != 0, "expected PF_STRICT=1 to fail while functions are still to write"
+    (copy / "tests" / "test_zz_markers.py").write_text(
+        "import pytest\n\npytestmark = pytest.mark.todo\n\n\n@pytest.mark.data\n"
+        "def test_needs_the_dataset():\n    pytest.skip('dataset not downloaded')\n\n\n"
+        "def test_still_to_write():\n    pytest.skip('⏳ à écrire')\n", encoding="utf-8")
+    marked = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-rfs",
+                             "tests/test_zz_markers.py"], cwd=copy, capture_output=True, text=True,
+                            env={**env, "PF_STRICT": "1"}, timeout=300)
+    assert "1 failed" in marked.stdout and "1 skipped" in marked.stdout and "test_still_to_write" in marked.stdout, \
+        f"expected PF_STRICT=1 to fail a skipped « todo » test but accept a skipped « data » test:\n{marked.stdout[-1500:]}"
 
 
 @pytest.mark.slow

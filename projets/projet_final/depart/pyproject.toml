@@ -31,4 +31,5 @@ addopts = "-rfs"
 markers = [
     "todo: a test to complete or whose functions are not written yet (skipped with ⏳ until then; PF_STRICT=1 fails)",
     "slow: a long test (an end-to-end training); skipped with -m 'not slow'",
+    "data: a test that reads the downloaded dataset; it skips where the data is absent, even with PF_STRICT=1",
 ]

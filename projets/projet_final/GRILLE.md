@@ -4,14 +4,19 @@
 
 **Comment lire la grille** : chaque critère est **observable**, c'est-à-dire vérifiable dans le dépôt par une commande ou une lecture, sans croire l'auteur sur parole. La mention **(R)** donne la version allégée du parcours rapide, pour PF.7, PF.9 et PF.11 : un projet du parcours rapide est noté sur elle, et peut avoir tous les points.
 
-**Les vérifications communes** (à faire une fois, avant la grille) :
+**Les vérifications communes** (à faire une fois, avant la grille ; `projet` est le nom de ta ligne de commande, celui de ton paquet si tu l'as renommé) :
 
 ```bash
 git clone <ton dépôt> /tmp/pf && cd /tmp/pf          # un clone neuf, pas ta copie de travail
 git log --reverse --format="%h %ad %s" --date=iso | head -20
-git show --no-patch --format="%h %ad" protocole      # la date du tag
+git show --no-patch --format="%h %ad" protocole      # le commit tagué et sa date
 head -1 experiments/runs.jsonl ; cat experiments/test_access.jsonl
-pip install -e ".[dev,serve]" && python -m pytest -q && PF_STRICT=1 python -m pytest -q
+git merge-base --is-ancestor protocole <environment.git_commit de la première ligne de runs.jsonl> && echo "runs après le tag"
+git log -p --format="%h %ad" -- experiments/test_access.jsonl | grep -c '^-{'     # 0 : le journal du test n'a jamais perdu de ligne
+pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+pip install -e ".[dev,serve,notebooks]" && python scripts/download_data.py    # le paquet, puis les données vérifiées
+python -m pytest -q && PF_STRICT=1 python -m pytest -q
+projet train --config configs/fast.yaml          # l'artefact du mode rapide (artifacts/model_fast), pour PF.11 et le notebook 03
 ```
 
 ## PF.1 — Cadrage (1 point)
@@ -51,7 +56,7 @@ pip install -e ".[dev,serve]" && python -m pytest -q && PF_STRICT=1 python -m py
 | [ ] | une métrique principale, des secondaires, la méthode d'intervalle (bootstrap, par groupes s'il y en a) | 0,25 | lecture de `docs/protocole.md` | |
 | [ ] | la baseline naïve **nommée** et la baseline classique, la validation croisée et la règle de ses folds | 0,25 | lecture | |
 | [ ] | le critère de succès chiffré, les sous-groupes et la robustesse, le budget (runs, graines, machine) | 0,25 | lecture | |
-| [ ] | le tag `protocole` existe, poussé, et sa date précède la première ligne de `experiments/runs.jsonl` | 0,25 | `git show protocole` contre `head -1 experiments/runs.jsonl` | |
+| [ ] | le tag `protocole` existe, poussé, et précède les expériences : sa date avant la première ligne de `experiments/runs.jsonl`, et le commit de chaque run descend du commit tagué | 0,25 | `git show protocole` contre `head -1 experiments/runs.jsonl` ; `git merge-base --is-ancestor protocole <git_commit du run>` | |
 | [ ] | la section « Modifications » liste chaque changement après le tag (date, commit, pourquoi), ou dit « Aucune » et `git diff protocole -- docs/protocole.md` est vide | 0,25 | `git log protocole..HEAD -- docs/protocole.md` | |
 
 ## PF.5 — Baselines (1 point)
@@ -110,14 +115,14 @@ pip install -e ".[dev,serve]" && python -m pytest -q && PF_STRICT=1 python -m py
 | [ ] | `pip install -e .` dans un environnement neuf, puis `python -m pytest -q` vert | 0,5 | dans le clone | |
 | [ ] | la configuration est validée (une clé inconnue refusée), la ligne de commande a ses codes de sortie, aucun code ne vit que dans un notebook | 0,25 | `projet train --set epoch=3` rend 2 ; les notebooks n'importent que le paquet | |
 | [ ] | au moins cinq tests à toi qui attrapent de vraies erreurs (découpage, prétraitement sans fuite, formes, apprentissage par cœur, API), chacun avec un message qui dit l'attendu | 0,5 | lecture de `tests/` ; casser une fonction à la main fait échouer un test | |
-| [ ] | `PF_STRICT=1 python -m pytest -q` ne saute plus rien | 0,25 | dans le clone | |
+| [ ] | `PF_STRICT=1 python -m pytest -q` ne saute plus rien (sauf un test marqué `data` quand le dataset manque) | 0,25 | dans le clone, après `python scripts/download_data.py` | |
 | [ ] | l'intégration continue est verte sur GitHub, son badge est dans le README, elle ne télécharge pas le dataset | 0,5 | l'onglet *Actions* du dépôt ; `.github/workflows/ci.yml` | |
 
 ## PF.11 — Démonstration ou API (1 point)
 
 | Fait | Critère | Pts | Comment le vérifier | Preuve |
 |---|---|---|---|---|
-| [ ] | l'artefact se suffit : dans un processus neuf, `scripts/predict.py` prédit depuis une entrée brute sans le code d'entraînement ni les données | 0,5 | `python scripts/predict.py --model ... --input examples.jsonl` dans le clone | |
+| [ ] | l'artefact se suffit : dans un processus neuf, `scripts/predict.py` prédit depuis une entrée brute sans le code d'entraînement ni les données | 0,5 | `python scripts/predict.py --model artifacts/model_fast --input examples.jsonl` dans le clone (l'artefact du `projet train` des vérifications communes) | |
 | [ ] | l'API répond sur `/health` et `/predict` et refuse une entrée invalide en 422 (ou la démo Gradio) ; la même prédiction que la ligne de commande **(R : la même prédiction par `scripts/predict.py` et par le notebook 03)** | 0,25 | `projet serve`, puis `curl` | |
 | [ ] | la latence p50 et p95 est mesurée, avec la machine **(R : la durée d'une prédiction, avec la machine)** | 0,25 | `projet latency` ; le README | |
 
@@ -145,8 +150,8 @@ pip install -e ".[dev,serve]" && python -m pytest -q && PF_STRICT=1 python -m py
 
 | Fait | Pénalité | Pts | Comment le vérifier | Preuve |
 |---|---|---|---|---|
-| [ ] | le test consulté avant l'évaluation finale (plus d'une ligne dans `experiments/test_access.jsonl` sans réouverture signalée, une métrique de test dans les `metrics` de `runs.jsonl`, un `select(..., "test")` contourné), **ou** le protocole modifié après le tag sans le signaler | −3 | `git log protocole..HEAD -- docs/protocole.md data/splits.json`  ; les clés des `metrics` du journal ; `git grep -n "_sealed=True"` hors de `evaluate.py` | |
-| [ ] | un notebook livré qui ne s'exécute pas de bout en bout (« Tout exécuter » en mode rapide, dans le clone) | −2 | `jupyter nbconvert --to notebook --execute notebooks/*.ipynb` | |
+| [ ] | le test consulté avant l'évaluation finale (plus d'une ligne dans `experiments/test_access.jsonl` sans réouverture signalée, une ligne effacée de ce journal, une métrique de test dans les `metrics` de `runs.jsonl`, un `select(..., "test")` contourné), **ou** le protocole modifié après le tag sans le signaler | −3 | `git log protocole..HEAD -- docs/protocole.md data/splits.json` ; `git log -p -- experiments/test_access.jsonl` (aucune ligne retirée) ; les clés des `metrics` du journal ; `git grep -n "_sealed=True"` hors de `evaluate.py` | |
+| [ ] | un notebook livré qui ne s'exécute pas de bout en bout : des sorties d'erreur dans le notebook commité, ou « Tout exécuter » qui s'arrête sur une erreur dans le clone (après les vérifications communes ; le notebook 03 n'y rouvre pas le test, il le dit) | −2 | lecture des sorties ; `jupyter nbconvert --to notebook --execute --output-dir /tmp/pf_nb notebooks/*.ipynb` | |
 | [ ] | un résultat rapporté sans intervalle **ni** baseline (README, rapport, model card ou soutenance) | −1 | lecture | |
 
 ## Le total et les seuils

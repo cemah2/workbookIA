@@ -10,7 +10,7 @@
 - les retards (*lags*) se calculent sur une grille horaire complète, avec des valeurs manquantes pour les 165 heures absentes (pas des zéros), et ne remontent pas à moins de 48 h : à 18 h la veille, l'heure de 23 h du lendemain moins 24 h n'est pas encore connue ;
 - fichier : `data/splits.json` · SHA-256 du découpage : `<les 64 caractères rendus par save_splits>`.
 
-Ce que l'audit a changé : `casual` et `registered` sont retirées (leur somme vaut `cnt` sur chaque ligne : une fuite de la cible) ; 22 heures d'humidité nulle sont traitées comme manquantes ; les 2 180 heures de vent nul sont gardées et signalées (vent calme ou mesure absente : la source ne le dit pas) ; la description des saisons du `Readme.txt` (1 = printemps) contredit les données (janvier est en saison 1) : la saison est recalculée depuis la date.
+Ce que l'audit a changé : `casual` et `registered` sont retirées (leur somme vaut `cnt` sur chaque ligne : une fuite de la cible) ; 22 heures d'humidité nulle sont traitées comme manquantes ; les 2 180 heures de vent nul sont gardées et signalées (vent calme ou mesure absente : la source ne le dit pas) ; la description des saisons du `Readme.txt` de l'archive (1 = printemps) contredit les données (janvier est en saison 1 ; la page de l'UCI dit aujourd'hui 1 = hiver) : la saison est recalculée depuis la date ; la page annonce 17 389 instances, le fichier `hour.csv` en a 17 379 : les chiffres du protocole sont ceux du fichier.
 
 ## Le test scellé
 

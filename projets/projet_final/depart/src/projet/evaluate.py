@@ -157,4 +157,6 @@ def open_sealed_test(config: Config, *, reason: str, root: str | Path = ".", all
         print("⚠️ no git tag « protocole »: the protocol was not frozen before the experiments (PF.4)")
     elif status["protocol_changed_since_tag"]:
         print("⚠️ docs/protocole.md changed since the tag « protocole »: report every change in the report")
+    if status["uncommitted"]:
+        print("⚠️ docs/protocole.md or data/splits.json has uncommitted changes: commit them, and say it in the report")
     return test

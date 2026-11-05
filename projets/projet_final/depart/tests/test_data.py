@@ -95,4 +95,5 @@ def test_select_refuses_the_test_split(toy):
 
 
 # TODO PF.2: test_load_examples_has_the_schema_of_the_data_card (an "id" column, unique; the target; the number of
-# rows written in data/card.md), skipped when the data is not downloaded (in the CI): pytest.skip if not found.
+# rows written in data/card.md), marked @pytest.mark.data and skipped when the data is not downloaded (in the CI):
+# pytest.skip if the files are not found. PF_STRICT=1 accepts this skip, and only this one.

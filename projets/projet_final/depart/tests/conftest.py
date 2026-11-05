@@ -6,7 +6,8 @@ written yet.
 
 While a function of the package raises ``NotImplementedError("TODO PF.n: ...")``, the tests that call it are reported
 as skipped with « ⏳ pas encore écrit : ... » instead of a failure: the CI stays green from the first commit, and the
-skips list what remains to do. With ``PF_STRICT=1`` (the last weeks, PF.10), they fail.
+skips list what remains to do. With ``PF_STRICT=1`` (the last weeks, PF.10), they fail, except the tests marked
+``data`` that skip because the downloaded dataset is absent (in the CI, which never downloads it).
 """
 
 import os
@@ -37,7 +38,8 @@ def pytest_runtest_makereport(item, call):
     if report.when not in ("setup", "call"):
         return
     if STRICT:
-        if report.skipped and item.get_closest_marker("todo") is not None:
+        # a « data » test may still skip where the dataset is absent (the CI): it reads files that are not in git
+        if report.skipped and item.get_closest_marker("todo") is not None and item.get_closest_marker("data") is None:
             report.outcome = "failed"
             report.longrepr = f"PF_STRICT=1: expected this « todo » test to be written and to pass, it was skipped"
         return

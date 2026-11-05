@@ -6,3 +6,6 @@ notebooks/
 experiments/
 **/__pycache__
 .venv
+.env
+kaggle.json
+.netrc

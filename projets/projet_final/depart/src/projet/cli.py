@@ -67,11 +67,14 @@ def build_parser() -> argparse.ArgumentParser:
 
 # ------------------------------------------------------------------------------------------------ the commands
 def _training_frames(config):
-    """The training and validation rows of the frozen split (the training ones subsampled in the fast mode)."""
+    """The training and validation rows of the frozen split (the training ones subsampled in the fast mode). Once
+    docs/protocole.md holds the SHA-256 of the split, the split is checked against it (a changed split fails)."""
     from .data import load_examples, load_splits, select, subsample
+    from .evaluate import PROTOCOL, SPLIT_DIGEST
 
     df = load_examples(config)
-    splits = load_splits(config.split_file)
+    found = SPLIT_DIGEST.search(Path(PROTOCOL).read_text(encoding="utf-8")) if Path(PROTOCOL).exists() else None
+    splits = load_splits(config.split_file, found.group(1) if found else None)
     train_df = subsample(select(df, splits, "train"), config.max_train_examples, config.seed)
     return train_df, select(df, splits, "val")
 

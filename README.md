@@ -18,11 +18,11 @@ Objectif : une **reconversion professionnelle** vers les métiers de l'IA et de 
 | **Exercices** | **2 028** : 1 933 dans les 39 chapitres (0A, 0B, 1 à 29, B1 à B8), 82 dans les 6 examens blancs, 13 étapes du projet final |
 | **Par type** | 🧠 448 · 🔁 114 · ✏️ 250 · ∂ 71 · 🔨 197 · 📦 191 · 🔬 116 · 🔮 87 · 🐛 50 · 📈 47 · 🧮 37 · 🗣️ 45 · ⚖️ 39 · 📄 34 · 🎨 27 · 🏆 39 · 💼 190 · 🛠️ 46 |
 | **Vérifications automatiques** | 5 671 réponses vérifiées par `wb.check` (empreinte, jamais la réponse en clair) |
-| **Tests** | **5 848 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 845 pour l'outillage du workbook |
+| **Tests** | **5 854 tests** pytest : 5 003 pour `mylearn` (ton code, comparé à NumPy, scikit-learn ou PyTorch) et 851 pour l'outillage du workbook |
 | **Notebooks** | 107 : 78 dans les chapitres (exercices et solutions exécutées), 12 pour les examens blancs, 15 pour les mini-projets et le projet final, 2 pour la mise en place |
 | **Flashcards** | 967 cartes en 39 sous-paquets Anki |
 | **mylearn** | 38 modules, 273 fonctions et classes publiques aux signatures figées |
-| **Index et glossaire** | 1 565 notions et 1 606 renvois, 1 261 termes au glossaire |
+| **Index et glossaire** | 1 565 notions et 1 602 renvois, 1 261 termes au glossaire |
 
 *Compté le 2026-11-05 par `python tools/repo_stats.py --write` : exercices du contrat (`docs/syllabus/data/*.json`), réponses de `src/wb/answers.json`, cartes acceptées par `export_flashcards.py --check`, tests de `pytest --collect-only --impl=ref`, fichiers `.ipynb` hors `mon_travail/`, stubs de `MANIFEST.json`, en-tête de l'index.*
 <!-- wb:end chiffres -->
@@ -57,7 +57,7 @@ Ensuite : `python tools/start_chapter.py 0A` pour commencer le premier chapitre.
 
 ## 🔁 Routine pour chaque chapitre
 
-1. `python tools/start_chapter.py 18` : copie le notebook et les squelettes `mylearn` du chapitre dans `mon_travail/` et complète tes fichiers de suivi, sans jamais écraser ton travail (sur Colab : [00_setup/COLAB.md](00_setup/COLAB.md) §2).
+1. `python tools/start_chapter.py 18` : copie le notebook et les squelettes `mylearn` du chapitre dans `mon_travail/` et complète tes fichiers de suivi, sans jamais écraser ton travail (sur Colab : [00_setup/COLAB.md §2](00_setup/COLAB.md#2-démarrer-un-chapitre)).
 2. Ouvre la fiche (`01_fiche.md`) et suis son **ordre conseillé** : un bloc du livre, la partie de la fiche qui lui correspond (la fiche entière compte 1 à 2 heures de lecture), puis les quiz 🧠, les rappels 🔁 et les exercices papier ✏️ et ∂ de ce bloc, sans le livre.
 3. Écris tes réponses papier dans `mon_travail/<chapitre>/06_mes_reponses.md`, puis passe au bloc suivant.
 4. Notebook (ta copie, `mon_travail/<chapitre>/03_notebook.ipynb`), dans l'ordre conseillé par la fiche : à chaque 🔮, écris ta prédiction **avant** d'exécuter. `wb.check` te dit si ta réponse est juste sans la révéler.
@@ -65,7 +65,7 @@ Ensuite : `python tools/start_chapter.py 0A` pour commencer le premier chapitre.
 6. Corrige avec les indices (`04_indices.md`) puis les solutions, réponds aux questions 💼 à voix haute, importe les flashcards du chapitre dans Anki (`python tools/export_flashcards.py --chapter 18`, pas à pas dans [`annexes/anki.md`](annexes/anki.md)).
 7. Note ta séance dans `mon_travail/suivi/journal.md`, ton niveau dans `mon_travail/suivi/auto_evaluation.md`, et coche tes exercices dans `mon_travail/suivi/tableau_de_bord.md`.
 
-À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint. La méthode complète (comment étudier, comment demander de l'aide à Claude en mode tuteur) est dans [`docs/METHODE.md`](docs/METHODE.md).
+À la fin d'une partie, `python tools/start_chapter.py CP1` (puis `CP2`…) copie l'examen blanc, ta copie et le kit de départ du mini-projet ; le déroulé est dans le `README.md` du checkpoint. Pour finir, `python tools/start_chapter.py PF` copie le kit du projet final (`projets/projet_final/depart/`) dans `mon_travail/projet_final/`, qui deviendra ton propre dépôt git (le pas à pas est dans [`projets/projet_final/README.md`](projets/projet_final/README.md), section « Démarrer »). La méthode complète (comment étudier, comment demander de l'aide à Claude en mode tuteur) est dans [`docs/METHODE.md`](docs/METHODE.md).
 
 ## 📚 Plan et statuts
 
@@ -115,7 +115,18 @@ Chaque partie se termine par un mini-projet prêt pour un portfolio : cahier des
 | [MP5 · Classifieur d'images CIFAR-10 de bout en bout](projets/partie_5_classifieur_cifar10/) | des baselines au modèle livré avec sa ligne de commande et sa fiche modèle |
 | [MP6 · Banc d'essai génératif : VAE contre GAN](projets/partie_6_generatif/) | deux modèles génératifs comparés sous un même protocole, sur Fashion-MNIST |
 
-**Projet final** ([`projets/projet_final/`](projets/projet_final/)) : un projet de bout en bout sur un dataset que tu choisis. Tu cadres le problème avec une métrique et un critère de succès fixés à l'avance, tu documentes ton dataset (data card du ch. 29), tu compares une baseline classique et un modèle de deep learning sous un protocole figé, tu évalues une seule fois sur un test scellé, puis tu livres un dépôt professionnel (paquet testé, intégration continue, model card) et tu le présentes comme en entretien technique.
+**Projet final** ([`projets/projet_final/`](projets/projet_final/)) : un projet de bout en bout sur un dataset que tu choisis, en 13 étapes (4 à 6 semaines). Tu cadres le problème avec une métrique et un critère de succès fixés à l'avance, tu documentes ton dataset (data card du ch. 29), tu compares une baseline classique et un modèle de deep learning sous un protocole figé, tu évalues une seule fois sur un test scellé, puis tu livres un dépôt professionnel (paquet testé, intégration continue, model card) et tu le présentes comme en entretien technique. Le dossier contient :
+
+| Fichier | Contenu |
+|---|---|
+| [`README.md`](projets/projet_final/README.md) | le cahier des charges : choix du dataset, règle du test scellé, budget, jalons, les 13 étapes et leurs livrables |
+| [`GRILLE.md`](projets/projet_final/GRILLE.md) | la grille sur 20 : critères observables, comment les vérifier, pénalités |
+| [`04_indices.md`](projets/projet_final/04_indices.md) | trois indices par étape, sur d'autres datasets que le tien |
+| [`SOUTENANCE.md`](projets/projet_final/SOUTENANCE.md) | le plan des dix minutes de présentation, la démonstration et une banque de questions d'entretien |
+| [`exemple/`](projets/projet_final/exemple/) | un exemple de cadrage et de protocole sur Bike Sharing (UCI), sans aucun résultat de modèle |
+| [`depart/`](projets/projet_final/depart/) | le kit de départ, un dépôt modèle : paquet `projet` (configuration et ligne de commande fournies, ouverture unique du test scellé), tests, notebooks, intégration continue, gabarits des documents |
+
+Il n'y a pas de solution de référence : le projet est le tien, et la grille sert à l'auto-évaluation puis à la correction par Claude (P9).
 
 Le lien entre ces compétences et les métiers visés (data analyst, data scientist, ML engineer, AI engineer) est dans [`annexes/metiers.md`](annexes/metiers.md).
 
@@ -136,7 +147,7 @@ workbookIA/
 │                        01_fiche, 02_exercices, 03_notebook, 04_indices, 05_solutions (.md et .ipynb exécuté),
 │                        06_mes_reponses, flashcards.csv, figures/
 ├── checkpoints/         partie_1 … partie_6 : examen blanc (sujet, notebook, corrigé, copie) et synthèse
-├── projets/             les six mini-projets (depart/, solution/) et le projet final
+├── projets/             les six mini-projets (depart/, solution/) et le projet final (cahier des charges, grille, indices, soutenance, exemple/, depart/)
 ├── annexes/             glossaire, index des notions, formulaire, cheatsheets, erreurs fréquentes, Anki, ressources, métiers
 ├── src/wb/              utilitaires du workbook : setup, wb.check, datasets, données synthétiques, graphiques…
 ├── templates/mylearn_stubs/   squelettes de mylearn (figés, MANIFEST.json)
@@ -155,7 +166,7 @@ workbookIA/
 | Commande | Rôle |
 |---|---|
 | `python 00_setup/check_env.py` | vérifie ton installation |
-| `python tools/start_chapter.py 18` | démarre un chapitre ou un checkpoint (`CP1`) ; `--init` crée `mon_travail/mylearn` et tes fichiers de suivi |
+| `python tools/start_chapter.py 18` | démarre un chapitre, un checkpoint (`CP1`) ou le projet final (`PF`) ; `--init` crée `mon_travail/mylearn` et tes fichiers de suivi |
 | `python -m pytest tests/test_ch18_<module>.py -q` | teste ton module du chapitre (`tests/ -m mylearn` : toute ta librairie ; `--impl=ref` : la référence) |
 | `python tools/export_flashcards.py` | fusionne les flashcards en un deck Anki à sous-paquets (`--chapter 3` : un chapitre ; `--apkg` : un paquet `.apkg`, avec genanki) |
 | `python tools/syllabus.py check` | vérifie le contrat (exercices, prérequis, parcours, stubs) ; `build` régénère le SYLLABUS, les parcours, le tableau de bord, l'index des notions et les tableaux de ce README |
@@ -189,13 +200,13 @@ workbookIA/
 
 ## Versions
 
-Python 3.13 et les versions préinstallées sur Colab (PyTorch 2.11, scikit-learn 1.6, NumPy 2.1, pandas 2.2…) : détail et justification dans [`docs/BIBLE.md` §21](docs/BIBLE.md). Les extras de `pyproject.toml` (`torch`, `hf`, `rl`, `anki`…) installent les dépendances d'un groupe de chapitres.
+Python 3.13 et les versions préinstallées sur Colab (PyTorch 2.11, scikit-learn 1.6, NumPy 2.1, pandas 2.2…) : détail et justification dans [`docs/BIBLE.md` §21](docs/BIBLE.md#21-versions-figées). Les extras de `pyproject.toml` (`torch`, `hf`, `rl`…) installent les dépendances d'un groupe de chapitres ; `anki`, celle de l'export `.apkg` des flashcards (genanki, facultatif).
 
 ## Crédits et licences
 
 - **Le livre** : Andrew Glassner, *Deep Learning: From Basics to Practice*, 2 volumes, 2018. Le workbook n'en recopie aucun passage : les fiches sont des résumés originaux, les exercices sont originaux, et les idées d'exemples reprises (la pièce truquée, Flippers, le réseau minuscule du ch. 18…) sont réécrites. Les PDF du livre ne sont jamais versionnés. Le code et les figures du livre sont publiés par l'auteur sous licence MIT ; ses dépôts de notebooks ne sont plus en ligne, mais des copies existent : [volume 1](https://github.com/bssrdf/DeepLearningBookCode-Volume1) et [volume 2](https://github.com/bssrdf/DeepLearningBookCode-Volume2) (voir aussi les [ressources de l'auteur](https://github.com/blueberrymusic/DeepLearningBook-Resources)).
-- **Les datasets** : chacun a sa fiche dans [`data/cards/`](data/cards/), avec sa provenance et sa licence. Palmer Penguins (CC0), MNIST (CC BY-SA 3.0), Fashion-MNIST (MIT), CIFAR-10 (sans licence formelle, citer le rapport technique), California Housing (recensement américain de 1990, via StatLib), *Adult* et 20 Newsgroups (CC BY 4.0, UCI), les taches solaires (SILSO, **CC BY-NC 4.0** : usage non commercial), *The Adventures of Sherlock Holmes* et *Le Tour du monde en quatre-vingts jours* (domaine public, Project Gutenberg), des photos sous CC BY 2.0 et des tableaux du domaine public ([`data/cards/images.md`](data/cards/images.md)).
+- **Les datasets** : chacun a sa fiche dans [`data/cards/`](data/cards/), avec sa provenance et sa licence. Palmer Penguins (CC0), MNIST (CC BY-SA 3.0), Fashion-MNIST (MIT), CIFAR-10 (sans licence formelle, citer le rapport technique), California Housing (recensement américain de 1990, via StatLib), *Adult* et 20 Newsgroups (CC BY 4.0, UCI), les taches solaires (SILSO, **CC BY-NC 4.0** : usage non commercial), *The Adventures of Sherlock Holmes* et *Le Tour du monde en quatre-vingts jours* (domaine public, Project Gutenberg), des photos sous CC BY 2.0 et des tableaux du domaine public ([`data/cards/images.md`](data/cards/images.md)). L'exemple de calibrage du projet final décrit Bike Sharing (UCI, CC BY 4.0), qui n'est pas versionné.
 - **CleanRL** : le chapitre B8 fait relire `ppo.py` de [CleanRL](https://github.com/vwxyzjn/cleanrl) (licence MIT), téléchargé à un commit figé et jamais installé.
 - **nanoGPT** : le mini-GPT du chapitre B3 suit la structure de [nanoGPT](https://github.com/karpathy/nanoGPT) d'A. Karpathy (licence MIT), crédité dans la fiche.
-- **Les modèles pré-entraînés** (ResNet-18, MobileNetV3, SqueezeNet et VGG16 de torchvision ; DINOv2, CLIP, MiniLM, SmolLM2, Qwen2.5… du Hugging Face Hub) sont téléchargés à des révisions figées, jamais versionnés ; leurs licences (BSD 3-Clause pour torchvision, Apache 2.0 pour la plupart des modèles du Hub, les conditions d'ImageNet, les restrictions de la fiche de CLIP) sont détaillées dans [`data/cards/pretrained.md`](data/cards/pretrained.md).
+- **Les modèles pré-entraînés** (ResNet-18, MobileNetV3, SqueezeNet et VGG16 de torchvision ; DINOv2, CLIP, MiniLM, SmolLM2, Qwen2.5… du Hugging Face Hub) sont téléchargés à des révisions figées, jamais versionnés ; leurs licences (BSD 3-Clause pour torchvision, Apache 2.0 ou MIT pour la plupart des modèles du Hub, les conditions d'ImageNet, les restrictions de la fiche de CLIP) sont détaillées dans [`data/cards/pretrained.md`](data/cards/pretrained.md).
 - **Les bibliothèques** : NumPy, pandas, Matplotlib, scikit-learn, PyTorch, Hugging Face (transformers, datasets, tokenizers, peft), Gymnasium, XGBoost, LightGBM, SHAP, FastAPI, pytest et genanki (facultatif), chacune sous sa propre licence.

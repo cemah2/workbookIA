@@ -21,7 +21,7 @@ def build_preprocessor(config: Config):
     """An UNFITTED preprocessor with the scikit-learn API (``fit(df)``, ``transform(df)``, ``get_params``), built from
     the settings of ``config`` alone.
 
-    Tabular: a ``ColumnTransformer`` (12.28, 15.28); text: a vectorizer or a wrapper around a tokenizer (B2, B4);
+    Tabular: a ``ColumnTransformer`` of scalers and encoders (12.26, 15.28); text: a vectorizer or a wrapper around a tokenizer (B2, B4);
     images: a small class that stores the mean and std of the channels in ``fit`` (MP5) or the transform of the
     pre-trained model (B1.11); a series: the scaling of the windows (22.23, 24.25). It receives rows of
     ``load_examples`` as they are (``fit(df)`` or ``fit(df, y)``) and ignores the column ``id`` and the target (a model

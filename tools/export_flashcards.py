@@ -156,7 +156,15 @@ def collect(files: list[Path], root: Path = ROOT, out=print) -> tuple[list[list[
     return all_cards, problems
 
 
+def escape_text(field: str) -> str:
+    """A field ready for Anki's HTML: a « < » or a « & » of the text (« \\( 0 < x \\) », « a & b ») becomes
+    ``&lt;`` or ``&amp;``, as the Anki manual asks; the tags (``<code>``, ``</b>``, ``<br>``) and entities stay."""
+    field = re.sub(r"&(?!(?:[A-Za-z]+|#\d+|#x[0-9A-Fa-f]+);)", "&amp;", field)
+    return re.sub(r"<(?![A-Za-z/!])", "&lt;", field)
+
+
 def write_csv(cards: list[list[str]], output: Path) -> None:
+    cards = [[escape_text(front), escape_text(back), tags, deck] for front, back, tags, deck in cards]
     buffer = io.StringIO()
     buffer.write(HEADER)
     writer = csv.writer(buffer, delimiter=";", quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
@@ -178,19 +186,14 @@ def write_apkg(cards: list[list[str]], output: Path, genanki) -> None:
                     "afmt": "{{FrontSide}}<hr id=answer>{{Verso}}"}],
         css=".card { font-family: arial; font-size: 20px; text-align: center; color: black; background-color: white; }",
     )
-    import warnings
-
     decks: dict[str, object] = {}
-    with warnings.catch_warnings():
-        # a « < » of a formula (« \\( x < 1 \\) ») is text for Anki, as in the CSV import; genanki warns about it
-        warnings.filterwarnings("ignore", message="Field contained the following invalid HTML tags")
-        for front, back, tags, deck in cards:
-            if deck not in decks:
-                decks[deck] = genanki.Deck(_stable_id(deck), deck)
-            chapter = tags.split()[0].split("::")[1] if tags.count("::") >= 1 else deck    # « ch18 » of dlwb::ch18::…
-            note = genanki.Note(model=model, fields=[front, back], tags=tags.split(),
-                                guid=genanki.guid_for(chapter, front))
-            decks[deck].add_note(note)
+    for front, back, tags, deck in cards:
+        if deck not in decks:
+            decks[deck] = genanki.Deck(_stable_id(deck), deck)
+        chapter = tags.split()[0].split("::")[1] if tags.count("::") >= 1 else deck    # « ch18 » of dlwb::ch18::…
+        note = genanki.Note(model=model, fields=[escape_text(front), escape_text(back)], tags=tags.split(),
+                            guid=genanki.guid_for(chapter, front))      # the GUID of the text as written
+        decks[deck].add_note(note)
     genanki.Package(list(decks.values())).write_to_file(str(output))
 
 

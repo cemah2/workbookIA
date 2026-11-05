@@ -388,6 +388,17 @@ def test_export_flashcards_files_each_card_in_its_part_and_chapter(tmp_path):
     assert _deck_rows(one) == rows, "a chapter export must land in the same sub-deck as the whole deck"
 
 
+@pytest.mark.parametrize("field, expected", [
+    (r"Quand \( |q| < 1 \) ?", r"Quand \( |q| &lt; 1 \) ?"),                  # a « < » of a formula
+    (r"\( \prod_{i<\ell} s_i \)", r"\( \prod_{i&lt;\ell} s_i \)"),
+    ("<code>a & b</code>, <b>x</b><br>", "<code>a &amp; b</code>, <b>x</b><br>"),   # tags stay, « & » escaped
+    ("&gt; et &#955; et &#x3bb;", "&gt; et &#955; et &#x3bb;"),                  # entities stay
+])
+def test_export_escapes_the_text_of_the_html_fields(field, expected):
+    """The Anki manual asks for ``&lt;`` and ``&amp;`` in an HTML field (``#html:true``); genanki warns otherwise."""
+    assert export_flashcards.escape_text(field) == expected
+
+
 def test_real_deck_sorts_its_sub_decks_in_study_order():
     """Anki sorts decks by name: « Partie 0 » to « Partie VII », « Ch. 07 » before « Ch. 10 » (two digits)."""
     folders = sorted((f.parent for f in ROOT.glob("chapitres/*/flashcards.csv")),

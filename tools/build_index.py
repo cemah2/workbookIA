@@ -20,8 +20,9 @@ For each entry:
   it is, by strength: a heading about it (« 20.4.3 · Le dropout »: 4), a heading that names it (3), its first
   definition, in bold or followed by its gloss (2), else the section that names it most often (1). The chapters are
   sorted by strength, then in study order; a chapter where the notion is only mentioned (strength 1) while another
-  one defines it goes to « évoquée ». A notion found in none of its chapters is looked for (heading or definition)
-  in every sheet;
+  one defines it goes to « évoquée » (unless the notion is in its ``teaches``). A chapter whose title is about the
+  notion (« Modèles de diffusion ») teaches it, with strength 4, and all its exercises practise it. A notion defined
+  in none of its chapters is looked for (heading or bold) in every sheet, and listed after them;
 - **exercices**: those whose title names it, then those whose statement (``02_exercices.md``, the notebooks, the
   exam subjects, the briefs of the projects) names it: first those that cover a section found above, then those of
   the chapters that teach it, then the others; a notion named by no statement (a long notion of the contract) keeps
@@ -400,7 +401,8 @@ def _contains(text: str, probe: str) -> bool:
     at = text.find(probe)
     while at >= 0:
         end = at + len(probe)
-        if any(text.startswith(suffix, end) and _boundary(text, at, end + len(suffix)) for suffix in ("", "s", "es", "x")):
+        if any(text.startswith(suffix, end) and _boundary(text, at, end + len(suffix))
+               for suffix in ("", "s", "es", "x")):
             return True
         at = text.find(probe, at + 1)
     return False
@@ -654,9 +656,10 @@ def build_index(chapters: dict, root: Path = ROOT) -> str:
         if not homonym:
             ids += sorted((i for i in said if chapter_of[i] not in shown_ids), key=_exercise_key)
         ids += [ex["id"] for cid in whole for ex in chapters[cid]["exercises"]]
-        if not ids and e["teaches"]:    # a long notion of the contract, named by no statement: the section's
-            ids = [i for (s, _, cid, _, sec) in taught if s >= 2 and sec is not None and sec["ref"]
-                   for i in covers.get((cid, sec["ref"]), [])]          # exercises
+        if not ids:     # named by no statement: the exercises of the book section of a heading about it, or, for
+            least = 2 if e["teaches"] else 4        # a notion of the contract, of the section that teaches it
+            ids = [i for (s, _, cid, _, sec) in taught if s >= least and sec is not None and sec.get("ref")
+                   for i in covers.get((cid, sec["ref"]), [])]
         ids = list(dict.fromkeys(ids))
         reused = [cid for cid in requires.find(probes) if cid not in e["taught"]]
         if homonym:                     # « noyau » of another sense in their notions: only the entry's own chapters

@@ -1,4 +1,8 @@
-# The data: downloaded again by scripts/download_data.py (its SHA-256 in data/card.md), never versioned
+# The data: downloaded again by scripts/download_data.py (its SHA-256 in data/card.md), never versioned.
+# Everything under data/ stays out of git, except the data card and the frozen split (a list of ids, no data).
+data/*
+!data/card.md
+!data/splits.json
 data/raw/
 data/cache/
 data/downloads/

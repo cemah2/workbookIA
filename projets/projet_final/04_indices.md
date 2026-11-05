@@ -108,7 +108,7 @@ Le naïf est ce que ferait quelqu'un sans modèle (classe majoritaire, moyenne, 
 </details>
 <details><summary>Indice 2</summary>
 
-(1) `build_naive` : `DummyClassifier`, `DummyRegressor`, ou un petit estimateur de persistance (`fit` retient la dernière valeur, `predict` la recopie) ; (2) `build_preprocessor` puis `build_classical` : `make_pipeline(préprocesseur, modèle)` ; (3) `cross_validate` : les folds du protocole (`GroupKFold`, `TimeSeriesSplit`, `StratifiedKFold`) et le `scoring` de `config.metric` ; (4) `log_run` et `read_runs` ; (5) `projet baselines --config configs/fast.yaml`, puis le notebook 02.
+(1) `set_seed` (la commande `projet baselines` l'appelle en premier) et `build_naive` : `DummyClassifier`, `DummyRegressor`, ou un petit estimateur de persistance (`fit` retient la dernière valeur, `predict` la recopie) ; (2) `build_preprocessor` puis `build_classical` : `make_pipeline(préprocesseur, modèle)` ; (3) `cross_validate` : les folds du protocole (`GroupKFold`, `TimeSeriesSplit`, `StratifiedKFold`) et le `scoring` de `config.metric` ; (4) `log_run` et `read_runs` ; (5) `projet baselines --config configs/fast.yaml`, puis le notebook 02.
 
 </details>
 <details><summary>Indice 3</summary>
@@ -144,7 +144,7 @@ Le bon modèle est le plus petit qui a une chance de battre ta baseline classiqu
 </details>
 <details><summary>Indice 3</summary>
 
-Un exemple sur un autre dataset (CIFAR-10, ce que tu as fait en B1) : le linear probe sur ResNet-18 figé sert de premier modèle deep learning, puis le dégel du dernier bloc avec deux learning rates (1e-3 pour la tête, 1e-5 pour le reste) le dépasse ; chaque marche est un run du journal. Liste de contrôle du tien : le prétraitement du modèle pré-entraîné (normalisation, taille, tokenizer de sa révision) · l'optimiseur créé **après** le remplacement de la tête · `model.eval()` et `torch.inference_mode()` à la validation · le meilleur checkpoint rechargé à la fin de `fit` · le mode rapide en moins de 10 min · le nombre de paramètres (`n_parameters`) dans le journal · la comparaison avec la baseline classique sur la même validation.
+Un exemple sur un autre dataset (CIFAR-10, ce que tu as fait en B1) : le linear probe sur ResNet-18 figé sert de premier modèle deep learning ; la marche suivante dégèle le dernier bloc avec deux learning rates (1e-3 pour la tête, 1e-4 pour `layer4`, comme en B1.17) et mesure ce qu'elle gagne, sur trois graines : en B1.17, sur 500 images, le gain restait de l'ordre du bruit d'une graine à l'autre. Chaque marche est un run du journal, gardée seulement si elle bat la précédente de plus que ce bruit. Liste de contrôle du tien : le prétraitement du modèle pré-entraîné (normalisation, taille, tokenizer de sa révision) · l'optimiseur créé **après** le remplacement de la tête · `model.eval()` et `torch.inference_mode()` à la validation · le meilleur checkpoint rechargé à la fin de `fit` · le mode rapide en moins de 10 min · le nombre de paramètres (`n_parameters`) dans le journal · la comparaison avec la baseline classique sur la même validation.
 
 </details>
 
@@ -164,13 +164,14 @@ Une expérience est une question posée **avant** de lancer : « le dégel du de
 </details>
 <details><summary>Indice 3</summary>
 
-Le cœur de `summarize` : la clé qui regroupe les graines d'une même configuration.
+Le cœur de `summarize` : la clé qui regroupe les graines d'une même configuration. Les deux baselines ont la même configuration : c'est le champ `model` du run qui les sépare.
 
 ```python
 def config_key(run):
     settings = {k: v for k, v in run["config"].items() if k != "seed"}
-    return json.dumps(settings, sort_keys=True)
-# then: group the "ok" runs by config_key, count the failed ones apart, mean and std of the validation metric,
+    return run["command"], run["model"], json.dumps(settings, sort_keys=True)
+# then: group the "ok" runs by config_key, count the failed ones apart, the validation metric of each run
+# (metrics["cv"]["mean"] for baselines, metrics["best_val"] for train), its mean and std per group,
 # one Markdown row per group, best first, a mark when there are fewer than three seeds
 ```
 
@@ -189,7 +190,7 @@ Une seule passe, préparée comme une expérience : tout est écrit et testé **
 </details>
 <details><summary>Indice 2</summary>
 
-(1) Écris et teste `compute_metrics`, `bootstrap_ci`, `paired_bootstrap`, `subgroup_table`, `worst_errors` sur la **validation** (les tests de `test_evaluate.py`, puis une copie du notebook 03 où le test est remplacé par la validation) ; (2) fige le modèle (artefact, run du journal), commite tout ; (3) passe `OPEN_TEST = True` et « Tout exécuter », une fois ; (4) commite `experiments/test_access.jsonl` et `experiments/test_results.json` ; (5) lis les vingt erreurs et range-les par cause ; (6) écris la section « Résultats ».
+(1) Écris et teste `compute_metrics`, `bootstrap_ci`, `paired_bootstrap`, `subgroup_table`, `worst_errors` sur la **validation** (les tests de `test_evaluate.py`, puis le notebook 03 en répétition : avec `OPEN_TEST = False`, il tourne en entier sur la validation, tes cellules de robustesse et d'explication comprises) ; (2) fige le modèle (artefact, run du journal), commite tout ; (3) passe `OPEN_TEST = True` et « Tout exécuter », une fois ; (4) commite `experiments/test_access.jsonl` et `experiments/test_results.json` ; (5) lis les vingt erreurs et range-les par cause ; (6) écris la section « Résultats ».
 
 </details>
 <details><summary>Indice 3</summary>
@@ -245,18 +246,19 @@ Le kit te donne la structure du paquet de B7 : il reste à le remplir et à le p
 </details>
 <details><summary>Indice 3</summary>
 
-Un test d'absence de fuite, sur un autre dataset (un tableau fabriqué dans le test) : le prétraitement appris sur l'entraînement ne doit pas changer quand on modifie le test.
+Un test d'absence de fuite, sur un autre dataset (un tableau fabriqué dans le test, avec une colonne numérique `x` standardisée) : un test très différent de l'entraînement doit être transformé avec les statistiques de l'entraînement, pas les siennes. Il échoue si le prétraitement est appris sur le test, ou sur l'entraînement et le test réunis.
 
 ```python
-def test_the_preprocessor_never_sees_the_test():
+def test_the_test_is_scaled_with_the_training_statistics():
     train, test = make_toy_frame(seed=0), make_toy_frame(seed=1)     # a helper of your tests
-    a = build_preprocessor(config).fit(train).transform(train)
-    test.loc[:, numeric_columns] *= 1000                              # a wild test set
-    b = build_preprocessor(config).fit(train).transform(train)
-    assert np.allclose(a, b), "expected the same transform of train, whatever the test holds"
+    test["x"] = test["x"] * 1000 + 50                                 # a test set far from the training
+    pre = build_preprocessor(config).fit(train)
+    expected = (test["x"] - train["x"].mean()) / train["x"].std(ddof=0)
+    got = ...                                                         # the column of x in pre.transform(test)
+    assert np.allclose(got, expected), "expected x scaled with the mean and std of the training rows only"
 ```
 
-Liste de contrôle : `pip install -e .` dans un environnement neuf · `projet --help` · une clé inconnue refusée · cinq tests à toi au moins · chacun échoue sur une version cassée · intégration continue verte et badge · `PF_STRICT=1` vert.
+Liste de contrôle : `pip install -e .` dans un environnement neuf · `projet --help` · une clé inconnue refusée · cinq tests à toi au moins, dont un sur la cible et l'identifiant (les mélanger ne change pas les features, sauf un encodage par la cible) · chacun échoue sur une version cassée · intégration continue verte et badge · `PF_STRICT=1` vert.
 
 </details>
 

@@ -26,8 +26,8 @@ def set_seed(seed: int, deterministic: bool = True) -> None:
     """Fix the seeds of ``random``, NumPy and PyTorch (CPU and GPU); with ``deterministic``, also ask PyTorch for
     deterministic algorithms (``torch.use_deterministic_algorithms(True, warn_only=True)``, cuDNN benchmark off).
     Same seed, same weights and same batches (B7.12, B7.13)."""
-    # TODO PF.6: random.seed, np.random.seed, torch.manual_seed (+ cuda), the deterministic switches
-    raise NotImplementedError("TODO PF.6: set_seed")
+    # TODO PF.5 (the baselines call it first): random.seed, np.random.seed, torch.manual_seed (+ cuda), the switches
+    raise NotImplementedError("TODO PF.5: set_seed")
 
 
 def cross_validate(estimator, df, config: Config) -> dict:
@@ -35,7 +35,7 @@ def cross_validate(estimator, df, config: Config) -> dict:
     the training examples only (never the test; validation too if the protocol says so).
 
     The folds follow the protocol: ``GroupKFold`` with ``config.group_column``, ``TimeSeriesSplit`` with
-    ``config.time_column``, otherwise ``StratifiedKFold`` (classification) or ``KFold``, with ``config.seed``
+    ``config.time_column`` (on ``df`` sorted by time: each fold validates on a period after the one it trains on), otherwise ``StratifiedKFold`` (classification) or ``KFold``, with ``config.seed``
     (8.19, 15.17). Returns ``{"metric": config.metric, "scores": [one per fold], "mean": ..., "std": ...}``; the
     same estimator and the same ``df`` give the same scores.
     """
@@ -134,6 +134,8 @@ def _json_default(value):
 def dumps(record: dict) -> str:
     """``json.dumps`` with ``_json_default`` and ``allow_nan=False`` after replacing NaN by None. Provided."""
     def clean(obj):
+        if hasattr(obj, "tolist") and not isinstance(obj, (list, tuple, dict)):
+            obj = obj.tolist()                          # NumPy scalars and arrays, float32 NaN included
         if isinstance(obj, float) and obj != obj:
             return None
         if isinstance(obj, dict):

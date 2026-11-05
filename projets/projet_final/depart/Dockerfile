@@ -26,4 +26,5 @@ RUN groupadd --system app && useradd --system --no-log-init --gid app app
 USER app
 
 EXPOSE 8000
-CMD ["sh", "-c", "python -m projet.serve --model $MODEL_DIR --host 0.0.0.0 --port 8000"]
+# exec: the server replaces the shell and receives the SIGTERM of « docker stop »
+CMD ["sh", "-c", "exec python -m projet.serve --model \"$MODEL_DIR\" --host 0.0.0.0 --port 8000"]

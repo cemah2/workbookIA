@@ -1,5 +1,6 @@
 # Continuous integration (PF.10): on every push and pull request, install the package on a clean machine and run the
-# tests. A step that fails stops the job. The data is not in git: the tests that need it skip themselves.
+# tests. A step that fails stops the job. The data is not in git: the tests that read it are marked « data » and skip
+# themselves when it is absent (PF_STRICT=1 accepts those skips only).
 name: ci
 on:
   push:

@@ -9,7 +9,8 @@ deliverables of PF.3, PF.5 and PF.8 in the contract docs/syllabus/data/pf.json).
 repository, which is not the workbook: their setup cell finds the project by its ``configs/fast.yaml`` and adds its
 ``src/`` to the path, and they call only the learner's package (no ``wb``, no ``mylearn``). Every step runs inside
 ``with step(...)``: a function not written yet, or an earlier step that did not run, prints ⏳, so that « Run all » on
-the empty kit ends without an error. The sealed test opens only with ``OPEN_TEST = True`` (03_evaluation).
+the empty kit ends without an error. The sealed test opens only with ``OPEN_TEST = True`` (03_evaluation); until
+then, the whole evaluation runs on the validation split (a rehearsal that writes nothing in experiments/).
 
 The bank of questions (the 💼 of the chapters of ``chapters`` in pf.json) is read from their 02_exercices.md and
 written between the markers ``<!-- pf:bank -->`` and ``<!-- pf:end bank -->`` of projets/projet_final/SOUTENANCE.md:
@@ -65,6 +66,7 @@ while not (ROOT / "configs" / "fast.yaml").exists() and ROOT != ROOT.parent:
 if not (ROOT / "configs" / "fast.yaml").exists():
     raise FileNotFoundError("Projet introuvable : ouvre ce notebook depuis ton dépôt (celui qui a configs/fast.yaml).")
 os.chdir(ROOT)                                    # the paths of the configuration are relative to the project
+(ROOT / "figures").mkdir(exist_ok=True)           # the figures of the report: plt.savefig("figures/....png")
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))         # your package, even without pip install -e
 
@@ -286,17 +288,21 @@ Le livrable de l'étape PF.8 : ce notebook **exécuté une fois**, `experiments/
         md("""
 ## 0. Avant d'ouvrir le test
 
+**La répétition générale.** Tant que `OPEN_TEST = False`, tout le notebook tourne sur la **validation** à la place du test : chaque cellule, les tiennes comprises (robustesse, explications), s'essaie sans toucher au test, et rien n'est écrit dans `experiments/`. Le test ne s'ouvre qu'une fois : une cellule qui plante après son ouverture ne se rattrape qu'en le rouvrant, et la réouverture se rapporte.
+
 Coche tout avant de passer `OPEN_TEST = True` :
 
+- « Tout exécuter » en répétition (`OPEN_TEST = False`) va jusqu'au bout, sans ⏳ ni erreur, sur la validation ;
 - le modèle retenu est figé : son artefact est dans `config.out_dir` (`projet train --config configs/full.yaml`) et son run dans le journal ;
 - les choix sont faits sur la validation (hyperparamètres, seuil, epoch d'arrêt), les ablations aussi ;
 - `docs/protocole.md` est tagué `protocole`, et toute modification depuis le tag est écrite dans sa section « Modifications » ;
 - tout est commité (`git status` est vide).
 
-Après l'exécution : commite **aussitôt** `experiments/test_access.jsonl` et `experiments/test_results.json`. Ne relance pas la cellule d'ouverture : elle refuse, et une réouverture forcée (`allow_reopen=True`) se rapporte dans le rapport.
+Après l'exécution : commite **aussitôt** `experiments/test_access.jsonl` et `experiments/test_results.json`, puis le notebook exécuté. Le relancer ensuite (un relecteur, « Tout exécuter » dans un clone) ne rouvre pas le test : la cellule d'ouverture voit la ligne du journal, le dit, et les cellules suivantes affichent ⏳ ; les sorties qui comptent sont celles du notebook commité. Pour refaire une évaluation interrompue ou fausse, `ALLOW_REOPEN = True` : la réouverture est notée dans le journal du test, et tu la rapportes, avec les deux résultats.
 """),
         code("""
-OPEN_TEST = False   # True ONCE, when the model is final (the checklist above)
+OPEN_TEST = False      # True ONCE, when the model is final (the checklist above)
+ALLOW_REOPEN = False   # True only to redo an interrupted or wrong evaluation: it is logged, say it in the report
 REASON = "TODO: final evaluation of the model of run <run_id>"
 """),
         code("""
@@ -319,6 +325,8 @@ predictor = naive = classical = None
 with step("le modèle retenu (predict.load_artifact)"):
     from projet.predict import load_artifact
 
+    if not Path(config.out_dir).exists():
+        raise Pending(f"l'artefact {config.out_dir} (projet train --config {CONFIG_PATH.as_posix()})")
     predictor = load_artifact(config.out_dir)
 with step("les deux baselines, réentraînées"):
     from projet.data import load_examples, load_splits, select
@@ -331,20 +339,33 @@ with step("les deux baselines, réentraînées"):
     classical = build_classical(config).fit(fit_df, fit_df[config.target])
 """),
         md("""
-## 2. L'ouverture du test
+## 2. L'ouverture du test (ou la répétition sur la validation)
 
-Rien ne s'ouvre tant que `OPEN_TEST = False` : les cellules suivantes affichent ⏳.
+Avec `OPEN_TEST = False`, `eval_df` est la validation : la répétition générale. Avec `OPEN_TEST = True`, c'est le test, ouvert une fois, et seulement si les trois modèles sont prêts à prédire.
 """),
         code("""
-test_df = None
-if OPEN_TEST:
-    with step("ouvrir le test scellé (evaluate.open_sealed_test)"):
-        from projet.evaluate import open_sealed_test
-
-        test_df = open_sealed_test(config, reason=REASON)
-        print(f"🔓 test ouvert : {len(test_df)} exemples. Commite experiments/test_access.jsonl maintenant.")
+eval_df = None
+EVAL_SPLIT = "test" if OPEN_TEST else "val"
+if not OPEN_TEST:
+    with step("répétition générale sur la validation (le test reste scellé)"):
+        need(predictor=predictor, naive=naive, classical=classical)
+        eval_df = select(examples, load_splits(config.split_file), "val")
+        print(f"ℹ️ Le test reste scellé (OPEN_TEST = False) : la suite tourne sur la validation ({len(eval_df)} "
+              "exemples), pour répéter l'évaluation. Rien n'est écrit dans experiments/.")
 else:
-    print("ℹ️ Le test reste scellé (OPEN_TEST = False).")
+    with step("ouvrir le test scellé (evaluate.open_sealed_test)"):
+        from projet.evaluate import open_sealed_test, sealed_test_accesses
+
+        need(predictor=predictor, naive=naive, classical=classical)   # never spend the one opening on a model not ready
+        previous = sealed_test_accesses(config)
+        if previous and not ALLOW_REOPEN:
+            print(f"🔒 Le test a déjà été ouvert ({len(previous)} fois, la première le {previous[0].get('opened')}) : "
+                  "cette exécution ne le rouvre pas. Les résultats de l'ouverture sont dans "
+                  "experiments/test_results.json et dans les sorties du notebook commité ; pour refaire une "
+                  "évaluation interrompue ou fausse : ALLOW_REOPEN = True, et dis-le dans le rapport.")
+        else:
+            eval_df = open_sealed_test(config, reason=REASON, allow_reopen=ALLOW_REOPEN)
+            print(f"🔓 test ouvert : {len(eval_df)} exemples. Commite experiments/test_access.jsonl maintenant.")
 """),
         md("""
 ## 3. Les métriques, avec leurs intervalles
@@ -358,10 +379,10 @@ import numpy as np
 
 predictions = results = None
 with step("prédictions des trois modèles"):
-    need(test_df=test_df, predictor=predictor, naive=naive, classical=classical)
-    y_true = test_df[config.target].to_numpy()
-    out = predictor.predict(test_df.drop(columns=[config.target]).to_dict("records"))
-    predictions = {"naive": np.asarray(naive.predict(test_df)), "classical": np.asarray(classical.predict(test_df)),
+    need(eval_df=eval_df, predictor=predictor, naive=naive, classical=classical)
+    y_true = eval_df[config.target].to_numpy()
+    out = predictor.predict(eval_df.drop(columns=[config.target]).to_dict("records"))
+    predictions = {"naive": np.asarray(naive.predict(eval_df)), "classical": np.asarray(classical.predict(eval_df)),
                    "model": np.array([o.get("label", o.get("prediction")) for o in out])}
     model_scores = np.array([o.get("score", np.nan) for o in out], dtype=float)
 with step("métriques et intervalles bootstrap"):
@@ -371,9 +392,10 @@ with step("métriques et intervalles bootstrap"):
     def main_metric(y, p):
         return compute_metrics(y, p, config)[config.metric]
 
-    groups = test_df[config.group_column].to_numpy() if config.group_column else None
+    groups = eval_df[config.group_column].to_numpy() if config.group_column else None
     boot = {"n_boot": config.n_bootstrap, "seed": config.seed, "groups": groups}
-    results = {"metric": config.metric, "n_test": int(len(test_df)), "models": {}, "differences": {}}
+    results = {"split": EVAL_SPLIT, "metric": config.metric, "n_examples": int(len(eval_df)), "models": {},
+               "differences": {}}
     for name, p in predictions.items():
         low, high = bootstrap_ci(y_true, p, main_metric, **boot)
         results["models"][name] = {**compute_metrics(y_true, p, config), "ci95_low": low, "ci95_high": high}
@@ -386,6 +408,8 @@ with step("métriques et intervalles bootstrap"):
         code("""
 with step("écrire experiments/test_results.json"):
     need(results=results)
+    if not OPEN_TEST:
+        raise Pending("la répétition sur la validation n'écrit rien ; le fichier s'écrit à l'ouverture du test")
     path = Path("experiments/test_results.json")
     if path.exists():                    # never overwrite the first evaluation
         path = path.with_name(f"test_results_reopened_{len(list(path.parent.glob('test_results*.json')))}.json")
@@ -403,7 +427,7 @@ with step("les erreurs les plus sûres d'elles (evaluate.worst_errors)"):
     need(predictions=predictions)
     from projet.evaluate import worst_errors
 
-    display(worst_errors(test_df, y_true, predictions["model"], y_score=model_scores, k=20))
+    display(worst_errors(eval_df, y_true, predictions["model"], y_score=model_scores, k=20))
     # TODO PF.8: your reading of the errors, grouped by cause (in the report)
 """),
         md("""
@@ -412,12 +436,12 @@ with step("les erreurs les plus sûres d'elles (evaluate.worst_errors)"):
 Les sous-groupes décidés dans le protocole (classes, sources, périodes, et une variable sensible si tu as le droit de t'en servir), chacun avec son effectif et son intervalle (`evaluate.subgroup_table`) ; puis les perturbations de robustesse du protocole (bruit, décalage, autre période). Un sous-groupe de moins de `min_size` exemples se signale, il ne se conclut pas.
 """),
         code("""
-SUBGROUP_COLUMN = config.group_column or config.target   # TODO PF.8: the column of the subgroups of your protocol
+SUBGROUP_COLUMN = None   # TODO PF.8: the column of eval_df that holds the subgroups of your protocol
 with step("métrique par sous-groupe (evaluate.subgroup_table)"):
-    need(predictions=predictions)
+    need(predictions=predictions, SUBGROUP_COLUMN=SUBGROUP_COLUMN)
     from projet.evaluate import subgroup_table
 
-    display(subgroup_table(y_true, predictions["model"], test_df[SUBGROUP_COLUMN].to_numpy(), main_metric,
+    display(subgroup_table(y_true, predictions["model"], eval_df[SUBGROUP_COLUMN].to_numpy(), main_metric,
                            n_boot=config.n_bootstrap, seed=config.seed))
 with step("robustesse"):
     need(predictions=predictions)

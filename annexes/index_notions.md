@@ -131,7 +131,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *apprentissage des features* → voir [feature learning](#f)
 - **apprentissage en contexte** (*in-context learning*) — enseignée : [ch. B4, Zéro-shot et few-shot][s514]
 - **apprentissage hiérarchique** (*hierarchical learning*) — enseignée : [ch. 20, 20.8 · Interpréter les résultats][s371] · exercices : 20.10, 20.Q1
-- **apprentissage non supervisé** (*unsupervised learning*) — enseignée : [ch. 1, 1.4 · Apprentissage non supervisé][s60]
+- **apprentissage non supervisé** (*unsupervised learning*) — enseignée : [ch. 1, 1.4 · Apprentissage non supervisé][s60] · exercices : 1.21, 1.E3, 1.Q8
 - **apprentissage par renforcement** (*reinforcement learning*) — enseignée : [ch. 1, 1.6 · Apprentissage par renforcement][s61] ; [ch. 26, Apprentissage par renforcement][s62] · exercices : 26.E5, 26.Q1–Q7, 29.R2, CP6.7 (+ 50)
 - *apprentissage par transfert* → voir [transfer learning](#t)
 - *apprentissage profond* → voir [deep learning](#d)
@@ -224,7 +224,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **banc d'essai** (*benchmark*) — enseignée : [mini-projet 6][s715] · exercices : 14.27, 19.25–26, 19.Q12, 27.24
 - **bandit contextuel** (*contextual bandit*) — enseignée : [ch. 11, Au-delà du livre : le bandit manchot][s157]
 - **bandit manchot** (*multi-armed bandit*) — enseignée : [ch. 11, Au-delà du livre : le bandit manchot][s157] · évoquée : [ch. 1][s144] · exercices : 11.11, 11.13, 11.19, B8.R3
-- **base de données vectorielle** (*vector database*) — enseignée : [ch. B4, Les bases de données vectorielles][s160] · évoquée : [ch. 7, 7.6.1 · Bizarreries de la grande dimension][s261]
+- **base de données vectorielle** (*vector database*) — enseignée : [ch. B4, Les bases de données vectorielles][s160] · évoquée : [ch. 7, 7.6.1 · Bizarreries de la grande dimension][s261] · exercices : B4.5, B4.17–20, B4.22, B4.Q9, B4.R3
 - *base model* → voir [modèle de base](#m)
 - *base rate* → voir [prévalence, taux de base](#p)
 - *base rate fallacy* → voir [erreur du taux de base](#e)
@@ -392,7 +392,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *chain rule* → voir [règle de la chaîne](#r)
 - **chain-of-thought** (*chaîne de pensée, raisonnement pas à pas*) — enseignée : [ch. B4, Le raisonnement pas à pas][s588] · exercices : B4.Q6
 - **chaîne d'arrêt** (*stop string*) — enseignée : [ch. B4, S'arrêter][s585] · exercices : B4.14
-- **chaîne de caractères** (*string*) — enseignée : [ch. 0A, 100.2.2 · Chaînes de caractères et f-strings][s68]
+- **chaîne de caractères** (*string*) — enseignée : [ch. 0A, 100.2.2 · Chaînes de caractères et f-strings][s68] · exercices : 0A.2, 0A.14–15, 0A.Q3
 - *chaîne de pensée* → voir [chain-of-thought](#c)
 - **champ de vitesses** (*velocity field*) — enseignée : [ch. B5, Flow matching et rectified flow][s628] · exercices : B5.Q11
 - **champ récepteur** (*receptive field*) — enseignée : [ch. 21, 21.2.4 · Le champ récepteur local][s389] · exercices : 21.5, 21.Q2, 21.Q8, 22.R1, CP5.2, 28.12, 28.17, 28.R3
@@ -729,7 +729,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *demande de fusion* → voir [pull request](#p)
 - **démarche expérimentale et journal d'expériences** — enseignée : [ch. 24][s761]
 - **démarrage à froid** (*cold start*) — enseignée : [ch. B1][s521] · exercices : B1.14
-- **démo hébergée** (*hosted demo*) — enseignée : [ch. B7, Une démo hébergée][s675]
+- **démo hébergée** (*hosted demo*) — enseignée : [ch. B7, Une démo hébergée][s675] · exercices : B7.23–25, B7.Q4
 - *demographic parity* → voir [parité démographique](#p)
 - *denoising* → voir [débruitage](#d)
 - *denoising autoencoder* → voir [autoencodeur débruiteur](#a)
@@ -830,7 +830,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **distance de Wasserstein 1D** — enseignée : [ch. 27, Au-delà du livre : mesurer un générateur][s482] · exercices : 27.11
 - **distances** — enseignée : [ch. 12, 12.5 · Normaliser et standardiser][s178] ; [ch. 13, 13.3 · Les k plus proches voisins][s258] · exercices : 2.25, 7.13, 7.20, 13.1, 13.4, 13.9, 13.14–15, 13.34, 13.R1 (+ 26) · approfondie : ch. 7
 - **distillation** (*knowledge distillation*) — enseignée : [ch. 6, 6.9 · La divergence KL][s245]
-- **distillation (de l'échantillonneur)** (*step distillation*) — enseignée : [ch. B5, La distillation][s622]
+- **distillation (de l'échantillonneur)** (*step distillation*) — enseignée : [ch. B5, La distillation][s622] · exercices : B5.5, B5.8, B5.17–18, B5.24–25, B5.30–31, B5.Q7–Q8 (+ 1)
 - **distillation adversariale** (*adversarial diffusion distillation*) — enseignée : [ch. B5, La distillation][s622]
 - **distillation progressive** (*progressive distillation*) — enseignée : [ch. B5, La distillation][s622]
 - *distributed term* → voir [terme distribué](#t)
@@ -1683,7 +1683,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **loi des grands nombres** (*law of large numbers*) — enseignée : [ch. 0B, 101.7.5 · Simuler pour estimer : fréquences et loi des grands nombres][s136] · exercices : 0B.52, 0B.Q12
 - **loi normale, gaussienne** (*normal distribution, Gaussian distribution*) — enseignée : [ch. 2, 2.3.2 · La loi normale][s183] · exercices : 2.3, 2.20, 2.Q1, 2.Q5, 5.R2, 7.15, 7.30, 8.25, 9.30, 11.10 (+ 9) · réutilisée : ch. 5, 7, 9, 12, 13, 17, 25, B5
 - **loi uniforme** (*uniform distribution*) — enseignée : [ch. 2, 2.3.1 · La loi uniforme][s182] · exercices : 2.Q4, 3.12, 6.8, 16.15, 16.Q9, CP6.1 · réutilisée : ch. 3
-- **lois d'échelle** (*scaling laws*) — enseignée : [ch. B3, Les lois d'échelle][s575]
+- **lois d'échelle** (*scaling laws*) — enseignée : [ch. B3, Les lois d'échelle][s575] · exercices : B3.8, B3.10, B3.27–28, B3.E2, B3.Q12
 - **lois usuelles** — enseignée : [ch. 2, 2.3 · Quelques lois usuelles][s733] · exercices : 2.5, 2.17
 - *long short-term memory* → voir [LSTM](#l)
 - *long-term dependency* → voir [dépendance à long terme](#d)
@@ -1904,7 +1904,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - MoE → voir [mélange d'experts (MoE)](#m)
 - **moindres carrés** (*least squares, ordinary least squares, OLS*) — enseignée : [ch. 9, Les moindres carrés (au-delà du livre)][s233] · exercices : 0B.24, 8.16, 9.2, 9.16–17, 9.22, 9.31, 10.Q1, 11.12, 11.18 (+ 2)
 - **momentum** (*élan*) — enseignée : [ch. 19, 19.5.1 · Le momentum][s363] · exercices : 19.2, 19.10, 19.13, 19.16, 19.20–21, 19.24, 19.E1, 19.Q9, CP4.3 (+ 18) · réutilisée : ch. 23, 26, B5
-- **momentum de Nesterov** (*Nesterov momentum, Nesterov accelerated gradient*) — enseignée : [ch. 19, 19.5.2 · Le momentum de Nesterov][s364]
+- **momentum de Nesterov** (*Nesterov momentum, Nesterov accelerated gradient*) — enseignée : [ch. 19, 19.5.2 · Le momentum de Nesterov][s364] · exercices : 19.3, 19.13, 19.16, 19.21, 19.Q10
 - **monôme** (*monomial*) — enseignée : [ch. 15, 15.9.5 · Les pipelines][s15] · exercices : 15.4
 - *monomial* → voir [monôme](#m)
 - *Monte Carlo error* → voir [bruit de Monte-Carlo](#b)
@@ -2339,7 +2339,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **probabilité conditionnelle** (*conditional probability*) — enseignée : [ch. 3, 3.4 · Probabilité conditionnelle][s201] · exercices : 3.Q3, 4.15, 4.Q8, 4.R1 · réutilisée : ch. 6, 11, 13
 - **probabilité jointe** (*joint probability*) — enseignée : [ch. 3, 3.5 · Probabilité jointe][s202] · exercices : 3.14, 3.Q4
 - **probabilité marginale** — enseignée : [ch. 3, 3.6 · Probabilité marginale et tables de contingence][s204] · exercices : 3.3–4, 3.14, 3.Q5, 3.R3
-- **probabilité simple, marginale** (*simple probability, marginal probability*) — enseignée : [ch. 3, 3.3 · Probabilité simple][s131]
+- **probabilité simple, marginale** (*simple probability, marginal probability*) — enseignée : [ch. 3, 3.3 · Probabilité simple][s131] · exercices : 3.1, 3.12, 3.Q2
 - **probabilités : événement, complémentaire, union, indépendance** — enseignée : [ch. 0B, 101.7.2 · Indépendance][s132] · exercices : 0B.26, 0B.52, 0B.E3, 0B.Q12
 - *probability density function* → voir [densité (pdf)](#d)
 - *probability distribution* → voir [distribution de probabilité, loi](#d)
@@ -2354,7 +2354,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **processus de décision markovien (MDP)** (*Markov decision process*) — enseignée : [ch. 26, 26.3.5 · La vue d'ensemble][s462] · exercices : 26.8, 26.Q5
 - **processus direct** (*forward process*) — enseignée : [ch. B5, 205.2 · Le processus direct : planning de bruit, ᾱ_t et forme…][s604] · exercices : B5.6, B5.22, B5.Q1
 - **processus direct et forme fermée** — enseignée : [ch. B5, 205.2 · Le processus direct : planning de bruit, ᾱ_t et forme…][s604] · exercices : B5.2–3, B5.6, B5.11–14, B5.Q2–Q3, B5.R3 (+ 2)
-- **processus inverse** (*reverse process*) — enseignée : [ch. B5, 205.3 · Le processus inverse et la loss simplifiée : prédire le…][s605]
+- **processus inverse** (*reverse process*) — enseignée : [ch. B5, 205.3 · Le processus inverse et la loss simplifiée : prédire le…][s605] · exercices : B5.7, B5.11, B5.16, B5.19, B5.23, B5.E1–E2, B5.Q4, B5.R3
 - *product rule* → voir [règle du produit](#r)
 - produit → voir [produit de Hadamard](#p), [produit extérieur](#p), [produit matriciel](#p), [produit scalaire](#p)
 - **produit de Hadamard** (*element-wise product, Hadamard product*) — enseignée : [ch. 0B, 101.3.4 · Produit élément par élément (Hadamard)][s117] · exercices : 0B.18, 0B.Q8
@@ -2410,7 +2410,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *Q-table* → voir [table Q, valeur Q](#t)
 - *Q-value* → voir [table Q, valeur Q](#t)
 - **QK-Norm** (*query-key normalization*) — enseignée : [ch. B3, Compter les paramètres d'un bloc][s574]
-- **QLoRA** (*quantized LoRA*) — enseignée : [ch. B4, QLoRA][s599]
+- **QLoRA** (*quantized LoRA*) — enseignée : [ch. B4, QLoRA][s599] · exercices : B4.3, B4.6, B4.11, B4.25–27, B4.E2, B4.Q10–Q11, B4.R2 (+ 1)
 - **quantification** (*quantization*) — enseignée : [ch. B4, La mémoire des poids][s446] · exercices : B7.1, B7.20
 - **quantification dynamique, statique** (*dynamic, static quantization*) — enseignée : [ch. B7, Accélérer sur CPU][s447] · exercices : B7.1, B7.20
 - quantile → voir [percentile, quantile, quartile](#p)
@@ -2701,7 +2701,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - *sequential test* → voir [test séquentiel, règle d'arrêt](#t)
 - *sequential updating* → voir [mise à jour bayésienne, séquentielle](#m)
 - séquentielle → voir [mise à jour bayésienne, séquentielle](#m)
-- **sérialiser** (*serialize*) — enseignée : [ch. 0A, 100.6.4 · Sérialiser : `json` et `pickle`][s88]
+- **sérialiser** (*serialize*) — enseignée : [ch. 0A, 100.6.4 · Sérialiser : `json` et `pickle`][s88] · exercices : 0A.39, 0A.Q8
 - *serialize* → voir [sérialiser](#s)
 - **série temporelle** (*time series*) — enseignée : [ch. 8, Données dépendantes : groupes et séries temporelles (au-delà du livre)][s269] · exercices : 1.12, 8.19, 22.1, 22.21, 22.E4, 22.Q12, 22.R3, PF.3 · approfondie : ch. 22
 - Series → voir [DataFrame, Series](#d)
@@ -2870,7 +2870,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **suivi d'expériences** — enseignée : [ch. B7, 207.5 · Suivi d'expériences : runs, métriques, artefacts, comparaison][s438] · exercices : B7.14, PF.7
 - *supervised fine-tuning* → voir [SFT](#s)
 - *supervised learning* → voir [apprentissage supervisé](#a)
-- **supervision humaine** (*human oversight*) — enseignée : [ch. B6, La supervision humaine][s652]
+- **supervision humaine** (*human oversight*) — enseignée : [ch. B6, La supervision humaine][s652] · exercices : B6.8–9, B6.28, B6.Q12
 - **support (d'une classe)** — enseignée : [ch. 3, Au-delà du livre : plusieurs classes et moyennes macro, micro,…][s41] ; [ch. 13, 13.4 · Les machines à vecteurs de support][s211] · exercices : 3.6, 3.25, 13.4, 13.10, 13.16, 13.18, 13.Q5
 - **support (few-shot)** (*support set*) — enseignée : [ch. 13, 13.4 · Les machines à vecteurs de support][s211] ; [ch. B1, Le few-shot et les prototypes de classe][s512] · exercices : 13.4, 13.10, 13.16, 13.18, 13.Q5, B1.25–26
 - *support set* → voir [support (few-shot)](#s)
@@ -2952,7 +2952,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - **test d'overfitting d'un mini-batch** (*overfit-one-batch test*) — enseignée : [ch. B7, Quatre familles de tests][s667]
 - **test de confirmation** (*confirmatory test*) — enseignée : [ch. 3, 3.8 · Appliquer la matrice de confusion : le piège de la prévalence][s207]
 - **test de données** (*data test*) — enseignée : [ch. B7, 207.6 · Tester un projet ML : tests unitaires, tests de données,…][s102] · exercices : B7.Q7
-- **test de Kolmogorov-Smirnov** (*Kolmogorov-Smirnov test*) — enseignée : [ch. B7, Le test de Kolmogorov-Smirnov][s677]
+- **test de Kolmogorov-Smirnov** (*Kolmogorov-Smirnov test*) — enseignée : [ch. B7, Le test de Kolmogorov-Smirnov][s677] · exercices : B7.4, B7.7–8, B7.16, B7.22, B7.E4, B7.Q11
 - **test de McNemar** (*McNemar's test*) — enseignée : [ch. 8, 8.6 · Utiliser les résultats du test][s270] · exercices : 8.26
 - **test de non-régression** (*regression test*) — enseignée : [ch. 7][s263] · exercices : B2.30, B7.16, B7.18
 - **test de propriété** (*property-based test*) — enseignée : [ch. 17, Au-delà du livre : choisir une activation, et tester une famille…][s349]
@@ -3118,7 +3118,7 @@ Entre parenthèses et en italique, l'autre langue. Une ligne « *terme* → voir
 - valeur → voir [requête, clé, valeur](#r), [valeur absolue](#v), [valeur de base](#v), [valeur de Shapley](#v), [valeur manquante](#v), [valeur prédictive négative (VPN)](#v), [valeur prédite](#v), [valeur sentinelle](#v), [valeurs aberrantes](#v), [valeurs de Shapley exactes](#v), [valeurs SHAP](#v)
 - **valeur absolue** (*absolute value*) — enseignée : [ch. 0B, 101.1.2 · Valeur absolue, inégalités, partie entière, fonction signe][s105] · exercices : 0B.2, 0B.39, 0B.Q4, 2.31, 5.1, 5.Q5, 8.25–26, 9.6, 9.16 (+ 16) · réutilisée : ch. 9
 - **valeur de base** (*base value*) — enseignée : [ch. B6, Les features comme joueurs][s635] · exercices : B6.1–2, B6.8, B6.11, B6.14–16, B6.Q4–Q5
-- **valeur de Shapley** (*Shapley value*) — enseignée : [ch. B6, 206.3 · Valeurs de Shapley : jeu coopératif, propriétés, calcul…][s632]
+- **valeur de Shapley** (*Shapley value*) — enseignée : [ch. B6, 206.3 · Valeurs de Shapley : jeu coopératif, propriétés, calcul…][s632] · exercices : B6.1–2, B6.7–8, B6.11, B6.14, B6.17, B6.E2, B6.Q4–Q5
 - **valeur manquante** (*missing value*) — enseignée : [ch. 0A, 100.9.3 · Valeurs manquantes et doublons][s97] · exercices : 0A.20, 0A.35, 0A.38, 1.2, 1.9, CP2.5, 12.10–11, 12.18, 12.33 (+ 3)
 - **valeur prédictive négative (VPN)** (*negative predictive value, NPV*) — enseignée : [ch. 3, 3.7.9 · Les autres mesures][s206] · exercices : 3.5
 - **valeur prédite** (*predicted value*) — enseignée : [ch. 7, 7.1 · Pourquoi ce chapitre ?][s142] · exercices : 7.Q1

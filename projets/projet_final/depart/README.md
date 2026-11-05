@@ -58,10 +58,12 @@ TODO : ce que le modèle ne sait pas faire, où il se trompe, les sous-groupes m
 ## Structure du dépôt
 
 ```
+README.md       ce fichier ; model_card.md (la model card) ; examples.jsonl (les entrées de la démonstration) ; LICENSE
 configs/        fast.yaml (CPU, moins de 10 min) et full.yaml (le mode complet)
-data/           card.md (la data card) et splits.json (le découpage figé) ; data/raw/ hors de git
-docs/           cadrage.md, protocole.md, rapport.md
+data/           card.md (la data card) et splits.json (le découpage figé) ; le reste de data/ hors de git
+docs/           cadrage.md, protocole.md, rapport.md, grille.md (l'auto-évaluation), soutenance.pdf
 experiments/    runs.jsonl (le journal), journal.md, test_access.jsonl, test_results.json
+figures/        les figures du rapport et du README (créé par les notebooks)
 notebooks/      01_exploration, 02_baselines, 03_evaluation
 scripts/        download_data.py, predict.py, summarize_runs.py
 src/projet/     le paquet (données, prétraitement, modèles, entraînement, évaluation, prédiction, API)

@@ -11,6 +11,8 @@
 | **Évaluation** | sur 20, avec la grille [`GRILLE.md`](GRILLE.md) : auto-évaluation, puis correction par Claude (prompt P9) |
 | **Livrables** | ton dépôt `mon_travail/projet_final/`, poussé sur GitHub ; une soutenance de 10 minutes ([`SOUTENANCE.md`](SOUTENANCE.md)) |
 
+**Par où commencer** : lis [Choisir ton dataset](#dataset) et [La règle du test scellé](#test-scelle), installe le kit dans ton dépôt ([Démarrer](#demarrer)), puis fais PF.1. **Ce que tu rends** : ton dépôt, avec le livrable de chaque étape (la ligne « Livrable » de chacune des [13 étapes](#etapes)), et ta soutenance. **Comment tu es noté** : [la grille](#grille), critère par critère, avec ses pénalités et ses seuils.
+
 **Sommaire** : [Le contexte](#contexte) · [Choisir ton dataset](#dataset) · [Le test scellé](#test-scelle) · [Le budget](#budget) · [Les jalons](#jalons) · [Démarrer](#demarrer) · [Le kit de départ](#kit) · [Les 13 étapes](#etapes) · [Le parcours rapide](#parcours-rapide) · [La grille](#grille) · [La correction](#correction) · [La soutenance](#soutenance) · [L'exemple de calibrage](#exemple)
 
 <a id="contexte"></a>
@@ -40,7 +42,7 @@ Tu l'as préparé au ch. 29 : le pitch de cinq lignes (🗣️ 29.4) et la data 
 - **Une cible claire** : une classe, une valeur, une prévision, une récompense ; mesurée, pas devinée. Un problème sans cible (du clustering seul, de la génération sans mesure) se transforme en problème mesurable, ou se choisit autrement.
 - **Une version figée** : une révision du Hugging Face Hub (le `sha` d'un commit), une version Kaggle ou OpenML, une archive datée ; et une somme SHA-256 par fichier.
 
-**Les interdits** : des données personnelles non anonymisées (noms, visages identifiables, adresses, dossiers médicaux, messages privés) ; un dataset **retiré** par ses auteurs ou à licence incompatible (MS-Celeb-1M, *80 Million Tiny Images*, Boston Housing hors d'une discussion de son retrait : 29.5, 15.7) ; un fil rouge du workbook tel quel (Penguins, California, MNIST, Fashion-MNIST, CIFAR-10, Holmes, Verne, les taches solaires, Adult) : tu as déjà tout fait dessus, le recruteur aussi.
+**Les interdits** : des données personnelles non anonymisées (noms, visages identifiables, adresses, dossiers médicaux, messages privés) ; un dataset **retiré** par ses auteurs ou à licence incompatible (MS-Celeb-1M, *80 Million Tiny Images*, Boston Housing hors d'une discussion de son retrait : 29.5, 15.7) ; un fil rouge du workbook tel quel (Penguins, California, MNIST, Fashion-MNIST, CIFAR-10, Holmes, Verne, les taches solaires, Adult) : tu as déjà tout fait dessus, le recruteur aussi ; ni le dataset de l'exemple de calibrage (Bike Sharing, [`exemple/`](exemple/)), dont le cadrage et le protocole sont déjà écrits.
 
 **Les variantes acceptées**
 
@@ -61,8 +63,8 @@ Un projet multimodal ou génératif est possible s'il reste mesurable (une métr
 Le test scellé est la seule mesure de ton projet qui ne soit pas optimiste : tous les choix (features, architecture, hyperparamètres, seuil, epoch d'arrêt) se font sans lui. Il obéit à quatre règles.
 
 1. **Un découpage figé et haché.** Le découpage (`data/splits.json`, les identifiants de chaque exemple en entraînement, validation et test) s'écrit **une fois** (`projet split`), se commite, et son SHA-256 se recopie dans `docs/protocole.md`. Toutes les expériences le relisent ; `evaluate.open_sealed_test` refuse d'ouvrir le test si le fichier a changé.
-2. **Le protocole tagué dans git avant les expériences.** `docs/protocole.md` (découpage, métriques, baselines, critère de succès, sous-groupes, budget) se commite puis se tague : `git tag protocole && git push --tags`. Le tag date le protocole : sa date doit précéder la première ligne de `experiments/runs.jsonl`.
-3. **Une seule évaluation finale.** Le test s'ouvre une fois, à la fin, pour le modèle retenu et les deux baselines, dans `notebooks/03_evaluation.ipynb` (`OPEN_TEST = True`). `evaluate.open_sealed_test` note chaque ouverture dans `experiments/test_access.jsonl` (date, commit, commit du tag, raison) et refuse une seconde ouverture. Commite ce fichier et `experiments/test_results.json` aussitôt.
+2. **Le protocole tagué dans git avant les expériences.** `docs/protocole.md` (découpage, métriques, baselines, critère de succès, sous-groupes, budget) se commite puis se tague : `git tag protocole && git push --tags`. Le tag date le protocole : sa date doit précéder la première ligne de `experiments/runs.jsonl`, et le commit de chaque run (le champ `environment.git_commit` du journal) doit descendre du commit tagué (`git merge-base --is-ancestor protocole <commit>`), ce qu'un tag déplacé après coup ne peut pas simuler.
+3. **Une seule évaluation finale.** Le test s'ouvre une fois, à la fin, pour le modèle retenu et les deux baselines, dans `notebooks/03_evaluation.ipynb` (`OPEN_TEST = True`) ; tant que `OPEN_TEST = False`, ce notebook répète toute l'évaluation sur la validation, sans rien écrire, pour que l'unique passe sur le test ne bute sur aucune cellule. `evaluate.open_sealed_test` note chaque ouverture dans `experiments/test_access.jsonl` (date, commit, commit du tag, raison) et refuse une seconde ouverture ; relancé, le notebook ne rouvre pas le test. Commite ce fichier et `experiments/test_results.json` aussitôt : le journal du test ne perd jamais une ligne (son historique git le montre), et le supprimer pour rouvrir le test compte comme un test consulté.
 4. **Toute modification signalée.** Changer le protocole après le tag n'est pas interdit (une métrique mal choisie, un défaut découvert tard) : la modification se fait dans un nouveau commit, s'écrit dans la section « Modifications » du protocole et dans le rapport, **avant** l'ouverture du test. Une réouverture du test (`allow_reopen=True`) se rapporte de même, avec les deux résultats.
 
 Pénalité : un test consulté avant l'évaluation finale, ou un protocole modifié après coup sans le signaler, coûte **3 points** (la grille le vérifie par `git log`, le tag et `experiments/test_access.jsonl`).
@@ -73,7 +75,7 @@ Pénalité : un test consulté avant l'évaluation finale, ou un protocole modif
 
 ## Le budget
 
-- **FAST_MODE** (`configs/fast.yaml`, `FAST_MODE = True` dans les notebooks) : tout le projet s'exécute sur un CPU en **moins de 10 minutes** (sous-échantillon d'entraînement, peu d'epochs, moins de tirages bootstrap). C'est lui que lancent les tests, l'intégration continue et le correcteur. Le protocole est le même dans les deux modes : seuls la quantité de données d'entraînement, les epochs et le nombre de tirages changent (un test de structure du kit le vérifie).
+- **FAST_MODE** (`configs/fast.yaml`, `FAST_MODE = True` dans les notebooks) : tout le projet s'exécute sur un CPU en **moins de 10 minutes** (sous-échantillon d'entraînement, peu d'epochs, moins de tirages bootstrap). C'est lui que lancent les tests, l'intégration continue et le correcteur. Le protocole est le même dans les deux modes : seul le budget change (la quantité de données d'entraînement, les epochs, la patience, la taille de batch, les tirages bootstrap, la machine) ; la tâche, la cible, le découpage, la graine et la métrique restent les mêmes (un test de structure du kit le vérifie).
 - **Le mode complet** (`configs/full.yaml`) : toutes les données, assez d'epochs. PF.6 et PF.7 dépassent en général 15 minutes de CPU : 🚀 **GPU Colab conseillé** (*Exécution → Modifier le type d'exécution → GPU*). Note la durée et la machine de chaque run (le journal les garde).
 - **Un projet fait en mode rapide seulement** peut avoir tous les points s'il le dit, et si ses chiffres sont ceux du mode rapide, avec leurs intervalles. Le mode complet sur Colab est recommandé pour le portfolio, pas exigé.
 - **Le budget de calcul est une contrainte du protocole** : une vingtaine de runs pour la recherche d'hyperparamètres, trois graines pour le modèle retenu et ses ablations. Au-delà, dis pourquoi (⚖️ 19.11).
@@ -140,7 +142,7 @@ Le kit (`depart/`) est un dépôt modèle, généralisé du paquet `cifarprod` d
 | `src/projet/predict.py`, `serve.py` | `save_artifact`, `load_artifact`, `Predictor.predict`, `create_app` (FastAPI), `measure_latency` | PF.11 |
 | `src/projet/cli.py` | la ligne de commande `projet` et ses sous-commandes `download`, `split`, `baselines`, `train`, `predict`, `latency`, `serve` : **fournie** (le câblage, à adapter) | PF.10 |
 | `scripts/` | `download_data.py`, `predict.py` (des appels à la ligne de commande), `summarize_runs.py` (le tableau du journal, à écrire) | PF.2, PF.7, PF.11 |
-| `notebooks/` | `01_exploration`, `02_baselines`, `03_evaluation` : ils n'appellent que ton paquet, et « Tout exécuter » à vide se termine en ⏳ | PF.3, PF.5, PF.8 |
+| `notebooks/` | `01_exploration`, `02_baselines`, `03_evaluation` : ils n'appellent que ton paquet, et « Tout exécuter » à vide se termine en ⏳ ; ils créent `figures/`, où vont les figures du rapport | PF.3, PF.5, PF.8 |
 | `tests/` | `test_structure.py` (passe dès le départ) ; `test_data.py`, `test_models.py`, `test_evaluate.py`, `test_serve.py` (marqués `todo`, à compléter) | PF.10 |
 | `configs/fast.yaml`, `configs/full.yaml` | le mode rapide et le mode complet, même protocole | PF.4, PF.6 |
 | `.github/workflows/ci.yml`, `Dockerfile` (facultatif), `.gitignore` | l'intégration continue, l'image de l'API, les données et les checkpoints hors de git | PF.10, PF.11 |
@@ -285,7 +287,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 **Livrable** : `notebooks/03_evaluation.ipynb` et section « Résultats » du rapport.
 
 **Critères de réussite**
-- une seule ligne dans `experiments/test_access.jsonl`, au commit d'un dépôt propre, après le tag `protocole` ;
+- une seule ligne dans `experiments/test_access.jsonl`, après le tag `protocole`, avec le protocole et le découpage commités (les champs `protocol_tag_commit`, `protocol_changed_since_tag` et `uncommitted_protocol_or_split` de la ligne) ;
 - les trois modèles sur le test, chacun avec l'intervalle bootstrap à 95 % de la métrique principale ;
 - la différence avec la baseline classique et son intervalle apparié ; le critère de succès atteint ou non, dit sans détour ;
 - vingt erreurs lues et rangées par cause, trois exemples commentés ;
@@ -322,7 +324,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 - `pip install -e .` sur une machine propre, puis `python -m pytest -q` vert ;
 - la configuration validée (une clé inconnue refusée), la ligne de commande et ses codes de sortie ;
 - au moins cinq tests à toi qui attrapent de vraies erreurs (découpage, prétraitement sans fuite, formes, apprentissage par cœur d'un mini-batch, API), avec un message qui dit ce qui était attendu ;
-- `PF_STRICT=1 python -m pytest -q` ne saute plus rien ;
+- `PF_STRICT=1 python -m pytest -q` ne saute plus rien (sauf les tests marqués `data`, là où le dataset n'est pas téléchargé : dans l'intégration continue) ;
 - l'intégration continue verte sur GitHub, son badge dans le README ;
 - aucun code qui ne vit que dans un notebook.
 
@@ -338,7 +340,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 
 **Critères de réussite**
 - un artefact qui se suffit : un processus neuf prédit sans le code d'entraînement ni les données ;
-- `scripts/predict.py` prédit depuis une entrée brute ;
+- `scripts/predict.py` prédit depuis une entrée brute, celles d'un fichier `examples.jsonl` versionné (trois ou quatre entrées choisies) ;
 - l'API répond sur `/health` et `/predict`, refuse une entrée invalide en 422 (ou la démo Gradio) ;
 - la même prédiction par la ligne de commande, l'API et le notebook ;
 - la latence p50 et p95, avec la machine.
@@ -379,7 +381,7 @@ Chaque étape a son livrable exact (le chemin du fichier dans ton dépôt), ses 
 
 ## Le parcours rapide
 
-Les quatre parcours font le projet final (BIBLE §22). Le **parcours rapide** (≈ 30 h) fait en entier PF.1 à PF.6, PF.8, PF.10, PF.12 et PF.13, et **allège** les trois autres étapes :
+Les quatre parcours font le projet final (BIBLE §22). Le **parcours rapide** fait en entier PF.1 à PF.6, PF.8, PF.10, PF.12 et PF.13 (≈ 30 h), et **allège** les trois autres étapes (quelques heures de plus) :
 
 - PF.7 : **une** ablation (sur trois graines), le journal et le tableau généré ;
 - PF.9 : **une** explication adaptée au modèle, avec son test de santé, et les usages à proscrire ;

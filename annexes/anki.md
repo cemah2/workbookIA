@@ -21,7 +21,7 @@ Les numéros ont deux chiffres (« Ch. 07 ») parce qu'Anki range les paquets pa
 
 ## 1. Fabriquer le fichier à importer
 
-Dans un terminal, à la racine du dépôt. Sur Colab, une cellule `!python /content/drive/MyDrive/workbookIA/tools/export_flashcards.py --chapter 18` écrit le fichier dans `Mon Drive/workbookIA/exports/`, où tu le télécharges depuis Google Drive (`00_setup/COLAB.md`).
+Dans un terminal, à la racine du dépôt. Sur Colab, une cellule `!python /content/drive/MyDrive/workbookIA/tools/export_flashcards.py --chapter 18` écrit le fichier dans `Mon Drive/workbookIA/exports/` : télécharge-le depuis [drive.google.com](https://drive.google.com), ou dans le panneau **Fichiers** de Colab (icône 📁 à gauche, `drive/MyDrive/workbookIA/exports/`, clic droit > **Télécharger**).
 
 | Commande | Fichier créé dans `exports/` | Quand ? |
 |---|---|---|
@@ -36,7 +36,7 @@ Le CSV d'un chapitre et le CSV global rangent une même carte dans **le même so
 
 ## 2. Importer le CSV (méthode conseillée)
 
-Il faut **Anki 2.1.54 ou plus récent** : les premières lignes du fichier (`#separator`, `#html`, `#tags column`, `#deck column`) règlent la fenêtre d'import à ta place ([manuel d'Anki, *Text Files*](https://docs.ankiweb.net/manual/importing/text-files)).
+Il faut **Anki 2.1.54 ou plus récent** (toute version actuelle convient : depuis 23.10, les numéros suivent l'année, et la version de novembre 2026 est la 26.09) : les premières lignes du fichier (`#separator:semicolon`, `#html:true`, `#tags column:3`, `#deck column:4`) règlent la fenêtre d'import à ta place ([manuel d'Anki, *Text Files*](https://docs.ankiweb.net/manual/importing/text-files)).
 
 1. Ouvre Anki, puis **Fichier > Importer** (*File > Import*) et choisis le fichier `.csv` du dossier `exports/`.
 2. Vérifie la fenêtre d'import :
@@ -44,10 +44,10 @@ Il faut **Anki 2.1.54 ou plus récent** : les premières lignes du fichier (`#se
    - **Séparateur** : point-virgule, et **HTML autorisé** coché (les deux sont lus dans le fichier) ;
    - **Paquet** : la colonne 4 (« Deck column ») ; les sous-paquets manquants sont créés ;
    - **Tags** : la colonne 3 ;
-   - **Doublons** : « Mettre à jour » (*Update*) si tu réimportes un fichier après une correction des cartes : la carte est mise à jour sur place et garde son historique de révision.
+   - **Notes existantes** (*Existing notes*) : « Mettre à jour » (*Update*, le réglage par défaut). Quand tu réimportes un fichier après une correction des cartes, Anki reconnaît une carte à son **recto** (le premier champ, dans le même type de note) : il la met à jour sur place, dans son paquet actuel, avec son historique de révision. Une carte dont le recto a changé arrive comme une nouvelle carte : supprime l'ancienne dans **Parcourir**.
 3. Clique sur **Importer**. Le résumé indique le nombre de cartes ajoutées ou mises à jour.
 
-Les formules s'affichent grâce à MathJax, intégré à Anki (`\( … \)` dans les cartes) : rien à installer.
+Les formules s'affichent grâce à MathJax, intégré à Anki (`\( … \)` dans les cartes) : rien à installer. Dans le fichier exporté, un « < » ou un « & » du texte est écrit `&lt;` ou `&amp;`, comme le demande le manuel quand le HTML est autorisé ; la carte affiche bien « < » et « & ».
 
 > ⚠️ **Piège classique — des paquets « ch18_backprop » d'avant la session 79** — Les anciennes versions de l'outil rangeaient un chapitre dans `Deep Learning Workbook::ch18_backprop`. Une réimportation met les cartes à jour **dans leur paquet actuel**, sans les déplacer. Pour adopter le nouveau rangement : dans **Parcourir** (*Browse*), cherche `"deck:Deep Learning Workbook::ch18_backprop"`, sélectionne tout (Ctrl+A), puis **Cartes > Changer de paquet** (*Change Deck*, Ctrl+D) vers `Deep Learning Workbook::Partie IV::Ch. 18 Rétropropagation`, et supprime le paquet vide.
 
@@ -56,15 +56,22 @@ Les formules s'affichent grâce à MathJax, intégré à Anki (`\( … \)` dans 
 1. Double-clique sur `exports/dlwb_anki.apkg`, ou **Fichier > Importer** dans Anki.
 2. C'est tout : les sous-paquets, les tags et le type de note « Deep Learning Workbook (recto/verso) » sont créés.
 
-Une réimportation d'un `.apkg` plus récent met à jour les cartes déjà présentes, car chaque carte garde le même identifiant d'une exportation à l'autre (tant que son recto ne change pas). **Choisis une seule méthode** : un `.apkg` importé après le CSV (ou l'inverse) donne des doublons, puisque ce ne sont pas les mêmes types de notes.
+Une réimportation d'un `.apkg` plus récent met à jour les cartes déjà présentes (réglage par défaut de la fenêtre d'import : mettre à jour les notes plus récentes), car chaque carte garde le même identifiant d'une exportation à l'autre (tant que son recto ne change pas). **Choisis une seule méthode** : un `.apkg` importé après le CSV (ou l'inverse) donne des doublons, puisque ce ne sont pas les mêmes types de notes.
 
-## 4. Réviser au fil du parcours
+## 4. Sur ton téléphone (AnkiDroid, AnkiMobile)
+
+- **Le plus simple : la synchronisation.** Crée un compte gratuit sur [AnkiWeb](https://ankiweb.net), importe les cartes sur ton ordinateur (section 2 ou 3), clique sur **Synchroniser** (*Sync*, en haut de la fenêtre d'Anki), puis synchronise AnkiDroid (le bouton aux deux flèches en cercle, en haut de la liste des paquets) ou AnkiMobile sur iPhone avec le même compte. Les paquets, les cartes, tes révisions et tes suspensions suivent, dans les deux sens.
+- **Sans ordinateur, sur Android** : envoie-toi le `.apkg` (pièce jointe, Google Drive) et ouvre-le depuis le téléphone : AnkiDroid propose de l'importer ; ou, dans AnkiDroid, menu de la liste des paquets > **Importer**, puis choisis le fichier ([manuel d'AnkiDroid, *Importing Anki Files*](https://ankidroid.org/docs/manual.html#importing)). AnkiDroid importe aussi le CSV depuis sa version 2.17 (la même fenêtre d'import que sur ordinateur), mais le `.apkg` est plus simple sur un petit écran.
+- **Sur iPhone (AnkiMobile)** : ouvre le fichier depuis l'app **Fichiers**, puis « Ouvrir avec » AnkiMobile.
+- **Importe sur un seul appareil**, puis synchronise : un même CSV importé sur l'ordinateur **et** sur le téléphone donne des doublons à la synchronisation (ses cartes n'ont pas d'identifiant fixe, contrairement à celles du `.apkg`).
+
+## 5. Réviser au fil du parcours
 
 - **Un chapitre à la fois** : clique sur le sous-paquet du chapitre que tu étudies (par exemple *Ch. 18 Rétropropagation*). Un clic sur *Partie IV* révise toute la partie, un clic sur *Deep Learning Workbook* tout ce que tu as importé.
 - **Chaque jour** : fais tes révisions sur le paquet racine *Deep Learning Workbook* : Anki mélange les chapitres et te présente les cartes dues, ce qui entretient les chapitres anciens (la répétition espacée, c'est ce qui rend les flashcards rentables).
 - **Nouvelles cartes par jour** : dans les options du paquet racine (roue dentée > *Options*), règle « Nouvelles cartes/jour » vers 20 : un chapitre (≈ 25 cartes) entre en un ou deux jours.
 
-## 5. Suspendre les chapitres pas encore étudiés
+## 6. Suspendre les chapitres pas encore étudiés
 
 Si tu importes le deck global au début, suspends ce que tu n'as pas encore étudié, puis réactive chapitre par chapitre :
 
@@ -75,7 +82,7 @@ Si tu importes le deck global au début, suspends ce que tu n'as pas encore étu
 
 Les cartes de 0A et 0B se révisent dès le début ; celles d'un chapitre bonus, quand tu arrives au bonus (les parcours sont dans [`docs/PARCOURS.md`](../docs/PARCOURS.md)).
 
-## 6. Ce qui ne change pas
+## 7. Ce qui ne change pas
 
 - Le format des fichiers du workbook (`front;back;tags`, BIBLE §12) : la colonne du paquet n'est ajoutée qu'à l'export, dans `exports/` (non versionné, régénérable).
 - Le tableau de bord (`suivi/tableau_de_bord.md`) garde sa case « Flashcards importées dans Anki » par chapitre.

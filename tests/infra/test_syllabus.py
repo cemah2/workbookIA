@@ -167,9 +167,17 @@ def test_readme_figures_match_the_repository(chapters):
     ("Le workbook : `wb.check`, « Tout exécuter »", "le-workbook--wbcheck--tout-exécuter-"),
     ("Au-delà du livre : l'**early stopping**", "au-delà-du-livre--learly-stopping"),
     ("Lire la [doc](https://pytorch.org) de `nn.Module`", "lire-la-doc-de-nnmodule"),
+    ("101.2.4 · Logarithmes : ln, log₂, log₁₀, changement de base",       # subscripts are not \p{Word}
+     "10124--logarithmes--ln-log-log-changement-de-base"),
 ])
 def test_index_anchors_are_those_of_github(heading, anchor):
     assert build_index.slug(heading) == anchor
+
+
+def test_index_of_notions_stays_under_what_github_displays():
+    """GitHub truncates the display of a file beyond about 500 KB: split the index by letter before that."""
+    size = (ROOT / "annexes" / "index_notions.md").stat().st_size
+    assert size < 480_000, f"expected annexes/index_notions.md under 480 000 bytes, got {size}: split it by letter"
 
 
 def test_index_sorts_like_a_french_dictionary():
@@ -194,6 +202,16 @@ def test_index_of_notions_finds_the_key_notions():
     assert links("attention multi-têtes (MHA)")[0].startswith("../chapitres/b3_transformers/01_fiche.md#2034--")
     assert links("objectif clippé, PPO")[0].startswith("../chapitres/b8_rl_moderne/01_fiche.md#2085--ppo")
     assert any("ch29_datasets" in t for t in links("data card"))
+    # the main lesson first, a mere mention of the panorama of ch. 1 after it (« évoquée » when only mentioned)
+    assert links("LoRA")[0].startswith("../chapitres/b4_llm/01_fiche.md#"), links("LoRA")
+    assert links("k-means")[0].startswith("../chapitres/ch07_classification/01_fiche.md#")
+    assert "évoquée : [ch. 1," in entries["k-means"]
+    assert links("modèle de diffusion")[0] == "../chapitres/b5_diffusion/01_fiche.md"     # its chapter's title
+    # exercises named by their statement, never an unrelated exercise of the same book section
+    assert "exercices : " in entries["clustering par densité"] and "7.3" not in entries["clustering par densité"]
+    assert "20.2" not in entries["trace"] and "0A.36" not in entries["trace"]           # « trace » is also a verb
+    # a word that starts several entries leads to them
+    assert any(line.startswith("- attention → voir [attention additive](#a)") for line in text.splitlines())
     for line in ("- *backpropagation* → voir [rétropropagation](#r)", "- PPO → voir [objectif clippé, PPO](#o)",
                  "- *multi-head attention* → voir [attention multi-têtes (MHA)](#a)"):
         assert line in text.splitlines(), f"expected the cross-reference « {line} »"
