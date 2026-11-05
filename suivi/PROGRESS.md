@@ -1,10 +1,14 @@
 # PROGRESS : état de la génération du workbook
 
-*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-05, session 78 (bonus B8, 2ᵉ et dernière partie : les chapitres bonus sont terminés).*
+*Tenu par Claude à chaque session (BIBLE §18). Dernière mise à jour : 2026-11-05, session 79 (finalisation : projet final, index des notions, deck Anki global, README final).*
 
 ## Prochaine étape
 
-➡️ **Session 79 : finalisation (prompt P10, `docs/METHODE.md`)** : le projet final (`docs/syllabus/data/pf.json`, dossier `projets/projet_final/`), l'index des notions, le deck Anki global, le README final ; puis les lignes « À valider sur Colab » restantes et les retours de l'apprenant (P7). Les 29 chapitres, les six checkpoints et les huit chapitres bonus sont publiés.
+➡️ **La génération du workbook est terminée** (session 79). La suite dépend de toi, avec les prompts de `docs/METHODE.md` :
+- étudier, puis renvoyer tes retours chapitre par chapitre (**P7**) ; le calibrage s'applique aux chapitres concernés ;
+- valider sur Colab les lignes encore « à faire » de la section « À valider sur Colab » (GPU, versions de Colab, modes complets 🚀), puis signaler le résultat (**P6**) ;
+- faire corriger ton travail, mini-projets et projet final compris (**P9**, sur `mon_travail/`) ;
+- choisir une licence pour le contenu original du dépôt (aucun fichier `LICENSE` pour l'instant : c'est ta décision, par exemple CC BY-NC-SA 4.0 pour les textes et MIT pour le code).
 
 - les modules « à la scikit-learn » (`fit`/`predict`, attributs appris suffixés par `_`) : les énoncés disent ce que `fit` apprend et ce qui est lu à chaque appel ; une cellule de vérification n'enchaîne jamais `.fit(...)` sur un objet de l'apprenant (helper `fitted` du ch. 7 : un `fit` sans `return self` est signalé par les tests, pas par une erreur de la cellule) ; un `fit` peut poser des attributs privés (`_nom`), que `clone` ignore ;
 - une cellule de vérification survit à une fonction qui renvoie `None` (helper `returned` : « as-tu oublié le return ? »), à une liste ou un tableau au lieu d'un tuple, à un résultat de mauvaise forme (un message dit la forme attendue), à une cellule réexécutée et à un noyau redémarré ; ses messages ne parlent pas d'un outil que le contexte exclut ;
@@ -201,7 +205,7 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 | B6 | Explicabilité, équité et éthique | ✅ | 73-74 | 49 exercices (dont 18 dans le notebook : explications globales, SHAP sur California et Penguins, gradients intégrés et Grad-CAM sur CIFAR-10 et le ResNet du B1, test d'Adebayo, audit d'équité sur Adult, atténuation, fiche modèle, défi), fiche (≈ 13 400 mots, 6 figures), 28 flashcards, partie 0 (121 vérifications) ; `mylearn/explain.py` (186 tests) ; infrastructure `wb.explain_data` |
 | B7 | Du notebook à la production | ✅ | 75-76 | fiche (≈ 11 100 mots, 5 figures), 27 exercices papier, 24 flashcards, partie 0 (116 vérifications) ; aucun module `mylearn` (chapitre de compétences pro) ; fastapi, uvicorn et pydantic figés aux versions de Colab ; notebook B7.9 à B7.25 (paquet de référence `solutions/b7_cifarprod/`, `wb.prod`), 2 apprenants simulés et un relecteur |
 | B8 | RL moderne : DQN, gradient de politique, PPO et RLHF | ✅ | 77-78 | fiche (≈ 13 900 mots, 7 figures), 26 exercices papier, 26 flashcards, partie 0 (135 vérifications) ; `mylearn/deep_rl.py` (163 tests), `rl.py` du ch. 26 réutilisé ; notebook B8.12 à B8.28 (valeur, politique, préférences ; infrastructure `wb.deep_rl_env`, défi CartPole en 100 000 pas comptés), 2 apprenants simulés et un relecteur |
-| PF | Projet final et finalisation (P10) | 📅 | | |
+| PF | Projet final et finalisation (P10) | ✅ | 79 | projet final (`projets/projet_final/` : cahier des charges en 13 étapes, grille de 62 critères, indices, banque de 104 questions de soutenance, exemple de cadrage et de protocole, kit `depart/` : dépôt modèle testé, CI, test scellé outillé) ; index des notions généré (`annexes/index_notions.md`) ; deck Anki global en sous-paquets (`annexes/anki.md`, `--apkg`) ; README final généré en partie ; un apprenant simulé et deux relecteurs |
 
 ## Session 1 (2026-09-29) : mise en place ✅
 
@@ -657,6 +661,28 @@ Légende : 📅 planifié · 🛠️ en cours (étape exacte indiquée) · ✅ g
 - Annexes et data cards (glossaire, cheatsheet scikit-learn, erreurs fréquentes ; Penguins, `penguins_raw`, synthétiques), README, BIBLE §22.
 - **Vérifications indépendantes** (deux apprenants simulés, parties A–B et C–D, un relecteur des indices, des solutions et des notes, puis une seconde passe sur les corrections) : voir BIBLE §22, ligne « Vérification indépendante du ch. 15, session 32 ».
 - Vérification finale : `syllabus.py check` 0 problème ; tests verts (infra 277, `--impl=ref` 2 467) ; `build_answers.py --check`, `export_flashcards.py --check` et `check_env.py` OK ; solutions exécutées en ≈ 1 min (cellule la plus lente : 🏆 15.31, ≈ 36 s) ; « Run all » du notebook vide sans erreur.
+
+## Session 79 (2026-11-05) : finalisation (P10) ✅
+
+**Fait** :
+- **Projet final** (`projets/projet_final/`, `python tools/start_chapter.py PF`) :
+  - `README.md` : cahier des charges en 13 étapes au format des exercices, règle du test scellé, budget, jalons, parcours rapide, correction par P9 ;
+  - `GRILLE.md` : 62 critères observables avec « Comment le vérifier » et une colonne de preuve, pénalités et seuils du contrat ;
+  - `04_indices.md` ; `SOUTENANCE.md` (104 questions 💼 des 21 chapitres mobilisés, générées par `tools/chapters/build_pf.py`) ;
+  - `exemple/` : un cadrage et un protocole sur Bike Sharing (UCI), qui montrent le niveau attendu sans rien résoudre ;
+  - `depart/` : un dépôt modèle généralisé du paquet de B7 (paquet `projet`, configuration et ligne de commande fournies, `open_sealed_test` qui vérifie l'empreinte du découpage et journalise chaque ouverture, tests de structure verts et tests `todo` en ⏳, CI, Dockerfile, gabarits de data card, model card, protocole, journal et rapport, trois notebooks autonomes) ; tests dans `tests/infra/test_final_project.py`.
+- **Index des notions** (`annexes/index_notions.md`, ≈ 1 565 notions) : généré par `tools/build_index.py`, appelé par `syllabus.py build` ; leçon principale, exercices qui la pratiquent, chapitres qui la reprennent, ancres vérifiées.
+- **Deck Anki global** : `export_flashcards.py` range les 967 cartes en 39 sous-paquets (partie, puis chapitre), avec des tags hiérarchiques ; option `--apkg` (genanki, extra `anki`) ; procédure dans `annexes/anki.md`.
+- **README final** : blocs « plan » et « parcours » écrits par `syllabus.py build`, bloc « En chiffres » par `tools/repo_stats.py --write` ; crédits et licences.
+- Deux tableaux parasites (`clipU160.npy`, `clipU224.npy`, 1 Mo chacun, commités à la racine en session 64) retirés.
+- **Vérifications indépendantes** : un relecteur de l'index, du deck et du README ; un relecteur du projet final ; un apprenant simulé qui a fait le projet de bout en bout sur Spambase. Voir BIBLE §22.
+- Vérification finale : `syllabus.py check` 0 problème ; tests 836 (mode apprenant) ; `build_answers.py --check`, `export_flashcards.py --check`, `build_index.py --check`, `build_pf.py --check` et `check_env.py` passent ; `mon_travail/` intact.
+
+**Leçons** :
+- un projet ouvert se vérifie comme un chapitre : un apprenant simulé qui le fait vraiment, sur un dataset réel, trouve des dépendances cachées entre étapes et des comparaisons injustes que la relecture ne voit pas ;
+- une règle d'honnêteté (le test scellé) s'outille autant que possible : empreinte, journal commité, tag annoté ; ce que l'outil ne garantit pas se dit, et la grille dit comment le repérer ;
+- un index généré se juge sur un échantillon : la première mention d'un terme n'est pas sa leçon, et un mot dans un énoncé n'est pas un exercice qui le pratique ;
+- un venv `--system-site-packages` créé depuis un autre venv ne voit pas ses paquets : pip retélécharge torch, en version CUDA (3,7 Go). Mieux vaut un `.pth` vers les paquets du venv partagé.
 
 ## Session 78 (2026-11-05) : chapitre bonus B8 (RL moderne : DQN, gradient de politique, PPO et RLHF), 2ᵉ et dernière partie ✅
 
