@@ -5553,7 +5553,7 @@ Le ch. 26 s'arrêtait là où les tables deviennent trop grandes. Ici, un résea
 |---|---|---|---|---|---|---|---|---|---|
 | B8.Q1 | 🧠 | Pourquoi une table Q ne suffit plus pour CartPole | ★ | 3 | — | 02 | — | R | wb.check |
 | B8.Q2 | 🧠 | La triade mortelle : approximation, amorçage et apprentissage off-policy | ★★ | 3 | — | 02 | — | – | wb.check |
-| B8.Q3 | 🧠 | Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? Vrai ou faux | ★ | 3 | — | 02 | — | R | wb.check |
+| B8.Q3 | 🧠 | Réseau cible et mémoire de rejeu : quel problème chacun résout-il ? | ★ | 3 | — | 02 | — | R | wb.check |
 | B8.Q4 | 🧠 | Double DQN : d'où vient la surestimation des valeurs Q ? | ★★ | 3 | — | 02 | — | R | wb.check |
 | B8.Q5 | 🧠 | Méthodes par valeur ou par politique : actions continues et politiques aléatoires | ★ | 3 | — | 02 | — | R | wb.check |
 | B8.Q6 | 🧠 | REINFORCE : pourquoi soustraire une baseline ne biaise pas le gradient | ★★ | 3 | — | 02 | — | RM | wb.check |
